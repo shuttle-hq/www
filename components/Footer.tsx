@@ -65,7 +65,7 @@ const navigation = [
       },
       {
         name: "Guides",
-        href: "https://github.com/shuttle-hq/shuttle/tree/main/examples",
+        href: "https://github.com/shuttle-hq/examples",
       },
       {
         name: "Contributors",
