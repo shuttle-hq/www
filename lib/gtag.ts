@@ -35,14 +35,14 @@ export const gtagConsent = () => {
   });
 };
 
-export const setupGoogleAnalytics = (router: NextRouter, user: User) => {
+export const setupGoogleAnalytics = (router: NextRouter, user: any) => {
   const handleRouteChange = (url: string) => {
     pageview(url);
   };
 
   // set userId in GA session
   if (typeof user !== "undefined") {
-    gtagUserId(user.name);
+    gtagUserId(user.userId);
   }
 
   router.events.on("routeChangeComplete", handleRouteChange);
