@@ -15,6 +15,7 @@ async function afterCallback(req, res, session, state) {
   });
 
   session.user.api_key = user.key;
+  session.user.userId = user.name;
 
   return session;
 }
