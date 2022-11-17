@@ -14,9 +14,6 @@ async function afterCallback(req, res, session, state) {
     }
   });
 
-  // set the user ID in the google analytics session
-  gtagUserId(user.name);
-
   session.user.api_key = user.key;
 
   return session;

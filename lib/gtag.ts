@@ -1,5 +1,6 @@
 import { NextRouter } from "next/router";
 import { GA_MEASUREMENT_ID } from "./constants";
+import { User } from "./shuttle";
 
 // https://developers.google.com/analytics/devguides/collection/ga4/event-parameters?client_type=gtag#set-up-every-event
 export const pageview = (url: string) => {
@@ -34,10 +35,16 @@ export const gtagConsent = () => {
   });
 };
 
-export const setupGoogleAnalytics = (router: NextRouter) => {
+export const setupGoogleAnalytics = (router: NextRouter, user: User) => {
   const handleRouteChange = (url: string) => {
     pageview(url);
   };
+
+  // set userId in GA session
+  if (typeof user !== "undefined") {
+    gtagUserId(user.name);
+  }
+
   router.events.on("routeChangeComplete", handleRouteChange);
   router.events.on("hashChangeComplete", handleRouteChange);
   return () => {
