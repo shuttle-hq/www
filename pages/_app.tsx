@@ -23,7 +23,8 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import Script from "next/script";
-import { setupGoogleAnalytics } from "../lib/gtag";
+import { gtagConsent, setupGoogleAnalytics } from "../lib/gtag";
+import CookieConsent from "react-cookie-consent";
 
 config.autoAddCss = false;
 
@@ -53,27 +54,15 @@ export default function App({ Component, pageProps }: AppProps) {
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
 
+            gtag('consent', 'default', {
+              'ad_storage': 'denied',
+              'analytics_storage': 'denied',
+            });
+
             gtag('config', '${GA_MEASUREMENT_ID}', {
               page_path: window.location.pathname,
             });
           `,
-            }}
-          />
-          <Script
-            strategy="afterInteractive"
-            dangerouslySetInnerHTML={{
-              __html: `
-                (function(d, w) {
-                  w.MissiveChatConfig = {
-                    "id": "35790ffd-9049-42c8-a9d4-e0865535419c"
-                  };
-
-                  var s = d.createElement('script');
-                  s.async = true;
-                  s.src = 'https://webchat.missiveapp.com/' + w.MissiveChatConfig.id + '/missive.js';
-                  if (d.head) d.head.appendChild(s);
-                })(document, window);
-              `,
             }}
           />
           <DefaultSeo
@@ -90,13 +79,26 @@ export default function App({ Component, pageProps }: AppProps) {
               cardType: "summary_large_image",
             }}
           />
-
           <div className="min-h-screen bg-slate-100 text-slate-800 dark:bg-dark-700 dark:text-dark-200">
             <AnnouncementBar />
             <Header />
             <Component {...pageProps} />
             <ApiKeyModal />
             <Footer />
+            <CookieConsent
+              buttonText="Accept"
+              buttonStyle={{
+                fontSize: "18px",
+                padding: "5px 14px",
+                backgroundColor: "#ff8a3f",
+              }}
+              onAccept={() => {
+                gtagConsent();
+              }}
+            >
+              We use cookies to enhance the user experience and measure
+              engagement.
+            </CookieConsent>
           </div>
         </AnnouncementBarIsClosedProvider>
       </ApiKeyModalStateProvider>
