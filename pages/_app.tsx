@@ -30,8 +30,8 @@ config.autoAddCss = false;
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  useEffect(() => setupGoogleAnalytics(router));
   const { user } = pageProps;
+  useEffect(() => setupGoogleAnalytics(router, user));
 
   return (
     <UserProvider user={user}>
