@@ -1,5 +1,6 @@
-import {handleAuth, handleCallback, handleLogin} from "@auth0/nextjs-auth0";
-import shuttle, {Error} from "../../../lib/shuttle";
+import { handleAuth, handleCallback, handleLogin } from "@auth0/nextjs-auth0";
+import { gtagUserId } from "../../../lib/gtag";
+import shuttle, { Error } from "../../../lib/shuttle";
 
 async function afterCallback(req, res, session, state) {
   const shuttlified = session.user.sub.replace("|", "-");
@@ -12,6 +13,9 @@ async function afterCallback(req, res, session, state) {
       return Promise.reject(err);
     }
   });
+
+  // set the user ID in the google analytics session
+  gtagUserId(user.name);
 
   session.user.api_key = user.key;
 

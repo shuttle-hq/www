@@ -23,6 +23,10 @@ export const gtagEvent = ({ action, category, label, value }: GtagEvent) => {
   });
 };
 
+export const gtagUserId = (userId: string) => {
+  window.gtag("set", "user_id", userId);
+};
+
 export const setupGoogleAnalytics = (router: NextRouter) => {
   const handleRouteChange = (url: string) => {
     pageview(url);
