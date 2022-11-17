@@ -88,7 +88,11 @@ export default function App({ Component, pageProps }: AppProps) {
             <CookieConsent
               buttonText="Accept"
               buttonStyle={{
-                fontSize: "18px",
+                borderRadius: "4px",
+                fontWeight: "500",
+                fontSize: "16px",
+                color: "rgb(15 23 42)",
+                lineHeight: "24px",
                 padding: "5px 14px",
                 backgroundColor: "#ff8a3f",
               }}
