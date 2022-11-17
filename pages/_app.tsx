@@ -93,7 +93,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 fontSize: "16px",
                 color: "rgb(15 23 42)",
                 lineHeight: "24px",
-                padding: "5px 14px",
+                padding: "4px 16px",
                 backgroundColor: "#ff8a3f",
               }}
               onAccept={() => {
