@@ -24,17 +24,26 @@ export const gtagEvent = ({ action, category, label, value }: GtagEvent) => {
   });
 };
 
+// set the user_id field in the GA session: https://developers.google.com/analytics/devguides/collection/ga4/reference/config#user_id
 export const gtagUserId = (userId: string) => {
   window.gtag("set", "user_id", userId);
 };
 
+// give gtag consent for analytics cookies (ad_storage is always disabled)
 export const gtagConsent = () => {
   window.gtag("consent", "update", {
     analytics_storage: "granted",
-    ad_storage: "granted",
   });
 };
 
+// revoke gtag consent for analytics cookies (ad_storage is always disabled)
+export const gtagRevokeConsent = () => {
+  window.gtag("consent", "update", {
+    analytics_storage: "denied",
+  });
+};
+
+// track page router changes
 export const setupGoogleAnalytics = (router: NextRouter, user: any) => {
   const handleRouteChange = (url: string) => {
     pageview(url);
