@@ -54,7 +54,7 @@ export default function SignupForm() {
           {
             <ExternalLink
               key="shuttle-next"
-              href="https://www.shuttle.rs/blog/2022/10/21/shuttle-next"
+              href="https://shuttle.rs/blog/2022/10/21/shuttle-next"
               className="text-brand-orange1 hover:text-brand-orange2"
             >
               next iteration of shuttle
