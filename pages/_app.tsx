@@ -23,10 +23,16 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import Script from "next/script";
-import { gtagConsent, setupGoogleAnalytics } from "../lib/gtag";
+import {
+  gtagConsent,
+  gtagRevokeConsent,
+  setupGoogleAnalytics,
+} from "../lib/gtag";
 import CookieConsent from "react-cookie-consent";
 
 config.autoAddCss = false;
+
+const transitionClass = "transition hover:brightness-125";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -45,6 +51,9 @@ export default function App({ Component, pageProps }: AppProps) {
             strategy="afterInteractive"
             src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
           />
+          {/* Disable ad storage always. Disable analytics storage by default for EU and EEA countries,
+          allowing users to opt-in via the cookie consent banner. Analytics storage is enabled by default
+          for remaining countries, but they may opt-out via cookie consent banner.*/}
           <Script
             id="google-analytics"
             strategy="afterInteractive"
@@ -55,8 +64,12 @@ export default function App({ Component, pageProps }: AppProps) {
             gtag('js', new Date());
 
             gtag('consent', 'default', {
-              'ad_storage': 'denied',
               'analytics_storage': 'denied',
+              'region': ['BE', 'BG', 'CZ', 'DK', 'DE', 'EE', 'IE', 'GR', 'ES', 'FR', 'HR', 'IT', 'CY', 'LV', 'LT', 'LU', 'HU', 'MT', 'NL', 'AT', 'PL', 'PT', 'RO', 'SI', 'SK', 'FI', 'SE', 'NO', 'CH', 'IS', 'LI', 'UK'],
+            });
+
+            gtag('consent', 'default', {
+              'ad_storage': 'denied',
             });
 
             gtag('config', '${GA_MEASUREMENT_ID}', {
@@ -86,19 +99,35 @@ export default function App({ Component, pageProps }: AppProps) {
             <ApiKeyModal />
             <Footer />
             <CookieConsent
+              style={{
+                justifyContent: "center",
+              }}
+              enableDeclineButton={true}
+              declineButtonText="Decline"
+              // only a limited subset of tailwind classes work
+              declineButtonClasses={transitionClass}
+              declineButtonStyle={{
+                borderRadius: "4px",
+                fontWeight: "500",
+                color: "rgb(15 23 42)",
+                padding: "4px 16px",
+                backgroundColor: "#7777dd",
+                minWidth: "87px",
+                opacity: "0.7",
+              }}
               buttonText="Accept"
+              // only a limited subset of tailwind classes work
+              buttonClasses={transitionClass}
               buttonStyle={{
                 borderRadius: "4px",
                 fontWeight: "500",
-                fontSize: "16px",
                 color: "rgb(15 23 42)",
-                lineHeight: "24px",
                 padding: "4px 16px",
-                backgroundColor: "#ff8a3f",
+                backgroundColor: "#f25100",
+                minWidth: "87px",
               }}
-              onAccept={() => {
-                gtagConsent();
-              }}
+              onDecline={() => gtagRevokeConsent()}
+              onAccept={() => gtagConsent()}
             >
               We use cookies to enhance the user experience and measure
               engagement.
