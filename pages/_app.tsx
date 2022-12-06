@@ -16,7 +16,7 @@ import {
 import { gtagConsent, gtagRevokeConsent, setupGoogleAnalytics } from '../lib/gtag'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { Navigation } from 'components/common'
+import { Navigation } from 'components/sections'
 
 const transitionClass = 'transition hover:brightness-125'
 
@@ -73,7 +73,7 @@ export default function App({ Component, pageProps }: AppProps) {
 					cardType: 'summary_large_image',
 				}}
 			/>
-			<div className='dark:bg-dark-700 dark:text-dark-200 min-h-screen bg-slate-100 text-slate-800'>
+			<div className='bg-black text-[#7A7A7A]'>
 				<Navigation />
 				<Component {...pageProps} />
 				<CookieConsent
