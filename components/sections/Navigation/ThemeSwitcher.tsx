@@ -1,10 +1,15 @@
 import { useLocalStorage, useMedia } from 'react-use'
-import { useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import { Lightbulb, Moon } from 'components/svgs'
+import clsx from 'clsx'
 
 type StorageTheme = 'dark' | 'light' | 'system'
 
-const ThemeSwitcher = () => {
+interface ThemeSwitcherProps {
+	className?: string
+}
+
+const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ className }) => {
 	const osTheme = useMedia('(prefers-color-scheme: dark)') ? 'dark' : 'light'
 	const [storageTheme, setStorageTheme] = useLocalStorage<StorageTheme>('app-theme', 'system')
 	const theme = storageTheme === 'system' ? osTheme : storageTheme
@@ -25,12 +30,13 @@ const ThemeSwitcher = () => {
 	return (
 		<button
 			type='button'
-			className='text-black dark:text-white'
+			className={clsx(className, 'text-black dark:text-white')}
 			onClick={() => {
 				updateTheme(theme === 'dark' ? 'light' : 'dark')
 			}}
 		>
 			{theme === 'dark' ? <Lightbulb /> : <Moon />}
+			<span className='lg:hidden'>Switch Theme</span>
 		</button>
 	)
 }
