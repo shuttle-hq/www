@@ -1,5 +1,10 @@
-import { Hero } from 'components/sections'
+import { GetStarted, Hero } from 'components/sections'
 
 export default function Home() {
-	return <Hero />
+	return (
+		<>
+			<Hero />
+			<GetStarted />
+		</>
+	)
 }

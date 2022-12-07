@@ -17,6 +17,7 @@ import { gtagConsent, gtagRevokeConsent, setupGoogleAnalytics } from '../lib/gta
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { Navigation } from 'components/sections'
+import '@splidejs/react-splide/css'
 
 const transitionClass = 'transition hover:brightness-125'
 

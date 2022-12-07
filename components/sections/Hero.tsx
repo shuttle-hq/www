@@ -6,7 +6,7 @@ const Hero = () => {
 		<div className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
 			<header className='md:grid md:grid-cols-2 md:items-center lg:grid-cols-[1.2fr_1fr] lg:gap-8'>
 				<div>
-					<h1 className='font-gradual lg:text-6.5 text-5xl font-bold text-[#C2C2C2]'>
+					<h1 className='font-gradual text-5xl font-bold text-[#C2C2C2] lg:text-6.5'>
 						<span className='text-gradient block bg-clip-text text-transparent'>Build Backends.</span>
 						Fast.
 					</h1>
@@ -21,7 +21,7 @@ const Hero = () => {
 				</div>
 				<div className='relative z-10 mt-8 overflow-hidden rounded-3xl p-5 sm:mt-10 sm:p-8 lg:mt-0 lg:p-10'>
 					<Image
-						src='/images/sections/hero/code.png'
+						src='/images/sections/code.png'
 						alt='code'
 						width={420}
 						height={349}
