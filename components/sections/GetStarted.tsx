@@ -1,7 +1,9 @@
 import Image from 'next/image'
-import { Splide, SplideSlide, SplideTrack } from '@splidejs/react-splide'
+import { Splide, SplideSlide } from '@splidejs/react-splide'
 import { FC, ReactNode } from 'react'
 import clsx from 'clsx'
+import Link from 'next/link'
+import { Copy } from 'components/svgs'
 
 const GetStarted = () => {
 	return (
@@ -12,11 +14,11 @@ const GetStarted = () => {
 				</h2>
 				<p className='mt-5 lg:text-xl'>
 					Once you’ve done this, you are good to go! To learn more about how shuttle works, take a look
-					at our
-					<a href='#' className='underline'>
+					at our&nbsp;
+					<Link href='#' className='underline'>
 						Docs
-					</a>
-					page!
+					</Link>
+					&nbsp;page!
 				</p>
 			</div>
 			<div className='mx-auto mt-10 w-full max-w-[1280px] gap-x-6 px-5 sm:px-10 lg:mt-16 lg:grid lg:grid-cols-[1fr_400px] lg:gap-5 xl:mt-20 xl:items-center xl:gap-12'>
@@ -78,24 +80,7 @@ const GetStarted = () => {
 						<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
 							$ cargo install cargo-shuttle
 							<button className='absolute right-3 rounded-lg border border-transparent p-1 text-[#C2C2C2] hover:border-[#484848] hover:bg-[#343434]'>
-								<svg
-									width={22}
-									height={22}
-									viewBox='0 0 22 22'
-									fill='currentColor'
-									xmlns='http://www.w3.org/2000/svg'
-								>
-									<path
-										fillRule='evenodd'
-										clipRule='evenodd'
-										d='M4.1665 19.1675H13.6665V17.5008H5.83317V7.00081H4.1665V19.1675Z'
-									/>
-									<path
-										fillRule='evenodd'
-										clipRule='evenodd'
-										d='M17.6656 3.00081H9.66561V13.6675H17.6656V3.00081ZM8.33228 1.66748V15.0008H18.9989V1.66748H8.33228Z'
-									/>
-								</svg>
+								<Copy />
 							</button>
 						</div>
 					</GetStartedSlide>
