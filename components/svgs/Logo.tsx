@@ -3,7 +3,6 @@ import { FC, SVGAttributes } from 'react'
 const Logo: FC<Partial<SVGAttributes<SVGSVGElement>>> = (props) => {
 	return (
 		<svg
-			className='text-[#C2C2C2]'
 			width='124'
 			height='30'
 			viewBox='0 0 124 30'

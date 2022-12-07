@@ -11,7 +11,7 @@ const Navigation = () => {
 	return (
 		<nav className='mx-auto flex h-[5.5rem] max-w-[1344px] items-center px-5 sm:px-10'>
 			<a href='#'>
-				<Logo />
+				<Logo className='dark:text-[#C2C2C2]' />
 			</a>
 			<div
 				className={clsx(
@@ -20,21 +20,31 @@ const Navigation = () => {
 				)}
 			>
 				<div className='flex flex-col gap-4 lg:flex-row lg:gap-8'>
-					<Link href='/blog'>Blog</Link>
-					<Link href='/pricing'>Pricing</Link>
-					<Link href='/docs'>Docs</Link>
-					<Link href='/beta'>Beta</Link>
-					<Link href='/shuttle-heros'>Shuttle Heroes</Link>
+					<Link className='nav-link-shadow' href='/blog'>
+						Blog
+					</Link>
+					<Link className='nav-link-shadow' href='/pricing'>
+						Pricing
+					</Link>
+					<Link className='nav-link-shadow' href='/docs'>
+						Docs
+					</Link>
+					<Link className='nav-link-shadow' href='/beta'>
+						Beta
+					</Link>
+					<Link className='nav-link-shadow' href='/shuttle-heros'>
+						Shuttle Heroes
+					</Link>
 				</div>
 				<div className='mt-10 lg:mt-0 lg:ml-auto lg:flex lg:items-center lg:gap-5'>
 					<div className='mt-10 flex flex-wrap items-center gap-5 lg:mt-0'>
-						<Button variant='secondary'>Join Discord</Button>
-						<Button variant='primary' className=''>
+						<Button variant='primary'>Join Discord</Button>
+						<Button variant='secondary'>
 							<GithubLogo />
 							Log in
 						</Button>
 					</div>
-					<ThemeSwitcher className='border-gradient-h group relative mt-5 flex gap-3 rounded-button p-3 after:rounded-[0.875rem] dark:hover:bg-black lg:-order-1 lg:mt-0' />
+					<ThemeSwitcher className='mt-5 lg:-order-1 lg:mt-0' />
 				</div>
 			</div>
 

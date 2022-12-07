@@ -30,12 +30,15 @@ const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ className }) => {
 	return (
 		<button
 			type='button'
-			className={clsx(className, 'text-black dark:text-white')}
+			className={clsx(
+				className,
+				'border-gradient-h group relative flex gap-3 rounded-button p-3 after:rounded-[0.875rem] dark:hover:bg-black'
+			)}
 			onClick={() => {
 				updateTheme(theme === 'dark' ? 'light' : 'dark')
 			}}
 		>
-			{theme === 'dark' ? <Lightbulb /> : <Moon />}
+			{theme === 'dark' ? <Lightbulb className='group-hover:fill-[url(#gradient)]' /> : <Moon />}
 			<span className='lg:hidden'>Switch Theme</span>
 		</button>
 	)

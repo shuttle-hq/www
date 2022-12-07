@@ -6,19 +6,18 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	children: ReactNode
 }
 
-const Button: FC<ButtonProps> = ({ variant, children }) => {
-	const variantClasses =
-		variant === 'primary'
-			? 'bg-[#D8D8D8] text-black hover:text-white'
-			: variant === 'secondary'
-			? 'bg-black text-[#C2C2C2]'
-			: ''
+const Button: FC<ButtonProps> = ({ variant, className, children }) => {
+	// Primary and secondary switch for dark mode
 
 	return (
 		<button
 			className={clsx(
 				'flex items-center gap-2 whitespace-nowrap rounded-button px-6 py-3 font-bold transition-all duration-500',
-				variantClasses
+				variant === 'primary' &&
+					'border-gradient shadow-gradient dark:button-shadow bg-black text-[#C2C2C2] dark:bg-[#D8D8D8] dark:text-black dark:hover:bg-gradient-to-r dark:hover:from-[#fc540c] dark:hover:to-[#f5c57a] dark:hover:text-white',
+				variant === 'secondary' &&
+					'button-shadow dark:border-gradient dark:shadow-gradient bg-[#D8D8D8] text-black hover:bg-gradient-to-r hover:from-[#fc540c] hover:to-[#f5c57a] hover:text-white dark:bg-black dark:text-[#C2C2C2] dark:hover:bg-none',
+				className
 			)}
 		>
 			{children}
