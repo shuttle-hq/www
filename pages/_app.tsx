@@ -29,6 +29,10 @@ export default function App({ Component, pageProps }: AppProps) {
 		<>
 			<Head>
 				<title>{SITE_TITLE}</title>
+				<link
+					href='https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible&display=swap'
+					rel='stylesheet'
+				/>
 			</Head>
 			{/* Global Site Tag (gtag.js) - Google Analytics */}
 			<Script
@@ -73,7 +77,7 @@ export default function App({ Component, pageProps }: AppProps) {
 					cardType: 'summary_large_image',
 				}}
 			/>
-			<div className='text-blue bg-white dark:bg-black dark:text-[#7A7A7A]'>
+			<div className='min-h-screen bg-transparent text-[#525151] dark:text-[#7A7A7A]'>
 				<Navigation />
 				<Component {...pageProps} />
 				<CookieConsent
