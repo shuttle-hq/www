@@ -1,3 +1,4 @@
+export * from './logos'
 export { default as Copy } from './Copy'
 export { default as GithubLogo } from './GithubLogo'
 export { default as Hamburger } from './Hamburger'
