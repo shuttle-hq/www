@@ -1,5 +1,6 @@
 import { Button } from 'components/elements'
 import { GithubLogo, Hamburger, Logo } from 'components/svgs'
+import ThemeSwitcher from './ThemeSwitcher'
 import Link from 'next/link'
 
 const Navigation = () => {
@@ -8,7 +9,7 @@ const Navigation = () => {
 			<a href='#'>
 				<Logo />
 			</a>
-			<div className='absolute left-0 top-[4.375rem] z-10 hidden h-[calc(100vh-4.375rem)] w-full overflow-y-auto bg-black p-5 sm:px-10 lg:static lg:ml-10 lg:flex lg:h-auto lg:items-center lg:overflow-y-visible lg:p-0'>
+			<div className='absolute left-0 top-[4.375rem] z-10 hidden h-[calc(100vh-4.375rem)] w-full overflow-y-auto p-5 dark:bg-black sm:px-10 lg:static lg:ml-10 lg:flex lg:h-auto lg:items-center lg:overflow-y-visible lg:p-0'>
 				<div className='flex flex-col gap-4 lg:flex-row lg:gap-8'>
 					<Link href='/blog'>Blog</Link>
 					<Link href='/pricing'>Pricing</Link>
@@ -25,6 +26,7 @@ const Navigation = () => {
 						Log in
 					</Button>
 				</div>
+				<ThemeSwitcher />
 			</div>
 			<button className='ml-auto text-[#D8D8D8] lg:hidden'>
 				<Hamburger />

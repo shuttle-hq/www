@@ -1,3 +1,5 @@
 export { default as GithubLogo } from './GithubLogo'
-export { default as Logo } from './Logo'
 export { default as Hamburger } from './Hamburger'
+export { default as Lightbulb } from './Lightbulb'
+export { default as Logo } from './Logo'
+export { default as Moon } from './Moon'

@@ -73,7 +73,7 @@ export default function App({ Component, pageProps }: AppProps) {
 					cardType: 'summary_large_image',
 				}}
 			/>
-			<div className='bg-black text-[#7A7A7A]'>
+			<div className='text-blue bg-white dark:bg-black dark:text-[#7A7A7A]'>
 				<Navigation />
 				<Component {...pageProps} />
 				<CookieConsent
