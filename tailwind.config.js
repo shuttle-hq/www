@@ -8,6 +8,7 @@ module.exports = {
 				gradual: 'sans-serif',
 			},
 			borderRadius: {
+				'4xl': '2rem',
 				button: '0.875rem',
 			},
 			fontSize: {
