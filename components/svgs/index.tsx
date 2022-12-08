@@ -1,5 +1,6 @@
-export * from './logos'
 export * from './features'
+export * from './logos'
+export * from './starters'
 export { default as Copy } from './Copy'
 export { default as GithubLogo } from './GithubLogo'
 export { default as Hamburger } from './Hamburger'

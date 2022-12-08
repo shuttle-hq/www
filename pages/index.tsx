@@ -1,4 +1,11 @@
-import { CommunitySupportedNumbers, Features, GetStarted, Hero, LogosReferences } from 'components/sections'
+import {
+	CommunitySupportedNumbers,
+	FeaturedStarters,
+	Features,
+	GetStarted,
+	Hero,
+	LogosReferences,
+} from 'components/sections'
 
 export default function Home() {
 	return (
@@ -8,6 +15,7 @@ export default function Home() {
 			<LogosReferences />
 			<Features />
 			<CommunitySupportedNumbers />
+			<FeaturedStarters />
 		</>
 	)
 }
