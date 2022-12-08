@@ -3,6 +3,7 @@ export { default as CommunitySupportedNumbers } from './CommunitySupportedNumber
 export { default as FeaturedBlogPosts } from './FeaturedBlogPosts'
 export { default as FeaturedStarters } from './FeaturedStarters'
 export { default as Footer } from './Footer'
+export { default as FrequentlyAskedQuestions } from './FrequentlyAskedQuestions'
 export { default as GetStarted } from './GetStarted'
 export { default as Hero } from './Hero'
 export { default as HowItWorks } from './HowItWorks'
