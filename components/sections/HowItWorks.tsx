@@ -95,32 +95,6 @@ const HowItWorks = () => {
 						</button>
 					</SplideSlide>
 				</Splide>
-				{/* <div id='splide3' className='splide md:top-px'>
-					<div className='splide__track md:!overflow-visible'>
-						<ul className='splide__list whitespace-nowrap text-[#C2C2C2]'>
-							<li className='splide__slide'>
-								<button className='rounded-[1.75rem] border border-[#191919] bg-black py-2 px-6 font-gradual font-bold text-[#D8D8D8] md:rounded-b-none md:border-b-0 md:py-3'>
-									Hello cloud
-								</button>
-							</li>
-							<li className='splide__slide'>
-								<button className='tab-shadow rounded-[1.75rem] border border-transparent p-2 font-gradual font-bold md:rounded-b-none md:border-b-0 md:py-3'>
-									Cargo deploy
-								</button>
-							</li>
-							<li className='splide__slide'>
-								<button className='tab-shadow rounded-[1.75rem] border border-transparent p-2 font-gradual font-bold md:rounded-b-none md:border-b-0 md:py-3'>
-									Using SQL
-								</button>
-							</li>
-							<li className='splide__slide'>
-								<button className='tab-shadow rounded-[1.75rem] border border-transparent p-2 font-gradual font-bold md:rounded-b-none md:border-b-0 md:py-3'>
-									Using Axum
-								</button>
-							</li>
-						</ul>
-					</div>
-				</div> */}
 				<div className='mt-3 rounded-[2rem] border border-[#191919] bg-black p-6 text-right md:mt-0 md:rounded-tl-none'>
 					<button className='rounded-xl border border-[#191919] p-2 text-[#C2C2C2] hover:border-[#484848] hover:bg-[#343434]'>
 						<Copy width={32} height={32} />
