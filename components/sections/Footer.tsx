@@ -1,4 +1,4 @@
-import YCombinator from 'components/svgs/logos/YCombinator'
+import { YCombinator } from 'components/svgs'
 import Image from 'next/image'
 import Link from 'next/link'
 
