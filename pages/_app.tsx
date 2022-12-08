@@ -16,7 +16,7 @@ import {
 import { gtagConsent, gtagRevokeConsent, setupGoogleAnalytics } from '../lib/gtag'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { Navigation } from 'components/sections'
+import { Footer, Navigation } from 'components/sections'
 import '@splidejs/react-splide/css'
 
 const transitionClass = 'transition hover:brightness-125'
@@ -81,6 +81,7 @@ export default function App({ Component, pageProps }: AppProps) {
 			<div className='min-h-screen bg-transparent text-[#525151] dark:text-[#7A7A7A]'>
 				<Navigation />
 				<Component {...pageProps} />
+				<Footer />
 				<CookieConsent
 					style={{
 						justifyContent: 'center',
