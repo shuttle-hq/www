@@ -1,6 +1,7 @@
 import {
 	CallToAction,
 	CommunitySupportedNumbers,
+	FeaturedBlogPosts,
 	FeaturedStarters,
 	Features,
 	GetStarted,
@@ -22,6 +23,7 @@ export default function Home() {
 			<HowItWorks />
 			<Testimonials />
 			<CallToAction />
+			<FeaturedBlogPosts />
 		</>
 	)
 }

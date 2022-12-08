@@ -92,7 +92,7 @@ const Testimonials = () => {
 							<div className='flex items-start gap-4'>
 								<div className='h-[3.125rem] w-[3.125rem] flex-shrink-0 rounded-full bg-gradient-to-r from-[#FC540C] via-[#4E452F] to-[#38D4E9] p-px'>
 									<Image
-										src='/images/sections/testimonials/user.jpg'
+										src='/images/sections/user.jpg'
 										alt='profile picture'
 										width={40}
 										height={40}
@@ -114,7 +114,7 @@ const Testimonials = () => {
 							<div className='flex items-start gap-4'>
 								<div className='h-[3.125rem] w-[3.125rem] flex-shrink-0 rounded-full bg-gradient-to-r from-[#FC540C] via-[#4E452F] to-[#38D4E9] p-px'>
 									<Image
-										src='/images/sections/testimonials/user.jpg'
+										src='/images/sections/user.jpg'
 										alt='profile picture'
 										width={40}
 										height={40}
@@ -137,7 +137,7 @@ const Testimonials = () => {
 							<div className='flex items-start gap-4'>
 								<div className='h-[3.125rem] w-[3.125rem] flex-shrink-0 rounded-full bg-gradient-to-r from-[#FC540C] via-[#4E452F] to-[#38D4E9] p-px'>
 									<Image
-										src='/images/sections/testimonials/user.jpg'
+										src='/images/sections/user.jpg'
 										alt='profile picture'
 										width={40}
 										height={40}
@@ -155,7 +155,7 @@ const Testimonials = () => {
 							<div className='flex items-start gap-4'>
 								<div className='h-[3.125rem] w-[3.125rem] flex-shrink-0 rounded-full bg-gradient-to-r from-[#FC540C] via-[#4E452F] to-[#38D4E9] p-px'>
 									<Image
-										src='/images/sections/testimonials/user.jpg'
+										src='/images/sections/user.jpg'
 										alt='profile picture'
 										width={40}
 										height={40}
@@ -182,7 +182,7 @@ const Testimonials = () => {
 							<div className='flex items-start gap-4'>
 								<div className='h-[3.125rem] w-[3.125rem] flex-shrink-0 rounded-full bg-gradient-to-r from-[#FC540C] via-[#4E452F] to-[#38D4E9] p-px'>
 									<Image
-										src='/images/sections/testimonials/user.jpg'
+										src='/images/sections/user.jpg'
 										alt='profile picture'
 										width={40}
 										height={40}
@@ -203,7 +203,7 @@ const Testimonials = () => {
 							<div className='flex items-start gap-4'>
 								<div className='h-[3.125rem] w-[3.125rem] flex-shrink-0 rounded-full bg-gradient-to-r from-[#FC540C] via-[#4E452F] to-[#38D4E9] p-px'>
 									<Image
-										src='/images/sections/testimonials/user.jpg'
+										src='/images/sections/user.jpg'
 										alt='profile picture'
 										width={40}
 										height={40}
