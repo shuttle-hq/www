@@ -1,4 +1,4 @@
-import { Features, GetStarted, Hero, LogosReferences } from 'components/sections'
+import { CommunitySupportedNumbers, Features, GetStarted, Hero, LogosReferences } from 'components/sections'
 
 export default function Home() {
 	return (
@@ -7,6 +7,7 @@ export default function Home() {
 			<GetStarted />
 			<LogosReferences />
 			<Features />
+			<CommunitySupportedNumbers />
 		</>
 	)
 }

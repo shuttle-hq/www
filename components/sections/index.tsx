@@ -1,3 +1,4 @@
+export { default as CommunitySupportedNumbers } from './CommunitySupportedNumbers'
 export { default as Footer } from './Footer'
 export { default as GetStarted } from './GetStarted'
 export { default as Hero } from './Hero'
