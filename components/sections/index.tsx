@@ -1,3 +1,4 @@
+export { default as CallToAction } from './CallToAction'
 export { default as CommunitySupportedNumbers } from './CommunitySupportedNumbers'
 export { default as FeaturedStarters } from './FeaturedStarters'
 export { default as Footer } from './Footer'

@@ -1,4 +1,5 @@
 import {
+	CallToAction,
 	CommunitySupportedNumbers,
 	FeaturedStarters,
 	Features,
@@ -20,6 +21,7 @@ export default function Home() {
 			<FeaturedStarters />
 			<HowItWorks />
 			<Testimonials />
+			<CallToAction />
 		</>
 	)
 }
