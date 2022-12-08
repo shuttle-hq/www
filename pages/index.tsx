@@ -6,6 +6,7 @@ import {
 	Hero,
 	HowItWorks,
 	LogosReferences,
+	Testimonials,
 } from 'components/sections'
 
 export default function Home() {
@@ -18,6 +19,7 @@ export default function Home() {
 			<CommunitySupportedNumbers />
 			<FeaturedStarters />
 			<HowItWorks />
+			<Testimonials />
 		</>
 	)
 }
