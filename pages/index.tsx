@@ -4,6 +4,7 @@ import {
 	Features,
 	GetStarted,
 	Hero,
+	HowItWorks,
 	LogosReferences,
 } from 'components/sections'
 
@@ -16,6 +17,7 @@ export default function Home() {
 			<Features />
 			<CommunitySupportedNumbers />
 			<FeaturedStarters />
+			<HowItWorks />
 		</>
 	)
 }
