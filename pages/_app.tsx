@@ -78,7 +78,7 @@ export default function App({ Component, pageProps }: AppProps) {
 					cardType: 'summary_large_image',
 				}}
 			/>
-			<div className='min-h-screen bg-transparent text-[#525151] dark:text-[#7A7A7A]'>
+			<div className='min-h-screen bg-transparent text-black dark:text-[#7A7A7A]'>
 				<Navigation />
 				<Component {...pageProps} />
 				<Footer />

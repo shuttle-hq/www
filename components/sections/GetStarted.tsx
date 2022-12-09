@@ -9,7 +9,7 @@ const GetStarted = () => {
 	return (
 		<>
 			<div className='mx-auto mt-24 w-full max-w-[800px] px-5 sm:mt-28 sm:px-10 lg:mt-32 xl:mt-36 desktop:mt-52'>
-				<h2 className='font-gradual text-4.5 font-bold leading-none text-[#C2C2C2]'>
+				<h2 className='font-gradual text-4.5 font-bold leading-none dark:text-[#C2C2C2]'>
 					Get started in seconds
 				</h2>
 				<p className='mt-5 lg:text-xl'>
@@ -79,7 +79,7 @@ const GetStarted = () => {
 					<GetStartedSlide number='1' title='Install' text='Run this command to install shuttle'>
 						<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
 							$ cargo install cargo-shuttle
-							<button className='absolute right-3 rounded-lg border border-transparent p-1 text-[#C2C2C2] hover:border-[#484848] hover:bg-[#343434]'>
+							<button className='absolute right-3 rounded-lg border border-transparent p-1 hover:border-[#484848] hover:bg-[#343434] dark:text-[#C2C2C2]'>
 								<Copy />
 							</button>
 						</div>
@@ -110,12 +110,12 @@ const GetStartedSlide: FC<GetStartedSlideProps> = ({ number, title, text, childr
 		<SplideSlide className='max-w-[85%] p-[1px] lg:max-w-full lg:pb-4 lg:last:pb-0'>
 			<div
 				className={clsx(
-					'border-gradient-h group relative h-full cursor-pointer cursor-pointer rounded-2xl rounded-2xl bg-black p-6 p-6 outline outline-1 outline-[#191919] transition after:rounded-2xl hover:outline-none',
+					'border-gradient-h group relative h-full cursor-pointer cursor-pointer rounded-2xl rounded-2xl p-6 p-6 outline outline-1 outline-black/10 transition after:rounded-2xl hover:outline-none dark:bg-black dark:outline-[#191919]',
 					number !== '1' && // If it isn't the first slide, hide the outline on desktop
 						'lg:outline-none'
 				)}
 			>
-				<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>
+				<h3 className='font-gradual text-2xl font-bold dark:text-[#C2C2C2]'>
 					<span className='bg-gradient-to-r from-[#FC540C] to-[#C39348] bg-clip-text text-transparent'>
 						{number.padStart(2, '0')}
 					</span>
@@ -127,7 +127,7 @@ const GetStartedSlide: FC<GetStartedSlideProps> = ({ number, title, text, childr
 
 				{/* If it the whole slide isn't outlined, add a line under the slide */}
 				{number !== '1' && (
-					<hr className='absolute -bottom-px left-6 w-[calc(100%-3rem)] border-[#191919] group-hover:hidden' />
+					<hr className='absolute -bottom-px left-6 w-[calc(100%-3rem)] border-black/10 group-hover:hidden dark:border-[#191919]' />
 				)}
 			</div>
 		</SplideSlide>

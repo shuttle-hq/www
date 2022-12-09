@@ -10,7 +10,9 @@ const HowItWorks = () => {
 	return (
 		<div className='mx-auto mt-24 w-full max-w-[1280px] px-5 sm:mt-28 sm:px-10 lg:mt-36 lg:grid lg:grid-cols-[1fr_minmax(566px,_1fr)] lg:gap-7 xl:grid-cols-2 desktop:mt-40'>
 			<div>
-				<h2 className='font-gradual text-5xl font-bold text-[#C2C2C2] lg:text-[3.5rem]'>How it works</h2>
+				<h2 className='font-gradual text-5xl font-bold dark:dark:text-[#C2C2C2] lg:text-[3.5rem]'>
+					How it works
+				</h2>
 				<div className='mt-4 space-y-7 sm:mt-8 lg:text-xl'>
 					<p>Shuttle is built for Rust.</p>
 					<p>
@@ -47,8 +49,8 @@ const HowItWorks = () => {
 							className={clsx(
 								'whitespace-nowrap rounded-[1.75rem] p-2 px-6 font-gradual font-bold leading-none md:rounded-b-none md:border-b-0 md:py-3',
 								selectedItem === 'hello-cloud'
-									? 'border border-[#191919] bg-black text-[#D8D8D8]'
-									: 'tab-shadow text-[#C2C2C2]'
+									? 'border border-[#191919] bg-[#13292C] text-[#D8D8D8] dark:bg-black'
+									: 'tab-shadow dark:dark:text-[#C2C2C2]'
 							)}
 							onClick={() => setSelectedItem('hello-cloud')}
 						>
@@ -60,8 +62,8 @@ const HowItWorks = () => {
 							className={clsx(
 								'whitespace-nowrap rounded-[1.75rem] p-2 px-6 font-gradual font-bold leading-none md:rounded-b-none md:border-b-0 md:py-3',
 								selectedItem === 'cargo-deploy'
-									? 'border border-[#191919] bg-black text-[#D8D8D8]'
-									: 'tab-shadow text-[#C2C2C2]'
+									? 'border border-[#191919] bg-[#13292C] text-[#D8D8D8] dark:bg-black'
+									: 'tab-shadow dark:text-[#C2C2C2]'
 							)}
 							onClick={() => setSelectedItem('cargo-deploy')}
 						>
@@ -73,8 +75,8 @@ const HowItWorks = () => {
 							className={clsx(
 								'whitespace-nowrap rounded-[1.75rem] p-2 px-6 font-gradual font-bold leading-none md:rounded-b-none md:border-b-0 md:py-3',
 								selectedItem === 'using-sql'
-									? 'border border-[#191919] bg-black text-[#D8D8D8]'
-									: 'tab-shadow text-[#C2C2C2]'
+									? 'border border-[#191919] bg-[#13292C] text-[#D8D8D8] dark:bg-black'
+									: 'tab-shadow dark:text-[#C2C2C2]'
 							)}
 							onClick={() => setSelectedItem('using-sql')}
 						>
@@ -86,8 +88,8 @@ const HowItWorks = () => {
 							className={clsx(
 								'whitespace-nowrap rounded-[1.75rem] p-2 px-6 font-gradual font-bold leading-none md:rounded-b-none md:border-b-0 md:py-3',
 								selectedItem === 'using-axum'
-									? 'border border-[#191919] bg-black text-[#D8D8D8]'
-									: 'tab-shadow text-[#C2C2C2]'
+									? 'border border-[#191919] bg-[#13292C] text-[#D8D8D8] dark:bg-black'
+									: 'tab-shadow dark:text-[#C2C2C2]'
 							)}
 							onClick={() => setSelectedItem('using-axum')}
 						>
@@ -95,8 +97,8 @@ const HowItWorks = () => {
 						</button>
 					</SplideSlide>
 				</Splide>
-				<div className='mt-3 rounded-[2rem] border border-[#191919] bg-black p-6 text-right md:mt-0 md:rounded-tl-none'>
-					<button className='rounded-xl border border-[#191919] p-2 text-[#C2C2C2] hover:border-[#484848] hover:bg-[#343434]'>
+				<div className='mt-3 rounded-[2rem] border border-[#191919] bg-[#13292C] p-6 text-right dark:bg-black md:mt-0 md:rounded-tl-none'>
+					<button className='rounded-xl border border-[#191919] p-2 text-white hover:border-[#484848] hover:bg-[#343434] dark:text-[#C2C2C2]'>
 						<Copy width={32} height={32} />
 					</button>
 					<Image src='/images/sections/code.png' alt='code' width={538} height={378} className='mt-6' />
