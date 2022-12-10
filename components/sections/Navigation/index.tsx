@@ -50,7 +50,7 @@ const Navigation = () => {
 				</div>
 			</div>
 
-			<button className='ml-auto text-[#D8D8D8] lg:hidden' onClick={() => setOpen((open) => !open)}>
+			<button className='ml-auto dark:text-[#D8D8D8] lg:hidden' onClick={() => setOpen((open) => !open)}>
 				<Hamburger />
 			</button>
 		</nav>

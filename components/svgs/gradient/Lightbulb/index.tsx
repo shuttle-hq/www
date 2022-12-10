@@ -10,7 +10,7 @@ const Lightbulb: FC<Partial<SVGAttributes<SVGSVGElement>>> = (props) => {
 			viewBox='0 0 25 24'
 			xmlns='http://www.w3.org/2000/svg'
 			{...props}
-			className={clsx(styles.lightbulb, 'h-full w-full', props.className)}
+			className={clsx(styles.lightbulb, 'lg:h-full lg:w-full', props.className)}
 		>
 			<defs>
 				<linearGradient id='dark-gradient'>
