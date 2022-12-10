@@ -30,10 +30,6 @@ export default function App({ Component, pageProps }: AppProps) {
 		<>
 			<Head>
 				<title>{SITE_TITLE}</title>
-				<link
-					href='https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible&display=swap'
-					rel='stylesheet'
-				/>
 			</Head>
 			{/* Global Site Tag (gtag.js) - Google Analytics */}
 			<Script
