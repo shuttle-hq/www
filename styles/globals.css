@@ -53,6 +53,7 @@ body.dark {
 		z-index: -1;
 		width: calc(100% + 2px);
 		height: calc(100% + 2px);
+		border-radius: 0.875rem;
 
 		opacity: 0;
 		transition: opacity 0.5s;
