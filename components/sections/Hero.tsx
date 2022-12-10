@@ -19,7 +19,7 @@ const Hero = () => {
 						<Button variant='secondary'>Join Discord</Button>
 					</div>
 				</div>
-				<div className='relative z-10 mt-8 overflow-hidden rounded-3xl p-5 sm:mt-10 sm:p-8 lg:mt-0 lg:p-10'>
+				<div className='relative z-10 mt-8 overflow-hidden rounded-3xl bg-[#13292C] p-5 dark:bg-black sm:mt-10 sm:p-8 lg:mt-0 lg:p-10'>
 					<Image
 						src='/images/sections/code.png'
 						alt='code'

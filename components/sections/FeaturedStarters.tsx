@@ -12,8 +12,10 @@ const FeaturedStarters = () => {
 		<div className='mt-24 sm:mt-28 lg:mt-36 desktop:mt-40'>
 			<div className='mx-auto w-full max-w-5xl px-5 sm:px-10'>
 				<div className='max-w-[510px]'>
-					<h2 className='font-gradual text-5xl font-bold text-[#C2C2C2] lg:text-[3.5rem]'>Starters</h2>
-					<p className='mt-5 text-xl lg:text-2xl'>
+					<h2 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-[3.5rem]'>
+						Starters
+					</h2>
+					<p className='mt-5 text-xl text-[#525151] dark:text-[#7A7A7A] lg:text-2xl'>
 						Shuttle is built for Rust. Take a stab at some of the examples and see how magical it is.
 					</p>
 				</div>
@@ -54,7 +56,7 @@ const FeaturedStarters = () => {
 				className='mt-10 lg:mx-auto lg:mt-14 lg:w-full lg:max-w-7xl lg:px-10 desktop:mt-16'
 			>
 				<FeaturedStarterItem
-					icon={<Authentication />}
+					icon={<Authentication className='mb-auto' />}
 					title='Authentication'
 					description='Custom functionality for Discord server using a bot written in Rust.'
 					bg='/images/sections/featured-starters/1-bg.png'
@@ -66,7 +68,7 @@ const FeaturedStarters = () => {
 					deployLink='#'
 				/>
 				<FeaturedStarterItem
-					icon={<Weather />}
+					icon={<Weather className='mb-auto' />}
 					title='Discord Weather Forecast Bot'
 					description='Custom functionality for Discord server using a bot written in Rust.'
 					bg='/images/sections/featured-starters/2-bg.png'
@@ -78,7 +80,7 @@ const FeaturedStarters = () => {
 					deployLink='#'
 				/>
 				<FeaturedStarterItem
-					icon={<Paperclip />}
+					icon={<Paperclip className='mb-auto' />}
 					title='Url shortener'
 					description='Custom functionality for Discord server using a bot written in Rust.'
 					bg='/images/sections/featured-starters/3-bg.png'
@@ -92,7 +94,7 @@ const FeaturedStarters = () => {
 				<FeaturedStarterItem
 					title="There's more"
 					bg='/images/sections/featured-starters/4-bg.png'
-					bgClassName='pointer-events-none absolute left-0 top-0 z-[-1] h-full w-full rounded-[2rem] object-cover'
+					bgClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem]'
 					stars='/images/sections/featured-starters/4-stars.png'
 					starsClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
 					stars2='/images/sections/featured-starters/4-stars-2.png'
@@ -130,10 +132,10 @@ const FeaturedStarterItem: FC<FeaturedStarterItemProps> = ({
 }) => {
 	return (
 		<SplideSlide className='splide__slide overflow-hidden p-px'>
-			<div className='border-gradient2-h group h-full rounded-[2rem] bg-black px-5 pt-8 pb-6 outline outline-1 outline-[#1E1B19] after:rounded-[2rem] hover:outline-transparent'>
-				<Image src={bg} alt='1 - bg' fill className={bgClassName} />
-				<Image src={stars} alt='1 - stars' fill className={starsClassName} />
-				<Image src={stars2} alt='1 - stars 2' fill className={stars2ClassName} />
+			<div className='border-gradient group h-full overflow-hidden rounded-[2rem] bg-[#13292C] px-5 pt-8 pb-6 outline outline-1 outline-[#1E1B19] after:rounded-[2rem] hover:outline-transparent dark:bg-black'>
+				<Image src={bg} alt='bg' fill className={bgClassName} />
+				<Image src={stars} alt='stars' fill className={starsClassName} />
+				<Image src={stars2} alt='stars 2' fill className={stars2ClassName} />
 				<div className='relative z-10 flex h-full flex-col'>
 					{icon}
 					<h3
@@ -144,9 +146,9 @@ const FeaturedStarterItem: FC<FeaturedStarterItemProps> = ({
 					>
 						{title}
 					</h3>
-					<p className='mt-1'>{description}</p>
+					<p className='mt-1 text-[#C2C2C2]'>{description}</p>
 					{deployLink ? (
-						<div className='mt-auto flex items-center justify-between gap-5 pt-5'>
+						<div className='mt-auto flex items-center justify-between gap-5 pt-5 text-[#C2C2C2]'>
 							<span>
 								<Link href='#' className='hover:underline'>
 									Source
@@ -159,7 +161,7 @@ const FeaturedStarterItem: FC<FeaturedStarterItemProps> = ({
 							<Button variant='primary'>Deploy</Button>
 						</div>
 					) : (
-						<Link href='#' className='group mt-3 inline-flex items-center'>
+						<Link href='#' className='group mt-3 inline-flex items-center text-[#C2C2C2]'>
 							View all
 							{/* Right Arrow */}
 							<svg

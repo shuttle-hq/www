@@ -6,15 +6,15 @@ const Features = () => {
 		<div className='mt-28 px-5 sm:mt-32 sm:px-10 lg:mt-36 desktop:mt-40'>
 			<div className='mx-auto w-full max-w-[1100px] desktop:grid desktop:grid-cols-[700px_auto] desktop:gap-5'>
 				<div className='max-w-[700px] desktop:py-10'>
-					<h2 className='font-gradual text-5xl font-bold text-[#C2C2C2] lg:text-[3.5rem]'>
+					<h2 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-[3.5rem]'>
 						Stop worrying about the features
 					</h2>
-					<p className='mt-5 text-xl lg:text-2xl'>
+					<p className='mt-5 text-xl text-[#525151] lg:text-2xl'>
 						If you want to ship web apps written in Rust, the cloud sucks. AWS is incredibly complex,
 						"simpler" providers like Heroku are ok
 					</p>
 				</div>
-				<div className='group relative hidden desktop:block desktop:overflow-hidden desktop:rounded-4xl'>
+				<div className='group relative hidden bg-[#13292C] text-[#C2C2C2] dark:bg-black dark:text-white desktop:block desktop:overflow-hidden desktop:rounded-4xl'>
 					<Image
 						src='/images/sections/features/header/bg.png'
 						alt='header bg'
@@ -36,7 +36,7 @@ const Features = () => {
 				</div>
 			</div>
 			<div className='mx-auto mt-16 grid w-full max-w-[1280px] gap-5 lg:grid-cols-2 desktop:grid-cols-3 desktop:grid-rows-6'>
-				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl p-5 sm:p-8 desktop:row-[span_4]'>
+				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-[#C2C2C2] dark:bg-black dark:text-white sm:p-8 desktop:row-[span_4]'>
 					<Image
 						src='/images/sections/features/top-left/bg.png'
 						alt='top left bg'
@@ -67,7 +67,7 @@ const Features = () => {
 						Log in
 					</a>
 				</div>
-				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl p-5 sm:p-8 desktop:row-[span_2]'>
+				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-[#C2C2C2] dark:bg-black dark:text-white sm:p-8 desktop:row-[span_2]'>
 					<Image
 						src='/images/sections/features/top-middle/bg.png'
 						alt='top middle bg'
@@ -90,7 +90,7 @@ const Features = () => {
 					<p>Insure that you are getting what you need at compile-time. Cut down on debugging time.</p>
 					<Compile />
 				</div>
-				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl p-5 sm:p-8 desktop:row-[span_3] desktop:justify-end'>
+				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-[#C2C2C2] dark:bg-black dark:text-white sm:p-8 desktop:row-[span_3] desktop:justify-end'>
 					<Image
 						src='/images/sections/features/top-right/bg.png'
 						alt='top right bg'
@@ -113,7 +113,7 @@ const Features = () => {
 					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Databases</h3>
 					<p>Wiring up a service to a persistent database is as easy as adding one line of code.</p>
 				</div>
-				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl p-5 sm:p-8 desktop:row-[5/7]'>
+				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-[#C2C2C2] dark:bg-black dark:text-white sm:p-8 desktop:row-[5/7]'>
 					<Image
 						src='/images/sections/features/bottom-left/bg.png'
 						alt='bottom left bg'
@@ -136,7 +136,7 @@ const Features = () => {
 					<p>A completely free and open-source project.</p>
 					<Open />
 				</div>
-				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl p-5 sm:p-8 desktop:row-[span_4]'>
+				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-[#C2C2C2] dark:bg-black dark:text-white sm:p-8 desktop:row-[span_4]'>
 					<Image
 						src='/images/sections/features/bottom-middle/bg.png'
 						alt='bottom middle bg'
@@ -159,7 +159,7 @@ const Features = () => {
 					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Fast deploy times</h3>
 					<p>Deploy new versions as quickly as running an incremental build, all with zero downtime</p>
 				</div>
-				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl p-5 sm:p-8 desktop:row-[span_3]'>
+				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-[#C2C2C2] dark:bg-black dark:text-white sm:p-8 desktop:row-[span_3]'>
 					<Image
 						src='/images/sections/features/bottom-right/bg.png'
 						alt='bottom right bg'
