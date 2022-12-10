@@ -15,8 +15,12 @@ const Hero = () => {
 						as plugins, not containers.
 					</p>
 					<div className='mt-5 flex flex-wrap items-center gap-5 sm:mt-10 lg:mt-12 xl:mt-16'>
-						<Button variant='primary'>Start deploying</Button>
-						<Button variant='secondary'>Join Discord</Button>
+						<Button variant='primary' invertOnDark className='bg-[#13292C] text-white'>
+							Start deploying
+						</Button>
+						<Button variant='secondary' invertOnDark>
+							Join Discord
+						</Button>
 					</div>
 				</div>
 				<div className='relative z-10 mt-8 overflow-hidden rounded-3xl bg-[#13292C] p-5 dark:bg-black sm:mt-10 sm:p-8 lg:mt-0 lg:p-10'>

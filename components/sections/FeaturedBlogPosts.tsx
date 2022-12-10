@@ -70,7 +70,9 @@ const FeaturedBlogPosts = () => {
 				/>
 			</Splide>
 			<div className='mt-12 flex justify-center'>
-				<Button variant='secondary'>See all articles</Button>
+				<Button variant='secondary' invertOnDark>
+					See all articles
+				</Button>
 			</div>
 		</div>
 	)

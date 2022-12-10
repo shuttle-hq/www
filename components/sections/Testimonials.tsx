@@ -80,7 +80,7 @@ const Testimonials = () => {
 				<h2 className='font-gradual text-4.5 font-bold leading-none text-[#C2C2C2] lg:text-[3.5rem]'>
 					What the community says
 				</h2>
-				<p className='mt-3 text-xl sm:mt-5 lg:text-2xl'>
+				<p className='mt-3 text-xl text-white/40 sm:mt-5 lg:text-2xl'>
 					Join X developers using shuttle. Connect with them on&nbsp;
 					<Link href='#' className='underline'>
 						Discord

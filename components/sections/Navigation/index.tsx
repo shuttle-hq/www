@@ -38,8 +38,10 @@ const Navigation = () => {
 				</div>
 				<div className='mt-10 lg:mt-0 lg:ml-auto lg:flex lg:items-center lg:gap-5'>
 					<div className='mt-10 flex flex-wrap items-center gap-5 lg:mt-0'>
-						<Button variant='primary'>Join Discord</Button>
-						<Button variant='secondary'>
+						<Button variant='secondary' invertOnDark>
+							Join Discord
+						</Button>
+						<Button variant='primary' invertOnDark>
 							<GithubLogo />
 							Log in
 						</Button>
