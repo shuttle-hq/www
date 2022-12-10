@@ -9,8 +9,12 @@ const FeaturedBlogPosts = () => {
 	return (
 		<div className='mt-24 lg:mt-32 desktop:mt-40'>
 			<div className='mx-auto w-full max-w-[1000px] px-5 sm:px-10'>
-				<h2 className='font-gradual text-5xl font-bold text-[#C2C2C2] lg:text-[3.5rem]'>What’s new</h2>
-				<p className='mt-5 text-xl lg:text-2xl'>Read about Rust, Shuttle and development in general</p>
+				<h2 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-[3.5rem]'>
+					What’s new
+				</h2>
+				<p className='mt-5 text-xl text-[#525151] dark:text-white/40 lg:text-2xl'>
+					Read about Rust, Shuttle and development in general
+				</p>
 			</div>
 			<Splide
 				options={{
@@ -84,7 +88,10 @@ interface ArticleProps {
 const Article: FC<ArticleProps> = ({ image, title, description, profilePicture, author, className }) => {
 	return (
 		<SplideSlide className={className}>
-			<Link href='#' className='o-h-shadow block rounded-[2rem] border border-[#1E1B19]'>
+			<Link
+				href='#'
+				className='o-h-shadow block rounded-[2rem] border border-[#1E1B19] bg-[#13292C] dark:bg-black'
+			>
 				<Image
 					src={image}
 					width={381}
@@ -94,7 +101,7 @@ const Article: FC<ArticleProps> = ({ image, title, description, profilePicture, 
 				/>
 				<div className='p-6'>
 					<h1 className='font-gradual text-xl font-bold text-white'>{title}</h1>
-					<p className='mt-3'>{description}</p>
+					<p className='mt-3 text-white/50'>{description}</p>
 					<div className='mt-6 flex items-center gap-2'>
 						<Image
 							src={profilePicture}
@@ -104,8 +111,8 @@ const Article: FC<ArticleProps> = ({ image, title, description, profilePicture, 
 							className='h-10 w-10 flex-shrink-0 rounded-full object-cover'
 						/>
 						<div>
-							<h3 className='font-gradual font-bold text-white'>{author}</h3>
-							<p className='mt-1 text-sm'>12 Sep, 2022 • 3 min read</p>
+							<h3 className='font-gradual font-bold text-[#C2C2C2]'>{author}</h3>
+							<p className='mt-1 text-sm text-white/50'>12 Sep, 2022 • 3 min read</p>
 						</div>
 					</div>
 				</div>

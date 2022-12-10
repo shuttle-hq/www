@@ -13,7 +13,7 @@ const HowItWorks = () => {
 				<h2 className='font-gradual text-5xl font-bold dark:dark:text-[#C2C2C2] lg:text-[3.5rem]'>
 					How it works
 				</h2>
-				<div className='mt-4 space-y-7 sm:mt-8 lg:text-xl'>
+				<div className='mt-4 space-y-7 text-[#525151] dark:text-[#7A7A7A] sm:mt-8 lg:text-xl'>
 					<p>Shuttle is built for Rust.</p>
 					<p>
 						A simple cargo command packages up your application, ships it to the shuttle build cluster

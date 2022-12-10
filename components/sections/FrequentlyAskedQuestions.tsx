@@ -11,18 +11,22 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 
 	return (
 		<div className='mx-auto mt-24 max-w-7xl px-5 sm:px-10 lg:mt-32 desktop:mt-48'>
-			<h2 className='font-gradual text-5xl font-bold text-[#C2C2C2] lg:text-[3.5rem]'>Common questions</h2>
+			<h2 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-[3.5rem]'>
+				Common questions
+			</h2>
 			<div className='mt-10 grid gap-8 sm:mt-14 lg:grid-cols-[1fr_minmax(auto,_380px)] lg:items-center lg:gap-16'>
 				<div className='divide-y divide-white divide-opacity-10 border-y border-white border-opacity-10'>
 					{questions.map(({ question, answer }, index) => (
 						<div className='flex items-center justify-between px-5'>
 							<div className='w-full'>
-								<button onClick={() => setActiveQuestion(index)} className='text-left'>
-									<h3 className='cursor-pointer py-5 pr-5 text-[#C2C2C2] md:text-xl'>
+								<button onClick={() => setActiveQuestion(index)} className='w-full text-left'>
+									<h3 className='cursor-pointer py-5 pr-5 text-[#525151] dark:text-[#C2C2C2] md:text-xl'>
 										{question}
 									</h3>
 								</button>
-								{activeQuestion === index && <p className='pb-5 pr-5'>{answer}</p>}
+								{activeQuestion === index && (
+									<p className='pb-5 pr-5 text-[#525151] dark:text-[#C2C2C2]'>{answer}</p>
+								)}
 							</div>
 							<button className='flex-shrink-0' onClick={() => setActiveQuestion(index)}>
 								{activeQuestion === index ? (
@@ -51,7 +55,7 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 						</div>
 					))}
 				</div>
-				<div className='group relative z-10 overflow-hidden rounded-[2rem] border border-white border-opacity-10 bg-gradient-to-r from-[#0A0401] via-[#0E0A08] to-[#040607] px-8 py-14'>
+				<div className='group relative z-10 overflow-hidden rounded-[2rem] border border-white border-opacity-10 bg-[#13292C] from-[#0A0401] via-[#0E0A08] to-[#040607] px-8 py-14 dark:bg-gradient-to-r'>
 					<Image
 						src='/images/sections/frequently-asked-questions/stars.png'
 						alt='stars'
@@ -65,7 +69,9 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 						className='pointer-events-none absolute top-0 left-0 z-[-1] h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
 					/>
 					<h3 className='text-2xl text-[#C2C2C2]'>Want to know more?</h3>
-					<p className='mt-2'>Join our Discord, we&apos;re happy to answer any questions!</p>
+					<p className='mt-2 text-[#C2C2C2]'>
+						Join our Discord, we&apos;re happy to answer any questions!
+					</p>
 					<Button variant='primary' className='mt-8'>
 						Join Discord
 					</Button>

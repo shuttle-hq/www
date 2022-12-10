@@ -4,7 +4,7 @@ import Image from 'next/image'
 const CallToAction = () => {
 	return (
 		<div className='mx-auto mt-8 max-w-7xl sm:mx-auto sm:mt-16 sm:px-10 lg:mt-32 desktop:mt-64'>
-			<div className='group relative z-[1] overflow-hidden rounded-[2rem]'>
+			<div className='group relative z-[1] overflow-hidden rounded-[2rem] bg-[#13292C] dark:bg-black'>
 				<span className='pointer-events-none'>
 					<Image
 						src='/images/sections/call-to-action/bg-m.png'
@@ -52,12 +52,12 @@ const CallToAction = () => {
 				<div className='px-5 py-10 md:px-8 desktop:px-20 desktop:pb-40'>
 					<h2 className='font-gradual text-4.5 font-bold leading-none text-[#C2C2C2] lg:text-[3.5rem] desktop:text-[4rem]'>
 						Build&nbsp;
-						<span className='text-gradient bg-clip-text text-transparent'>
-							the Future of Backend Development&nbsp;
-						</span>
+						<span>the Future of Backend Development&nbsp;</span>
 						with us
 					</h2>
-					<p className='mt-4 text-xl lg:text-2xl'>Become a part of shuttle heroes program!</p>
+					<p className='mt-4 text-xl text-[#C2C2C2] dark:text-[#7A7A7A] lg:text-2xl'>
+						Become a part of shuttle heroes program!
+					</p>
 					<div className='mt-10 flex flex-wrap items-center gap-4 lg:mt-12 xl:mt-16'>
 						<Button variant='primary' className='px-6 py-3 sm:py-3.5 sm:px-8 sm:text-lg'>
 							Github

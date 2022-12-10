@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 const Testimonials = () => {
 	return (
-		<div className='group relative z-10 mt-24 overflow-hidden py-24'>
+		<div className='group relative z-10 mt-24 overflow-hidden bg-[#13292C] py-24 dark:bg-black'>
 			<span className='pointer-events-none'>
 				<Image
 					src='/images/sections/testimonials/bg-m.png'
@@ -101,10 +101,10 @@ const Testimonials = () => {
 								</div>
 								<div>
 									<h3 className='font-gradual font-bold text-white'>John C.</h3>
-									<p>@johnny</p>
+									<p className='text-[#C2C2C2]'>@johnny</p>
 								</div>
 							</div>
-							<p className='mt-5'>
+							<p className='mt-5 text-[#C2C2C2]'>
 								You’ve created a really opening and welcoming community - I feel like it’s a
 								complex project I can actually contribute toYou’ve created a really opening and
 								welcoming community
@@ -123,10 +123,10 @@ const Testimonials = () => {
 								</div>
 								<div>
 									<h3 className='font-gradual font-bold text-white'>John C.</h3>
-									<p>@johnny</p>
+									<p className='text-[#C2C2C2]'>@johnny</p>
 								</div>
 							</div>
-							<p className='mt-5'>
+							<p className='mt-5 text-[#C2C2C2]'>
 								You’ve created a really opening and welcoming community - I feel like it’s a
 								complex project I.
 							</p>
@@ -146,10 +146,12 @@ const Testimonials = () => {
 								</div>
 								<div>
 									<h3 className='font-gradual font-bold text-white'>John C.</h3>
-									<p>@johnny</p>
+									<p className='text-[#C2C2C2]'>@johnny</p>
 								</div>
 							</div>
-							<p className='mt-5'>You’ve created a really opening and welcoming community</p>
+							<p className='mt-5 text-[#C2C2C2]'>
+								You’ve created a really opening and welcoming community
+							</p>
 						</div>
 						<div className='rounded-[1.25rem] border border-white border-opacity-10 p-6 backdrop-blur-2xl'>
 							<div className='flex items-start gap-4'>
@@ -164,10 +166,10 @@ const Testimonials = () => {
 								</div>
 								<div>
 									<h3 className='font-gradual font-bold text-white'>John C.</h3>
-									<p>@johnny</p>
+									<p className='text-[#C2C2C2]'>@johnny</p>
 								</div>
 							</div>
-							<p className='mt-5'>
+							<p className='mt-5 text-[#C2C2C2]'>
 								You’ve created a really opening and welcoming community - I feel like it’s a
 								complex project I can actually contribute to.
 								<br />
@@ -191,10 +193,10 @@ const Testimonials = () => {
 								</div>
 								<div>
 									<h3 className='font-gradual font-bold text-white'>John C.</h3>
-									<p>@johnny</p>
+									<p className='text-[#C2C2C2]'>@johnny</p>
 								</div>
 							</div>
-							<p className='mt-5'>
+							<p className='mt-5 text-[#C2C2C2]'>
 								You’ve created a really opening and welcoming community - I feel like it’s a
 								complex project I can actually contribute to
 							</p>
@@ -212,10 +214,10 @@ const Testimonials = () => {
 								</div>
 								<div>
 									<h3 className='font-gradual font-bold text-white'>John C.</h3>
-									<p>@johnny</p>
+									<p className='text-[#C2C2C2]'>@johnny</p>
 								</div>
 							</div>
-							<p className='mt-5'>
+							<p className='mt-5 text-[#C2C2C2]'>
 								You’ve created a really opening and welcoming community - I feel like it’s a
 							</p>
 						</div>
