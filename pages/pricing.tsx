@@ -1,6 +1,6 @@
-import { CallToAction, FrequentlyAskedQuestions, Testimonials, TrustedBy } from 'components/sections'
+import { CallToAction, FrequentlyAskedQuestions, Pricing, Testimonials, TrustedBy } from 'components/sections'
 
-export default function Pricing() {
+export default function PricingPage() {
 	return (
 		<>
 			<div className='mx-auto mt-24 w-full max-w-[1280px] px-5 sm:px-10 lg:mt-28'>
@@ -16,7 +16,7 @@ export default function Pricing() {
 					</p>
 				</header>
 			</div>
-
+			<Pricing />
 			<TrustedBy />
 			<Testimonials />
 			<FrequentlyAskedQuestions
