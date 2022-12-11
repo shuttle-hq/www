@@ -1,5 +1,6 @@
 export { default as CallToAction } from './CallToAction'
 export { default as CommunitySupportedNumbers } from './CommunitySupportedNumbers'
+export { default as FeaturedBlogPost } from './FeaturedBlogPost'
 export { default as FeaturedBlogPosts } from './FeaturedBlogPosts'
 export { default as FeaturedStarters } from './FeaturedStarters'
 export { default as Footer } from './Footer'
