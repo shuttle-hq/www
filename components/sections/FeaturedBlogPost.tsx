@@ -1,6 +1,5 @@
 import { getAuthors } from 'lib/blog/authors'
 import { Post } from 'lib/blog/posts'
-import { generateReadingTime } from 'lib/helpers'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
@@ -15,7 +14,7 @@ const FeaturedBlogPost: FC<Post> = (post) => {
 				<div className='grid gap-4 lg:gap-6'>
 					<div className='flex flex-wrap items-center gap-x-4 gap-y-1'>
 						<div className='flex items-center gap-2 font-gradual font-bold text-[#C2C2C2]'>
-							{firstAuthor.author_image_url && (
+							{firstAuthor?.author_image_url && (
 								<Image
 									src={firstAuthor.author_image_url}
 									alt={`${firstAuthor.author} avatar`}
@@ -24,18 +23,16 @@ const FeaturedBlogPost: FC<Post> = (post) => {
 									className='rounded-full'
 								/>
 							)}
-							{firstAuthor.author} - {firstAuthor.position}
+							{firstAuthor?.author || 'Shuttle'}
+							{firstAuthor?.position ? ` - ${firstAuthor.position}` : ''}
 						</div>
-						<li className='list-disc'>12 Sep, 2022</li>
+						<li className='list-disc'>{post.date}</li>
 					</div>
 					<a href={`/blog/${post.url}`}>
 						<h2 className='font-gradual text-2xl font-bold text-[#C2C2C2] lg:text-[2.5rem] lg:leading-none'>
-							It's time to rethink how we use virtualization in backends
+							{post.title}
 						</h2>
-						<p className='mt-3 lg:text-xl'>
-							Virtual machines and containers have improved backends in a lot of ways, but over time
-							they have also created a lot of problems.
-						</p>
+						<p className='mt-3 lg:text-xl'>{post.description}</p>
 					</a>
 					<div className='flex flex-wrap items-center gap-[0.625rem] text-sm text-[#C2C2C2]'>
 						{post.tags?.map((tag) => (
@@ -54,7 +51,7 @@ const FeaturedBlogPost: FC<Post> = (post) => {
 						src={`/images/blog/` + post.thumb}
 						alt={post.title}
 						fill
-						className='rounded-[2rem] transition-all duration-300 group-hover:scale-125'
+						className='rounded-[2rem] object-contain transition-all duration-300 group-hover:scale-125'
 					/>
 				</Link>
 			</div>
