@@ -20,7 +20,7 @@ const Navigation = () => {
 				)}
 			>
 				<div className='flex flex-col gap-4 lg:flex-row lg:gap-8'>
-					<Link className='nav-link-shadow' href='/blog'>
+					<Link className='nav-link-shadow' href='/blog/all'>
 						Blog
 					</Link>
 					<Link className='nav-link-shadow' href='/pricing'>

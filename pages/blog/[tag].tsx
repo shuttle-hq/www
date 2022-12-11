@@ -4,7 +4,20 @@ import { NextSeo } from 'next-seo'
 import { SITE_URL } from 'lib/constants'
 import { GetStaticPropsResult } from 'next'
 import { getAllTags, getSortedPosts } from 'lib/blog/posts'
-import { FeaturedBlogPost } from 'components/sections'
+import { Blog, FeaturedBlogPost } from 'components/sections'
+
+export async function getStaticPaths() {
+	const tags = getAllTags()
+
+	const paths = tags.map((tag) => ({
+		params: { tag },
+	}))
+
+	return {
+		paths,
+		fallback: false,
+	}
+}
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
 	const allPostsData = getSortedPosts()
@@ -23,8 +36,8 @@ interface Props {
 	readonly tags: readonly string[]
 }
 
-export default function Blog(props: Props): JSX.Element {
-	const tags = ['all', ...props.tags]
+export default function BlogPage(props: Props): JSX.Element {
+	const tags = props.tags
 	const [activeTag, setActiveTag] = useState('all')
 	const router = useRouter()
 
@@ -68,6 +81,7 @@ export default function Blog(props: Props): JSX.Element {
 			/>
 
 			<FeaturedBlogPost {...headPost} />
+			<Blog tags={tags} />
 		</>
 	)
 }

@@ -1,3 +1,4 @@
+export { default as Blog } from './Blog'
 export { default as CallToAction } from './CallToAction'
 export { default as CommunitySupportedNumbers } from './CommunitySupportedNumbers'
 export { default as FeaturedBlogPost } from './FeaturedBlogPost'

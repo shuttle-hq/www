@@ -122,13 +122,16 @@ export const getPostData = async (slug: string) => {
 
 export function getAllTags(): readonly string[] {
 	const posts = getSortedPosts()
-	let tags: string[] = []
 
-	posts.map((post) => {
-		;(post?.tags || []).map((tag: string) => {
-			if (!tags.includes(tag)) return tags.push(tag)
-		})
-	})
+	const tags = posts.reduce(
+		(acc: string[], post) => {
+			;(post?.tags || []).map((tag: string) => {
+				if (!acc.includes(tag)) return acc.push(tag)
+			})
+			return acc
+		},
+		['all']
+	)
 
 	return tags
 }
