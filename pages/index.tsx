@@ -11,8 +11,24 @@ import {
 	LogosReferences,
 	Testimonials,
 } from 'components/sections'
+import { getAllTags, getSortedPosts } from 'lib/blog/posts'
+import { GetStaticPropsResult } from 'next'
 
-export default function Home() {
+export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
+	const posts = getSortedPosts(3)
+
+	return {
+		props: {
+			posts,
+		},
+	}
+}
+
+interface Props {
+	readonly posts: ReturnType<typeof getSortedPosts>
+}
+
+export default function Home(props: Props) {
 	return (
 		<>
 			<Hero />
@@ -46,7 +62,7 @@ export default function Home() {
 					},
 				]}
 			/>
-			<FeaturedBlogPosts />
+			<FeaturedBlogPosts posts={props.posts} />
 		</>
 	)
 }

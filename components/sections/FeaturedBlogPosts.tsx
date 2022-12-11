@@ -1,11 +1,17 @@
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import { Grid } from '@splidejs/splide-extension-grid'
 import { Button } from 'components/elements'
+import { getAuthors } from 'lib/blog/authors'
+import { Post } from 'lib/blog/posts'
 import Image from 'next/image'
 import Link from 'next/link'
-import { FC } from 'react'
+import { FC, useState } from 'react'
 
-const FeaturedBlogPosts = () => {
+interface FeaturedBlogPostsProps {
+	posts: Post[]
+}
+
+const FeaturedBlogPosts: FC<FeaturedBlogPostsProps> = ({ posts = [] }) => {
 	return (
 		<div className='mt-24 lg:mt-32 desktop:mt-40'>
 			<div className='mx-auto w-full max-w-[1000px] px-5 sm:px-10'>
@@ -45,29 +51,13 @@ const FeaturedBlogPosts = () => {
 				extensions={{ Grid }}
 				className='mt-10 lg:mx-auto lg:mt-14 lg:w-full lg:max-w-7xl lg:px-10 desktop:mt-16'
 			>
-				<Article
-					image='/images/sections/featured-blog-posts/article.jpg'
-					title="It's time to rethink how we use virtualization in backends"
-					description='Virtual machines and containers have improved backends in a lot of ways, but over time they have also created a lot of problems.'
-					profilePicture='/images/sections/user.jpg'
-					author='Ben'
-					className='lg:pt-10'
-				/>
-				<Article
-					image='/images/sections/featured-blog-posts/article-2.png'
-					title='Building an authentication system in Rust using session tokens'
-					description='Virtual machines and containers have improved backends in a lot of ways, but over time they have also created a lot of problems.'
-					profilePicture='/images/sections/user.jpg'
-					author='Ben'
-					className='lg:pt-5'
-				/>
-				<Article
-					image='/images/sections/featured-blog-posts/article-3.png'
-					title="More than you've ever wanted to know about errors in Rust"
-					description='Virtual machines and containers have improved backends in a lot of ways, but over time they have also created a lot of problems.'
-					profilePicture='/images/sections/user.jpg'
-					author='Ben'
-				/>
+				{posts.map((post, index) => (
+					<Article
+						key={post?.slug || index}
+						post={post}
+						className={index === 0 ? 'lg:pt-10' : index === 1 ? 'lg:pt-5' : ''}
+					/>
+				))}
 			</Splide>
 			<div className='mt-12 flex justify-center'>
 				<Button variant='secondary' invertOnDark>
@@ -79,42 +69,49 @@ const FeaturedBlogPosts = () => {
 }
 
 interface ArticleProps {
-	image: string
-	title: string
-	description: string
-	profilePicture: string
-	author: string
+	post: Post
 	className?: string
 }
 
-const Article: FC<ArticleProps> = ({ image, title, description, profilePicture, author, className }) => {
+const Article: FC<ArticleProps> = ({ post, className }) => {
+	const authors = getAuthors(post.author?.split(',') ?? [])
+	const [firstAuthor, ...remainingAuthors] = authors
+
+	const [authorImage, setAuthorImage] = useState<string>(firstAuthor?.author_image_url || '/images/logo.png')
+
 	return (
 		<SplideSlide className={className}>
 			<Link
-				href='#'
+				href={`/blog/${post.url}`}
 				className='o-h-shadow block rounded-[2rem] border border-[#1E1B19] bg-[#13292C] dark:bg-black'
 			>
 				<Image
-					src={image}
+					src={`/images/blog/` + post.thumb}
 					width={381}
 					height={214}
 					alt='article image'
 					className='w-full rounded-t-[2rem]'
 				/>
 				<div className='p-6'>
-					<h1 className='font-gradual text-xl font-bold text-white'>{title}</h1>
-					<p className='mt-3 text-white/50'>{description}</p>
+					<h1 className='font-gradual text-xl font-bold text-white'>{post.title}</h1>
+					<p className='mt-3 text-white/50'>{post.description}</p>
 					<div className='mt-6 flex items-center gap-2'>
 						<Image
-							src={profilePicture}
-							alt={`${author} image`}
-							width={40}
-							height={40}
-							className='h-10 w-10 flex-shrink-0 rounded-full object-cover'
+							src={authorImage}
+							onError={() => setAuthorImage('/images/logo.png')}
+							alt={`${firstAuthor?.author} avatar`}
+							width={24}
+							height={24}
+							className={authorImage !== '/images/logo.png' ? 'rounded-full' : ''}
 						/>
 						<div>
-							<h3 className='font-gradual font-bold text-[#C2C2C2]'>{author}</h3>
-							<p className='mt-1 text-sm text-white/50'>12 Sep, 2022 • 3 min read</p>
+							<h3 className='font-gradual font-bold text-[#C2C2C2]'>
+								{firstAuthor?.author || 'Shuttle'}
+								{firstAuthor?.position ? ` - ${firstAuthor.position}` : ''}
+							</h3>
+							<p className='mt-1 text-sm text-white/50'>
+								{post.date} • {post.readingTime}
+							</p>
 						</div>
 					</div>
 				</div>
