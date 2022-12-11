@@ -17,7 +17,7 @@ const HowItWorks = () => {
 					<p>Shuttle is built for Rust.</p>
 					<p>
 						A simple cargo command packages up your application, ships it to the shuttle build cluster
-						where it's incrementally compiled and automatically served on a unique subdomain.
+						where it&lsquo;s incrementally compiled and automatically served on a unique subdomain.
 					</p>
 					<p>
 						Shuttle uses simple but powerful annotations to understand your dependencies.

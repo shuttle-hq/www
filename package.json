@@ -26,6 +26,7 @@
     "react-cookie-consent": "^8.0.1",
     "react-dom": "18.2.0",
     "react-use": "^17.4.0",
+    "sharp": "^0.31.2",
     "typescript": "4.9.3"
   },
   "devDependencies": {

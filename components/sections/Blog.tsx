@@ -95,6 +95,7 @@ const BlogPost: FC<Post> = (post) => {
 				<div className='flex flex-wrap items-center gap-[0.625rem] text-sm text-[#C2C2C2]'>
 					{(post?.tags || []).map((tag) => (
 						<Link
+							key={tag}
 							href={`/blog/${tag}`}
 							className='border-gradient-h relative rounded-full bg-black px-2 py-1 outline outline-1 outline-[#1E1B19] hover:outline-transparent hover:after:rounded-full hover:after:bg-gradient-to-r hover:after:from-[#FC540C] hover:after:to-[#FFD76F]'
 						>

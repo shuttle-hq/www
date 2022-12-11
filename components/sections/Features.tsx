@@ -11,7 +11,7 @@ const Features = () => {
 					</h2>
 					<p className='mt-5 text-xl text-[#525151] lg:text-2xl'>
 						If you want to ship web apps written in Rust, the cloud sucks. AWS is incredibly complex,
-						"simpler" providers like Heroku are ok
+						&apos;simpler&apos; providers like Heroku are ok
 					</p>
 				</div>
 				<div className='group relative hidden bg-[#13292C] text-[#C2C2C2] dark:bg-black dark:text-white desktop:block desktop:overflow-hidden desktop:rounded-4xl'>

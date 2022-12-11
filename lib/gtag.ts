@@ -1,6 +1,12 @@
 import { NextRouter } from 'next/router'
 import { GA_MEASUREMENT_ID } from './constants'
 
+declare global {
+	interface Window {
+		gtag: any
+	}
+}
+
 // https://developers.google.com/analytics/devguides/collection/ga4/event-parameters?client_type=gtag#set-up-every-event
 export const pageview = (url: string) => {
 	window.gtag('config', GA_MEASUREMENT_ID, {

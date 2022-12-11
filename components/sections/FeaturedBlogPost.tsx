@@ -29,15 +29,16 @@ const FeaturedBlogPost: FC<Post> = (post) => {
 						</div>
 						<li className='list-disc'>{post.date}</li>
 					</div>
-					<a href={`/blog/${post.url}`}>
+					<Link href={`/blog/${post.url}`}>
 						<h2 className='font-gradual text-2xl font-bold text-[#C2C2C2] lg:text-[2.5rem] lg:leading-9'>
 							{post.title}
 						</h2>
 						<p className='mt-3 lg:text-xl'>{post.description}</p>
-					</a>
+					</Link>
 					<div className='flex flex-wrap items-center gap-[0.625rem] text-sm text-[#C2C2C2]'>
 						{post.tags?.map((tag) => (
 							<Link
+								key={tag}
 								href={`/blog/tags/${tag}`}
 								className='border-gradient-h relative rounded-full bg-black px-2 py-1 outline outline-1 outline-[#1E1B19] hover:outline-transparent hover:after:rounded-full hover:after:bg-gradient-to-r hover:after:from-[#FC540C] hover:after:to-[#FFD76F]'
 							>

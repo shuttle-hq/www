@@ -24,7 +24,7 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 			>
 				<div className='divide-y divide-white divide-opacity-10 border-y border-white border-opacity-10'>
 					{questions.map(({ question, answer }, index) => (
-						<div className='flex items-center justify-between px-5'>
+						<div className='flex items-center justify-between px-5' key={question}>
 							<div className='w-full'>
 								<button onClick={() => setActiveQuestion(index)} className='w-full text-left'>
 									<h3 className='cursor-pointer py-5 pr-5 text-[#525151] dark:text-[#C2C2C2] md:text-xl'>
