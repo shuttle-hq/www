@@ -2,11 +2,13 @@ import { getAuthors } from 'lib/blog/authors'
 import { Post } from 'lib/blog/posts'
 import Image from 'next/image'
 import Link from 'next/link'
-import { FC } from 'react'
+import { FC, useState } from 'react'
 
 const FeaturedBlogPost: FC<Post> = (post) => {
 	const authors = getAuthors(post.author?.split(',') ?? [])
 	const [firstAuthor, ...remainingAuthors] = authors
+
+	const [authorImage, setAuthorImage] = useState<string>(firstAuthor?.author_image_url || '/images/logo.png')
 
 	return (
 		<div className='mx-auto mt-8 w-full max-w-[1280px] px-5 sm:mt-24 sm:px-10'>
@@ -14,22 +16,21 @@ const FeaturedBlogPost: FC<Post> = (post) => {
 				<div className='grid gap-4 lg:gap-6'>
 					<div className='flex flex-wrap items-center gap-x-4 gap-y-1'>
 						<div className='flex items-center gap-2 font-gradual font-bold text-[#C2C2C2]'>
-							{firstAuthor?.author_image_url && (
-								<Image
-									src={firstAuthor.author_image_url}
-									alt={`${firstAuthor.author} avatar`}
-									width={24}
-									height={24}
-									className='rounded-full'
-								/>
-							)}
+							<Image
+								src={authorImage}
+								onError={() => setAuthorImage('/images/logo.png')}
+								alt={`${firstAuthor?.author} avatar`}
+								width={24}
+								height={24}
+								className={authorImage !== '/images/logo.png' ? 'rounded-full' : ''}
+							/>
 							{firstAuthor?.author || 'Shuttle'}
 							{firstAuthor?.position ? ` - ${firstAuthor.position}` : ''}
 						</div>
 						<li className='list-disc'>{post.date}</li>
 					</div>
 					<a href={`/blog/${post.url}`}>
-						<h2 className='font-gradual text-2xl font-bold text-[#C2C2C2] lg:text-[2.5rem] lg:leading-none'>
+						<h2 className='font-gradual text-2xl font-bold text-[#C2C2C2] lg:text-[2.5rem] lg:leading-9'>
 							{post.title}
 						</h2>
 						<p className='mt-3 lg:text-xl'>{post.description}</p>

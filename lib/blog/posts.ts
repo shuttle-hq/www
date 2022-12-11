@@ -35,7 +35,7 @@ export interface Post {
 	readonly hideAuthor?: boolean
 }
 
-export function getSortedPosts(limit?: number, tags?: readonly string[]): readonly Post[] {
+export function getSortedPosts(limit?: number, tags?: readonly string[]): Post[] {
 	//Reads all the files in the post directory
 	const fileNames = fs.readdirSync(POST_DIRECTORY)
 
@@ -120,7 +120,7 @@ export const getPostData = async (slug: string) => {
 	return postContent
 }
 
-export function getAllTags(): readonly string[] {
+export function getAllTags(): string[] {
 	const posts = getSortedPosts()
 
 	const tags = posts.reduce(

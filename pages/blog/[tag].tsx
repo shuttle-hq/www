@@ -2,9 +2,10 @@ import { useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import { SITE_URL } from 'lib/constants'
-import { GetStaticPropsResult } from 'next'
+import { GetStaticPropsContext, GetStaticPropsResult } from 'next'
 import { getAllTags, getSortedPosts } from 'lib/blog/posts'
 import { Blog, FeaturedBlogPost } from 'components/sections'
+import { ParsedUrlQuery } from 'querystring'
 
 export async function getStaticPaths() {
 	const tags = getAllTags()
@@ -19,39 +20,36 @@ export async function getStaticPaths() {
 	}
 }
 
-export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
-	const allPostsData = getSortedPosts()
+interface Params extends ParsedUrlQuery {
+	readonly tag: string
+}
+
+export async function getStaticProps({
+	params,
+}: GetStaticPropsContext<Params>): Promise<GetStaticPropsResult<Props>> {
+	const tag = params?.tag !== undefined && params.tag !== 'all' ? params.tag : ''
+	const posts = getSortedPosts(0, tag ? [tag] : undefined)
+
 	const tags = getAllTags()
 
 	return {
 		props: {
-			blogs: allPostsData,
+			posts,
 			tags,
 		},
 	}
 }
 
 interface Props {
-	readonly blogs: ReturnType<typeof getSortedPosts>
-	readonly tags: readonly string[]
+	readonly posts: ReturnType<typeof getSortedPosts>
+	readonly tags: string[]
 }
 
 export default function BlogPage(props: Props): JSX.Element {
 	const tags = props.tags
-	const [activeTag, setActiveTag] = useState('all')
 	const router = useRouter()
 
-	const [headPost, tailPosts] = useMemo(() => {
-		const [head, ...tail] = props.blogs
-
-		return [head, tail]
-	}, [props.blogs])
-
-	const blogs = useMemo(() => {
-		if (activeTag === 'all') return tailPosts
-
-		return tailPosts.filter((post) => (post.tags || []).includes(activeTag))
-	}, [tailPosts, activeTag])
+	const [headPost, ...tailPosts] = props.posts
 
 	const meta_title = 'Shuttle Blog'
 	const meta_description = 'Get all your shuttle News on the shuttle blog.'
@@ -81,7 +79,7 @@ export default function BlogPage(props: Props): JSX.Element {
 			/>
 
 			<FeaturedBlogPost {...headPost} />
-			<Blog tags={tags} />
+			<Blog tags={tags} posts={tailPosts} />
 		</>
 	)
 }
