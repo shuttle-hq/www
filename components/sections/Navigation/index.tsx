@@ -20,19 +20,19 @@ const Navigation = () => {
 				)}
 			>
 				<div className='flex flex-col gap-4 lg:flex-row lg:gap-8'>
-					<Link className='nav-link-shadow' href='/blog/all'>
+					<Link className='nav-link-shadow transition-all hover:text-white' href='/blog/all'>
 						Blog
 					</Link>
-					<Link className='nav-link-shadow' href='/pricing'>
+					<Link className='nav-link-shadow transition-all hover:text-white' href='/pricing'>
 						Pricing
 					</Link>
-					<Link className='nav-link-shadow' href='/docs'>
+					<Link className='nav-link-shadow transition-all hover:text-white' href='/docs'>
 						Docs
 					</Link>
-					<Link className='nav-link-shadow' href='/beta'>
+					<Link className='nav-link-shadow transition-all hover:text-white' href='/beta'>
 						Beta
 					</Link>
-					<Link className='nav-link-shadow' href='/shuttle-heros'>
+					<Link className='nav-link-shadow transition-all hover:text-white' href='/shuttle-heros'>
 						Shuttle Heroes
 					</Link>
 				</div>
