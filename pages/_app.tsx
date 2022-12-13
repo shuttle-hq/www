@@ -38,11 +38,8 @@ const transitionClass = "transition hover:brightness-125";
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const { user } = pageProps;
-
   useEffect(() => setupGoogleAnalytics(router, user));
-
-  useEffect(() => setupFathomAnalytics(router));
-
+  useEffect(() => setupFathomAnalytics(router), []);
   return (
     <UserProvider user={user}>
       <ApiKeyModalStateProvider>
