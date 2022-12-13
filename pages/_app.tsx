@@ -29,6 +29,7 @@ import {
   setupGoogleAnalytics,
 } from "../lib/gtag";
 import CookieConsent from "react-cookie-consent";
+import { setupFathomAnalytics } from "../lib/fathom";
 
 config.autoAddCss = false;
 
@@ -37,7 +38,10 @@ const transitionClass = "transition hover:brightness-125";
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const { user } = pageProps;
+
   useEffect(() => setupGoogleAnalytics(router, user));
+
+  useEffect(() => setupFathomAnalytics(router));
 
   return (
     <UserProvider user={user}>
