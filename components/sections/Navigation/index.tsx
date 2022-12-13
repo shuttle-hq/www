@@ -10,7 +10,12 @@ const Navigation = () => {
 
 	return (
 		<nav className='mx-auto flex h-[5.5rem] w-full max-w-[1344px] items-center px-5 sm:px-10'>
-			<Link href='/'>
+			<Link
+				href='/'
+				onClick={() => {
+					setOpen(false)
+				}}
+			>
 				<Logo className='dark:text-[#C2C2C2]' />
 			</Link>
 			<div
@@ -20,19 +25,49 @@ const Navigation = () => {
 				)}
 			>
 				<div className='flex flex-col gap-4 lg:flex-row lg:gap-8'>
-					<Link className='nav-link-shadow transition-all hover:text-white' href='/blog/all'>
+					<Link
+						className='nav-link-shadow transition-all hover:text-white'
+						href='/blog/all'
+						onClick={() => {
+							setOpen(false)
+						}}
+					>
 						Blog
 					</Link>
-					<Link className='nav-link-shadow transition-all hover:text-white' href='/pricing'>
+					<Link
+						className='nav-link-shadow transition-all hover:text-white'
+						href='/pricing'
+						onClick={() => {
+							setOpen(false)
+						}}
+					>
 						Pricing
 					</Link>
-					<Link className='nav-link-shadow transition-all hover:text-white' href='/docs'>
+					<Link
+						className='nav-link-shadow transition-all hover:text-white'
+						href='/docs'
+						onClick={() => {
+							setOpen(false)
+						}}
+					>
 						Docs
 					</Link>
-					<Link className='nav-link-shadow transition-all hover:text-white' href='/beta'>
+					<Link
+						className='nav-link-shadow transition-all hover:text-white'
+						href='/beta'
+						onClick={() => {
+							setOpen(false)
+						}}
+					>
 						Beta
 					</Link>
-					<Link className='nav-link-shadow transition-all hover:text-white' href='/shuttle-heros'>
+					<Link
+						className='nav-link-shadow transition-all hover:text-white'
+						href='/shuttle-heros'
+						onClick={() => {
+							setOpen(false)
+						}}
+					>
 						Shuttle Heroes
 					</Link>
 				</div>
