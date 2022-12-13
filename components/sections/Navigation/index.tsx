@@ -9,7 +9,7 @@ const Navigation = () => {
 	const [open, setOpen] = useState(false)
 
 	return (
-		<nav className='mx-auto flex h-[5.5rem] max-w-[1344px] items-center px-5 sm:px-10'>
+		<nav className='mx-auto flex h-[5.5rem] w-full max-w-[1344px] items-center px-5 sm:px-10'>
 			<Link href='/'>
 				<Logo className='dark:text-[#C2C2C2]' />
 			</Link>

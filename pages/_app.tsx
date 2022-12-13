@@ -14,10 +14,10 @@ import {
 	GA_MEASUREMENT_ID,
 } from '../lib/constants'
 import { gtagConsent, gtagRevokeConsent, setupGoogleAnalytics } from '../lib/gtag'
-import { useEffect } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { Footer, Navigation } from 'components/sections'
 import '@splidejs/react-splide/css'
+import { Page } from 'components/templates'
 
 const transitionClass = 'transition hover:brightness-125'
 
@@ -25,6 +25,8 @@ export default function App({ Component, pageProps }: AppProps) {
 	const router = useRouter()
 	const { user } = pageProps
 	useEffect(() => setupGoogleAnalytics(router, user))
+
+	const getLayout = (Component as any).getLayout || ((page: ReactNode) => <Page>{page}</Page>)
 
 	return (
 		<>
@@ -75,9 +77,7 @@ export default function App({ Component, pageProps }: AppProps) {
 				}}
 			/>
 			<div className='min-h-screen bg-transparent text-black dark:text-[#7A7A7A]'>
-				<Navigation />
-				<Component {...pageProps} />
-				<Footer />
+				{getLayout(<Component {...pageProps} />)}
 				<CookieConsent
 					style={{
 						justifyContent: 'center',

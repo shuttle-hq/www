@@ -85,6 +85,30 @@ body.dark {
 		opacity: 1;
 	}
 
+	.input-border-gradient::after {
+		content: '';
+		position: absolute;
+		left: -1px;
+		top: -1px;
+		z-index: -1;
+		width: calc(100% + 2px);
+		height: calc(100% + 2px);
+		border-radius: 0.75rem;
+		background-image: linear-gradient(
+			81.45deg,
+			rgba(252, 84, 12, 0.5) 44.31%,
+			rgba(255, 215, 111, 0.36) 61.89%,
+			rgba(56, 212, 233, 0.5) 77.57%
+		);
+		opacity: 0;
+		transition: all 0.5s;
+	}
+
+	.input-border-gradient:hover::after,
+	.input-border-gradient:focus-within::after {
+		opacity: 1;
+	}
+
 	.shadow-gradient::before {
 		content: '';
 		position: absolute;

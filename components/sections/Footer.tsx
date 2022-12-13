@@ -1,10 +1,16 @@
+import clsx from 'clsx'
 import { YCombinator } from 'components/svgs'
 import Image from 'next/image'
 import Link from 'next/link'
+import { FC } from 'react'
 
-const Footer = () => {
+interface FooterProps {
+	disableMargin?: boolean
+}
+
+const Footer: FC<FooterProps> = ({ disableMargin }) => {
 	return (
-		<footer className='mt-28 border-t border-black/10 dark:border-white/10'>
+		<footer className={clsx(!disableMargin && 'mt-28', 'border-t border-black/10 dark:border-white/10')}>
 			<div className='relative mx-auto max-w-[1328px]'>
 				<div className='absolute left-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 transform overflow-hidden rounded-2xl border border-black/10 dark:border-white/10'>
 					<Image src='/images/sections/footer/rocket.gif' alt='rocket' fill />
