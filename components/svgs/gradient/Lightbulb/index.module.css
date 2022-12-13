@@ -1,0 +1,15 @@
+.lightbulb {
+	display: inline-block;
+}
+
+.lightbulb stop {
+	transition: 0.4s ease;
+}
+
+.lightbulb:hover stop:first-child {
+	stop-color: #fc540c;
+}
+
+.lightbulb:hover stop:last-child {
+	stop-color: #38d4e9;
+}
