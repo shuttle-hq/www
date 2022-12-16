@@ -1,5 +1,4 @@
 import matter from 'gray-matter'
-import { getAuthors } from 'lib/blog/authors'
 import { serialize } from 'next-mdx-remote/serialize'
 import { NextSeo } from 'next-seo'
 import Image from 'next/image'
@@ -17,7 +16,7 @@ import { GetStaticPropsContext, GetStaticPropsResult } from 'next'
 import { ParsedUrlQuery } from 'querystring'
 import Link from 'next/link'
 import clsx from 'clsx'
-import { BlogPrevNext, BlogSidebar } from 'components/sections'
+import { BlogHeader, BlogPrevNext, BlogSidebar, CallToAction } from 'components/sections'
 
 export async function getStaticPaths() {
 	const paths = getAllPostSlugs()
@@ -207,8 +206,6 @@ interface Props {
 }
 
 export default function BlogPostPage(props: Props) {
-	const author = getAuthors(props.blog.author?.split(',') ?? [])
-
 	const { basePath } = useRouter()
 
 	return (
@@ -241,53 +238,12 @@ export default function BlogPostPage(props: Props) {
 				}}
 			/>
 			<div className='mx-auto max-w-6xl p-4 sm:p-6 lg:p-8'>
-				<div className='mb-16 max-w-5xl space-y-8'>
-					<div className='space-y-4'>
-						<p className='text-brand-900'>Blog post</p>
-						<h1 className='text-4xl'>{props.blog.title}</h1>
-						<div className='flex space-x-3 text-sm text-slate-500 dark:text-gray-400'>
-							<p>{props.blog.date}</p>
-							<p>•</p>
-							<p>{props.blog.readingTime}</p>
-						</div>
-						<div className='flex gap-3'>
-							{author.map((author, index) => {
-								return (
-									<div className='mt-6 mb-8 mr-4 w-max lg:mb-0' key={index}>
-										<Link
-											className={author.author_url ? 'cursor-pointer' : ''}
-											href={author.author_url}
-										>
-											<div className='flex items-center gap-3'>
-												{author.author_image_url && (
-													<div className='w-10'>
-														<Image
-															src={author.author_image_url}
-															className='rounded-full border'
-															width={20}
-															height={20}
-															alt=''
-														/>
-													</div>
-												)}
-												<div className='flex flex-col'>
-													<span className='mb-0 text-sm dark:text-gray-200'>
-														{author.author}
-													</span>
-													<span className='mb-0 text-xs text-slate-500 dark:text-gray-400'>
-														{author.position}
-													</span>
-												</div>
-											</div>
-										</Link>
-									</div>
-								)
-							})}
-						</div>
-					</div>
-				</div>
-				<div className='grid gap-6 lg:grid-cols-4'>
+				<div className='grid grid-cols-1 gap-6 gap-y-12 lg:grid-cols-4'>
 					{/* Content */}
+					<div className='lg:col-span-3'>
+						<BlogHeader post={props.blog} />
+					</div>
+					<div className='hidden lg:block' />
 					<div className='lg:col-span-3'>
 						{(props.blog.thumb ?? props.blog.cover) && (
 							<div className='mb-8 grid grid-cols-1 justify-items-center'>
@@ -322,27 +278,6 @@ export default function BlogPostPage(props: Props) {
 						>
 							<MDXRemote {...props.blog.content} components={mdxComponents} />
 						</article>
-						{/* <div className="mt-16">
-              <div className="text-sm dark:text-gray-400">
-                Share this article
-              </div>
-              <div className="mt-4 flex items-center space-x-4">
-                <a
-                  href={`https://twitter.com/share?text=${props.blog.title}&url=${SITE_URL}blog/${props.blog.slug}`}
-                  className="text-slate-600 hover:text-slate-900 dark:text-gray-400 hover:dark:text-gray-200"
-                >
-                  <FontAwesomeIcon icon={faTwitter} className="text-xl" />
-                </a>
-
-                <a
-                  href={`https://www.linkedin.com/shareArticle?url=${SITE_URL}blog/${props.blog.slug}&title=${props.blog.title}`}
-                  className="text-slate-600 hover:text-slate-900 dark:text-gray-400 hover:dark:text-gray-200"
-                >
-                  <FontAwesomeIcon icon={faLinkedin} className="text-xl" />
-                </a>
-              </div>
-            </div> */}
-
 						<BlogPrevNext prevPost={props.prevPost} nextPost={props.nextPost} />
 						{/* <Socials /> */}
 					</div>
@@ -355,6 +290,7 @@ export default function BlogPostPage(props: Props) {
 					/>
 				</div>
 			</div>
+			<CallToAction />
 		</>
 	)
 }
