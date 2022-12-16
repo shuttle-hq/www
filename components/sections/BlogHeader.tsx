@@ -14,9 +14,7 @@ const BlogHeader: FC<BlogHeaderProps> = ({ post }) => {
 	return (
 		<div className='max-w-5xl space-y-8'>
 			<div className='space-y-4'>
-				<h1 className='text-4xl font-bold leading-tight text-[#C2C2C2] lg:text-6xl'>
-					Building an authentication system in Rust using session tokens
-				</h1>
+				<h1 className='text-4xl font-bold leading-tight text-[#C2C2C2] lg:text-6xl'>{post.title}</h1>
 				<div className='flex gap-3'>
 					{author.map((author, index) => {
 						return (
