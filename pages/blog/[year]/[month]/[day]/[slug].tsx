@@ -17,7 +17,7 @@ import { GetStaticPropsContext, GetStaticPropsResult } from 'next'
 import { ParsedUrlQuery } from 'querystring'
 import Link from 'next/link'
 import clsx from 'clsx'
-import { BlogPrevNext } from 'components/sections'
+import { BlogPrevNext, BlogSidebar } from 'components/sections'
 
 export async function getStaticPaths() {
 	const paths = getAllPostSlugs()
@@ -202,7 +202,7 @@ const mdxComponents: MDXRemoteProps['components'] = {
 interface Props {
 	readonly prevPost?: Post
 	readonly nextPost?: Post
-	readonly relatedPosts: readonly Post[]
+	readonly relatedPosts: Post[]
 	readonly blog: Post
 }
 
@@ -347,60 +347,12 @@ export default function BlogPostPage(props: Props) {
 						{/* <Socials /> */}
 					</div>
 					{/* Sidebar */}
-					<div className='sticky space-y-8 lg:w-64'>
-						<div className='space-y-8 lg:sticky lg:top-20'>
-							<div className='hidden lg:block'>
-								<div className='space-y-8 py-8 lg:py-0'>
-									<div className='space-x-2'>
-										{props.blog.tags.map((tag: string) => {
-											return (
-												<Link
-													key={tag}
-													className='flex-shrink-0 cursor-pointer rounded-full border border-green-400 bg-green-400/10 px-2 py-1 text-xs font-medium text-green-500 hover:bg-green-400/20 dark:text-green-400'
-													href={`/blog/tags/${tag}`}
-												>
-													{tag}
-												</Link>
-											)
-										})}
-									</div>
-
-									<div className='mb-4 dark:text-gray-200'>On this page</div>
-
-									<div className='prose prose-toc dark:prose-dark-toc !mt-0'>
-										<MDXRemote {...props.blog.toc} components={mdxComponents} />
-									</div>
-								</div>
-							</div>
-							{props.relatedPosts.length > 0 ? (
-								<div>
-									<div className='mb-4 dark:text-gray-200'>Related articles</div>
-
-									<div className='flex flex-col gap-2 space-y-3'>
-										{props.relatedPosts.map((post, index) => (
-											<Link
-												href={`/blog/${post.url}`}
-												key={index}
-												className='flex gap-2 text-sm text-slate-500 hover:text-slate-900 dark:text-gray-300 hover:dark:text-gray-200'
-											>
-												{/* <DocumentTextIcon className='mt-[2px] h-4 w-4 flex-shrink-0' /> */}
-
-												<span>{post.title}</span>
-											</Link>
-										))}
-										<div className='mt-2'>
-											<Link
-												href={`/blog`}
-												className='cursor-pointer text-sm text-slate-500 hover:text-slate-900 dark:text-gray-300 hover:dark:text-gray-200'
-											>
-												View all posts
-											</Link>
-										</div>
-									</div>
-								</div>
-							) : null}
-						</div>
-					</div>
+					<BlogSidebar
+						tags={props.blog.tags || []}
+						relatedPosts={props.relatedPosts || []}
+						toc={props.blog.toc}
+						mdxComponents={mdxComponents}
+					/>
 				</div>
 			</div>
 		</>
