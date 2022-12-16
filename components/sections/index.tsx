@@ -1,6 +1,8 @@
 export { default as AboutHero } from './AboutHero'
 export { default as BackedBy } from './BackedBy'
 export { default as Blog } from './Blog'
+export { default as BlogArticle } from './BlogArticle'
+export { default as BlogPrevNext } from './BlogPrevNext'
 export { default as CallToAction } from './CallToAction'
 export { default as CommunitySupportedNumbers } from './CommunitySupportedNumbers'
 export { default as FeaturedBlogPost } from './FeaturedBlogPost'

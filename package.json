@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mapbox/rehype-prism": "^0.8.0",
     "@splidejs/react-splide": "^0.7.12",
     "@splidejs/splide-extension-grid": "^0.4.1",
     "@types/node": "18.11.11",
@@ -19,6 +20,7 @@
     "eslint-config-next": "13.0.6",
     "fs": "^0.0.1-security",
     "gray-matter": "^4.0.3",
+    "markdown-toc": "^1.2.0",
     "next": "13.0.6",
     "next-mdx-remote": "^4.2.0",
     "next-seo": "^5.15.0",
@@ -26,6 +28,8 @@
     "react-cookie-consent": "^8.0.1",
     "react-dom": "18.2.0",
     "react-use": "^17.4.0",
+    "rehype-slug": "^5.1.0",
+    "remark-gfm": "^3.0.1",
     "sharp": "^0.31.2",
     "typescript": "4.9.3"
   },
