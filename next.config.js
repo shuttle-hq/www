@@ -19,7 +19,7 @@ const nextConfig = {
 		return [
 			{
 				source: '/blog',
-				destination: '/blog/all',
+				destination: '/blog/tags/all',
 				permanent: true,
 			},
 		]

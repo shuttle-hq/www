@@ -45,7 +45,7 @@ const Blog: FC<BlogProps> = ({ tags, posts }) => {
 						key={tag}
 					>
 						<Link
-							href={`/blog/${tag}`}
+							href={`/blog/tags/${tag}`}
 							className={clsx('p-2 lg:hover:pl-4', tag === activeTag && 'pl-4 text-transparent')}
 						>
 							{tag}
@@ -96,7 +96,7 @@ const BlogPost: FC<Post> = (post) => {
 					{(post?.tags || []).map((tag) => (
 						<Link
 							key={tag}
-							href={`/blog/${tag}`}
+							href={`/blog/tags/${tag}`}
 							className='border-gradient-h relative rounded-full px-2 py-1 outline outline-1 outline-black/10 hover:outline-transparent hover:after:rounded-full hover:after:bg-gradient-to-r hover:after:from-[#FC540C] hover:after:to-[#FFD76F] dark:bg-black dark:outline-[#1E1B19]'
 						>
 							{tag}

@@ -27,7 +27,7 @@ const Navigation = () => {
 				<div className='flex flex-col gap-4 lg:flex-row lg:gap-8'>
 					<Link
 						className='nav-link-shadow transition-all hover:text-white'
-						href='/blog/all'
+						href='/blog/tags/all'
 						onClick={() => {
 							setOpen(false)
 						}}
