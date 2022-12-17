@@ -18,84 +18,87 @@ module.exports = {
 			screens: {
 				desktop: '1440px',
 			},
-		},
-		typography: ({ theme }) => {
-			const tocCSS = {
-				ul: {
-					'list-style-type': 'none',
-					'padding-left': 0,
-					margin: 0,
-					li: {
-						'padding-left': 0,
-						marginTop: '0.375rem',
-						marginBottom: '0.375rem',
-					},
-					a: {
-						display: 'block',
-						'text-decoration': 'none',
-						fontSize: '0.875rem',
-						fontWeight: '400',
-						color: '#525151',
-						transition: 'all 0.5s ease-in-out',
-						position: 'relative',
-						left: 0,
-						'&:hover': {
-							color: '#000000',
-							left: '1rem',
-						},
-						'font-weight': '400',
-					},
+			typography: ({ theme }) => {
+				const tocCSS = {
 					ul: {
 						'list-style-type': 'none',
+						'padding-left': 0,
+						margin: 0,
 						li: {
+							'padding-left': 0,
 							marginTop: '0.375rem',
 							marginBottom: '0.375rem',
-							'padding-left': '0 !important',
-							'margin-left': '0.75rem',
 						},
 						a: {
-							fontWeight: '200',
+							display: 'block',
+							'text-decoration': 'none',
+							fontSize: '0.875rem',
+							fontWeight: '400',
 							color: '#525151',
+							transition: 'all 0.5s ease-in-out',
+							position: 'relative',
+							left: 0,
 							'&:hover': {
 								color: '#000000',
+								left: '1rem',
+							},
+							'font-weight': '400',
+						},
+						ul: {
+							'list-style-type': 'none',
+							li: {
+								marginTop: '0.375rem',
+								marginBottom: '0.375rem',
+								'padding-left': '0 !important',
+								'margin-left': '0.75rem',
+							},
+							a: {
+								fontWeight: '200',
+								color: '#525151',
+								'&:hover': {
+									color: '#000000',
+								},
 							},
 						},
 					},
-				},
-			}
+				}
 
-			return {
-				toc: {
-					css: tocCSS,
-				},
-				'dark-toc': {
-					css: {
-						...tocCSS,
-						ul: {
-							...tocCSS.ul,
-							a: {
-								...tocCSS.ul.a,
-								color: '#C2C2C280',
-								'&:hover': {
-									...tocCSS.ul.a['&:hover'],
-									color: '#C2C2C2',
-								},
-							},
+				console.log(theme)
+
+				return {
+					...theme,
+					toc: {
+						css: tocCSS,
+					},
+					'dark-toc': {
+						css: {
+							...tocCSS,
 							ul: {
-								...tocCSS.ul.ul,
+								...tocCSS.ul,
 								a: {
-									...tocCSS.ul.ul.a,
+									...tocCSS.ul.a,
 									color: '#C2C2C280',
 									'&:hover': {
-										...tocCSS.ul.ul.a['&:hover'],
+										...tocCSS.ul.a['&:hover'],
 										color: '#C2C2C2',
+									},
+								},
+								ul: {
+									...tocCSS.ul.ul,
+									a: {
+										...tocCSS.ul.ul.a,
+										color: '#C2C2C280',
+										'&:hover': {
+											...tocCSS.ul.ul.a['&:hover'],
+											color: '#C2C2C2',
+										},
 									},
 								},
 							},
 						},
 					},
-				},
-			}
+				}
+			},
 		},
 	},
 	plugins: [require('@tailwindcss/typography')],

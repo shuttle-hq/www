@@ -160,8 +160,13 @@ const Pre = ({ children, ...props }: any) => {
 
 const mdxComponents: MDXRemoteProps['components'] = {
 	a(props) {
-		if (props.href.match(/^https?:\/\//)) {
-			return <a {...props} className='text-brand-orange1 hover:text-brand-orange2 no-underline'></a>
+		if (props?.href?.match(/^https?:\/\//)) {
+			return (
+				<a
+					{...props}
+					className='relative bg-gradient-to-r from-[#FC540C] to-[#FFD76F] bg-clip-text text-transparent'
+				></a>
+			)
 		}
 
 		return (
@@ -184,7 +189,7 @@ const mdxComponents: MDXRemoteProps['components'] = {
 	CaptionedImage: (props: any) => {
 		return (
 			<div className='grid grid-cols-1 justify-items-center'>
-				<img src={props.src} alt={props.src}></img>
+				<img src={props.src} alt={props.src} className='overflow-hidden rounded-2xl'></img>
 				<span className='-mt-6 text-sm text-[#828282] dark:text-gray-300'>{props.caption}</span>
 			</div>
 		)
@@ -225,8 +230,8 @@ export default function BlogPostPage(props: Props) {
 						//
 						// TODO: author urls should be internal in future
 						// currently we have external links to github profiles
-						authors: [props.blog.author_url],
-						tags: props.blog.tags.map((cat: string) => {
+						authors: [props.blog.author_url || ''],
+						tags: (props.blog.tags || []).map((cat: string) => {
 							return cat
 						}),
 					},
@@ -273,7 +278,9 @@ export default function BlogPostPage(props: Props) {
 								'prose-headings:before:-mt-36',
 								'prose-headings:before:pt-36',
 								'prose-headings:lg:before:-mt-20',
-								'prose-headings:before:lg:pt-20'
+								'prose-headings:before:lg:pt-20',
+								'text-[#7A7A7A]',
+								''
 							)}
 						>
 							<MDXRemote {...props.blog.content} components={mdxComponents} />
