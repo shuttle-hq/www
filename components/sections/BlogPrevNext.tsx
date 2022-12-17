@@ -37,9 +37,7 @@ const DirectionCard: FC<DirectionCardProps> = ({ post, className, hoverDirection
 			<div
 				className={clsx(
 					'relative w-full text-sm text-slate-500 transition-all duration-500 dark:text-gray-400',
-					hoverDirection === 'left'
-						? 'left-0 group-hover:-left-2'
-						: 'right-0 ml-auto group-hover:-right-2'
+					hoverDirection === 'left' ? 'left-0 group-hover:-left-2' : 'right-0 group-hover:-right-2'
 				)}
 			>
 				{hoverDirection === 'left' ? (
@@ -47,7 +45,14 @@ const DirectionCard: FC<DirectionCardProps> = ({ post, className, hoverDirection
 						<path d='M10.4706 21L2 11M10.4706 1L2 11M2 11H38' stroke='white' strokeWidth={2} />
 					</svg>
 				) : (
-					<svg width={38} height={22} viewBox='0 0 38 22' fill='none' xmlns='http://www.w3.org/2000/svg'>
+					<svg
+						width={38}
+						height={22}
+						viewBox='0 0 38 22'
+						fill='none'
+						xmlns='http://www.w3.org/2000/svg'
+						className='ml-auto'
+					>
 						<path
 							d='M27.5294 21L36 11M27.5294 1L36 11M36 11H-8.9407e-07'
 							stroke='white'
