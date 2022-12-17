@@ -9,6 +9,8 @@ import { getAllPostSlugs, getPostData, getSortedPosts, Post } from 'lib/blog/pos
 import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote'
 import gfm from 'remark-gfm'
 import slug from 'rehype-slug'
+
+// @ts-ignore
 import toc from 'markdown-toc'
 import rehypePrism from '@mapbox/rehype-prism'
 import { SITE_URL } from 'lib/constants'
@@ -127,7 +129,10 @@ const Pre = ({ children, ...props }: any) => {
 						...children.props,
 						className: children.props.className ?? 'language-',
 						children: [
-							<span className='mr-4 inline-block w-4 select-none text-right italic text-[rgb(92,99,112)] last:hidden'>
+							<span
+								className='mr-4 inline-block w-4 select-none text-right italic text-[rgb(92,99,112)] last:hidden'
+								key={line}
+							>
 								{line}
 							</span>,
 							...[children.props.children].flat().flatMap((child) => {
@@ -140,7 +145,10 @@ const Pre = ({ children, ...props }: any) => {
 
 											return [
 												'\n',
-												<span className='mr-4 inline-block w-4 select-none text-right italic text-[rgb(92,99,112)] last:hidden'>
+												<span
+													key={head}
+													className='mr-4 inline-block w-4 select-none text-right italic text-[rgb(92,99,112)] last:hidden'
+												>
 													{line}
 												</span>,
 												child,

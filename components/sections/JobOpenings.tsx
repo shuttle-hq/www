@@ -39,13 +39,14 @@ const JobOpenings = () => {
 					<div className='mt-8 grid gap-6 lg:mt-16 lg:grid-cols-2 lg:items-start lg:gap-8'>
 						<div className='space-y-6 text-xl lg:space-y-8'>
 							<p>
-								Joining us, you'll become part of an exceptionally strong engineering team that has
-								a big bias for action and a love for quick experimentation and hacking.
+								Joining us, you&apos;ll become part of an exceptionally strong engineering team
+								that has a big bias for action and a love for quick experimentation and hacking.
 							</p>
 							<p>
 								We have a flat hierarchy and build everything in the open - our main tools are our
 								GH and Discord, which are both completely public. We believe everyone should
-								contribute equally to the engineering decisions as well as our products' direction.
+								contribute equally to the engineering decisions as well as our products&apos;
+								direction.
 							</p>
 						</div>
 						<div className='flex flex-col divide-y divide-white/10 border-b border-white/10 text-xl text-[#C2C2C2]'>

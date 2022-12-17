@@ -63,10 +63,7 @@ module.exports = {
 					},
 				}
 
-				console.log(theme)
-
 				return {
-					...theme,
 					toc: {
 						css: tocCSS,
 					},

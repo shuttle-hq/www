@@ -78,16 +78,16 @@ export default function Beta() {
 							If you are looking for a way to support shuttle in the meantime, you can do so by:
 						</p>
 						<div className='mt-8 flex flex-col items-start'>
-							<a href='https://github.com/shuttle-hq/shuttle' target='_blank'>
+							<a href='https://github.com/shuttle-hq/shuttle' target='_blank' rel='noreferrer'>
 								💻 contributing to shuttle
 							</a>
-							<a href='https://github.com/shuttle-hq/shuttle' target='_blank'>
+							<a href='https://github.com/shuttle-hq/shuttle' target='_blank' rel='noreferrer'>
 								⭐️ starring the repository
 							</a>
-							<a href='https://discord.gg/shuttle' target='_blank'>
+							<a href='https://discord.gg/shuttle' target='_blank' rel='noreferrer'>
 								👾 joining our discord community
 							</a>
-							<a href='https://twitter.com/shuttle_dev' target='_blank'>
+							<a href='https://twitter.com/shuttle_dev' target='_blank' rel='noreferrer'>
 								🐦 following us on twitter
 							</a>
 						</div>
