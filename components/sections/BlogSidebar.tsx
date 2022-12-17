@@ -70,7 +70,7 @@ const BlogSidebar: FC<BlogSidebarProps> = ({ tags, relatedPosts, toc, mdxCompone
 							<div className='mt-2'>
 								<Link
 									href='/blog/tags/all'
-									className='group flex cursor-pointer items-center space-x-2 text-sm text-slate-500 hover:text-slate-900 hover:underline dark:text-[#7A7A7A] hover:dark:text-white'
+									className='group flex cursor-pointer items-center space-x-2 text-sm text-[#525151] hover:text-black hover:underline dark:text-[#7A7A7A] hover:dark:text-white'
 								>
 									<span>View all</span>
 									<svg
@@ -79,11 +79,11 @@ const BlogSidebar: FC<BlogSidebarProps> = ({ tags, relatedPosts, toc, mdxCompone
 										viewBox='0 0 17 14'
 										fill='none'
 										xmlns='http://www.w3.org/2000/svg'
-										className='relative left-0 transition-all duration-500 group-hover:left-2'
+										className='relative left-0 text-black transition-all duration-500 group-hover:left-2 dark:text-white'
 									>
 										<path
 											d='M0 7H15M15 7L9.78261 1M15 7L9.78261 13'
-											stroke='#D8D8D8'
+											stroke='currentColor'
 											stroke-width='2'
 										/>
 									</svg>

@@ -13,7 +13,7 @@ import slug from 'rehype-slug'
 // @ts-ignore
 import toc from 'markdown-toc'
 import rehypePrism from '@mapbox/rehype-prism'
-import { SITE_URL } from 'lib/constants'
+import { DISCORD_URL, SITE_URL } from 'lib/constants'
 import { GetStaticPropsContext, GetStaticPropsResult } from 'next'
 import { ParsedUrlQuery } from 'querystring'
 import Link from 'next/link'
@@ -296,38 +296,41 @@ export default function BlogPostPage(props: Props) {
 							</article>
 						)}
 						{/* Powered By */}
-						<div className='relative mt-11 flex w-full flex-col overflow-hidden rounded-[2rem] p-8'>
+						<div className='relative mt-11 flex w-full flex-col overflow-hidden rounded-[2rem] bg-[#13292C] p-8 dark:bg-black'>
 							<Image
 								src='/images/sections/powered-by/bg.png'
 								alt=''
 								fill
-								className='absolute left-0 top-0 -z-10'
+								className='absolute left-0 top-0 z-10'
 							/>
 							<Image
 								src='/images/sections/powered-by/stars.png'
 								alt=''
 								fill
-								className='absolute left-20 bottom-0 -z-10'
+								className='absolute left-20 bottom-0 z-10'
 							/>
-							<Logo className='text-black dark:text-white' />
-							<span className='mt-5 text-[#7A7A7A]'>
+							<Logo className='relative z-10 text-white' />
+							<span className='relative z-10 mt-5 text-[#FFFFFF8F] dark:text-[#7A7A7A]'>
 								This blog post is powered by shuttle - The Rust-native, open source, cloud
 								development platform. If you have any questions, or want to provide feedback, join
-								our Discord server!
+								our{' '}
+								<a target='_blank' rel='noreferrer' className='text-[#FF8A3F]' href={DISCORD_URL}>
+									Discord server!
+								</a>
 							</span>
 						</div>
 						{/* <Socials /> */}
 						<div className='mt-14 mb-20 flex items-center space-x-4'>
-							<span className='text-[#C2C2C2]'>Share article</span>
+							<span className='text-[#525151] dark:text-[#C2C2C2]'>Share article</span>
 							<a
 								href={`https://twitter.com/share?text=${props.blog.title}&url=${SITE_URL}blog/${props.blog.slug}`}
-								className='flex items-center rounded-xl border border border-black/10 p-3 dark:border-white/10'
+								className='flex items-center rounded-xl border border border-black/10 bg-black p-3 dark:border-white/10'
 							>
 								<TwitterLogo />
 							</a>
 							<a
 								href={`https://www.linkedin.com/shareArticle?url=${SITE_URL}blog/${props.blog.slug}&title=${props.blog.title}`}
-								className='flex items-center rounded-xl border border border-black/10 p-3 dark:border-white/10'
+								className='flex items-center rounded-xl border border border-black/10 bg-black p-3 dark:border-white/10'
 							>
 								<LinkedInLogo />
 							</a>

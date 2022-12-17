@@ -31,12 +31,12 @@ const DirectionCard: FC<DirectionCardProps> = ({ post, className, hoverDirection
 			href={`/blog/${post.url}`}
 			className={clsx(
 				className,
-				'group relative block cursor-pointer rounded-[2rem] border border-black/10 p-8 !shadow-[#FC540C59] transition duration-500 hover:shadow-[0px_4px_40px] dark:border-white/10'
+				'group relative block cursor-pointer rounded-[2rem] border border-black/10 bg-[#13292C] p-8 !shadow-[#FC540C59] transition duration-500 hover:shadow-[0px_4px_40px] dark:border-white/10 dark:bg-black'
 			)}
 		>
 			<div
 				className={clsx(
-					'relative w-full text-sm text-slate-500 transition-all duration-500 dark:text-gray-400',
+					'relative w-full text-sm text-[#C2C2C2] transition-all duration-500',
 					hoverDirection === 'left' ? 'left-0 group-hover:-left-2' : 'right-0 group-hover:-right-2'
 				)}
 			>
@@ -64,7 +64,7 @@ const DirectionCard: FC<DirectionCardProps> = ({ post, className, hoverDirection
 
 			<div
 				className={clsx(
-					'relative mt-4 text-lg text-slate-800 transition-all duration-500 dark:text-gray-200',
+					'relative mt-4 text-lg text-[#C2C2C2] transition-all duration-500',
 					hoverDirection === 'left' ? 'left-0 group-hover:left-2' : 'right-0 group-hover:right-2'
 				)}
 			>
@@ -72,7 +72,7 @@ const DirectionCard: FC<DirectionCardProps> = ({ post, className, hoverDirection
 			</div>
 			<div
 				className={clsx(
-					'relative text-xs text-slate-500 transition-all duration-500 dark:text-gray-400',
+					'relative mt-5 text-xs text-[#FFFFFF8F] transition-all duration-500 dark:text-[#C2C2C2]',
 					hoverDirection === 'left' ? 'left-0 group-hover:left-2' : 'right-0 group-hover:right-2'
 				)}
 			>
