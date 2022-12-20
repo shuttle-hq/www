@@ -22,13 +22,13 @@ export default function Beta() {
 					className='absolute top-0 left-0 -z-10 h-full w-full object-cover'
 				/>
 				<Image
-					src='/images/pages/beta/stars.png'
+					src='/images/pages/stars.png'
 					alt='stars '
 					fill
 					className='absolute top-0 left-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:translate-x-12 group-hover:translate-y-3 md:block'
 				/>
 				<Image
-					src='/images/pages/beta/stars-2.png'
+					src='/images/pages/stars-2.png'
 					alt='stars 2'
 					fill
 					className='absolute top-0 left-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-5 md:block'

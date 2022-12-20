@@ -76,7 +76,7 @@ const Navigation = () => {
 						<Button variant='secondary' invertOnDark>
 							Join Discord
 						</Button>
-						<Button variant='primary' invertOnDark>
+						<Button variant='primary' invertOnDark href='/login'>
 							<GithubLogo />
 							Log in
 						</Button>
