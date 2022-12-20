@@ -18,6 +18,7 @@ import { ReactNode, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import '@splidejs/react-splide/css'
 import { Page } from 'components/templates'
+import { UserProvider } from '@auth0/nextjs-auth0/client'
 
 const transitionClass = 'transition hover:brightness-125'
 
@@ -77,7 +78,7 @@ export default function App({ Component, pageProps }: AppProps) {
 				}}
 			/>
 			<div className='min-h-screen bg-transparent text-black dark:text-[#7A7A7A]'>
-				{getLayout(<Component {...pageProps} />)}
+				<UserProvider>{getLayout(<Component {...pageProps} />)}</UserProvider>
 				<CookieConsent
 					style={{
 						justifyContent: 'center',
