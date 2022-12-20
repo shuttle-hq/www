@@ -4,9 +4,12 @@ import ThemeSwitcher from './ThemeSwitcher'
 import Link from 'next/link'
 import { useState } from 'react'
 import clsx from 'clsx'
+import { useUser } from '@auth0/nextjs-auth0/client'
 
 const Navigation = () => {
 	const [open, setOpen] = useState(false)
+
+	const { user } = useUser()
 
 	return (
 		<nav className='mx-auto flex h-[5.5rem] w-full max-w-[1344px] items-center px-5 sm:px-10'>
@@ -76,9 +79,15 @@ const Navigation = () => {
 						<Button variant='secondary' invertOnDark>
 							Join Discord
 						</Button>
-						<Button variant='primary' invertOnDark href='/login'>
-							<GithubLogo />
-							Log in
+						<Button variant='primary' invertOnDark href={user ? '/dashboard/' : '/login'}>
+							{user ? (
+								'Dashboard'
+							) : (
+								<>
+									<GithubLogo />
+									Log in
+								</>
+							)}
 						</Button>
 					</div>
 					<ThemeSwitcher className='mt-5 lg:-order-1 lg:mt-0' />
