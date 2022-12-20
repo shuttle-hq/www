@@ -30,7 +30,7 @@ export default function LoginPage() {
 				className='absolute top-0 left-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-5 md:block'
 			/>
 			<Logo className='text-white' />
-			<Button variant='secondary' className='mt-16 mb-9'>
+			<Button variant='secondary' className='mt-16 mb-9' href='/auth'>
 				Log in with Github
 			</Button>
 			<div className='absolute bottom-[-75vh] left-[-9.5%] -z-10 h-[67.37vh] w-[90vw] rotate-[20deg] transform bg-[linear-gradient(62.43deg,_rgba(252,_84,_12,_0.595)_33.67%,_rgba(56,_212,_233,_0.455)_79.8%)] blur-[250px]' />
