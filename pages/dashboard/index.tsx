@@ -1,3 +1,8 @@
+import { useUser } from '@auth0/nextjs-auth0/client'
+import { DashboardPage } from 'components/templates'
+import { useRouter } from 'next/router'
+import { ReactNode, useEffect } from 'react'
+
 export default function DashboardHome() {
 	return (
 		<div className='flex h-full w-full flex-col items-center justify-center'>
@@ -8,3 +13,5 @@ export default function DashboardHome() {
 		</div>
 	)
 }
+
+DashboardHome.getLayout = (children: ReactNode) => <DashboardPage>{children}</DashboardPage>

@@ -2,11 +2,8 @@ import { ReactNode } from 'react'
 import { Button } from 'components/elements'
 import { Logo } from 'components/svgs'
 import Image from 'next/image'
-import { useUser } from '@auth0/nextjs-auth0/client'
 
 export default function LoginPage() {
-	const { user } = useUser()
-
 	return (
 		<div className='group relative flex h-screen w-screen flex-col items-center justify-center overflow-hidden'>
 			<div className='absolute -z-10 h-full w-full bg-black' />

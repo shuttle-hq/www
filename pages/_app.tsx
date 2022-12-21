@@ -30,7 +30,7 @@ export default function App({ Component, pageProps }: AppProps) {
 	const getLayout = (Component as any).getLayout || ((page: ReactNode) => <Page>{page}</Page>)
 
 	return (
-		<>
+		<UserProvider>
 			<Head>
 				<title>{SITE_TITLE}</title>
 			</Head>
@@ -78,7 +78,7 @@ export default function App({ Component, pageProps }: AppProps) {
 				}}
 			/>
 			<div className='min-h-screen bg-transparent text-black dark:text-[#7A7A7A]'>
-				<UserProvider>{getLayout(<Component {...pageProps} />)}</UserProvider>
+				{getLayout(<Component {...pageProps} />)}
 				<CookieConsent
 					style={{
 						justifyContent: 'center',
@@ -113,6 +113,6 @@ export default function App({ Component, pageProps }: AppProps) {
 					We use cookies to enhance the user experience and measure engagement.
 				</CookieConsent>
 			</div>
-		</>
+		</UserProvider>
 	)
 }
