@@ -33,20 +33,24 @@ const Blog: FC<BlogProps> = ({ tags, posts }) => {
 						},
 					},
 				}}
-				className='splide border-y border-white border-opacity-10 py-2 lg:border-0'
+				className='splide border-y border-black/10 py-2 dark:border-white/10 lg:border-0'
 			>
 				{tags.map((tag) => (
 					<SplideSlide
 						className={clsx(
+							'lg:!mt-2 lg:first:!mt-0',
 							tag === activeTag
 								? 'block bg-gradient-to-r from-[#FC540C] to-[#FFD76F] bg-clip-text lg:w-max'
-								: 'blog-tab-shadow block lg:transition-all lg:hover:text-white'
+								: 'blog-tab-shadow block lg:transition-all lg:hover:text-black dark:lg:hover:text-white'
 						)}
 						key={tag}
 					>
 						<Link
 							href={`/blog/tags/${tag}`}
-							className={clsx('p-2 lg:hover:pl-4', tag === activeTag && 'pl-4 text-transparent')}
+							className={clsx(
+								'p-2 transition-all lg:hover:pl-4',
+								tag === activeTag && 'pl-4 text-transparent'
+							)}
 						>
 							{tag}
 						</Link>
