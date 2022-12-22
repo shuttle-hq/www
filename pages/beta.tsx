@@ -19,7 +19,7 @@ export default function Beta() {
 					src='/images/pages/beta/bg.png'
 					alt='bg'
 					fill
-					className='absolute top-0 left-0 -z-10 h-full w-full object-cover'
+					className='absolute top-0 left-0 -z-10 h-full w-full bg-[#13292C] object-cover dark:bg-black'
 				/>
 				<Image
 					src='/images/pages/stars.png'
@@ -46,26 +46,30 @@ export default function Beta() {
 						<span className='text-gradient block bg-clip-text text-transparent'>Build Backends.</span>
 						Fast.
 					</h1>
-					<p className='mt-4 max-w-xl sm:text-xl lg:text-2xl'>
+					<p className='mt-4 max-w-xl text-white dark:text-[#7A7A7A] sm:text-xl lg:text-2xl'>
 						Sign up to our closed beta and get updated on the next iteration of shuttle, a serverless
 						backend framework with the fastest build, test and deploy times ever.
 					</p>
 				</header>
 				{!formSubmitted ? (
 					<form
-						className='mt-12 w-full max-w-xl flex-col rounded-2xl bg-black/20 p-5 backdrop-blur-[15px] sm:p-8'
+						className='mt-12 w-full max-w-xl flex-col rounded-2xl bg-black/20 p-5 backdrop-blur-lg sm:p-8'
 						onSubmit={handleSubmit}
 					>
-						<h3 className='text-xl'>Your email</h3>
-						<div className='input-border-gradient relative mt-2 rounded-xl bg-black focus-within:bg-black hover:bg-black'>
+						<h3 className='text-xl text-white dark:text-[#7A7A7A]'>Your email</h3>
+						<div className='input-border-gradient relative mt-2 rounded-xl bg-[#13292C] focus-within:bg-[#13292C] hover:bg-[#13292C] dark:bg-black dark:focus-within:bg-black dark:hover:bg-black'>
 							<input
-								className='w-full rounded-xl bg-transparent py-3 px-4 text-xl text-white outline outline-1 outline-[#7A7A7A] placeholder:text-[#C2C2C2]/20 hover:outline-transparent focus:outline-transparent'
+								className='w-full rounded-xl bg-transparent py-3 px-4 text-xl text-white outline outline-1 outline-[#7A7A7A] placeholder:text-[#C2C2C2]/50 hover:outline-transparent focus:outline-transparent dark:placeholder:text-[#C2C2C2]/20'
 								placeholder='picard@enterprise.com'
 								type='email'
 								required
 							/>
 						</div>
-						<Button type='submit' variant='primary' className='mt-5 bg-[#D8D8D8] px-6 py-3 text-lg'>
+						<Button
+							type='submit'
+							variant='primary'
+							className='mt-5 px-6 py-3 text-lg dark:bg-[#D8D8D8]'
+						>
 							Sign up for beta
 						</Button>
 					</form>
