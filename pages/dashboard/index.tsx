@@ -1,8 +1,9 @@
-import { useUser } from '@auth0/nextjs-auth0/client'
 import { DashboardPage } from 'components/templates'
-import { useRouter } from 'next/router'
-import { ReactNode, useEffect } from 'react'
+import { FC, ReactNode } from 'react'
 import { FeaturedStarters } from 'components/sections'
+import Image from 'next/image'
+import clsx from 'clsx'
+import { Copy } from '../../components/svgs'
 
 export default function DashboardHome() {
 	return (
@@ -14,16 +15,92 @@ export default function DashboardHome() {
 					</h1>
 					<p className='mt-4 sm:text-xl lg:text-2xl'>Follow these few steps and you’re ready to go</p>
 				</header>
-				<div className='mt-16 grid grid-cols-11 gap-y-5'>
-					<div className='col-span-3 col-start-1 row-span-1 h-[171px] w-full bg-[red]'></div>
-					<div className='col-span-3 col-start-3 row-start-2 h-[171px] w-full bg-[red]'></div>
-					<div className='col-span-3 col-start-5 row-start-3 h-[171px] w-full bg-[red]'></div>
-					<div className='col-span-3 col-start-7 row-start-4 h-[171px] w-full bg-[red]'></div>
-					<div className='col-span-3 col-start-9 row-start-5 h-[171px] w-full bg-[red]'></div>
+				<div className='mt-16 grid gap-y-5 lg:grid-cols-12'>
+					<Step
+						number='1'
+						title='Install'
+						backgroundImage='/images/pages/dashboard/card-1.png'
+						gradientClassName='from-[#FC540C] to-[#C39348]'
+						command='cargo install cargo-shuttle'
+						className='row-start-1 lg:col-span-4 lg:col-start-1'
+					/>
+					<Step
+						number='2'
+						title='Log in'
+						backgroundImage='/images/pages/dashboard/card-2.png'
+						gradientClassName='from-[#FC540C] to-[#C39348]'
+						command='cargo install cargo-shuttle'
+						className='row-start-2 lg:col-span-4 lg:col-start-3'
+					/>
+					<Step
+						number='3'
+						title='Initialize'
+						backgroundImage='/images/pages/dashboard/card-3.png'
+						gradientClassName='from-[#FC540C] to-[#C39348]'
+						command='cargo install cargo-shuttle'
+						className='row-start-3 lg:col-span-4 lg:col-start-5'
+					/>
+					<Step
+						number='4'
+						title='Create project'
+						backgroundImage='/images/pages/dashboard/card-4.png'
+						gradientClassName='from-[#FC540C] to-[#C39348]'
+						command='cargo install cargo-shuttle'
+						className='row-start-4 lg:col-span-4 lg:col-start-7'
+					/>
+					<Step
+						number='5'
+						title='Deploy'
+						backgroundImage='/images/pages/dashboard/card-5.png'
+						gradientClassName='from-[#FC540C] to-[#C39348]'
+						command='cargo install cargo-shuttle'
+						className='row-start-5 lg:col-span-4 lg:col-start-9'
+					/>
 				</div>
 			</div>
 			<FeaturedStarters />
 		</>
+	)
+}
+
+interface StepProps {
+	number: string
+	gradientClassName: string
+	backgroundImage: string
+	title: string
+	command?: string
+	className: string
+}
+
+const Step: FC<StepProps> = ({ number, backgroundImage, gradientClassName, title, command, className }) => {
+	return (
+		<div
+			className={clsx(
+				'relative w-full overflow-hidden rounded-[2rem] border border-black/10 p-6 dark:border-white/10',
+				className
+			)}
+		>
+			<Image src={backgroundImage} alt='' fill className='absolute' />
+			<h3 className='font-gradual text-2xl font-bold dark:text-[#C2C2C2]'>
+				<span className={clsx('bg-gradient-to-r bg-clip-text text-transparent', gradientClassName)}>
+					{number.padStart(2, '0')}
+				</span>
+				&nbsp;{title}
+			</h3>
+			<p className='mt-2'>Run this command to install shuttle</p>
+
+			<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
+				$ {command}
+				<button className='absolute right-3 rounded-lg border border-transparent p-1 hover:border-[#484848] hover:bg-[#343434] dark:text-[#C2C2C2]'>
+					<Copy />
+				</button>
+			</div>
+
+			{/* If it the whole slide isn't outlined, add a line under the slide */}
+			{number !== '1' && (
+				<hr className='absolute -bottom-px left-6 w-[calc(100%-3rem)] border-black/10 group-hover:hidden dark:border-[#191919]' />
+			)}
+		</div>
 	)
 }
 
