@@ -31,7 +31,7 @@ const Navigation = () => {
 			>
 				<div className='flex flex-col gap-4 lg:flex-row lg:gap-8'>
 					<Link
-						className='nav-link-shadow transition-all hover:text-white'
+						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='/blog/tags/all'
 						onClick={() => {
 							setOpen(false)
@@ -40,7 +40,7 @@ const Navigation = () => {
 						Blog
 					</Link>
 					<Link
-						className='nav-link-shadow transition-all hover:text-white'
+						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='/pricing'
 						onClick={() => {
 							setOpen(false)
@@ -49,7 +49,7 @@ const Navigation = () => {
 						Pricing
 					</Link>
 					<Link
-						className='nav-link-shadow transition-all hover:text-white'
+						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='/docs'
 						onClick={() => {
 							setOpen(false)
@@ -58,7 +58,7 @@ const Navigation = () => {
 						Docs
 					</Link>
 					<Link
-						className='nav-link-shadow transition-all hover:text-white'
+						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='/beta'
 						onClick={() => {
 							setOpen(false)
@@ -67,7 +67,7 @@ const Navigation = () => {
 						Beta
 					</Link>
 					<Link
-						className='nav-link-shadow transition-all hover:text-white'
+						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='/shuttle-heros'
 						onClick={() => {
 							setOpen(false)
