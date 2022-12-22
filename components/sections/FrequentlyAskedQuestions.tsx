@@ -12,13 +12,13 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 	const [activeQuestion, setActiveQuestion] = useState<number | null>(null)
 
 	return (
-		<div className='mx-auto mt-24 max-w-7xl px-5 sm:px-10 lg:mt-32 desktop:mt-48'>
+		<div className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-32 desktop:mt-48'>
 			<h2 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-[3.5rem]'>
 				Common questions
 			</h2>
 			<div
 				className={clsx(
-					'mt-10  gap-8 sm:mt-14  lg:gap-16',
+					'mt-10  gap-8 sm:mt-14 lg:gap-16',
 					!hideDiscord && 'grid lg:grid-cols-[1fr_minmax(auto,_380px)] lg:items-center'
 				)}
 			>
