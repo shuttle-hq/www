@@ -41,7 +41,7 @@ const Blog: FC<BlogProps> = ({ tags, posts }) => {
 							'lg:!mt-2 lg:first:!mt-0',
 							tag === activeTag
 								? 'block bg-gradient-to-r from-[#FC540C] to-[#FFD76F] bg-clip-text lg:w-max'
-								: 'blog-tab-shadow block lg:transition-all lg:hover:text-black dark:lg:hover:text-white'
+								: 'blog-tab-shadow block hover:text-black dark:hover:text-white lg:transition-all'
 						)}
 						key={tag}
 					>
