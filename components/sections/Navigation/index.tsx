@@ -1,10 +1,12 @@
 import { Button } from 'components/elements'
 import { GithubLogo, Hamburger, Logo } from 'components/svgs'
-import ThemeSwitcher from './ThemeSwitcher'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useState } from 'react'
 import clsx from 'clsx'
 import { useUser } from '@auth0/nextjs-auth0/client'
+
+const ThemeSwitcher = dynamic(() => import('./ThemeSwitcher'), { ssr: false })
 
 const Navigation = () => {
 	const [open, setOpen] = useState(false)
