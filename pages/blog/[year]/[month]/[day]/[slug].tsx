@@ -178,9 +178,7 @@ const mdxComponents: MDXRemoteProps['components'] = {
 			)
 		}
 
-		return (
-			<Link {...(props as any)} className='text-brand-orange1 hover:text-brand-orange2 no-underline'></Link>
-		)
+		return <Link {...(props as any)} className='my-0 no-underline'></Link>
 	},
 	pre: (props: any) => {
 		return <Pre {...props} />
