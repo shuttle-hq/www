@@ -32,7 +32,7 @@ const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ className }) => {
 			type='button'
 			className={clsx(
 				className,
-				'lg:border-gradient group relative flex items-center justify-center gap-3 rounded-button after:rounded-[0.875rem] dark:bg-black lg:bg-white'
+				'lg:border-gradient group relative flex items-center justify-center gap-3 rounded-button after:rounded-[0.875rem] dark:bg-black lg:bg-[#E9E9E9]'
 			)}
 			onClick={() => {
 				updateTheme(theme === 'dark' ? 'light' : 'dark')
