@@ -18,7 +18,7 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 				<div className='divide-y divide-black/10 dark:divide-white/10 lg:grid lg:grid-cols-2 lg:divide-y-0 lg:divide-x'>
 					<div className='grid grid-cols-2 divide-x divide-black/10 text-xl dark:divide-white/10'>
 						<div className='flex flex-col gap-3 px-8 pt-16 pb-8 lg:p-16'>
-							<h3 className='font-gradual font-bold text-[#C2C2C2]'>Shuttle</h3>
+							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Shuttle</h3>
 							<Link href='/' className='transition duration-300 hover:text-[#D8D8D8]'>
 								Features
 							</Link>
@@ -33,7 +33,7 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 							</Link>
 						</div>
 						<div className='flex flex-col gap-3 px-8 pt-16 pb-8 lg:p-16'>
-							<h3 className='font-gradual font-bold text-[#C2C2C2]'>Company</h3>
+							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Company</h3>
 							<Link href='/' className='transition duration-300 hover:text-[#D8D8D8]'>
 								About
 							</Link>
@@ -44,7 +44,7 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 					</div>
 					<div className='grid grid-cols-2 divide-x divide-black/10 text-xl dark:divide-white/10'>
 						<div className='flex flex-col gap-3 px-8 pt-16 pb-8 lg:p-16'>
-							<h3 className='font-gradual font-bold text-[#C2C2C2]'>Developers</h3>
+							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Developers</h3>
 							<Link href='/' className='transition duration-300 hover:text-[#D8D8D8]'>
 								Docs
 							</Link>
@@ -56,7 +56,7 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 							</Link>
 						</div>
 						<div className='flex flex-col gap-3 px-8 pt-16 pb-8 lg:p-16'>
-							<h3 className='font-gradual font-bold text-[#C2C2C2]'>Community</h3>
+							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Community</h3>
 							<Link href='/' className='transition duration-300 hover:text-[#D8D8D8]'>
 								GitHub
 							</Link>
