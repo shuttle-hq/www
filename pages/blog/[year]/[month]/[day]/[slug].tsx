@@ -187,11 +187,9 @@ const mdxComponents: MDXRemoteProps['components'] = {
 	},
 	TLDR: (props: any) => {
 		return (
-			<div className='border-brand-orange1 border-l-8 bg-gray-200 p-4 text-left text-xl text-gray-500  dark:bg-gray-800 dark:text-gray-200'>
-				<span className='text-md bg-brand-orange1 dark:text-dark-800 rounded px-[10px] py-[2px] font-extrabold  text-slate-100'>
-					TLDR
-				</span>
-				{props.children}
+			<div className='mb-32 text-left text-xl'>
+				<span className='font-bold text-[#C2C2C2]'>TLDR;</span>
+				<span className='text-[#7A7A7A] prose-p:!my-2'>{props.children}</span>
 			</div>
 		)
 	},
@@ -289,7 +287,7 @@ export default function BlogPostPage(props: Props) {
 									'prose-headings:before:pt-36',
 									'prose-headings:lg:before:-mt-20',
 									'prose-headings:before:lg:pt-20',
-									'text-[#7A7A7A]'
+									'text-xl text-[#7A7A7A] prose-h2:text-5xl prose-h5:text-2xl'
 								)}
 							>
 								<MDXRemote {...props.blog.content} components={mdxComponents} />

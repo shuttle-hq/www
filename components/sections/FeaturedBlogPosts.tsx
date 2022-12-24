@@ -60,7 +60,7 @@ const FeaturedBlogPosts: FC<FeaturedBlogPostsProps> = ({ posts = [] }) => {
 				))}
 			</Splide>
 			<div className='mt-12 flex justify-center'>
-				<Button variant='secondary' invertOnDark>
+				<Button variant='secondary' invertOnDark href='/blog/tags/all'>
 					See all articles
 				</Button>
 			</div>
