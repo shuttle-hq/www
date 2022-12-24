@@ -33,8 +33,9 @@ const JobOpenings = () => {
 					/>
 				</span>
 				<div className='px-5 py-10 md:px-8 desktop:px-20 desktop:pb-40'>
-					<h2 className='font-gradual text-4.5 font-bold leading-none text-[#C2C2C2] lg:text-[3.5rem] desktop:text-[4rem]'>
-						Let&apos;s build the future of development together
+					<h2 className='text-gradient bg-clip-text font-gradual text-4.5 font-bold leading-none text-[#C2C2C2] lg:text-[3.5rem] desktop:text-[4rem]'>
+						Let&apos;s build <span className='text-transparent'>the future of development&nbsp;</span>
+						together
 					</h2>
 					<div className='mt-8 grid gap-6 lg:mt-16 lg:grid-cols-2 lg:items-start lg:gap-8'>
 						<div className='space-y-6 text-xl lg:space-y-8'>

@@ -50,9 +50,9 @@ const CallToAction = () => {
 					/>
 				</span>
 				<div className='px-5 py-10 md:px-8 desktop:px-20 desktop:pb-40'>
-					<h2 className='font-gradual text-4.5 font-bold leading-none text-[#C2C2C2] lg:text-[3.5rem] desktop:text-[4rem]'>
+					<h2 className='text-gradient bg-clip-text font-gradual text-4.5 font-bold leading-none text-[#C2C2C2] lg:text-[3.5rem] desktop:text-[4rem]'>
 						Build&nbsp;
-						<span>the Future of Backend Development&nbsp;</span>
+						<span className='text-transparent'>the Future of Backend Development&nbsp;</span>
 						with us
 					</h2>
 					<p className='mt-4 text-xl text-[#C2C2C2] dark:text-[#7A7A7A] lg:text-2xl'>
