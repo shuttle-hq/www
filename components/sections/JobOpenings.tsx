@@ -11,7 +11,7 @@ const JobOpenings = () => {
 						src='/images/sections/job-openings/bg.png'
 						alt=''
 						fill
-						className='absolute top-0 left-0 -z-10 h-full w-full object-cover'
+						className='absolute top-0 left-0 -z-10 h-full w-full bg-[#13292C] object-cover dark:bg-black'
 					/>
 					<Image
 						src='/images/sections/job-openings/stars.png'
@@ -38,7 +38,7 @@ const JobOpenings = () => {
 						together
 					</h2>
 					<div className='mt-8 grid gap-6 lg:mt-16 lg:grid-cols-2 lg:items-start lg:gap-8'>
-						<div className='space-y-6 text-xl lg:space-y-8'>
+						<div className='space-y-6 text-xl text-[#FFFFFF8F] dark:text-[#C2C2C2] lg:space-y-8'>
 							<p>
 								Joining us, you&apos;ll become part of an exceptionally strong engineering team
 								that has a big bias for action and a love for quick experimentation and hacking.

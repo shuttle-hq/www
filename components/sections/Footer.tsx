@@ -19,25 +19,43 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 					<div className='grid grid-cols-2 divide-x divide-black/10 text-xl dark:divide-white/10'>
 						<div className='flex flex-col gap-3 px-8 pt-16 pb-8 lg:p-16'>
 							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Shuttle</h3>
-							<Link href='/' className='transition duration-300 hover:text-[#D8D8D8]'>
+							<Link
+								href='/'
+								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+							>
 								Features
 							</Link>
-							<Link href='/' className='transition duration-300 hover:text-[#D8D8D8]'>
+							<Link
+								href='/'
+								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+							>
 								Examples
 							</Link>
-							<Link href='/' className='transition duration-300 hover:text-[#D8D8D8]'>
+							<Link
+								href='/'
+								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+							>
 								Code Snippets
 							</Link>
-							<Link href='/' className='transition duration-300 hover:text-[#D8D8D8]'>
+							<Link
+								href='/'
+								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+							>
 								Roadmap
 							</Link>
 						</div>
 						<div className='flex flex-col gap-3 px-8 pt-16 pb-8 lg:p-16'>
 							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Company</h3>
-							<Link href='/' className='transition duration-300 hover:text-[#D8D8D8]'>
+							<Link
+								href='/'
+								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+							>
 								About
 							</Link>
-							<Link href='/' className='transition duration-300 hover:text-[#D8D8D8]'>
+							<Link
+								href='/'
+								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+							>
 								Careers
 							</Link>
 						</div>
@@ -45,28 +63,49 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 					<div className='grid grid-cols-2 divide-x divide-black/10 text-xl dark:divide-white/10'>
 						<div className='flex flex-col gap-3 px-8 pt-16 pb-8 lg:p-16'>
 							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Developers</h3>
-							<Link href='/' className='transition duration-300 hover:text-[#D8D8D8]'>
+							<Link
+								href='/'
+								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+							>
 								Docs
 							</Link>
-							<Link href='/' className='transition duration-300 hover:text-[#D8D8D8]'>
+							<Link
+								href='/'
+								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+							>
 								Guides
 							</Link>
-							<Link href='/' className='transition duration-300 hover:text-[#D8D8D8]'>
+							<Link
+								href='/shuttle-heroes'
+								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+							>
 								Shuttle Heroes
 							</Link>
 						</div>
 						<div className='flex flex-col gap-3 px-8 pt-16 pb-8 lg:p-16'>
 							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Community</h3>
-							<Link href='/' className='transition duration-300 hover:text-[#D8D8D8]'>
+							<Link
+								href='/'
+								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+							>
 								GitHub
 							</Link>
-							<Link href='/' className='transition duration-300 hover:text-[#D8D8D8]'>
+							<Link
+								href='/'
+								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+							>
 								Discord
 							</Link>
-							<Link href='/' className='transition duration-300 hover:text-[#D8D8D8]'>
+							<Link
+								href='/'
+								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+							>
 								Twitter
 							</Link>
-							<Link href='/' className='transition duration-300 hover:text-[#D8D8D8]'>
+							<Link
+								href='/'
+								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+							>
 								Linkedin
 							</Link>
 						</div>

@@ -13,7 +13,7 @@ interface BlogSidebarProps {
 const BlogSidebar: FC<BlogSidebarProps> = ({ tags, relatedPosts, toc, mdxComponents }) => {
 	return (
 		<div className='relative w-full'>
-			<div className='w-full space-y-6 lg:sticky lg:top-20'>
+			<div className='w-full space-y-6 lg:sticky lg:top-0'>
 				<div className='rounded-3xl border border-black/10 py-4 px-6 dark:border-white/10'>
 					<div className='mb-2 dark:text-[#C2C2C2]'>Categories</div>
 
