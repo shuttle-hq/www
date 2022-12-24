@@ -188,8 +188,8 @@ const mdxComponents: MDXRemoteProps['components'] = {
 	TLDR: (props: any) => {
 		return (
 			<div className='mb-32 text-left text-xl'>
-				<span className='font-bold text-[#C2C2C2]'>TLDR;</span>
-				<span className='text-[#7A7A7A] prose-p:!my-2'>{props.children}</span>
+				<span className='font-bold text-black dark:text-[#C2C2C2]'>TLDR;</span>
+				<span className='text-[#525151] prose-p:!my-2 dark:text-[#7A7A7A]'>{props.children}</span>
 			</div>
 		)
 	},
@@ -201,13 +201,13 @@ const mdxComponents: MDXRemoteProps['components'] = {
 			</div>
 		)
 	},
-	// blockquote(props) {
-	//   return (
-	//     <blockquote className="my-4 border-l-8 border-brand-orange1 bg-gray-200 p-4 text-left text-xl text-gray-500 dark:border-brand-orange2 dark:bg-gray-800 dark:text-gray-200">
-	//       {props.children}
-	//     </blockquote>
-	//   );
-	// },
+	blockquote(props) {
+		return (
+			<blockquote className='border-none bg-[linear-gradient(180deg,_#FC540C_25.63%,_rgba(255,_215,_111,_0.72)_60.67%,_#38D4E9_88.15%)] pl-2 text-left text-2xl font-normal not-italic text-[#525151] dark:text-[#7A7A7A]'>
+				<div className='bg-white py-1 pl-8 prose-p:!my-0 dark:bg-black'>{props.children}</div>
+			</blockquote>
+		)
+	},
 }
 
 interface Props {
@@ -287,7 +287,7 @@ export default function BlogPostPage(props: Props) {
 									'prose-headings:before:pt-36',
 									'prose-headings:lg:before:-mt-20',
 									'prose-headings:before:lg:pt-20',
-									'text-xl text-[#7A7A7A] prose-h2:text-5xl prose-h5:text-2xl'
+									'text-xl text-[#525151] prose-h2:text-5xl prose-h4:text-3xl prose-h5:text-2xl dark:text-[#7A7A7A]'
 								)}
 							>
 								<MDXRemote {...props.blog.content} components={mdxComponents} />
