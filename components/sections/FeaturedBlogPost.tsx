@@ -12,7 +12,7 @@ const FeaturedBlogPost: FC<Post> = (post) => {
 
 	return (
 		<div className='mx-auto mt-8 w-full max-w-[1280px] px-5 sm:mt-24 sm:px-10'>
-			<div className='border-black-10 group grid gap-4 rounded-[2rem] border p-5 transition-all duration-300 hover:shadow-[0px_4px_88px_0px_rgba(252,84,12,0.25)] dark:border-white/10 md:grid-cols-2 md:items-center md:gap-5 md:p-8'>
+			<div className='group grid gap-4 rounded-[2rem] border border-black/10 p-5 transition-all duration-300 hover:shadow-[0px_4px_88px_0px_rgba(252,84,12,0.25)] dark:border-white/10 md:grid-cols-2 md:items-center md:gap-5 md:p-8'>
 				<div className='grid gap-4 lg:gap-6'>
 					<div className='flex flex-wrap items-center gap-x-4 gap-y-1'>
 						<div className='flex items-center gap-2 font-gradual font-bold text-black dark:text-[#C2C2C2]'>
