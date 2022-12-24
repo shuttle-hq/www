@@ -1,4 +1,4 @@
-import { Splide, SplideSlide } from '@splidejs/react-splide'
+import { Splide, SplideSlide, SplideTrack } from '@splidejs/react-splide'
 import { Grid } from '@splidejs/splide-extension-grid'
 import { Button } from 'components/elements'
 import { getAuthors } from 'lib/blog/authors'
@@ -49,15 +49,18 @@ const FeaturedBlogPosts: FC<FeaturedBlogPostsProps> = ({ posts = [] }) => {
 					},
 				}}
 				extensions={{ Grid }}
+				hasTrack={false}
 				className='mt-10 lg:mx-auto lg:mt-14 lg:w-full lg:max-w-7xl lg:px-10 desktop:mt-16'
 			>
-				{posts.map((post, index) => (
-					<Article
-						key={post?.slug || index}
-						post={post}
-						className={index === 0 ? 'lg:pt-10' : index === 1 ? 'lg:pt-5' : ''}
-					/>
-				))}
+				<SplideTrack className='!overflow-visible'>
+					{posts.map((post, index) => (
+						<Article
+							key={post?.slug || index}
+							post={post}
+							className={index === 0 ? 'lg:pt-10' : index === 1 ? 'lg:pt-5' : ''}
+						/>
+					))}
+				</SplideTrack>
 			</Splide>
 			<div className='mt-12 flex justify-center'>
 				<Button variant='secondary' invertOnDark href='/blog/tags/all'>
@@ -83,7 +86,7 @@ const Article: FC<ArticleProps> = ({ post, className }) => {
 		<SplideSlide className={className}>
 			<Link
 				href={`/blog/${post.url}`}
-				className='o-h-shadow block rounded-[2rem] border border-[#1E1B19] bg-[#13292C] dark:bg-black'
+				className='block rounded-[2rem] border border-[#1E1B19] bg-[#13292C] transition duration-500 hover:shadow-[0px_4px_64px_0px_rgba(252,84,12,0.25)] dark:bg-black'
 			>
 				<Image
 					src={`/images/blog/` + post.thumb}
