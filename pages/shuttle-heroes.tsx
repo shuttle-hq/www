@@ -1,26 +1,16 @@
 import {
 	CallToAction,
-	CommunitySupportedNumbers,
-	FeaturedBlogPosts,
-	FeaturedStarters,
-	Features,
-	FrequentlyAskedQuestions,
-	GetStarted,
-	Hero,
-	HowItWorks,
-	LogosReferences,
+	ShuttleHeroesBenefits,
 	ShuttleHeroesHero,
 	ShuttleHeroesResponsibilities,
-	Testimonials,
 } from 'components/sections'
-import { getAllTags, getSortedPosts } from 'lib/blog/posts'
-import { GetStaticPropsResult } from 'next'
 
 export default function ShuttleHeroes() {
 	return (
 		<>
 			<ShuttleHeroesHero />
 			<ShuttleHeroesResponsibilities />
+			<ShuttleHeroesBenefits />
 			<CallToAction />
 		</>
 	)

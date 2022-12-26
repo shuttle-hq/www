@@ -1,4 +1,5 @@
 export * from './features'
+export * from './heroes-benefits'
 export * from './logos'
 export * from './starters'
 export { default as Copy } from './Copy'
