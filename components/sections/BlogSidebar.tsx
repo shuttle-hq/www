@@ -22,7 +22,7 @@ const BlogSidebar: FC<BlogSidebarProps> = ({ tags, relatedPosts, toc, mdxCompone
 							return (
 								<Link
 									key={tag}
-									className='border-gradient pill relative rounded-full px-2 py-1 text-sm outline outline-1 outline-black/10 transition-all duration-500 duration-500 hover:outline-none hover:after:rounded-full hover:after:bg-gradient-to-r hover:after:from-[#FC540C] hover:after:to-[#FFD76F] dark:bg-black dark:outline-[#1E1B19] dark:hover:text-white'
+									className='border-gradient pill relative rounded-full bg-[#E9E9E9] px-2 py-1 text-sm outline outline-1 outline-black/10 transition-all duration-500 duration-500 hover:outline-none hover:after:rounded-full hover:after:bg-gradient-to-r hover:after:from-[#FC540C] hover:after:to-[#FFD76F] dark:bg-black dark:outline-[#1E1B19] dark:hover:text-white'
 									href={`/blog/tags/${tag}`}
 								>
 									{tag}
