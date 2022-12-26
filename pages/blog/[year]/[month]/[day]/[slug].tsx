@@ -263,19 +263,16 @@ export default function BlogPostPage(props: Props) {
 					<div className='lg:col-span-3'>
 						{(props.blog.thumb ?? props.blog.cover) && (
 							<div className='mb-8 grid grid-cols-1 justify-items-center'>
-								{/* todo: fix this temporary hack to fix the caption */}
-								<img
-									className='rounded'
+								<Image
 									src={'/images/blog/' + (props.blog.cover ?? props.blog.thumb)}
 									alt='Cover image'
-								/>
-								{/* <Image
-									src={'/images/blog/' + (props.blog.cover ?? props.blog.thumb)}
-									layout='fill'
+									width={1000}
+									height={1000}
 									objectFit='contain'
-								/> */}
+									className='w-full rounded-[2rem]'
+								/>
 								{props.blog.caption && (
-									<span className='mt-2 text-sm text-[#828282] dark:text-gray-300'>
+									<span className='mt-2 text-center text-sm text-[#525151] dark:text-[#7A7A7A] dark:text-gray-300'>
 										{props.blog.caption}
 									</span>
 								)}
