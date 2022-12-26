@@ -30,7 +30,7 @@ const Starter: FC<StarterProps> = ({
 	deployLink,
 }) => {
 	return (
-		<div className='border-gradient group relative h-full overflow-hidden rounded-[2rem] bg-[#13292C] px-5 pt-8 pb-6 outline outline-1 outline-[#1E1B19] after:rounded-[2rem] hover:outline-transparent dark:bg-black'>
+		<div className='border-gradient group relative relative h-full overflow-visible rounded-[2rem] bg-[#13292C] px-5 pt-8 pb-6 outline outline-1 outline-[#1E1B19] after:rounded-[2rem] hover:outline-transparent dark:bg-black'>
 			<Image src={bg} alt='bg' fill className={bgClassName} />
 			<Image src={stars} alt='stars' fill className={starsClassName} />
 			<Image src={stars2} alt='stars 2' fill className={stars2ClassName} />
