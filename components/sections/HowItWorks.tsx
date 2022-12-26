@@ -1,4 +1,4 @@
-import { Splide, SplideSlide } from '@splidejs/react-splide'
+import { Splide, SplideSlide, SplideTrack } from '@splidejs/react-splide'
 import clsx from 'clsx'
 import { Copy } from 'components/svgs'
 import Image from 'next/image'
@@ -43,59 +43,62 @@ const HowItWorks = () => {
 						},
 					}}
 					className='splide md:top-px'
+					hasTrack={false}
 				>
-					<SplideSlide>
-						<button
-							className={clsx(
-								'whitespace-nowrap rounded-[1.75rem] p-2 px-6 font-gradual font-bold leading-none md:rounded-b-none md:border-b-0 md:py-3',
-								selectedItem === 'hello-cloud'
-									? 'border border-[#191919] bg-[#13292C] text-[#D8D8D8] dark:bg-black'
-									: 'tab-shadow dark:dark:text-[#C2C2C2]'
-							)}
-							onClick={() => setSelectedItem('hello-cloud')}
-						>
-							Hello cloud
-						</button>
-					</SplideSlide>
-					<SplideSlide>
-						<button
-							className={clsx(
-								'whitespace-nowrap rounded-[1.75rem] p-2 px-6 font-gradual font-bold leading-none md:rounded-b-none md:border-b-0 md:py-3',
-								selectedItem === 'cargo-deploy'
-									? 'border border-[#191919] bg-[#13292C] text-[#D8D8D8] dark:bg-black'
-									: 'tab-shadow dark:text-[#C2C2C2]'
-							)}
-							onClick={() => setSelectedItem('cargo-deploy')}
-						>
-							Cargo deploy
-						</button>
-					</SplideSlide>
-					<SplideSlide>
-						<button
-							className={clsx(
-								'whitespace-nowrap rounded-[1.75rem] p-2 px-6 font-gradual font-bold leading-none md:rounded-b-none md:border-b-0 md:py-3',
-								selectedItem === 'using-sql'
-									? 'border border-[#191919] bg-[#13292C] text-[#D8D8D8] dark:bg-black'
-									: 'tab-shadow dark:text-[#C2C2C2]'
-							)}
-							onClick={() => setSelectedItem('using-sql')}
-						>
-							Using SQL
-						</button>
-					</SplideSlide>
-					<SplideSlide>
-						<button
-							className={clsx(
-								'whitespace-nowrap rounded-[1.75rem] p-2 px-6 font-gradual font-bold leading-none md:rounded-b-none md:border-b-0 md:py-3',
-								selectedItem === 'using-axum'
-									? 'border border-[#191919] bg-[#13292C] text-[#D8D8D8] dark:bg-black'
-									: 'tab-shadow dark:text-[#C2C2C2]'
-							)}
-							onClick={() => setSelectedItem('using-axum')}
-						>
-							Using Axum
-						</button>
-					</SplideSlide>
+					<SplideTrack className='!overflow-visible'>
+						<SplideSlide>
+							<button
+								className={clsx(
+									'whitespace-nowrap rounded-[1.75rem] p-2 px-6 font-gradual font-bold leading-none md:rounded-b-none md:border-b-0 md:py-3',
+									selectedItem === 'hello-cloud'
+										? 'border border-[#191919] bg-[#13292C] text-[#D8D8D8] dark:bg-black'
+										: 'tab-shadow dark:text-[#C2C2C2]'
+								)}
+								onClick={() => setSelectedItem('hello-cloud')}
+							>
+								Hello cloud
+							</button>
+						</SplideSlide>
+						<SplideSlide>
+							<button
+								className={clsx(
+									'whitespace-nowrap rounded-[1.75rem] p-2 px-6 font-gradual font-bold leading-none md:rounded-b-none md:border-b-0 md:py-3',
+									selectedItem === 'cargo-deploy'
+										? 'border border-[#191919] bg-[#13292C] text-[#D8D8D8] dark:bg-black'
+										: 'tab-shadow dark:text-[#C2C2C2]'
+								)}
+								onClick={() => setSelectedItem('cargo-deploy')}
+							>
+								Cargo deploy
+							</button>
+						</SplideSlide>
+						<SplideSlide>
+							<button
+								className={clsx(
+									'whitespace-nowrap rounded-[1.75rem] p-2 px-6 font-gradual font-bold leading-none md:rounded-b-none md:border-b-0 md:py-3',
+									selectedItem === 'using-sql'
+										? 'border border-[#191919] bg-[#13292C] text-[#D8D8D8] dark:bg-black'
+										: 'tab-shadow dark:text-[#C2C2C2]'
+								)}
+								onClick={() => setSelectedItem('using-sql')}
+							>
+								Using SQL
+							</button>
+						</SplideSlide>
+						<SplideSlide>
+							<button
+								className={clsx(
+									'whitespace-nowrap rounded-[1.75rem] p-2 px-6 font-gradual font-bold leading-none md:rounded-b-none md:border-b-0 md:py-3',
+									selectedItem === 'using-axum'
+										? 'border border-[#191919] bg-[#13292C] text-[#D8D8D8] dark:bg-black'
+										: 'tab-shadow dark:text-[#C2C2C2]'
+								)}
+								onClick={() => setSelectedItem('using-axum')}
+							>
+								Using Axum
+							</button>
+						</SplideSlide>
+					</SplideTrack>
 				</Splide>
 				<div className='mt-3 rounded-[2rem] border border-[#191919] bg-[#13292C] p-6 text-right dark:bg-black md:mt-0 md:rounded-tl-none'>
 					<button className='rounded-xl border border-[#191919] p-2 text-white hover:border-[#484848] hover:bg-[#343434] dark:text-[#C2C2C2]'>
