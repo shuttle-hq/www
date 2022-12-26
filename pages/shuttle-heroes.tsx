@@ -10,6 +10,7 @@ import {
 	HowItWorks,
 	LogosReferences,
 	ShuttleHeroesHero,
+	ShuttleHeroesResponsibilities,
 	Testimonials,
 } from 'components/sections'
 import { getAllTags, getSortedPosts } from 'lib/blog/posts'
@@ -19,6 +20,7 @@ export default function ShuttleHeroes() {
 	return (
 		<>
 			<ShuttleHeroesHero />
+			<ShuttleHeroesResponsibilities />
 			<CallToAction />
 		</>
 	)
