@@ -20,6 +20,7 @@ import Link from 'next/link'
 import clsx from 'clsx'
 import { BlogHeader, BlogPrevNext, BlogSidebar, CallToAction } from 'components/sections'
 import { LinkedInLogo, Logo, TwitterLogo } from 'components/svgs'
+import { CopyButton } from 'components/elements'
 
 export async function getStaticPaths() {
 	const paths = getAllPostSlugs()
@@ -120,9 +121,14 @@ const Pre = ({ children, ...props }: any) => {
 
 	return (
 		<div className='relative'>
-			{/* <Copy code={code}></Copy> */}
-
-			<pre {...props} className={props.className ?? 'language-'}>
+			<CopyButton code={code} className='absolute right-2 top-2 inline-flex items-center' />
+			<pre
+				{...props}
+				className={clsx(
+					'!border !border-black/10 !bg-transparent !pr-16 text-[#525151] dark:!border-white/10 dark:text-[#7A7A7A]',
+					props.className ?? 'language-'
+				)}
+			>
 				{{
 					...children,
 					props: {
