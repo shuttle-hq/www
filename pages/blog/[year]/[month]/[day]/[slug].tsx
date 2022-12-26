@@ -191,7 +191,7 @@ const mdxComponents: MDXRemoteProps['components'] = {
 	},
 	TLDR: (props: any) => {
 		return (
-			<div className='mb-32 text-left text-xl'>
+			<div className='mb-24 text-left text-xl'>
 				<span className='font-bold text-black dark:text-[#C2C2C2]'>TLDR;</span>
 				<span className='text-[#525151] prose-p:!my-2 dark:text-[#7A7A7A]'>{props.children}</span>
 			</div>
