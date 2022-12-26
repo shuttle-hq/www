@@ -68,7 +68,7 @@ const Navigation = () => {
 					</Link>
 					<Link
 						className='nav-link-shadow transition-all dark:hover:text-white'
-						href='/shuttle-heros'
+						href='/shuttle-heroes'
 						onClick={() => {
 							setOpen(false)
 						}}
