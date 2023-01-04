@@ -1,8 +1,8 @@
 ---
 title: Reflection in Rust with procedural macros
-description: A tutorial on building and deploying an interactive bot in Rust with Serenity & shuttle
+description: Comparing runtime reflection in JavaScript against Rust's compile time procedural derive macros
 author: ben
-tags: [rust, tutorial]
+tags: [rust, tutorial, comparison]
 thumb: proc-macro-banner.png
 cover: proc-macro-banner.png
 date: "2022-12-23T15:00:00"
@@ -10,12 +10,12 @@ date: "2022-12-23T15:00:00"
 
 
 # Reflection in Rust with procedural macros
-Procedural macros are one of the more complex but powerful parts of Rust. For me, it's one of the features that really sets Rust apart from other languages.. If you have ever seen this syntax and left scratching your head, then this post is for you:
+Procedural macros are one of the more complex but powerful parts of Rust. For me, it's one of the features that really sets Rust apart from other languages. If you have ever seen this syntax and left scratching your head, then this post is for you:
 ```rust
 #[derive(derive_macros::MyTrait)] // << 🤨
 struct X {}
 ```
-This article will cover the concept of macros and some interesting use cases, and you certainly don't need to be a Rut expert to follow along. However, the example section assumes you have written *some* Rust (`if let`, `struct` , `trait` etc).
+This article will cover the concept of macros and some interesting use cases, and you certainly don't need to be a Rust expert to follow along. However, the example section assumes you have written *some* Rust (`if let` , `struct`, `trait` etc).
 
 In this post we'll compare how Rust's compile time, token based approach to object reflection is different to the approach in JavaScript's runtime approach to reflection.
 
@@ -39,9 +39,9 @@ pub fn my_macro(input: TokenStream) -> TokenStream {
 Procedural macros are different to `macro_rules!` in that they can **additionally** work on the tokens of existing structures. This includes `fn` ,`trait` , `struct` and `enum` declarations. They also require creating a separate crate for the function. This article will walk through all the steps and file structure required to add a proc (from "procedural") macro to a crate.
 
 ## Runtime reflection and JavaScript
-Before we start with writing procedural macros, let's take a look at closely related concept called reflection, what reflection is and how it is implemented in the JavaScript language. Reflection is looking at the properties a program at runtime. There are various points to introspect such as the name of declarations, the structure of fields. In the following example we will be looking at the fields of an *object* in JavaScript.
+Before we start with writing procedural macros, let's take a look at closely related concept called reflection, what reflection is and how it is implemented in the JavaScript language. Reflection refers to code that may introspect and generate its own structure and behavior. There are various points to introspect such as the name of declarations, the structure of fields. In the following example we will be looking at the fields of an *object* in JavaScript.
 
-JavaScript objects can be inspected at runtime. There are no fixed structures in JavaScript. Every object can have properties added or removed (unless [sealed](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal)). On the other hand Rust structures are static, that is they are determined at compile time. Rust *packs* field data together to build structures and turns keys into offsets in memory. The actual fields, the count, the names are all lost at runtime under regular operation. On the other hand JavaScript objects at the surface level are all maps from keys to other JavaScript values. The names of properties are kept in memory at runtime. In Rust the rough equivalent type of a JS object would be: `HashMap<&'static str, Box<dyn std::any::Any>>` (ignoring object prototypes). You could use a `HashMap` to emulate the dynamic object from JS.
+JavaScript objects can be inspected at runtime. There are no fixed structures in JavaScript. Every object can have properties added or removed (unless [sealed](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal)). On the other hand Rust structures are static, that is they are determined at compile time. Rust *packs* field data together to build structures and turns keys into offsets in memory. The actual fields, the count, the names are all lost at runtime under regular operation. On the other hand JavaScript objects at the surface level are all maps from keys to other JavaScript values. The names of properties are kept in memory at runtime. In Rust the rough equivalent type of a JS object would be: `HashMap<&'static str, Box<dyn std::any::Any>>` (ignoring object prototypes).
 
 ## Our reflection example
 In our first example we have an array of JavaScript objects:
@@ -140,10 +140,10 @@ const stringToFloat32 = (string, offset) => {
 function arrayFromString(string, fields) {
 	let i = 0;
 	const entries = stringToFloat32(string, i);
-  i += 2;
+    i += 2;
 	const array = [];
 	for (let arrayIndex = 0; arrayIndex < entries; arrayIndex++) {
-    const object = {};
+        const object = {};
 		for (const { name, ty } of fields) {
 			let value;
 			switch (ty) {
@@ -166,7 +166,7 @@ function arrayFromString(string, fields) {
 			}
 			Reflect.set(object, name, value);
 		}
-    array.push(object);
+        array.push(object);
 	}
 	return array;
 }
@@ -175,16 +175,16 @@ function arrayFromString(string, fields) {
 Here we're using another part of reflection `Reflect.set` which allows us to set a property of an existing object based on a string key (`name`).
 
 ### Problems with reflection in JavaScript
-The `arrayFromString` function assumes that the caller has passed a standard array where every object has the same type. `Reflect.get` will fail at runtime as if the property doesn't exist. The downside of this is that both the dynamic property lookup and null check is expensive at runtime.
+The `arrayToString` function assumes that the caller has passed a standard array where every object has the same type. `Reflect.get` will fail at runtime as if the property doesn't exist. The downside of this is that both the dynamic property lookup and null check is expensive at runtime.
 
-One way to catch property errors ahead of time is to us a type system on top of JavaScript like TypeScript.
+One way to catch property errors ahead of time is to use a type system on top of JavaScript such as TypeScript.
 
 ## Writing a Rust procedural macro
 
 To get started, if you are not already in a cargo project you can create one with `cargo new <name>` command. Before we start generating code we should declare a trait as a target for our macros output.
 
 ### The BinarySerializable trait
-First, we need to create a `trait` which describes the requirements for serializing and deserializing objects - let's call this the `BinarySerializable` trait. Serialization will require adding data to a buffer. Deserialization will require pulling from an iterator (which iterates over bytes of a serialized buffer) and producing a term of `Self`. *We will assume the format is well-formed and panic at runtime rather than proper handling with `Result` when deserializing.*
+First, we need to create a `trait` which describes the requirements for serializing and deserializing objects - let's call this the `BinarySerializable` trait. Serialization will require adding information on the structure into a buffer. Deserialization will require pulling from an iterator (which iterates over bytes of a serialized buffer) and producing a term of `Self`. *We will assume the deserialize input is well-formed and panic at runtime rather than proper handling with `Result` when deserializing.*
 
 ```rust
 pub trait BinarySerializable {
@@ -213,7 +213,6 @@ impl BinarySerializable for u64 {
 
     fn deserialize<I: Iterator<Item = u8>>(iter: &mut I) -> Self {
         let mut buf = [0; u64::BITS as usize / 8];
-        // @ben this won't work right? You're pulling a single byte? Don't you need 8 bytes?
         buf.fill_with(|| iter.next().unwrap());
         u64::from_le_bytes(buf)
     }
@@ -296,12 +295,21 @@ use syn::{parse_macro_input, DeriveInput, Data};
 pub fn my_macro(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
 
+    // Get the name of the structure the derive is on. For example if we have:
+    // ```rust
+    // #[derive(BinarySerializable)]
+    // struct MyStruct;
+    // ```
+    // `name` will be "MyStruct"
     let name = input.ident;
 
+    // Only look at struct data for now.
+    // Challenge for the reader to continue the logic for enums!
     let Data::Struct(struct_data) = input.data else {
         unimplemented!("enums");
     };
 
+    // Produce a iterator of expressions for serializing each field
     let serialize_fields = struct_data.fields.iter().map(|field| {
         let Some(ident) = &field.ident else {
             unimplemented!("tuple structs");
@@ -309,6 +317,8 @@ pub fn my_macro(input: TokenStream) -> TokenStream {
         quote!( self.#ident.serialize(buf); )
     });
 
+    // Produce a key value pair deserializing each field
+    // VERY important that the iterator is in the same order as the above serialize iterator!
     let deserialize_fields = struct_data.fields.iter().map(|field| {
         let Some(ident) = &field.ident else {
             unimplemented!("tuple structs");
@@ -316,7 +326,9 @@ pub fn my_macro(input: TokenStream) -> TokenStream {
         quote!( #ident: BinarySerializable::deserialize(iter) )
     });
 
+    // Finally produce a `impl` block for our trait. Using `#` to interpolate are above token iterators
     let expanded = quote! {
+        #[automatically_derived]
         impl BinarySerializable for #name {
             fn serialize(self, buf: &mut Vec<u8>) {
                 #( #serialize_fields );*
@@ -359,13 +371,11 @@ struct Country {
 #### cargo expand-ing our macro (optional)
 We can debug the output by installing [cargo-expand](https://github.com/dtolnay/cargo-expand) (`cargo install cargo-expand`). Running `cargo expand` we see the result which is the automatic generated what we wrote manually:
 
-// @ben add the `$cargo expand` prompt alongside the generated code and make sure the next is a little smaller.
-
 ![](/images/blog/cargo-expand-proc-macro-output.png)
 
 > `cargo-expand` requires Rust nightly and can require running `cargo clean` if switching back and forth between stable.
 
-Alternatively, adding `eprintln!("{}", expanded)` to the end of your macro code and then running `cargo check` also works for debugging. The output is not as readable but it works for malformed token streams for malformed token streams.
+Alternatively, adding `eprintln!("{}", expanded)` to the end of your macro code and then running `cargo check` also helps for debugging. The output is not as readable but it works for malformed token streams.
 
 We can now emulate what we were doing with JavaScript arrays using regular generics and trait logic in Rust:
 ```rust
@@ -391,14 +401,13 @@ struct X(String);
 
 Additionally, macros can result in increased compile time. When building the crate all the macros need to be run and the output token streams need to be parsed.
 
-// @ben not sure what you're saying here - consider rephrasing
-Another problem is that the implementation has to be maintained across crates. When publishing you have to make sure that the crates are released at once and the main crate imports a macro who generates the most up to date code.
+Another problem is that the trait and its corresponding macro are split across crates. If like me you like keeping similar logic together then you might be a bit annoyed that it is impossible to have the trait definition and macro automatic implementation in the same file. The other difficulty is publishing the crate to [crates.io](https://crates.io/) (with `cargo publish`). For your crate to work its derive macro crate also needs to be published. If you update the trait and the macro you must first release the proc macro crate and then afterwards update the dependency version before publishing the main crate.
 
 ### syn-helpers
-[syn-helpers](https://github.com/kaleidawave/syn-helpers) is a framework I have been working to abstract common derive patterns. Our short example works great for our `Country` struct, our macros should work across enums, generics, etc. It's still a work in progress but not all proc macros need long and complex implementations.
+[syn-helpers](https://github.com/kaleidawave/syn-helpers) is a framework I have been working to abstract common derive patterns. Our short example works great for our `Country` struct. However our macros should but doesn't currently work across enums, items with generics, etc. With syn-helpers it abstracts the item the derive is on and gives a really simple way to add logic to fields. It's still a work in progress but not all proc macros need long and complex implementations.
 
 ### Inner annotations
-Sometimes we want to have some custom behaviour for a field. Rust allows for writing attributes in lots of places. The attribute can be read from the syntax tree that syn parses and are simple to lookup. They can contain token stream arguments if even more information needs to be given to the macro.
+Sometimes we want to have some custom behavior for a field. Rust allows for writing attributes in lots of places. The attribute can be read from the syntax tree that syn parses and are simple to lookup. They can contain token stream arguments if even more information needs to be given to the macro.
 
 In our example if there was a field we didn't want to end up in the output and that could be generated at runtime using default. We could add the following attribute and in the logic of the macro doing some different handling here.
 
@@ -409,12 +418,12 @@ struct Country {
 	ignored_field: TypeThatImplementsDefault
 }
 ```
-Just remember when doing so to register with Rust that the attribute belongs to the derive macro by adding attributes here `#[proc_macro_derive(BinarySerializable, attributes(serialization_skip))]`
+Just remember when doing so to register with Rust that the attribute belongs to the derive macro by registering attributes in the `proc_macro_derive` attribute. E.g. `#[proc_macro_derive(BinarySerializable, attributes(serialization_skip))]`
 
 # Conclusion
 
 ## Performance characteristics
-As code is generated at compile time. It can be faster than having to do the work at runtime. Compared to JavaScript reflection, the properties are known at compile time, and we can read them using memory offsets. It is difficult to benchmark the difference between JavaScript's runtime reflection and Rust with proc macro compile time reflection, without the results including other differences in the languages.
+As code is generated at compile time. It can be faster than having to do the work at runtime. Compared to JavaScript reflection, the properties are known at compile time, and we can read them using memory offsets. We won't cover it here as it is difficult to benchmark the difference between JavaScript's runtime reflection and Rust with proc macro compile time reflection, without the results including other differences in the languages.
 
 ## Real world procedural macro examples
 Proc macros are used throughout Rust. Most standard library `derive`s are proc macro could be implemented as proc macros.
@@ -423,11 +432,10 @@ Proc macros are used throughout Rust. Most standard library `derive`s are proc m
 [Serde](https://serde.rs/), a serialization and deserialization library is a prime example. It is feature-complete and supports a bunch of different serialization formats like JSON, YAML, etc.
 
 ### Ezno
-Ezno, a compiler project I am working on, uses some bespoke ones in the AST definitions for generating logic for visiting/walking AST.
+Ezno, a compiler project I am working on, uses some bespoke derive macros in the AST definitions for generating normally repetitive logic for visiting/walking AST.
 
 ### Shuttle
 Shuttle which is a Rust-native cloud development platform uses procedural macros to define how a service runs and what features it needs. It works a bit differently using *attribute* macros (as opposed to the *derive* macros we used in our example) which work on more items that just `structs` and `enum`s. They allow complete rewrites of token streams as opposed to just generating additional code. Here macros enable users to define how the service runs along-side business logic, rather than having to manage configuration files separately. Long live infrastructure for code!
-
 
 ## In summary procedural macros are good for
 - Common operations over structures, reducing boilerplate
