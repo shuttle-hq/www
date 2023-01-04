@@ -265,10 +265,14 @@ impl BinarySerializable for Country {
 
 This is great and we have our desired functionality. In this code we have to be careful we serialize and fields in the same order. **Writing this `impl` block out for many structs with many fields would get tedious. If we add another `struct` we want to be serializable we don't want to have to have to copy the implementation over.**
 
+With some idea of the code we want to write, we can get Rust to generate the above code for us using just the information in the struct definition. This is where proc macros come in...
+
 ### Procedural macro time!
-With some idea of the code we want to write, using proc macros we can code-generated the desired code at compile time!
+
+Now we know what code we want to generate, we can write some Rust code to handle a structure and generate the an output token stream.
 
 Rust procedural macros require their own crate for their definition due to constraints on how they are compiled. The unofficial Rust convention for derive macros is the name of trait or crate name + derive. So let's run the following from our current folder `cargo new --lib binary-serialize-derive`. We need to let `cargo` know that this crate is a proc macro by defining it in its `Cargo.toml`. We'll also add the dependencies [syn](https://crates.io/crates/syn) for parsing the contents of our structure and [quote](https://crates.io/crates/quote) for generating the output:
+
 ```toml
 [package]
 name = "binary-serialize-derive"
