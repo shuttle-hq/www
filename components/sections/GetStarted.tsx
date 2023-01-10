@@ -1,18 +1,27 @@
 import Image from 'next/image'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
-import { FC, ReactNode, useRef } from 'react'
+import { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { Copy } from 'components/svgs'
 
 const GetStarted = () => {
+	const [selectedSlide, setSelectedSlide] = useState(0)
 	const slideRef = useRef<Splide>(null)
 
 	const handleClick = (id: number) => {
-		if (slideRef.current) {
-			slideRef.current.go(id)
-		}
+		setSelectedSlide(id)
 	}
+
+	useEffect(() => {
+		slideRef.current?.go(selectedSlide)
+	}, [selectedSlide])
+
+	useEffect(() => {
+		slideRef.current?.splide?.on('move', () => {
+			setSelectedSlide(slideRef.current?.splide?.index ?? 0)
+		})
+	}, [])
 
 	return (
 		<>
@@ -108,6 +117,7 @@ const GetStarted = () => {
 						title='Install'
 						text='Run this command to install shuttle'
 						handleClick={handleClick}
+						isSelected={0 === selectedSlide}
 					>
 						<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
 							$ cargo install cargo-shuttle
@@ -121,15 +131,9 @@ const GetStarted = () => {
 						title='Initialize'
 						text='Run this command to init interactive prompt'
 						handleClick={handleClick}
+						isSelected={1 === selectedSlide}
 					>
-						<div
-							onClick={(e) => {
-								e.preventDefault()
-								e.stopPropagation
-								handleClick(2)
-							}}
-							className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'
-						>
+						<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
 							$ cargo shuttle init interactive prompt
 							<button className='absolute right-3 rounded-lg border border-transparent p-1 hover:border-[#484848] hover:bg-[#343434] dark:text-[#C2C2C2]'>
 								<Copy />
@@ -141,6 +145,7 @@ const GetStarted = () => {
 						title='Deploy'
 						text='Run this command to deploy output'
 						handleClick={handleClick}
+						isSelected={2 === selectedSlide}
 					>
 						<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
 							$ cargo shuttle deploy output
@@ -161,9 +166,10 @@ interface GetStartedSlideProps {
 	text: string
 	children?: ReactNode
 	handleClick: (id: number) => void
+	isSelected: boolean
 }
 
-const GetStartedSlide: FC<GetStartedSlideProps> = ({ number, title, text, children, handleClick }) => {
+const GetStartedSlide: FC<GetStartedSlideProps> = ({ number, title, text, children, handleClick, isSelected }) => {
 	// React splide is 0-indexed
 	const adjustedNumber = number + 1
 
@@ -171,9 +177,10 @@ const GetStartedSlide: FC<GetStartedSlideProps> = ({ number, title, text, childr
 		<div
 			onMouseEnter={() => handleClick(number)}
 			className={clsx(
-				'border-gradient group relative h-full cursor-pointer cursor-pointer rounded-2xl rounded-2xl bg-[#E9E9E9] p-6 p-6 outline outline-1 outline-black/10 transition after:rounded-2xl hover:outline-none dark:bg-black hover:lg:outline-none',
+				'group relative h-full cursor-pointer cursor-pointer rounded-2xl rounded-2xl bg-[#E9E9E9] p-6 p-6 outline outline-1 outline-black/10 transition after:rounded-2xl dark:bg-black',
 				adjustedNumber === 1 && // If it isn't the first slide, hide the outline on desktop
-					'dark:outline-[#191919]'
+					'dark:outline-[#191919]',
+				isSelected && 'border-gradient outline outline-1 outline-red-300'
 			)}
 		>
 			<h3 className='font-gradual text-2xl font-bold dark:text-[#C2C2C2]'>
