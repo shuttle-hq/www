@@ -8,7 +8,7 @@ const HowItWorks = () => {
 	const [selectedItem, setSelectedItem] = useState('hello-cloud')
 
 	return (
-		<div className='mx-auto mt-24 w-full max-w-[1280px] px-5 sm:mt-28 sm:px-10 lg:mt-36 lg:grid lg:grid-cols-[1fr_minmax(566px,_1fr)] lg:gap-7 xl:grid-cols-2 desktop:mt-40'>
+		<div className='mx-auto mt-24 w-full max-w-7xl overflow-hidden px-5 sm:mt-28 sm:px-10 lg:mt-36 lg:grid lg:grid-cols-[1fr_minmax(566px,_1fr)] lg:gap-7 xl:grid-cols-2 desktop:mt-40'>
 			<div>
 				<h2 className='font-gradual text-5xl font-bold dark:dark:text-[#C2C2C2] lg:text-[3.5rem]'>
 					How it works
