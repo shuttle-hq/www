@@ -26,7 +26,7 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 								Features
 							</Link>
 							<Link
-								href='/'
+								href='/starters'
 								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
 							>
 								Examples
@@ -47,7 +47,7 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 						<div className='flex flex-col gap-3 px-8 pt-16 pb-8 lg:p-16'>
 							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Company</h3>
 							<Link
-								href='/'
+								href='/about'
 								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
 							>
 								About
@@ -84,30 +84,38 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 						</div>
 						<div className='flex flex-col gap-3 px-8 pt-16 pb-8 lg:p-16'>
 							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Community</h3>
-							<Link
-								href='/'
+							<a
+								href='https://github.com/shuttle-hq/shuttle'
+								target='_blank'
+								rel='noreferrer'
 								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
 							>
 								GitHub
-							</Link>
-							<Link
-								href='/'
+							</a>
+							<a
+								href='https://discord.com/invite/shuttle'
+								target='_blank'
+								rel='noreferrer'
 								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
 							>
 								Discord
-							</Link>
-							<Link
-								href='/'
+							</a>
+							<a
+								href='https://twitter.com/shuttle_dev'
+								target='_blank'
+								rel='noreferrer'
 								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
 							>
 								Twitter
-							</Link>
-							<Link
-								href='/'
+							</a>
+							<a
+								href='https://www.linkedin.com/company/shuttle-yc'
+								target='_blank'
+								rel='noreferrer'
 								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
 							>
 								Linkedin
-							</Link>
+							</a>
 						</div>
 					</div>
 				</div>
