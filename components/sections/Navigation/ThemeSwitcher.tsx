@@ -11,7 +11,7 @@ interface ThemeSwitcherProps {
 
 const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ className }) => {
 	const osTheme = useMedia('(prefers-color-scheme: dark)') ? 'dark' : 'light'
-	const [storageTheme, setStorageTheme] = useLocalStorage<StorageTheme>('app-theme', 'system')
+	const [storageTheme, setStorageTheme] = useLocalStorage<StorageTheme>('app-theme', 'dark')
 	const theme = storageTheme === 'system' ? osTheme : storageTheme
 	const isDarkTheme = theme === 'dark'
 
