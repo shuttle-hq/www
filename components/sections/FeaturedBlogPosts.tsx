@@ -13,7 +13,7 @@ interface FeaturedBlogPostsProps {
 
 const FeaturedBlogPosts: FC<FeaturedBlogPostsProps> = ({ posts = [] }) => {
 	return (
-		<div className='overflow--x-hidden mt-24 lg:mt-32 desktop:mt-40'>
+		<div className='mt-24 overflow-x-hidden lg:mt-32 desktop:mt-40'>
 			<div className='mx-auto w-full max-w-[1000px] px-5 sm:px-10'>
 				<h2 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-[3.5rem]'>
 					What’s new
