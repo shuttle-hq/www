@@ -13,7 +13,7 @@ const Pricing = () => {
 			<div className='flex items-center justify-center gap-5 text-xl'>
 				<div
 					className={clsx(
-						selectedPricing === 'monthly' ? 'text-black dark:text-[#C2C2C2]' : 'text-[#C2C2C2]'
+						selectedPricing === 'monthly' ? 'text-black dark:text-[#C2C2C2]' : 'text-[#7A7A7A]'
 					)}
 				>
 					Monthly
@@ -24,7 +24,7 @@ const Pricing = () => {
 				/>
 				<div
 					className={clsx(
-						selectedPricing === 'annual' ? 'text-black dark:text-[#C2C2C2]' : 'text-[#C2C2C2]'
+						selectedPricing === 'annual' ? 'text-black dark:text-[#C2C2C2]' : 'text-[#7A7A7A]'
 					)}
 				>
 					Annual
