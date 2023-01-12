@@ -11,6 +11,15 @@ interface FrequentlyAskedQuestionsProps {
 const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions, hideDiscord }) => {
 	const [activeQuestion, setActiveQuestion] = useState<number | null>(null)
 
+	const updateActiveQuestion = (index: number) => {
+		if (activeQuestion === index) {
+			setActiveQuestion(null)
+			return
+		}
+
+		setActiveQuestion(index)
+	}
+
 	return (
 		<div className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-32 desktop:mt-48'>
 			<h2 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-[3.5rem]'>
@@ -19,23 +28,30 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 			<div
 				className={clsx(
 					'mt-10  gap-8 sm:mt-14 lg:gap-16',
-					!hideDiscord && 'grid lg:grid-cols-[1fr_minmax(auto,_380px)] lg:items-center'
+					!hideDiscord && 'grid lg:grid-cols-[1fr_minmax(auto,_380px)] lg:items-start'
 				)}
 			>
 				<div className='divide-y divide-white divide-opacity-10 border-y border-white border-opacity-10'>
 					{questions.map(({ question, answer }, index) => (
 						<div className='flex items-center justify-between px-5' key={question}>
 							<div className='w-full'>
-								<button onClick={() => setActiveQuestion(index)} className='w-full text-left'>
+								<button onClick={() => updateActiveQuestion(index)} className='w-full text-left'>
 									<h3 className='cursor-pointer py-5 pr-5 text-[#525151] dark:text-[#C2C2C2] md:text-xl'>
 										{question}
 									</h3>
 								</button>
-								{activeQuestion === index && (
-									<p className='pb-5 pr-5 text-[#525151] dark:text-[#C2C2C2]'>{answer}</p>
-								)}
+								<div
+									className={clsx(
+										'text-[#525151] transition-all duration-500 dark:text-[#C2C2C2]',
+										activeQuestion === index
+											? 'max-h-48 pb-5 pr-5 opacity-100'
+											: 'max-h-0 overflow-hidden pb-0 pr-0 opacity-0'
+									)}
+								>
+									<p className='text-[#525151] dark:text-[#C2C2C2]'>{answer}</p>
+								</div>
 							</div>
-							<button className='flex-shrink-0' onClick={() => setActiveQuestion(index)}>
+							<button className='flex-shrink-0' onClick={() => updateActiveQuestion(index)}>
 								{activeQuestion === index ? (
 									<svg
 										width={32}
