@@ -120,9 +120,10 @@ body.dark {
 		background-image: linear-gradient(85.57deg, rgba(255, 92, 0, 0.4) 18.06%, rgba(0, 240, 255, 0.4) 136.08%);
 		filter: blur(15px);
 		transform: scale(0.8);
+		transition: all 500ms;
 	}
 
-	a.shadow-gradient:hover::before {
+	.shadow-gradient:hover::before {
 		transform: scale(1);
 	}
 
