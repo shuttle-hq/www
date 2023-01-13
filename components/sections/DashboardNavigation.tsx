@@ -1,7 +1,11 @@
 import { Hamburger, Logo } from 'components/svgs'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { useState } from 'react'
 import clsx from 'clsx'
+import { Button } from 'components/elements'
+
+const ThemeSwitcher = dynamic(() => import('./Navigation/ThemeSwitcher'), { ssr: false })
 
 const DashboardNavigation = () => {
 	const [open, setOpen] = useState(false)
@@ -41,8 +45,22 @@ const DashboardNavigation = () => {
 					>
 						Discord
 					</Link>
+					<Link
+						className='nav-link-shadow transition-all hover:text-white'
+						href='/dashboard/deployments'
+						onClick={() => {
+							setOpen(false)
+						}}
+					>
+						Deployments
+					</Link>
 				</div>
-				<div className='mt-4 lg:mt-0 lg:ml-auto lg:flex lg:items-center lg:gap-5'>
+				<div className='mt-10 lg:mt-0 lg:ml-auto lg:flex lg:items-center lg:gap-5'>
+					<div className='mt-10 flex flex-wrap items-center gap-5 lg:mt-0'>
+						<Button variant='primary' invertOnDark href='/dashboard/'>
+							Dashboard
+						</Button>
+					</div>
 					<div className='mt-4 flex flex-wrap items-center gap-5 lg:mt-0'>
 						<Link
 							className='nav-link-shadow transition-all hover:text-white'
@@ -54,6 +72,7 @@ const DashboardNavigation = () => {
 							Logout
 						</Link>
 					</div>
+					<ThemeSwitcher className='mt-5 lg:-order-1 lg:mt-0' />
 				</div>
 			</div>
 
