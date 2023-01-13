@@ -110,7 +110,7 @@ const GetStartedSlide: FC<GetStartedSlideProps> = ({ number, title, text, childr
 		<SplideSlide className='max-w-[85%] p-[1px] lg:max-w-full lg:pb-4 lg:last:pb-1'>
 			<div
 				className={clsx(
-					'border-gradient group relative h-full cursor-pointer cursor-pointer rounded-2xl bg-[#E9E9E9] p-6 shadow-[0_0_0_10px_rgba(0,0,0,0.1)] transition after:rounded-2xl hover:shadow-none dark:bg-black hover:lg:shadow-none',
+					'border-gradient group relative h-full cursor-pointer cursor-pointer rounded-2xl bg-[#E9E9E9] p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.1)] transition after:rounded-2xl hover:shadow-none dark:bg-black hover:lg:shadow-none',
 					number === '1' && // If it isn't the first slide, hide the outline on desktop
 						'dark:shadow-[0_0_0_1px_#191919]'
 				)}
