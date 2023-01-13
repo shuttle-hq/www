@@ -92,7 +92,7 @@ const Navigation = () => {
 							)}
 						</Button>
 					</div>
-					{/* <ThemeSwitcher className='mt-5 lg:-order-1 lg:mt-0' /> */}
+					<ThemeSwitcher className='mt-5 lg:-order-1 lg:mt-0' hidden />
 				</div>
 			</div>
 
