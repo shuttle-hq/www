@@ -76,7 +76,12 @@ const GetStarted = () => {
 					}}
 					className='mt-12 lg:mt-0'
 				>
-					<GetStartedSlide number='1' title='Install' text='Run this command to install shuttle'>
+					<GetStartedSlide
+						number='1'
+						title='Install'
+						text='Run this command to install shuttle'
+						gradient='from-[#FC540C] to-[#C39348]'
+					>
 						<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
 							$ cargo install cargo-shuttle
 							<button className='absolute right-3 rounded-lg border border-transparent p-1 hover:border-[#484848] hover:bg-[#343434] dark:text-[#C2C2C2]'>
@@ -84,14 +89,30 @@ const GetStarted = () => {
 							</button>
 						</div>
 					</GetStartedSlide>
-					<GetStartedSlide number='2' title='Log in' text='Run this command to install shuttle' />
-					<GetStartedSlide number='3' title='Initialize' text='Run this command to install shuttle' />
+					<GetStartedSlide
+						number='2'
+						title='Log in'
+						text='Run this command to install shuttle'
+						gradient='from-[#D1883C] to-[#ABA363]'
+					/>
+					<GetStartedSlide
+						number='3'
+						title='Initialize'
+						text='Run this command to install shuttle'
+						gradient='from-[#C19549] to-[#8AB58D]'
+					/>
 					<GetStartedSlide
 						number='4'
 						title='Create project'
 						text='Run this command to install shuttle'
+						gradient='from-[#B89A4F] to-[#8FB287]'
 					/>
-					<GetStartedSlide number='5' title='Deploy' text='Run this command to install shuttle' />
+					<GetStartedSlide
+						number='5'
+						title='Deploy'
+						text='Run this command to install shuttle'
+						gradient='from-[#91B185] to-[#38D3E9]'
+					/>
 				</Splide>
 			</div>
 		</>
@@ -102,21 +123,22 @@ interface GetStartedSlideProps {
 	number: string
 	title: string
 	text: string
+	gradient?: string
 	children?: ReactNode
 }
 
-const GetStartedSlide: FC<GetStartedSlideProps> = ({ number, title, text, children }) => {
+const GetStartedSlide: FC<GetStartedSlideProps> = ({ number, title, text, gradient, children }) => {
 	return (
 		<SplideSlide className='max-w-[85%] p-[1px] lg:max-w-full lg:pb-4 lg:last:pb-1'>
 			<div
 				className={clsx(
-					'border-gradient group relative h-full cursor-pointer cursor-pointer rounded-2xl bg-[#E9E9E9] p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.1)] transition after:rounded-2xl hover:shadow-none dark:bg-black hover:lg:shadow-none',
+					'border-gradient group relative h-full cursor-pointer cursor-pointer rounded-2xl bg-[#E9E9E9] p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.1)] transition after:rounded-2xl hover:shadow-none dark:bg-black dark:hover:shadow-none hover:lg:shadow-none',
 					number === '1' && // If it isn't the first slide, hide the outline on desktop
 						'dark:shadow-[0_0_0_1px_#191919]'
 				)}
 			>
 				<h3 className='font-gradual text-2xl font-bold dark:text-[#C2C2C2]'>
-					<span className='bg-gradient-to-r from-[#FC540C] to-[#C39348] bg-clip-text text-transparent'>
+					<span className={clsx('bg-gradient-to-r bg-clip-text text-transparent', gradient)}>
 						{number.padStart(2, '0')}
 					</span>
 					&nbsp;{title}
