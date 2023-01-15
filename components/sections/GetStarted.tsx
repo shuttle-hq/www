@@ -21,7 +21,7 @@ const GetStarted = () => {
 					&nbsp;page!
 				</p>
 			</div>
-			<div className='mx-auto mt-10 w-full max-w-[1280px] gap-x-6 px-5 sm:px-10 lg:mt-16 lg:grid lg:grid-cols-[1fr_400px] lg:gap-5 xl:mt-20 xl:items-center xl:gap-12'>
+			<div className='mx-auto mt-10 w-full max-w-7xl gap-x-6 px-5 sm:px-10 lg:mt-16 lg:grid lg:grid-cols-[1fr_400px] lg:gap-5 xl:mt-20 xl:items-center xl:gap-12'>
 				<div className='group relative z-10 flex items-end overflow-hidden rounded-2xl bg-[#13292C] px-8 pt-16 dark:bg-black sm:mt-10 sm:items-center sm:px-4 sm:px-12 sm:py-24 lg:mt-0 lg:items-end lg:items-center lg:px-8 lg:py-12 xl:p-[4.375rem] desktop:items-end desktop:pt-[8.75rem] desktop:pb-0'>
 					<Image
 						src='/images/sections/code.png'
@@ -30,18 +30,33 @@ const GetStarted = () => {
 						height={349}
 						className='mx-auto rounded-t-xl sm:rounded-xl lg:w-full lg:rounded-t-3xl lg:rounded-b-3xl desktop:relative desktop:-bottom-px desktop:rounded-b-none'
 					/>
+					{/* Desktop */}
 					<Image
-						src='/images/sections/get-started/bg.png'
-						alt='get started background'
-						width={524}
-						height={627}
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full object-cover'
+						src='/images/sections/get-started/noise.png'
+						alt='get started noise'
+						fill
+						className='pointer-events-none absolute left-0 top-0 -z-10 hidden h-full w-full object-cover lg:block'
 					/>
+					<Image
+						src='/images/sections/get-started/bottom.png'
+						alt='get started background'
+						width={739}
+						height={422}
+						className='pointer-events-none absolute left-0 bottom-0 -z-10 w-full opacity-50 transition duration-500 group-hover:opacity-70'
+					/>
+					<Image
+						src='/images/sections/get-started/top-left.png'
+						alt='get started top'
+						width={366}
+						height={233}
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full object-cover group-hover:-top-5 group-hover:-left-5'
+					/>
+					{/* Tablet */}
 					<Image
 						src='/images/sections/get-started/tablet-bg.png'
 						alt='get started tablet background'
 						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 hidden h-full w-full object-cover sm:block xl:hidden'
+						className='pointer-events-none absolute left-0 top-0 -z-10 hidden h-full w-full object-cover sm:block lg:hidden'
 					/>
 					<Image
 						src='/images/sections/get-started/stars.png'
