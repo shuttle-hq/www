@@ -86,15 +86,17 @@ const Article: FC<ArticleProps> = ({ post, className }) => {
 		<SplideSlide className={className}>
 			<Link
 				href={`/blog/${post.url}`}
-				className='block rounded-2.5xl bg-[#13292C] transition duration-500 hover:shadow-[0px_4px_64px_0px_rgba(252,84,12,0.25)] dark:border dark:border-[#1E1B19] dark:bg-black'
+				className='group block rounded-2.5xl bg-[#13292C] transition duration-500 hover:shadow-[0px_4px_64px_0px_rgba(252,84,12,0.25)] dark:border dark:border-[#1E1B19] dark:bg-black'
 			>
-				<Image
-					src={`/images/blog/` + post.thumb}
-					width={381}
-					height={214}
-					alt='article image'
-					className='w-full rounded-t-2.5xl'
-				/>
+				<div className='relative aspect-[381/214] w-full overflow-hidden rounded-t-2.5xl'>
+					<Image
+						src={`/images/blog/` + post.thumb}
+						fill
+						alt='article image'
+						className='w-full transition-all duration-500 group-hover:scale-125'
+					/>
+				</div>
+
 				<div className='p-6'>
 					<h1 className='font-gradual text-xl font-bold text-white'>{post.title}</h1>
 					<p className='mt-3 text-white/50'>{post.description}</p>
