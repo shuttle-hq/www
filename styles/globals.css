@@ -123,7 +123,9 @@ body.dark {
 		transition: all 500ms;
 	}
 
-	.shadow-gradient:hover::before {
+	button.shadow-gradient:hover::before,
+	a.shadow-gradient:hover::before,
+	input.shadow-gradient:hover::before {
 		transform: scale(1);
 	}
 
