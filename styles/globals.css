@@ -124,9 +124,8 @@ body.dark {
 	}
 
 	button.shadow-gradient:hover::before,
-	a.shadow-gradient:hover::before,
-	input.shadow-gradient:hover::before {
-		transform: scale(1);
+	a.shadow-gradient:hover::before {
+		transform: scale(1) !important;
 	}
 
 	@media (min-width: 768px) {
