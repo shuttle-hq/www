@@ -7,7 +7,7 @@ interface SwitchProps {
 
 const Switch: FC<SwitchProps> = ({ checked, setChecked }) => {
 	return (
-		<label className='border-gradient always-visible relative h-[32px] w-[77px] cursor-pointer rounded-3xl bg-[#E9E9E9] after:rounded-3xl dark:bg-black'>
+		<label className='input-border-gradient dark:border-gradient always-visible relative h-[32px] w-[77px] cursor-pointer rounded-3xl bg-[#E9E9E9] after:rounded-3xl after:opacity-100 dark:bg-black'>
 			<input
 				type='checkbox'
 				className='peer hidden'
