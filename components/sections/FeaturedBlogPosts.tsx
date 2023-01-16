@@ -13,7 +13,7 @@ interface FeaturedBlogPostsProps {
 
 const FeaturedBlogPosts: FC<FeaturedBlogPostsProps> = ({ posts = [] }) => {
 	return (
-		<div className='mt-24 overflow-x-hidden lg:mt-32 desktop:mt-40'>
+		<div className='mt-24 overflow-hidden lg:mt-32 desktop:mt-40'>
 			<div className='mx-auto w-full max-w-[1000px] px-5 sm:px-10'>
 				<h2 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-[3.5rem]'>
 					What’s new
@@ -86,25 +86,25 @@ const Article: FC<ArticleProps> = ({ post, className }) => {
 		<SplideSlide className={className}>
 			<Link
 				href={`/blog/${post.url}`}
-				className='block rounded-[2rem] border border-[#1E1B19] bg-[#13292C] transition duration-500 hover:shadow-[0px_4px_64px_0px_rgba(252,84,12,0.25)] dark:bg-black'
+				className='block rounded-2.5xl bg-[#13292C] transition duration-500 hover:shadow-[0px_4px_64px_0px_rgba(252,84,12,0.25)] dark:bg-black'
 			>
 				<Image
 					src={`/images/blog/` + post.thumb}
 					width={381}
 					height={214}
 					alt='article image'
-					className='w-full rounded-t-[2rem]'
+					className='w-full rounded-t-2.5xl'
 				/>
 				<div className='p-6'>
 					<h1 className='font-gradual text-xl font-bold text-white'>{post.title}</h1>
 					<p className='mt-3 text-white/50'>{post.description}</p>
-					<div className='mt-6 flex items-center gap-2'>
+					<div className='mt-6 flex items-center gap-2.5'>
 						<Image
 							src={authorImage}
 							onError={() => setAuthorImage('/images/logo.png')}
 							alt={`${firstAuthor?.author} avatar`}
-							width={24}
-							height={24}
+							width={40}
+							height={40}
 							className={authorImage !== '/images/logo.png' ? 'rounded-full' : ''}
 						/>
 						<div>

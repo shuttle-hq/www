@@ -12,7 +12,7 @@ interface ThemeSwitcherProps {
 
 const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ className, hidden }) => {
 	const [theme, setTheme] = useLocalStorage<StorageTheme>('app-theme', 'dark')
-	const isDarkTheme = theme === 'dark'
+	const isDarkTheme = false
 
 	useEffect(() => {
 		if (isDarkTheme) {

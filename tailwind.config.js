@@ -9,6 +9,7 @@ module.exports = {
 				gradual: 'sans-serif',
 			},
 			borderRadius: {
+				'2.5xl': '1.5rem',
 				'4xl': '2rem',
 				button: '0.875rem',
 			},
