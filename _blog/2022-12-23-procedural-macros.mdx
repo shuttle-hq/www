@@ -183,20 +183,20 @@ One way to catch property errors ahead of time is to use a type system on top of
 
 To get started, if you are not already in a cargo project you can create one with `cargo new <name>` command. Before we start generating code we should declare a trait as a target for our macros output.
 
-### The BinarySerializable trait
-First, we need to create a `trait` which describes the requirements for serializing and deserializing objects - let's call this the `BinarySerializable` trait. Serialization will require adding information on the structure into a buffer. Deserialization will require pulling from an iterator (which iterates over bytes of a serialized buffer) and producing a term of `Self`. *We will assume the deserialize input is well-formed and panic at runtime rather than proper handling with `Result` when deserializing.*
+### The `Binary` trait
+First, we need to create a `trait` which describes the requirements for serializing and deserializing objects - let's call this the `Binary` trait. Serialization will require adding information on the structure into a buffer. Deserialization will require pulling from an iterator (which iterates over bytes of a serialized buffer) and producing a term of `Self`. *We will assume the deserialize input is well-formed and panic at runtime rather than proper handling with `Result` when deserializing.*
 
 ```rust
-pub trait BinarySerializable {
+pub trait Binary {
     fn serialize(self, buf: &mut Vec<u8>);
 
     fn deserialize<I: Iterator<Item = u8>>(iter: &mut I) -> Self;
 }
 ```
 
-We can implement the `BinarySerializable` trait for the primitives that will be in our structures:
+We can implement the `Binary` trait for the primitives that will be in our structures:
 ```rust
-impl BinarySerializable for bool {
+impl Binary for bool {
     fn serialize(self, buf: &mut Vec<u8>) {
         buf.push(self as u8)
     }
@@ -206,7 +206,7 @@ impl BinarySerializable for bool {
     }
 }
 
-impl BinarySerializable for u64 {
+impl Binary for u64 {
     fn serialize(self, buf: &mut Vec<u8>) {
         buf.extend_from_slice(&self.to_le_bytes());
     }
@@ -218,7 +218,7 @@ impl BinarySerializable for u64 {
     }
 }
 
-impl BinarySerializable for String {
+impl Binary for String {
     fn serialize(self, buf: &mut Vec<u8>) {
         (self.len() as u64).serialize(buf);
         buf.extend_from_slice(self.as_bytes());
@@ -243,10 +243,10 @@ struct Country {
 }
 ```
 
-We could implement `BinarySerializable` for `Country`, writing a bespoke implementation for it manually:
+We could implement `Binary` for `Country`, writing a bespoke implementation for it manually:
 
 ```rust
-impl BinarySerializable for Country {
+impl Binary for Country {
     fn serialize(self, buf: &mut Vec<u8>) {
         self.name.serialize(buf);
         self.population.serialize(buf);
@@ -255,9 +255,9 @@ impl BinarySerializable for Country {
 
     fn deserialize<I: Iterator<Item = u8>>(iter: &mut I) -> Self {
         Self {
-            name: BinarySerializable::deserialize(iter),
-            population: BinarySerializable::deserialize(iter),
-            above_equator: BinarySerializable::deserialize(iter),
+            name: Binary::deserialize(iter),
+            population: Binary::deserialize(iter),
+            above_equator: Binary::deserialize(iter),
         }
     }
 }
@@ -271,11 +271,11 @@ With some idea of the code we want to write, we can get Rust to generate the abo
 
 Now we know what code we want to generate, we can write some Rust code to handle a structure and generate the an output token stream.
 
-Rust procedural macros require their own crate for their definition due to constraints on how they are compiled. The unofficial Rust convention for derive macros is the name of trait or crate name + derive. So let's run the following from our current folder `cargo new --lib binary-serialize-derive`. We need to let `cargo` know that this crate is a proc macro by defining it in its `Cargo.toml`. We'll also add the dependencies [syn](https://crates.io/crates/syn) for parsing the contents of our structure and [quote](https://crates.io/crates/quote) for generating the output:
+Rust procedural macros require their own crate for their definition due to constraints on how they are compiled. The unofficial Rust convention for derive macros is the name of trait or crate name + derive. So let's run the following from our current folder `cargo new --lib binary-derive`. We need to let `cargo` know that this crate is a proc macro by defining it in its `Cargo.toml`. We'll also add the dependencies [syn](https://crates.io/crates/syn) for parsing the contents of our structure and [quote](https://crates.io/crates/quote) for generating the output:
 
 ```toml
 [package]
-name = "binary-serialize-derive"
+name = "binary-derive"
 version = "0.1.0"
 edition = "2021"
 
@@ -295,26 +295,27 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn::{parse_macro_input, DeriveInput, Data};
 
-#[proc_macro_derive(BinarySerializable)]
+#[proc_macro_derive(Binary)]
 pub fn my_macro(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
 
     // Get the name of the structure the derive is on. For example if we have:
     // ```rust
-    // #[derive(BinarySerializable)]
+    // #[derive(Binary)]
     // struct MyStruct;
     // ```
     // `name` will be "MyStruct"
     let name = input.ident;
 
-    // Only look at struct data for now.
-    // Challenge for the reader to continue the logic for enums!
+    // Only look at structs for now.
+    // Challenge for the reader to add the logic for enums!
     let Data::Struct(struct_data) = input.data else {
         unimplemented!("enums");
     };
 
     // Produce a iterator of expressions for serializing each field
     let serialize_fields = struct_data.fields.iter().map(|field| {
+        // `field.ident` is the name of the field
         let Some(ident) = &field.ident else {
             unimplemented!("tuple structs");
         };
@@ -324,18 +325,20 @@ pub fn my_macro(input: TokenStream) -> TokenStream {
     // Produce a key value pair deserializing each field
     // VERY important that the iterator is in the same order as the above serialize iterator!
     let deserialize_fields = struct_data.fields.iter().map(|field| {
+        // Same process as for serialization but generating constructor
+        // field.ident instead of calling expressions
         let Some(ident) = &field.ident else {
             unimplemented!("tuple structs");
         };
-        quote!( #ident: BinarySerializable::deserialize(iter) )
+        quote!( #ident: Binary::deserialize(iter) )
     });
 
     // Finally produce a `impl` block for our trait. Using `#` to interpolate are above token iterators
     let expanded = quote! {
         #[automatically_derived]
-        impl BinarySerializable for #name {
+        impl Binary for #name {
             fn serialize(self, buf: &mut Vec<u8>) {
-                #( #serialize_fields );*
+                #( #serialize_fields )*
             }
 
             fn deserialize<I: Iterator<Item = u8>>(iter: &mut I) -> Self {
@@ -350,21 +353,21 @@ pub fn my_macro(input: TokenStream) -> TokenStream {
 }
 ```
 
-Our macro starts with a `pub` function with an attribute `#[proc_macro_derive(BinarySerializable)]` to show this is the derive macro for `BinarySerializable`. In the code we use two iterators. One that generates `serialize` calls on fields and one that deserializes fields and assigns them to fields. Throughout we use `quote!` (which yes is another macro 🤯). With `quote` we can describe the tokens we want to generate in a declarative form exactly the same as Rust's syntax. The `expanded` variable is code that is a copy of the above however using the *hash* `#` character we can specify variables we want to interpolate. For example our struct name is interpolated into `impl BinarySerializable for #name`. We then interpolate our iterators. Using parenthesis and asterisks we specify run through the items from the iterator with a separator in between. In the first case the `serialize` call statements are separated with semicolons `#( #serialize_fields );*`.
+Our macro starts with a `pub` function with an attribute `#[proc_macro_derive(Binary)]` to show this is the derive macro for `Binary`. In the code we use two iterators. One that generates `serialize` calls on fields and one that deserializes fields and assigns them to fields. Throughout we use `quote!` (which yes is another macro 🤯). With `quote` we can describe the tokens we want to generate in a declarative form exactly the same as Rust's syntax. The `expanded` variable is code that is a copy of the above however using the *hash* `#` character we can specify variables we want to interpolate. For example our struct name is interpolated into `impl Binary for #name`. We then interpolate our iterators. Using parenthesis and asterisks we specify run through the items from the iterator with a separator in between. In the first case the `serialize` call statements are separated with semicolons `#( #serialize_fields );*`.
 
 ## Using the procedural macro
 With our macro written, we include our crate using a path dependency
 ```toml
 [dependencies]
-binary-serialize-derive = { path = "./binary-serialize-derive" }
+binary-derive = { path = "./binary-derive" }
 ```
 
 Similar to a function or other items we can import and reference the macro. It does not clash as macros and types have different name-spaces therefore we can have a macro and trait with the same name in the scope. (traits exist in the type namespace). We can tell the compiler that we want to generate code for `Country` using the `#[derive(...)` attribute on our struct.
 
 ```rust
-use binary_serialize_derive::BinarySerializable;
+use binary_derive::Binary;
 
-#[derive(BinarySerializable)]
+#[derive(Binary)]
 struct Country {
     name: String,
     population: u64,
@@ -375,7 +378,7 @@ struct Country {
 #### cargo expand-ing our macro (optional)
 We can debug the output by installing [cargo-expand](https://github.com/dtolnay/cargo-expand) (`cargo install cargo-expand`). Running `cargo expand` we see the result which is the automatic generated what we wrote manually:
 
-![](/images/blog/cargo-expand-proc-macro-output.png)
+![](/images/blog/proc-macro-cargo-expand-output.png)
 
 > `cargo-expand` requires Rust nightly and can require running `cargo clean` if switching back and forth between stable.
 
@@ -383,7 +386,7 @@ Alternatively, adding `eprintln!("{}", expanded)` to the end of your macro code 
 
 We can now emulate what we were doing with JavaScript arrays using regular generics and trait logic in Rust:
 ```rust
-pub fn serialize_list<T: BinarySerializable>(items: Vec<T>) -> Vec<u8> {
+pub fn serialize_list<T: Binary>(items: Vec<T>) -> Vec<u8> {
     let mut buf = Vec::new();
     buf.extend_from_slice(&items.len().to_le_bytes());
     for item in items {
@@ -422,7 +425,7 @@ struct Country {
 	ignored_field: TypeThatImplementsDefault
 }
 ```
-Just remember when doing so to register with Rust that the attribute belongs to the derive macro by registering attributes in the `proc_macro_derive` attribute. E.g. `#[proc_macro_derive(BinarySerializable, attributes(serialization_skip))]`
+Just remember when doing so to register with Rust that the attribute belongs to the derive macro by registering attributes in the `proc_macro_derive` attribute. E.g. `#[proc_macro_derive(Binary, attributes(serialization_skip))]`
 
 # Conclusion
 
@@ -434,9 +437,6 @@ Proc macros are used throughout Rust. Most standard library `derive`s are proc m
 
 ### Serde
 [Serde](https://serde.rs/), a serialization and deserialization library is a prime example. It is feature-complete and supports a bunch of different serialization formats like JSON, YAML, etc.
-
-### Ezno
-Ezno, a compiler project I am working on, uses some bespoke derive macros in the AST definitions for generating normally repetitive logic for visiting/walking AST.
 
 ### Shuttle
 Shuttle which is a Rust-native cloud development platform uses procedural macros to define how a service runs and what features it needs. It works a bit differently using *attribute* macros (as opposed to the *derive* macros we used in our example) which work on more items that just `structs` and `enum`s. They allow complete rewrites of token streams as opposed to just generating additional code. Here macros enable users to define how the service runs along-side business logic, rather than having to manage configuration files separately. Long live infrastructure for code!
