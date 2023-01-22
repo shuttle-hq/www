@@ -16,8 +16,8 @@ const HowItWorks = () => {
 				<div className='mt-4 space-y-7 text-[#525151] dark:text-[#7A7A7A] sm:mt-8 lg:text-xl'>
 					<p
 						className={clsx(
-							'text-slate-300 transition duration-200',
-							selectedItem === 'hello-cloud' && 'text-slate-900'
+							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
+							selectedItem === 'hello-cloud' && '!text-black dark:!text-white'
 						)}
 					>
 						With shuttle you can take any Rust service code, and have it ready for deployment by adding
@@ -25,8 +25,8 @@ const HowItWorks = () => {
 					</p>
 					<p
 						className={clsx(
-							'text-slate-300 transition duration-200',
-							selectedItem === 'cargo-deploy' && 'text-slate-900'
+							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
+							selectedItem === 'cargo-deploy' && '!text-black dark:!text-white'
 						)}
 					>
 						Your code is packaged and sent to shuttle where it is compiled and deployed. After a few
@@ -34,8 +34,8 @@ const HowItWorks = () => {
 					</p>
 					<p
 						className={clsx(
-							'text-slate-300 transition duration-200',
-							selectedItem === 'using-sql' && 'text-slate-900'
+							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
+							selectedItem === 'using-sql' && '!text-black dark:!text-white'
 						)}
 					>
 						You can then add more annotations that control cloud resources. Adding components like
@@ -43,8 +43,8 @@ const HowItWorks = () => {
 					</p>
 					<p
 						className={clsx(
-							'text-slate-300 transition duration-200',
-							selectedItem === 'using-axum' && 'text-slate-900'
+							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
+							selectedItem === 'using-axum' && '!text-black dark:!text-white'
 						)}
 					>
 						The next time you deploy your app, shuttle provisions and configures the resources you
