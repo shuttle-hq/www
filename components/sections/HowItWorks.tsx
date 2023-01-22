@@ -14,17 +14,43 @@ const HowItWorks = () => {
 					How it works
 				</h2>
 				<div className='mt-4 space-y-7 text-[#525151] dark:text-[#7A7A7A] sm:mt-8 lg:text-xl'>
-					<p>Shuttle is built for Rust.</p>
-					<p>
-						A simple cargo command packages up your application, ships it to the shuttle build cluster
-						where it&lsquo;s incrementally compiled and automatically served on a unique subdomain.
+					<p
+						className={clsx(
+							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
+							selectedItem === 'hello-cloud' && '!text-black dark:!text-white'
+						)}
+					>
+						With shuttle you can take any Rust service code, and have it ready for deployment by adding
+						a single annotation to your main function.
 					</p>
-					<p>
-						Shuttle uses simple but powerful annotations to understand your dependencies.
-						Infrastructure dependencies like databases or key-value stores are spun up for you and
-						everything is automatically wired together from the get-go.
+					<p
+						className={clsx(
+							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
+							selectedItem === 'cargo-deploy' && '!text-black dark:!text-white'
+						)}
+					>
+						Your code is packaged and sent to shuttle where it is compiled and deployed. After a few
+						seconds, your app is already running in the cloud.
 					</p>
-					<p>It feels a little magical.</p>
+					<p
+						className={clsx(
+							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
+							selectedItem === 'using-sql' && '!text-black dark:!text-white'
+						)}
+					>
+						You can then add more annotations that control cloud resources. Adding components like
+						databases, secrets or storage is as easy as adding arguments to a function.
+					</p>
+					<p
+						className={clsx(
+							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
+							selectedItem === 'using-axum' && '!text-black dark:!text-white'
+						)}
+					>
+						The next time you deploy your app, shuttle provisions and configures the resources you
+						need. In minutes, you can build complex and scalable apps on industry-standard AWS products
+						and never have to touch the AWS console.
+					</p>
 				</div>
 			</div>
 			<div className='shadow-gradient mt-14 before:blur-[60px] lg:mt-0'>
