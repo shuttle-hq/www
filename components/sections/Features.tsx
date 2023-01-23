@@ -7,11 +7,10 @@ const Features = () => {
 			<div className='mx-auto w-full max-w-[1100px] desktop:grid desktop:grid-cols-[700px_auto] desktop:gap-5'>
 				<div className='max-w-[700px] desktop:py-10'>
 					<h2 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-[3.5rem]'>
-						Stop worrying about the features
+						Bring your code, we'll handle the rest
 					</h2>
 					<p className='mt-5 text-xl text-[#525151] lg:text-2xl'>
-						If you want to ship web apps written in Rust, the cloud sucks. AWS is incredibly complex,
-						&apos;simpler&apos; providers like Heroku are ok
+						We didn't think about this one...
 					</p>
 				</div>
 				<div className='group relative hidden bg-[#13292C] text-[#C2C2C2] dark:bg-black dark:text-white desktop:block desktop:overflow-hidden desktop:rounded-4xl'>
@@ -56,9 +55,9 @@ const Features = () => {
 						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain transition-transform duration-1000 group-hover:-translate-x-10 group-hover:-translate-y-1'
 					/>
 					<Skip />
-					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Skip the AWS console</h3>
+					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Rust, made simple</h3>
 					<p>
-						Configure your features directly from your Rust code. Avoid unnecessary context-switching.
+						Shuttle makes it easy to connect to databases, has out-of-the-box logging support, abundant documentation and supports all major Rust frameworks. Yes, even if you are coming from JS.
 					</p>
 					<a
 						href='#'
@@ -86,8 +85,9 @@ const Features = () => {
 						fill
 						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain transition-transform duration-1000 group-hover:-translate-x-10 group-hover:-translate-y-1'
 					/>
-					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Compile-time insurance</h3>
-					<p>Insure that you are getting what you need at compile-time. Cut down on debugging time.</p>
+					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Vercel for Backends</h3>
+					<p>Get an entire infrastructure configured without writing any infrastructure config.
+					</p>
 					<Compile />
 				</div>
 				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-[#C2C2C2] dark:bg-black dark:text-white sm:p-8 desktop:row-[span_3] desktop:justify-end'>
@@ -110,8 +110,8 @@ const Features = () => {
 						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain transition-transform duration-1000 group-hover:-translate-x-10 group-hover:-translate-y-1'
 					/>
 					<Database />
-					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Databases</h3>
-					<p>Wiring up a service to a persistent database is as easy as adding one line of code.</p>
+					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>No Vendor lock-in</h3>
+					<p>No need to have your app hosted on our servers, you can deploy it to your own cloud or even run shuttle in your garage.</p>
 				</div>
 				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-[#C2C2C2] dark:bg-black dark:text-white sm:p-8 desktop:row-[5/7]'>
 					<Image
@@ -132,8 +132,8 @@ const Features = () => {
 						fill
 						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain transition-transform duration-1000 group-hover:-translate-x-10 group-hover:-translate-y-1'
 					/>
-					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Entirely open-source</h3>
-					<p>A completely free and open-source project.</p>
+					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Everything is Rust, Rust is everything</h3>
+					<p>Get a database by just asking for one in your Rust code.</p>
 					<Open />
 				</div>
 				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-[#C2C2C2] dark:bg-black dark:text-white sm:p-8 desktop:row-[span_4]'>
@@ -156,8 +156,8 @@ const Features = () => {
 						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain transition-transform duration-1000 group-hover:-translate-x-10 group-hover:-translate-y-1'
 					/>
 					<Deploy />
-					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Fast deploy times</h3>
-					<p>Deploy new versions as quickly as running an incremental build, all with zero downtime</p>
+					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Build fast, redeploy instantly</h3>
+					<p>Shuttle always uses the cache from previous builds to give you second-scale redeploys</p>
 				</div>
 				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-[#C2C2C2] dark:bg-black dark:text-white sm:p-8 desktop:row-[span_3]'>
 					<Image
@@ -178,10 +178,9 @@ const Features = () => {
 						fill
 						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain transition-transform duration-1000 group-hover:-translate-x-10 group-hover:-translate-y-1'
 					/>
-					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Generous free tier</h3>
+					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Forever-free tier</h3>
 					<p>
-						Start deploying your apps with no strings attached and enjoy many free tier benefits with
-						Shuttle.
+					Unlike Heroku, we’re open source and we have a free tier that will stay that way forever.
 					</p>
 					<Free />
 				</div>

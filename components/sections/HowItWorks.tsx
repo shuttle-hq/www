@@ -82,7 +82,7 @@ const HowItWorks = () => {
 								)}
 								onClick={() => setSelectedItem('hello-cloud')}
 							>
-								Hello cloud
+								Get Started
 							</button>
 						</SplideSlide>
 						<SplideSlide>
@@ -95,7 +95,7 @@ const HowItWorks = () => {
 								)}
 								onClick={() => setSelectedItem('cargo-deploy')}
 							>
-								Cargo deploy
+								Deploy
 							</button>
 						</SplideSlide>
 						<SplideSlide>
@@ -108,7 +108,7 @@ const HowItWorks = () => {
 								)}
 								onClick={() => setSelectedItem('using-sql')}
 							>
-								Using SQL
+								Add a Database
 							</button>
 						</SplideSlide>
 						<SplideSlide>
@@ -121,7 +121,7 @@ const HowItWorks = () => {
 								)}
 								onClick={() => setSelectedItem('using-axum')}
 							>
-								Using Axum
+								Deploy Again
 							</button>
 						</SplideSlide>
 					</SplideTrack>

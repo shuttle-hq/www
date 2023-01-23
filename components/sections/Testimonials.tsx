@@ -74,10 +74,11 @@ const Testimonials = () => {
 					What the community says
 				</h2>
 				<p className='mt-3 text-xl text-white/40 sm:mt-5 lg:text-2xl'>
-					Join X developers using shuttle. Connect with them on&nbsp;
+					Join 2,000 developers using shuttle. Connect with them on&nbsp;
 					<Link href='#' className='underline'>
 						Discord
 					</Link>
+					.
 				</p>
 				<div className='mt-6 grid gap-5 md:mt-20 md:grid-cols-3 md:items-center'>
 					<div className='space-y-5'>
@@ -93,14 +94,13 @@ const Testimonials = () => {
 									/>
 								</div>
 								<div>
-									<h3 className='font-gradual font-bold text-white'>John C.</h3>
-									<p className='text-[#C2C2C2]'>@johnny</p>
+									<h3 className='font-gradual font-bold text-white'>Dominykas</h3>
+									<p className='text-[#C2C2C2]'>@chaosteil</p>
+									<p className='text-[#C2C2C2]'> Staff Software Engineer @ Uber</p>
 								</div>
 							</div>
 							<p className='mt-5 text-[#C2C2C2]'>
-								You’ve created a really opening and welcoming community - I feel like it’s a
-								complex project I can actually contribute toYou’ve created a really opening and
-								welcoming community
+								Game changer, what a great project.
 							</p>
 						</div>
 						<div className='rounded-[1.25rem] border border-white border-opacity-10 p-6 backdrop-blur-2xl'>
@@ -115,13 +115,13 @@ const Testimonials = () => {
 									/>
 								</div>
 								<div>
-									<h3 className='font-gradual font-bold text-white'>John C.</h3>
-									<p className='text-[#C2C2C2]'>@johnny</p>
+									<h3 className='font-gradual font-bold text-white'>Matthias Endler</h3>
+									<p className='text-[#C2C2C2]'>@mathiasendler</p>
+									<p className='text-[#C2C2C2]'>Rust Consultant @ Corrode</p>
 								</div>
 							</div>
 							<p className='mt-5 text-[#C2C2C2]'>
-								You’ve created a really opening and welcoming community - I feel like it’s a
-								complex project I.
+							Deployed my second service with shuttle and I really like it! It's fast and integrates well with cargo, so I can focus on the Rust code instead of the deployment. Well done!
 							</p>
 						</div>
 					</div>

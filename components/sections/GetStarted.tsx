@@ -13,12 +13,7 @@ const GetStarted = () => {
 					Get started in seconds
 				</h2>
 				<p className='mt-5 lg:text-xl'>
-					Once you’ve done this, you are good to go! To learn more about how shuttle works, take a look
-					at our&nbsp;
-					<Link href='#' className='underline'>
-						Docs
-					</Link>
-					&nbsp;page!
+				Build an app with your favourite Rust framework and deploy it immediately. We’ll take care of all the infrastructure.
 				</p>
 			</div>
 			<div className='mx-auto mt-10 w-full max-w-7xl gap-x-6 px-5 sm:px-10 lg:mt-16 lg:grid lg:grid-cols-[1fr_400px] lg:gap-5 xl:mt-20 xl:items-center xl:gap-12'>
@@ -94,7 +89,7 @@ const GetStarted = () => {
 					<GetStartedSlide
 						number='1'
 						title='Install'
-						text='Run this command to install shuttle'
+						text='Install the CLI'
 						gradient='from-[#FC540C] to-[#C39348]'
 					>
 						<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
@@ -106,28 +101,30 @@ const GetStarted = () => {
 					</GetStartedSlide>
 					<GetStartedSlide
 						number='2'
-						title='Log in'
-						text='Run this command to install shuttle'
+						title='Initialize'
+						text='Bootstrap your project'
 						gradient='from-[#D1883C] to-[#ABA363]'
-					/>
+					>
+						<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
+							$ cargo shuttle init
+							<button className='absolute right-3 rounded-lg border border-transparent p-1 hover:border-[#484848] hover:bg-[#343434] dark:text-[#C2C2C2]'>
+								<Copy />
+							</button>
+						</div>
+					</GetStartedSlide>
 					<GetStartedSlide
 						number='3'
-						title='Initialize'
-						text='Run this command to install shuttle'
-						gradient='from-[#C19549] to-[#8AB58D]'
-					/>
-					<GetStartedSlide
-						number='4'
-						title='Create project'
-						text='Run this command to install shuttle'
-						gradient='from-[#B89A4F] to-[#8FB287]'
-					/>
-					<GetStartedSlide
-						number='5'
 						title='Deploy'
-						text='Run this command to install shuttle'
-						gradient='from-[#91B185] to-[#38D3E9]'
-					/>
+						text='Take-off in 3, 2, 1..'
+						gradient='from-[#C19549] to-[#8AB58D]'
+					>
+						<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
+							$ cargo shuttle deploy
+							<button className='absolute right-3 rounded-lg border border-transparent p-1 hover:border-[#484848] hover:bg-[#343434] dark:text-[#C2C2C2]'>
+								<Copy />
+							</button>
+						</div>
+					</GetStartedSlide>
 				</Splide>
 			</div>
 		</>
