@@ -138,12 +138,13 @@ const Testimonials = () => {
 									/>
 								</div>
 								<div>
-									<h3 className='font-gradual font-bold text-white'>John C.</h3>
-									<p className='text-[#C2C2C2]'>@johnny</p>
+									<h3 className='font-gradual font-bold text-white'>Peter Mertz</h3>
+									<p className='text-[#C2C2C2]'>@mertzalertz</p>
+									<p className='text-[#C2C2C2]'>Lead Engineer @ Zed Financial</p>
 								</div>
 							</div>
 							<p className='mt-5 text-[#C2C2C2]'>
-								You’ve created a really opening and welcoming community
+							Shuttle is hands down the best way to deploy a rust app quickly, safely, with the ability to scale. It has a variety of frameworks supported, and the community surrounding it is incredible. Heroku for Rust but better!
 							</p>
 						</div>
 						<div className='rounded-[1.25rem] border border-white border-opacity-10 p-6 backdrop-blur-2xl'>
