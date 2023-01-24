@@ -9,8 +9,8 @@ export default function ShuttleHeroes() {
 	return (
 		<>
 			<ShuttleHeroesHero />
-			<ShuttleHeroesResponsibilities />
 			<ShuttleHeroesBenefits />
+			<ShuttleHeroesResponsibilities />
 			<CallToAction />
 		</>
 	)

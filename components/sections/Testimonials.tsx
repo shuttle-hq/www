@@ -86,7 +86,7 @@ const Testimonials = () => {
 							<div className='flex items-start gap-4'>
 								<div className='h-[3.125rem] w-[3.125rem] flex-shrink-0 rounded-full bg-gradient-to-r from-[#FC540C] via-[#4E452F] to-[#38D4E9] p-px'>
 									<Image
-										src='/images/sections/user.jpg'
+										src='/images/sections/testimonials/dominykas.jpg'
 										alt='profile picture'
 										width={40}
 										height={40}
@@ -107,7 +107,7 @@ const Testimonials = () => {
 							<div className='flex items-start gap-4'>
 								<div className='h-[3.125rem] w-[3.125rem] flex-shrink-0 rounded-full bg-gradient-to-r from-[#FC540C] via-[#4E452F] to-[#38D4E9] p-px'>
 									<Image
-										src='/images/sections/user.jpg'
+										src='/images/sections/testimonials/matthias.jpg'
 										alt='profile picture'
 										width={40}
 										height={40}
@@ -130,7 +130,7 @@ const Testimonials = () => {
 							<div className='flex items-start gap-4'>
 								<div className='h-[3.125rem] w-[3.125rem] flex-shrink-0 rounded-full bg-gradient-to-r from-[#FC540C] via-[#4E452F] to-[#38D4E9] p-px'>
 									<Image
-										src='/images/sections/user.jpg'
+										src='/images/sections/testimonials/peter.jpeg'
 										alt='profile picture'
 										width={40}
 										height={40}
@@ -151,7 +151,7 @@ const Testimonials = () => {
 							<div className='flex items-start gap-4'>
 								<div className='h-[3.125rem] w-[3.125rem] flex-shrink-0 rounded-full bg-gradient-to-r from-[#FC540C] via-[#4E452F] to-[#38D4E9] p-px'>
 									<Image
-										src='/images/sections/user.jpg'
+										src='/images/sections/testimonials/stefan.jpeg'
 										alt='profile picture'
 										width={40}
 										height={40}
@@ -159,17 +159,14 @@ const Testimonials = () => {
 									/>
 								</div>
 								<div>
-									<h3 className='font-gradual font-bold text-white'>John C.</h3>
-									<p className='text-[#C2C2C2]'>@johnny</p>
+									<h3 className='font-gradual font-bold text-white'>Stefan Baumgartner</h3>
+									<p className='text-[#C2C2C2]'>@ddprrt</p>
+									<p className='text-[#C2C2C2]'>Senior Product Architect @ Dynatrace</p>
 								</div>
 							</div>
 							<p className='mt-5 text-[#C2C2C2]'>
 								You’ve created a really opening and welcoming community - I feel like it’s a
 								complex project I can actually contribute to.
-								<br />
-								<br />
-								You’ve created a really opening and welcoming community You’ve created a really
-								opening and welcoming community
 							</p>
 						</div>
 					</div>
@@ -178,7 +175,7 @@ const Testimonials = () => {
 							<div className='flex items-start gap-4'>
 								<div className='h-[3.125rem] w-[3.125rem] flex-shrink-0 rounded-full bg-gradient-to-r from-[#FC540C] via-[#4E452F] to-[#38D4E9] p-px'>
 									<Image
-										src='/images/sections/user.jpg'
+										src='/images/sections/testimonials/roberto.jpg'
 										alt='profile picture'
 										width={40}
 										height={40}
@@ -186,13 +183,13 @@ const Testimonials = () => {
 									/>
 								</div>
 								<div>
-									<h3 className='font-gradual font-bold text-white'>John C.</h3>
-									<p className='text-[#C2C2C2]'>@johnny</p>
+									<h3 className='font-gradual font-bold text-white'>Roberto Huertas</h3>
+									<p className='text-[#C2C2C2]'>@robertohuertasm</p>
+									<p className='text-[#C2C2C2]'>Software Engineer @ Datadog</p>
 								</div>
 							</div>
 							<p className='mt-5 text-[#C2C2C2]'>
-								You’ve created a really opening and welcoming community - I feel like it’s a
-								complex project I can actually contribute to
+								Awaiting testimonial...
 							</p>
 						</div>
 						<div className='rounded-[1.25rem] border border-white border-opacity-10 p-6 backdrop-blur-2xl'>
@@ -207,12 +204,12 @@ const Testimonials = () => {
 									/>
 								</div>
 								<div>
-									<h3 className='font-gradual font-bold text-white'>John C.</h3>
-									<p className='text-[#C2C2C2]'>@johnny</p>
+									<h3 className='font-gradual font-bold text-white'>ebox96</h3>
+									<p className='text-[#C2C2C2]'>@ebox96</p>
 								</div>
 							</div>
 							<p className='mt-5 text-[#C2C2C2]'>
-								You’ve created a really opening and welcoming community - I feel like it’s a
+								Awaiting testimonial...
 							</p>
 						</div>
 					</div>
