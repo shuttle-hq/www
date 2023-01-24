@@ -21,6 +21,7 @@ import clsx from 'clsx'
 import { BlogHeader, BlogPrevNext, BlogSidebar, CallToAction } from 'components/sections'
 import { LinkedInLogo, Logo, TwitterLogo } from 'components/svgs'
 import { CopyButton } from 'components/elements'
+import { TwitterTweetEmbed } from 'react-twitter-embed'
 
 export async function getStaticPaths() {
 	const paths = getAllPostSlugs()
@@ -189,6 +190,13 @@ const mdxComponents: MDXRemoteProps['components'] = {
 	pre: (props: any) => {
 		return <Pre {...props} />
 	},
+	Tweet: (props: any) => {
+		return (
+			<div className='flex items-center justify-center [&>*]:w-full [&>*]:max-w-sm lg:[&>*]:max-w-xl'>
+				<TwitterTweetEmbed {...props} options={{ width: '100%' }} />
+			</div>
+		)
+	},
 	TLDR: (props: any) => {
 		return (
 			<div className='mb-24 text-left text-xl'>
@@ -206,6 +214,7 @@ const mdxComponents: MDXRemoteProps['components'] = {
 		)
 	},
 	blockquote(props) {
+		console.log(props)
 		return (
 			<blockquote className='border-none bg-[linear-gradient(180deg,_#FC540C_25.63%,_rgba(255,_215,_111,_0.72)_60.67%,_#38D4E9_88.15%)] pl-2 text-left text-2xl font-normal not-italic text-[#525151] dark:text-[#7A7A7A]'>
 				<div className='bg-[#E9E9E9] py-1 pl-8 prose-p:!my-0 dark:bg-black'>{props.children}</div>
@@ -346,7 +355,6 @@ export default function BlogPostPage(props: Props) {
 				</div>
 			</div>
 			<CallToAction />
-			<script async src='https://platform.twitter.com/widgets.js' charSet='utf-8'></script>
 		</>
 	)
 }

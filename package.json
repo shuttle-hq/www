@@ -29,6 +29,7 @@
     "react": "18.2.0",
     "react-cookie-consent": "^8.0.1",
     "react-dom": "18.2.0",
+    "react-twitter-embed": "^4.0.4",
     "react-use": "^17.4.0",
     "rehype-slug": "^5.1.0",
     "remark-gfm": "^3.0.1",
