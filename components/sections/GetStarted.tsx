@@ -1,11 +1,18 @@
 import Image from 'next/image'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
-import { FC, ReactNode } from 'react'
+import { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { Copy } from 'components/svgs'
 
 const GetStarted = () => {
+	const [selectedSlide, setSelectedSlide] = useState(0)
+	const slideRef = useRef<Splide>(null)
+
+	const handleClick = (id: number) => {
+		slideRef.current?.go(id)
+	}
+
 	return (
 		<>
 			<div className='mx-auto mt-24 w-full max-w-[800px] px-5 sm:mt-28 sm:px-10 lg:mt-32 xl:mt-36 desktop:mt-52'>
@@ -21,16 +28,53 @@ const GetStarted = () => {
 					&nbsp;page!
 				</p>
 			</div>
-			<div className='mx-auto mt-10 w-full max-w-7xl gap-x-6 px-5 sm:px-10 lg:mt-16 lg:grid lg:grid-cols-[1fr_400px] lg:gap-5 xl:mt-20 xl:items-center xl:gap-12'>
-				<div className='group relative z-10 flex items-end overflow-hidden rounded-2xl bg-[#13292C] px-8 pt-16 dark:bg-black sm:mt-10 sm:items-center sm:px-4 sm:px-12 sm:py-24 lg:mt-0 lg:items-end lg:items-center lg:px-8 lg:py-12 xl:p-[4.375rem] desktop:items-end desktop:pt-[8.75rem] desktop:pb-0'>
-					<Image
-						src='/images/sections/code.png'
-						alt='code'
-						width={420}
-						height={349}
-						className='mx-auto rounded-t-xl sm:rounded-xl lg:w-full lg:rounded-t-3xl lg:rounded-b-3xl desktop:relative desktop:-bottom-px desktop:rounded-b-none'
-					/>
-					{/* Desktop */}
+			<div className='mx-auto mt-10 w-full max-w-[1280px] gap-x-6 px-5 sm:px-10 lg:mt-16 lg:grid lg:grid-cols-[1fr_400px] lg:gap-5 xl:mt-20 xl:items-center xl:gap-12'>
+				<div className='group relative z-10 flex items-end overflow-hidden rounded-2xl bg-[#13292C] px-8 pt-16 dark:bg-black sm:mt-10 sm:items-center sm:px-4 sm:px-12 sm:py-24 lg:mt-0 lg:items-end lg:items-center lg:px-8 lg:py-12 xl:p-[4.375rem] desktop:items-end desktop:pt-[2.75rem] desktop:pb-0'>
+					<Splide
+						ref={slideRef}
+						onMounted={(splide) => {
+							console.log(splide)
+							splide?.on('move', () => {
+								setSelectedSlide(splide?.index ?? 0)
+							})
+						}}
+						aria-label='Shuttle'
+						options={{
+							type: 'loop',
+							pagination: false,
+							autoplay: true,
+							arrows: false,
+							interval: 3000,
+						}}
+					>
+						<SplideSlide>
+							<Image
+								src='/images/sections/code.png'
+								alt='Image 1'
+								width={420}
+								height={349}
+								className='mx-auto rounded-t-xl sm:rounded-xl lg:w-full lg:rounded-t-3xl lg:rounded-b-3xl desktop:relative desktop:-bottom-px desktop:rounded-b-none'
+							/>
+						</SplideSlide>
+						<SplideSlide>
+							<Image
+								src='/images/sections/code.png'
+								alt='Image 2'
+								width={420}
+								height={349}
+								className='mx-auto rounded-t-xl sm:rounded-xl lg:w-full lg:rounded-t-3xl lg:rounded-b-3xl desktop:relative desktop:-bottom-px desktop:rounded-b-none'
+							/>
+						</SplideSlide>
+						<SplideSlide>
+							<Image
+								src='/images/sections/code.png'
+								alt='Image 3'
+								width={420}
+								height={349}
+								className='mx-auto rounded-t-xl sm:rounded-xl lg:w-full lg:rounded-t-3xl lg:rounded-b-3xl desktop:relative desktop:-bottom-px desktop:rounded-b-none'
+							/>
+						</SplideSlide>
+					</Splide>
 					<Image
 						src='/images/sections/get-started/noise.png'
 						alt='get started noise'
@@ -75,26 +119,14 @@ const GetStarted = () => {
 						className='sn:hidden pointer-events-none absolute left-0 top-0 -z-10 h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-20 group-hover:-translate-y-1 lg:block'
 					/>
 				</div>
-				<Splide
-					options={{
-						pagination: false,
-						autoWidth: true,
-						autoHeight: true,
-						arrows: false,
-						gap: '1rem',
-						mediaQuery: 'min',
-						breakpoints: {
-							1024: {
-								destroy: true,
-							},
-						},
-					}}
-					className='mt-12 lg:mt-0'
-				>
+
+				<div className='mt-12 flex h-full gap-3 overflow-y-hidden overflow-x-scroll p-1 lg:mt-0 lg:flex-col lg:overflow-visible'>
 					<GetStartedSlide
-						number='1'
+						number={0}
 						title='Install'
 						text='Run this command to install shuttle'
+						handleClick={handleClick}
+						isSelected={0 === selectedSlide}
 						gradient='from-[#FC540C] to-[#C39348]'
 					>
 						<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
@@ -105,69 +137,87 @@ const GetStarted = () => {
 						</div>
 					</GetStartedSlide>
 					<GetStartedSlide
-						number='2'
-						title='Log in'
-						text='Run this command to install shuttle'
-						gradient='from-[#D1883C] to-[#ABA363]'
-					/>
-					<GetStartedSlide
-						number='3'
+						number={1}
 						title='Initialize'
-						text='Run this command to install shuttle'
-						gradient='from-[#C19549] to-[#8AB58D]'
-					/>
+						text='Run this command to init interactive prompt'
+						handleClick={handleClick}
+						isSelected={1 === selectedSlide}
+						gradient='from-[#D1883C] to-[#ABA363]'
+					>
+						<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
+							$ cargo shuttle init interactive prompt
+							<button className='absolute right-3 rounded-lg border border-transparent p-1 hover:border-[#484848] hover:bg-[#343434] dark:text-[#C2C2C2]'>
+								<Copy />
+							</button>
+						</div>
+					</GetStartedSlide>
 					<GetStartedSlide
-						number='4'
-						title='Create project'
-						text='Run this command to install shuttle'
-						gradient='from-[#B89A4F] to-[#8FB287]'
-					/>
-					<GetStartedSlide
-						number='5'
+						number={2}
 						title='Deploy'
-						text='Run this command to install shuttle'
-						gradient='from-[#91B185] to-[#38D3E9]'
-					/>
-				</Splide>
+						text='Run this command to deploy output'
+						handleClick={handleClick}
+						isSelected={2 === selectedSlide}
+						gradient='from-[#C19549] to-[#8AB58D]'
+					>
+						<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
+							$ cargo shuttle deploy output
+							<button className='absolute right-3 rounded-lg border border-transparent p-1 hover:border-[#484848] hover:bg-[#343434] dark:text-[#C2C2C2]'>
+								<Copy />
+							</button>
+						</div>
+					</GetStartedSlide>
+				</div>
 			</div>
 		</>
 	)
 }
 
 interface GetStartedSlideProps {
-	number: string
+	number: number
 	title: string
 	text: string
 	gradient?: string
 	children?: ReactNode
+	handleClick: (id: number) => void
+	isSelected: boolean
 }
 
-const GetStartedSlide: FC<GetStartedSlideProps> = ({ number, title, text, gradient, children }) => {
+const GetStartedSlide: FC<GetStartedSlideProps> = ({
+	number,
+	title,
+	text,
+	children,
+	gradient,
+	handleClick,
+	isSelected,
+}) => {
+	// React splide is 0-indexed
+	const adjustedNumber = number + 1
+
 	return (
-		<SplideSlide className='max-w-[85%] p-[1px] lg:max-w-full lg:pb-4 lg:last:pb-1'>
-			<div
-				className={clsx(
-					'border-gradient group relative h-full cursor-pointer cursor-pointer rounded-2xl bg-[#E9E9E9] p-6 shadow-[0_0_0_1px_rgba(0,0,0,0.1)] transition after:rounded-2xl hover:shadow-none dark:bg-black dark:hover:shadow-none hover:lg:shadow-none',
-					number === '1' && // If it isn't the first slide, hide the outline on desktop
-						'dark:shadow-[0_0_0_1px_#191919]'
-				)}
-			>
-				<h3 className='font-gradual text-2xl font-bold dark:text-[#C2C2C2]'>
-					<span className={clsx('bg-gradient-to-r bg-clip-text text-transparent', gradient)}>
-						{number.padStart(2, '0')}
-					</span>
-					&nbsp;{title}
-				</h3>
-				<p className='mt-2'>{text}</p>
+		<div
+			onClick={() => handleClick(number)}
+			onMouseEnter={() => handleClick(number)}
+			className={clsx(
+				'group relative h-full min-w-max cursor-pointer cursor-pointer rounded-2xl bg-[#E9E9E9] p-6 transition after:rounded-2xl dark:bg-black',
+				isSelected ? 'shadow-[0_0_0_1px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_1px_#191919] ' : ''
+			)}
+		>
+			<h3 className='font-gradual text-2xl font-bold dark:text-[#C2C2C2]'>
+				<span className={clsx('bg-gradient-to-r bg-clip-text text-transparent', gradient)}>
+					0{adjustedNumber}
+				</span>
+				&nbsp;{title}
+			</h3>
+			<p className='mt-2'>{text}</p>
 
-				{children}
+			{children}
 
-				{/* If it the whole slide isn't outlined, add a line under the slide */}
-				{number !== '1' && (
-					<hr className='absolute -bottom-px left-6 w-[calc(100%-3rem)] border-black/10 group-hover:hidden dark:border-[#191919]' />
-				)}
-			</div>
-		</SplideSlide>
+			{/* If it the whole slide isn't outlined, add a line under the slide */}
+			{adjustedNumber !== 1 && (
+				<hr className='absolute -bottom-px left-6 w-[calc(100%-3rem)] border-black/10 group-hover:hidden dark:border-[#191919]' />
+			)}
+		</div>
 	)
 }
 
