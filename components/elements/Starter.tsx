@@ -30,7 +30,7 @@ const Starter: FC<StarterProps> = ({
 	deployLink,
 }) => {
 	return (
-		<div className='border-gradient group relative relative h-full overflow-visible rounded-[2rem] bg-[#13292C] px-5 pt-8 pb-6 outline outline-1 outline-[#1E1B19] after:rounded-[2rem] hover:outline-transparent dark:bg-black'>
+		<div className='border-gradient group relative relative h-full overflow-visible rounded-4xl bg-[#13292C] px-5 pt-8 pb-6 shadow-[0_0_0_1px_#191919] after:rounded-[2rem] hover:shadow-none dark:bg-black'>
 			<Image src={bg} alt='bg' fill className={bgClassName} />
 			<Image src={stars} alt='stars' fill className={starsClassName} />
 			<Image src={stars2} alt='stars 2' fill className={stars2ClassName} />
@@ -56,10 +56,12 @@ const Starter: FC<StarterProps> = ({
 								Post
 							</Link>
 						</span>
-						<Button variant='primary'>Deploy</Button>
+						<Button variant='primary' href={deployLink}>
+							Deploy
+						</Button>
 					</div>
 				) : (
-					<Link href='#' className='group mt-3 inline-flex items-center text-[#C2C2C2]'>
+					<Link href='/starters' className='group mt-3 inline-flex items-center text-[#C2C2C2]'>
 						View all
 						{/* Right Arrow */}
 						<svg

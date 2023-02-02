@@ -10,18 +10,8 @@ const GetStarted = () => {
 	const slideRef = useRef<Splide>(null)
 
 	const handleClick = (id: number) => {
-		setSelectedSlide(id)
+		slideRef.current?.go(id)
 	}
-
-	useEffect(() => {
-		slideRef.current?.go(selectedSlide)
-	}, [selectedSlide])
-
-	useEffect(() => {
-		slideRef.current?.splide?.on('move', () => {
-			setSelectedSlide(slideRef.current?.splide?.index ?? 0)
-		})
-	}, [])
 
 	return (
 		<>
@@ -42,6 +32,12 @@ const GetStarted = () => {
 				<div className='group relative z-10 flex items-end overflow-hidden rounded-2xl bg-[#13292C] px-8 pt-16 dark:bg-black sm:mt-10 sm:items-center sm:px-4 sm:px-12 sm:py-24 lg:mt-0 lg:items-end lg:items-center lg:px-8 lg:py-12 xl:p-[4.375rem] desktop:items-end desktop:pt-[2.75rem] desktop:pb-0'>
 					<Splide
 						ref={slideRef}
+						onMounted={(splide) => {
+							console.log(splide)
+							splide?.on('move', () => {
+								setSelectedSlide(splide?.index ?? 0)
+							})
+						}}
 						aria-label='Shuttle'
 						options={{
 							type: 'loop',
@@ -79,19 +75,32 @@ const GetStarted = () => {
 							/>
 						</SplideSlide>
 					</Splide>
-
 					<Image
-						src='/images/sections/get-started/bg.png'
-						alt='get started background'
-						width={524}
-						height={627}
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full object-cover'
+						src='/images/sections/get-started/noise.png'
+						alt='get started noise'
+						fill
+						className='pointer-events-none absolute left-0 top-0 -z-10 hidden h-full w-full object-cover lg:block'
 					/>
+					<Image
+						src='/images/sections/get-started/bottom.png'
+						alt='get started background'
+						width={739}
+						height={422}
+						className='pointer-events-none absolute left-0 bottom-0 -z-10 w-full opacity-50 transition duration-500 group-hover:opacity-70'
+					/>
+					<Image
+						src='/images/sections/get-started/top-left.png'
+						alt='get started top'
+						width={366}
+						height={233}
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full object-cover group-hover:-top-5 group-hover:-left-5'
+					/>
+					{/* Tablet */}
 					<Image
 						src='/images/sections/get-started/tablet-bg.png'
 						alt='get started tablet background'
 						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 hidden h-full w-full object-cover sm:block xl:hidden'
+						className='pointer-events-none absolute left-0 top-0 -z-10 hidden h-full w-full object-cover sm:block lg:hidden'
 					/>
 					<Image
 						src='/images/sections/get-started/stars.png'
@@ -111,13 +120,14 @@ const GetStarted = () => {
 					/>
 				</div>
 
-				<div className='flex h-full flex-col gap-3'>
+				<div className='mt-12 flex h-full gap-3 overflow-y-hidden overflow-x-scroll p-1 lg:mt-0 lg:flex-col lg:overflow-visible'>
 					<GetStartedSlide
 						number={0}
 						title='Install'
 						text='Run this command to install shuttle'
 						handleClick={handleClick}
 						isSelected={0 === selectedSlide}
+						gradient='from-[#FC540C] to-[#C39348]'
 					>
 						<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
 							$ cargo install cargo-shuttle
@@ -132,6 +142,7 @@ const GetStarted = () => {
 						text='Run this command to init interactive prompt'
 						handleClick={handleClick}
 						isSelected={1 === selectedSlide}
+						gradient='from-[#D1883C] to-[#ABA363]'
 					>
 						<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
 							$ cargo shuttle init interactive prompt
@@ -146,6 +157,7 @@ const GetStarted = () => {
 						text='Run this command to deploy output'
 						handleClick={handleClick}
 						isSelected={2 === selectedSlide}
+						gradient='from-[#C19549] to-[#8AB58D]'
 					>
 						<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
 							$ cargo shuttle deploy output
@@ -164,27 +176,35 @@ interface GetStartedSlideProps {
 	number: number
 	title: string
 	text: string
+	gradient?: string
 	children?: ReactNode
 	handleClick: (id: number) => void
 	isSelected: boolean
 }
 
-const GetStartedSlide: FC<GetStartedSlideProps> = ({ number, title, text, children, handleClick, isSelected }) => {
+const GetStartedSlide: FC<GetStartedSlideProps> = ({
+	number,
+	title,
+	text,
+	children,
+	gradient,
+	handleClick,
+	isSelected,
+}) => {
 	// React splide is 0-indexed
 	const adjustedNumber = number + 1
 
 	return (
 		<div
+			onClick={() => handleClick(number)}
 			onMouseEnter={() => handleClick(number)}
 			className={clsx(
-				'group relative h-full cursor-pointer cursor-pointer rounded-2xl rounded-2xl bg-[#E9E9E9] p-6 p-6 outline outline-1 outline-black/10 transition after:rounded-2xl dark:bg-black',
-				adjustedNumber === 1 && // If it isn't the first slide, hide the outline on desktop
-					'dark:outline-[#191919]',
-				isSelected && 'border-gradient outline outline-1 outline-red-300'
+				'group relative h-full min-w-max cursor-pointer cursor-pointer rounded-2xl bg-[#E9E9E9] p-6 transition after:rounded-2xl dark:bg-black',
+				isSelected ? 'shadow-[0_0_0_1px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_1px_#191919] ' : ''
 			)}
 		>
 			<h3 className='font-gradual text-2xl font-bold dark:text-[#C2C2C2]'>
-				<span className='bg-gradient-to-r from-[#FC540C] to-[#C39348] bg-clip-text text-transparent'>
+				<span className={clsx('bg-gradient-to-r bg-clip-text text-transparent', gradient)}>
 					0{adjustedNumber}
 				</span>
 				&nbsp;{title}

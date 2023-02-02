@@ -7,17 +7,12 @@ type StorageTheme = 'dark' | 'light' | 'system'
 
 interface ThemeSwitcherProps {
 	className?: string
+	hidden?: boolean
 }
 
-const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ className }) => {
-	const osTheme = useMedia('(prefers-color-scheme: dark)') ? 'dark' : 'light'
-	const [storageTheme, setStorageTheme] = useLocalStorage<StorageTheme>('app-theme', 'system')
-	const theme = storageTheme === 'system' ? osTheme : storageTheme
+const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ className, hidden }) => {
+	const [theme, setTheme] = useLocalStorage<StorageTheme>('app-theme', 'dark')
 	const isDarkTheme = theme === 'dark'
-
-	function updateTheme(theme: 'dark' | 'light') {
-		setStorageTheme(theme === osTheme ? 'system' : theme)
-	}
 
 	useEffect(() => {
 		if (isDarkTheme) {
@@ -32,10 +27,11 @@ const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ className }) => {
 			type='button'
 			className={clsx(
 				className,
-				'lg:border-gradient group relative flex items-center justify-center gap-3 rounded-button after:rounded-[0.875rem] dark:bg-black lg:bg-[#E9E9E9]'
+				'lg:border-gradient group relative flex items-center justify-center gap-3 rounded-button after:rounded-[0.875rem] dark:bg-black lg:bg-[#E9E9E9]',
+				hidden && '!hidden'
 			)}
 			onClick={() => {
-				updateTheme(theme === 'dark' ? 'light' : 'dark')
+				setTheme(theme === 'dark' ? 'light' : 'dark')
 			}}
 		>
 			{theme === 'dark' ? <Lightbulb className='lg:p-3' /> : <Moon className='lg:p-3' />}

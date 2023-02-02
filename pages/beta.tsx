@@ -78,20 +78,40 @@ export default function Beta() {
 						<h3 className='font-gradual text-[2rem] font-bold leading-none text-white'>
 							Thank you for signing up!
 						</h3>
-						<p className='mt-3'>
+						<p className='mt-3 text-[#C2C2C2] dark:text-[#7A7A7A]'>
 							If you are looking for a way to support shuttle in the meantime, you can do so by:
 						</p>
-						<div className='mt-8 flex flex-col items-start'>
-							<a href='https://github.com/shuttle-hq/shuttle' target='_blank' rel='noreferrer'>
+						<div className='mt-8 flex flex-col items-center text-center text-[#C2C2C2] dark:text-[#7A7A7A]'>
+							<a
+								href='https://github.com/shuttle-hq/shuttle'
+								target='_blank'
+								rel='noreferrer'
+								className='text-lg transition hover:text-white hover:underline'
+							>
 								💻 contributing to shuttle
 							</a>
-							<a href='https://github.com/shuttle-hq/shuttle' target='_blank' rel='noreferrer'>
+							<a
+								href='https://github.com/shuttle-hq/shuttle'
+								target='_blank'
+								rel='noreferrer'
+								className='text-lg transition hover:text-white hover:underline'
+							>
 								⭐️ starring the repository
 							</a>
-							<a href='https://discord.gg/shuttle' target='_blank' rel='noreferrer'>
+							<a
+								href='https://discord.gg/shuttle'
+								target='_blank'
+								rel='noreferrer'
+								className='text-lg transition hover:text-white hover:underline'
+							>
 								👾 joining our discord community
 							</a>
-							<a href='https://twitter.com/shuttle_dev' target='_blank' rel='noreferrer'>
+							<a
+								href='https://twitter.com/shuttle_dev'
+								target='_blank'
+								rel='noreferrer'
+								className='text-lg transition hover:text-white hover:underline'
+							>
 								🐦 following us on twitter
 							</a>
 						</div>

@@ -7,24 +7,17 @@ const Testimonials = () => {
 			<span className='pointer-events-none'>
 				<Image
 					src='/images/sections/testimonials/bg-m.png'
-					alt='stars mobile'
+					alt='bg mobile'
 					width={375}
 					height={1047}
 					className='absolute top-0 left-0 -z-10 aspect-[2/3] h-full w-full object-cover md:aspect-auto xl:hidden'
 				/>
-				<Image
+				<img
 					src='/images/sections/testimonials/bg.png'
-					alt='stars'
+					alt='bg'
 					width={600}
 					height={1000}
-					className='absolute top-0 left-0 -z-10 hidden aspect-[2/3] h-full w-full object-cover md:aspect-auto xl:block'
-				/>
-				<Image
-					src='/images/sections/testimonials/stars-1.png'
-					alt='stars'
-					width={1920}
-					height={1000}
-					className='absolute top-0 left-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:translate-x-12 group-hover:translate-y-3 md:block'
+					className='absolute top-0 left-[-22.1%] -z-10 hidden aspect-[2/3] h-full w-full object-cover transition-all duration-1000 group-hover:left-[-15.8%] md:block md:aspect-auto xl:block'
 				/>
 				<Image
 					src='/images/sections/testimonials/stars-1.png'
