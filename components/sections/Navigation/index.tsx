@@ -50,7 +50,7 @@ const Navigation = () => {
 					</Link>
 					<Link
 						className='nav-link-shadow transition-all dark:hover:text-white'
-						href='/docs'
+						href='https://docs.shuttle.rs'
 						onClick={() => {
 							setOpen(false)
 						}}

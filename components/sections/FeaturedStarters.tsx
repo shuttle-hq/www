@@ -12,7 +12,7 @@ const FeaturedStarters = () => {
 						Starters
 					</h2>
 					<p className='mt-5 text-xl text-[#525151] dark:text-[#7A7A7A] lg:text-2xl'>
-						Shuttle is built for Rust. Take a stab at some of the examples and see how magical it is.
+					Set up and deploy a quick starter, in minutes, with detailed instructions on how it works. 
 					</p>
 				</div>
 			</div>
@@ -54,8 +54,8 @@ const FeaturedStarters = () => {
 				<SplideSlide className='splide__slide overflow-hidden p-px'>
 					<Starter
 						icon={<Authentication className='mb-auto' />}
-						title='Authentication'
-						description='Custom functionality for Discord server using a bot written in Rust.'
+						title='Build a Discord Bot'
+						description='Add custom functionality to your Discord server, using a bot written in Rust.'
 						bg='/images/sections/featured-starters/1-bg.png'
 						bgClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover'
 						stars='/images/sections/featured-starters/1-stars.png'
@@ -68,8 +68,8 @@ const FeaturedStarters = () => {
 				<SplideSlide className='splide__slide overflow-hidden p-px'>
 					<Starter
 						icon={<Weather className='mb-auto' />}
-						title='Discord Weather Forecast Bot'
-						description='Custom functionality for Discord server using a bot written in Rust.'
+						title='URL Shortener'
+						description='Get a shuttle relational database and build a URL shortener service.'
 						bg='/images/sections/featured-starters/2-bg.png'
 						bgClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover'
 						stars='/images/sections/featured-starters/2-stars.png'
@@ -82,8 +82,8 @@ const FeaturedStarters = () => {
 				<SplideSlide className='splide__slide overflow-hidden p-px'>
 					<Starter
 						icon={<Paperclip className='mb-auto' />}
-						title='Url shortener'
-						description='Custom functionality for Discord server using a bot written in Rust.'
+						title='Deploy a full-stack app with JS & Rust'
+						description='Build a React SPA with a backend and deploy it to Shuttle.'
 						bg='/images/sections/featured-starters/3-bg.png'
 						bgClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover'
 						stars='/images/sections/featured-starters/3-stars.png'

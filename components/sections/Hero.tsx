@@ -11,12 +11,11 @@ const Hero = () => {
 						Fast.
 					</h1>
 					<p className='mt-4 sm:text-xl lg:text-2xl'>
-						Shuttle is an open-source serverless platform written 100% in Rust, which treats your apps
-						as plugins, not containers.
+					Build & ship a backend without writing any infrastructure files. Instead get your infrastructure definitions from your code function signatures / annotations.
 					</p>
 					<div className='mt-5 flex flex-wrap items-center gap-5 sm:mt-10 lg:mt-12 xl:mt-16'>
 						<Button variant='primary' invertOnDark className='bg-[#13292C] text-white'>
-							Start deploying
+							Start Building
 						</Button>
 						<Button variant='secondary' invertOnDark>
 							Join Discord
