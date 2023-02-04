@@ -23,6 +23,11 @@ import { LinkedInLogo, Logo, TwitterLogo } from 'components/svgs'
 import { CopyButton } from 'components/elements'
 import { TwitterTweetEmbed } from 'react-twitter-embed'
 
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter'
+import rust from 'react-syntax-highlighter/dist/cjs/languages/prism/rust'
+import oneDark from 'react-syntax-highlighter/dist/cjs/styles/prism/one-dark'
+import CodeBlock from 'components/elements/CodeBlock'
+
 export async function getStaticPaths() {
 	const paths = getAllPostSlugs()
 
@@ -121,12 +126,12 @@ const Pre = ({ children, ...props }: any) => {
 	}, [children])
 
 	return (
-		<div className='relative'>
+		<div className={clsx('relative')}>
 			<CopyButton code={code} className='absolute right-2 top-2 inline-flex items-center' />
 			<pre
 				{...props}
 				className={clsx(
-					'!border !border-black/10 !bg-transparent !pr-16 text-[#525151] dark:!border-white/10 dark:text-[#7A7A7A]',
+					'!border !border-black/10 !pr-16 text-[#525151] dark:!border-white/10 dark:text-[#7A7A7A]',
 					props.className ?? 'language-'
 				)}
 			>
