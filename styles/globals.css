@@ -17,6 +17,90 @@ body.dark {
 	background: black;
 }
 
+@layer base {
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: normal;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradual-Regular.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: italic;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradual-RegularItalic.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: normal;
+		font-weight: 500;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradual-Medium.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: italic;
+		font-weight: 500;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradual-MediumItalic.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: normal;
+		font-weight: 600;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradual-Semibold.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: italic;
+		font-weight: 600;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradual-SemiboldItalic.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: normal;
+		font-weight: 700;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradual-Bold.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: italic;
+		font-weight: 700;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradual-BoldItalic.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: normal;
+		font-weight: 800;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradual-Extrabold.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: italic;
+		font-weight: 800;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradualExtraboldItalic.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: normal;
+		font-weight: 900;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradualBlack.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: italic;
+		font-weight: 900;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradualBlackItalic.woff2');
+	}
+}
+
 @layer components {
 	.text-gradient {
 		background-image: linear-gradient(

@@ -6,7 +6,7 @@ module.exports = {
 	theme: {
 		extend: {
 			fontFamily: {
-				gradual: 'sans-serif',
+				gradual: 'BwGradual, sans-serif',
 			},
 			borderRadius: {
 				'2.5xl': '1.5rem',
