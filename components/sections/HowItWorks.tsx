@@ -1,5 +1,6 @@
 import { Splide, SplideSlide, SplideTrack } from '@splidejs/react-splide'
 import clsx from 'clsx'
+import { CodeBlock } from 'components/elements'
 import { Copy } from 'components/svgs'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -127,10 +128,20 @@ const HowItWorks = () => {
 					</SplideTrack>
 				</Splide>
 				<div className='mt-3 rounded-[2rem] border border-[#191919] bg-[#13292C] p-6 text-right dark:bg-black md:mt-0 md:rounded-tl-none'>
-					<button className='rounded-xl border border-[#191919] p-2 text-white hover:border-[#484848] hover:bg-[#343434] dark:text-[#C2C2C2]'>
-						<Copy width={32} height={32} />
-					</button>
-					<Image src='/images/sections/code.png' alt='code' width={538} height={378} className='mt-6' />
+					<CodeBlock
+						code={
+							selectedItem === 'hello-cloud'
+								? HELLO_CLOUD
+								: selectedItem === 'cargo-deploy'
+								? CARGO_DEPLOYS
+								: selectedItem === 'using-sql'
+								? USING_SQLX
+								: USING_AXUM
+						}
+						language='rust'
+						showLineNumbers={selectedItem !== 'hello-cloud'}
+						className='mt-6'
+					/>
 				</div>
 			</div>
 		</div>
@@ -138,3 +149,83 @@ const HowItWorks = () => {
 }
 
 export default HowItWorks
+
+const HELLO_CLOUD = `
+use rocket::{get, routes};
+#[get("/hello")]
+fn hello() -> &'static str {
+    "Hello, world!"
+}
+#[shuttle_service::main]
+async fn init() -> shuttle_service::ShuttleRocket {
+    Ok(
+        rocket::build()
+            .mount("/", routes![hello])
+    )
+}
+`.trim()
+
+const CARGO_DEPLOYS = `
+$ cargo shuttle deploy
+   Packaging url-shortener v0.1.0 (/private/shuttle/examples/url-shortener)
+   Archiving Cargo.toml
+   Archiving Cargo.toml.orig
+   Archiving README.md
+   Archiving Shuttle.toml
+   Archiving migrations/20220324143837_urls.sql
+   Archiving src/lib.rs
+   Compiling tracing-attributes v0.1.20
+   Compiling tokio-util v0.6.9
+   Compiling multer v2.0.2
+   Compiling hyper v0.14.18
+   Compiling rocket_http v0.5.0-rc.1
+   Compiling rocket_codegen v0.5.0-rc.1
+   Compiling rocket v0.5.0-rc.1
+   Compiling shuttle-service v0.2.5
+   Compiling url-shortener v0.1.0 (/opt/unveil/crates/s-2)
+    Finished dev [unoptimized + debuginfo] target(s) in 1m 01s
+        Project:            url-shortener
+        Deployment Id:      3d08ac34-ad63-41c1-836b-99afdc90af9f
+        Deployment Status:  DEPLOYED
+        Host:               url-shortener.shuttleapp.rs
+        Created At:         2022-04-01 08:32:34.412602556 UTC
+        Database URI:       postgres://***:***@pg.shuttle.rs/db-url-shortener
+❯
+`.trim()
+
+const USING_SQLX = `
+use rocket::{get, routes, State};
+use sqlx::PgPool;
+struct MyState(PgPool);
+#[get("/hello")]
+fn hello(state: &State<MyState>) -> &'static str {
+    // Do things with \`state.0\`...
+    "Hello, Postgres!"
+}
+#[shuttle_service::main]
+async fn rocket(
+    #[shared::Postgres] pool: PgPool
+) -> shuttle_service::ShuttleRocket {
+    let state = MyState(pool);
+    Ok(
+        rocket::build()
+            .manage(state)
+            .mount("/", routes![hello])
+    )
+}
+`.trim()
+
+const USING_AXUM = `
+use axum::{routing::get, Router};
+use sync_wrapper::SyncWrapper;
+async fn hello_world() -> &'static str {
+    "Hello, world!"
+}
+#[shuttle_service::main]
+async fn axum() -> shuttle_service::ShuttleAxum {
+    let router = Router::new()
+        .route("/hello", get(hello_world));
+    let sync_wrapper = SyncWrapper::new(router);
+    Ok(sync_wrapper)
+}
+`.trim()

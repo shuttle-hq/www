@@ -4,14 +4,28 @@ import { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { Copy } from 'components/svgs'
+import { CodeBlock } from 'components/elements'
 
 const GetStarted = () => {
 	const [selectedSlide, setSelectedSlide] = useState(0)
-	const slideRef = useRef<Splide>(null)
+	const [locked, setLocked] = useState(false)
 
-	const handleClick = (id: number) => {
-		slideRef.current?.go(id)
+	const handleClick = (id: number, lock?: boolean) => {
+		// If the user is already locked on a slide, don't allow them to change slides by hovering (when lock is undefined)
+		if (locked && !lock) return
+
+		setSelectedSlide(id)
+
+		if (lock) setLocked(true)
 	}
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			if (!locked) setSelectedSlide((selectedSlide) => (selectedSlide === 2 ? 0 : selectedSlide + 1))
+		}, 5000)
+
+		return () => clearInterval(interval)
+	}, [locked])
 
 	return (
 		<>
@@ -20,56 +34,23 @@ const GetStarted = () => {
 					Get started in seconds
 				</h2>
 				<p className='mt-5 lg:text-xl'>
-				Build an app with your favourite Rust framework and deploy it immediately. We’ll take care of all the infrastructure.
+					Build an app with your favourite Rust framework and deploy it immediately. We’ll take care of
+					all the infrastructure.
 				</p>
 			</div>
-			<div className='mx-auto mt-10 w-full max-w-[1280px] gap-x-6 px-5 sm:px-10 lg:mt-16 lg:grid lg:grid-cols-[1fr_400px] lg:gap-5 xl:mt-20 xl:items-center xl:gap-12'>
-				<div className='group relative z-10 flex items-end overflow-hidden rounded-2xl bg-[#13292C] px-8 pt-16 dark:bg-black sm:mt-10 sm:items-center sm:px-4 sm:px-12 sm:py-24 lg:mt-0 lg:items-end lg:items-center lg:px-8 lg:py-12 xl:p-[4.375rem] desktop:items-end desktop:pt-[2.75rem] desktop:pb-0'>
-					<Splide
-						ref={slideRef}
-						onMounted={(splide) => {
-							console.log(splide)
-							splide?.on('move', () => {
-								setSelectedSlide(splide?.index ?? 0)
-							})
-						}}
-						aria-label='Shuttle'
-						options={{
-							type: 'loop',
-							pagination: false,
-							autoplay: true,
-							arrows: false,
-							interval: 3000,
-						}}
-					>
-						<SplideSlide>
-							<Image
-								src='/images/sections/code.png'
-								alt='Image 1'
-								width={420}
-								height={349}
-								className='mx-auto rounded-t-xl sm:rounded-xl lg:w-full lg:rounded-t-3xl lg:rounded-b-3xl desktop:relative desktop:-bottom-px desktop:rounded-b-none'
-							/>
-						</SplideSlide>
-						<SplideSlide>
-							<Image
-								src='/images/sections/code.png'
-								alt='Image 2'
-								width={420}
-								height={349}
-								className='mx-auto rounded-t-xl sm:rounded-xl lg:w-full lg:rounded-t-3xl lg:rounded-b-3xl desktop:relative desktop:-bottom-px desktop:rounded-b-none'
-							/>
-						</SplideSlide>
-						<SplideSlide>
-							<Image
-								src='/images/sections/code.png'
-								alt='Image 3'
-								width={420}
-								height={349}
-								className='mx-auto rounded-t-xl sm:rounded-xl lg:w-full lg:rounded-t-3xl lg:rounded-b-3xl desktop:relative desktop:-bottom-px desktop:rounded-b-none'
-							/>
-						</SplideSlide>
-					</Splide>
+			<div
+				className='mx-auto mt-10 w-full max-w-7xl gap-x-6 px-5 sm:px-10 lg:mt-16 lg:grid lg:grid-cols-[1fr_400px] lg:gap-5 xl:mt-20 xl:items-center xl:gap-12'
+				onMouseLeave={() => setLocked(false)}
+			>
+				<div className='group relative z-10 block h-full items-end overflow-hidden rounded-2xl bg-[#13292C] px-8 pt-16 dark:bg-black sm:mt-10 sm:items-center sm:px-4 sm:px-12 sm:py-24 lg:mt-0 lg:items-end lg:items-center lg:px-8 lg:py-12 xl:flex xl:p-[4.375rem] desktop:items-end desktop:pt-[2.75rem] desktop:pb-0'>
+					<CodeBlock
+						language='rust'
+						code={selectedSlide === 0 ? HELLO_CLOUD : selectedSlide === 1 ? CARGO_DEPLOYS : USING_SQLX}
+						showLineNumbers
+						className={clsx(
+							'absolute left-1/2 mx-auto h-full -translate-x-1/2 transform overflow-auto rounded-t-xl sm:rounded-xl lg:w-full lg:rounded-t-3xl lg:rounded-b-3xl xl:overflow-hidden desktop:relative desktop:-bottom-px desktop:rounded-b-none'
+						)}
+					/>
 					<Image
 						src='/images/sections/get-started/noise.png'
 						alt='get started noise'
@@ -139,7 +120,7 @@ const GetStarted = () => {
 						isSelected={1 === selectedSlide}
 						gradient='from-[#D1883C] to-[#ABA363]'
 					>
-					<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
+						<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
 							$ cargo shuttle init
 							<button className='absolute right-3 rounded-lg border border-transparent p-1 hover:border-[#484848] hover:bg-[#343434] dark:text-[#C2C2C2]'>
 								<Copy />
@@ -173,7 +154,7 @@ interface GetStartedSlideProps {
 	text: string
 	gradient?: string
 	children?: ReactNode
-	handleClick: (id: number) => void
+	handleClick: (id: number, lock?: boolean) => void
 	isSelected: boolean
 }
 
@@ -191,10 +172,10 @@ const GetStartedSlide: FC<GetStartedSlideProps> = ({
 
 	return (
 		<div
-			onClick={() => handleClick(number)}
+			onClick={() => handleClick(number, true)}
 			onMouseEnter={() => handleClick(number)}
 			className={clsx(
-				'group relative h-full min-w-max cursor-pointer cursor-pointer rounded-2xl bg-[#E9E9E9] p-6 transition after:rounded-2xl dark:bg-black',
+				'group relative h-max min-w-max cursor-pointer cursor-pointer rounded-2xl bg-[#E9E9E9] p-6 transition after:rounded-2xl dark:bg-black',
 				isSelected ? 'shadow-[0_0_0_1px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_1px_#191919] ' : ''
 			)}
 		>
@@ -217,3 +198,68 @@ const GetStartedSlide: FC<GetStartedSlideProps> = ({
 }
 
 export default GetStarted
+
+const HELLO_CLOUD = `
+use rocket::{get, routes};
+#[get("/hello")]
+fn hello() -> &'static str {
+    "Hello, world!"
+}
+#[shuttle_service::main]
+async fn init() -> shuttle_service::ShuttleRocket {
+    Ok(
+        rocket::build()
+            .mount("/", routes![hello])
+    )
+}
+`.trim()
+
+const CARGO_DEPLOYS = `
+$ cargo shuttle deploy
+   Packaging url-shortener v0.1.0 (/private/shuttle/examples/url-shortener)
+   Archiving Cargo.toml
+   Archiving Cargo.toml.orig
+   Archiving README.md
+   Archiving Shuttle.toml
+   Archiving migrations/20220324143837_urls.sql
+   Archiving src/lib.rs
+   Compiling tracing-attributes v0.1.20
+   Compiling tokio-util v0.6.9
+   Compiling multer v2.0.2
+   Compiling hyper v0.14.18
+   Compiling rocket_http v0.5.0-rc.1
+   Compiling rocket_codegen v0.5.0-rc.1
+   Compiling rocket v0.5.0-rc.1
+   Compiling shuttle-service v0.2.5
+   Compiling url-shortener v0.1.0 (/opt/unveil/crates/s-2)
+    Finished dev [unoptimized + debuginfo] target(s) in 1m 01s
+        Project:            url-shortener
+        Deployment Id:      3d08ac34-ad63-41c1-836b-99afdc90af9f
+        Deployment Status:  DEPLOYED
+        Host:               url-shortener.shuttleapp.rs
+        Created At:         2022-04-01 08:32:34.412602556 UTC
+        Database URI:       postgres://***:***@pg.shuttle.rs/db-url-shortener
+❯
+`.trim()
+
+const USING_SQLX = `
+use rocket::{get, routes, State};
+use sqlx::PgPool;
+struct MyState(PgPool);
+#[get("/hello")]
+fn hello(state: &State<MyState>) -> &'static str {
+    // Do things with \`state.0\`...
+    "Hello, Postgres!"
+}
+#[shuttle_service::main]
+async fn rocket(
+    #[shared::Postgres] pool: PgPool
+) -> shuttle_service::ShuttleRocket {
+    let state = MyState(pool);
+    Ok(
+        rocket::build()
+            .manage(state)
+            .mount("/", routes![hello])
+    )
+}
+`.trim()
