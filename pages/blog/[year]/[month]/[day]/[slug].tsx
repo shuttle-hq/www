@@ -131,7 +131,7 @@ const Pre = ({ children, ...props }: any) => {
 			<pre
 				{...props}
 				className={clsx(
-					'!border !border-black/10 !pr-16 text-[#525151] dark:!border-white/10 dark:text-[#7A7A7A]',
+					'!border !border-black/10 !bg-white !pr-16 !text-sm text-[#525151] dark:!border-white/10 dark:!bg-black dark:text-[#7A7A7A] [&>*]:!bg-white dark:[&>*]:!bg-black',
 					props.className ?? 'language-'
 				)}
 			>
