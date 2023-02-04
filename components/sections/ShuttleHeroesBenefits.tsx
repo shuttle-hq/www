@@ -13,12 +13,12 @@ const ShuttleHeroesBenefits = () => {
 			</p>
 
 			<div className='mt-16 grid w-full gap-5 lg:grid-cols-2 desktop:grid-cols-3 desktop:grid-rows-2'>
-				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-[#C2C2C2] dark:bg-black dark:text-white sm:p-8 sm:pb-12'>
+				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-[#C2C2C2] dark:bg-black dark:text-white sm:p-8 sm:pb-12 desktop:justify-end'>
 					<Image
 						src='/images/sections/shuttle-heroes-benefits/bg-1.png'
 						alt='top left bg'
 						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain'
 					/>
 					<Image
 						src='/images/sections/shuttle-heroes-benefits/stars-1.png'
@@ -30,12 +30,13 @@ const ShuttleHeroesBenefits = () => {
 					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>shuttle swag</h3>
 					<p className='text-[#FFFFFF8F]'>Latest and greatest shuttle swag</p>
 				</div>
+
 				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-[#C2C2C2] dark:bg-black dark:text-white sm:p-8 sm:pb-12'>
 					<Image
 						src='/images/sections/shuttle-heroes-benefits/bg-2.png'
 						alt='top left bg'
 						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain'
 					/>
 					<Image
 						src='/images/sections/shuttle-heroes-benefits/stars-2.png'
@@ -52,7 +53,7 @@ const ShuttleHeroesBenefits = () => {
 						src='/images/sections/shuttle-heroes-benefits/bg-3.png'
 						alt='top left bg'
 						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain'
 					/>
 					<Image
 						src='/images/sections/shuttle-heroes-benefits/stars-3.png'
@@ -69,7 +70,7 @@ const ShuttleHeroesBenefits = () => {
 						src='/images/sections/shuttle-heroes-benefits/bg-4.png'
 						alt='top left bg'
 						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain'
 					/>
 					<Image
 						src='/images/sections/shuttle-heroes-benefits/stars-4.png'
@@ -86,7 +87,7 @@ const ShuttleHeroesBenefits = () => {
 						src='/images/sections/shuttle-heroes-benefits/bg-5.png'
 						alt='top left bg'
 						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain'
 					/>
 					<Image
 						src='/images/sections/shuttle-heroes-benefits/stars-5.png'
@@ -103,7 +104,7 @@ const ShuttleHeroesBenefits = () => {
 						src='/images/sections/shuttle-heroes-benefits/bg-6.png'
 						alt='top left bg'
 						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain'
 					/>
 					<Image
 						src='/images/sections/shuttle-heroes-benefits/stars-6.png'

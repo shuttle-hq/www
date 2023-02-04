@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 const Features = () => {
 	return (
-		<div className='mt-28 px-5 sm:mt-32 sm:px-10 lg:mt-36 desktop:mt-40'>
+		<div className='mt-28 px-5 sm:mt-32 sm:px-10 lg:mt-36 desktop:mt-40' id='features'>
 			<div className='mx-auto w-full max-w-[1100px] desktop:grid desktop:grid-cols-[700px_auto] desktop:gap-5'>
 				<div className='max-w-[700px] desktop:py-10'>
 					<h2 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-[3.5rem]'>

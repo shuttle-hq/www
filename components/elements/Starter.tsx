@@ -56,10 +56,12 @@ const Starter: FC<StarterProps> = ({
 								Post
 							</Link>
 						</span>
-						<Button variant='primary'>Deploy</Button>
+						<Button variant='primary' href={deployLink}>
+							Deploy
+						</Button>
 					</div>
 				) : (
-					<Link href='#' className='group mt-3 inline-flex items-center text-[#C2C2C2]'>
+					<Link href='/starters' className='group mt-3 inline-flex items-center text-[#C2C2C2]'>
 						View all
 						{/* Right Arrow */}
 						<svg

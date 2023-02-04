@@ -40,7 +40,6 @@ export default function PricingPage() {
 						answer: "A simple cargo command packages up your application, ships it to the shuttle build cluster where it's incrementally compiled and automatically served on a unique subdomain.",
 					},
 				]}
-				hideDiscord
 			/>
 			<CallToAction />
 		</>
