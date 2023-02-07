@@ -119,7 +119,7 @@ const Testimonials = () => {
 								</div>
 							</div>
 							<p className='mt-5 text-[#C2C2C2]'>
-								Deployed my second service with shuttle and I really like it! It's fast and
+								Deployed my second service with shuttle and I really like it! It&apos;s fast and
 								integrates well with cargo, so I can focus on the Rust code instead of the
 								deployment. Well done!
 							</p>
