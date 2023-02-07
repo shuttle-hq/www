@@ -10,7 +10,7 @@ const Pricing = () => {
 
 	return (
 		<div className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
-			<div className='flex items-center justify-center gap-5 text-xl'>
+			{/* <div className='flex items-center justify-center gap-5 text-xl'>
 				<div
 					className={clsx(
 						selectedPricing === 'monthly' ? 'text-black dark:text-[#C2C2C2]' : 'text-[#7A7A7A]'
@@ -32,8 +32,8 @@ const Pricing = () => {
 						-10%
 					</sup>
 				</div>
-			</div>
-			<div className='mt-14 grid gap-5 lg:grid-cols-3'>
+			</div> */}
+			<div className='mt-14 grid gap-5 lg:grid-cols-2'>
 				<div className='group relative z-10 flex flex-col items-start gap-8 overflow-hidden rounded-[2rem] bg-[#13292C] p-5 dark:bg-black sm:p-8'>
 					<Image
 						src='/images/sections/pricing/hobby/bg.png'
@@ -67,7 +67,7 @@ const Pricing = () => {
 					</div>
 					<Button variant='primary'>Get started for free</Button>
 				</div>
-				<div className='group relative z-10 flex flex-col items-start gap-8 overflow-hidden rounded-[2rem] bg-[#13292C] p-5 shadow-[0px_0px_64px_rgba(252,84,12,0.25)] dark:bg-black sm:p-8'>
+				{/* <div className='group relative z-10 flex flex-col items-start gap-8 overflow-hidden rounded-[2rem] bg-[#13292C] p-5 shadow-[0px_0px_64px_rgba(252,84,12,0.25)] dark:bg-black sm:p-8'>
 					<Image
 						src='/images/sections/pricing/starter/bg.png'
 						alt='background'
@@ -99,7 +99,7 @@ const Pricing = () => {
 						<p className='mt-1 text-sm text-[#C2C2C2]'>user / month</p>
 					</div>
 					<Button variant='primary'>Get started for free</Button>
-				</div>
+				</div> */}
 				<div className='group relative z-10 flex flex-col items-start gap-8 overflow-hidden rounded-[2rem] bg-[#13292C] p-5 dark:bg-black sm:p-8'>
 					<Image
 						src='/images/sections/pricing/pro/bg.png'
@@ -142,7 +142,7 @@ const Pricing = () => {
 					{/* Mobile */}
 					<Splide
 						onMove={(splide, index) => {
-							setSelectedMobilePlan(index === 0 ? 'hobby' : index === 1 ? 'starter' : 'pro')
+							setSelectedMobilePlan(index === 0 ? 'hobby' : 'pro')
 						}}
 						options={{
 							perPage: 3,
@@ -168,7 +168,7 @@ const Pricing = () => {
 						>
 							Hobby
 						</SplideSlide>
-						<SplideSlide
+						{/* <SplideSlide
 							className={clsx(
 								selectedMobilePlan === 'starter'
 									? 'text-gradient bg-clip-text text-4.5 text-transparent'
@@ -177,7 +177,7 @@ const Pricing = () => {
 							)}
 						>
 							Starter
-						</SplideSlide>
+						</SplideSlide> */}
 						<SplideSlide
 							className={clsx(
 								selectedMobilePlan === 'pro'
@@ -206,7 +206,7 @@ const Pricing = () => {
 								</Button>
 							}
 						/>
-						<MobilePlanFeatures
+						{/* <MobilePlanFeatures
 							visible={selectedMobilePlan === 'starter'}
 							teamSize='5'
 							deployment='unlimited'
@@ -223,7 +223,7 @@ const Pricing = () => {
 									Get started
 								</Button>
 							}
-						/>
+						/> */}
 						<MobilePlanFeatures
 							visible={selectedMobilePlan === 'pro'}
 							teamSize='custom'
@@ -241,69 +241,69 @@ const Pricing = () => {
 					</div>
 					{/* Desktop */}
 					<div className='hidden divide-y divide-black/10 text-xl dark:divide-white/10 lg:block'>
-						<div className='grid grid-cols-4 py-[0.875rem]'>
+						<div className='grid grid-cols-3 py-[0.875rem]'>
 							<div className='font-gradual font-bold'>Features</div>
 							<div className='text-center font-gradual text-2xl font-bold text-black dark:text-[#C2C2C2]'>
 								Hobby
 							</div>
-							<div className='text-center font-gradual text-2xl font-bold text-black dark:text-[#C2C2C2]'>
+							{/* <div className='text-center font-gradual text-2xl font-bold text-black dark:text-[#C2C2C2]'>
 								Starter
-							</div>
+							</div> */}
 							<div className='text-center font-gradual text-2xl font-bold text-black dark:text-[#C2C2C2] '>
 								Pro
 							</div>
 						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
+						<div className='grid grid-cols-3 items-center py-2 text-center'>
 							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>Team size</div>
 							<div>1</div>
-							<div>5</div>
+							{/* <div>5</div> */}
 							<div>custom</div>
 						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
+						<div className='grid grid-cols-3 items-center py-2 text-center'>
 							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>
 								Deployment
 							</div>
 							<div>unlimited</div>
-							<div>unlimited</div>
+							{/* <div>unlimited</div> */}
 							<div>unlimited</div>
 						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
+						<div className='grid grid-cols-3 items-center py-2 text-center'>
 							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>
 								Number of projects
 							</div>
 							<div>5</div>
-							<div>5</div>
+							{/* <div>5</div> */}
 							<div>unlimited</div>
 						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
+						<div className='grid grid-cols-3 items-center py-2 text-center'>
 							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>Requests</div>
 							<div>150k/month</div>
-							<div>300k/month</div>
+							{/* <div>300k/month</div> */}
 							<div>custom</div>
 						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
+						<div className='grid grid-cols-3 items-center py-2 text-center'>
 							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>Workers</div>
 							<div>1</div>
-							<div>5</div>
+							{/* <div>5</div> */}
 							<div>custom</div>
 						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
+						<div className='grid grid-cols-3 items-center py-2 text-center'>
 							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>
 								Database storage
 							</div>
 							<div>500MB</div>
-							<div>2TB</div>
+							{/* <div>2TB</div> */}
 							<div>custom</div>
 						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
+						<div className='grid grid-cols-3 items-center py-2 text-center'>
 							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>
 								Subdomains
 							</div>
 							<div>500MB</div>
-							<div>2TB</div>
+							{/* <div>2TB</div> */}
 							<div>custom</div>
 						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
+						<div className='grid grid-cols-3 items-center py-2 text-center'>
 							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>
 								Custom domains
 							</div>
@@ -323,21 +323,21 @@ const Pricing = () => {
 									/>
 								</svg>
 							</div>
-							<div>2</div>
+							{/* <div>2</div> */}
 							<div>custom</div>
 						</div>
 					</div>
 					<div className='mt-16 hidden divide-y divide-black/10 text-xl dark:divide-white/10 lg:block'>
-						<div className='mt-16 grid grid-cols-4 py-[0.875rem] lg:mt-0'>
+						<div className='mt-16 grid grid-cols-3 py-[0.875rem] lg:mt-0'>
 							<div className='font-gradual font-bold'>Support</div>
 						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
+						<div className='grid grid-cols-3 items-center py-2 text-center'>
 							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>Community</div>
 							<div>Discord</div>
-							<div>Discord</div>
+							{/* <div>Discord</div> */}
 							<div>Discord</div>
 						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
+						<div className='grid grid-cols-3 items-center py-2 text-center'>
 							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>
 								Request turnaround
 							</div>
@@ -357,21 +357,21 @@ const Pricing = () => {
 									/>
 								</svg>
 							</div>
-							<div>24h</div>
+							{/* <div>24h</div> */}
 							<div>8h</div>
 						</div>
-						<div className='grid grid-cols-4 items-center pt-11 text-center'>
+						<div className='grid grid-cols-3 items-center pt-11 text-center'>
 							<div />
 							<div>
 								<Button variant='primary' className='mx-auto bg-[#D8D8D8]'>
 									Get started for free
 								</Button>
 							</div>
-							<div>
+							{/* <div>
 								<Button variant='primary' className='mx-auto bg-[#D8D8D8]'>
 									Get started
 								</Button>
-							</div>
+							</div> */}
 							<div>
 								<Button variant='secondary' className='mx-auto'>
 									Contact us
