@@ -3,7 +3,7 @@ import { serialize } from 'next-mdx-remote/serialize'
 import { NextSeo } from 'next-seo'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React from 'react'
+import { useMemo } from 'react'
 import { generateReadingTime } from 'lib/helpers'
 import { getAllPostSlugs, getPostData, getSortedPosts, Post } from 'lib/blog/posts'
 import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote'
@@ -22,11 +22,6 @@ import { BlogHeader, BlogPrevNext, BlogSidebar, CallToAction } from 'components/
 import { LinkedInLogo, Logo, TwitterLogo } from 'components/svgs'
 import { CopyButton } from 'components/elements'
 import { TwitterTweetEmbed } from 'react-twitter-embed'
-
-import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter'
-import rust from 'react-syntax-highlighter/dist/cjs/languages/prism/rust'
-import oneDark from 'react-syntax-highlighter/dist/cjs/styles/prism/one-dark'
-import CodeBlock from 'components/elements/CodeBlock'
 
 export async function getStaticPaths() {
 	const paths = getAllPostSlugs()
@@ -112,7 +107,7 @@ export async function getStaticProps({
 const Pre = ({ children, ...props }: any) => {
 	let line = 1
 
-	const code = React.useMemo(() => {
+	const code = useMemo(() => {
 		return [children.props.children]
 			.flat()
 			.flatMap((child) => {
@@ -212,14 +207,19 @@ const mdxComponents: MDXRemoteProps['components'] = {
 	},
 	CaptionedImage: (props: any) => {
 		return (
-			<div className='grid grid-cols-1 justify-items-center'>
-				<img src={props.src} alt={props.src} className='overflow-hidden rounded-2xl'></img>
+			<div className='relative grid w-full grid-cols-1 justify-items-center'>
+				<Image
+					src={props.src}
+					alt={props.alt}
+					width={1}
+					height={1}
+					className='overflow-hidden rounded-2xl object-contain'
+				></Image>
 				<span className='-mt-6 text-sm text-[#828282] dark:text-gray-300'>{props.caption}</span>
 			</div>
 		)
 	},
 	blockquote(props) {
-		console.log(props)
 		return (
 			<blockquote className='border-none bg-[linear-gradient(180deg,_#FC540C_25.63%,_rgba(255,_215,_111,_0.72)_60.67%,_#38D4E9_88.15%)] pl-2 text-left text-2xl font-normal not-italic text-[#525151] dark:text-[#7A7A7A]'>
 				<div className='bg-[#E9E9E9] py-1 pl-8 prose-p:!my-0 dark:bg-black'>{props.children}</div>
@@ -280,10 +280,9 @@ export default function BlogPostPage(props: Props) {
 								<Image
 									src={'/images/blog/' + (props.blog.cover ?? props.blog.thumb)}
 									alt='Cover image'
-									width={1000}
-									height={1000}
-									objectFit='contain'
-									className='w-full rounded-[2rem]'
+									width={810}
+									height={424}
+									className='w-full rounded-[2rem] object-contain'
 								/>
 								{props.blog.caption && (
 									<span className='mt-2 text-center text-sm text-[#525151] dark:text-[#7A7A7A] dark:text-gray-300'>

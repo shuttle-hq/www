@@ -12,7 +12,7 @@ const Testimonials = () => {
 					height={1047}
 					className='absolute top-0 left-0 -z-10 aspect-[2/3] h-full w-full object-cover md:aspect-auto xl:hidden'
 				/>
-				<img
+				<Image
 					src='/images/sections/testimonials/bg.png'
 					alt='bg'
 					width={600}
@@ -99,9 +99,7 @@ const Testimonials = () => {
 									<p className='text-[#C2C2C2]'> Staff Software Engineer @ Uber</p>
 								</div>
 							</div>
-							<p className='mt-5 text-[#C2C2C2]'>
-								Game changer, what a great project.
-							</p>
+							<p className='mt-5 text-[#C2C2C2]'>Game changer, what a great project.</p>
 						</div>
 						<div className='rounded-[1.25rem] border border-white border-opacity-10 p-6 backdrop-blur-2xl'>
 							<div className='flex items-start gap-4'>
@@ -121,7 +119,9 @@ const Testimonials = () => {
 								</div>
 							</div>
 							<p className='mt-5 text-[#C2C2C2]'>
-							Deployed my second service with shuttle and I really like it! It's fast and integrates well with cargo, so I can focus on the Rust code instead of the deployment. Well done!
+								Deployed my second service with shuttle and I really like it! It's fast and
+								integrates well with cargo, so I can focus on the Rust code instead of the
+								deployment. Well done!
 							</p>
 						</div>
 					</div>
@@ -144,7 +144,9 @@ const Testimonials = () => {
 								</div>
 							</div>
 							<p className='mt-5 text-[#C2C2C2]'>
-							Shuttle is hands down the best way to deploy a rust app quickly, safely, with the ability to scale. It has a variety of frameworks supported, and the community surrounding it is incredible. Heroku for Rust but better!
+								Shuttle is hands down the best way to deploy a rust app quickly, safely, with the
+								ability to scale. It has a variety of frameworks supported, and the community
+								surrounding it is incredible. Heroku for Rust but better!
 							</p>
 						</div>
 						<div className='rounded-[1.25rem] border border-white border-opacity-10 p-6 backdrop-blur-2xl'>
