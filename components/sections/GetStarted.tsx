@@ -5,10 +5,18 @@ import clsx from 'clsx'
 import Link from 'next/link'
 import { Copy } from 'components/svgs'
 import { CodeBlock } from 'components/elements'
+import { useIntersection } from 'react-use'
 
 const GetStarted = () => {
 	const [selectedSlide, setSelectedSlide] = useState(0)
 	const [locked, setLocked] = useState(false)
+
+	const intersectionRef = useRef(null)
+	const intersection = useIntersection(intersectionRef, {
+		root: null,
+		rootMargin: '0px',
+		threshold: 1,
+	})
 
 	const handleClick = (id: number, lock?: boolean) => {
 		// If the user is already locked on a slide, don't allow them to change slides by hovering (when lock is undefined)
@@ -21,11 +29,12 @@ const GetStarted = () => {
 
 	useEffect(() => {
 		const interval = setInterval(() => {
-			if (!locked) setSelectedSlide((selectedSlide) => (selectedSlide === 2 ? 0 : selectedSlide + 1))
+			if (!locked && (intersection?.intersectionRatio || 0) === 1)
+				setSelectedSlide((selectedSlide) => (selectedSlide === 2 ? 0 : selectedSlide + 1))
 		}, 5000)
 
 		return () => clearInterval(interval)
-	}, [locked])
+	}, [locked, intersection])
 
 	return (
 		<>
@@ -41,6 +50,7 @@ const GetStarted = () => {
 			<div
 				className='mx-auto mt-10 w-full max-w-7xl gap-x-6 px-5 sm:px-10 lg:mt-16 lg:grid lg:grid-cols-[1fr_400px] lg:gap-5 xl:mt-20 xl:items-center xl:gap-12'
 				onMouseLeave={() => setLocked(false)}
+				ref={intersectionRef}
 			>
 				<div className='group relative z-10 block h-full items-end overflow-hidden rounded-2xl bg-[#13292C] px-8 pt-16 dark:bg-black sm:mt-10 sm:items-center sm:px-4 sm:px-12 sm:py-24 lg:mt-0 lg:items-end lg:items-center lg:px-8 lg:py-12 xl:flex xl:p-[4.375rem] desktop:items-end desktop:pt-[2.75rem] desktop:pb-0'>
 					<CodeBlock
