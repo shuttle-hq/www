@@ -4,7 +4,7 @@ import { FC } from 'react'
 
 const JobOpenings = () => {
 	return (
-		<div className='mx-auto mt-8 w-full max-w-7xl sm:mt-16 sm:px-10 lg:mt-32'>
+		<div className='mx-auto mt-8 w-full max-w-7xl sm:mt-16 sm:px-10 lg:mt-32' id='careers'>
 			<div className='group relative z-10 overflow-hidden rounded-[2rem]'>
 				<span className='pointer-events-none'>
 					<Image

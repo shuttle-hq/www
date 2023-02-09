@@ -19,26 +19,20 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 					<div className='grid grid-cols-2 divide-x divide-black/10 text-xl dark:divide-white/10'>
 						<div className='flex flex-col gap-3 px-8 pt-16 pb-8 lg:p-16'>
 							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Shuttle</h3>
-							<a
-								href='#features'
+							<Link
+								href='/'
 								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
 							>
 								Features
-							</a>
+							</Link>
 							<Link
 								href='/starters'
 								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
 							>
-								Examples
+								Starters
 							</Link>
 							<Link
-								href='/'
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								Code Snippets
-							</Link>
-							<Link
-								href='/'
+								href='https://github.com/orgs/shuttle-hq/projects/4'
 								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
 							>
 								Roadmap
@@ -53,7 +47,8 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 								About
 							</Link>
 							<Link
-								href='/'
+								href='/about#careers'
+								scroll={false}
 								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
 							>
 								Careers
@@ -70,7 +65,7 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 								Docs
 							</Link>
 							<Link
-								href='/'
+								href='https://docs.shuttle.rs/examples/axum'
 								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
 							>
 								Guides
