@@ -18,7 +18,7 @@ export default function StartersPage() {
 				<div className='mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4'>
 					<Starter
 						icon={<Paperclip className='mb-auto' />}
-						title='Url shortener'
+						title='Build a Discord bot'
 						description='Custom functionality for Discord server using a bot written in Rust.'
 						bg='/images/sections/featured-starters/3-bg.png'
 						bgClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover'
@@ -26,9 +26,45 @@ export default function StartersPage() {
 						starsClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
 						stars2='/images/sections/featured-starters/3-stars-2.png'
 						stars2ClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
-						deployLink='#'
+						deployLink='https://www.shuttle.rs/blog/2022/09/14/serentity-discord-bot'
 					/>
 					<Starter
+						icon={<Paperclip className='mb-auto' />}
+						title='URL Shortener'
+						description='Get a shuttle relational database and build a URL shortener service.'
+						bg='/images/sections/featured-starters/3-bg.png'
+						bgClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover'
+						stars='/images/sections/featured-starters/3-stars.png'
+						starsClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
+						stars2='/images/sections/featured-starters/3-stars-2.png'
+						stars2ClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
+						deployLink='https://github.com/shuttle-hq/examples/tree/main/rocket/url-shortener'
+					/>
+					<Starter
+						icon={<Paperclip className='mb-auto' />}
+						title='Deploy a full-stack app with JS & Rust'
+						description='Build a React SPA with a backend and deploy it to Shuttle.'
+						bg='/images/sections/featured-starters/3-bg.png'
+						bgClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover'
+						stars='/images/sections/featured-starters/3-stars.png'
+						starsClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
+						stars2='/images/sections/featured-starters/3-stars-2.png'
+						stars2ClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
+						deployLink='https://joshmo.hashnode.dev/deploying-a-nextjs-front-end-with-a-rust-api-in-one-go'
+					/>
+					<Starter
+						icon={<Paperclip className='mb-auto' />}
+						title='Calendar'
+						description='Build a CLI tool for scheduling events.'
+						bg='/images/sections/featured-starters/3-bg.png'
+						bgClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover'
+						stars='/images/sections/featured-starters/3-stars.png'
+						starsClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
+						stars2='/images/sections/featured-starters/3-stars-2.png'
+						stars2ClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
+						deployLink='https://endler.dev/2022/zerocal/'
+					/>
+					{/* <Starter
 						icon={<Paperclip className='mb-auto' />}
 						title='Url shortener'
 						description='Custom functionality for Discord server using a bot written in Rust.'
@@ -75,43 +111,7 @@ export default function StartersPage() {
 						stars2='/images/sections/featured-starters/3-stars-2.png'
 						stars2ClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
 						deployLink='#'
-					/>
-					<Starter
-						icon={<Paperclip className='mb-auto' />}
-						title='Url shortener'
-						description='Custom functionality for Discord server using a bot written in Rust.'
-						bg='/images/sections/featured-starters/3-bg.png'
-						bgClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover'
-						stars='/images/sections/featured-starters/3-stars.png'
-						starsClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
-						stars2='/images/sections/featured-starters/3-stars-2.png'
-						stars2ClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
-						deployLink='#'
-					/>
-					<Starter
-						icon={<Paperclip className='mb-auto' />}
-						title='Url shortener'
-						description='Custom functionality for Discord server using a bot written in Rust.'
-						bg='/images/sections/featured-starters/3-bg.png'
-						bgClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover'
-						stars='/images/sections/featured-starters/3-stars.png'
-						starsClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
-						stars2='/images/sections/featured-starters/3-stars-2.png'
-						stars2ClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
-						deployLink='#'
-					/>
-					<Starter
-						icon={<Paperclip className='mb-auto' />}
-						title='Url shortener'
-						description='Custom functionality for Discord server using a bot written in Rust.'
-						bg='/images/sections/featured-starters/3-bg.png'
-						bgClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover'
-						stars='/images/sections/featured-starters/3-stars.png'
-						starsClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
-						stars2='/images/sections/featured-starters/3-stars-2.png'
-						stars2ClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
-						deployLink='#'
-					/>
+					/> */}
 				</div>
 			</div>
 
