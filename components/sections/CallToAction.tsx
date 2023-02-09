@@ -59,13 +59,25 @@ const CallToAction = () => {
 						Become a part of shuttle heroes program!
 					</p>
 					<div className='mt-10 flex flex-wrap items-center gap-4 lg:mt-12 xl:mt-16'>
-						<Button variant='primary' className='px-6 py-3 sm:py-3.5 sm:px-8 sm:text-lg'>
+						<Button
+							href='https://github.com/shuttle-hq/shuttle'
+							variant='primary'
+							className='px-6 py-3 sm:py-3.5 sm:px-8 sm:text-lg'
+						>
 							Github
 						</Button>
-						<Button variant='secondary' className='px-6 py-3 sm:py-3.5 sm:px-8 sm:text-lg'>
+						<Button
+							href='https://discord.gg/shuttle'
+							variant='secondary'
+							className='px-6 py-3 sm:py-3.5 sm:px-8 sm:text-lg'
+						>
 							Discord
 						</Button>
-						<Button variant='secondary' className='px-6 py-3 sm:py-3.5 sm:px-8 sm:text-lg'>
+						<Button
+							href='https://twitter.com/shuttle_dev'
+							variant='secondary'
+							className='px-6 py-3 sm:py-3.5 sm:px-8 sm:text-lg'
+						>
 							Twitter
 						</Button>
 					</div>
