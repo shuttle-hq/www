@@ -7,16 +7,19 @@ const ShuttleHeroesHero = () => {
 			<header className='md:grid md:grid-cols-2 md:items-center lg:grid-cols-[1.2fr_1fr] lg:gap-8'>
 				<div>
 					<h1 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-6.5'>
-						<span className='text-gradient block bg-clip-text text-transparent'>
-							Join shuttle heroes
-						</span>
-						program
+						<span className='text-gradient block bg-clip-text text-transparent'>Join our Heroes</span>
+						program!
 					</h1>
 					<p className='mt-4 sm:text-xl lg:text-2xl'>
-						Let&apos;s build the future of backend development together
+						Our program acknowledges developers who have made exceptional contributions to shuttle.
 					</p>
 					<div className='mt-5 flex flex-wrap items-center gap-5 sm:mt-10 lg:mt-12 xl:mt-16'>
-						<Button variant='primary' invertOnDark className='bg-[#13292C] text-white'>
+						<Button
+							variant='primary'
+							invertOnDark
+							className='bg-[#13292C] text-white'
+							href='https://btl1d1x5z23.typeform.com/to/WAu53vBi'
+						>
 							Become a shuttle hero
 						</Button>
 					</div>
