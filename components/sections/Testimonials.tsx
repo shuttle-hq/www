@@ -86,7 +86,7 @@ const Testimonials = () => {
 							<div className='flex items-start gap-4'>
 								<div className='h-[3.125rem] w-[3.125rem] flex-shrink-0 rounded-full bg-gradient-to-r from-[#FC540C] via-[#4E452F] to-[#38D4E9] p-px'>
 									<Image
-										src='/images/sections/user.jpg'
+										src='/images/sections/testimonials/dominykas.jpg'
 										alt='profile picture'
 										width={40}
 										height={40}
@@ -105,7 +105,7 @@ const Testimonials = () => {
 							<div className='flex items-start gap-4'>
 								<div className='h-[3.125rem] w-[3.125rem] flex-shrink-0 rounded-full bg-gradient-to-r from-[#FC540C] via-[#4E452F] to-[#38D4E9] p-px'>
 									<Image
-										src='/images/sections/user.jpg'
+										src='/images/sections/testimonials/matthias.jpg'
 										alt='profile picture'
 										width={40}
 										height={40}
@@ -119,7 +119,7 @@ const Testimonials = () => {
 								</div>
 							</div>
 							<p className='mt-5 text-[#C2C2C2]'>
-								Deployed my second service with shuttle and I really like it! It&apos;s fast and
+								Deployed my second service with shuttle and I really like it! It's fast and
 								integrates well with cargo, so I can focus on the Rust code instead of the
 								deployment. Well done!
 							</p>
@@ -130,7 +130,7 @@ const Testimonials = () => {
 							<div className='flex items-start gap-4'>
 								<div className='h-[3.125rem] w-[3.125rem] flex-shrink-0 rounded-full bg-gradient-to-r from-[#FC540C] via-[#4E452F] to-[#38D4E9] p-px'>
 									<Image
-										src='/images/sections/user.jpg'
+										src='/images/sections/testimonials/peter.jpeg'
 										alt='profile picture'
 										width={40}
 										height={40}
@@ -153,7 +153,7 @@ const Testimonials = () => {
 							<div className='flex items-start gap-4'>
 								<div className='h-[3.125rem] w-[3.125rem] flex-shrink-0 rounded-full bg-gradient-to-r from-[#FC540C] via-[#4E452F] to-[#38D4E9] p-px'>
 									<Image
-										src='/images/sections/user.jpg'
+										src='/images/sections/testimonials/stefan.jpeg'
 										alt='profile picture'
 										width={40}
 										height={40}
@@ -161,17 +161,17 @@ const Testimonials = () => {
 									/>
 								</div>
 								<div>
-									<h3 className='font-gradual font-bold text-white'>John C.</h3>
-									<p className='text-[#C2C2C2]'>@johnny</p>
+									<h3 className='font-gradual font-bold text-white'>Stefan Baumgartner</h3>
+									<p className='text-[#C2C2C2]'>@ddprrt</p>
+									<p className='text-[#C2C2C2]'>
+										Owner oida.dev | Architect @ Dynatrace | Rust Linz
+									</p>
 								</div>
 							</div>
 							<p className='mt-5 text-[#C2C2C2]'>
-								You’ve created a really opening and welcoming community - I feel like it’s a
-								complex project I can actually contribute to.
-								<br />
-								<br />
-								You’ve created a really opening and welcoming community You’ve created a really
-								opening and welcoming community
+								You soon realize Shuttle is much more than just a host for your app. It's your Rust
+								framework for the cloud; Infrastructure as Crates! This puts Shuttle in front of
+								everything else I've tried. I couldn't be more happier!
 							</p>
 						</div>
 					</div>
@@ -180,7 +180,7 @@ const Testimonials = () => {
 							<div className='flex items-start gap-4'>
 								<div className='h-[3.125rem] w-[3.125rem] flex-shrink-0 rounded-full bg-gradient-to-r from-[#FC540C] via-[#4E452F] to-[#38D4E9] p-px'>
 									<Image
-										src='/images/sections/user.jpg'
+										src='/images/sections/testimonials/roberto.jpg'
 										alt='profile picture'
 										width={40}
 										height={40}
@@ -188,13 +188,14 @@ const Testimonials = () => {
 									/>
 								</div>
 								<div>
-									<h3 className='font-gradual font-bold text-white'>John C.</h3>
-									<p className='text-[#C2C2C2]'>@johnny</p>
+									<h3 className='font-gradual font-bold text-white'>Roberto Huertas</h3>
+									<p className='text-[#C2C2C2]'>@robertohuertasm</p>
+									<p className='text-[#C2C2C2]'>Software Engineer @ Datadog</p>
 								</div>
 							</div>
 							<p className='mt-5 text-[#C2C2C2]'>
-								You’ve created a really opening and welcoming community - I feel like it’s a
-								complex project I can actually contribute to
+								Mind-blowing! What a huge addition to the Rust ecosystem! I'm sure this will be a
+								driveway to get more people into Rust.
 							</p>
 						</div>
 						<div className='rounded-[1.25rem] border border-white border-opacity-10 p-6 backdrop-blur-2xl'>
@@ -209,12 +210,14 @@ const Testimonials = () => {
 									/>
 								</div>
 								<div>
-									<h3 className='font-gradual font-bold text-white'>John C.</h3>
-									<p className='text-[#C2C2C2]'>@johnny</p>
+									<h3 className='font-gradual font-bold text-white'>Deep</h3>
+									<p className='text-[#C2C2C2]'>@deepg</p>
+									<p className='text-[#C2C2C2]'>Rust Software Engineer</p>
 								</div>
 							</div>
 							<p className='mt-5 text-[#C2C2C2]'>
-								You’ve created a really opening and welcoming community - I feel like it’s a
+								I tried migrating my project from heroku to shuttle and it works perfectly! Looking
+								forward to more of it
 							</p>
 						</div>
 					</div>
