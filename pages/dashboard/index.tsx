@@ -19,6 +19,7 @@ export default function DashboardHome() {
 					<Step
 						number='1'
 						title='Install'
+						description='Run this command to install shuttle'
 						backgroundImage='/images/pages/dashboard/card-1.png'
 						gradientClassName='from-[#FC540C] to-[#C39348]'
 						command='cargo install cargo-shuttle'
@@ -27,33 +28,37 @@ export default function DashboardHome() {
 					<Step
 						number='2'
 						title='Log in'
+						description='Run this command to start the login process'
 						backgroundImage='/images/pages/dashboard/card-2.png'
 						gradientClassName='from-[#FC540C] to-[#C39348]'
-						command='cargo install cargo-shuttle'
+						command='cargo shuttle login'
 						className='row-start-2 lg:col-span-4 lg:col-start-3'
 					/>
 					<Step
 						number='3'
-						title='Initialize'
+						title='Authenticate'
+						description='Run this command to authenticate'
 						backgroundImage='/images/pages/dashboard/card-3.png'
 						gradientClassName='from-[#FC540C] to-[#C39348]'
-						command='cargo install cargo-shuttle'
+						command='cargo install login {key}'
 						className='row-start-3 lg:col-span-4 lg:col-start-5'
 					/>
 					<Step
 						number='4'
-						title='Create project'
+						title='Initalize'
+						description='Run this command to initialize your project'
 						backgroundImage='/images/pages/dashboard/card-4.png'
 						gradientClassName='from-[#FC540C] to-[#C39348]'
-						command='cargo install cargo-shuttle'
+						command='cargo shuttle init'
 						className='row-start-4 lg:col-span-4 lg:col-start-7'
 					/>
 					<Step
 						number='5'
 						title='Deploy'
+						description='Run this command to deploy your project 🥳'
 						backgroundImage='/images/pages/dashboard/card-5.png'
 						gradientClassName='from-[#FC540C] to-[#C39348]'
-						command='cargo install cargo-shuttle'
+						command='cargo shuttle deploy'
 						className='row-start-5 lg:col-span-4 lg:col-start-9'
 					/>
 				</div>
@@ -68,11 +73,20 @@ interface StepProps {
 	gradientClassName: string
 	backgroundImage: string
 	title: string
+	description: string
 	command?: string
 	className: string
 }
 
-const Step: FC<StepProps> = ({ number, backgroundImage, gradientClassName, title, command, className }) => {
+const Step: FC<StepProps> = ({
+	number,
+	backgroundImage,
+	gradientClassName,
+	title,
+	description,
+	command,
+	className,
+}) => {
 	return (
 		<div
 			className={clsx(
@@ -87,7 +101,7 @@ const Step: FC<StepProps> = ({ number, backgroundImage, gradientClassName, title
 				</span>
 				&nbsp;{title}
 			</h3>
-			<p className='mt-2'>Run this command to install shuttle</p>
+			<p className='mt-2'>{description}</p>
 
 			<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
 				$ {command}
