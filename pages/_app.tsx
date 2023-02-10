@@ -81,6 +81,8 @@ export default function App({ Component, pageProps }: AppProps) {
 				{getLayout(<Component {...pageProps} />)}
 				<CookieConsent
 					style={{
+						// Hidden until restyle
+						display: 'none',
 						justifyContent: 'center',
 					}}
 					enableDeclineButton={true}
