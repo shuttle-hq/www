@@ -186,9 +186,7 @@ const Features = () => {
 						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain transition-transform duration-1000 group-hover:-translate-x-10 group-hover:-translate-y-1'
 					/>
 					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Forever-free tier</h3>
-					<p>
-						Unlike Heroku, we’re open source and we have a free tier that will stay that way forever.
-					</p>
+					<p>Unlimited access to essential features, no strings attached.</p>
 					<Free />
 				</div>
 			</div>
