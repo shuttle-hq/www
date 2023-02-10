@@ -1,6 +1,6 @@
 import { Starter } from 'components/elements'
 import { CallToAction } from 'components/sections'
-import { Paperclip } from 'components/svgs'
+import { Calendar, Discord, Paperclip, React } from 'components/svgs'
 
 export default function StartersPage() {
 	return (
@@ -17,7 +17,7 @@ export default function StartersPage() {
 				</header>
 				<div className='mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4'>
 					<Starter
-						icon={<Paperclip className='mb-auto' />}
+						icon={<Discord className='mb-auto' />}
 						title='Build a Discord bot'
 						description='Custom functionality for Discord server using a bot written in Rust.'
 						bg='/images/sections/featured-starters/3-bg.png'
@@ -41,7 +41,7 @@ export default function StartersPage() {
 						deployLink='https://github.com/shuttle-hq/examples/tree/main/rocket/url-shortener'
 					/>
 					<Starter
-						icon={<Paperclip className='mb-auto' />}
+						icon={<React className='mb-auto' />}
 						title='Deploy a full-stack app with JS & Rust'
 						description='Build a React SPA with a backend and deploy it to Shuttle.'
 						bg='/images/sections/featured-starters/3-bg.png'
@@ -53,7 +53,7 @@ export default function StartersPage() {
 						deployLink='https://joshmo.hashnode.dev/deploying-a-nextjs-front-end-with-a-rust-api-in-one-go'
 					/>
 					<Starter
-						icon={<Paperclip className='mb-auto' />}
+						icon={<Calendar className='mb-auto' />}
 						title='Calendar'
 						description='Build a CLI tool for scheduling events.'
 						bg='/images/sections/featured-starters/3-bg.png'
