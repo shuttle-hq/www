@@ -18,13 +18,13 @@ const ShuttleHeroesBenefits = () => {
 						src='/images/sections/shuttle-heroes-benefits/bg-1.png'
 						alt='top left bg'
 						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover'
 					/>
 					<Image
 						src='/images/sections/shuttle-heroes-benefits/stars-1.png'
 						alt='top left stars'
 						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover'
 					/>
 					<SwagBenefit />
 					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>shuttle swag</h3>
@@ -36,13 +36,13 @@ const ShuttleHeroesBenefits = () => {
 						src='/images/sections/shuttle-heroes-benefits/bg-2.png'
 						alt='top left bg'
 						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover'
 					/>
 					<Image
 						src='/images/sections/shuttle-heroes-benefits/stars-2.png'
 						alt='top left stars'
 						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover'
 					/>
 					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Free tier for life</h3>
 					<p className='text-[#FFFFFF8F]'>A generous free tier for life</p>
@@ -53,13 +53,13 @@ const ShuttleHeroesBenefits = () => {
 						src='/images/sections/shuttle-heroes-benefits/bg-3.png'
 						alt='top left bg'
 						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover'
 					/>
 					<Image
 						src='/images/sections/shuttle-heroes-benefits/stars-3.png'
 						alt='top left stars'
 						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover'
 					/>
 					<HighPriorityBenefit />
 					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Priority access </h3>
@@ -70,13 +70,13 @@ const ShuttleHeroesBenefits = () => {
 						src='/images/sections/shuttle-heroes-benefits/bg-4.png'
 						alt='top left bg'
 						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover'
 					/>
 					<Image
 						src='/images/sections/shuttle-heroes-benefits/stars-4.png'
 						alt='top left stars'
 						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover'
 					/>
 					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Behind-the-scenes </h3>
 					<p className='text-[#FFFFFF8F]'>look at the ongoing development</p>
@@ -87,13 +87,13 @@ const ShuttleHeroesBenefits = () => {
 						src='/images/sections/shuttle-heroes-benefits/bg-5.png'
 						alt='top left bg'
 						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover'
 					/>
 					<Image
 						src='/images/sections/shuttle-heroes-benefits/stars-5.png'
 						alt='top left stars'
 						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover'
 					/>
 					<HeroBenefit />
 					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Heroes role</h3>
@@ -104,13 +104,13 @@ const ShuttleHeroesBenefits = () => {
 						src='/images/sections/shuttle-heroes-benefits/bg-6.png'
 						alt='top left bg'
 						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover'
 					/>
 					<Image
 						src='/images/sections/shuttle-heroes-benefits/stars-6.png'
 						alt='top left stars'
 						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover'
 					/>
 					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Paid program possibility</h3>
 					<p className='text-[#FFFFFF8F]'>Consideration for our paid open source program</p>
