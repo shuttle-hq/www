@@ -122,7 +122,7 @@ const Pricing = () => {
 					<div>
 						<h3 className='font-gradual text-[2rem] font-bold leading-none text-[#C2C2C2]'>Pro</h3>
 						<p className='mt-2 text-[#C2C2C2]'>
-							The perfect confluence of features to run your hobby-projects for free - forever.
+							We’re still test-driving shuttle Pro, so do get in touch if you’d like to get more usage or features than is included in the Hobby tier.
 						</p>
 					</div>
 					<div className='mt-auto'>

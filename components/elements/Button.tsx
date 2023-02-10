@@ -29,14 +29,14 @@ const Button: FC<ButtonProps> = ({ variant = 'none', invertOnDark, className, ch
 
 	if (href)
 		if (href.startsWith('/'))
-			return (
-				<Link href={href} className={classNames}>
+			children = (
+				<Link href={href}>
 					{children}
 				</Link>
 			)
 		else
-			return (
-				<a href={href} target='_blank' className={classNames}>
+			children = (
+				<a href={href} target='_blank' rel="noreferrer">
 					{children}
 				</a>
 			)

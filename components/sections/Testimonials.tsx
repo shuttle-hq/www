@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import {DISCORD_URL} from "../../lib/constants";
 
 const Testimonials = () => {
 	return (
@@ -74,8 +75,8 @@ const Testimonials = () => {
 					What the community says
 				</h2>
 				<p className='mt-3 text-xl text-white/40 sm:mt-5 lg:text-2xl'>
-					Join 2,000 developers using shuttle. Connect with them on&nbsp;
-					<Link href='#' className='underline'>
+					Join thousands of developers using shuttle. Connect with them on&nbsp;
+					<Link href={DISCORD_URL} className='underline'>
 						Discord
 					</Link>
 					.
@@ -171,7 +172,7 @@ const Testimonials = () => {
 							<p className='mt-5 text-[#C2C2C2]'>
 								You soon realize Shuttle is much more than just a host for your app. It's your Rust
 								framework for the cloud; Infrastructure as Crates! This puts Shuttle in front of
-								everything else I've tried. I couldn't be more happier!
+								everything else I've tried. I couldn't be more happy!
 							</p>
 						</div>
 					</div>

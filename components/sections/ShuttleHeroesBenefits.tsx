@@ -7,9 +7,8 @@ const ShuttleHeroesBenefits = () => {
 			<h2 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-[3.5rem]'>
 				Your benefits
 			</h2>
-			<p className='mt-5 text-xl text-[#525151] lg:text-2xl'>
-				This is not a paid position, but in exchange for contributing to shuttle, you will get access to
-				some great and exclusive rewards and perks.
+			<p className='mt-5 text-xl lg:text-2xl'>
+				As part of the deal, contributing to shuttle, will get you some amazing rewards and perks.
 			</p>
 
 			<div className='mt-16 grid w-full gap-5 lg:grid-cols-2 desktop:grid-cols-3 desktop:grid-rows-2'>
@@ -63,7 +62,7 @@ const ShuttleHeroesBenefits = () => {
 					/>
 					<HighPriorityBenefit />
 					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Priority access </h3>
-					<p className='text-[#FFFFFF8F]'>to future shuttle batches, workshops & bootcamps</p>
+					<p className='text-[#FFFFFF8F]'>Get the dibs on future shuttle batches, workshops & bootcamps</p>
 				</div>
 				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-[#C2C2C2] dark:bg-black dark:text-white sm:p-8 sm:pb-12'>
 					<Image
@@ -79,7 +78,7 @@ const ShuttleHeroesBenefits = () => {
 						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover'
 					/>
 					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Behind-the-scenes </h3>
-					<p className='text-[#FFFFFF8F]'>look at the ongoing development</p>
+					<p className='text-[#FFFFFF8F]'>Get an inside look at the ongoing developments</p>
 					<ViewBenefit />
 				</div>
 				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-[#C2C2C2] dark:bg-black dark:text-white sm:p-8 sm:pb-12'>
@@ -96,8 +95,8 @@ const ShuttleHeroesBenefits = () => {
 						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover'
 					/>
 					<HeroBenefit />
-					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Heroes role</h3>
-					<p className='text-[#FFFFFF8F]'>on discord (& access to special channels)</p>
+					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Discord Hero</h3>
+					<p className='text-[#FFFFFF8F]'>Get the Hero role on our Discord and access to special channels</p>
 				</div>
 				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-[#C2C2C2] dark:bg-black dark:text-white sm:p-8 sm:pb-12'>
 					<Image
@@ -112,8 +111,8 @@ const ShuttleHeroesBenefits = () => {
 						fill
 						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover'
 					/>
-					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Paid program possibility</h3>
-					<p className='text-[#FFFFFF8F]'>Consideration for our paid open source program</p>
+					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Become a paid contributor</h3>
+					<p className='text-[#FFFFFF8F]'>Get considered for our paid open source program</p>
 					<PaidBenefit />
 				</div>
 			</div>

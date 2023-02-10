@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import { Button } from 'components/elements'
 import Image from 'next/image'
 import { FC, useState } from 'react'
+import {DISCORD_URL} from "../../lib/constants";
 
 interface FrequentlyAskedQuestionsProps {
 	questions: { question: string; answer: string }[]
@@ -14,10 +15,9 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 	const updateActiveQuestion = (index: number) => {
 		if (activeQuestion === index) {
 			setActiveQuestion(null)
-			return
+		} else {
+			setActiveQuestion(index)
 		}
-
-		setActiveQuestion(index)
 	}
 
 	return (
@@ -96,7 +96,7 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 						<p className='mt-2 text-[#C2C2C2]'>
 							Join our Discord, we&apos;re happy to answer any questions!
 						</p>
-						<Button variant='primary' className='mt-8'>
+						<Button variant='primary' className='mt-8' href={DISCORD_URL}>
 							Join Discord
 						</Button>
 					</div>

@@ -164,7 +164,9 @@ const Features = () => {
 					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>
 						Build fast, redeploy instantly
 					</h3>
-					<p className='opacity-50'>Shuttle always uses the cache from previous builds to give you second-scale redeploys</p>
+					<p className='opacity-50'>
+						Shuttle always uses the cache from previous builds to give you lightning-speed redeploys.
+					</p>
 				</div>
 				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-[#C2C2C2] dark:bg-black dark:text-white sm:p-8 desktop:row-[span_3]'>
 					<Image

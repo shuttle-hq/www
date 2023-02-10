@@ -41,11 +41,8 @@ const TrustedBy = () => {
 				<div className='grid w-full gap-5 px-5 py-10 md:px-8 lg:grid-cols-[450px_1fr] lg:items-center lg:gap-12 lg:py-16 desktop:px-20'>
 					<div>
 						<h2 className='font-gradual text-4.5 font-bold leading-none text-white dark:text-[#C2C2C2] lg:text-5xl'>
-							Trusted by the best backend teams
+							Trusted by some of the top engineers in the world
 						</h2>
-						<p className='mt-4 text-xl text-[#7A7A7A] lg:text-2xl'>
-							A short description about the best teams using this.
-						</p>
 					</div>
 					<div className='group relative aspect-[556/313] w-full'>
 						<Uber

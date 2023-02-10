@@ -1,3 +1,5 @@
+import { DISCORD_URL } from "../../lib/constants";
+
 import Link from 'next/link'
 
 const CommunitySupportedNumbers = () => {
@@ -6,13 +8,13 @@ const CommunitySupportedNumbers = () => {
 			<div className='mx-auto grid w-full max-w-[1280px] grid-cols-3 gap-y-12 gap-x-8 px-5 sm:gap-14 sm:px-10 lg:grid-cols-[1fr_51px_1fr_1fr_1fr] lg:items-center'>
 				<div className='col-span-3 lg:col-span-1 lg:py-12'>
 					<h2 className='font-gradual text-2xl font-bold text-black dark:text-[#C2C2C2]'>
-						Supported by the community
+						Powered by our Community
 					</h2>
 					<Link
-						href='#'
+						href={DISCORD_URL}
 						className='group mt-3 inline-flex items-center text-[#525151] dark:text-[#C2C2C2]'
 					>
-						Join them now
+						Join us now
 						{/* Right Arrow */}
 						<svg
 							className='relative left-2 text-black transition-all duration-300 ease-in-out group-hover:left-4 dark:text-[#D8D8D8]'
