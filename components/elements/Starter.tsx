@@ -44,7 +44,7 @@ const Starter: FC<StarterProps> = ({
 				>
 					{title}
 				</h3>
-				<p className='mt-1 text-[#C2C2C2]'>{description}</p>
+				<p className='opacity-60 mt-1 text-[#C2C2C2]'>{description}</p>
 				{deployLink ? (
 					<div className='mt-auto flex items-center justify-between gap-5 pt-5 text-[#C2C2C2]'>
 						<span>
