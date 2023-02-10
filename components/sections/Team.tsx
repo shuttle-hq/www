@@ -49,62 +49,26 @@ const Team = () => {
 				<div className='mt-6 grid gap-5 md:mt-20 md:grid-cols-3 md:items-center'>
 					<div className='space-y-5'>
 						<User
-							image='/images/sections/team/user.jpg'
-							name='Name Surname'
-							position='CTO'
-							description='PhD in Mathematics from Penn State, previously built ML models for trading.'
-						/>
-						<User
-							image='/images/sections/team/user.jpg'
-							name='Name Surname'
-							position='CTO'
-							description='PhD in Mathematics from Penn State, previously built ML models for trading.'
-						/>
-						<User
-							image='/images/sections/team/user.jpg'
-							name='Name Surname'
-							position='CTO'
-							description='PhD in Mathematics from Penn State, previously built ML models for trading.'
+							image='/images/sections/team/damien.jpg'
+							name='Damien Broka'
+							position='Founder'
+							description='Damien has prior experience as a Data Scientist. He also holds a PhD in Mathematics from Pennsylvania State University. He is crazy about personal online privacy and does not trust social media.'
 						/>
 					</div>
 					<div className='space-y-5'>
 						<User
-							image='/images/sections/team/user.jpg'
-							name='Name Surname'
-							position='CTO'
-							description='PhD in Mathematics from Penn State, previously built ML models for trading. Rust expert with deep understanding of its ecosystem.'
-						/>
-						<User
-							image='/images/sections/team/user.jpg'
-							name='Name Surname'
-							position='CTO'
-							description='PhD in Mathematics from Penn State, previously built ML models for trading. Rust expert with deep understanding of its ecosystem.'
-						/>
-						<User
-							image='/images/sections/team/user.jpg'
-							name='Name Surname'
-							position='CTO'
-							description='PhD in Mathematics from Penn State, previously built ML models for trading. Rust expert with deep understanding of its ecosystem.'
+							image='/images/sections/team/nodar.jpg'
+							name='Nodar Daneliya'
+							position='CEO'
+							description='Co-Founder, CEO at shuttle. Previously led trading & operations for a machine learning driven quant hedge fund. Hands-on experience in private equity and investment banking from technology and media focused merchant bank - the Raine Group, with a background in project management and leadership from Google.'
 						/>
 					</div>
 					<div className='space-y-5'>
 						<User
-							image='/images/sections/team/user.jpg'
-							name='Name Surname'
-							position='CTO'
-							description='PhD in Mathematics from Penn State, previously built ML models for trading.'
-						/>
-						<User
-							image='/images/sections/team/user.jpg'
-							name='Name Surname'
-							position='CTO'
-							description='PhD in Mathematics from Penn State, previously built ML models for trading.'
-						/>
-						<User
-							image='/images/sections/team/user.jpg'
-							name='Name Surname'
-							position='CTO'
-							description='PhD in Mathematics from Penn State, previously built ML models for trading.'
+							image='/images/sections/team/christos.jpg'
+							name='Christos Hadjiaslanis'
+							position='Founder'
+							description="I'm a software engineer and one of the founders at shuttle. I get excited by open-source projects, developer productivity and Rust!"
 						/>
 					</div>
 				</div>
