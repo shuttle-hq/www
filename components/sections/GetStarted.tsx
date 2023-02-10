@@ -54,8 +54,8 @@ const GetStarted = () => {
 			>
 				<div className='group relative z-10 block h-full items-end overflow-hidden rounded-2xl bg-[#13292C] px-8 pt-16 dark:bg-black sm:mt-10 sm:items-center sm:px-4 sm:px-12 sm:py-24 lg:mt-0 lg:items-end lg:items-center lg:px-8 lg:py-12 xl:flex xl:p-[4.375rem] desktop:items-end desktop:pt-[2.75rem] desktop:pb-0'>
 					<CodeBlock
-						language='rust'
-						code={selectedSlide === 0 ? HELLO_CLOUD : selectedSlide === 1 ? CARGO_DEPLOYS : USING_SQLX}
+						language={selectedSlide === 2 ? 'none' : 'rust' }
+						code={selectedSlide === 0 ? HELLO_CLOUD : selectedSlide === 1 ? USING_SQLX : CARGO_DEPLOYS }
 						showLineNumbers
 						className={clsx(
 							'absolute left-1/2 mx-auto h-full -translate-x-1/2 transform overflow-auto rounded-t-xl sm:rounded-xl lg:w-full lg:rounded-t-3xl lg:rounded-b-3xl xl:overflow-hidden desktop:relative desktop:-bottom-px desktop:rounded-b-none'
@@ -181,29 +181,31 @@ const GetStartedSlide: FC<GetStartedSlideProps> = ({
 	const adjustedNumber = number + 1
 
 	return (
-		<div
-			onClick={() => handleClick(number, true)}
-			onMouseEnter={() => handleClick(number)}
-			className={clsx(
-				'group relative h-max min-w-max cursor-pointer cursor-pointer rounded-2xl bg-[#E9E9E9] p-6 transition after:rounded-2xl dark:bg-black',
-				isSelected ? 'shadow-[0_0_0_1px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_1px_#191919] ' : ''
-			)}
+		<div onClick={() => handleClick(number, true)}
+			 onMouseEnter={() => handleClick(number)}
+			 className={clsx(
+				 'group relative h-max min-w-max cursor-pointer p-[1px] cursor-pointer rounded-2xl transition after:rounded-2xl',
+				 isSelected ? clsx('bg-gradient-to-r to-transparent', gradient) : 'transparent'
+			 )}
 		>
-			<h3 className='font-gradual text-2xl font-bold dark:text-[#C2C2C2]'>
+			<div className={clsx('bg-[#E9E9E9] dark:bg-black p-6 rounded-2xl after:rounded-2xl')}>
+				<h3 className='font-gradual text-2xl font-bold dark:text-[#C2C2C2]'>
 				<span className={clsx('bg-gradient-to-r bg-clip-text text-transparent', gradient)}>
 					0{adjustedNumber}
 				</span>
-				&nbsp;{title}
-			</h3>
-			<p className='mt-2'>{text}</p>
+					&nbsp;{title}
+				</h3>
+				<p className='mt-2'>{text}</p>
 
-			{children}
+				{children}
 
-			{/* If it the whole slide isn't outlined, add a line under the slide */}
-			{adjustedNumber !== 1 && (
-				<hr className='absolute -bottom-px left-6 w-[calc(100%-3rem)] border-black/10 group-hover:hidden dark:border-[#191919]' />
-			)}
+				{/* If it the whole slide isn't outlined, add a line under the slide */}
+				{adjustedNumber !== 1 && (
+					<hr className='absolute -bottom-px left-6 w-[calc(100%-3rem)] border-black/10 group-hover:hidden dark:border-[#191919]' />
+				)}
+			</div>
 		</div>
+
 	)
 }
 
@@ -226,7 +228,7 @@ async fn init() -> shuttle_service::ShuttleRocket {
 
 const CARGO_DEPLOYS = `
 $ cargo shuttle deploy
-   Packaging url-shortener v0.1.0 (/private/shuttle/examples/url-shortener)
+   Packaging url-shortener v0.1.0 (/shuttle/url-shortener)
    Archiving Cargo.toml
    Archiving Cargo.toml.orig
    Archiving README.md
@@ -244,11 +246,11 @@ $ cargo shuttle deploy
    Compiling url-shortener v0.1.0 (/opt/unveil/crates/s-2)
     Finished dev [unoptimized + debuginfo] target(s) in 1m 01s
         Project:            url-shortener
-        Deployment Id:      3d08ac34-ad63-41c1-836b-99afdc90af9f
+        Deployment Id:      3d08ac34-ad63-41c1-836b-99af...
         Deployment Status:  DEPLOYED
         Host:               url-shortener.shuttleapp.rs
         Created At:         2022-04-01 08:32:34.412602556 UTC
-        Database URI:       postgres://***:***@pg.shuttle.rs/db-url-shortener
+        Database URI:       postgres://***:***@pg.shuttle.rs/db
 ❯
 `.trim()
 

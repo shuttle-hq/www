@@ -9,7 +9,7 @@ const Features = () => {
 					<h2 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-[3.5rem]'>
 						Bring your code, we&apos;ll handle the rest
 					</h2>
-					<p className='mt-5 text-xl text-[#525151] lg:text-2xl'>
+					<p className='mt-5 text-xl text-[#525151] dark:text-[#7A7A7A] lg:text-2xl'>
 						Leave the deployment to us and focus on what matters, writing good code.
 					</p>
 				</div>
