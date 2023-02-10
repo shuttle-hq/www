@@ -65,7 +65,7 @@ const Starter: FC<StarterProps> = ({
 						View all
 						{/* Right Arrow */}
 						<svg
-							className='relative left-2 text-[#D8D8D8] transition-all duration-300 ease-in-out group-hover:left-4'
+							className='relative my-4 left-2 text-[#D8D8D8] transition-all duration-300 ease-in-out group-hover:left-4'
 							width={17}
 							height={14}
 							viewBox='0 0 17 14'
