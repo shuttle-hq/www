@@ -10,16 +10,19 @@ const HowItWorks = () => {
 
 	return (
 		<div className='mx-auto mt-24 w-full max-w-7xl overflow-hidden px-5 sm:mt-28 sm:overflow-visible sm:px-10 lg:mt-36 lg:grid lg:grid-cols-[1fr_minmax(566px,_1fr)] lg:gap-7 xl:grid-cols-2 desktop:mt-40'>
-			<div>
-				<h2 className='font-gradual text-5xl font-bold dark:dark:text-[#C2C2C2] lg:text-[3.5rem]'>
+			<div className='col-span-2'>
+				<h2 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-[3.5rem]'>
 					How it works
 				</h2>
+			</div>
+			<div>
 				<div className='mt-4 space-y-7 text-[#525151] dark:text-[#7A7A7A] sm:mt-8 lg:text-xl'>
 					<p
 						className={clsx(
 							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
-							selectedItem === 'hello-cloud' && '!text-black dark:!text-white'
+							selectedItem === 'hello-cloud' && '!text-black dark:text-[#C2C2C2]'
 						)}
+						onMouseOver={() => setSelectedItem("hello-cloud")}
 					>
 						With shuttle you can take any Rust service code, and have it ready for deployment by adding
 						a single annotation to your main function.
@@ -27,8 +30,9 @@ const HowItWorks = () => {
 					<p
 						className={clsx(
 							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
-							selectedItem === 'cargo-deploy' && '!text-black dark:!text-white'
+							selectedItem === 'cargo-deploy' && '!text-black dark:text-[#C2C2C2]'
 						)}
+						onMouseOver={() => setSelectedItem("cargo-deploy")}
 					>
 						Your code is packaged and sent to shuttle where it is compiled and deployed. After a few
 						seconds, your app is already running in the cloud.
@@ -36,8 +40,9 @@ const HowItWorks = () => {
 					<p
 						className={clsx(
 							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
-							selectedItem === 'using-sql' && '!text-black dark:!text-white'
+							selectedItem === 'using-sql' && '!text-black dark:text-[#C2C2C2]'
 						)}
+						onMouseOver={() => setSelectedItem("using-sql")}
 					>
 						You can then add more annotations that control cloud resources. Adding components like
 						databases, secrets or storage is as easy as adding arguments to a function.
@@ -45,8 +50,9 @@ const HowItWorks = () => {
 					<p
 						className={clsx(
 							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
-							selectedItem === 'using-axum' && '!text-black dark:!text-white'
+							selectedItem === 'using-axum' && '!text-black dark:text-[#C2C2C2]'
 						)}
+						onMouseOver={() => setSelectedItem("using-axum")}
 					>
 						The next time you deploy your app, shuttle provisions and configures the resources you
 						need. In minutes, you can build complex and scalable apps on industry-standard AWS products
