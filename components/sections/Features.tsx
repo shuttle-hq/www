@@ -10,7 +10,7 @@ const Features = () => {
 						Bring your code, we&apos;ll handle the rest
 					</h2>
 					<p className='mt-5 text-xl text-[#525151] lg:text-2xl'>
-						We didn&apos;t think about this one...
+						Leave the deployment to us and focus on what matters, writing good code.
 					</p>
 				</div>
 				<div className='group relative hidden bg-[#13292C] text-[#C2C2C2] dark:bg-black dark:text-white desktop:block desktop:overflow-hidden desktop:rounded-4xl'>
