@@ -144,7 +144,7 @@ const HowItWorks = () => {
 								? USING_SQLX
 								: USING_AXUM
 						}
-						language='rust'
+						language={selectedItem === 'cargo-deploy' ? 'terminal' : 'rust'}
 						showLineNumbers={selectedItem !== 'hello-cloud'}
 						className='mt-6'
 					/>
@@ -173,7 +173,7 @@ async fn init() -> shuttle_service::ShuttleRocket {
 
 const CARGO_DEPLOYS = `
 $ cargo shuttle deploy
-   Packaging url-shortener v0.1.0 (/private/shuttle/examples/url-shortener)
+   Packaging url-shortener v0.1.0 (/shuttle/url-shortener)
    Archiving Cargo.toml
    Archiving Cargo.toml.orig
    Archiving README.md
@@ -191,11 +191,11 @@ $ cargo shuttle deploy
    Compiling url-shortener v0.1.0 (/opt/unveil/crates/s-2)
     Finished dev [unoptimized + debuginfo] target(s) in 1m 01s
         Project:            url-shortener
-        Deployment Id:      3d08ac34-ad63-41c1-836b-99afdc90af9f
+        Deployment Id:      3d08ac34-ad63-41c1-836b-99af...
         Deployment Status:  DEPLOYED
         Host:               url-shortener.shuttleapp.rs
         Created At:         2022-04-01 08:32:34.412602556 UTC
-        Database URI:       postgres://***:***@pg.shuttle.rs/db-url-shortener
+        Database URI:       postgres://***:***@pg.shuttle.rs/db
 ❯
 `.trim()
 
