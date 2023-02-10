@@ -1,7 +1,7 @@
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import { Grid } from '@splidejs/splide-extension-grid'
 import { Starter } from 'components/elements'
-import { Authentication, Paperclip, Weather } from 'components/svgs'
+import { Discord, Paperclip, React } from 'components/svgs'
 
 const FeaturedStarters = () => {
 	return (
@@ -12,7 +12,7 @@ const FeaturedStarters = () => {
 						Starters
 					</h2>
 					<p className='mt-5 text-xl text-[#525151] dark:text-[#7A7A7A] lg:text-2xl'>
-					Set up and deploy a quick starter, in minutes, with detailed instructions on how it works. 
+						Set up and deploy a quick starter, in minutes, with detailed instructions on how it works.
 					</p>
 				</div>
 			</div>
@@ -53,7 +53,7 @@ const FeaturedStarters = () => {
 			>
 				<SplideSlide className='splide__slide overflow-hidden p-px'>
 					<Starter
-						icon={<Authentication className='mb-auto' />}
+						icon={<Discord className='mb-auto' />}
 						title='Build a Discord Bot'
 						description='Add custom functionality to your Discord server, using a bot written in Rust.'
 						bg='/images/sections/featured-starters/1-bg.png'
@@ -67,7 +67,7 @@ const FeaturedStarters = () => {
 				</SplideSlide>
 				<SplideSlide className='splide__slide overflow-hidden p-px'>
 					<Starter
-						icon={<Weather className='mb-auto' />}
+						icon={<Paperclip className='mb-auto' />}
 						title='URL Shortener'
 						description='Get a shuttle relational database and build a URL shortener service.'
 						bg='/images/sections/featured-starters/2-bg.png'
@@ -81,7 +81,7 @@ const FeaturedStarters = () => {
 				</SplideSlide>
 				<SplideSlide className='splide__slide overflow-hidden p-px'>
 					<Starter
-						icon={<Paperclip className='mb-auto' />}
+						icon={<React className='mb-auto' />}
 						title='Deploy a full-stack app with JS & Rust'
 						description='Build a React SPA with a backend and deploy it to Shuttle.'
 						bg='/images/sections/featured-starters/3-bg.png'
