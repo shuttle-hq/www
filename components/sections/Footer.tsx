@@ -109,14 +109,14 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 								rel='noreferrer'
 								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
 							>
-								Linkedin
+								LinkedIn
 							</a>
 						</div>
 					</div>
 				</div>
 				<div className='grid grid-cols-2 divide-x divide-black/10 dark:divide-white/10 lg:col-span-2'>
 					<div className='lg:grid lg:grid-cols-2 lg:divide-x lg:divide-black/10 dark:lg:divide-white/10'>
-						<p className='px-8 pb-5 lg:px-16 lg:pb-9'>© 2022 shuttle</p>
+						<p className='px-8 pb-5 lg:px-16 lg:pb-9'>© 2023 shuttle</p>
 						<div className='hidden lg:block' />
 					</div>
 					<div className='lg:grid lg:grid-cols-2 lg:divide-x lg:divide-black/10 dark:lg:divide-white/10'>

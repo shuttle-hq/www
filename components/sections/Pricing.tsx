@@ -1,8 +1,9 @@
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import clsx from 'clsx'
-import { Button, Switch } from 'components/elements'
+import { Button, LoginButton } from 'components/elements'
 import Image from 'next/image'
 import { FC, ReactNode, useState } from 'react'
+import {ContactUsButton} from "../elements/Button";
 
 const Pricing = () => {
 	const [selectedPricing, setSelectedPricing] = useState<'monthly' | 'annual'>('monthly')
@@ -65,7 +66,7 @@ const Pricing = () => {
 						</p>
 						<p className='mt-1 text-sm text-[#C2C2C2]'>/ month</p>
 					</div>
-					<Button variant='primary'>Get started for free</Button>
+					<LoginButton variant='primary'>Get Started</LoginButton>
 				</div>
 				{/* <div className='group relative z-10 flex flex-col items-start gap-8 overflow-hidden rounded-[2rem] bg-[#13292C] p-5 shadow-[0px_0px_64px_rgba(252,84,12,0.25)] dark:bg-black sm:p-8'>
 					<Image
@@ -98,7 +99,7 @@ const Pricing = () => {
 						</p>
 						<p className='mt-1 text-sm text-[#C2C2C2]'>user / month</p>
 					</div>
-					<Button variant='primary'>Get started for free</Button>
+					<LoginButton variant='primary'>Get started for free</LoginButton>
 				</div> */}
 				<div className='group relative z-10 flex flex-col items-start gap-8 overflow-hidden rounded-[2rem] bg-[#13292C] p-5 dark:bg-black sm:p-8'>
 					<Image
@@ -131,7 +132,7 @@ const Pricing = () => {
 						</p>
 						<p className='mt-1 text-sm text-[#C2C2C2]'>custom pricing</p>
 					</div>
-					<Button variant='secondary'>Contact us</Button>
+					<ContactUsButton variant='secondary'>Contact Us</ContactUsButton>
 				</div>
 			</div>
 			<div className='mt-24 lg:mt-32'>
@@ -201,9 +202,9 @@ const Pricing = () => {
 							subdomains='1'
 							community='Discord'
 							action={
-								<Button variant='primary' className='bg-[#D8D8D8]'>
-									Get started for free
-								</Button>
+								<LoginButton variant='primary' className='bg-[#D8D8D8]'>
+									Get Started
+								</LoginButton>
 							}
 						/>
 						{/* <MobilePlanFeatures
@@ -219,9 +220,9 @@ const Pricing = () => {
 							community='Discord'
 							requestTurnaround='24h'
 							action={
-								<Button variant='primary' className='bg-[#D8D8D8]'>
+								<LoginButton variant='primary' className='bg-[#D8D8D8]'>
 									Get started
-								</Button>
+								</LoginButton>
 							}
 						/> */}
 						<MobilePlanFeatures
@@ -236,7 +237,7 @@ const Pricing = () => {
 							customDomains='custom'
 							community='Discord'
 							requestTurnaround='8h'
-							action={<Button variant='secondary'>Contact us</Button>}
+							action={<ContactUsButton variant='secondary'>Contact Us</ContactUsButton>}
 						/>
 					</div>
 					{/* Desktop */}
@@ -363,9 +364,9 @@ const Pricing = () => {
 						<div className='grid grid-cols-3 items-center pt-11 text-center'>
 							<div />
 							<div>
-								<Button variant='primary' className='mx-auto bg-[#D8D8D8]'>
-									Get started for free
-								</Button>
+								<LoginButton variant='primary' className='mx-auto bg-[#D8D8D8]'>
+									Get Started
+								</LoginButton>
 							</div>
 							{/* <div>
 								<Button variant='primary' className='mx-auto bg-[#D8D8D8]'>
@@ -373,9 +374,9 @@ const Pricing = () => {
 								</Button>
 							</div> */}
 							<div>
-								<Button variant='secondary' className='mx-auto'>
-									Contact us
-								</Button>
+								<ContactUsButton variant='secondary' className='mx-auto'>
+									Contact Us
+								</ContactUsButton>
 							</div>
 						</div>
 					</div>

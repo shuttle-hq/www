@@ -1,5 +1,7 @@
 import { Compile, Database, Deploy, Free, Open, Skip } from 'components/svgs'
 import Image from 'next/image'
+import {Button, LoginButton} from "../elements";
+import {useUser} from "@auth0/nextjs-auth0/client";
 
 const Features = () => {
 	return (
@@ -60,12 +62,9 @@ const Features = () => {
 						Shuttle makes it easy to connect to databases, has out-of-the-box logging support, abundant
 						documentation and supports all major Rust frameworks. Yes, even if you are coming from JS.
 					</p>
-					<a
-						href='#'
-						className='button-shadow mt-5 rounded-button bg-[#D8D8D8] px-6 py-3 font-gradual font-bold text-black hover:bg-gradient-to-r hover:from-[#fc540c] hover:to-[#f5c57a] hover:text-white'
-					>
+					<LoginButton variant='primary'>
 						Log in
-					</a>
+					</LoginButton>
 				</div>
 				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-[#C2C2C2] dark:bg-black dark:text-white sm:p-8 desktop:row-[span_2]'>
 					<Image

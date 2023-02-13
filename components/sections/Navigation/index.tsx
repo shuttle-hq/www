@@ -1,10 +1,11 @@
-import { Button } from 'components/elements'
+import {Button, LoginButton} from 'components/elements'
 import { GithubLogo, Hamburger, Logo } from 'components/svgs'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useState } from 'react'
 import clsx from 'clsx'
 import { useUser } from '@auth0/nextjs-auth0/client'
+import {DISCORD_URL} from "../../../lib/constants";
 
 const ThemeSwitcher = dynamic(() => import('./ThemeSwitcher'), { ssr: false })
 
@@ -78,10 +79,10 @@ const Navigation = () => {
 				</div>
 				<div className='mt-10 lg:mt-0 lg:ml-auto lg:flex lg:items-center lg:gap-5'>
 					<div className='mt-10 flex flex-wrap items-center gap-5 lg:mt-0'>
-						<Button variant='secondary' invertOnDark>
+						<Button variant='secondary' invertOnDark href={DISCORD_URL}>
 							Join Discord
 						</Button>
-						<Button variant='primary' invertOnDark href={user ? '/dashboard/' : '/login'}>
+						<LoginButton variant='primary' invertOnDark>
 							{user ? (
 								'Dashboard'
 							) : (
@@ -90,7 +91,7 @@ const Navigation = () => {
 									Log in
 								</>
 							)}
-						</Button>
+						</LoginButton>
 					</div>
 					<ThemeSwitcher className='mt-5 lg:-order-1 lg:mt-0' hidden />
 				</div>

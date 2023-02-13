@@ -1,11 +1,16 @@
 import clsx from 'clsx'
 import Link from 'next/link'
-import { FC, ReactNode } from 'react'
+import {FC, ReactElement, ReactNode} from 'react'
+import {useUser} from "@auth0/nextjs-auth0/client";
+import {CONTACT_US_URI} from "../../lib/constants";
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface CommonButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	variant: 'primary' | 'secondary'
 	children: ReactNode
 	invertOnDark?: boolean
+}
+
+interface ButtonProps extends CommonButtonProps {
 	href?: string
 }
 
@@ -27,6 +32,8 @@ const Button: FC<ButtonProps> = ({ variant = 'none', invertOnDark, className, ch
 		className
 	)
 
+	children = <button className={classNames}>{children}</button>;
+
 	if (href)
 		if (href.startsWith('/'))
 			children = (
@@ -41,7 +48,17 @@ const Button: FC<ButtonProps> = ({ variant = 'none', invertOnDark, className, ch
 				</a>
 			)
 
-	return <button className={classNames}>{children}</button>
+	return children;
+}
+
+export const LoginButton: FC<CommonButtonProps> = ({children, ...inner}) => {
+	const { user } = useUser()
+	const dashboardBaseUrl = user ? "/dashboard" : "/login"
+	return (<Button href={dashboardBaseUrl} {...inner}>{children}</Button>)
+}
+
+export const ContactUsButton: FC<CommonButtonProps> = ({children, ...inner}) => {
+	return (<Button href={CONTACT_US_URI} {...inner}>{children}</Button>)
 }
 
 export default Button

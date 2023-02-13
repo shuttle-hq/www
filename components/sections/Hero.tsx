@@ -1,7 +1,10 @@
-import { Button } from 'components/elements'
+import {Button, LoginButton} from 'components/elements'
 import Image from 'next/image'
+import {useUser} from "@auth0/nextjs-auth0/client";
+import {DISCORD_URL} from "../../lib/constants";
 
 const Hero = () => {
+	const { user } = useUser();
 	return (
 		<div className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
 			<header className='md:grid md:grid-cols-2 md:items-center lg:grid-cols-[1.2fr_1fr] lg:gap-8'>
@@ -14,10 +17,10 @@ const Hero = () => {
 						Build & ship a backend without writing any infrastructure files. Instead get your infrastructure definitions from your code function signatures and annotations.
 					</p>
 					<div className='mt-5 flex flex-wrap items-center gap-5 sm:mt-10 lg:mt-12 xl:mt-16'>
-						<Button variant='primary' invertOnDark className='bg-[#13292C] text-white'>
+						<LoginButton variant='primary' invertOnDark>
 							Start Building
-						</Button>
-						<Button variant='secondary' invertOnDark>
+						</LoginButton>
+						<Button variant='secondary' invertOnDark href={DISCORD_URL}>
 							Join Discord
 						</Button>
 					</div>

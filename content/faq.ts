@@ -1,4 +1,6 @@
-export const QUESTIONS = [
+import { QuestionAttrs } from "../components/sections/FrequentlyAskedQuestions";
+
+export const Questions: QuestionAttrs[] = [
     {
         question: 'How secure is shuttle?',
         answer: "We build and deploy every project in its own container. This gives you safe isolation from other users, and also across all the projects that are owned by your account.",
@@ -28,3 +30,5 @@ export const QUESTIONS = [
         answer: "You can bring your lambda code to shuttle as is. And we run it on dedicated infrastructure that keeps the state of your services across requests, has no cold-start and can even have long-running threads, all of which is not possible on AWS Lambda.",
     },
 ]
+
+export default Questions

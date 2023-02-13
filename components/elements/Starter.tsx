@@ -4,18 +4,31 @@ import Link from 'next/link'
 import { FC, ReactNode } from 'react'
 import Button from './Button'
 
-interface StarterProps {
-	icon?: ReactNode
+export type StarterIcon = "paperclip" | "discord" | "react" | "calendar"
+
+export function getStarterIcon(icon: StarterIcon): ReactNode {
+	return <></>
+}
+
+export type StarterAttrs = {
 	title: string
+	icon?: StarterIcon
 	description?: string
+	sourceLink?: string
+	postLink?: string
+	deployLink?: string
+}
+
+export interface StarterXProps {
 	bg: string
 	bgClassName?: string
 	stars: string
 	starsClassName?: string
 	stars2: string
 	stars2ClassName?: string
-	deployLink?: string
 }
+
+export interface StarterProps extends StarterXProps, StarterAttrs {}
 
 const Starter: FC<StarterProps> = ({
 	icon,
@@ -27,6 +40,8 @@ const Starter: FC<StarterProps> = ({
 	starsClassName,
 	stars2,
 	stars2ClassName,
+	sourceLink,
+	postLink,
 	deployLink,
 }) => {
 	return (
@@ -35,28 +50,28 @@ const Starter: FC<StarterProps> = ({
 			<Image src={stars} alt='stars' fill className={starsClassName} />
 			<Image src={stars2} alt='stars 2' fill className={stars2ClassName} />
 			<div className='relative z-10 flex h-full flex-col'>
-				{icon}
+				{icon && getStarterIcon(icon)}
 				<h3
 					className={clsx(
 						'font-gradual text-2xl font-bold text-[#C2C2C2]',
-						deployLink ? 'mt-3' : 'my-auto'
+						sourceLink ? 'mt-3' : 'my-auto'
 					)}
 				>
 					{title}
 				</h3>
 				<p className='opacity-60 mt-1 text-[#C2C2C2]'>{description}</p>
-				{deployLink ? (
+				{sourceLink ? (
 					<div className='mt-auto flex items-center justify-between gap-5 pt-5 text-[#C2C2C2]'>
 						<span>
-							<Link href='#' className='hover:underline'>
+							<Link href={sourceLink} className='hover:underline'>
 								Source
 							</Link>
 							<span className='px-[0.375rem]'>•</span>
-							<Link href='#' className='hover:underline'>
+							<Link href={postLink || '/blog'} className='hover:underline'>
 								Post
 							</Link>
 						</span>
-						<Button variant='primary' href={deployLink}>
+						<Button variant='primary' href={deployLink || "/login"}>
 							Deploy
 						</Button>
 					</div>
@@ -81,5 +96,7 @@ const Starter: FC<StarterProps> = ({
 		</div>
 	)
 }
+
+
 
 export default Starter

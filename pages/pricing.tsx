@@ -1,5 +1,5 @@
 import { CallToAction, FrequentlyAskedQuestions, Pricing, Testimonials, TrustedBy } from 'components/sections'
-import {QUESTIONS} from "../lib/faq";
+import {QUESTIONS} from "../content/faq";
 
 export default function PricingPage() {
 	return (

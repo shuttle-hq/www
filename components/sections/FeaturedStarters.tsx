@@ -2,8 +2,46 @@ import { Splide, SplideSlide } from '@splidejs/react-splide'
 import { Grid } from '@splidejs/splide-extension-grid'
 import { Starter } from 'components/elements'
 import { Discord, Paperclip, React } from 'components/svgs'
+import {GetStaticPropsResult} from "next";
+import {StarterAttrs, StarterProps, StarterXProps} from "../elements/Starter";
+import {FeaturedStartersContent} from "../../content/starters";
 
-const FeaturedStarters = () => {
+const StartersXProps: StarterXProps[] = [
+	{
+		bg: '/images/sections/featured-starters/1-bg.png',
+		bgClassName: 'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover',
+		stars: '/images/sections/featured-starters/1-stars.png',
+		starsClassName: 'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3',
+		stars2: '/images/sections/featured-starters/1-stars-2.png',
+		stars2ClassName: 'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover'
+	},
+	{
+		bg: '/images/sections/featured-starters/2-bg.png',
+		bgClassName: 'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover',
+		stars: '/images/sections/featured-starters/2-stars.png',
+		starsClassName: 'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3',
+		stars2: '/images/sections/featured-starters/2-stars-2.png',
+		stars2ClassName: 'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
+	},
+	{
+		bg: '/images/sections/featured-starters/3-bg.png',
+		bgClassName: 'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover',
+		stars: '/images/sections/featured-starters/3-stars.png',
+		starsClassName: 'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3',
+		stars2: '/images/sections/featured-starters/3-stars-2.png',
+		stars2ClassName: 'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
+	}
+]
+
+const FeaturedStarters = ({starters}: {starters: StarterAttrs[]}) => {
+	const children = StartersXProps.slice(0, 3).map((xprops, idx) => {
+		return (
+			<SplideSlide className='splide__slide overflow-hidden p-px' key={idx}>
+				<Starter {...{...xprops, ...starters[idx]}}/>
+			</SplideSlide>
+		)
+	})
+
 	return (
 		<div className='mt-24 sm:mt-28 lg:mt-36 desktop:mt-40'>
 			<div className='mx-auto w-full max-w-5xl px-5 sm:px-10'>
@@ -51,48 +89,7 @@ const FeaturedStarters = () => {
 				extensions={{ Grid }}
 				className='mt-10 lg:mx-auto lg:mt-14 lg:w-full lg:max-w-7xl lg:px-10 desktop:mt-16'
 			>
-				<SplideSlide className='splide__slide overflow-hidden p-px'>
-					<Starter
-						icon={<Discord className='mb-auto' />}
-						title='Build a Discord Bot'
-						description='Add custom functionality to your Discord server, using a bot written in Rust.'
-						bg='/images/sections/featured-starters/1-bg.png'
-						bgClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover'
-						stars='/images/sections/featured-starters/1-stars.png'
-						starsClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
-						stars2='/images/sections/featured-starters/1-stars-2.png'
-						stars2ClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover'
-						deployLink='#'
-					/>
-				</SplideSlide>
-				<SplideSlide className='splide__slide overflow-hidden p-px'>
-					<Starter
-						icon={<Paperclip className='mb-auto' />}
-						title='URL Shortener'
-						description='Get a shuttle relational database and build a URL shortener service.'
-						bg='/images/sections/featured-starters/2-bg.png'
-						bgClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover'
-						stars='/images/sections/featured-starters/2-stars.png'
-						starsClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
-						stars2='/images/sections/featured-starters/2-stars-2.png'
-						stars2ClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
-						deployLink='#'
-					/>
-				</SplideSlide>
-				<SplideSlide className='splide__slide overflow-hidden p-px'>
-					<Starter
-						icon={<React className='mb-auto' />}
-						title='Deploy a full-stack app with JS & Rust'
-						description='Build a React SPA with a backend and deploy it to Shuttle.'
-						bg='/images/sections/featured-starters/3-bg.png'
-						bgClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover'
-						stars='/images/sections/featured-starters/3-stars.png'
-						starsClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
-						stars2='/images/sections/featured-starters/3-stars-2.png'
-						stars2ClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
-						deployLink='#'
-					/>
-				</SplideSlide>
+				{children}
 				<SplideSlide className='splide__slide overflow-hidden p-px'>
 					<Starter
 						title="There's more"

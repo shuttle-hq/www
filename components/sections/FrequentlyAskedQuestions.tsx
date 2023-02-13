@@ -4,8 +4,13 @@ import Image from 'next/image'
 import { FC, useState } from 'react'
 import {DISCORD_URL} from "../../lib/constants";
 
+export interface QuestionAttrs {
+	question: string,
+	answer: string
+}
+
 interface FrequentlyAskedQuestionsProps {
-	questions: { question: string; answer: string }[]
+	questions: QuestionAttrs[]
 	hideDiscord?: boolean
 }
 
