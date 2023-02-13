@@ -4,10 +4,20 @@ import Link from 'next/link'
 import { FC, ReactNode } from 'react'
 import Button from './Button'
 
-export type StarterIcon = "paperclip" | "discord" | "react" | "calendar"
+import { Calendar, Discord, Paperclip, React } from 'components/svgs'
+
+export type StarterIcon = 'paperclip' | 'discord' | 'react' | 'calendar'
 
 export function getStarterIcon(icon: StarterIcon): ReactNode {
-	return <></>
+	const props = {
+		className: 'mb-auto'
+	}
+	switch (icon) {
+		case 'paperclip': return <Paperclip {...props}/>
+		case 'discord': return <Discord {...props}/>
+		case 'react': return <React {...props}/>
+		case 'calendar': return <Calendar {...props}/>
+	}
 }
 
 export type StarterAttrs = {
@@ -71,7 +81,7 @@ const Starter: FC<StarterProps> = ({
 								Post
 							</Link>
 						</span>
-						<Button variant='primary' href={deployLink || "/login"}>
+						<Button variant='primary' href={deployLink || '/login'}>
 							Deploy
 						</Button>
 					</div>
