@@ -4,8 +4,28 @@ import { FeaturedStarters } from 'components/sections'
 import Image from 'next/image'
 import clsx from 'clsx'
 import { Copy } from '../../components/svgs'
+import {StarterAttrs} from "../../components/elements/Starter";
+import {FeaturedStartersContent} from "../../content";
+import {GetStaticPropsResult} from "next";
+import {useUser} from "@auth0/nextjs-auth0/client";
+import {useCopyToClipboard} from "react-use";
 
-export default function DashboardHome() {
+export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
+	const starters = FeaturedStartersContent
+	return {
+		props: {
+			starters
+		},
+	}
+}
+
+interface Props {
+	readonly starters: StarterAttrs[]
+}
+
+export default function DashboardHome({starters}: Props) {
+	const { user } = useUser();
+	const apiKey = user?.api_key as string | undefined;
 	return (
 		<>
 			<div className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
@@ -40,7 +60,7 @@ export default function DashboardHome() {
 						description='Run this command to authenticate'
 						backgroundImage='/images/pages/dashboard/card-3.png'
 						gradientClassName='from-[#FC540C] to-[#C39348]'
-						command='cargo install login {key}'
+						command={`cargo install login ${apiKey}`}
 						className='row-start-3 lg:col-span-4 lg:col-start-5'
 					/>
 					<Step
@@ -63,7 +83,7 @@ export default function DashboardHome() {
 					/>
 				</div>
 			</div>
-			<FeaturedStarters />
+			<FeaturedStarters starters={starters}/>
 		</>
 	)
 }
@@ -74,7 +94,7 @@ interface StepProps {
 	backgroundImage: string
 	title: string
 	description: string
-	command?: string
+	command: string
 	className: string
 }
 
@@ -87,6 +107,7 @@ const Step: FC<StepProps> = ({
 	command,
 	className,
 }) => {
+	const [copyToClipboardState, copyToClipboard] = useCopyToClipboard()
 	return (
 		<div
 			className={clsx(
@@ -105,7 +126,10 @@ const Step: FC<StepProps> = ({
 
 			<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
 				$ {command}
-				<button className='absolute right-3 rounded-lg border border-transparent p-1 hover:border-[#484848] hover:bg-[#343434] dark:text-[#C2C2C2]'>
+				<button
+					className='absolute right-3 rounded-lg border border-transparent p-1 hover:border-[#484848] hover:bg-[#343434] dark:text-[#C2C2C2]'
+					onClick={() => copyToClipboard(command)}
+				>
 					<Copy />
 				</button>
 			</div>
