@@ -1,131 +1,104 @@
-const defaultTheme = require("tailwindcss/defaultTheme");
-
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./{components,pages}/**/*.tsx"],
-  darkMode: "class",
-  theme: {
-    extend: {
-      colors: {
-        "brand-yellow1": "#fae15c",
-        "brand-orange1": "#ff8a3f",
-        "brand-orange2": "#f25100",
-        "brand-purple1": "#7777DD",
-        brand: {
-          100: "#fae15c",
-          200: "#fad149",
-          300: "#fac138",
-          400: "#f9b127",
-          500: "#f9a016",
-          600: "#f88e05",
-          700: "#f67c00",
-          800: "#f56800",
-          900: "#f25100",
-        },
-        dark: {
-          100: "#eeeeee",
-          200: "#e0e0e0",
-          300: "#bbbbbb",
-          400: "#666666",
-          500: "#444444",
-          600: "#2a2a2a",
-          700: "#1f1f1f",
-          800: "#181818",
-          900: "#0f0f0f",
-        },
-        gray: {
-          100: "#eeeeee",
-          200: "#e0e0e0",
-          300: "#bbbbbb",
-          400: "#7d7d7d",
-          500: "#343434",
-          600: "#2a2a2a",
-          700: "#1f1f1f",
-          800: "#181818",
-          900: "#0f0f0f",
-        },
-      },
-      fontFamily: {
-        sans: ["Ubuntu", ...defaultTheme.fontFamily.sans],
-        mono: ["Source Code Pro", "Menlo", "monospace"],
-      },
-      typography: ({ theme }) => {
-        const tocCSS = {
-          ul: {
-            "list-style-type": "none",
-            "padding-left": 0,
-            margin: 0,
-            li: {
-              "padding-left": 0,
-            },
-            a: {
-              display: "block",
-              "text-decoration": "none",
-              fontSize: "0.8rem",
-              fontWeight: "200",
-              color: theme("colors.slate[500]"),
-              "&:hover": {
-                color: theme("colors.slate[900]"),
-              },
-              "font-weight": "400",
-            },
-            ul: {
-              "list-style-type": "none",
-              li: {
-                marginTop: "0.2rem",
-                marginBottom: "0.2rem",
-                "padding-left": "0 !important",
-                "margin-left": "0.5rem",
-              },
-              a: {
-                fontWeight: "200",
-                color: theme("colors.slate[600]"),
-                "&:hover": {
-                  color: theme("colors.slate[900]"),
-                },
-              },
-            },
-          },
-        };
+	darkMode: 'class',
+	content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
+	important: true,
+	theme: {
+		extend: {
+			fontFamily: {
+				gradual: 'BwGradual, sans-serif',
+			},
+			borderRadius: {
+				'2.5xl': '1.5rem',
+				'4xl': '2rem',
+				button: '0.875rem',
+			},
+			fontSize: {
+				4.5: '2.5rem',
+				6.5: '4rem',
+			},
+			screens: {
+				desktop: '1440px',
+			},
+			typography: ({ theme }) => {
+				const tocCSS = {
+					ul: {
+						'list-style-type': 'none',
+						'padding-left': 0,
+						margin: 0,
+						li: {
+							'padding-left': 0,
+							marginTop: '0.375rem',
+							marginBottom: '0.375rem',
+						},
+						a: {
+							display: 'block',
+							'text-decoration': 'none',
+							fontSize: '0.875rem',
+							fontWeight: '400',
+							color: '#525151',
+							transition: 'all 0.5s ease-in-out',
+							position: 'relative',
+							left: 0,
+							'&:hover': {
+								color: '#000000',
+								left: '1rem',
+							},
+							'font-weight': '400',
+						},
+						ul: {
+							'list-style-type': 'none',
+							li: {
+								marginTop: '0.375rem',
+								marginBottom: '0.375rem',
+								'padding-left': '0 !important',
+								'margin-left': '0.75rem',
+							},
+							a: {
+								fontWeight: '200',
+								color: '#525151',
+								'&:hover': {
+									color: '#000000',
+								},
+							},
+						},
+					},
+				}
 
-        return {
-          toc: {
-            css: tocCSS,
-          },
-          "dark-toc": {
-            css: {
-              ...tocCSS,
-              ul: {
-                ...tocCSS.ul,
-                a: {
-                  ...tocCSS.ul.a,
-                  color: theme("colors.gray[300]"),
-                  "&:hover": {
-                    ...tocCSS.ul.a["&:hover"],
-                    color: theme("colors.gray[200]"),
-                  },
-                },
-                ul: {
-                  ...tocCSS.ul.ul,
-                  a: {
-                    ...tocCSS.ul.ul.a,
-                    color: theme("colors.scale[400]"),
-                    "&:hover": {
-                      ...tocCSS.ul.ul.a["&:hover"],
-                      color: theme("colors.gray[200]"),
-                    },
-                  },
-                },
-              },
-            },
-          },
-        };
-      },
-    },
-  },
-  plugins: [
-    require("@tailwindcss/typography"),
-    require("@tailwindcss/forms"),
-    // require('@tailwindcss/line-clamp'),
-    // require('@tailwindcss/aspect-ratio'),
-  ],
-};
+				return {
+					toc: {
+						css: tocCSS,
+					},
+					'dark-toc': {
+						css: {
+							...tocCSS,
+							ul: {
+								...tocCSS.ul,
+								a: {
+									...tocCSS.ul.a,
+									color: '#C2C2C280',
+									'&:hover': {
+										...tocCSS.ul.a['&:hover'],
+										color: '#C2C2C2',
+									},
+								},
+								ul: {
+									...tocCSS.ul.ul,
+									a: {
+										...tocCSS.ul.ul.a,
+										color: '#C2C2C280',
+										'&:hover': {
+											...tocCSS.ul.ul.a['&:hover'],
+											color: '#C2C2C2',
+										},
+									},
+								},
+							},
+						},
+					},
+				}
+			},
+		},
+	},
+	plugins: [require('@tailwindcss/typography')],
+}

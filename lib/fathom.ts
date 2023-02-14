@@ -9,6 +9,10 @@ export const setupFathomAnalytics = (router: NextRouter) => {
   //  - Do not include https://
   //  - This must be an exact match of your domain.
   //  - If you're using www. for your domain, make sure you include that here.
+  if (FATHOM_TRACKING_CODE === undefined) {
+    return;
+  }
+
   Fathom.load(FATHOM_TRACKING_CODE, {
     includedDomains: ["shuttle.rs", "www.shuttle.rs"],
   });

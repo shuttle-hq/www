@@ -1,68 +1,85 @@
-import { NextSeo } from "next-seo";
-import { getAlltags, getSortedPosts, Post } from "../../../lib/posts";
-import BlogListItem from "../../../components/blog/BlogListItem";
-import { ParsedUrlQuery } from "querystring";
-import { GetStaticPropsContext, GetStaticPropsResult } from "next";
-import InternalLink from "../../../components/InternalLink";
+import { useMemo, useState } from 'react'
+import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
+import { SITE_URL } from 'lib/constants'
+import { GetStaticPropsContext, GetStaticPropsResult } from 'next'
+import { getAllTags, getSortedPosts } from 'lib/blog/posts'
+import { Blog, FeaturedBlogPost } from 'components/sections'
+import { ParsedUrlQuery } from 'querystring'
+
+export async function getStaticPaths() {
+	const tags = getAllTags()
+
+	const paths = tags.map((tag) => ({
+		params: { tag },
+	}))
+
+	return {
+		paths,
+		fallback: false,
+	}
+}
 
 interface Params extends ParsedUrlQuery {
-  readonly tag: string;
+	readonly tag: string
 }
 
 export async function getStaticProps({
-  params,
+	params,
 }: GetStaticPropsContext<Params>): Promise<GetStaticPropsResult<Props>> {
-  const posts = getSortedPosts(0, [params.tag]);
+	const tag = params?.tag !== undefined && params.tag !== 'all' ? params.tag : ''
+	const posts = getSortedPosts(0, tag ? [tag] : undefined)
 
-  return {
-    props: {
-      tag: params.tag,
-      blogs: posts,
-    },
-  };
-}
+	const tags = getAllTags()
 
-export async function getStaticPaths() {
-  const tags = getAlltags();
-  return {
-    paths: tags.map((tag) => ({ params: { tag } })),
-    fallback: false,
-  };
+	return {
+		props: {
+			posts,
+			tags,
+		},
+	}
 }
 
 interface Props {
-  readonly tag: string;
-  readonly blogs: readonly Post[];
+	readonly posts: ReturnType<typeof getSortedPosts>
+	readonly tags: string[]
 }
 
-export default function TagBlogsPage(props: Props) {
-  const { blogs, tag } = props;
-  return (
-    <>
-      <NextSeo
-        title={`Blog | ${tag}`}
-        description="Latest news from the shuttle team."
-      />
+export default function BlogPage(props: Props): JSX.Element {
+	const tags = props.tags
+	const router = useRouter()
 
-      <div className="mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
-        <div className="flex space-x-1">
-          <p className="cursor-pointer">
-            <InternalLink href="/blog">Blog</InternalLink>
-          </p>
-          <p>/</p>
-          <p>{`${tag}`}</p>
-        </div>
-        <ol className="grid grid-cols-12 gap-8 py-16 lg:gap-16">
-          {blogs.map((blog, idx) => (
-            <div
-              className="col-span-12 mb-16 md:col-span-12 lg:col-span-6 xl:col-span-4"
-              key={idx}
-            >
-              <BlogListItem post={blog} />
-            </div>
-          ))}
-        </ol>
-      </div>
-    </>
-  );
+	const [headPost, ...tailPosts] = props.posts
+
+	const meta_title = 'Shuttle Blog'
+	const meta_description = 'Get all your shuttle News on the shuttle blog.'
+
+	return (
+		<>
+			<NextSeo
+				title={meta_title}
+				description={meta_description}
+				openGraph={{
+					title: meta_title,
+					description: meta_description,
+					url: SITE_URL + router.pathname,
+					images: [
+						{
+							url: `${SITE_URL}images/og/og-image.jpg`,
+						},
+					],
+				}}
+				additionalLinkTags={[
+					{
+						rel: 'alternate',
+						type: 'application/rss+xml',
+						href: `${SITE_URL}rss.xml`,
+					},
+				]}
+			/>
+
+			<FeaturedBlogPost {...headPost} />
+			<Blog tags={tags} posts={tailPosts} />
+		</>
+	)
 }

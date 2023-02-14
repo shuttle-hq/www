@@ -1,474 +1,364 @@
-import matter from "gray-matter";
-import { getAuthors } from "../../../../../lib/authors";
-import { serialize } from "next-mdx-remote/serialize";
-import { NextSeo } from "next-seo";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import React from "react";
-import { generateReadingTime } from "../../../../../lib/helpers";
-import {
-  getAllPostSlugs,
-  getPostdata,
-  getSortedPosts,
-  Post,
-} from "../../../../../lib/posts";
-import { MDXRemote, MDXRemoteProps } from "next-mdx-remote";
-import gfm from "remark-gfm";
-import slug from "rehype-slug";
-import toc from "markdown-toc";
-import rehypePrism from "@mapbox/rehype-prism";
-import { SITE_URL } from "../../../../../lib/constants";
-import { GetStaticPropsContext, GetStaticPropsResult } from "next";
-import { ParsedUrlQuery } from "querystring";
-import InternalLink from "../../../../../components/InternalLink";
-import ExternalLink from "../../../../../components/ExternalLink";
-import classnames from "classnames";
-import { DocumentTextIcon } from "@heroicons/react/outline";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLinkedin, faTwitter } from "@fortawesome/free-brands-svg-icons";
-import Copy from "../../../../../components/Copy";
-import Socials from "../../../../../components/Socials";
+import matter from 'gray-matter'
+import { serialize } from 'next-mdx-remote/serialize'
+import { NextSeo } from 'next-seo'
+import Image from 'next/image'
+import { useRouter } from 'next/router'
+import { useMemo } from 'react'
+import { generateReadingTime } from 'lib/helpers'
+import { getAllPostSlugs, getPostData, getSortedPosts, Post } from 'lib/blog/posts'
+import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote'
+import gfm from 'remark-gfm'
+import slug from 'rehype-slug'
+
+// @ts-ignore
+import toc from 'markdown-toc'
+import rehypePrism from '@mapbox/rehype-prism'
+import { DISCORD_URL, SITE_URL } from 'lib/constants'
+import { GetStaticPropsContext, GetStaticPropsResult } from 'next'
+import { ParsedUrlQuery } from 'querystring'
+import Link from 'next/link'
+import clsx from 'clsx'
+import { BlogHeader, BlogPrevNext, BlogSidebar, CallToAction } from 'components/sections'
+import { LinkedInLogo, Logo, TwitterLogo } from 'components/svgs'
+import { CopyButton } from 'components/elements'
+import { TwitterTweetEmbed } from 'react-twitter-embed'
 
 export async function getStaticPaths() {
-  const paths = getAllPostSlugs();
-  return {
-    paths,
-    fallback: false,
-  };
+	const paths = getAllPostSlugs()
+
+	return {
+		paths: paths,
+		fallback: false,
+	}
 }
 
 interface Params extends ParsedUrlQuery {
-  readonly year: string;
-  readonly month: string;
-  readonly day: string;
-  readonly slug: string;
+	readonly year: string
+	readonly month: string
+	readonly day: string
+	readonly slug: string
 }
 
 export async function getStaticProps({
-  params,
+	params,
 }: GetStaticPropsContext<Params>): Promise<GetStaticPropsResult<Props>> {
-  const filePath = `${params.year}-${params.month}-${params.day}-${params.slug}`;
-  const postContent = await getPostdata(filePath);
-  const readingTime = generateReadingTime(postContent);
-  const { data, content } = matter(postContent);
+	if (!params) throw new Error('No params found')
 
-  const mdxPost = await serialize(content, {
-    scope: data,
-    mdxOptions: {
-      remarkPlugins: [gfm],
-      rehypePlugins: [slug, rehypePrism],
-    },
-  });
+	const filePath = `${params.year}-${params.month}-${params.day}-${params.slug}`
+	const postContent = await getPostData(filePath)
+	const readingTime = generateReadingTime(postContent)
+	const { data, content } = matter(postContent)
 
-  const contentTOC = toc(content, {
-    maxdepth: data.toc_depth ?? 3,
-  });
+	const mdxPost = await serialize(content, {
+		scope: data,
+		mdxOptions: {
+			remarkPlugins: [gfm],
+			rehypePlugins: [slug, rehypePrism],
+		},
+	})
 
-  const mdxTOC = await serialize(contentTOC.content);
+	const contentTOC = toc(content, {
+		maxdepth: data.toc_depth ?? 3,
+	})
 
-  const relatedPosts = getSortedPosts(
-    6,
-    mdxPost.scope.tags as readonly string[]
-  )
-    .filter((p) => p.slug != filePath)
-    .slice(0, 5);
+	const mdxTOC = await serialize(contentTOC.content)
 
-  const allPosts = getSortedPosts();
+	if (!mdxPost || !mdxPost.scope) throw new Error('No mdxPost found')
 
-  const currentIndex = allPosts
-    .map(function (e) {
-      return e.slug;
-    })
-    .indexOf(filePath);
+	const relatedPosts = getSortedPosts(6, mdxPost.scope.tags as readonly string[])
+		.filter((p) => p.slug != filePath)
+		.slice(0, 5)
 
-  const nextPost = allPosts[currentIndex + 1] ?? null;
-  const prevPost = allPosts[currentIndex - 1] ?? null;
+	const allPosts = getSortedPosts()
 
-  const options: Intl.DateTimeFormatOptions = {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  };
-  const formattedDate = new Date(data.date).toLocaleDateString(
-    "en-IN",
-    options
-  );
+	const currentIndex = allPosts
+		.map(function (e) {
+			return e.slug
+		})
+		.indexOf(filePath)
 
-  return {
-    props: {
-      prevPost,
-      nextPost,
-      relatedPosts,
-      blog: {
-        slug: `${params.year}/${params.month}/${params.day}/${params.slug}`,
-        content: mdxPost,
-        ...data,
-        toc: mdxTOC,
-        readingTime,
-        date: formattedDate,
-      } as Post,
-    },
-  };
+	const nextPost = allPosts[currentIndex + 1] ?? null
+	const prevPost = allPosts[currentIndex - 1] ?? null
+
+	const options: Intl.DateTimeFormatOptions = {
+		month: 'long',
+		day: 'numeric',
+		year: 'numeric',
+	}
+	const formattedDate = new Date(data.date).toLocaleDateString('en-IN', options)
+
+	return {
+		props: {
+			prevPost,
+			nextPost,
+			relatedPosts,
+			blog: {
+				slug: `${params.year}/${params.month}/${params.day}/${params.slug}`,
+				content: mdxPost,
+				...data,
+				toc: mdxTOC,
+				readingTime,
+				date: formattedDate,
+			} as Post,
+		},
+	}
 }
 
 const Pre = ({ children, ...props }: any) => {
-  let line = 1;
+	let line = 1
 
-  const code = React.useMemo(() => {
-    return [children.props.children]
-      .flat()
-      .flatMap((child) => {
-        if (typeof child !== "string") {
-          return child.props.children;
-        } else {
-          return child;
-        }
-      })
-      .join("");
-  }, [children]);
+	const code = useMemo(() => {
+		return [children.props.children]
+			.flat()
+			.flatMap((child) => {
+				if (typeof child !== 'string') {
+					return child.props.children
+				} else {
+					return child
+				}
+			})
+			.join('')
+	}, [children])
 
-  return (
-    <div className="relative">
-      <Copy code={code}></Copy>
+	return (
+		<div className={clsx('relative')}>
+			<CopyButton code={code} className='absolute right-2 top-2 inline-flex items-center' />
+			<pre
+				{...props}
+				className={clsx(
+					'!border !border-black/10 !bg-white !pr-16 !text-sm text-[#525151] dark:!border-white/10 dark:!bg-black dark:text-[#7A7A7A] [&>*]:!bg-white dark:[&>*]:!bg-black',
+					props.className ?? 'language-'
+				)}
+			>
+				{{
+					...children,
+					props: {
+						...children.props,
+						className: children.props.className ?? 'language-',
+						children: [
+							<span
+								className='mr-4 inline-block w-4 select-none text-right italic text-[rgb(92,99,112)] last:hidden'
+								key={line}
+							>
+								{line}
+							</span>,
+							...[children.props.children].flat().flatMap((child) => {
+								if (typeof child === 'string') {
+									const [head, ...tail] = child.split('\n')
+									return [
+										head,
+										...tail.flatMap((child) => {
+											line++
 
-      <pre {...props} className={props.className ?? "language-"}>
-        {{
-          ...children,
-          props: {
-            ...children.props,
-            className: children.props.className ?? "language-",
-            children: [
-              <span className="mr-4 inline-block w-4 select-none text-right italic text-[rgb(92,99,112)] last:hidden">
-                {line}
-              </span>,
-              ...[children.props.children].flat().flatMap((child) => {
-                if (typeof child === "string") {
-                  const [head, ...tail] = child.split("\n");
-                  return [
-                    head,
-                    ...tail.flatMap((child) => {
-                      line++;
+											return [
+												'\n',
+												<span
+													key={head}
+													className='mr-4 inline-block w-4 select-none text-right italic text-[rgb(92,99,112)] last:hidden'
+												>
+													{line}
+												</span>,
+												child,
+											]
+										}),
+									]
+								} else {
+									return child
+								}
+							}),
+						],
+					},
+				}}
+			</pre>
+		</div>
+	)
+}
 
-                      return [
-                        "\n",
-                        <span className="mr-4 inline-block w-4 select-none text-right italic text-[rgb(92,99,112)] last:hidden">
-                          {line}
-                        </span>,
-                        child,
-                      ];
-                    }),
-                  ];
-                } else {
-                  return child;
-                }
-              }),
-            ],
-          },
-        }}
-      </pre>
-    </div>
-  );
-};
+const mdxComponents: MDXRemoteProps['components'] = {
+	a(props) {
+		if (props?.href?.match(/^https?:\/\//)) {
+			return (
+				<a
+					{...props}
+					className='relative bg-gradient-to-r from-[#FC540C] to-[#FFD76F] bg-clip-text text-transparent'
+				></a>
+			)
+		}
 
-const mdxComponents: MDXRemoteProps["components"] = {
-  a(props) {
-    if (props.href.match(/^https?:\/\//)) {
-      return (
-        <ExternalLink
-          {...props}
-          className="text-brand-orange1 no-underline hover:text-brand-orange2"
-        ></ExternalLink>
-      );
-    }
-
-    return (
-      <InternalLink
-        {...(props as any)}
-        className="text-brand-orange1 no-underline hover:text-brand-orange2"
-      ></InternalLink>
-    );
-  },
-  pre: (props: any) => {
-    return <Pre {...props} />;
-  },
-  TLDR: (props: any) => {
-    return (
-      <div className="border-l-8 border-brand-orange1 bg-gray-200 p-4 text-left text-xl text-gray-500  dark:bg-gray-800 dark:text-gray-200">
-        <span className="text-md rounded bg-brand-orange1 px-[10px] py-[2px] font-extrabold text-slate-100  dark:text-dark-800">
-          TLDR
-        </span>
-        {props.children}
-      </div>
-    );
-  },
-  CaptionedImage: (props: any) => {
-    return (
-      <div className="grid grid-cols-1 justify-items-center">
-        <img src={props.src} alt={props.src}></img>
-        <span className="-mt-6 text-sm text-[#828282] dark:text-gray-300">
-          {props.caption}
-        </span>
-      </div>
-    );
-  },
-  // blockquote(props) {
-  //   return (
-  //     <blockquote className="my-4 border-l-8 border-brand-orange1 bg-gray-200 p-4 text-left text-xl text-gray-500 dark:border-brand-orange2 dark:bg-gray-800 dark:text-gray-200">
-  //       {props.children}
-  //     </blockquote>
-  //   );
-  // },
-};
+		return <Link {...(props as any)} className='my-0 no-underline'></Link>
+	},
+	pre: (props: any) => {
+		return <Pre {...props} />
+	},
+	Tweet: (props: any) => {
+		return (
+			<div className='flex items-center justify-center [&>*]:w-full [&>*]:max-w-sm lg:[&>*]:max-w-xl'>
+				<TwitterTweetEmbed {...props} options={{ width: '100%' }} />
+			</div>
+		)
+	},
+	TLDR: (props: any) => {
+		return (
+			<div className='mb-24 text-left text-xl'>
+				<span className='font-bold text-black dark:text-[#C2C2C2]'>TLDR;</span>
+				<span className='text-[#525151] prose-p:!my-2 dark:text-[#7A7A7A]'>{props.children}</span>
+			</div>
+		)
+	},
+	CaptionedImage: (props: any) => {
+		return (
+			<div className='relative grid w-full grid-cols-1 justify-items-center'>
+				<Image
+					src={props.src}
+					alt={props.alt}
+					width={1}
+					height={1}
+					className='overflow-hidden rounded-2xl object-contain'
+				></Image>
+				<span className='-mt-6 text-sm text-[#828282] dark:text-gray-300'>{props.caption}</span>
+			</div>
+		)
+	},
+	blockquote(props) {
+		return (
+			<blockquote className='border-none bg-[linear-gradient(180deg,_#FC540C_25.63%,_rgba(255,_215,_111,_0.72)_60.67%,_#38D4E9_88.15%)] pl-2 text-left text-2xl font-normal not-italic text-[#525151] dark:text-[#7A7A7A]'>
+				<div className='bg-[#E9E9E9] py-1 pl-8 prose-p:!my-0 dark:bg-black'>{props.children}</div>
+			</blockquote>
+		)
+	},
+}
 
 interface Props {
-  readonly prevPost?: Post;
-  readonly nextPost?: Post;
-  readonly relatedPosts: readonly Post[];
-  readonly blog: Post;
+	readonly prevPost?: Post
+	readonly nextPost?: Post
+	readonly relatedPosts: Post[]
+	readonly blog: Post
 }
 
 export default function BlogPostPage(props: Props) {
-  const author = getAuthors(props.blog.author?.split(",") ?? []);
+	const { basePath } = useRouter()
 
-  const { basePath } = useRouter();
-
-  return (
-    <>
-      <NextSeo
-        title={props.blog.title}
-        openGraph={{
-          title: props.blog.title,
-          description: props.blog.description,
-          url: `${SITE_URL}blog/${props.blog.slug}`,
-          type: "article",
-          article: {
-            //
-            // TODO: add expiration and modified dates
-            // https://github.com/garmeeh/next-seo#article
-            publishedTime: props.blog.date,
-            //
-            // TODO: author urls should be internal in future
-            // currently we have external links to github profiles
-            authors: [props.blog.author_url],
-            tags: props.blog.tags.map((cat: string) => {
-              return cat;
-            }),
-          },
-          images: [
-            {
-              url: `${SITE_URL}${basePath}/images/blog/${props.blog.thumb}`,
-            },
-          ],
-        }}
-      />
-      <div className="mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
-        <div className="mb-16 max-w-5xl space-y-8">
-          <div className="space-y-4">
-            <p className="text-brand-900">Blog post</p>
-            <h1 className="text-4xl">{props.blog.title}</h1>
-            <div className="flex space-x-3 text-sm text-slate-500 dark:text-gray-400">
-              <p>{props.blog.date}</p>
-              <p>•</p>
-              <p>{props.blog.readingTime}</p>
-            </div>
-            <div className="flex gap-3">
-              {author.map((author, index) => {
-                return (
-                  <div className="mt-6 mb-8 mr-4 w-max lg:mb-0" key={index}>
-                    <InternalLink
-                      className={author.author_url ? "cursor-pointer" : ""}
-                      href={author.author_url}
-                    >
-                      <div className="flex items-center gap-3">
-                        {author.author_image_url && (
-                          <div className="w-10">
-                            <Image
-                              src={author.author_image_url}
-                              className="rounded-full border"
-                              width="100%"
-                              height="100%"
-                              layout="responsive"
-                            />
-                          </div>
-                        )}
-                        <div className="flex flex-col">
-                          <span className="mb-0 text-sm dark:text-gray-200">
-                            {author.author}
-                          </span>
-                          <span className="mb-0 text-xs text-slate-500 dark:text-gray-400">
-                            {author.position}
-                          </span>
-                        </div>
-                      </div>
-                    </InternalLink>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-        <div className="gap-6 lg:flex">
-          {/* Content */}
-          <div className="flex-1 overflow-hidden">
-            {(props.blog.thumb ?? props.blog.cover) && (
-              <div className="mb-8 grid grid-cols-1 justify-items-center">
-                {/* todo: fix this temporary hack to fix the caption */}
-                <img
-                  className="rounded"
-                  src={"/images/blog/" + (props.blog.cover ?? props.blog.thumb)}
-                  alt="Cover image"
-                />
-                {/* <Image
-                    src={
-                      "/images/blog/" + (props.blog.cover ?? props.blog.thumb)
-                    }
-                    layout="fill"
-                    objectFit="contain"
-                  /> */}
-                {props.blog.caption && (
-                  <span className="mt-2 text-sm text-[#828282] dark:text-gray-300">
-                    {props.blog.caption}
-                  </span>
-                )}
-              </div>
-            )}
-            <article
-              className={classnames(
-                "prose dark:prose-invert",
-                "max-w-none",
-                "prose-headings:before:block",
-                "prose-headings:before:-mt-36",
-                "prose-headings:before:pt-36",
-                "prose-headings:lg:before:-mt-20",
-                "prose-headings:before:lg:pt-20"
-              )}
-            >
-              <MDXRemote {...props.blog.content} components={mdxComponents} />
-            </article>
-            <div className="mt-16">
-              <div className="text-sm dark:text-gray-400">
-                Share this article
-              </div>
-              <div className="mt-4 flex items-center space-x-4">
-                <ExternalLink
-                  href={`https://twitter.com/share?text=${props.blog.title}&url=${SITE_URL}blog/${props.blog.slug}`}
-                  className="text-slate-600 hover:text-slate-900 dark:text-gray-400 hover:dark:text-gray-200"
-                >
-                  <FontAwesomeIcon icon={faTwitter} className="text-xl" />
-                </ExternalLink>
-
-                <ExternalLink
-                  href={`https://www.linkedin.com/shareArticle?url=${SITE_URL}blog/${props.blog.slug}&title=${props.blog.title}`}
-                  className="text-slate-600 hover:text-slate-900 dark:text-gray-400 hover:dark:text-gray-200"
-                >
-                  <FontAwesomeIcon icon={faLinkedin} className="text-xl" />
-                </ExternalLink>
-              </div>
-            </div>
-            <div className="grid gap-8 py-8 lg:grid-cols-1">
-              <div>
-                {props.prevPost && (
-                  <NextCard post={props.prevPost} label="Last post" />
-                )}
-              </div>
-              <div>
-                {props.nextPost && (
-                  <NextCard
-                    post={props.nextPost}
-                    label="Next post"
-                    className="text-right"
-                  />
-                )}
-              </div>
-            </div>
-            <Socials />
-          </div>
-          {/* Sidebar */}
-          <div className="flex-none space-y-8 lg:w-64">
-            <div className="space-y-8 lg:sticky lg:top-20">
-              <div className="hidden lg:block">
-                <div className="space-y-8 py-8 lg:py-0">
-                  <div className="space-x-2">
-                    {props.blog.tags.map((tag: string) => {
-                      return (
-                        <InternalLink
-                          key={tag}
-                          className="flex-shrink-0 cursor-pointer rounded-full border border-green-400 bg-green-400/10 px-2 py-1 text-xs font-medium text-green-500 hover:bg-green-400/20 dark:text-green-400"
-                          href={`/blog/tags/${tag}`}
-                        >
-                          {tag}
-                        </InternalLink>
-                      );
-                    })}
-                  </div>
-
-                  <div className="mb-4 dark:text-gray-200">On this page</div>
-
-                  <div className="prose prose-toc !mt-0 dark:prose-dark-toc">
-                    <MDXRemote {...props.blog.toc} components={mdxComponents} />
-                  </div>
-                </div>
-              </div>
-              {props.relatedPosts.length > 0 ? (
-                <div>
-                  <div className="mb-4 dark:text-gray-200">
-                    Related articles
-                  </div>
-
-                  <div className="flex flex-col gap-2 space-y-3">
-                    {props.relatedPosts.map((post, index) => (
-                      <InternalLink
-                        href={`/blog/${post.url}`}
-                        key={index}
-                        className="flex gap-2 text-sm text-slate-500 hover:text-slate-900 dark:text-gray-300 hover:dark:text-gray-200"
-                      >
-                        <DocumentTextIcon className="mt-[2px] h-4 w-4 flex-shrink-0" />
-
-                        <span>{post.title}</span>
-                      </InternalLink>
-                    ))}
-                    <div className="mt-2">
-                      <InternalLink
-                        href={`/blog`}
-                        className="cursor-pointer text-sm text-slate-500 hover:text-slate-900 dark:text-gray-300 hover:dark:text-gray-200"
-                      >
-                        View all posts
-                      </InternalLink>
-                    </div>
-                  </div>
-                </div>
-              ) : null}
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
-
-interface NextCardProps {
-  readonly post: Post;
-  readonly label: string;
-  readonly className?: string;
-}
-
-function NextCard({ post, label, className }: NextCardProps) {
-  return (
-    <InternalLink
-      href={`/blog/${post.url}`}
-      className={classnames(
-        className,
-        "block cursor-pointer rounded border border-slate-400 p-6 transition hover:bg-slate-200 dark:border-dark-500 dark:hover:bg-dark-600"
-      )}
-    >
-      <div className="text-sm text-slate-500 dark:text-gray-400">{label}</div>
-
-      <div className="mt-4 text-lg text-slate-800 dark:text-gray-200">
-        {post.title}
-      </div>
-      <div className="text-xs text-slate-500 dark:text-gray-400">
-        {post.date}
-      </div>
-    </InternalLink>
-  );
+	return (
+		<>
+			<NextSeo
+				title={props.blog.title}
+				openGraph={{
+					title: props.blog.title,
+					description: props.blog.description,
+					url: `${SITE_URL}blog/${props.blog.slug}`,
+					type: 'article',
+					article: {
+						//
+						// TODO: add expiration and modified dates
+						// https://github.com/garmeeh/next-seo#article
+						publishedTime: props.blog.date,
+						//
+						// TODO: author urls should be internal in future
+						// currently we have external links to github profiles
+						authors: [props.blog.author_url || ''],
+						tags: (props.blog.tags || []).map((cat: string) => {
+							return cat
+						}),
+					},
+					images: [
+						{
+							url: `${SITE_URL}${basePath}/images/blog/${props.blog.thumb}`,
+						},
+					],
+				}}
+			/>
+			<div className='mx-auto max-w-6xl p-4 sm:p-6 lg:p-8'>
+				<div className='grid grid-cols-1 gap-6 gap-y-12 lg:grid-cols-4'>
+					{/* Content */}
+					<div className='lg:col-span-3'>
+						<BlogHeader post={props.blog} />
+					</div>
+					<div className='hidden lg:block' />
+					<div className='lg:col-span-3'>
+						{(props.blog.thumb ?? props.blog.cover) && (
+							<div className='mb-8 grid grid-cols-1 justify-items-center'>
+								<Image
+									src={'/images/blog/' + (props.blog.cover ?? props.blog.thumb)}
+									alt='Cover image'
+									width={810}
+									height={424}
+									className='w-full rounded-[2rem] object-contain'
+								/>
+								{props.blog.caption && (
+									<span className='mt-2 text-center text-sm text-[#525151] dark:text-[#7A7A7A] dark:text-gray-300'>
+										{props.blog.caption}
+									</span>
+								)}
+							</div>
+						)}
+						{props.blog.content && (
+							<article
+								className={clsx(
+									'prose dark:prose-invert',
+									'max-w-none overflow-x-hidden',
+									'prose-headings:before:block',
+									'prose-headings:before:-mt-36',
+									'prose-headings:before:pt-36',
+									'prose-headings:lg:before:-mt-20',
+									'prose-headings:before:lg:pt-20',
+									'text-xl text-[#525151] prose-h2:text-5xl prose-h4:text-3xl prose-h5:text-2xl dark:text-[#7A7A7A]'
+								)}
+							>
+								<MDXRemote {...props.blog.content} components={mdxComponents} />
+							</article>
+						)}
+						{/* Powered By */}
+						<div className='relative mt-11 flex w-full flex-col overflow-hidden rounded-[2rem] bg-[#13292C] p-8 dark:bg-black'>
+							<Image
+								src='/images/sections/powered-by/bg.png'
+								alt=''
+								fill
+								className='absolute left-0 top-0 z-10'
+							/>
+							<Image
+								src='/images/sections/powered-by/stars.png'
+								alt=''
+								fill
+								className='absolute left-20 bottom-0 z-10'
+							/>
+							<Logo className='relative z-10 text-white' />
+							<span className='relative z-10 mt-5 text-[#FFFFFF8F] dark:text-[#7A7A7A]'>
+								This blog post is powered by shuttle - The Rust-native, open source, cloud
+								development platform. If you have any questions, or want to provide feedback, join
+								our{' '}
+								<a target='_blank' rel='noreferrer' className='text-[#FF8A3F]' href={DISCORD_URL}>
+									Discord server!
+								</a>
+							</span>
+						</div>
+						{/* <Socials /> */}
+						<div className='mt-14 mb-20 flex items-center space-x-4'>
+							<span className='text-[#525151] dark:text-[#C2C2C2]'>Share article</span>
+							<a
+								href={`https://twitter.com/share?text=${props.blog.title}&url=${SITE_URL}blog/${props.blog.slug}`}
+								className='flex items-center rounded-xl border border border-black/10 bg-black p-3 dark:border-white/10'
+							>
+								<TwitterLogo />
+							</a>
+							<a
+								href={`https://www.linkedin.com/shareArticle?url=${SITE_URL}blog/${props.blog.slug}&title=${props.blog.title}`}
+								className='flex items-center rounded-xl border border border-black/10 bg-black p-3 dark:border-white/10'
+							>
+								<LinkedInLogo />
+							</a>
+						</div>
+						<BlogPrevNext prevPost={props.prevPost} nextPost={props.nextPost} />
+					</div>
+					{/* Sidebar */}
+					<BlogSidebar
+						tags={props.blog.tags || []}
+						relatedPosts={props.relatedPosts || []}
+						toc={props.blog.toc}
+						mdxComponents={mdxComponents}
+					/>
+				</div>
+			</div>
+			<CallToAction />
+		</>
+	)
 }

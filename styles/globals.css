@@ -1,0 +1,266 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import 'prism-themes/themes/prism-one-dark.css';
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	font-family: 'Atkinson Hyperlegible', sans-serif;
+	background: #e9e9e9;
+}
+
+body.dark {
+	background: black;
+}
+
+@layer base {
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: normal;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradual-Regular.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: italic;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradual-RegularItalic.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: normal;
+		font-weight: 500;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradual-Medium.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: italic;
+		font-weight: 500;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradual-MediumItalic.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: normal;
+		font-weight: 600;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradual-Semibold.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: italic;
+		font-weight: 600;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradual-SemiboldItalic.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: normal;
+		font-weight: 700;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradual-Bold.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: italic;
+		font-weight: 700;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradual-BoldItalic.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: normal;
+		font-weight: 800;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradual-Extrabold.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: italic;
+		font-weight: 800;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradualExtraboldItalic.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: normal;
+		font-weight: 900;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradualBlack.woff2');
+	}
+
+	@font-face {
+		font-family: 'BwGradual';
+		font-style: italic;
+		font-weight: 900;
+		src: url('/fonts/Bw-Gradual/woff2/BwGradualBlackItalic.woff2');
+	}
+}
+
+@layer components {
+	.text-gradient {
+		background-image: linear-gradient(
+			71.78deg,
+			#fc540c 27.87%,
+			rgba(255, 215, 111, 0.72) 52.56%,
+			#38d4e9 74.58%
+		);
+	}
+
+	.button-shadow,
+	.shadow-gradient,
+	.tab-shadow,
+	.nav-link-shadow {
+		position: relative;
+	}
+
+	.button-shadow::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		height: 100%;
+		width: 100%;
+		z-index: -1;
+		background: linear-gradient(
+			76.82deg,
+			rgba(244, 42, 41, 0.3) -6.51%,
+			rgba(255, 137, 63, 0.3) 75.76%,
+			rgba(229, 233, 56, 0.3) 132.04%
+		);
+		filter: blur(30px);
+	}
+
+	.border-gradient::after {
+		content: '';
+		position: absolute;
+		left: -1px;
+		top: -1px;
+		z-index: -1;
+		width: calc(100% + 2px);
+		height: calc(100% + 2px);
+		border-radius: 0.875rem;
+
+		opacity: 0;
+		transition: opacity 0.5s;
+	}
+
+	.border-gradient.always-visible::after {
+		opacity: 1;
+	}
+
+	.border-gradient::after {
+		background-image: linear-gradient(
+			84.16deg,
+			rgba(244, 41, 41, 0.2) -7.25%,
+			rgba(255, 215, 111, 0.042) 35.45%,
+			rgba(56, 212, 233, 0.2) 97%
+		);
+	}
+
+	.dark .border-gradient::after {
+		background-image: linear-gradient(
+			84.16deg,
+			rgba(244, 41, 41, 0.2) -7.25%,
+			rgba(255, 215, 111, 0.042) 35.45%,
+			rgba(56, 212, 233, 0.2) 97%
+		);
+	}
+
+	.border-gradient:hover::after {
+		opacity: 1;
+	}
+
+	.input-border-gradient::after {
+		content: '';
+		position: absolute;
+		left: -1px;
+		top: -1px;
+		z-index: -1;
+		width: calc(100% + 2px);
+		height: calc(100% + 2px);
+		border-radius: 0.75rem;
+		background-image: linear-gradient(
+			81.45deg,
+			rgba(252, 84, 12, 0.5) 44.31%,
+			rgba(255, 215, 111, 0.36) 61.89%,
+			rgba(56, 212, 233, 0.5) 77.57%
+		);
+		opacity: 0;
+		transition: all 0.5s;
+	}
+
+	.input-border-gradient:hover::after,
+	.input-border-gradient:focus-within::after {
+		opacity: 1;
+	}
+
+	.shadow-gradient::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		height: 100%;
+		width: 100%;
+		z-index: -1;
+		background-image: linear-gradient(85.57deg, rgba(255, 92, 0, 0.4) 18.06%, rgba(0, 240, 255, 0.4) 136.08%);
+		filter: blur(15px);
+		transform: scale(0.8);
+		transition: all 500ms;
+	}
+
+	button.shadow-gradient:hover::before,
+	a.shadow-gradient:hover::before {
+		transform: scale(1) !important;
+	}
+
+	@media (min-width: 768px) {
+		.tab-shadow:hover::before {
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 0;
+			height: 100%;
+			width: 100%;
+			border-radius: 9999px;
+			z-index: -1;
+			opacity: 0.5;
+			filter: blur(20px);
+			transform: scaleY(0.5);
+			background-image: linear-gradient(86.56deg, #ff5c00 -12.79%, #00d1ff 151.05%);
+			animation: nav-link-shadow 0.3s ease-out forwards;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.nav-link-shadow:hover::before {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translateX(-50%) translateY(-50%);
+
+			height: 33px;
+			width: 70px;
+
+			border-radius: 50%;
+			z-index: -1;
+			background: linear-gradient(86.87deg, #ff5c00 -13.38%, #00d1ff 111.85%);
+			filter: blur(25px);
+			animation: nav-link-shadow 0.3s ease-out forwards;
+		}
+
+		@keyframes nav-link-shadow {
+			0% {
+				opacity: 0;
+			}
+			100% {
+				opacity: 0.8;
+			}
+		}
+	}
+}
