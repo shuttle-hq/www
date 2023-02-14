@@ -7,11 +7,15 @@ type StorageTheme = 'dark' | 'light' | 'system'
 
 interface ThemeSwitcherProps {
 	className?: string
+	defaultTheme?: StorageTheme
 	hidden?: boolean
 }
 
-const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ className, hidden }) => {
-	const [theme, setTheme] = useLocalStorage<StorageTheme>('app-theme', 'dark')
+const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ className, defaultTheme, hidden }) => {
+	const defaultTheme_ = defaultTheme || "dark"
+	const [theme, setTheme] = useLocalStorage<StorageTheme>('app-theme', defaultTheme_)
+	useEffect(() => setTheme(defaultTheme_))
+
 	const isDarkTheme = theme === 'dark'
 
 	useEffect(() => {
