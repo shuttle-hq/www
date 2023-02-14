@@ -10,25 +10,25 @@ const LogosReferences = () => {
 					<Link href='https://uber.com'>
 						<Uber className='text-[#13292C] dark:text-white' />
 					</Link>
-					<Link href='https://uber.com'>
+					<Link href='https://github.com/'>
 						<Github className='text-[#13292C] dark:text-white' />
 					</Link>
-					<Link href='https://uber.com'>
+					<Link href='https://www.uipath.com/'>
 						<UiPath className='text-[#13292C] dark:text-white' />
 					</Link>
-					<Link href='https://uber.com'>
+					<Link href='https://www.meta.com/'>
 						<Meta className='text-[#13292C] dark:text-white' />
 					</Link>
-					<Link href='https://uber.com'>
+					<Link href='https://stellar.org/'>
 						<Stellar className='text-[#13292C] dark:text-white' />
 					</Link>
-					<Link href='https://uber.com'>
+					<Link href='https://www.mongodb.com/'>
 						<MongoDB className='text-[#13292C] dark:text-white' />
 					</Link>
-					<Link href='https://uber.com'>
+					<Link href='https://www.hulu.com'>
 						<Hulu className='text-[#13292C] dark:text-white' />
 					</Link>
-					<Link href='https://uber.com'>
+					<Link href='https://www.f5.com/'>
 						<F5 className='text-[#13292C] dark:text-white' />
 					</Link>
 				</div>
