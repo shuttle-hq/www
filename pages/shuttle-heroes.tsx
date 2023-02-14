@@ -11,7 +11,7 @@ export default function ShuttleHeroes() {
 			<ShuttleHeroesHero />
 			<ShuttleHeroesResponsibilities />
 			<ShuttleHeroesBenefits />
-			<CallToAction />
+			<CallToAction subtext='Become a part of shuttle heroes program!'/>
 		</>
 	)
 }

@@ -47,7 +47,7 @@ export default function Home({posts, starters, questions}: Props) {
 			<FeaturedStarters starters={starters}/>
 			<HowItWorks />
 			<Testimonials />
-			<CallToAction />
+			<CallToAction/>
 			<FrequentlyAskedQuestions questions={questions}/>
 			<FeaturedBlogPosts posts={posts} />
 		</>
