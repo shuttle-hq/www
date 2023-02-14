@@ -11,6 +11,7 @@ export const TWITTER_HANDLE = '@shuttle_dev'
 
 export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
 export const FORMSPREE_ENDPOINT = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT
+export const FATHOM_TRACKING_CODE = process.env.NEXT_PUBLIC_FATHOM_TRACKING_CODE
 
 export const GITHUB_URL = 'https://github.com/shuttle-hq/shuttle'
 
