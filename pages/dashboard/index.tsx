@@ -60,12 +60,12 @@ export default function DashboardHome({starters}: Props) {
 						description='Run this command to authenticate'
 						backgroundImage='/images/pages/dashboard/card-3.png'
 						gradientClassName='from-[#FC540C] to-[#C39348]'
-						command={`cargo install login ${apiKey}`}
+						command={`cargo shuttle login ${apiKey}`}
 						className='row-start-3 lg:col-span-4 lg:col-start-5'
 					/>
 					<Step
 						number='4'
-						title='Initalize'
+						title='Initialize'
 						description='Run this command to initialize your project'
 						backgroundImage='/images/pages/dashboard/card-4.png'
 						gradientClassName='from-[#FC540C] to-[#C39348]'
