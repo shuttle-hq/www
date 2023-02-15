@@ -55,7 +55,7 @@ const GetStarted = () => {
 				<div className='group relative z-10 block h-full items-end overflow-hidden rounded-2xl bg-[#13292C] px-8 pt-16 dark:bg-black sm:mt-10 sm:items-center sm:px-4 sm:px-12 sm:py-24 lg:mt-0 lg:items-end lg:items-center lg:px-8 lg:py-12 xl:flex xl:p-[4.375rem] desktop:items-end desktop:pt-[2.75rem] desktop:pb-0'>
 					<CodeBlock
 						language={selectedSlide === 2 ? 'none' : 'rust' }
-						code={selectedSlide === 0 ? HELLO_CLOUD : selectedSlide === 1 ? USING_SQLX : CARGO_DEPLOYS }
+						code={selectedSlide === 0 ? SHUTTLE_INSTALL : selectedSlide === 1 ? SHUTTLE_INIT : SHUTTLE_DEPLOY }
 						showLineNumbers
 						className={clsx(
 							'absolute left-1/2 mx-auto h-full -translate-x-1/2 transform overflow-auto rounded-t-xl sm:rounded-xl lg:w-full lg:rounded-t-3xl lg:rounded-b-3xl xl:overflow-hidden desktop:relative desktop:-bottom-px desktop:rounded-b-none'
@@ -211,7 +211,7 @@ const GetStartedSlide: FC<GetStartedSlideProps> = ({
 
 export default GetStarted
 
-const HELLO_CLOUD = `
+const SHUTTLE_INSTALL = `
 ❯ cargo shuttle help
 A cargo command for the shuttle platform (https://www.shuttle.rs/)
 
@@ -235,7 +235,7 @@ Commands:
   help        Print this message or the help of the given subcommand(s)
 `.trim()
 
-const CARGO_DEPLOYS = `
+const SHUTTLE_INIT = `
 #[get("/")]
 fn hello() -> &'static str {
     "Hello, Cloud!"
@@ -247,7 +247,7 @@ async fn rocket() -> shuttle_service::ShuttleRocket {
 }
 `.trim()
 
-const USING_SQLX = `
+const SHUTTLE_DEPLOY = `
 $ cargo shuttle deploy
    Packaging url-shortener v0.1.0 (/shuttle/url-shortener)
    Archiving Cargo.toml
