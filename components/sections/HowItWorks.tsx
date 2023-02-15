@@ -210,7 +210,7 @@ struct MyState(PgPool);
 #[get("/hello")]
 fn hello(state: &State<MyState>) -> &'static str {
 
-    // Do things with `state.0`...
+    // Do things with \`state.0\`...
     "Hello, Postgres!"
 }
 
