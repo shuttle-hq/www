@@ -199,7 +199,6 @@ const Pricing = () => {
 							requests='150k/month'
 							workers='1'
 							databaseStorage='500MB'
-							subdomains='1'
 							community='Discord'
 							action={
 								<LoginButton variant='primary' className='bg-[#D8D8D8]'>
@@ -233,7 +232,6 @@ const Pricing = () => {
 							requests='custom'
 							workers='custom'
 							databaseStorage='custom'
-							subdomains='custom'
 							customDomains='custom'
 							community='Discord'
 							requestTurnaround='8h'
@@ -291,14 +289,6 @@ const Pricing = () => {
 						<div className='grid grid-cols-3 items-center py-2 text-center'>
 							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>
 								Database storage
-							</div>
-							<div>500MB</div>
-							{/* <div>2TB</div> */}
-							<div>custom</div>
-						</div>
-						<div className='grid grid-cols-3 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>
-								Subdomains
 							</div>
 							<div>500MB</div>
 							{/* <div>2TB</div> */}
@@ -394,7 +384,6 @@ interface MobilePlanFeaturesProps {
 	requests: string
 	workers: string
 	databaseStorage: string
-	subdomains: string
 	customDomains?: string
 	community: string
 	requestTurnaround?: string
@@ -409,7 +398,6 @@ const MobilePlanFeatures: FC<MobilePlanFeaturesProps> = ({
 	requests,
 	workers,
 	databaseStorage,
-	subdomains,
 	customDomains,
 	community,
 	requestTurnaround,
@@ -441,10 +429,6 @@ const MobilePlanFeatures: FC<MobilePlanFeaturesProps> = ({
 			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
 				<div className='text-[#525151] dark:text-[#C2C2C2]'>Database storage</div>
 				<div className='text-right'>{databaseStorage}</div>
-			</div>
-			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
-				<div className='text-[#525151] dark:text-[#C2C2C2]'>Subdomains</div>
-				<div className='text-right'>{subdomains}</div>
 			</div>
 			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
 				<div className='text-[#525151] dark:text-[#C2C2C2]'>Custom domains</div>
