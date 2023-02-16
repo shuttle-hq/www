@@ -3,26 +3,21 @@ import type { AppProps } from 'next/app'
 import { DefaultSeo } from 'next-seo'
 import CookieConsent from 'react-cookie-consent'
 import Head from 'next/head'
-import { setupFathomAnalytics } from "../lib/fathom";
-import {
-	APP_NAME,
-	SITE_TITLE,
-	SITE_DESCRIPTION,
-	SITE_URL,
-	TWITTER_HANDLE
-} from '../lib/constants'
+import { setupFathomAnalytics } from '../lib/fathom'
+import { APP_NAME, SITE_TITLE, SITE_DESCRIPTION, SITE_URL, TWITTER_HANDLE } from '../lib/constants'
 import { ReactNode, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import '@splidejs/react-splide/css'
 import { Page } from 'components/templates'
 import { UserProvider } from '@auth0/nextjs-auth0/client'
+import { StarOnGithub } from 'components/sections'
 
 const transitionClass = 'transition hover:brightness-125'
 
 export default function App({ Component, pageProps }: AppProps) {
 	const router = useRouter()
 	const { user } = pageProps
-	useEffect(() => setupFathomAnalytics(router), []);
+	useEffect(() => setupFathomAnalytics(router), [])
 
 	const getLayout = (Component as any).getLayout || ((page: ReactNode) => <Page>{page}</Page>)
 
@@ -46,6 +41,7 @@ export default function App({ Component, pageProps }: AppProps) {
 				}}
 			/>
 			<div className='min-h-screen bg-transparent text-black dark:text-[#7A7A7A]'>
+				<StarOnGithub />
 				{getLayout(<Component {...pageProps} />)}
 				<CookieConsent
 					style={{
