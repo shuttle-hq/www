@@ -1,3 +1,4 @@
+import { Jobs } from 'content'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
@@ -52,15 +53,9 @@ const JobOpenings = () => {
 						</div>
 						<div className='flex flex-col divide-y divide-white/10 border-b border-white/10 text-xl text-[#C2C2C2]'>
 							<p className='pb-4 font-gradual font-bold'>Open positions</p>
-							<Position
-								name='Backend Engineer (Rust)'
-								link='https://www.workatastartup.com/jobs/57932'
-							/>
-							<Position name='Framework Engineer' link='https://www.workatastartup.com/jobs/57934' />
-							<Position
-								name='Technical Product Manager'
-								link='https://www.workatastartup.com/jobs/57935'
-							/>
+							{Jobs.map((job) => (
+								<Position key={job.name} name={job.name} link={job.link} />
+							))}
 						</div>
 					</div>
 				</div>
@@ -69,7 +64,7 @@ const JobOpenings = () => {
 	)
 }
 
-interface PositionProps {
+export interface PositionProps {
 	name: string
 	link: string
 }
