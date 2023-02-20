@@ -3,26 +3,19 @@ import type { AppProps } from 'next/app'
 import { DefaultSeo } from 'next-seo'
 import CookieConsent from 'react-cookie-consent'
 import Head from 'next/head'
-import { setupFathomAnalytics } from "../lib/fathom";
-import {
-	APP_NAME,
-	SITE_TITLE,
-	SITE_DESCRIPTION,
-	SITE_URL,
-	TWITTER_HANDLE
-} from '../lib/constants'
+import { setupFathomAnalytics } from '../lib/fathom'
+import { APP_NAME, SITE_TITLE, SITE_DESCRIPTION, SITE_URL, TWITTER_HANDLE } from '../lib/constants'
 import { ReactNode, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import '@splidejs/react-splide/css'
 import { Page } from 'components/templates'
 import { UserProvider } from '@auth0/nextjs-auth0/client'
-
-const transitionClass = 'transition hover:brightness-125'
+import { StarOnGithub } from 'components/sections'
 
 export default function App({ Component, pageProps }: AppProps) {
 	const router = useRouter()
 	const { user } = pageProps
-	useEffect(() => setupFathomAnalytics(router), []);
+	useEffect(() => setupFathomAnalytics(router), [])
 
 	const getLayout = (Component as any).getLayout || ((page: ReactNode) => <Page>{page}</Page>)
 
@@ -46,37 +39,17 @@ export default function App({ Component, pageProps }: AppProps) {
 				}}
 			/>
 			<div className='min-h-screen bg-transparent text-black dark:text-[#7A7A7A]'>
+				<StarOnGithub />
 				{getLayout(<Component {...pageProps} />)}
 				<CookieConsent
-					style={{
-						// Hidden until restyle
-						display: 'none',
-						justifyContent: 'center',
-					}}
+					containerClasses='max-w-xl left-1/2 transform bottom-4 -translate-x-1/2 flex items-end flex-col bg-black/10 border border-white/10 backdrop-filter backdrop-blur-lg backdrop-saturate-150 rounded-2xl p-6'
+					contentClasses='text-base text-[#FFFFFF8F] !m-0 !flex-none tracking-tight self-start'
+					buttonWrapperClasses='!mt-3'
+					buttonClasses='!m-0 !py-3 !px-6 gap-2 whitespace-nowrap rounded-button font-bold transition-all duration-500 button-shadow dark:border-gradient dark:shadow-gradient bg-[#E9E9E9] text-black hover:bg-gradient-to-r hover:from-[#fc540c] hover:to-[#f5c57a] hover:text-white dark:bg-black dark:text-[#C2C2C2] dark:hover:bg-none'
+					declineButtonClasses='!p-0 !mr-6 !ml-0 !my-0 !bg-transparent text-[#7A7A7A] hover:text-[#FFFFFF] underline transition duration-500'
 					enableDeclineButton={true}
 					declineButtonText='Decline'
-					// only a limited subset of tailwind classes work
-					declineButtonClasses={transitionClass}
-					declineButtonStyle={{
-						borderRadius: '4px',
-						fontWeight: '500',
-						color: 'rgb(15 23 42)',
-						padding: '4px 16px',
-						backgroundColor: '#7777dd',
-						minWidth: '87px',
-						opacity: '0.7',
-					}}
-					buttonText='Accept'
-					// only a limited subset of tailwind classes work
-					buttonClasses={transitionClass}
-					buttonStyle={{
-						borderRadius: '4px',
-						fontWeight: '500',
-						color: 'rgb(15 23 42)',
-						padding: '4px 16px',
-						backgroundColor: '#f25100',
-						minWidth: '87px',
-					}}
+					buttonText='Allow'
 					onDecline={() => {}}
 					onAccept={() => {}}
 				>
