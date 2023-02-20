@@ -54,7 +54,7 @@ const GetStarted = () => {
 			>
 				<div className='group relative z-10 block h-full items-end overflow-hidden rounded-2xl bg-[#13292C] px-8 pt-16 dark:bg-black sm:mt-10 sm:items-center sm:px-4 sm:px-12 sm:py-24 lg:mt-0 lg:items-end lg:items-center lg:px-8 lg:py-12 xl:flex xl:p-[4.375rem] desktop:items-end desktop:pt-[2.75rem] desktop:pb-0'>
 					<CodeBlock
-						language={selectedSlide === 2 ? 'none' : 'rust' }
+						language={selectedSlide === 1 ? 'rust' : 'none' }
 						code={selectedSlide === 0 ? SHUTTLE_INSTALL : selectedSlide === 1 ? SHUTTLE_INIT : SHUTTLE_DEPLOY }
 						showLineNumbers
 						className={clsx(
@@ -248,7 +248,7 @@ async fn rocket() -> shuttle_service::ShuttleRocket {
 `.trim()
 
 const SHUTTLE_DEPLOY = `
-$ cargo shuttle deploy
+❯ cargo shuttle deploy
    Packaging url-shortener v0.1.0 (/shuttle/url-shortener)
    Archiving Cargo.toml
    Archiving Cargo.toml.orig
