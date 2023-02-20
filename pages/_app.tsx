@@ -10,6 +10,7 @@ import { useRouter } from 'next/router'
 import '@splidejs/react-splide/css'
 import { Page } from 'components/templates'
 import { UserProvider } from '@auth0/nextjs-auth0/client'
+import { StarOnGithub } from 'components/sections'
 
 export default function App({ Component, pageProps }: AppProps) {
 	const router = useRouter()
@@ -38,6 +39,7 @@ export default function App({ Component, pageProps }: AppProps) {
 				}}
 			/>
 			<div className='min-h-screen bg-transparent text-black dark:text-[#7A7A7A]'>
+				<StarOnGithub />
 				{getLayout(<Component {...pageProps} />)}
 				<CookieConsent
 					containerClasses='max-w-xl left-1/2 transform bottom-4 -translate-x-1/2 flex items-end flex-col bg-black/10 border border-white/10 backdrop-filter backdrop-blur-lg backdrop-saturate-150 rounded-2xl p-6'
