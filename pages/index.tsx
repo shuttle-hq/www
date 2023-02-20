@@ -13,8 +13,8 @@ import {
 } from 'components/sections'
 import { getAllTags, getSortedPosts, Post } from 'lib/blog/posts'
 import { GetStaticPropsResult } from 'next'
-import { StarterAttrs } from "../components/elements/Starter";
-import { QuestionAttrs } from "../components/sections/FrequentlyAskedQuestions";
+import { StarterAttrs } from "../components/elements/Starter"
+import { QuestionAttrs } from "../components/sections/FrequentlyAskedQuestions"
 import { Questions, FeaturedStartersContent } from "../content"
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
@@ -47,7 +47,7 @@ export default function Home({posts, starters, questions}: Props) {
 			<FeaturedStarters starters={starters}/>
 			<HowItWorks />
 			<Testimonials />
-			<CallToAction />
+			<CallToAction/>
 			<FrequentlyAskedQuestions questions={questions}/>
 			<FeaturedBlogPosts posts={posts} />
 		</>

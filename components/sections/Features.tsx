@@ -108,7 +108,7 @@ const Features = () => {
 						fill
 						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain transition-transform duration-1000 group-hover:-translate-x-10 group-hover:-translate-y-1'
 					/>
-					<Database />
+					<Open />
 					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>No Vendor lock-in</h3>
 					<p className='opacity-50'>
 						No need to have your app hosted on our servers, you can deploy it to your own cloud or even
@@ -138,7 +138,7 @@ const Features = () => {
 						Everything is Rust, Rust is everything
 					</h3>
 					<p className='opacity-50'>Get a database by just asking for one in your Rust code.</p>
-					<Open />
+					<Database />
 				</div>
 				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-[#C2C2C2] dark:bg-black dark:text-white sm:p-8 xl:row-[span_4]'>
 					<Image

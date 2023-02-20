@@ -31,7 +31,7 @@ export default function LoginPage() {
 				Log in with Github
 			</Button>
 			<div className='absolute bottom-[-75vh] left-[-9.5%] -z-10 h-[67.37vh] w-[90vw] rotate-[20deg] transform bg-[linear-gradient(62.43deg,_rgba(252,_84,_12,_0.595)_33.67%,_rgba(56,_212,_233,_0.455)_79.8%)] blur-[250px]' />
-			<p>By logging in,_you agree to our Terms of service</p>
+			<p>By logging in, you agree to our Terms of service</p>
 		</div>
 	)
 }

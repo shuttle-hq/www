@@ -158,10 +158,12 @@ export default HowItWorks
 
 const HELLO_CLOUD = `
 use rocket::{get, routes};
+
 #[get("/hello")]
 fn hello() -> &'static str {
     "Hello, world!"
 }
+
 #[shuttle_service::main]
 async fn init() -> shuttle_service::ShuttleRocket {
     Ok(
@@ -202,17 +204,23 @@ $ cargo shuttle deploy
 const USING_SQLX = `
 use rocket::{get, routes, State};
 use sqlx::PgPool;
+
 struct MyState(PgPool);
+
 #[get("/hello")]
 fn hello(state: &State<MyState>) -> &'static str {
+
     // Do things with \`state.0\`...
     "Hello, Postgres!"
 }
+
 #[shuttle_service::main]
 async fn rocket(
     #[shared::Postgres] pool: PgPool
 ) -> shuttle_service::ShuttleRocket {
+
     let state = MyState(pool);
+
     Ok(
         rocket::build()
             .manage(state)
@@ -222,16 +230,13 @@ async fn rocket(
 `.trim()
 
 const USING_AXUM = `
-use axum::{routing::get, Router};
-use sync_wrapper::SyncWrapper;
-async fn hello_world() -> &'static str {
-    "Hello, world!"
-}
-#[shuttle_service::main]
-async fn axum() -> shuttle_service::ShuttleAxum {
-    let router = Router::new()
-        .route("/hello", get(hello_world));
-    let sync_wrapper = SyncWrapper::new(router);
-    Ok(sync_wrapper)
-}
+$ cargo shuttle deploy
+    Finished dev [unoptimized + debuginfo] target(s) in 20s
+        Project:            url-shortener
+        Deployment Id:      3d08ac34-ad63-41c1-836b-99af...
+        Deployment Status:  DEPLOYED
+        Host:               url-shortener.shuttleapp.rs
+        Created At:         2022-04-01 08:32:34.412602556 UTC
+        Database URI:       postgres://***:***@pg.shuttle.rs/db
+❯
 `.trim()

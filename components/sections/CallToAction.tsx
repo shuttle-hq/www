@@ -1,7 +1,12 @@
 import { Button } from 'components/elements'
 import Image from 'next/image'
 
-const CallToAction = () => {
+interface CallToActionProps {
+	subtext?: string
+}
+
+const CallToAction = ({subtext}: CallToActionProps) => {
+	const subtext_ = subtext || 'Join the movement and help revolutionize the world of backend development. Together, we can create the future!'
 	return (
 		<div className='mx-auto mt-8 max-w-7xl sm:mx-auto sm:mt-16 sm:px-10 lg:mt-32 desktop:mt-64'>
 			<div className='group relative z-[1] overflow-hidden rounded-[2rem] bg-[#13292C] dark:bg-black'>
@@ -56,7 +61,7 @@ const CallToAction = () => {
 						with us
 					</h2>
 					<p className='mt-4 text-xl text-[#C2C2C2] dark:text-[#7A7A7A] lg:text-2xl'>
-						Become a part of shuttle heroes program!
+						{subtext_}
 					</p>
 					<div className='mt-10 flex flex-wrap items-center gap-4 lg:mt-12 xl:mt-16'>
 						<Button
