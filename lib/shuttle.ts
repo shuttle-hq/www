@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse, HttpStatusCode, Method } from 'axios'
 
 export async function getApiKey(username: string): Promise<string> {
-	const res = await fetch(`${process.env.SHUTTLE_API_BASE_URL}/users/${username}` {
+	const res = await fetch(`${process.env.SHUTTLE_API_BASE_URL}/users/${username}`, {
 		method: 'POST',
 		headers: {
 			Authorization: `Bearer ${process.env.SHUTTLE_ADMIN_SECRET}`,
