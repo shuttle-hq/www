@@ -60,7 +60,7 @@ export default function DashboardHome({starters}: Props) {
 						description='Run this command to authenticate'
 						backgroundImage='/images/pages/dashboard/card-3.png'
 						gradientClassName='from-[#FC540C] to-[#C39348]'
-						command={`cargo shuttle login ${apiKey}`}
+						command={`cargo shuttle login --api-key ${apiKey}`}
 						className='row-start-3 lg:col-span-4 lg:col-start-5'
 					/>
 					<Step
