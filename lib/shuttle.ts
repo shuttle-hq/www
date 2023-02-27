@@ -65,7 +65,7 @@ export class Shuttle {
 	}
 
 	async create_user(user: string): Promise<User> {
-		return this.request('POST', `/users/${user}`).then((body) => {
+		return this.request('POST', `/users/${user}/basic`).then((body) => {
 			return body as User
 		})
 	}
