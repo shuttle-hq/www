@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse, HttpStatusCode, Method } from 'axios'
 
 export async function getApiKey(username: string): Promise<string> {
-	const res = await fetch(`${process.env.SHUTTLE_API_BASE_URL}/users/${username}`, {
+	const res = await fetch(`${process.env.SHUTTLE_API_BASE_URL}/users/${username}` {
 		method: 'POST',
 		headers: {
 			Authorization: `Bearer ${process.env.SHUTTLE_ADMIN_SECRET}`,
@@ -65,7 +65,7 @@ export class Shuttle {
 	}
 
 	async create_user(user: string): Promise<User> {
-		return this.request('POST', `/users/${user}`).then((body) => {
+		return this.request('POST', `/users/${user}/basic`).then((body) => {
 			return body as User
 		})
 	}
