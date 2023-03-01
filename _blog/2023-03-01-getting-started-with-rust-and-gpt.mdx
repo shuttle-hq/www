@@ -48,13 +48,13 @@ Now we're ready to get started!
 We'll want to start our project by initialising a React project using Vite, which is a fast development tool for rapid web development. We can run the following command below to initialise our project:
 
 ```bash
-npm create vite@latest react-rust-chatgpt-example -- --template react-ts
+npm create vite@latest react-rust-gpt-example -- --template react-ts
 ```
 
 Now we should have a new folder in our current working directory that holds a default React project that we'll use as a base directory. You can quickly navigate to it by running the following command:
 
 ```bash
-cd react-rust-chatgpt-example
+cd react-rust-gpt-example
 ```
 
 For this example, we'll be using TailwindCSS for our classes. You can find out how to install TailwindCSS for Vite [here](https://tailwindcss.com/docs/guides/vite). You will probably want to delete your `App.css` file and the relevant line to import it into the `App.ts` file, as this file won't be necessary once you start using Tailwind classes.
@@ -170,10 +170,10 @@ axum-extra = { version = "0.5.0", features = ["spa"] }
 
 Once this is done, we can then create the routes we'll be using in our Axum router. We'll be using only a single route in our Axum router and then adding our compiled frontend assets with the `SpaRouter` type provided by `axum-extra` later on.
 
-Before we write our API route though, we should allow our web service to use our API key that we retrieved from ChatGPT by storing it in a `Secrets.toml` file at the `Cargo.toml` level - it should look like this:
+Before we write our API route though, we should allow our web service to use our API key that we retrieved from GPT-3 by storing it in a `Secrets.toml` file at the `Cargo.toml` level - it should look like this:
 
 ```toml
-CHATGPT_API_KEY="YOUR_KEY_HERE"
+GPT_API_KEY="YOUR_KEY_HERE"
 ```
 
 Now we can add our secrets to our main entry point function, like so:
@@ -187,11 +187,11 @@ async fn axum(
 // https://docs.shuttle.rs/resources/shuttle-static-folder
     #[shuttle_static_folder::StaticFolder] static_folder: PathBuf,
 ) -> shuttle_service::ShuttleAxum {
-    let chatgpt_token = secrets
-        .get("CHATGPT_API_KEY")
-        .expect("You need to set CHATGPT_API_KEY in your Secrets.toml file!");
+    let gpt_token = secrets
+        .get("GPT_API_KEY")
+        .expect("You need to set GPT_API_KEY in your Secrets.toml file!");
 
-    let router = handle_router(chatgpt_token);
+    let router = handle_router(gpt_token);
     let sync_wrapper = SyncWrapper::new(router);
 
     Ok(sync_wrapper)
@@ -233,11 +233,11 @@ pub fn handle_router(api_key: String) -> Router {
 }
 ```
 
-### Notes On ChatGPT Prompting
+### Notes On GPT-3 Prompting
 
 So now we're done with the coding itself for the most part, we should probably explore how to get better at AI prompting.
 
-Prompting plays a very significant part in being able to get ChatGPT to give us an answer that we are able to meaningfully use in a web app. Although ChatGPT can give a rough approximation of an answer if we only try to prompt it in plain English, we can do much better by giving it an exact criteria of what we want by using specific descriptors, such as format, style, how we want the result to be formatted, and so on.
+Prompting plays a very significant part in being able to get GPT-3 to give us an answer that we are able to meaningfully use in a web app. Although GPT can give a rough approximation of an answer if we only try to prompt it in plain English, we can do much better by giving it an exact criteria of what we want by using specific descriptors, such as format, style, how we want the result to be formatted, and so on.
 
 So instead of just writing a vague description of what we want, like this:
 
@@ -262,7 +262,7 @@ Shapes:
 Style:
 ```
 
-Now when we pass this as the prompt to ChatGPT instead of the message we put in before, we should get a much more descriptive response! This should now be the final part of the coding part of our app done. If we wanted to extend this, we could make it so only authorised users could access the prompt generator, or we could allow users to submit responses to prompts they've generated.
+Now when we pass this as the prompt to GPT-3 instead of the message we put in before, we should get a much more descriptive response! This should now be the final part of the coding part of our app done. If we wanted to extend this, we could make it so only authorised users could access the prompt generator, or we could allow users to submit responses to prompts they've generated.
 
 ### Integrating Front & Backend
 
@@ -302,11 +302,11 @@ async fn axum(
     #[shuttle_secrets::Secrets] secrets: SecretStore,
     #[shuttle_static_folder::StaticFolder] static_folder: PathBuf,
 ) -> shuttle_service::ShuttleAxum {
-    let chatgpt_token = secrets
-        .get("CHATGPT_API_KEY")
-        .expect("You need to set CHATGPT_API_KEY in your Secrets.toml file!");
+    let gpt_token = secrets
+        .get("GPT_API_KEY")
+        .expect("You need to set GPT_API_KEY in your Secrets.toml file!");
 
-    let router = handle_router(chatgpt_token, static_folder);
+    let router = handle_router(gpt_token, static_folder);
     let sync_wrapper = SyncWrapper::new(router);
 
     Ok(sync_wrapper)
@@ -342,7 +342,7 @@ Now our frontend assets will compile into the static folder of our Rust project,
 Now our app is ready to deploy, so once we're ready we can finalise the process by running the following command:
 
 ```rust
-cargo shuttle deploy 
+cargo shuttle deploy
 ```
 
 If there's no issues, it should deploy! We'll be able to view our app at the link that was given to us in the terminal, and it should work with no issues whatsoever.
@@ -356,4 +356,4 @@ Now that we're done, there's quite a few ways we could easily extend this exampl
 * A random password generator based on some random criteria.
     
 
-Working with ChatGPT has never been easier, and with some simple prompt refinement we can get results that we can turn into meaningful web applications for end users. We've also recently released a new version (v0.10.0) that implements some really cool new features like a Node CLI to easily bootstrap a Next.js + Rust application, as well as local secrets, so if you'd like to use it for other things, now is a better time than ever to try it out!
+Working with GPT-3 has never been easier, and with some simple prompt refinement we can get results that we can turn into meaningful web applications for end users. We've also recently released a new version (v0.10.0) that implements some really cool new features like a Node CLI to easily bootstrap a Next.js + Rust application, as well as local secrets, so if you'd like to use it for other things, now is a better time than ever to try it out!
