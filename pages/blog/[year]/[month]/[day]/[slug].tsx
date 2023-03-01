@@ -136,12 +136,12 @@ const Pre = ({ children, ...props }: any) => {
 						...children.props,
 						className: children.props.className ?? 'language-',
 						children: [
-							<span
-								className='mr-4 inline-block w-4 select-none text-right italic text-[rgb(92,99,112)] last:hidden'
-								key={line}
-							>
-								{line}
-							</span>,
+							// <span
+							// 	className='mr-4 inline-block w-4 select-none text-right italic text-[rgb(92,99,112)] last:hidden'
+							// 	key={line}
+							// >
+							// 	{line}
+							// </span>,
 							...[children.props.children].flat().flatMap((child) => {
 								if (typeof child === 'string') {
 									const [head, ...tail] = child.split('\n')
@@ -152,12 +152,12 @@ const Pre = ({ children, ...props }: any) => {
 
 											return [
 												'\n',
-												<span
-													key={head}
-													className='mr-4 inline-block w-4 select-none text-right italic text-[rgb(92,99,112)] last:hidden'
-												>
-													{line}
-												</span>,
+												// <span
+												// 	key={head}
+												// 	className='mr-4 inline-block w-4 select-none text-right italic text-[rgb(92,99,112)] last:hidden'
+												// >
+												// 	{line}
+												// </span>,
 												child,
 											]
 										}),
