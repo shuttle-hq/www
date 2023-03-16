@@ -1,8 +1,6 @@
 import { Splide, SplideSlide, SplideTrack } from '@splidejs/react-splide'
 import clsx from 'clsx'
 import { CodeBlock } from 'components/elements'
-import { Copy } from 'components/svgs'
-import Image from 'next/image'
 import { useState } from 'react'
 
 const HowItWorks = () => {
