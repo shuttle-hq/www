@@ -1,11 +1,9 @@
 import Image from 'next/image'
-import { Splide, SplideSlide } from '@splidejs/react-splide'
-import { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
-import Link from 'next/link'
 import { Copy } from 'components/svgs'
 import { CodeBlock } from 'components/elements'
-import { useIntersection } from 'react-use'
+import { useCopyToClipboard, useIntersection } from 'react-use'
 
 const GetStarted = () => {
 	const [selectedSlide, setSelectedSlide] = useState(0)
@@ -110,48 +108,30 @@ const GetStarted = () => {
 					<GetStartedSlide
 						number={0}
 						title='Install'
+						command="cargo install cargo-shuttle"
 						text='Install the CLI'
 						handleClick={handleClick}
 						isSelected={0 === selectedSlide}
 						gradient='from-[#FC540C] to-[#C39348]'
-					>
-						<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
-							$ cargo install cargo-shuttle
-							<button className='absolute right-3 rounded-lg border border-transparent p-1 hover:border-[#484848] hover:bg-[#343434] dark:text-[#C2C2C2]'>
-								<Copy />
-							</button>
-						</div>
-					</GetStartedSlide>
+					/>
 					<GetStartedSlide
 						number={1}
 						title='Initialize'
+						command="cargo shuttle init"
 						text='Bootstrap your project'
 						handleClick={handleClick}
 						isSelected={1 === selectedSlide}
 						gradient='from-[#D1883C] to-[#ABA363]'
-					>
-						<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
-							$ cargo shuttle init
-							<button className='absolute right-3 rounded-lg border border-transparent p-1 hover:border-[#484848] hover:bg-[#343434] dark:text-[#C2C2C2]'>
-								<Copy />
-							</button>
-						</div>
-					</GetStartedSlide>
+					/>
 					<GetStartedSlide
 						number={2}
 						title='Deploy'
+						command='cargo shuttle deploy'
 						text='Take-off in 3, 2, 1..'
 						handleClick={handleClick}
 						isSelected={2 === selectedSlide}
 						gradient='from-[#C19549] to-[#8AB58D]'
-					>
-						<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
-							$ cargo shuttle deploy
-							<button className='absolute right-3 rounded-lg border border-transparent p-1 hover:border-[#484848] hover:bg-[#343434] dark:text-[#C2C2C2]'>
-								<Copy />
-							</button>
-						</div>
-					</GetStartedSlide>
+					/>
 				</div>
 			</div>
 		</>
@@ -162,8 +142,8 @@ interface GetStartedSlideProps {
 	number: number
 	title: string
 	text: string
+	command: string
 	gradient?: string
-	children?: ReactNode
 	handleClick: (id: number, lock?: boolean) => void
 	isSelected: boolean
 }
@@ -172,11 +152,12 @@ const GetStartedSlide: FC<GetStartedSlideProps> = ({
 	number,
 	title,
 	text,
-	children,
+	command,
 	gradient,
 	handleClick,
 	isSelected,
 }) => {
+	const [_, copyToClipboard] = useCopyToClipboard();
 	// React splide is 0-indexed
 	const adjustedNumber = number + 1
 
@@ -197,7 +178,12 @@ const GetStartedSlide: FC<GetStartedSlideProps> = ({
 				</h3>
 				<p className='mt-2'>{text}</p>
 
-				{children}
+				<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
+					$ {command}
+					<button className='absolute right-3 rounded-lg border border-transparent p-1 hover:border-[#484848] hover:bg-[#343434] dark:text-[#C2C2C2]'>
+						<Copy onClick={() => copyToClipboard(command)}/>
+					</button>
+				</div>
 
 				{/* If it the whole slide isn't outlined, add a line under the slide */}
 				{adjustedNumber !== 1 && (
