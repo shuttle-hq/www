@@ -126,13 +126,12 @@ You'll be prompted to enter a name for your project, where you want to initialis
 Once the project's been created, you'll have the following:
 
 ```rust
-// Lib.rs
-#[shuttle_service::main]
-async fn axum() -> shuttle_service::ShuttleAxum {
+// main.rs
+#[shuttle_runtime::main]
+async fn axum() -> shuttle_axum::ShuttleAxum {
     let router = Router::new().route("/hello", get(hello_world));
-    let sync_wrapper = SyncWrapper::new(router);
-
-    Ok(sync_wrapper)
+    
+    Ok(router.into())
 }
 ```
 
@@ -144,12 +143,11 @@ version = "0.1.0"
 edition = "2021"
 publish = false
 
-[lib]
-
 [dependencies]
-shuttle-service = { version = "0.10.0", features = ["web-axum"] }
-axum = "0.6.4"
-sync_wrapper = "0.1.2"
+axum = "0.6.10"
+shuttle-axum = { version = "0.12.0" }
+shuttle-runtime = { version = "0.12.0" }
+tokio = { version = "1.26.0" }
 ```
 
 Once you've checked that you have the above files, you'll want to add some more dependencies to make our final backend by pasting this as the dependencies into your Cargo.toml (they will get automatically built on compile):
@@ -157,15 +155,16 @@ Once you've checked that you have the above files, you'll want to add some more 
 ```rust
 // Cargo.toml
 [dependencies]
-shuttle-service = { version = "0.11.0", features = ["web-axum"] }
-axum = "0.6.4"
-sync_wrapper = "0.1.2"
-shuttle-secrets = "0.10.0"
-serde = { version = "1.0.152", features = ["derive"] }
+axum = "0.6.10"
+axum-extra = { version = "0.5.0", features = ["spa"] }
 axum-macros = "0.3.4"
 openai-api = "0.1.4"
-shuttle-static-folder = "0.11.0"
-axum-extra = { version = "0.5.0", features = ["spa"] }
+serde = { version = "1.0.152", features = ["derive"] }
+shuttle-axum = { version = "0.12.0" }
+shuttle-runtime = { version = "0.12.0" }
+shuttle-secrets = "0.12.0"
+shuttle-static-folder = "0.12.0"
+tokio = { version = "1.26.0" }
 ```
 
 Once this is done, we can then create the routes we'll be using in our Axum router. We'll be using only a single route in our Axum router and then adding our compiled frontend assets with the `SpaRouter` type provided by `axum-extra` later on.
@@ -179,29 +178,28 @@ GPT_API_KEY="YOUR_KEY_HERE"
 Now we can add our secrets to our main entry point function, like so:
 
 ```rust
-// lib.rs
-#[shuttle_service::main]
+// main.rs
+#[shuttle_runtime::main]
 async fn axum(
 // https://docs.shuttle.rs/resources/shuttle-secrets
     #[shuttle_secrets::Secrets] secrets: SecretStore,
 // https://docs.shuttle.rs/resources/shuttle-static-folder
     #[shuttle_static_folder::StaticFolder] static_folder: PathBuf,
-) -> shuttle_service::ShuttleAxum {
+) -> shuttle_axum::ShuttleAxum {
     let gpt_token = secrets
         .get("GPT_API_KEY")
         .expect("You need to set GPT_API_KEY in your Secrets.toml file!");
 
     let router = handle_router(gpt_token);
-    let sync_wrapper = SyncWrapper::new(router);
-
-    Ok(sync_wrapper)
+    
+    Ok(router.into())
 }
 ```
 
 Let's have a look at what our API route would look like:
 
 ```rust
-// Lib.rs
+// main.rs
 pub async fn generate_prompt(State(state): State<AppState>) -> impl IntoResponse {
 
     let prompt = "Generate a random name.
@@ -296,8 +294,8 @@ This will allow our frontend to compile directly to the static folder that our b
 If we run `npm run build`, assuming there were no build errors we should now have a subfolder in our API directory called "static", which will hold all of our static assets that we can refer to in our Rust project. Let's implement our static folder by using the `shuttle_shared_folder` package:
 
 ```rust
-// lib.rs
-#[shuttle_service::main]
+// main.rs
+#[shuttle_runtime::main]
 async fn axum(
     #[shuttle_secrets::Secrets] secrets: SecretStore,
     #[shuttle_static_folder::StaticFolder] static_folder: PathBuf,
@@ -307,9 +305,7 @@ async fn axum(
         .expect("You need to set GPT_API_KEY in your Secrets.toml file!");
 
     let router = handle_router(gpt_token, static_folder);
-    let sync_wrapper = SyncWrapper::new(router);
-
-    Ok(sync_wrapper)
+    Ok(router.into())
 }
 ```
 
@@ -356,4 +352,4 @@ Now that we're done, there's quite a few ways we could easily extend this exampl
 * A random password generator based on some random criteria.
     
 
-Working with GPT-3 has never been easier, and with some simple prompt refinement we can get results that we can turn into meaningful web applications for end users. We've also recently released a new version (v0.10.0) that implements some really cool new features like a Node CLI to easily bootstrap a Next.js + Rust application, as well as local secrets, so if you'd like to use it for other things, now is a better time than ever to try it out!
+Working with GPT-3 has never been easier, and with some simple prompt refinement we can get results that we can turn into meaningful web applications for end users. We've also recently released a new version (v0.12.0) that implements some really cool new features like a Node CLI to easily bootstrap a Next.js + Rust application, as well as local secrets, so if you'd like to use it for other things, now is a better time than ever to try it out!
