@@ -299,7 +299,7 @@ If we run `npm run build`, assuming there were no build errors we should now hav
 async fn axum(
     #[shuttle_secrets::Secrets] secrets: SecretStore,
     #[shuttle_static_folder::StaticFolder] static_folder: PathBuf,
-) -> shuttle_service::ShuttleAxum {
+) -> shuttle_axum::ShuttleAxum {
     let gpt_token = secrets
         .get("GPT_API_KEY")
         .expect("You need to set GPT_API_KEY in your Secrets.toml file!");
