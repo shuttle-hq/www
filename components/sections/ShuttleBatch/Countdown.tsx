@@ -33,7 +33,7 @@ export const Countdown = () => {
 						variant='primary'
 						invertOnDark
 						className='bg-[#13292C] text-white'
-						href='https://btl1d1x5z23.typeform.com/to/WAu53vBi'
+						href='https://btl1d1x5z23.typeform.com/shuttle-batch-2'
 					>
 						Apply now
 					</Button>

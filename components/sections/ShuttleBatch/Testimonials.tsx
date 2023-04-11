@@ -1,10 +1,19 @@
 import { Button } from 'components/elements'
 import { DISCORD_URL } from 'lib/constants'
+import Image from 'next/image'
+import { Quote } from 'components/svgs/batch'
 
-export const Quote = () => {
+export const Testimonials = () => {
 	return (
 		<section className='mx-auto mt-24 w-full max-w-7xl items-center px-5 sm:px-10 lg:mt-28'>
-			<div className='my-20 flex flex-col gap-5 lg:px-40 lg:py-40'>
+			<div className='relative my-20 flex flex-col gap-5 lg:py-40 lg:pl-[278px] lg:pr-52'>
+				<Image
+					src='/images/sections/batch/bg-testimonial.jpg'
+					alt='background'
+					fill
+					className='absolute top-0 left-0 -z-10 hidden h-full w-full rounded-4xl md:block'
+				/>
+				<Quote className='absolute top-32 left-32 hidden md:block' />
 				<p className='text-2xl text-[#C2C2C2]'>
 					“As someone who didn't have any experience in the industry and only a little experience in
 					open-source, I was struggling to find a project I felt qualified to contribute to.
@@ -15,7 +24,7 @@ export const Quote = () => {
 				</p>
 
 				<div>
-					<p className='text-xl text-[#C2C2C2]'>- Oddbjorn *Surname*</p>
+					<p className='text-xl text-[#C2C2C2]'>- Oddbjørn Grødem</p>
 					<span className='text-base text-[#7A7A7A]'>Shuttle Batch 1.0, joined the Shuttle team</span>
 				</div>
 			</div>
@@ -23,12 +32,12 @@ export const Quote = () => {
 			<div className='mt-72'>
 				<h1 className='text-center text-6xl text-[#C2C2C2]'>Join Shuttle Batch 2023</h1>
 
-				<div className='my-32 flex justify-center gap-4'>
+				<div className='mb-32 mt-16 flex justify-center gap-4'>
 					<Button
 						variant='primary'
 						invertOnDark
 						className='bg-[#13292C] text-white'
-						href='https://btl1d1x5z23.typeform.com/to/WAu53vBi'
+						href='https://btl1d1x5z23.typeform.com/shuttle-batch-2'
 					>
 						Apply now
 					</Button>

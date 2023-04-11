@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 const VALUES: { title: string; description: string }[] = [
 	{
 		title: '🚀 Y Combinator Vibes',
@@ -33,24 +35,32 @@ const VALUES: { title: string; description: string }[] = [
 
 export const Description = () => {
 	return (
-		<section className='mx-auto mt-52 w-full max-w-7xl items-center px-5 sm:px-10'>
-			<h1 className='text-6xl text-[#C2C2C2]'>What’s Shuttle Batch</h1>
-			<p className='mt-4 text-2xl text-[#7A7A7A]'>
-				Batch is an immersive online program where Rust developers unite to learn, collaborate, and
-				contribute to an exciting open-source project, while receiving mentorship and forming lasting
-				connections within the community.
-			</p>
+		<section className='relative pb-28'>
+			<Image
+				src='/images/sections/batch/bg-batch.jpg'
+				alt='background'
+				fill
+				className='absolute top-0 left-0 -z-10 hidden h-full w-full md:block'
+			/>
+			<div className='relative mx-auto mt-32 w-full max-w-7xl items-center px-5 sm:px-10 lg:mt-52'>
+				<h1 className='text-6xl text-[#C2C2C2]'>What’s Shuttle Batch</h1>
+				<p className='mt-4 text-2xl text-[#7A7A7A]'>
+					Batch is an immersive online program where Rust developers unite to learn, collaborate, and
+					contribute to an exciting open-source project, while receiving mentorship and forming lasting
+					connections within the community.
+				</p>
 
-			<div className='mt-36 flex flex-col gap-16 lg:ml-72'>
-				{VALUES.map((value, idx) => (
-					<div key={value.title} className='flex gap-16'>
-						<span className='text-3xl text-[#414141]'>0{idx + 1}</span>
-						<div>
-							<h3 className='text-3xl text-[#D8D8D8]'>{value.title}</h3>
-							<p className='mt-[10px] text-xl'>{value.description}</p>
+				<div className='mt-36 flex flex-col gap-16 lg:ml-72'>
+					{VALUES.map((value, idx) => (
+						<div key={value.title} className='flex gap-16'>
+							<span className='text-3xl text-[#414141]'>0{idx + 1}</span>
+							<div>
+								<h3 className='text-3xl text-[#D8D8D8]'>{value.title}</h3>
+								<p className='mt-[10px] text-xl'>{value.description}</p>
+							</div>
 						</div>
-					</div>
-				))}
+					))}
+				</div>
 			</div>
 		</section>
 	)
