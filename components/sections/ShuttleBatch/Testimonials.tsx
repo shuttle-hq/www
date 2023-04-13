@@ -11,11 +11,11 @@ export const Testimonials = () => {
 					src='/images/sections/batch/bg-testimonial.jpg'
 					alt='background'
 					fill
-					className='absolute top-0 left-0 -z-10 hidden h-full w-full rounded-4xl md:block'
+					className='absolute left-0 top-0 -z-10 hidden h-full w-full rounded-4xl md:block'
 				/>
-				<Quote className='absolute top-32 left-32 hidden md:block' />
+				<Quote className='absolute left-32 top-32 hidden md:block' />
 				<p className='text-2xl text-[#C2C2C2]'>
-					“As someone who didn't have any experience in the industry and only a little experience in
+					“As someone who didn&apos;t have any experience in the industry and only a little experience in
 					open-source, I was struggling to find a project I felt qualified to contribute to.
 				</p>
 				<p className='text-2xl text-[#C2C2C2]'>
