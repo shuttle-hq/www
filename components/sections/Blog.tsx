@@ -107,7 +107,7 @@ const BlogPost: FC<Post> = (post) => {
 						</Link>
 					))}
 
-					<div className='text-[#7A7A7A]'>3 min read</div>
+					<div className='text-[#7A7A7A]'>{post.readingTime}</div>
 				</div>
 			</div>
 			<Link href={`/blog/${post.url}`} className='relative h-full overflow-hidden rounded-[2rem]'>

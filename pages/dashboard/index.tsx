@@ -107,7 +107,7 @@ const Step: FC<StepProps> = ({
 	command,
 	className,
 }) => {
-	const [copyToClipboardState, copyToClipboard] = useCopyToClipboard()
+	const [_, copyToClipboard] = useCopyToClipboard()
 	return (
 		<div
 			className={clsx(
