@@ -1,11 +1,11 @@
-import {Button, LoginButton} from 'components/elements'
+import { Button, LoginButton } from 'components/elements'
 import { GithubLogo, Hamburger, Logo } from 'components/svgs'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useState } from 'react'
 import clsx from 'clsx'
 import { useUser } from '@auth0/nextjs-auth0/client'
-import {DISCORD_URL} from "../../../lib/constants";
+import { DISCORD_URL } from '../../../lib/constants'
 
 const ThemeSwitcher = dynamic(() => import('./ThemeSwitcher'), { ssr: false })
 
@@ -75,6 +75,15 @@ const Navigation = () => {
 						}}
 					>
 						Shuttle Heroes
+					</Link>
+					<Link
+						className='nav-link-shadow transition-all dark:hover:text-white'
+						href='/shuttle-batch'
+						onClick={() => {
+							setOpen(false)
+						}}
+					>
+						Shuttle Batch
 					</Link>
 				</div>
 				<div className='mt-10 lg:mt-0 lg:ml-auto lg:flex lg:items-center lg:gap-5'>
