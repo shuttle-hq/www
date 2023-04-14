@@ -19,7 +19,7 @@ export const Countdown = () => {
 				<p className='mt-4 text-center text-xl text-[#7A7A7A]'>Shuttle Batch 2023 starts in</p>
 				<h2 className='text-gradient mt-12 bg-clip-text text-center font-gradual text-[80px] font-bold leading-[150%] text-[#C2C2C2]'>
 					<span className='text-transparent'>
-						<Counter date={1682280000000} renderer={renderer} />
+						<Counter date={1683057600} renderer={renderer} />
 					</span>
 				</h2>
 				<div className='flex justify-center gap-24 text-[#7A7A7A]'>
