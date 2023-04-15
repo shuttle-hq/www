@@ -30,7 +30,7 @@ const VALUES: { title: string; description: string }[] = [
 	{
 		title: '🎁 Swagtastic',
 		description:
-			'Get ready to rock some exclusive Shuttle swag, because all participants in Batch 2.0 will score awesome company goodies as a thank-you for joining the adventure and making a difference in the our community! 🤩🛍️',
+			'Get ready to rock some exclusive Shuttle swag, because all participants in Batch 2.0 will score awesome company goodies as a thank-you for joining the adventure and making a difference in our community! 🤩🛍️',
 	},
 ]
 
