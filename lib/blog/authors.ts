@@ -27,7 +27,7 @@ const authors: readonly Author[] = [
 	{
 		author_id: 'brokad',
 		author: 'Damien B.',
-		position: 'CTO',
+		position: 'Founder',
 		author_url: 'https://github.com/brokad',
 		author_image_url: '/images/authors/brokad.jpeg',
 	},
