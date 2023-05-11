@@ -85,8 +85,17 @@ const Navigation = () => {
 					>
 						Shuttle Batch
 					</Link>
+					<Link
+						className='nav-link-shadow transition-all dark:hover:text-white'
+						href='/launchpad'
+						onClick={() => {
+							setOpen(false)
+						}}
+					>
+						Launchpad
+					</Link>
 				</div>
-				<div className='mt-10 lg:mt-0 lg:ml-auto lg:flex lg:items-center lg:gap-5'>
+				<div className='mt-10 lg:ml-auto lg:mt-0 lg:flex lg:items-center lg:gap-5'>
 					<div className='mt-10 flex flex-wrap items-center gap-5 lg:mt-0'>
 						<Button variant='secondary' invertOnDark href={DISCORD_URL}>
 							Join Discord
