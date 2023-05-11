@@ -2,6 +2,7 @@ import { Hamburger, Logo } from 'components/svgs'
 import Link from 'next/link'
 import { useState } from 'react'
 import clsx from 'clsx'
+import {DISCORD_URL} from "../../lib/constants";
 
 const DashboardNavigation = () => {
 	const [open, setOpen] = useState(false)
@@ -25,7 +26,7 @@ const DashboardNavigation = () => {
 				<div className='flex flex-col gap-4 lg:flex-row lg:gap-8'>
 					<Link
 						className='nav-link-shadow transition-all hover:text-white'
-						href='/blog/tags/all'
+						href='https://docs.shuttle.rs'
 						onClick={() => {
 							setOpen(false)
 						}}
@@ -34,7 +35,7 @@ const DashboardNavigation = () => {
 					</Link>
 					<Link
 						className='nav-link-shadow transition-all hover:text-white'
-						href='/pricing'
+						href={DISCORD_URL}
 						onClick={() => {
 							setOpen(false)
 						}}

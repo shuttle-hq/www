@@ -14,7 +14,7 @@ export const AllStartersContent: StarterAttrsContent[] = [
         featured: true,
         description: 'Add custom functionality to your Discord server, using a bot written in Rust.',
         sourceLink: `${GITHUB_EXAMPLES_URL}/tree/main/serenity/hello-world`,
-        postLink: '/blog/2022/09/14/serentity-discord-bot'
+        postLink: '/blog/2022/09/14/serenity-discord-bot'
     },
     {
         title: 'URL Shortener',
