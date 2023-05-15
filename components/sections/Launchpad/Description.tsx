@@ -45,23 +45,24 @@ export const Description = () => {
 			<div className='relative mx-auto mt-32 w-full max-w-[600px] items-center lg:mt-52'>
 				<h1 className='text-3xl text-[#C2C2C2]'>So, to sum it up</h1>
 				<p className='mt-4 text-xl text-[#7A7A7A]'>
-					<span className='text-white'>&rarr;</span> Learning Rust tutorial-style with real-world
+					<span className='mr-4 text-white'>&rarr;</span> Learning Rust tutorial-style with real-world
 					applications
 				</p>
 				<p className='mt-4 text-xl text-[#7A7A7A]'>
-					<span className='text-white'>&rarr;</span> Suitable for beginners and experienced developers
+					<span className='mr-4 text-white'>&rarr;</span> Suitable for beginners and experienced
+					developers
 				</p>
 				<p className='mt-4 text-xl text-[#7A7A7A]'>
-					<span className='text-white'>&rarr;</span> Each issue takes only 1 hour to implement
+					<span className='mr-4 text-white'>&rarr;</span> Each issue takes only 1 hour to implement
 				</p>
 				<p className='mt-4 text-xl text-[#7A7A7A]'>
-					<span className='text-white'>&rarr;</span> Flexible pacing for busy developers
+					<span className='mr-4 text-white'>&rarr;</span> Flexible pacing for busy developers
 				</p>
 				<p className='mt-4 text-xl text-[#7A7A7A]'>
-					<span className='text-white'>&rarr;</span> Additional resources for advanced learners
+					<span className='mr-4 text-white'>&rarr;</span> Additional resources for advanced learners
 				</p>
 				<p className='mt-4 text-xl text-[#7A7A7A]'>
-					<span className='text-white'>&rarr;</span> Learning one Rust concept per issue
+					<span className='mr-4 text-white'>&rarr;</span> Learning one Rust concept per issue
 				</p>
 			</div>
 		</section>

@@ -10,7 +10,7 @@ export const Form = () => {
 			</p>
 
 			<form
-				action='https://buttondown.email/api/emails/embed-subscribe/guga'
+				action='https://buttondown.email/api/emails/embed-subscribe/shuttle'
 				method='post'
 				target='popupwindow'
 				className='embeddable-buttondown-form mt-28 text-center'

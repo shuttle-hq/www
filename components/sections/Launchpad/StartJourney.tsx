@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 export const Testimonials = () => {
 	return (
-		<section className='relative mx-auto mb-80 mt-24 flex w-full max-w-6xl flex-col items-center rounded-b-4xl px-5 pb-48 sm:px-10 lg:mt-28'>
+		<section className='relative mx-auto mb-20 mt-24 flex w-full max-w-6xl flex-col items-center rounded-b-4xl px-5 pb-10 sm:px-10 md:mb-80 md:pb-48 lg:mt-28'>
 			<Image
 				src='/images/sections/batch/bg-batch.jpg'
 				alt='background'
@@ -18,7 +18,7 @@ export const Testimonials = () => {
 			</p>
 
 			<form
-				action='https://buttondown.email/api/emails/embed-subscribe/guga'
+				action='https://buttondown.email/api/emails/embed-subscribe/shuttle'
 				method='post'
 				target='popupwindow'
 				className='embeddable-buttondown-form mt-16 text-center'
