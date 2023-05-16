@@ -15,9 +15,9 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 				<div className='absolute left-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 transform overflow-hidden rounded-2xl border border-black/10 dark:border-white/10'>
 					<Image src='/images/sections/footer/rocket.gif' alt='rocket' fill />
 				</div>
-				<div className='divide-y divide-black/10 dark:divide-white/10 lg:grid lg:grid-cols-2 lg:divide-y-0 lg:divide-x'>
+				<div className='divide-y divide-black/10 dark:divide-white/10 lg:grid lg:grid-cols-2 lg:divide-x lg:divide-y-0'>
 					<div className='grid grid-cols-2 divide-x divide-black/10 text-xl dark:divide-white/10'>
-						<div className='flex flex-col gap-3 px-8 pt-16 pb-8 lg:p-16'>
+						<div className='flex flex-col gap-3 px-8 pb-8 pt-16 lg:p-16'>
 							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Shuttle</h3>
 							<Link
 								href='/#features'
@@ -38,7 +38,7 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 								Roadmap
 							</Link>
 						</div>
-						<div className='flex flex-col gap-3 px-8 pt-16 pb-8 lg:p-16'>
+						<div className='flex flex-col gap-3 px-8 pb-8 pt-16 lg:p-16'>
 							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Company</h3>
 							<Link
 								href='/about'
@@ -56,7 +56,7 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 						</div>
 					</div>
 					<div className='grid grid-cols-2 divide-x divide-black/10 text-xl dark:divide-white/10'>
-						<div className='flex flex-col gap-3 px-8 pt-16 pb-8 lg:p-16'>
+						<div className='flex flex-col gap-3 px-8 pb-8 pt-16 lg:p-16'>
 							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Developers</h3>
 							<Link
 								href='https://docs.shuttle.rs'
@@ -82,8 +82,14 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 							>
 								Shuttle Batch
 							</Link>
+							<Link
+								href='/launchpad'
+								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+							>
+								Launchpad
+							</Link>
 						</div>
-						<div className='flex flex-col gap-3 px-8 pt-16 pb-8 lg:p-16'>
+						<div className='flex flex-col gap-3 px-8 pb-8 pt-16 lg:p-16'>
 							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Community</h3>
 							<a
 								href='https://github.com/shuttle-hq/shuttle'
