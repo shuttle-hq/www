@@ -41,6 +41,18 @@ export const Description = () => {
 					videos that allow you to dive deeper into the subject matter.
 				</p>
 			</div>
+			
+			<div className='relative mx-auto mt-32 w-full max-w-[600px]  items-center lg:mt-52'>
+				<h1 className='text-3xl text-[#C2C2C2]'>Teaming up with Stefan Baumgartner 🦀</h1>
+				<p className='mt-4 text-xl text-[#7A7A7A]'>
+					We have teamed up with none other than <a href="https://fettblog.eu">Stefan Baumgartner</a>,
+					an architect, developer and author from Linz, Austria.
+				</p>
+				<p className='mt-4 text-xl text-[#7A7A7A]'>
+					Stefan is, among other things, the organizer of the biggest Rust meet up in Europe ━ <a href="https://rust-linz.at/">Rust Linz</a>
+					and he was the lecturer at our <a href="https://www.youtube.com/watch?v=-N8AKKCE9L8">Rust for Javascript Developers</a> workshop!
+				</p>
+			</div>
 
 			<div className='relative mx-auto mt-32 w-full max-w-[600px] items-center lg:mt-52'>
 				<h1 className='text-3xl text-[#C2C2C2]'>So, to sum it up</h1>
