@@ -29,7 +29,7 @@ export const Form = () => {
 				/>
 			</form>
 
-			<p className='mt-4 text-center text-xl text-[#7A7A7A]'>Join x developers on their journey</p>
+			<p className='mt-4 text-center text-xl text-[#7A7A7A]'>Join hundreds of developers on their journey</p>
 		</section>
 	)
 }
