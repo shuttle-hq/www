@@ -13,7 +13,7 @@ export const Testimonials = () => {
 				Start your journey now
 			</h2>
 			<p className='mt-8 max-w-2xl text-center text-xl text-[#7A7A7A]'>
-				The Shuttle Launchpad is meant to run for multiple issues with no defined end, ensuring you always
+				The Shuttle Launchpad newsletter is meant to run for multiple issues with no defined end, ensuring you always
 				have new material to keep learning, staying up to date with the ever-changing Rust ecosystem.
 			</p>
 
