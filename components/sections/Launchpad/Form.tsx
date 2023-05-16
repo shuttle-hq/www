@@ -6,7 +6,7 @@ export const Form = () => {
 				<span className='text-transparent'>Shuttle Launchpad</span>
 			</h2>
 			<p className='mt-8 text-center text-xl text-[#7A7A7A]'>
-				Master Rust easily with our engaging, tutorial-style lessons and real-world examples.
+				Master Rust easily with our engaging, tutorial-style lessons and real-world examples in our Launchpad newsletter.
 			</p>
 
 			<form
