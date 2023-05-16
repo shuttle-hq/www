@@ -28,8 +28,8 @@ export const Description = () => {
 			<div className='relative mx-auto mt-32 w-full max-w-[600px]  items-center lg:mt-52'>
 				<h1 className='text-3xl text-[#C2C2C2]'>That’s where Shuttle Launchpad comes in 🚀</h1>
 				<p className='mt-4 text-xl text-[#7A7A7A]'>
-					Our unique approach to teaching Rust tutorial-style with real-world applications sets us apart
-					from other learning resources.
+					Our unique approach to teaching Rust tutorial-style with real-world applications, in the form of
+					a newsletter, sets us apart from other learning resources.
 				</p>
 				<p className='mt-4 text-xl text-[#7A7A7A]'>
 					We make it easy for busy developers to learn Rust by breaking each concept down into manageable
@@ -49,8 +49,8 @@ export const Description = () => {
 					an architect, developer and author from Linz, Austria.
 				</p>
 				<p className='mt-4 text-xl text-[#7A7A7A]'>
-					Stefan is, among other things, the organizer of the biggest Rust meet up in Europe ━ <a href="https://rust-linz.at/">Rust Linz</a>
-					and he was the lecturer at our <a href="https://www.youtube.com/watch?v=-N8AKKCE9L8">Rust for Javascript Developers</a> workshop!
+					Stefan is, among other things, the organizer of the biggest Rust meet up in Europe ━ <span className='text-white'><a href="https://rust-linz.at/">Rust Linz</a></span>
+					 and he was the lecturer at our <span className='text-white'><a href="https://www.youtube.com/watch?v=-N8AKKCE9L8">Rust for Javascript Developers</a></span> workshop!
 				</p>
 			</div>
 
@@ -65,7 +65,7 @@ export const Description = () => {
 					developers
 				</p>
 				<p className='mt-4 text-xl text-[#7A7A7A]'>
-					<span className='mr-4 text-white'>&rarr;</span> Each issue takes only 1 hour to implement
+					<span className='mr-4 text-white'>&rarr;</span> Contents of each newsletter issue take only 1 hour to implement
 				</p>
 				<p className='mt-4 text-xl text-[#7A7A7A]'>
 					<span className='mr-4 text-white'>&rarr;</span> Flexible pacing for busy developers
