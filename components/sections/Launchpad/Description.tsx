@@ -46,11 +46,11 @@ export const Description = () => {
 				<h1 className='text-3xl text-[#C2C2C2]'>Teaming up with Stefan Baumgartner 🦀</h1>
 				<p className='mt-4 text-xl text-[#7A7A7A]'>
 					We have teamed up with none other than <a href="https://fettblog.eu">Stefan Baumgartner</a>,
-					an architect, developer and author from Linz, Austria.
+					an architect, developer and author from Linz, Austria who, with his extensive experience of educating developers,
+					brings a wealth of knowledge and practical insights to the Launchpad.
 				</p>
 				<p className='mt-4 text-xl text-[#7A7A7A]'>
-					Stefan is, among other things, the organizer of the biggest Rust meet up in Europe ━ <span className='text-white'><a href="https://rust-linz.at/">Rust Linz</a></span>
-					 and he was the lecturer at our <span className='text-white'><a href="https://www.youtube.com/watch?v=-N8AKKCE9L8">Rust for Javascript Developers</a></span> workshop!
+					Stefan is, among other things, the organizer of the biggest Rust meet up in Europe ━ <span className='text-white'><a href="https://rust-linz.at/">Rust Linz</a></span> and he was the lecturer at our <span className='text-white'><a href="https://www.youtube.com/watch?v=-N8AKKCE9L8">Rust for Javascript Developers</a></span> workshop!
 				</p>
 			</div>
 
