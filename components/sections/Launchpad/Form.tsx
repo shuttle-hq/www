@@ -19,13 +19,13 @@ export const Form = () => {
 					type='email'
 					name='email'
 					placeholder='Your email'
-					className='mr-[18px] h-[56px] w-[412px] rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-xl font-normal text-[#D8D8D8] placeholder:text-[#D8D8D8]'
+					className='mr-[18px] h-[56px] w-full rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-xl font-normal text-[#D8D8D8] placeholder:text-[#D8D8D8] sm:w-[412px]'
 				/>
 				<input type='hidden' value='1' name='embed' />
 				<input
 					type='submit'
 					value='Subscribe'
-					className='h-[56px] w-[154px] rounded-[14px] bg-[#D8D8D8] text-lg text-black'
+					className='mt-4 h-[56px] w-full rounded-[14px] bg-[#D8D8D8] text-lg text-black sm:mt-0 sm:w-[154px]'
 				/>
 			</form>
 
