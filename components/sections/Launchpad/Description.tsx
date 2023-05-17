@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 export const Description = () => {
 	return (
-		<section className='relative pb-28'>
+		<section className='relative px-5 pb-28 sm:px-10'>
 			<Image
 				src='/images/sections/batch/bg-batch.jpg'
 				alt='background'
