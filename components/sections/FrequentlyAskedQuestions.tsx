@@ -49,7 +49,7 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 									className={clsx(
 										'text-[#525151] transition-all duration-500 dark:text-[#C2C2C2]',
 										activeQuestion === index
-											? 'max-h-48 pb-5 pr-5 opacity-100'
+											? 'pb-5 pr-5 opacity-100'
 											: 'max-h-0 overflow-hidden pb-0 pr-0 opacity-0'
 									)}
 								>
