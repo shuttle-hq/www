@@ -78,15 +78,6 @@ const Navigation = () => {
 					</Link>
 					<Link
 						className='nav-link-shadow transition-all dark:hover:text-white'
-						href='/shuttle-batch'
-						onClick={() => {
-							setOpen(false)
-						}}
-					>
-						Shuttle Batch
-					</Link>
-					<Link
-						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='/launchpad'
 						onClick={() => {
 							setOpen(false)
