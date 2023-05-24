@@ -16,7 +16,7 @@ const Hero = () => {
 				action='https://buttondown.email/api/emails/embed-subscribe/shuttle'
 				method='post'
 				target='popupwindow'
-				className='embeddable-buttondown-form mt-10 text-center'
+				className='embeddable-buttondown-form mt-10 flex flex-col items-center text-center font-gradual text-lg font-bold sm:flex-row'
 			>
 				<input
 					type='email'
@@ -28,7 +28,7 @@ const Hero = () => {
 				<input
 					type='submit'
 					value='Join the waitlist'
-					className='mt-4 h-[56px] w-full rounded-[14px] bg-[#D8D8D8] text-lg text-black sm:mt-0 sm:w-[154px]'
+					className='mt-4 h-[56px] cursor-pointer rounded-[14px] bg-[#D8D8D8] px-6 text-lg text-black sm:mt-0'
 				/>
 			</form>
 		</div>
