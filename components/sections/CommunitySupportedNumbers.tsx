@@ -42,7 +42,7 @@ const CommunitySupportedNumbers = () => {
 				</svg>
 				<div className='text-center lg:py-12'>
 					<p className='bg-gradient-to-r from-[#FB540C] to-[#DD7D31] bg-clip-text font-gradual text-[2.5rem] font-bold leading-none text-transparent sm:text-[3.5rem]'>
-						2k
+						2.7k
 					</p>
 					<h3 className='mt-1 text-sm text-[#525151] dark:text-[#C2C2C2] sm:text-base'>Github Stars</h3>
 				</div>
@@ -54,7 +54,7 @@ const CommunitySupportedNumbers = () => {
 				</div>
 				<div className='text-center lg:py-12'>
 					<p className='bg-gradient-to-r from-[#93B083] to-[#7BBB9F] bg-clip-text font-gradual text-[2.5rem] font-bold leading-none text-transparent sm:text-[3.5rem]'>
-						40
+						60+
 					</p>
 					<h3 className='mt-1 text-sm text-[#525151] dark:text-[#C2C2C2] sm:text-base'>Contributors</h3>
 				</div>
