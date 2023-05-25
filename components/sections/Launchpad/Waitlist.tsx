@@ -19,11 +19,7 @@ export const Waitlist: FC<WaitListProps> = ({ cta, description, subDescription }
 			<h2 className='text-gradient mt-12 max-w-4xl bg-clip-text text-center font-gradual text-[56px] font-bold leading-[150%] text-[#C2C2C2]'>
 				{cta}
 			</h2>
-			<p className='mt-8 max-w-2xl text-center text-xl text-[#7A7A7A]'>
-				The Shuttle Launchpad newsletter is meant to run for multiple issues with no defined end, ensuring
-				you always have new material to keep learning, staying up to date with the ever-changing Rust
-				ecosystem.
-			</p>
+			<p className='mt-8 max-w-2xl text-center text-xl text-[#7A7A7A]'>{description}</p>
 			<form
 				action='https://buttondown.email/api/emails/embed-subscribe/shuttle'
 				method='post'

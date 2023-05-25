@@ -78,12 +78,12 @@ const Navigation = () => {
 					</Link>
 					<Link
 						className='nav-link-shadow transition-all dark:hover:text-white'
-						href='/shuttle-batch'
+						href='/shuttle-ai'
 						onClick={() => {
 							setOpen(false)
 						}}
 					>
-						Shuttle Batch
+						Shuttle AI
 					</Link>
 					<Link
 						className='nav-link-shadow transition-all dark:hover:text-white'

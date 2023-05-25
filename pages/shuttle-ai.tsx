@@ -21,8 +21,8 @@ export default function ShuttleAIPage() {
 			<Info />
 			<Steps />
 			<Waitlist
-				cta='The fastest way to go from an idea to production.'
-				description='Sign up for the waitlist!'
+				cta='The fastest way to build and deploy in the cloud.'
+				description='Even faster than deploying a "hello world". Sign up for the waitlist!'
 			/>
 		</div>
 	)
