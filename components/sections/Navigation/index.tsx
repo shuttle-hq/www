@@ -26,11 +26,11 @@ const Navigation = () => {
 			</Link>
 			<div
 				className={clsx(
-					'absolute left-0 top-[4.375rem] z-20 h-[calc(100vh-4.375rem)] w-full overflow-y-auto bg-[#E9E9E9] p-5 dark:bg-black sm:px-10 lg:static lg:ml-10 lg:flex lg:h-auto lg:items-center lg:overflow-y-visible lg:p-0',
+					'absolute left-0 top-[4.375rem] z-20 h-[calc(100vh-4.375rem)] w-full overflow-y-auto bg-[#E9E9E9] p-5 dark:bg-black sm:px-10 xl:static xl:ml-10 xl:flex xl:h-auto xl:items-center xl:overflow-y-visible xl:bg-transparent xl:p-0 xl:dark:bg-transparent',
 					!open && 'hidden'
 				)}
 			>
-				<div className='flex flex-col gap-4 lg:flex-row lg:gap-8'>
+				<div className='flex flex-col gap-4 xl:flex-row xl:gap-8'>
 					<Link
 						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='/blog/tags/all'
@@ -86,8 +86,8 @@ const Navigation = () => {
 						Launchpad
 					</Link>
 				</div>
-				<div className='mt-10 lg:ml-auto lg:mt-0 lg:flex lg:items-center lg:gap-5'>
-					<div className='mt-10 flex flex-wrap items-center gap-5 lg:mt-0'>
+				<div className='mt-10 xl:ml-auto xl:mt-0 xl:flex xl:items-center xl:gap-5'>
+					<div className='mt-10 flex flex-wrap items-center gap-5 xl:mt-0'>
 						<Button variant='secondary' invertOnDark href={DISCORD_URL}>
 							Join Discord
 						</Button>
@@ -102,11 +102,11 @@ const Navigation = () => {
 							)}
 						</LoginButton>
 					</div>
-					<ThemeSwitcher className='mt-5 lg:-order-1 lg:mt-0' hidden />
+					<ThemeSwitcher className='mt-5 xl:-order-1 xl:mt-0' hidden />
 				</div>
 			</div>
 
-			<button className='ml-auto dark:text-[#D8D8D8] lg:hidden' onClick={() => setOpen((open) => !open)}>
+			<button className='ml-auto dark:text-[#D8D8D8] xl:hidden' onClick={() => setOpen((open) => !open)}>
 				<Hamburger />
 			</button>
 		</nav>
