@@ -1,4 +1,4 @@
-import { Hero, Info } from 'components/sections/ShuttleAI'
+import { Hero, Info, Steps } from 'components/sections/ShuttleAI'
 import { Waitlist } from 'components/sections/Launchpad'
 import { Page } from 'components/templates'
 import { ReactNode } from 'react'
@@ -19,6 +19,7 @@ export default function ShuttleAIPage() {
 			/>
 			<Hero />
 			<Info />
+			<Steps />
 			<Waitlist
 				cta='The fastest way to go from an idea to production.'
 				description='Sign up for the waitlist!'
