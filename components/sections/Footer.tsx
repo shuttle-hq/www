@@ -47,6 +47,24 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 								About
 							</Link>
 							<Link
+								href='/terms'
+								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+							>
+								Terms of Service
+							</Link>
+							<Link
+								href='/privacy'
+								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+							>
+								Privacy Policy
+							</Link>
+							<Link
+								href='/acceptable-use'
+								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+							>
+								Acceptable Use Policy
+							</Link>
+							<Link
 								href='/about#careers'
 								scroll={false}
 								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'

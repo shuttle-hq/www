@@ -2,7 +2,7 @@ export default function AcceptableUse() {
 	return (
 		<main className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
 			<div className='mb-[98px]'>
-				<h1 className='text-[64px] font-bold text-[#D8D8D8]'>Acceptable Use Policy</h1>
+				<h1 className='mb-[19px] text-[64px] font-bold text-[#D8D8D8]'>Acceptable Use Policy</h1>
 				<p className='text-xl'>
 					This Acceptable Use Policy (this “Policy”) describes prohibited uses of the web services
 					offered by OpenQuery, Inc. and its affiliates (the “Services”) and the website located at 
