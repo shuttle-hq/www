@@ -225,14 +225,14 @@ export default function Privacy() {
 				</ul>
 			</div>
 
-			<div className='text-xl'>
-				<h2 className='mb-5 text-2xl font-bold text-[#D8D8D8]'>2. How we share personal information</h2>
+			<div className='mb-[88px] space-y-6 text-xl'>
+				<h2 className='mb-5 text-[40px] font-bold text-[#D8D8D8]'>2. How we share personal information</h2>
 				<p>
 					We may share your personal information in the instances described below. For further
 					information on your choices regarding your information, see{' '}
 					<strong>Control Over Your Information</strong>.
 				</p>
-				<ul className='mb-5 list-inside list-disc space-y-4 text-xl'>
+				<ul className='mb-5 list-disc space-y-4 pl-[25px] text-xl'>
 					<li className='mb-2'>
 						We may share your personal information with third-party service providers or business
 						partners who help us deliver or improve our Site or services, or who perform services on
@@ -271,18 +271,20 @@ export default function Privacy() {
 						you directly as an individual.
 					</li>
 				</ul>
-				<h2 className='mb-5 font-bold'>3. Control over your information</h2>
-				<h3 className='mb-2 font-bold'>Email Communications</h3>
+			</div>
+			<div className='mb-[88px] space-y-6 text-xl'>
+				<h2 className='mb-5 text-[40px] font-bold text-[#D8D8D8]'>3. Control over your information</h2>
+				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Email Communications</h3>
 				<p className='mb-5'>
 					From time to time, we may send you emails regarding updates to our Service, products or
 					services, notices about our organization, or information about products/services we offer (or
 					promotional offers from third parties) that we think may be of interest to you. If you wish to
-					unsubscribe from such emails, simply click the "unsubscribe link" provided at the bottom of the
-					email communication. Note that you cannot unsubscribe from certain services-related email
-					communications (e.g., account verification, confirmations of transactions, technical or legal
-					notices).
+					unsubscribe from such emails, simply click the &quot;unsubscribe link&quot; provided at the
+					bottom of the email communication. Note that you cannot unsubscribe from certain
+					services-related email communications (e.g., account verification, confirmations of
+					transactions, technical or legal notices).
 				</p>
-				<h3 className='mb-2 font-bold'>Modifying Account Information</h3>
+				<h3 className='mb-2 mt-2 text-2xl font-bold text-[#D8D8D8]'>Modifying Account Information</h3>
 				<p className='mb-5'>
 					If you have an online account with us, you have the ability to modify certain information in
 					your account (e.g., your contact information) through the account options provided on the Site.
@@ -294,6 +296,150 @@ export default function Privacy() {
 					provide additional information to identify yourself, but we do not promise that we will be able
 					to satisfy your request.
 				</p>
+			</div>
+
+			<div className='mb-[88px] space-y-6 text-xl'>
+				<h2 className='mb-5 text-[40px] font-bold leading-none text-[#D8D8D8]'>
+					4. How We Use Cookies and Other Tracking Technology to Collect Information
+				</h2>
+				<p>
+					We, and our third-party partners, automatically collect certain types of usage information when
+					you visit our Site, read our emails, or otherwise engage with us. We typically collect this
+					information through a variety of tracking technologies, including cookies, web beacons,
+					embedded scripts, location-identifying technologies, file information, and similar technology
+					(collectively, &quot;<strong>tracking technologies</strong>&quot;).
+				</p>
+				<p>
+					We, and our third-party partners, use tracking technologies to automatically collect usage and
+					device information, such as:
+				</p>
+				<ul className='mb-5 list-disc space-y-4 pl-[25px] text-xl'>
+					<li className='mb-2'>
+						Information about your device and its software, such as your IP address, browser type,
+						Internet service provider, device type/model/manufacturer, operating system, date and time
+						stamp, and a unique ID that allows us to uniquely identify your browser or your account
+						(including, for example, a persistent device identifier), and other such information.
+					</li>
+					<li className='mb-2'>
+						When you access our sites from a mobile device, we may collect unique identification
+						numbers associated with your device or our mobile application mobile carrier, device type,
+						model and manufacturer, mobile device operating system brand and model, and depending on
+						your mobile device settings, we may be able to approximate a device’s location by analyzing
+						other information, like an IP address.
+					</li>
+					<li className='mb-2'>
+						Information about the way you access and use our services, for example, the site from which
+						you came and the site to which you are going when you leave our services, the pages you
+						visit, the links you click, whether you open emails or click the links contained in emails,
+						whether you access the services from multiple devices, and other actions you take on the
+						Sites.
+					</li>
+				</ul>
+				<p>
+					We use the data collected through tracking technologies to: (a) remember information so that
+					you will not have to re-enter it during your visit or the next time you visit the site; (b)
+					provide custom content and information; (c) identify you across multiple devices; (d) provide
+					and monitor the effectiveness of our services; (e) monitor aggregate metrics such as total
+					number of visitors, traffic, usage, and demographic patterns on our Site; (f) diagnose or fix
+					technology problems; and (g) to provide, plan for, and enhance our services.
+				</p>
+				<p>
+					<strong>Note:</strong> We do not engage in online targeted advertising.
+				</p>
+				<p>
+					<strong>Cookies and Other Tracking Technologies Opt-Out.</strong> Depending on your browser or
+					mobile device, you may be able to set your browser to delete or notify you of cookies and other
+					tracking technology by actively managing the settings on your browser or mobile device.
+				</p>
+				<p>
+					If you would prefer not to accept cookies, most browsers will allow you to: Change your browser
+					settings to notify you when you receive a cookie, which lets you choose whether or not to
+					accept it; Disable existing cookies; or Set your browser to automatically reject cookies.
+					Please note that doing so may negatively impact your experience using the sites, as some
+					features and services on our sites may not work properly. Depending on your mobile device and
+					operating system, you may not be able to delete or block all cookies. You may also set your
+					e-mail options to prevent the automatic downloading of images that may contain technologies
+					that would allow us to know whether you have accessed our e-mail and performed certain
+					functions with it.
+				</p>
+			</div>
+
+			<div className='mb-[88px] space-y-6 text-xl'>
+				<h2 className='mb-5 text-[40px] font-bold leading-none text-[#D8D8D8]'>
+					5. Data Retention and Security
+				</h2>
+				<p>
+					We will retain your personal information for the length of time needed to fulfill the purposes
+					outlined in this Privacy Notice, unless a longer retention period is required or permitted by
+					law. We store data on servers in the U.K. or any other country in which Shuttle or its
+					affiliates, subsidiaries, agents or contractors maintain facilities. If you are located in the
+					European Union or other regions with laws governing data collection and use that may differ
+					from U.S. law, please note that your personal information may be transferred to a country and
+					jurisdiction that does not have the same data protection laws as your jurisdiction. When you
+					register for use with Shuttle, you have the option of where you store your information, and we
+					will not transfer it without providing information to you in advance.
+				</p>
+				<p>
+					Shuttle cares about the security of your information and uses commercially reasonable physical,
+					technical, and organizational measures designed to preserve the integrity and security of all
+					information we collect. However, no security system is impenetrable, and we cannot guarantee
+					the security of our systems 100%. In the event that any information under our control is
+					compromised as a result of a breach of security, we will take reasonable steps to investigate
+					the situation and, where appropriate, notify those individuals whose information may have been
+					compromised and take other steps, in accordance with any applicable laws and regulations.
+				</p>
+			</div>
+
+			<div className='mb-[88px] space-y-6 text-xl'>
+				<h2 className='mb-5 text-[40px] font-bold leading-none text-[#D8D8D8]'>
+					6. Links to Third-Party Websites and Services
+				</h2>
+				<p>
+					For your convenience, our Site may provide links to third-party websites or services that we do
+					not own or operate. We are not responsible for the practices employed by any websites or
+					services linked to or from the services, including the information or content contained within
+					them. Your browsing and interaction on any other website or service are subject to the
+					applicable third party’s rules and policies, not ours. If you are using a third-party website
+					or service, you do so at your own risk. We encourage you to review the privacy policies of any
+					site or service before providing any personal information.
+				</p>
+			</div>
+			<div className='mb-[88px] space-y-6 text-xl'>
+				<h2 className='mb-5 text-[40px] font-bold leading-none text-[#D8D8D8]'>7. Children’s Privacy</h2>
+				<p>
+					Our services are not intended for children under the age of 13. We do not knowingly solicit or
+					collect personal information from children under the age of 13. If we learn that any personal
+					information has been collected inadvertently from a child under 13, we will delete the
+					information as soon as possible. If you believe that we might have collected information from a
+					child under 13, please contact us at{' '}
+					<a href='mailto:privacy@shuttle.rs' className='text-[#C2C2C2] underline'>
+						privacy@shuttle.rs
+					</a>
+					.
+				</p>
+			</div>
+			<div className='mb-[88px] space-y-6 text-xl'>
+				<h2 className='mb-5 text-[40px] font-bold leading-none text-[#D8D8D8]'>
+					8. Changes to Privacy Notice
+				</h2>
+				<p>
+					We reserve the right to change this Privacy Notice from time to time in our sole discretion. We
+					will notify you about material changes in the way we treat personal data by sending a notice to
+					the primary email address specified in your Shuttle account and/or by placing a prominent
+					notice on our Site. It is your responsibility to review this Privacy Notice periodically. When
+					we do change the Privacy Notice, we will also revise the &quot;last modified&quot; date.
+				</p>
+			</div>
+			<div className='mb-[88px] space-y-6 text-xl'>
+				<h2 className='mb-5 text-[40px] font-bold leading-none text-[#D8D8D8]'>9. Contact Us</h2>
+				<p>
+					For additional inquiries about this Privacy Notice, please send us an email at{' '}
+					<a href='mailto:privacy@shuttle.rs' className='text-[#C2C2C2] underline'>
+						privacy@shuttle.rs
+					</a>
+					.
+				</p>
+				<p>This Privacy Notice was last modified on 30th May 2023.</p>
 			</div>
 
 			<div className='mb-10 mt-10'>
