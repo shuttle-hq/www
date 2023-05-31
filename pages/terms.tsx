@@ -1,29 +1,4 @@
-import { getAllTags, getSortedPosts, Post } from 'lib/blog/posts'
-import { GetStaticPropsResult } from 'next'
-import { StarterAttrs } from '../components/elements/Starter'
-import { QuestionAttrs } from '../components/sections/FrequentlyAskedQuestions'
-import { Questions, FeaturedStartersContent } from '../content'
-
-export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
-	const posts = getSortedPosts(3)
-	const starters = FeaturedStartersContent
-	const questions = Questions
-	return {
-		props: {
-			posts,
-			starters,
-			questions,
-		},
-	}
-}
-
-interface Props {
-	readonly posts: Post[]
-	readonly starters: StarterAttrs[]
-	readonly questions: QuestionAttrs[]
-}
-
-export default function Home({ posts, starters, questions }: Props) {
+export default function Terms() {
 	return (
 		<main className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
 			<div className='mb-[98px]'>
