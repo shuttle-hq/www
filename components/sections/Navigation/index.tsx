@@ -78,7 +78,7 @@ const Navigation = () => {
 					</Link>
 					<Link
 						className='nav-link-shadow transition-all dark:hover:text-white'
-						href='/shuttle-ai'
+						href='/ai'
 						onClick={() => {
 							setOpen(false)
 						}}
