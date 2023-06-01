@@ -10,7 +10,7 @@ const Info = () => {
 					</h2>
 					<p className='mt-7 leading-8 text-[#7A7A7A] lg:text-xl'>
 						Want to build a revolutionary new blogging service?
-						<br /> Just write&nbsp;
+						<br className='hidden sm:block' /> Just write&nbsp;
 						<code className='inline-block rounded-lg border border-white/10 px-2 py-1 text-base text-sm text-[#D8D8D8] lg:text-base'>
 							cargo shuttle-ai &quot;Build me a blog service&quot;
 						</code>{' '}
@@ -143,8 +143,8 @@ const Info = () => {
 						<code className='inline-block rounded-lg border border-white/10 px-2 py-1 text-base text-sm text-[#D8D8D8] lg:text-base'>
 							cargo shuttle-ai &quot;Build me a blog service&quot;
 						</code>
-						, sit back and watch as our AI agents analyse your code, update it and deploy the new
-						changes to.
+						<span className='hidden sm:block'>,</span> sit back and watch as our AI agents analyse your
+						code, update it and deploy the required changes.
 					</p>
 				</div>
 			</div>

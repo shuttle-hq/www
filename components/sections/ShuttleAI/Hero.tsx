@@ -1,6 +1,6 @@
 const Hero = () => {
 	return (
-		<div className='relative flex flex-col items-center justify-center px-4 pt-60'>
+		<div className='relative flex flex-col items-center justify-center px-4 pt-32 sm:pt-60'>
 			<h1 className='w-fit text-center font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-6.5'>
 				Instant apps,
 				<br />
