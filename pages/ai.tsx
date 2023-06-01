@@ -28,8 +28,4 @@ export default function ShuttleAIPage() {
 	)
 }
 
-ShuttleAIPage.getLayout = (children: ReactNode) => (
-	<Page disableFooterMargin background='/images/pages/shuttle-ai/hero.png'>
-		{children}
-	</Page>
-)
+ShuttleAIPage.getLayout = (children: ReactNode) => <Page disableFooterMargin>{children}</Page>

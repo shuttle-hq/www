@@ -12,7 +12,7 @@ const Info = () => {
 						Want to build a revolutionary new blogging service?
 						<br className='hidden sm:block' /> Just write&nbsp;
 						<code className='inline-block rounded-lg border border-white/10 px-2 py-1 text-base text-sm text-[#D8D8D8] lg:text-base'>
-							cargo shuttle-ai &quot;Build me a blog service&quot;
+							shuttle-ai build &quot;Build me a blog service&quot;
 						</code>{' '}
 						and while you go and grab a cup of coffee, Shuttle&apos;s AI agents will breakdown the
 						project, generate the needed code, ensure it compiles, provision the infrustructure and
@@ -141,10 +141,10 @@ const Info = () => {
 					<p className='mt-7 leading-8 text-[#7A7A7A] lg:text-xl'>
 						Just write&nbsp;
 						<code className='inline-block rounded-lg border border-white/10 px-2 py-1 text-base text-sm text-[#D8D8D8] lg:text-base'>
-							cargo shuttle-ai &quot;Build me a blog service&quot;
+							shuttle-ai add-feature &quot;Add comment support&quot;
 						</code>
-						<span className='hidden sm:block'>,</span> sit back and watch as our AI agents analyse your
-						code, update it and deploy the required changes.
+						<span className='hidden sm:inline-block'>,</span> sit back and watch as our AI agents
+						analyse your code, update it and deploy the required changes.
 					</p>
 				</div>
 			</div>
