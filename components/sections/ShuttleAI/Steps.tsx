@@ -25,7 +25,7 @@ const Steps = () => {
 				of the app.
 			</p>
 			<p className='mb-10 w-full max-w-3xl text-xl leading-8 text-[#7A7A7A]'>
-				After we got our plan devices, we pass it on to the code-generation agents that focus on generating
+				Once we have our plan decided, we pass it on to the code-generation agents that focus on generating
 				you a working codebase. Meanwhile, our Shuttlify agents take care of your infrastructure and
 				provisioning, while our compilation agents sit in the background and fix any potential errors or
 				mistakes that might appear. What you get in the end, is a real, live Rust-based backend deployed on
