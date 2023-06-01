@@ -471,8 +471,8 @@ export default function Privacy() {
 
 			<div className='mb-10 mt-10'>
 				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>
-					1. Personal data we collect from you when you use the Supabase European Services, and how we
-					use it.
+					1. Personal data we collect from you when you use the Shuttle European Services, and how we use
+					it.
 				</h2>
 				<p className='mb-5 text-xl'>
 					<strong>
@@ -514,7 +514,7 @@ export default function Privacy() {
 					</li>
 					<li>
 						<strong>
-							information about your usage patterns (such as how often you use the Supabase European
+							information about your usage patterns (such as how often you use the Shuttle European
 							Services and your language settings).
 						</strong>
 					</li>
