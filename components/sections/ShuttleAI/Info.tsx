@@ -180,20 +180,18 @@ const Info = () => {
 				/>
 			</svg>
 			<div className='px-4'>
-				<div className='w-full rounded-4xl border border-white/20 p-4 lg:p-8'>
-					<div className='flex aspect-video w-full items-center justify-center rounded-4xl bg-[#131313]'>
-						<svg
-							width='85'
-							height='107'
-							viewBox='0 0 85 107'
-							fill='none'
-							xmlns='http://www.w3.org/2000/svg'
-						>
-							<path
-								d='M82.7574 50.134L6.1611 0.955704C3.49894 -0.753522 0 1.15803 0 4.32166V102.678C0 105.842 3.49895 107.754 6.16111 106.044L82.7575 56.866C85.2093 55.2917 85.2093 51.7083 82.7574 50.134Z'
-								fill='#D9D9D9'
-							/>
-						</svg>
+				<div className='w-full rounded-4xl border border-white/20'>
+					<div className='relative h-0 overflow-hidden pb-[56.25%]'>
+						<iframe
+							className='absolute left-0 top-0 h-full w-full rounded-4xl'
+							width='1080'
+							height='720'
+							src='https://www.youtube.com/embed/6sHo-2ddw3U?controls=0&autoplay=1'
+							title='YouTube video player'
+							frameBorder='1'
+							allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+							allowFullScreen
+						/>
 					</div>
 				</div>
 			</div>
