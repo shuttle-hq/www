@@ -106,6 +106,12 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 							>
 								Launchpad
 							</Link>
+							<Link
+								href='/ai'
+								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+							>
+								Shuttle AI
+							</Link>
 						</div>
 						<div className='flex flex-col gap-3 px-8 pb-8 pt-16 lg:p-16'>
 							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Community</h3>
