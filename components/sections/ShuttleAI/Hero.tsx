@@ -24,7 +24,8 @@ const Hero = () => {
 
 			<div className='mt-10 flex flex-col items-center justify-center text-center font-gradual text-lg font-bold sm:flex-row'>
 				<Link
-					href='/launchpad'
+					href='https://btl1d1x5z23.typeform.com/shuttle-ai'
+					target='_blank'
 					className='mt-4 flex h-[56px] cursor-pointer items-center rounded-[14px] bg-[#D8D8D8] px-6 text-lg text-black sm:mt-0'
 				>
 					Join the waitlist
