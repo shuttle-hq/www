@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 
 const Hero = () => {
 	return (
@@ -21,25 +22,14 @@ const Hero = () => {
 				Yes, we did it. From prompt to deployed app in under 5 minutes
 			</p>
 
-			<form
-				action='https://buttondown.email/api/emails/embed-subscribe/shuttle'
-				method='post'
-				target='popupwindow'
-				className='embeddable-buttondown-form mt-10 flex flex-col items-center text-center font-gradual text-lg font-bold sm:flex-row'
-			>
-				<input
-					type='email'
-					name='email'
-					placeholder='Your email'
-					className='mr-[18px] h-[56px] w-full rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-xl font-normal text-[#D8D8D8] placeholder:text-[#D8D8D8] sm:w-[412px]'
-				/>
-				<input type='hidden' value='1' name='embed' />
-				<input
-					type='submit'
-					value='Join the waitlist'
-					className='mt-4 h-[56px] cursor-pointer rounded-[14px] bg-[#D8D8D8] px-6 text-lg text-black sm:mt-0'
-				/>
-			</form>
+			<div className='mt-10 flex flex-col items-center justify-center text-center font-gradual text-lg font-bold sm:flex-row'>
+				<Link
+					href='/launchpad'
+					className='mt-4 flex h-[56px] cursor-pointer items-center rounded-[14px] bg-[#D8D8D8] px-6 text-lg text-black sm:mt-0'
+				>
+					Join the waitlist
+				</Link>
+			</div>
 		</div>
 	)
 }

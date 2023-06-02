@@ -1,8 +1,8 @@
 import { Hero, Info, Steps } from 'components/sections/ShuttleAI'
-import { Waitlist } from 'components/sections/Launchpad'
 import { Page } from 'components/templates'
 import { ReactNode } from 'react'
 import Image from 'next/image'
+import { Waitlist } from 'components/sections/ShuttleAI/Waitlist'
 
 export default function ShuttleAIPage() {
 	return (
