@@ -31,17 +31,6 @@ const Steps = () => {
 				mistakes that might appear. What you get in the end, is a real, live Rust-based backend deployed on
 				Shuttle’s cloud.
 			</p>
-			<p className='w-full max-w-3xl text-xl leading-8 text-[#7A7A7A]'>
-				If you want to learn more, check out our blog post:&nbsp;
-				<a
-					href='https://blog.com/sth'
-					target='_blank'
-					rel='noreferrer'
-					className='inline-block text-[#D8D8D8] underline'
-				>
-					blog.com/sth
-				</a>
-			</p>
 		</div>
 	)
 }
