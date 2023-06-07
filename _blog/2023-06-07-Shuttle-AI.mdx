@@ -1,5 +1,5 @@
 ---
-title: What if Machines Did All the Work?
+title: What if machines did all the work?
 description: What if we didn't have to write code anymore? What if we could rely on machines to do our work for us? But not just code - specifications, infrastructure, deployments. What might the future of development look like? Let's take a look.
 author: Ian Rumac
 tags: [rust, Shuttle AI, AI]
@@ -53,11 +53,13 @@ And no worries - we’ve all seen generated code before and know how messy it ca
 
 
 ### Choosing Rust
+
 While Rust is one of the most loved languages and praised for it’s performance and reliability, it is also notorious for it’s strictness and learning curve. That strictness makes it perfectly positioned as a language for code-generation - if it compiles, you have the confidence in the codebase and it’s inner workings - while it does not provide the confidence of good test-coverage, it narrows the possible bug area. Using a dynamic language like Javascript would be able to make our job easier, but the confidence in the generated code would be quite low due to it’s dynamic properties.
 
 On the other hand, while Rust has a large learning curve, more and more developers are trying it and joining the Rust community. So generating a simple service they can play with and experiment on seems like a perfect opportunity to help them get over the curve easily and quickly become productive in Rust.
 
 ### Behind the scenes
+
 Behind the scenes lies a process with multiple GPT Agents, working in tandem to generate code, make it deployable and fix any errors along the way. Let’s take a look behind the curtain and see how the process works:
 
 ![](/images/blog/diagram.png)
@@ -108,3 +110,4 @@ We are happily looking forward to the future of this technology and all the pote
 While Shuttle AI is currently in a private alpha, you can [join the waitlist](https://shuttle.rs/ai) to be among the first to get access to it or [join our Discord](https://discord.gg/shuttle) to find out more.
 
 If you have any questions about the tool, feel free to reach out to us on [Twitter](https://twitter.com/shuttle_dev) or [Discord](https://discord.gg/shuttle). We’d love to hear what you think and learn how we can make this even more useful for you!
+
