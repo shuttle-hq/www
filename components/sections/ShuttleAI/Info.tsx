@@ -189,7 +189,7 @@ const Info = () => {
 							src='https://www.youtube.com/embed/6sHo-2ddw3U?controls=0&autoplay=1'
 							title='YouTube video player'
 							frameBorder='1'
-							allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+							allow='accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
 							allowFullScreen
 						/>
 					</div>
