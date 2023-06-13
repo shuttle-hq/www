@@ -9,14 +9,14 @@ interface DashboardPageProps {
 }
 
 const DashboardPage: FC<DashboardPageProps> = ({ children, disableFooterMargin }) => {
-	const { user } = useUser()
+	const { user, isLoading } = useUser()
 	const router = useRouter()
 
 	useEffect(() => {
-		if (!user) {
+		if (!isLoading && !user) {
 			router.push('/')
 		}
-	}, [user, router])
+	}, [user, router, isLoading])
 
 	return (
 		<div className='flex min-h-screen flex-col'>
