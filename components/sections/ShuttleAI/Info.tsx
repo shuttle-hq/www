@@ -186,7 +186,7 @@ const Info = () => {
 							className='absolute left-0 top-0 h-full w-full rounded-4xl'
 							width='1080'
 							height='720'
-							src='https://www.youtube.com/embed/6sHo-2ddw3U?controls=0&autoplay=1'
+							src='https://www.youtube.com/embed/6sHo-2ddw3U?controls=0&autoplay=0'
 							title='YouTube video player'
 							frameBorder='1'
 							allow='accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
