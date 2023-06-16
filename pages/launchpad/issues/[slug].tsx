@@ -233,8 +233,9 @@ export default function IssuePage(props: Props) {
         }}
       />
       <div className='mx-auto max-w-4xl p-4 sm:p-6 lg:p-8'>
-        <div>
-          <div>
+        <div className='grid grid-cols-1 gap-6 gap-y-12 lg:grid-cols-4'>
+          <div className='lg:col-span-3'>
+
             {props.issue.content && (
               <article
                 className={clsx(
