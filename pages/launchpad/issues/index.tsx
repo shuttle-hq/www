@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
-  const issues = getSortedIssues(0)
+  const issues = getSortedIssues()
 
   return {
     props: {
