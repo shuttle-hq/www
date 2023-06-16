@@ -8,23 +8,21 @@ export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
   const issues = getSortedIssues(0)
   console.log('issues:', issues)
 
-  const tags = getAllTags()
-
   return {
     props: {
       issues,
-      tags,
     },
   }
 }
 
 interface Props {
   readonly issues: ReturnType<typeof getSortedIssues>
-  readonly tags: string[]
 }
 
 export default function Launchpad(props: Props) {
-  const { issues = [], tags = [] } = props
+  const { issues = [] } = props
+
+  console.log('issues:', issues)
 
   return (
     <>

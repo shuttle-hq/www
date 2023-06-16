@@ -7,6 +7,7 @@ interface IssueProps {
 }
 
 const LaunchpadIssues: FC<IssueProps> = ({ issues }) => {
+  console.log(issues)
   return (
     <div className='mt-16 flex w-full flex-col lg:mx-auto lg:mt-20  lg:max-w-7xl lg:px-10'>
       <h1 className='mb-16 text-[56px] font-bold text-[#C2C2C2]'>Shuttle Launchpad</h1>
