@@ -268,7 +268,7 @@ export default function Beta() {
             </p>
 
             <p className='mb-[30px]'>
-              With the beta release, we are proud to deliver the progress we've made in ensuring a stable and dependable platform. Our team has worked tirelessly to address previous concerns and implement solutions that provide a solid foundation for developers. As we continue to evolve and refine Shuttle, we remain committed to maintaining and improving stability.
+              With the beta release, we are proud to deliver the progress we&apos;ve made in ensuring a stable and dependable platform. Our team has worked tirelessly to address previous concerns and implement solutions that provide a solid foundation for developers. As we continue to evolve and refine Shuttle, we remain committed to maintaining and improving stability.
             </p>
 
             <h2 className='mb-4 text-[32px] text-[#D8D8D8]'>Reliability</h2>
@@ -384,7 +384,7 @@ export default function Beta() {
             </div>
 
             <p className='mb-[30px]'>
-              We encourage you to submit your feedback, suggestions and feature requests through <Link href="https://github.com/shuttle-hq/shuttle/issues/new/choose" className='underline'>GitHub issues</Link>, as your input is invaluable in guiding the platform's growth and evolution.
+              We encourage you to submit your feedback, suggestions and feature requests through <Link href="https://github.com/shuttle-hq/shuttle/issues/new/choose" className='underline'>GitHub issues</Link>, as your input is invaluable in guiding the platform&apos;s growth and evolution.
             </p>
 
             <p className='mb-[30px]'>
