@@ -102,7 +102,7 @@ const UPCOMING_FEATURES: Array<Feature> = [
     points: [
       'Allow the selection of the desired region for project deployment',
       'Utilize your own AWS account, granting greater control and ownership',
-      '- Expand deployment options by adding support for additional cloud providers beyond AWS'
+      'Expand deployment options by adding support for additional cloud providers beyond AWS'
     ],
   },
   {
@@ -257,7 +257,7 @@ export default function Beta() {
             <p className='mb-[30px]'>
               We’ve revealed  <Link href="https://shuttle.rs/ai" target="_blank" className='underline'>Shuttle AI</Link> recently and we want to make it a companion in your development endeavors. The goal is simple, supercharging development productivity by enabling you to get started faster than ever. Even faster than getting a ‘hello-world’ app up and running.
             </p>
-            <p>
+            <p className='mb-[30px]'>
               All it takes to generate & deploy a project is a single prompt, eg. <code>shuttle-ai build &quot;a blog backend&quot;</code> and in case you need an additional feature, for example, simply run eg. <code>shuttle-ai add-feature &quot;comments&quot;</code>.
             </p>
 
@@ -419,7 +419,7 @@ export default function Beta() {
           </div>
 
           <div className='max-w-3xl px-5 py-24 sm:px-10 lg:py-28'>
-            <h1 className='mb-[30px] text-[56px] text-[#C2C2C2]' id='#08'>
+            <h1 className='mb-[30px] text-[56px] text-[#C2C2C2]' id='08'>
               08 Growing our team
             </h1>
 
