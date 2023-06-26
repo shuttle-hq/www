@@ -410,7 +410,7 @@ export default function Beta() {
             <p className='mb-[30px]'>We’ll be sharing more details on this later on so stay tuned.</p>
 
             <Image
-              src='/images/beta/investor-graphic.png'
+              src='/images/beta/investors.png'
               alt='status page'
               width={784}
               height={500}
