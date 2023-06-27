@@ -301,6 +301,10 @@ export default function Beta() {
               As we head into beta, we&apos;ve prepared a lot of activities and events for you to engage with and make the most out of this exciting phase.
             </p>
 
+            <p className='mb-[30px]'>
+              Tune into our <Link href="https://discord.gg/shuttle" target="_blank" className='underline'>Discord server</Link> to stay up-to-date as we progress through the launch week.
+            </p>
+
             <Image src='/images/beta/preview.png' alt='status page' width={784} height={500} />
           </div>
 
@@ -315,7 +319,7 @@ export default function Beta() {
                 <p className='mb-2 italic'>
                   “Mind-blowing! What a huge addition to the Rust ecosystem! I&apos;m sure this will be a driveway to get more people into Rust.”
                 </p>
-                <p>- Roberto Huertas, Software Engineer @ Datadog</p>
+                <p className='font-bold'>- Roberto Huertas, Software Engineer @ Datadog</p>
               </div>
             </div>
 
@@ -325,7 +329,7 @@ export default function Beta() {
                 <p className='mb-2 italic'>
                   “Game changer, what a great project.”
                 </p>
-                <p>- Dominykas, Staff Software Engineer @ Uber</p>
+                <p className='font-bold'>- Dominykas, Staff Software Engineer @ Uber</p>
               </div>
             </div>
 
@@ -335,7 +339,7 @@ export default function Beta() {
                 <p className='mb-2 italic'>
                   “You soon realize Shuttle is much more than just a host for your app. It&apos;s your Rust framework for the cloud; Infrastructure as Crates! This puts Shuttle in front of everything else I&apos;ve tried. I couldn&apos;t be more happy!”
                 </p>
-                <p>- Owner oida.dev | Architect @ Dynatrace | Rust Linz</p>
+                <p className='font-bold'>- Owner oida.dev | Architect @ Dynatrace | Rust Linz</p>
               </div>
             </div>
 
@@ -387,7 +391,7 @@ export default function Beta() {
               We encourage you to submit your feedback, suggestions and feature requests through <Link href="https://github.com/shuttle-hq/shuttle/issues/new/choose" className='underline'>GitHub issues</Link>, as your input is invaluable in guiding the platform&apos;s growth and evolution.
             </p>
 
-            <p className='mb-[30px]'>
+            <p className='mb-[30px] font-bold'>
               Together, we can create the fastest backend development experience ever.
             </p>
           </div>
