@@ -142,34 +142,34 @@ export default function Beta() {
           <p>Now, we are entering beta.</p>
         </div>
 
-        <div className='flex flex-1 flex-row justify-center gap-[60px] lg:flex-col'>
-          <div className='flex flex-col'>
-            <span className='text-[56px] font-bold text-[#C2C2C2] '>4,000+</span>
+        <div className='flex flex-1 flex-col sm:flex-row justify-center gap-[60px] lg:flex-col items-center sm:items-start'>
+          <div className='flex flex-col items-center sm:items-start'>
+            <span className='text-[56px] font-bold text-[#C2C2C2]'>4,000+</span>
             <p>Users</p>
           </div>
-          <div className='flex flex-col'>
+          <div className='flex flex-col items-center sm:items-start'>
             <span className='text-[56px] font-bold text-[#C2C2C2] '>3,000</span>
             <p>Community members</p>
           </div>
         </div>
 
-        <div className='flex flex-1 flex-row justify-center gap-[60px] lg:flex-col'>
-          <div className='flex flex-col'>
+        <div className='flex flex-1 flex-col sm:flex-row justify-center gap-[60px] lg:flex-col items-center sm:items-start'>
+          <div className='flex flex-col items-center sm:items-start'>
             <span className='text-[56px] font-bold text-[#C2C2C2] '>4,000+</span>
             <p>Projects</p>
           </div>
-          <div className='flex flex-col'>
+          <div className='flex flex-col items-center sm:items-start'>
             <span className='text-[56px] font-bold text-[#C2C2C2] '>68</span>
             <p>Contributors</p>
           </div>
         </div>
 
-        <div className='flex flex-1 flex-row justify-center gap-[60px] lg:flex-col'>
-          <div className='flex flex-col'>
+        <div className='flex flex-1 flex-col sm:flex-row justify-center gap-[60px] lg:flex-col items-center sm:items-start'>
+          <div className='flex flex-col items-center sm:items-start'>
             <span className='text-[56px] font-bold text-[#C2C2C2] '>3,100+</span>
             <p>GitHub stars</p>
           </div>
-          <div className='flex flex-col'>
+          <div className='flex flex-col items-center sm:items-start'>
             <span className='text-[56px] font-bold text-[#C2C2C2] '>∞</span>
             <p>Minutes saved</p>
           </div>
