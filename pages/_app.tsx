@@ -11,6 +11,7 @@ import '@splidejs/react-splide/css'
 import { Page } from 'components/templates'
 import { UserProvider } from '@auth0/nextjs-auth0/client'
 import { StarOnGithub } from 'components/sections'
+import { Analytics } from '@vercel/analytics/react'
 
 export default function App({ Component, pageProps }: AppProps) {
 	const router = useRouter()
@@ -55,6 +56,7 @@ export default function App({ Component, pageProps }: AppProps) {
 				>
 					We use cookies to enhance the user experience and measure engagement.
 				</CookieConsent>
+				<Analytics />
 			</div>
 		</UserProvider>
 	)
