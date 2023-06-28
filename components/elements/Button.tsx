@@ -1,8 +1,8 @@
 import clsx from 'clsx'
 import Link from 'next/link'
-import {FC, ReactElement, ReactNode} from 'react'
-import {useUser} from "@auth0/nextjs-auth0/client";
-import {CONTACT_US_URI} from "../../lib/constants";
+import { FC, ReactNode } from 'react'
+import { useUser } from '@auth0/nextjs-auth0/client'
+import { CONTACT_US_URI } from '../../lib/constants'
 
 interface CommonButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	variant: 'primary' | 'secondary'
@@ -32,33 +32,36 @@ const Button: FC<ButtonProps> = ({ variant = 'none', invertOnDark, className, ch
 		className
 	)
 
-	children = <button className={classNames}>{children}</button>;
+	children = <button className={classNames}>{children}</button>
 
 	if (href)
-		if (href.startsWith('/'))
-			children = (
-				<Link href={href}>
-					{children}
-				</Link>
-			)
+		if (href.startsWith('/')) children = <Link href={href}>{children}</Link>
 		else
 			children = (
-				<a href={href} target='_blank' rel="noreferrer">
+				<a href={href} target='_blank' rel='noreferrer'>
 					{children}
 				</a>
 			)
 
-	return children;
+	return children
 }
 
-export const LoginButton: FC<CommonButtonProps> = ({children, ...inner}) => {
+export const LoginButton: FC<CommonButtonProps> = ({ children, ...inner }) => {
 	const { user } = useUser()
-	const dashboardBaseUrl = user ? "/dashboard" : "/login"
-	return (<Button href={dashboardBaseUrl} {...inner}>{children}</Button>)
+	const dashboardBaseUrl = user ? '/dashboard' : 'https://console.shuttle.rs/login'
+	return (
+		<Button href={dashboardBaseUrl} {...inner}>
+			{children}
+		</Button>
+	)
 }
 
-export const ContactUsButton: FC<CommonButtonProps> = ({children, ...inner}) => {
-	return (<Button href={CONTACT_US_URI} {...inner}>{children}</Button>)
+export const ContactUsButton: FC<CommonButtonProps> = ({ children, ...inner }) => {
+	return (
+		<Button href={CONTACT_US_URI} {...inner}>
+			{children}
+		</Button>
+	)
 }
 
 export default Button
