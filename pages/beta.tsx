@@ -408,7 +408,7 @@ export default function Beta() {
             </p>
 
             <p className='mb-[30px]'>
-              Their belief in Shuttle fuels our determination to redefine cloud development and we are extremely grateful that in addition to the amazing community supporting Shuttle, we are joined on thing journey by some of the top investors and operators in the world.
+              Their belief in Shuttle fuels our determination to redefine cloud development and we are extremely grateful that in addition to the amazing community supporting Shuttle, we are joined on this journey by some of the top investors and operators in the world.
             </p>
 
             <p className='mb-[30px]'>We’ll be sharing more details on this later on so stay tuned.</p>
