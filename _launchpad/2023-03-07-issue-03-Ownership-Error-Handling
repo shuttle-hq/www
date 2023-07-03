@@ -1,0 +1,290 @@
+---
+title: "Issue #3: Ownership & Error Handling"
+date: "2023-07-03T16:00:00"
+---
+
+# Shuttle Launchpad #3: Sudoku, Ownership and Error Handling
+
+Welcome to the third issue of Shuttle Launchpad! Before we go into the nitty gritty details of today's issue, let's take some time to celebrate the Shuttle reaching beta status! 🎉 Check out all our announcements on [shuttle.rs/beta](https://shuttle.rs/beta).
+
+Btw... we're [growing our team](https://www.shuttle.rs/about#careers)!
+
+## A Sudoku Solver
+
+In this issue, we will build a sudoku solver. The solver will be a web service that takes a sudoku board as input and returns the solved board as output. The solver will be implemented using a backtracking algorithm.
+
+Of course, we want to deploy it to Shuttle, so let's start with a new Shuttle project. If this is your first time using Shuttle, you can follow the [installation guide](https://docs.shuttle.rs/introduction/installation), or check out the previous issue in our [archive](https://shuttle.rs/launchpad/).
+
+---
+
+💡 **Note**: We've recently released Shuttle 0.20.0, which uses Rust 1.70. Be sure to upgrade!
+
+---
+
+Create a new project using the CLI tool, and select _Axum_ as your web framework.
+
+```bash
+$ cargo shuttle init
+```
+
+Add a few dependencies to your `Cargo.toml`, we're going to need them. You see that we add some features and crates that contain the word "json". This is because we want to use JSON as our data format. We will use the `serde` and `serde_json` crates to serialize and deserialize our data. They are powerful tools that make those daunting tasks rather easy!
+
+```toml
+[dependencies]
+shuttle-runtime = "0.18.0"
+axum = { version = "0.6.18", features = ["json"] }
+shuttle-axum = "0.18.0"
+tokio = "1.28.2"
+serde_json = "1.0.99"
+serde = "1.0.164"
+```
+
+Adapt the main function to get rid of all the hello world stuff from the template. We want to have one route called `/solve` that accepts a POST request.
+
+```rust
+#[shuttle_runtime::main]
+async fn axum() -> shuttle_axum::ShuttleAxum {
+    let router = Router::new().route("/solve", post(solve));
+
+    Ok(router.into())
+}
+```
+
+We create a struct called `Sudoku` which will contain the board as a nested array: Nine rows with nine columns, representing the fields of the Sudoku board. We use a constant called `SIZE` to define the size of the board. We also derive the `Serialize` and `Deserialize` traits from the `serde` crate. This will allow us to easily serialize and deserialize our struct to and from JSON.
+
+```rust
+use serde::{Deserialize, Serialize};
+
+const SIZE: usize = 9;
+
+#[derive(Serialize, Deserialize)]
+struct Sudoku {
+    board: [[u8; SIZE]; SIZE],
+}
+```
+
+And just like that, we are able to take JSON input from a post request and get a Rust struct out of it.
+
+```json
+// The JSON input
+{
+	"board": [
+        [5, 3, 0, 0, 7, 0, 0, 0, 0],
+        [6, 0, 0, 1, 9, 5, 0, 0, 0],
+        [0, 9, 8, 0, 0, 0, 0, 6, 0],
+        [8, 0, 0, 0, 6, 0, 0, 0, 3],
+        [4, 0, 0, 8, 0, 3, 0, 0, 1],
+        [7, 0, 0, 0, 2, 0, 0, 0, 6],
+        [0, 6, 0, 0, 0, 0, 2, 8, 0],
+        [0, 0, 0, 4, 1, 9, 0, 0, 5],
+        [0, 0, 0, 0, 8, 0, 0, 7, 9]
+	]
+}
+```
+
+That's all it needs. That's how powerful `serde` is! Oh, and vice versa! We can take a Rust struct and display JSON information.
+
+Try it out by writing the `solve` function, which takes a `Json` extractor to transform the request body into a Sudoku struct. The function returns the same struct again.
+
+
+```rust
+async fn solve(Json(mut sudoku): Json<Sudoku>) -> Json<Sudoku> {
+    sudoku
+}
+```
+
+All type-safe, with the right error handling baked in. Once you have one of those structs in your hands you can be sure that the data is alright.
+
+And yes, the return type is `Json<Sudoku>`, maybe we should use a type alias called `TedLasso`? 🤔 _Ba-dum-tss_!
+
+Alright, let's implement the actual solving algorithm. It's a pretty straightforward backtracking algorithm. We will use a recursive function called `solve_sudoku` that takes a mutable reference to a `Sudoku` struct. The function returns a boolean value, indicating whether the sudoku was solved or not.
+
+Wait a second, what's a _mutable reference_? In Rust, every value needs an owner. When the owner goes out of scope (which usually means at a closing curly brace), Rust frees associated memory. If you pass a value as an argument without any extra annotations, the function or method will take ownership of the value, and then the value will be dropped at the end of the function. This is called _move semantics_.
+
+However, we have a recursive function where we want to change the same struct over and over again. This is why we create a reference. A reference basically says: Somebody else owns this, but I give you access so you can read from it. If you want to change it, add the `mut` keyword to the reference, indicating that you want to mutate the value. This is called a _mutable reference_.
+
+So in our function `solve_sudoku`, the actual `sudoku` struct can be modified, but the owner is outside of the `solve_sudoku` function.
+
+The algorithm itself first looks for an empty square (indicated by a `0`), then goes through all possible numbers from 0 to 9, and checks if the number is safe to put in the square. If it is, it puts the number in the square and calls itself again. If the function returns `true`, the sudoku was solved, and we can return `true` as well. If the function returns `false`, we need to remove the number from the square again and try the next number.
+
+```rust
+fn solve_sudoku(sudoku: &mut Sudoku) -> bool {
+    let mut row = 0;
+    let mut col = 0;
+    let mut is_empty = false;
+
+    for i in 0..SIZE {
+        for j in 0..SIZE {
+            if sudoku.board[i][j] == 0 {
+                row = i;
+                col = j;
+                is_empty = true;
+                break;
+            }
+        }
+        if is_empty {
+            break;
+        }
+    }
+
+    if !is_empty {
+        return true;
+    }
+
+    for num in 1..=SIZE {
+        if is_safe(sudoku, row, col, num as u8) {
+            sudoku.board[row][col] = num as u8;
+            if solve_sudoku(sudoku) {
+                return true;
+            }
+            sudoku.board[row][col] = 0;
+        }
+    }
+
+    false
+}
+```
+
+The `is_safe` function checks if a number can be put in a square. It checks the row, the column, and the 3x3 square the square is in. If the number is not in any of those, it is safe to put it in the square.
+
+`is_safe` takes a reference. Here we tell Rust, that while `is_safe` is not the owner, it also doesn't need to change anything. Just read from it! This is called a _shared reference_.
+
+
+```rust
+fn is_safe(sudoku: &Sudoku, row: usize, col: usize, num: u8) -> bool {
+    for i in 0..SIZE {
+        if sudoku.board[row][i] == num {
+            return false;
+        }
+    }
+
+    for i in 0..SIZE {
+        if sudoku.board[i][col] == num {
+            return false;
+        }
+    }
+
+    let start_row = row - row % 3;
+    let start_col = col - col % 3;
+
+    for i in 0..3 {
+        for j in 0..3 {
+            if self.board[i + start_row][j + start_col] == num {
+                return false;
+            }
+        }
+    }
+
+    true
+}
+```
+
+The nice thing about this is that everything is explicit. You look at that code and see exactly what is happening. This makes working together or going back to your project after a while so much easier.
+
+Also note that when we call `solve_sudoku` another time, recursively, we don't need to put the `&mut` keyword in front of the argument. This is because the function takes a mutable reference, and we already have a mutable reference. So we can just pass it along. The mutable reference becomes part of the type!
+
+Our Sudoku solver works already, so you write something like this and be done with it.
+
+```rust
+async fn solve(Json(mut sudoku): Json<Sudoku>) -> Json<Sudoku> {
+    solve_sudoku(&mut sudoku);
+    sudoku
+}
+```
+
+But, we have this nice struct, so why not make the solve algorithm part of the struct?
+
+Let's create an `impl` block and add the functions as methods from an instance. But look at the method signatures. They contain the `self` keyword, indicating that they work on an instance as method, and have the same reference semantics as the functions we wrote before. But in this case, it's for the instance itself, not for _another_ struct of the same type.
+
+```rust
+impl Sudoku {
+    fn solve(&mut self) -> bool {
+        //...
+    }
+
+    fn is_safe(&self, row: usize, col: usize, num: u8) -> bool {
+        //...
+    }
+}
+```
+
+Try moving the code from the functions in there, but don't forget to change the `sudoku` variable to `self` wherever necessary. If you're stuck, check out the reference implementation in the [example repository](https://github.com/ddprrt/shuttle-launchpad-examples).
+
+Alright, we're almost there. There's just one thing we need to change. We want to make sure that we only return a solution if there is an actual solution. So our `solve` function needs to take care of two states:
+
+1. Is there a solution, return the Sudoku struct.
+2. If there isn't, return an HTTP error.
+
+There is an enum in Rust representing exactly that. It's called `Result`. It has two variants, `Ok` and `Err`. `Ok` contains the value you want to return, and `Err` contains an error. The error can be anything, but in our case, we want to return an HTTP error, represented by the `StatusCode` enum from the `axum` crate.
+
+```rust
+async fn solve(Json(mut sudoku): Json<Sudoku>) -> Result<Json<Sudoku>, StatusCode> {
+    if sudoku.solve() {
+        Ok(Json(sudoku))
+    } else {
+        Err(StatusCode::BAD_REQUEST)
+    }
+}
+```
+
+And with that, we have proper error handling, proper input handling, proper structs, and type-safe and memory-safe results. Wow!
+
+The biggest part of our application is actually the solving algorithm, and I'm sure it can be improved. But that's up to you!
+
+Test it with `curl`:
+
+```bash
+$ curl --request POST \
+  --url http://localhost:8000/solve \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"board": [
+        [5, 3, 0, 0, 7, 0, 0, 0, 0],
+        [6, 0, 0, 1, 9, 5, 0, 0, 0],
+        [0, 9, 8, 0, 0, 0, 0, 6, 0],
+        [8, 0, 0, 0, 6, 0, 0, 0, 3],
+        [4, 0, 0, 8, 0, 3, 0, 0, 1],
+        [7, 0, 0, 0, 2, 0, 0, 0, 6],
+        [0, 6, 0, 0, 0, 0, 2, 8, 0],
+        [0, 0, 0, 4, 1, 9, 0, 0, 5],
+        [0, 0, 0, 0, 8, 0, 0, 7, 9]
+	]
+}'
+```
+
+
+Deploy it to Shuttle:
+
+```bash
+$ cargo shuttle deploy
+```
+
+Oh, and if you're up to it, create a nice little front end and share it with the community!
+
+_If you're stuck somewhere, join our Discord channel and ask at [#launchpad](https://discord.com/channels/803236282088161321/1119168545239093278)_.
+
+## Time for your feedback!
+
+We want to tailor Shuttle Launchpad to your needs! [Give us feedback](https://btl1d1x5z23.typeform.com/to/dTU2F8jI) on the most recent issue and your wishes here.
+
+## Join us!
+
+Shuttle has a very active community. Join us on [Discord](https://discord.gg/shuttle), star us on [GitHub](https://github.com/shuttle-hq/shuttle), follow us on [Twitter](https://twitter.com/shuttle_dev), and watch out for video content on [YouTube](https://www.youtube.com/@shuttle-dev).
+
+If you have any questions regarding _Launchpad_, join the `#launchpad` channel on Shuttle's [Discord](https://discord.gg/shuttle).
+
+## Links, Videos, Tutorials
+
+[_Web-based Services in Rust_](https://rust-web-services-workshop.mainmatter.com/): Stefan is giving a three-day workshop in July, where you learn more about advanced web applications in Rust. Tickets are 250 EUR early bird!
+
+[_Shuttle Beta_](https://shuttle.rs/beta): Shuttle reached Beta! Celebrate with us!
+
+[_Launchpad Examples_](https://github.com/ddprrt/shuttle-launchpad-examples): Check out all Launchpad Examples on GitHub.
+
+[_Hack without fear_](https://www.youtube.com/watch?v=lO1z-7cuRYI): Niko Matsakis explains Ownership in detail. One of the best presentations on this topic.
+
+## Bye!
+
+That's it for today. Next time, we implement a real application together. Get in touch with us and let us know what you want to see!
+
+-- [Stefan](https://oida.dev) and your friends from [Shuttle](https://shuttle.rs)
