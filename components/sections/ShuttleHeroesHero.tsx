@@ -11,7 +11,7 @@ const ShuttleHeroesHero = () => {
 						program!
 					</h1>
 					<p className='mt-4 sm:text-xl lg:text-2xl'>
-						Our program acknowledges developers who have made exceptional contributions to shuttle.
+						Our program acknowledges developers who have made exceptional contributions to Shuttle.
 					</p>
 					<div className='mt-5 flex flex-wrap items-center gap-5 sm:mt-10 lg:mt-12 xl:mt-16'>
 						<Button
@@ -20,7 +20,7 @@ const ShuttleHeroesHero = () => {
 							className='bg-[#13292C] text-white'
 							href='https://btl1d1x5z23.typeform.com/to/WAu53vBi'
 						>
-							Become a shuttle hero
+							Become a Shuttle hero
 						</Button>
 					</div>
 				</div>

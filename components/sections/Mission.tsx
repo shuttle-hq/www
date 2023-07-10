@@ -8,7 +8,7 @@ const Mission = () => {
 							About Shuttle
 						</h2>
 						<p className='text-\ mt-3 max-w-[800px] sm:mt-5 lg:text-xl'>
-							We are building the fastest backend development experience. shuttle is an open source
+							We are building the fastest backend development experience. Shuttle is an open source
 							cloud platform for developing and deploying apps with zero infra hassle.
 						</p>
 						<p className='mt-3 max-w-[800px] text-xl sm:mt-5 lg:text-xl'>
@@ -19,13 +19,13 @@ const Mission = () => {
 						</p>
 						<p className='mt-3 max-w-[800px] text-xl sm:mt-5 lg:text-xl'>
 							We have thousands of developers in our community incl. engineers from some of the top
-							companies and are about to launch shuttle beta.
+							companies and are about to launch Shuttle beta.
 						</p>
 						<h2 className='mt-14 font-gradual text-4.5 font-bold leading-none dark:text-[#C2C2C2] lg:text-5xl'>
 							Our mission
 						</h2>
 						<p className='mt-3 max-w-[800px] text-xl sm:mt-5 lg:text-xl'>
-							At shuttle, we’re on a mission to revolutionise developer experience for building web
+							At Shuttle, we’re on a mission to revolutionise developer experience for building web
 							apps. Everything we do is about crafting an exceptionally simple, satisfying and
 							effective way to do cloud development. We are open source community-driven and loved by
 							thousands of developers. Our vision: the ultimate platform to supercharge engineers’

@@ -22,7 +22,7 @@ const HowItWorks = () => {
 						)}
 						onMouseOver={() => setSelectedItem("hello-cloud")}
 					>
-						With shuttle you can take any Rust service code, and have it ready for deployment by adding
+						With Shuttle you can take any Rust service code, and have it ready for deployment by adding
 						a single annotation to your main function.
 					</p>
 					<p
@@ -32,7 +32,7 @@ const HowItWorks = () => {
 						)}
 						onMouseOver={() => setSelectedItem("cargo-deploy")}
 					>
-						Your code is packaged and sent to shuttle where it is compiled and deployed. After a few
+						Your code is packaged and sent to Shuttle where it is compiled and deployed. After a few
 						seconds, your app is already running in the cloud.
 					</p>
 					<p
@@ -52,7 +52,7 @@ const HowItWorks = () => {
 						)}
 						onMouseOver={() => setSelectedItem("using-axum")}
 					>
-						The next time you deploy your app, shuttle provisions and configures the resources you
+						The next time you deploy your app, Shuttle provisions and configures the resources you
 						need. In minutes, you can build complex and scalable apps on industry-standard AWS products
 						and never have to touch the AWS console.
 					</p>

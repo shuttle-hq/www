@@ -31,7 +31,7 @@ export default function DashboardHome({starters}: Props) {
 			<div className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
 				<header className='max-w-2xl'>
 					<h1 className='w-fit font-gradual text-5xl font-bold dark:text-[#C2C2C2] lg:text-6.5'>
-						Start using shuttle
+						Start using Shuttle
 					</h1>
 					<p className='mt-4 sm:text-xl lg:text-2xl'>Follow these few steps and you’re ready to go</p>
 				</header>
