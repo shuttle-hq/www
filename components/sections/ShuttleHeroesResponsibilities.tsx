@@ -6,7 +6,7 @@ const ShuttleHeroesResponsibilities = () => {
 		<div className='mx-auto mt-24 w-full max-w-7xl border-y border-black/10 px-5 pt-32 pb-52 dark:border-white/10 sm:px-10 lg:mt-28'>
 			<h2 className='text-center text-5xl font-bold text-black dark:text-[#C2C2C2]'>
 				What is required to become a{' '}
-				<span className='text-gradient block bg-clip-text text-transparent'>shuttle hero?</span>
+				<span className='text-gradient block bg-clip-text text-transparent'>Shuttle hero?</span>
 			</h2>
 			<div className='mt-24 grid gap-5 lg:grid-cols-4'>
 				<div className='flex items-start gap-4'>
@@ -36,7 +36,7 @@ const ShuttleHeroesResponsibilities = () => {
 					<div>
 						<h3 className='font-gradual text-xl font-bold dark:text-[#C2C2C2]'>Spreading the word</h3>
 						<p className='mt-1'>
-							Be loud! Let others know of your experience with shuttle, spread the shuttle word!
+							Be loud! Let others know of your experience with Shuttle, spread the Shuttle word!
 						</p>
 					</div>
 				</div>
@@ -66,7 +66,7 @@ const ShuttleHeroesResponsibilities = () => {
 					/>
 					<div>
 						<h3 className='font-gradual text-xl font-bold dark:text-[#C2C2C2]'>Contribute</h3>
-						<p className='mt-1'>Consistently contribute to shuttle, pushing it forward even more!</p>
+						<p className='mt-1'>Consistently contribute to Shuttle, pushing it forward even more!</p>
 					</div>
 				</div>
 			</div>
