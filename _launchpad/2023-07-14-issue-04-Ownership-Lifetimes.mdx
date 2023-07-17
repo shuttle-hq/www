@@ -1,0 +1,224 @@
+---
+title: "Issue #4: Ownership, lifetimes & the big win!"
+date: "2023-07-14T16:00:00"
+---
+
+# Shuttle Launchpad #4: Ownership, Lifetimes, and the big win!
+
+Welcome to Shuttle Launchpad issue #4! In this issue, we want to take some more time to talk about ownership and lifetimes. In particular, we will work with an example that uses explicit lifetimes. All that is packed in a simple example that generates random numbers for the lottery. Try it out, and maybe you win the jackpot! Let's get started!
+
+## A Lotto Number Generator
+
+We want to implement a simple lottery number generator API. As always, we use Shuttle to create a new project.
+
+```bash
+$ cargo shuttle init
+```
+
+Pick _Axum_ for your framework, or choose the one you're most familiar with. Since we create random numbers, let's add the `rand` crate to our dependencies.
+
+```rust
+$ cargo add rand
+```
+
+Let's start with the `Lotto` struct. The struct contains a `pot`, a vector with all the lotto numbers from 1 to an upper range. We also need a random number generator, and we use the `SmallRng` generator from the `rand` package for that.
+
+```rust
+struct Lotto {
+    pot: Vec<u32>,
+    rng: SmallRng,
+}
+```
+
+In the implementation block, we create a constructor function `new`. We take an upper limit for the pot, and use the inclusive range `(1..=pot_size)` to collect numbers from 1 to the upper limit. We pass the random number generator as it is. Since we don't have any reference annotations, `Lotto` will take ownership over the random number generator.
+
+The `take` method takes a _mutable reference_ of the instance. Meaning that this method is only callable if the instance is mutable. We shuffle the pot, take the first `amount` of numbers, and return them as a vector. Since the lotto instance _owns_ the vector, we need to clone the numbers, because we might want to reuse the struct again. Otherwise, we would move the vector out of the struct, and the struct would be empty. We don't want that (and thankfully, Rust will most likely complain).
+
+```rust
+impl Lotto {
+    fn new(pot_size: u32, rng: SmallRng) -> Self {
+        Self {
+            pot: (1..=pot_size).collect(),
+            rng,
+        }
+    }
+
+    fn take(&mut self, amount: usize) -> Vec<u32> {
+        self.pot.shuffle(self.rng);
+        self.pot.iter()
+            .take(amount)
+            .map(|e| e.to_owned()).collect()
+    }
+}
+```
+
+That's already a big part of what we want to achieve today. But what if we don't want to create new random number generators for every time we create lotto numbers? What if we want to reuse a single small random number generator `SmallRng` over and over again? If we want to reuse the random number generator, we need to pass it as a mutable reference. But if we change the struct, Rust will complain!
+
+
+```rust
+// NOTE: THIS WON'T COMPILE!
+struct Lotto {
+    pot: Vec<u32>,
+    rng: &mut SmallRng,
+}
+
+impl Lotto {
+    fn new(pot_size: u32, rng: &mut SmallRng) -> Self {
+        Self {
+            pot: (1..=pot_size).collect(),
+            rng,
+        }
+    }
+
+    // ...
+}
+```
+
+Rust tells us, that we need to have _lifetime annotations_. In Rust, lifetimes describe how long a certain value is kept in memory. The Rust borrow checker then figures out if references "live long enough". If they don't you get a compilation error. With that, Rust knows when to allocate memory and when to get rid of it.
+
+Lifetime annotations are everywhere, but you usually don't have to write them. In that case, Rust needs a little help from you. It needs to be notified that there is a lifetime that we need to take care of, and you need to annotate the right field with it. You do that by using a generic lifetime parameter to the struct and field.
+
+```rust
+struct Lotto<'a> {
+    pot: Vec<u32>,
+    rng: &'a mut SmallRng,
+}
+```
+
+And then we need to add the same lifetime annotation to the implementation block as well.
+
+```rust
+impl<'a> Lotto<'a> {
+    fn new(pot_size: u32, rng: &'a mut SmallRng) -> Self {
+        Self {
+            pot: (1..=pot_size).collect(),
+            rng,
+        }
+    }
+
+    // ...
+}
+```
+
+Rust now has all the information it needs. And we can create the lotto handler function which we wire up to Axum.
+
+```rust
+async fn handler_lotto(
+    Path((pot_size, amount)): Path<(u32, usize)>
+) -> impl IntoResponse {
+    let mut rng = SmallRng::from_entropy();
+    let mut lotto = Lotto::new(pot_size, &mut rng);
+    let results = lotto.take(amount);
+    Json(results)
+}
+```
+
+Fantastic! But we still create a new random number generator for every call. Let's create one outside the router and add it as an extension to your router. We now have the problem that we need to share the random number generator between threads. To achieve that, we use a `Mutex` to guarantee safe writeable access from multiple threads. Random number generators need to be mutable as they start from a seed value and change the internal state with every call. Please make sure you use the `tokio::sync::Mutex`.
+
+We also need to wrap the random number generator in an `Arc`. `Arc` is short for atomic reference counter. Since we have shared access to the random number generator, we need to make sure that we take care of all references in all threads. The `Arc` will take care of that for us. It counts up with every clone (which happens with every invocation), and then once the shared state goes out of scope, it counts down again. The original data stays intact and will only be discarded once the internal counter reaches zero. Basically a simple version of garbage collection.
+
+```rust
+type SharedState = Arc<Mutex<SmallRng>>;
+
+#[shuttle_runtime::main]
+async fn axum() -> shuttle_axum::ShuttleAxum {
+    let state = 
+         Arc::new(Mutex::new(SmallRng::from_entropy()));
+    let router = Router::new()
+        .route("/lotto/:pot/:amount", get(handler_lotto))
+        .layer(Extension(state));
+    Ok(router.into())
+}
+```
+
+To wire our shared state up, we add an `Extension` extractor to our handler function.
+
+**NOTE**: _You can also use the `with_state` call in Axum and use a `State` extractor. Shuttle currently doesn't support that, but it will in the future. `Extension` just works as well._
+
+```rust
+async fn handler_lotto(
+    Path((pot_size, amount)): Path<(u32, usize)>,
+    Extension(state): Extension<SharedState>,
+) -> impl IntoResponse {
+    let mut rng = state.lock().await;
+    let mut lotto = Lotto::new(pot_size, &mut rng);
+    let results = lotto.take(amount);
+    Json(results)
+}
+```
+
+Fantastic! Shared random numbers for every call. Try it out by curling:
+
+```bash
+$ curl localhost:8000/50/5
+```
+
+Good luck playing!
+
+## Stretch goal: Make it generic!
+
+But wait a second, we can do a little more. See this as a stretch goal for advanced developers. We can make our `Lotto` struct generic over the random number generator. That way we can use any random number generator we want. We just need to make sure that the random number generator implements the `RngCore` trait. That's a trait from the `rand` crate that is implemented for every random number generator.
+
+Create a new generic type parameter `RngCore` and make sure it implements the `RngCore` trait. This is called a _trait bound_.
+
+```rust
+struct Lotto<'a, R: RngCore> {
+    pot: Vec<u32>,
+    rng: &'a mut R,
+}
+
+impl<'a, R: RngCore> Lotto<'a, R> {
+    fn new(pot_size: u32, rng: &'a mut R) -> Self {
+        Self {
+            pot: (1..=pot_size).collect(),
+            rng,
+        }
+    }
+
+    //...
+}
+```
+
+The only thing we need to change in our handler function is to annotate the Lotto struct with this new information.
+
+*💡 Question*: _Why do we need to annotate the `Lotto` struct? Come to our [Discord](https://discord.gg/shuttle) and chat with us about it!_
+
+```rust
+async fn handler_lotto(
+    Path((pot_size, amount)): Path<(u32, usize)>,
+    Extension(state): Extension<SharedState>,
+) -> impl IntoResponse {
+    let mut rng = state.lock().await;
+    let mut lotto: Lotto<'_, SmallRng> = 
+        Lotto::new(pot_size, &mut rng);
+    let results = lotto.take(amount);
+    Json(results)
+}
+```
+
+Now you can re-use `Lotto` for every possible random number generator from the `rand` crate!
+
+## Time for your feedback!
+
+We want to tailor Shuttle Launchpad to your needs! [Give us feedback](https://btl1d1x5z23.typeform.com/to/dTU2F8jI) on the most recent issue and your wishes here.
+
+## Join us!
+
+Shuttle has a very active community. Join us on [Discord](https://discord.gg/shuttle), star us on [GitHub](https://github.com/shuttle-hq/shuttle), follow us on [Twitter](https://twitter.com/shuttle_dev), and watch out for video content on [YouTube](https://www.youtube.com/@shuttle-dev).
+
+If you have any questions regarding _Launchpad_, join the `#launchpad` channel on Shuttle's [Discord](https://discord.gg/shuttle).
+
+## Links, Videos, Tutorials
+
+
+[_Shuttle Beta_](https://shuttle.rs/beta): Shuttle reached Beta! Celebrate with us!
+
+[_Launchpad Examples_](https://github.com/ddprrt/shuttle-launchpad-examples): Check out all Launchpad Examples on GitHub.
+
+[_The Rust Borrow Checker - A Deep Dive_](https://www.youtube.com/watch?v=HG1fppexRMA): Nell Shamrell-Harrington explains the nitty gritty details of lifetimes and the borrow checker.
+
+## Bye!
+
+That's it for today. Get in touch with us and let us know what you want to see!
+
+-- [Stefan](https://oida.dev) and your friends from [Shuttle](https://shuttle.rs)
