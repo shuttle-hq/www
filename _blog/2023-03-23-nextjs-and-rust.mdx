@@ -208,7 +208,7 @@ pub fn create_router(state: AppState, folder: PathBuf) -> Router {
 // create a router that will host both of our new routes once we create them
     let api_router = Router::new()
            .route("/register", post(register))
-           .route("/login, post(login))
+           .route("/login", post(login))
            .with_state(state);
 
 // return a router that nests our API router in an "/api" route and merges it with our static files
