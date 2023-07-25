@@ -211,10 +211,10 @@ const mdxComponents: MDXRemoteProps['components'] = {
 				<Image
 					src={props.src}
 					alt={props.alt}
-					width={1}
+					width={1000}
 					height={1}
 					className='overflow-hidden rounded-2xl object-contain'
-				></Image>
+				/>
 				<span className='-mt-6 text-sm text-[#828282] dark:text-gray-300'>{props.caption}</span>
 			</div>
 		)
@@ -319,7 +319,7 @@ export default function BlogPostPage(props: Props) {
 								src='/images/sections/powered-by/stars.png'
 								alt=''
 								fill
-								className='absolute left-20 bottom-0 z-10'
+								className='absolute bottom-0 left-20 z-10'
 							/>
 							<Logo className='relative z-10 text-white' />
 							<span className='relative z-10 mt-5 text-[#FFFFFF8F] dark:text-[#7A7A7A]'>
@@ -332,7 +332,7 @@ export default function BlogPostPage(props: Props) {
 							</span>
 						</div>
 						{/* <Socials /> */}
-						<div className='mt-14 mb-20 flex items-center space-x-4'>
+						<div className='mb-20 mt-14 flex items-center space-x-4'>
 							<span className='text-[#525151] dark:text-[#C2C2C2]'>Share article</span>
 							<a
 								href={`https://twitter.com/share?text=${props.blog.title}&url=${SITE_URL}blog/${props.blog.slug}`}
