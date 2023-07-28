@@ -87,7 +87,6 @@ shuttle-runtime = "0.21.0" # required to use shuttle
 shuttle-secrets = "0.21.0" # required to use secrets with shuttle
 shuttle-turso = "0.21.0" # required to use turso with shuttle
 tokio = "1.28.2" # async runtime
-
 ```
 
 Remember the Turso database URL and API token you got earlier? You’ll want to store it in a `Secrets.toml` file at the root of your project. We’ll also be using Gmail SMTP for sending emails through `lettre`, although the crate will work with pretty much any SMTP server as long as you have the credentials and the relay server information! The `Secrets.toml` file should look like this:
@@ -230,7 +229,7 @@ Here are the following routes:
 
 When we load our API home page route up on the browser, our front page will look like this:
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b52e8447-6c3a-4b62-9f74-f0ddad624001/Untitled.png)
+![Preview of the cat facts API front page](cat-facts-frontpage.png)
 
 It’s quite simple, but as this is intentionally meant to be an API for other developers to pull from, we really only need to add what routes are available and write about for other developers to pull from, we really only need to add what routes are available and write about how to use them.how to use them. 
 
@@ -525,7 +524,7 @@ impl shuttle_runtime::Service for CustomService {
 
 Now that we’ve written everything, all you need to do is to use `cargo shuttle deploy` (add `--allow-dirty` if on a Git branch with uncommitted changes) and if there are no problems, you’ll be able to visit your web service at the provided URL in the terminal! The deployment at the end should look like something similar to this:
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/cabdfe8f-1605-48e6-bbec-bd5ec34f33b9/Untitled.png)
+![Preview of the cat facts API deployment](cat-facts-deployed.png)
 
 ## Conclusion
 
