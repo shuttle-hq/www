@@ -1,0 +1,207 @@
+---
+title: "Issue #5: Traits & image processing"
+date: "2023-07-31T16:00:00"
+---
+
+# Shuttle Launchpad #5: Our first foray into traits, building an image-processing app!
+
+Welcome to the next issue of Launchpad! This time we look at traits and create a little image-processing app. Enjoy!
+
+## Our first foray into traits with an image-processing app
+
+We want to create an app that converts images into grayscale images. We use Axum for the web server. Let's create a new Shuttle project with an Axum server.
+
+```bash
+$ cargo shuttle init
+```
+
+We need a few crates.
+
+```bash
+$ cargo add hyper bytes image
+```
+
+Hyper is a create for HTTP processing, Bytes is a utility crate for, well, bytes in a networking context, and Image is a crate for image processing entirely written in Rust.
+
+Create a new Router that will handle post requests to a `process_image` endpoint.
+
+```rust
+#[shuttle_runtime::main]
+async fn axum() -> shuttle_axum::ShuttleAxum {
+    let router = Router::new()
+        .route("/process", post(process_image));
+
+    Ok(router.into())
+}
+```
+
+The `process_image` function will take `Bytes` and return `Bytes`. We will use the `image` crate to create a `DynamicImage` from those bytes.
+
+
+```rust
+async fn process_image(bytes: Bytes) -> impl IntoResponse {
+    let image = image::load_from_memory(&bytes).unwrap();
+    // tbd...
+}
+```
+
+Since `Bytes` could be no image but anything, this method could return an error. We call `unwrap` here to keep things simple for now, but note that this call might fail if we don't send an image.
+
+Next, we prepare a buffer to write the image to.
+
+```rust
+let mut vec: Vec<u8> = Vec::new();
+let mut cursor = Cursor::new(&mut vec);
+```
+
+`Cursor` wraps an in-memory buffer and provides it with a `Seek` implementation. This means that the image function has the possibility to easily move around in the buffer to modify data.
+
+Next, we call `grayscale` on the image, and write the result to the buffer as PNG.
+
+```rust
+image
+    .grayscale()
+    .write_to(&mut cursor, ImageOutputFormat::Png)
+    .unwrap();
+```
+
+This is also an operation that can fail, but we call `unwrap` here for simplicity.
+
+Finally, we return the buffer as `Bytes` and give it a content type of `image/png`. See the complete function below.
+
+```rust
+async fn process_image(bytes: Bytes) -> impl IntoResponse {
+    let image = image::load_from_memory(&bytes).unwrap();
+    let mut vec: Vec<u8> = Vec::new();
+    let mut cursor = Cursor::new(&mut vec);
+    image
+        .grayscale()
+        .write_to(&mut cursor, ImageOutputFormat::Png)
+        .unwrap();
+    let bytes: Bytes = vec.into();
+
+    ([("content-type", "image/png")], bytes)
+}
+```
+
+It's that easy! But actually, there are a few things that we can improve. First, we should return an error if the image processing fails and not just kill the task using `unwrap`. And second, we the return value of `process_image` is a bit clunky, we can make that nicer.
+
+We need two types for that. One for the response, and one for the error.
+Let's start with the error type. The image crate uses `ImageError` which is not
+compatible with `IntoResponse`. We can create a new type instead that works with `IntoResponse`.
+
+To create a Rust error type, define a struct and implement the `std::error::Error` trait. Since errors need to be printable, they also need to implement `Display` and `Debug`.
+
+```rust
+#[derive(Debug)]
+struct ProcessImageError(String);
+
+impl Display for ProcessImageError {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        write!(f, "ProcessImageError: {}", self.0)
+    }
+}
+
+impl std::error::Error for ProcessImageError {}
+```
+
+With those three traits, we make it possible to use `println!` and use our struct for proper Rust error handling. With traits, we make our own type compatible with the bigger Rust ecosystem.
+
+Now, we need to make sure that we can convert an `ImageError` into a `ProcessImageError`. We use the `From` trait for that.
+
+```rust
+impl From<image::ImageError> for ProcessImageError {
+    fn from(err: image::ImageError) -> Self {
+        ProcessImageError(format!("ImageError: {}", err))
+    }
+}
+```
+
+And last, but not least, we need to make it compatible with Axum. We implement `IntoResponse` for our error type.
+
+```rust
+impl IntoResponse for ProcessImageError {
+    fn into_response(self) -> axum::response::Response {
+        (StatusCode::INTERNAL_SERVER_ERROR, self.0).into_response()
+    }
+}
+```
+
+We set a status code from the `hyper` crate to an internal server error, and use the error message as the body.
+
+Now, we need to create a type for the response. We can use a tuple struct for that.
+
+```rust
+struct ImageResponse(Bytes);
+```
+
+This holds the original bytes array. We also implement `IntoResponse` for `ImageResponse`, so Axum knows what to do.
+
+```rust
+impl IntoResponse for ImageResponse {
+    fn into_response(self) -> axum::response::Response {
+        ([("content-type", "image/png")], self.0).into_response()
+    }
+}
+```
+
+This is basically the line we had before at the end of our function, but wrapped in a trait to make it nicer to use.
+
+Now, we can change our function to return the new types, and to return a `Result` where we either have an error or a response.
+
+```rust
+async fn process_image(bytes: Bytes) -> Result<ImageResponse, ProcessImageError> {
+    let image = image::load_from_memory(&bytes)?;
+    let mut vec: Vec<u8> = Vec::new();
+    let mut cursor = Cursor::new(&mut vec);
+    image
+        .grayscale()
+        .write_to(&mut cursor, ImageOutputFormat::Png)?;
+    let bytes: Bytes = vec.into();
+
+    Ok(ImageResponse(bytes))
+}
+```
+
+A few nice things have happened. First, we don't need to call `unwrap` anymore. We use the `?` operator instead, which will return an error if the operation fails. It's an early exit, and you can stay on the happy path. You write like there is no error, but if there is it will be handled.
+
+We also wrap the bytes into an `ImageResponse` and return that. This is a lot nicer than the tuple we had before. And also we don't need to care about the content types. We can actually use this struct for a lot of responses.
+
+Try it out!
+
+```bash
+$ cargo shuttle run
+$ curl -X POST -H "Content-Type: image/png" --data-binary @test.png http://localhost:8000/process > test2.png
+```
+
+If you want to improve, here are some tasks for you.
+
+- Try figuring out a few other image operations and create new handlers.
+- Look at the `imageproc` crate and see if you can do some advanced operations.
+- Send a few images in parallel and see what happens.
+
+And keep the program ready. Next time, we try to improve it even further!
+
+## Time for your feedback!
+
+We want to tailor Shuttle Launchpad to your needs! [Give us feedback](https://btl1d1x5z23.typeform.com/to/dTU2F8jI) on the most recent issue and your wishes here.
+
+## Join us!
+
+Shuttle has a very active community. Join us on [Discord](https://discord.gg/shuttle), star us on [GitHub](https://github.com/shuttle-hq/shuttle), follow us on [Twitter](https://twitter.com/shuttle_dev), and watch out for video content on [YouTube](https://www.youtube.com/@shuttle-dev).
+
+If you have any questions regarding _Launchpad_, join the `#launchpad` channel on Shuttle's [Discord](https://discord.gg/shuttle).
+
+## Links, Videos, Tutorials
+
+
+[_Launchpad Examples_](https://github.com/ddprrt/shuttle-launchpad-examples): Check out all Launchpad Examples on GitHub.
+
+[_Trials, Traits, and Tribulations_](https://www.youtube.com/watch?v=WgVWxLuPvfQ): A talk by Stefan at last year's EuroRust, where he talks all about traits and what you can do with them.
+
+## Bye!
+
+That's it for today. Get in touch with us and let us know what you want to see!
+
+-- [Stefan](https://oida.dev) and your friends from [Shuttle](https://shuttle.rs)
+
