@@ -14,7 +14,7 @@ const BlogSidebar: FC<BlogSidebarProps> = ({ tags, relatedPosts, toc, mdxCompone
 	return (
 		<div className='relative w-full'>
 			<div className='w-full space-y-6 lg:sticky lg:top-0'>
-				<div className='rounded-3xl border border-black/10 py-4 px-6 dark:border-white/10'>
+				<div className='rounded-3xl border border-black/10 px-6 py-4 dark:border-white/10'>
 					<div className='mb-2 dark:text-[#C2C2C2]'>Categories</div>
 
 					<div className='flex flex-wrap gap-2'>
@@ -31,7 +31,7 @@ const BlogSidebar: FC<BlogSidebarProps> = ({ tags, relatedPosts, toc, mdxCompone
 						})}
 					</div>
 				</div>
-				<div className='rounded-3xl border border-black/10 py-4 px-6 dark:border-white/10'>
+				<div className='rounded-3xl border border-black/10 px-6 py-4 dark:border-white/10'>
 					<div className='mb-4 dark:text-gray-200'>On this page</div>
 					{toc && (
 						<div className='prose prose-toc !mt-0 pl-4 dark:prose-dark-toc'>
@@ -40,7 +40,7 @@ const BlogSidebar: FC<BlogSidebarProps> = ({ tags, relatedPosts, toc, mdxCompone
 					)}
 				</div>
 				{relatedPosts.length > 0 ? (
-					<div className='rounded-3xl border border-black/10 py-4 px-6 dark:border-white/10'>
+					<div className='rounded-3xl border border-black/10 px-6 py-4 dark:border-white/10'>
 						<div className='mb-4 dark:text-[#C2C2C2]'>Related articles</div>
 
 						<div className='relative flex flex-col gap-2 space-y-3'>
@@ -84,7 +84,7 @@ const BlogSidebar: FC<BlogSidebarProps> = ({ tags, relatedPosts, toc, mdxCompone
 										<path
 											d='M0 7H15M15 7L9.78261 1M15 7L9.78261 13'
 											stroke='currentColor'
-											stroke-width='2'
+											strokeWidth='2'
 										/>
 									</svg>
 								</Link>
