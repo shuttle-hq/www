@@ -8,7 +8,7 @@ export default function About() {
 				src='/images/sections/mission/mission.jpg'
 				alt='bg'
 				fill
-				style={{ objectFit: 'cover', zIndex: -1, top: '50%' }}
+				style={{ objectFit: 'cover', zIndex: -1, top: 0 }}
 				quality={100}
 			/>
 			<AboutHero />
