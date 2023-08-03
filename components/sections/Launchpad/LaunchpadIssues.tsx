@@ -33,22 +33,6 @@ export function Issue({ issue, idx }: { idx: number; issue: Issue }) {
 				</Link>
 			</div>
 
-			<div>
-				<div className='flex flex-wrap gap-2'>
-					{(issue.tags || []).map((tag: string) => {
-						return (
-							<Link
-								key={tag}
-								className='border-gradient pill relative rounded-full bg-[#E9E9E9] px-2 py-1 text-sm outline outline-1 outline-black/10 transition-all duration-500 hover:outline-none hover:after:rounded-full hover:after:bg-gradient-to-r hover:after:from-[#FC540C] hover:after:to-[#FFD76F] dark:bg-black dark:outline-[#1E1B19] dark:hover:text-white'
-								href={`/launchpad/tags/${tag}`}
-							>
-								{tag}
-							</Link>
-						)
-					})}
-				</div>
-			</div>
-
 			<p className='text-[#7A7A7A]'>{issue.date}</p>
 		</div>
 	)

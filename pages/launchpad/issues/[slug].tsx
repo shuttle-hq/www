@@ -226,21 +226,6 @@ export default function IssuePage(props: Props) {
 			<div className='mx-auto max-w-4xl p-4 sm:p-6 lg:p-8'>
 				<div className='grid grid-cols-1 gap-6 gap-y-12 lg:grid-cols-4'>
 					<div className='lg:col-span-3'>
-						<div className='px-0 py-4'>
-							<div className='flex flex-wrap gap-2'>
-								{(props.issue.tags || []).map((tag: string) => {
-									return (
-										<Link
-											key={tag}
-											className='border-gradient pill relative rounded-full bg-[#E9E9E9] px-2 py-1 text-sm outline outline-1 outline-black/10 transition-all duration-500 hover:outline-none hover:after:rounded-full hover:after:bg-gradient-to-r hover:after:from-[#FC540C] hover:after:to-[#FFD76F] dark:bg-black dark:outline-[#1E1B19] dark:hover:text-white'
-											href={`/launchpad/tags/${tag}`}
-										>
-											{tag}
-										</Link>
-									)
-								})}
-							</div>
-						</div>
 						{props.issue.content && (
 							<article
 								className={clsx(
