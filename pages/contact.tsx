@@ -1,3 +1,4 @@
+import { Button } from 'components/elements'
 import { FormEvent, MouseEvent, useState } from 'react'
 
 type FormTargetOption = 'support@shuttle.rs' | 'hello@shuttle.rs'
@@ -76,13 +77,14 @@ export default function About() {
 						className='w-full rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-xl font-normal text-[#D8D8D8] placeholder:text-[#D8D8D8]'
 						required
 					/>
-					<button
+					<Button
+						variant='primary'
 						type='submit'
 						onClick={handleSubmit}
-						className='mt-4 h-[56px] w-full rounded-[14px] bg-[#D8D8D8] text-lg text-black sm:mt-0'
+						className='h-[56px] justify-center text-lg'
 					>
 						Submit
-					</button>
+					</Button>
 				</form>
 			</section>
 		</main>
