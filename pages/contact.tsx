@@ -41,7 +41,7 @@ export default function About() {
 							name='target'
 							id='target'
 							onChange={(e) => setTarget(e.target.value as FormTargetOption)}
-							className='h-[56px] w-full appearance-none rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-xl font-normal text-[#D8D8D8] placeholder:text-[#D8D8D8]'
+							className='h-[56px] w-full appearance-none rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-xl font-normal text-[#D8D8D8] outline-none placeholder:text-[#D8D8D8]'
 						>
 							<option value='support@shuttle.rs' className='text-base'>
 								Support
@@ -57,7 +57,7 @@ export default function About() {
 						type='text'
 						name='name'
 						placeholder='Full Name'
-						className='h-[56px] w-full rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-xl font-normal text-[#D8D8D8] placeholder:text-[#D8D8D8]'
+						className='h-[56px] w-full rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-xl font-normal text-[#D8D8D8] outline-none placeholder:text-[#D8D8D8]'
 						required
 					/>
 					<input
@@ -66,7 +66,7 @@ export default function About() {
 						type='text'
 						name='subject'
 						placeholder='Subject'
-						className='h-[56px] w-full rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-xl font-normal text-[#D8D8D8] placeholder:text-[#D8D8D8]'
+						className='h-[56px] w-full rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-xl font-normal text-[#D8D8D8] outline-none placeholder:text-[#D8D8D8]'
 						required
 					/>
 					<textarea
@@ -74,7 +74,7 @@ export default function About() {
 						onChange={(e) => setBody(e.target.value)}
 						name='body'
 						placeholder='Message'
-						className='w-full rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-xl font-normal text-[#D8D8D8] placeholder:text-[#D8D8D8]'
+						className='w-full rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-xl font-normal text-[#D8D8D8] outline-none placeholder:text-[#D8D8D8]'
 						required
 					/>
 					<Button
