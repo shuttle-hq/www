@@ -23,15 +23,33 @@ export default function About() {
 					Contact
 				</h2>
 				<form onSubmit={handleSubmit} className=' flex w-full flex-col gap-4 text-center'>
-					<select
-						name='target'
-						id='target'
-						onChange={(e) => setTarget(e.target.value as FormTargetOption)}
-						className='h-[56px] w-full rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-xl font-normal text-[#D8D8D8] placeholder:text-[#D8D8D8]'
-					>
-						<option value='support@shuttle.rs'>Support</option>
-						<option value='hello@shuttle.rs'>General Inquiry</option>
-					</select>
+					<div className='relative cursor-pointer'>
+						<svg
+							className='absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 transform text-gray-400'
+							viewBox='0 0 20 20'
+							fill='currentColor'
+							aria-hidden='true'
+						>
+							<path
+								fill-rule='evenodd'
+								d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z'
+								clip-rule='evenodd'
+							/>
+						</svg>
+						<select
+							name='target'
+							id='target'
+							onChange={(e) => setTarget(e.target.value as FormTargetOption)}
+							className='h-[56px] w-full appearance-none rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-xl font-normal text-[#D8D8D8] placeholder:text-[#D8D8D8]'
+						>
+							<option value='support@shuttle.rs' className='text-base'>
+								Support
+							</option>
+							<option value='hello@shuttle.rs' className='text-base'>
+								General Inquiry
+							</option>
+						</select>
+					</div>
 					<input
 						value={name}
 						onChange={(e) => setName(e.target.value)}
