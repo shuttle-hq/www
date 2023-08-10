@@ -4,6 +4,7 @@ import { FormEvent, MouseEvent, useState } from 'react'
 type FormTargetOption = 'support@shuttle.rs' | 'hello@shuttle.rs'
 
 export default function About() {
+	const [isOpen, setIsOpen] = useState(false)
 	const [target, setTarget] = useState<FormTargetOption>('support@shuttle.rs')
 	const [name, setName] = useState<string>('')
 	const [subject, setSubject] = useState<string>('')
@@ -16,6 +17,11 @@ export default function About() {
 
 		window.location.href = `mailto:${target}?subject=${name} - ${subject}&body=${body}`
 	}
+
+	const options = [
+		{ value: 'support@shuttle.rs', label: 'Support' },
+		{ value: 'hello@shuttle.rs', label: 'General Inquiry' },
+	]
 
 	return (
 		<main>
@@ -37,19 +43,31 @@ export default function About() {
 								clip-rule='evenodd'
 							/>
 						</svg>
-						<select
-							name='target'
-							id='target'
-							onChange={(e) => setTarget(e.target.value as FormTargetOption)}
-							className='h-[56px] w-full appearance-none rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-xl font-normal text-[#D8D8D8] outline-none placeholder:text-[#D8D8D8]'
+						<div
+							className='relative h-[56px] w-full appearance-none rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-left text-xl font-normal text-[#D8D8D8] placeholder:text-[#D8D8D8]'
+							onClick={() => setIsOpen(!isOpen)}
 						>
-							<option value='support@shuttle.rs' className='text-base'>
-								Support
-							</option>
-							<option value='hello@shuttle.rs' className='text-base'>
-								General Inquiry
-							</option>
-						</select>
+							<div>
+								{options.find((option) => option.value === target)?.label ??
+									'Please select an option'}
+							</div>
+							{isOpen && (
+								<div className='absolute left-0 top-[56px] z-10 w-full rounded-lg border border-slate-700 bg-black py-[15px]'>
+									{options.map((option, index) => (
+										<div
+											key={index}
+											className='flex h-[56px] cursor-pointer items-center px-[12px] text-xl font-normal text-[#D8D8D8] hover:bg-slate-900 hover:text-white'
+											onClick={() => {
+												setTarget(option.value as FormTargetOption)
+												setIsOpen(false)
+											}}
+										>
+											{option.label}
+										</div>
+									))}
+								</div>
+							)}
+						</div>
 					</div>
 					<input
 						value={name}
