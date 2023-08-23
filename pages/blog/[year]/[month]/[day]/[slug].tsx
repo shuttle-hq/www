@@ -21,6 +21,8 @@ import { BlogHeader, BlogPrevNext, BlogSidebar, CallToAction } from 'components/
 import { LinkedInLogo, Logo, TwitterLogo } from 'components/svgs'
 import { TwitterTweetEmbed } from 'react-twitter-embed'
 import { Pre } from 'components/blog/Pre'
+import MastodonLogo from 'components/svgs/MastodonLogo'
+import HNLogo from 'components/svgs/HNLogo'
 
 export async function getStaticPaths() {
 	const paths = getAllPostSlugs()
@@ -265,18 +267,42 @@ export default function BlogPostPage(props: Props) {
 						<div className='mb-20 mt-14 flex items-center space-x-4'>
 							<span className='text-[#525151] dark:text-[#C2C2C2]'>Share article</span>
 							<a
+								href={`https://news.ycombinator.com/submitlink?u=${encodeURIComponent(
+									`${SITE_URL}blog/${props.blog.slug}`
+								)}&t=${encodeURIComponent(props.blog.title)}`}
+								className='flex items-center rounded-xl border border-black/10 bg-black p-3 dark:border-white/10'
+								target='_blank'
+								rel='noreferrer'
+							>
+								<HNLogo />
+							</a>
+							<a
 								href={`https://twitter.com/share?text=${encodeURIComponent(
 									props.blog.title
 								)}&url=${SITE_URL}blog/${props.blog.slug}`}
 								className='flex items-center rounded-xl border border border-black/10 bg-black p-3 dark:border-white/10'
+								target='_blank'
+								rel='noreferrer'
 							>
 								<TwitterLogo />
 							</a>
 							<a
 								href={`https://www.linkedin.com/shareArticle?url=${SITE_URL}blog/${props.blog.slug}&title=${props.blog.title}`}
 								className='flex items-center rounded-xl border border border-black/10 bg-black p-3 dark:border-white/10'
+								target='_blank'
+								rel='noreferrer'
 							>
 								<LinkedInLogo />
+							</a>
+							<a
+								href={`https://mastodon.social/share?text=${encodeURIComponent(
+									`${props.blog.title} ${SITE_URL}blog/${props.blog.slug}`
+								)}`}
+								className='flex items-center rounded-xl border border-black/10 bg-black p-3 dark:border-white/10'
+								target='_blank'
+								rel='noreferrer'
+							>
+								<MastodonLogo />
 							</a>
 						</div>
 						<BlogPrevNext prevPost={props.prevPost} nextPost={props.nextPost} />
