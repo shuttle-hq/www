@@ -63,7 +63,7 @@ const authors: readonly Author[] = [
 	{
 		author_id: 'stefan',
 		author: 'Stefan Baumgartner',
-		position: '',
+		position: 'Owner at Oida.dev, Rust Linz organizer',
 		author_url: 'https://twitter.com/ddprrt',
 		author_image_url:
 			'https://cdn.discordapp.com/attachments/1084800035872587838/1143858032720220231/GxgFcPtm_400x400.jpeg',
