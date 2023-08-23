@@ -776,9 +776,9 @@ export default function Privacy() {
 					) and the Swiss Federal Data Protection and Information Commissioner (
 					<a
 						className='text-[#D8D8D8] underline'
-						href='https://www.edoeb.admin.ch/edoeb/en/home/the-fdpic/contact/address.html'
+						href='https://www.edoeb.admin.ch/edoeb/en/home/deredoeb/kontakt.html'
 					>
-						https://www.edoeb.admin.ch/edoeb/en/home/the-fdpic/contact/address.html
+						https://www.edoeb.admin.ch/edoeb/en/home/deredoeb/kontakt.html
 					</a>
 					).
 				</p>

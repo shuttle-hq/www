@@ -26,7 +26,7 @@ In the [previous DevLog](https://www.shuttle.rs/blog/2022/04/22/dev-log-0) we st
 
 ## Deployment State
 
-shuttle exposes an HTTP endpoint under `POST /deploy`. This endpoint receives a series of bytes, from [`cargo shuttle`](https://crates.io/crates/cargo-shuttle), which correspond to a packaged cargo project (basically a compressed tarball with a bunch of `.rs` files).
+shuttle exposes an HTTP endpoint under `POST /deploy`. This endpoint receives a series of bytes, from [`cargo shuttle`](https://github.com/shuttle-hq/shuttle/tree/main/cargo-shuttle), which correspond to a packaged cargo project (basically a compressed tarball with a bunch of `.rs` files).
 
 The aim of the game, is to convert that series of bytes into a deployed web service - how do we go about doing that?
 
@@ -81,7 +81,7 @@ struct BuiltState {
 
 So far so good. At this point we have a pointer to a compiled shared object file - next we need to load it into memory.
 
-`shuttle` uses the [`libloading`](https://crates.io/crates/libloading) crate to dynamically load from a `.so` file a value of a type implementing the [`Service`](https://docs.rs/shuttle-service/0.2.6/shuttle_service/trait.Service.html) trait. The `Service` trait is code-generated for the user via the `#[shuttle_service::main]` annotation and it's how shuttle interfaces with client apps.
+`shuttle` uses the [`libloading`](https://github.com/nagisa/rust_libloading) crate to dynamically load from a `.so` file a value of a type implementing the [`Service`](https://docs.rs/shuttle-service/0.2.6/shuttle_service/trait.Service.html) trait. The `Service` trait is code-generated for the user via the `#[shuttle_service::main]` annotation and it's how shuttle interfaces with client apps.
 
 ```rust
 pub struct LoadedState {

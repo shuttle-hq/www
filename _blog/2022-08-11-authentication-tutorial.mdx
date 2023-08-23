@@ -242,7 +242,7 @@ async fn post_signup(
 
 #### Creating users and storing passwords safety
 
-When storing passwords in a database, for security reasons we don't want them to be in the exact format as plain text. To transform them away from the plain text format we will use a [cryptographic hash function](https://en.wikipedia.org/wiki/Cryptographic_hash_function) from [pbkdf2](https://crates.io/crates/pbkdf2) (`cargo add pbkdf2`):
+When storing passwords in a database, for security reasons we don't want them to be in the exact format as plain text. To transform them away from the plain text format we will use a [cryptographic hash function](https://en.wikipedia.org/wiki/Cryptographic_hash_function) from [pbkdf2](https://github.com/RustCrypto/password-hashes/tree/master/pbkdf2) (`cargo add pbkdf2`):
 
 ```rust
 fn create_user(username: &str, password: &str, database: &Database) -> Result<i32, SignupError> {
@@ -355,7 +355,7 @@ Cookies help store the state between browser requests. When a response is sent d
 
 Again, these need to be safe. We don't want collisions/duplicates. We want it to be hard to guess. For these reasons, we will represent it as a 128-bit unsigned integer. This has 2^128 options, so a very low chance of a collision.
 
-We want to generate a "session token". We want the tokens to be cryptographically secure. Given a session id, we don't want users to be able to find the next one. A simple globally incremented u128 wouldn't be secure because if I know I have *session 10* then I can send requests with *session 11* for the user who logged in after. With a cryptographically secure generator, there isn't a distinguishing pattern between subsequently generated tokens. We will use the [ChaCha](https://crates.io/crates/rand_chacha) algorithm/crate (we will add `cargo add rand_core rand_chacha`). [We can see that it does implement the crypto marker-trait confirming it is valid for cryptographic scenarios](https://docs.rs/rand_chacha/0.3.1/rand_chacha/struct.ChaCha8Rng.html#impl-CryptoRng).
+We want to generate a "session token". We want the tokens to be cryptographically secure. Given a session id, we don't want users to be able to find the next one. A simple globally incremented u128 wouldn't be secure because if I know I have *session 10* then I can send requests with *session 11* for the user who logged in after. With a cryptographically secure generator, there isn't a distinguishing pattern between subsequently generated tokens. We will use the [ChaCha](https://github.com/rust-random/rand/tree/master/rand_chacha) algorithm/crate (we will add `cargo add rand_core rand_chacha`). [We can see that it does implement the crypto marker-trait confirming it is valid for cryptographic scenarios](https://docs.rs/rand_chacha/0.3.1/rand_chacha/struct.ChaCha8Rng.html#impl-CryptoRng).
 
 This is unlike [Pseudo-random number generators where you can predict the next *random* number given a start point and the algorithm](https://www.youtube.com/watch?v=-h_rj2-HP2E). This could be a problem if we have our token we can get the session token of the person who logged in after us really easy and thus impersonate them.
 

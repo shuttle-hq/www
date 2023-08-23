@@ -2,8 +2,8 @@ import { PositionProps } from 'components/sections/JobOpenings'
 
 export const Jobs: PositionProps[] = [
 	{
-		name: 'Founding Engineer',
-		link: 'https://www.ycombinator.com/companies/shuttle/jobs/OP0bfXH-founding-engineer',
+		name: 'Staff Cloud Engineer',
+		link: 'https://www.ycombinator.com/companies/shuttle/jobs/LpJTT9u-staff-cloud-engineer',
 	},
 	{
 		name: 'Technical Product Manager',
