@@ -394,7 +394,7 @@ async fn user_disconnected(my_id: usize, users: &Users) {
 
 While this is arguably more work for you, it's also a lot more direct, meaning that you have full control over what's happening. For some cases, being able to be so close to HTTP request and response is a delight and makes things easier.
 
-Its middleware approach is similar to what you know from Tower, but Tide exposes the [async trait crate](https://crates.io/crates/async-trait) to make implementation a lot easier. Since Tide is implement by folks who are also involved in the Rust async ecosystem, you can expect things like proper [async methods in traits](https://blog.rust-lang.org/inside-rust/2023/05/03/stabilizing-async-fn-in-trait.html) which recently landed in Nightly, to be adopted quickly.
+Its middleware approach is similar to what you know from Tower, but Tide exposes the [async trait crate](https://github.com/dtolnay/async-trait) to make implementation a lot easier. Since Tide is implement by folks who are also involved in the Rust async ecosystem, you can expect things like proper [async methods in traits](https://blog.rust-lang.org/inside-rust/2023/05/03/stabilizing-async-fn-in-trait.html) which recently landed in Nightly, to be adopted quickly.
 
 #### Tide Example
 
