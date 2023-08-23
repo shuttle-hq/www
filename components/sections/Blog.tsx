@@ -76,7 +76,7 @@ const BlogPost: FC<Post> = (post) => {
 		<div className='group grid gap-4 rounded-[2rem] border border-black/10 p-5 transition-all duration-300 hover:shadow-[0px_4px_64px_0px_rgba(252,84,12,0.25)] dark:border-white/10 md:grid-cols-2 md:items-center md:gap-5 md:p-8'>
 			<div className='grid gap-4 lg:gap-5'>
 				<div className='flex flex-wrap items-center gap-x-4 gap-y-1'>
-					<div className='flex items-center gap-2 font-gradual font-bold dark:text-[#C2C2C2]'>
+					<div className='mr-1 flex items-center gap-2 font-gradual font-bold dark:text-[#C2C2C2]'>
 						<Image
 							src={authorImage}
 							onError={() => setAuthorImage('/images/logo.png')}
