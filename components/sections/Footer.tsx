@@ -32,12 +32,6 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 								Starters
 							</Link>
 							<Link
-								href='https://github.com/orgs/shuttle-hq/projects/4'
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								Roadmap
-							</Link>
-							<Link
 								href='https://status.shuttle.rs'
 								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
 							>

@@ -1,0 +1,264 @@
+---
+title: "Issue #6: A little CRUD"
+date: "2023-08-11T16:00:00"
+---
+
+# Shuttle Launchpad #6: A little CRUD 
+
+Welcome to Shuttle Launchpad Issue #6! This time, we want to apply all the learnings from the previous issues to create something that you might do a lot when writing backends: CRUD APIs. CRUD stands for "Create, read, update, delete", and is a pattern to manage database records via HTTP APIs. In doing so, we also learn about how to use a PostgreSQL database in Shuttle, and how the `sqlx` crate works. Have fun!
+
+## A basic CRUD setup
+
+In this issue of Shuttle Launchpad, we want to create a small CRUD API using Axum and SQLx. In doing so, we will revisit a few techniques that we already learned in previous issues, now combined into a proper backend application.
+
+We will use the `shuttle-shared-db` crate to get access to a PostgreSQL database that is provisioned by Shuttle directly. Infrastructure as Code!
+
+First, create a new project.
+
+```bash
+$ cargo shuttle init
+```
+
+Select _Axum_ as framework. We also need some dependencies. To work with the database, we need `sqlx` and `shuttle-shared-db`. We also need `serde` to serialize and deserialize our data.
+
+```bash
+$ cargo add sqlx --features postgres
+$ cargo add shuttle-shared-db --features postgres-rustls
+$ cargo add serde --features derive
+```
+
+Open your `main.rs` file and add the following imports. Don't worry, you will need to use all of them when the time comes.
+
+```rust
+use axum::{
+    extract::{Path, State},
+    http::StatusCode,
+    response::IntoResponse,
+    routing::{get, post},
+    Json, Router,
+};
+
+use serde::{Deserialize, Serialize};
+use sqlx::{Executor, FromRow, PgPool, Postgres, QueryBuilder};
+```
+
+Since we're accessing a database, we need to tell our database what data we expect. We write a small `scheme.sql` file and put it in the root of our application. It will contain the SQL statements to create the table we need.
+
+```sql
+-- Create the articles table if it doesn't exist
+CREATE TABLE IF NOT EXISTS articles (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255),
+    content TEXT,
+    published_date VARCHAR(255)
+);
+```
+
+As you can see, we only create the table if it doesn't exist. Which means we can execute this script always at startup of our application and can be sure that we have a table to work with.
+
+Let's see how we can wire up the database in our application. We use the `shuttle_shared_db::Postgres` macro to get access to a database. The database is available on Shuttle, but if we want to test it locally, we need to provide the URI of the database we want to connect to. We can do this by adding a `local_uri` attribute to the macro. The macro will then use this URI instead of the one provided by Shuttle when working locally.
+
+> 💡 Note that you need to have a PostgreSQL database installed locally to actually work with the database. You can install it via `brew install postgresql` on Mac or `sudo apt install postgresql` on Ubuntu. Depending on your system, the access to the database is different. The default on Mac is to useyour system user with no password. The database name is `postgres`. This might be different on your system, though.
+
+The `shuttle_shared_db` macro gives us access to a `PgPool` struct. This struct is a connection pool to the database. We can use it to execute SQL statements on the database.
+
+We use the connection pool to execute the `schema.sql` file we created earlier. The `include_str!` macro literally takes the string value from the file and puts it into our code.
+
+```rust
+#[shuttle_runtime::main]
+async fn axum(
+    #[shuttle_shared_db::Postgres(
+        local_uri = "postgres://username@localhost:5432/postgres")
+    ]
+    pool: PgPool,
+) -> shuttle_axum::ShuttleAxum {
+    pool.execute(include_str!("../schema.sql"))
+        .await
+        .map_err(shuttle_runtime::CustomError::new)?;
+    let router = Router::new();
+    Ok(router.into())
+}
+```
+
+The `shuttle_shared_db` macro expects a `Result` type as return value, where the error value is a Shuttle runtime error. The `execute` method of `PgPool` also returns a `Result`, but the error is not compatible with the one expected by Shuttle. Using `map_err` we can convert the error into a Shuttle runtime error.
+
+Next, let's set up our `Router`. We have two routes, one where we can add new articles, the other one where we can read articles based on their ID, which is a number. We also add some state to our router, namely the database connection pool. This way, we can access the database from within our handlers.
+
+```rust
+let router = Router::new()
+    .route("/articles", post(create_article))
+    .route("/articles/:id", get(get_article))
+    .with_state(pool);
+```
+
+Next, we create a representation of the data we want to store in our database.
+We write an `Article` struct with the necessary fields, and we use the `Deserialize` trait from the `serde` crate to deserialize a JSON input from a request into this struct.
+
+```rust
+#[derive(Deserialize)]
+struct Article {
+    title: String,
+    content: String,
+    published_date: String,
+}
+```
+
+With that, we can write a function signature that not only takes the database connection pool as state, but also an article as an input. We use the `Json` extractor from Axum to extract the JSON input from the request and deserialize it into our `Article` struct. The good thing is that this handler won't be accessed if we send bogus data to the function. Axum will return an error, and we don't even need to write any code for that.
+
+
+```rust
+async fn create_article(
+    State(pool): State<PgPool>,
+    Json(new_article): Json<Article>,
+) -> impl IntoResponse {
+    // tbd ...
+}
+```
+
+Now for the implementation. We want to insert the article we just received and return a success message if everything went well. We use the `QueryBuilder` from the `sqlx` crate to build our SQL statement. We use the `push_values` method to insert the values from our `Article` struct into the query. We use the `push_bind` method to bind the values to the query. This way, we can prevent SQL injection attacks.
+
+Builders are very common in Rust. They are used to build complex data structures. In this case, we use the builder to build an SQL query.
+
+
+```rust
+// Insert the new article into the database
+let mut query_builder: QueryBuilder<Postgres> =
+    QueryBuilder::new("INSERT INTO articles (title, content, published_date)");
+
+query_builder.push_values([new_article], |mut b, article| {
+    b.push_bind(article.title)
+        .push_bind(article.content)
+        .push_bind(article.published_date);
+});
+```
+
+The `push_values` iterates over multiple elements and thus needs a slice of data. In our case, it's just one element. Then we have a closure, where we have access to a _mutable_ builder, and the article in question.
+
+> 💡 For advanced developers: Note that `published_date` is string. Wouldn't it be better if it's an actual date? Try to change the type to `chrono::NaiveDate` and see what happens.
+
+Next, we use the `build` method to build the query and the `execute` method to execute it on the database. The `execute` method returns a `Result` type, where the error is a `sqlx::Error`. We can use the `match` statement to handle the result. If everything went well, we return a success message. If not, we return an error message.
+
+```rust
+let result = query_builder.build().execute(&pool).await;
+
+match result {
+    Ok(_) => (StatusCode::OK, "Article created".to_string()),
+    Err(e) => (
+        StatusCode::INTERNAL_SERVER_ERROR,
+        format!("Error creating article: {}", e.to_string()),
+    ),
+}
+```
+
+And that's it for the first part. We're now able to insert new articles to our database.
+
+
+Let's see how we can read articles from the database. We want to use a few tricks to write some less code.
+
+We take the `Article` struct and add a few more traits be deriving them. The first one is `FromRow`, a trait from `sqlx` that maps rows to structs. That way, you don't need to convert any result on your own. The other one is `Serialize`, which allows us to serialize the struct into JSON. We need this for our response.
+
+```rust
+#[derive(Deserialize, FromRow, Serialize)]
+struct Article {
+    title: String,
+    content: String,
+    published_date: String,
+}
+```
+
+Then, we write the `get_article` function. It takes the article ID as path parameter. We use the `Path` extractor from Axum to extract the ID from the request. The parameter needs to be an integer, if we receive anything else, Axum will return an error.
+
+We also take the database connection pool as state.
+
+As return type, we expect a result with either the `Article` as JSON, or with an error that is a status code and an error message.
+
+```rust
+async fn get_article(
+    Path(article_id): Path<usize>,
+    State(pool): State<PgPool>,
+) -> Result<Json<Article>, (StatusCode, String)> {
+    // tbd ...
+}
+```
+
+Let's implement the query. We do a simple query instead of the builder and use the `query_as` method to map the result to our `Article` struct. We use the `format!` macro to insert the article ID into the query.
+
+We don't need to fear SQL injection here since the article ID is an integer and not a string.
+
+```rust
+let query = format!(
+    "SELECT title, content, published_date FROM articles WHERE id = {}",
+    article_id
+);
+let result = sqlx::query_as(&query);
+```
+
+And now for a little magic 🪄. We use the `fetch_one` method to fetch the article from the database. If the article is not found, the method returns an error. We use the `map_err` method to convert the error into a status code and an error message.
+
+If the article is found, we get a `PgRow` struct. But thanks to the `FromRow` trait, we can convert it into our `Article` struct. All we need to do is to annotate the binding with the `Article` type. That's all. Rust's type system is clever enough to know that the row can be serialized into `Article`.
+
+Since `fetch_one` still returns a `Result` type, we use the `?` operator to return an error if the result is an error. The error now is the one we expect based on our function signature.
+
+```rust
+let article: Article = result.fetch_one(&pool).await.map_err(|_| {
+    (
+        StatusCode::NOT_FOUND,
+        format!("Article with id {} not found", article_id),
+    )
+})?;
+```
+
+So, the first magic conversion has happened, now on to the second one. Since we used the `Serialize` trait on `Article`, all we need to do to send the article as JSON is to wrap it in a `Json` struct. We use the `Ok` function to wrap the `Json` struct in a `Result` type.
+
+```rust
+Ok(Json(article))
+```
+
+And that's all that is. We can now read articles from the database.
+
+Try it out yourself. Deploy your app to Shuttle, and use the following commands to create and read articles.
+
+```bash
+$ curl --request POST \
+  --url https://<your-app-name>.shuttleapp.rs/articles \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"title": "What a fantastic day",
+	"content": "Look at all the beautiful flowers",
+	"published_date": "2023-08-11"
+}'
+```
+
+```bash
+$ curl --request GET \
+  --url https://<your-app-name>.shuttleapp.rs/articles/1
+```
+
+Fantastic! There are a few things now to do you for you:
+
+- Try working with other data types than `String`s
+- Can you add the ID to the struct as well? How do you make sure that the user should not send one when you create a new article
+- Can you limit access to creating articles?
+- Implement the "update" and "delete" function yourself!
+
+Good luck, and don't forget to share your results!
+
+## Time for your feedback!
+
+We want to tailor Shuttle Launchpad to your needs! [Give us feedback](https://btl1d1x5z23.typeform.com/to/dTU2F8jI) on the most recent issue and your wishes here.
+
+## Join us!
+
+Shuttle has a very active community. Join us on [Discord](https://discord.gg/shuttle), star us on [GitHub](https://github.com/shuttle-hq/shuttle), follow us on [Twitter](https://twitter.com/shuttle_dev), and watch out for video content on [YouTube](https://www.youtube.com/@shuttle-dev).
+
+If you have any questions regarding _Launchpad_, join the `#launchpad` channel on Shuttle's [Discord](https://discord.gg/shuttle).
+
+## Links, Videos, Tutorials
+
+[_Launchpad Examples_](https://github.com/ddprrt/shuttle-launchpad-examples): Check out all Launchpad Examples on GitHub.
+
+## Bye!
+
+That's it for today. Get in touch with us and let us know what you want to see!
+
+-- [Stefan](https://oida.dev) and your friends from [Shuttle](https://shuttle.rs)
