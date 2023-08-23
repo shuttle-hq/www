@@ -20,13 +20,13 @@ Also note that this list is by no means exhaustive, and I definitely missed some
 
 ### Axum
 
-Axum is a web application framework with a special standing in the Rust ecosystem. It is part of the [Tokio](https://tokio.rs/) project, which the runtime for writing asynchronous network applications with Rust. Not only does Axum use Tokio as its asynchronous runtime, but it also integrates with other libraries from the Tokio ecosystem, making use of _Hyper_ as its HTTP server and _Tower_ for middleware. In doing so, developers are able to reuse existing libraries and tools from the Tokio ecosystem.
+Axum is a web application framework with a special standing in the Rust ecosystem. It is part of the [Tokio](https://tokio.rs/) project, which is the runtime for writing asynchronous network applications with Rust. Not only does Axum use Tokio as its asynchronous runtime, but it also integrates with other libraries from the Tokio ecosystem, making use of _Hyper_ as its HTTP server and _Tower_ for middleware. In doing so, developers are able to reuse existing libraries and tools from the Tokio ecosystem.
 
 Axum also strives to deliver a best in class developer experience without relying on macros, but rather leveraging Rust's type system to provide a safe and ergonomic API. This is achieved by using traits to define the core abstractions of the framework, such as the `Handler` trait, which is used to define the core logic of an application. This approach allows developers to easily compose applications from smaller components, which can be reused across multiple applications.
 
 A handler in Axum is a function that takes a request and returns a response. This is similar to other backend frameworks, but with Axum's `FromRequest` trait, developers can specify the types of data that should be extracted from the request. The return type needs to implement the `IntoResponse` trait, and there are already a number of types that implement this trait, including tuple types that allow to easily change e.g. the status code of a response.
 
-Whenever you work with Rust's type system, generics and especially async methods in traits (or more concretely: a returned `Future`), you know how complex Rust's error messages can get when you don't satisfy a trait bound. Especially when you try to match abstract trait bounds, it happens ever so often that you get a wall of text that is hard to decipher. Change the order of a few lines, and nothing works anymore! Axum provides a library with helper macros that put the error to where it actually happens, making it easier to understand what went wrong.
+If you've ever worked with Rust's type system, generics and especially async methods in traits (or more concretely: a returned `Future`), you know how complex Rust's error messages can get when you don't satisfy a trait bound. Especially when you try to match abstract trait bounds, it happens ever so often that you get a wall of text that is hard to decipher. Change the order of a few lines, and nothing works anymore! Axum provides a library with helper macros that put the error to where it actually happens, making it easier to understand what went wrong.
 
 Axum does a lot of things right, and it's very easy to get applications started that do _a lot_. However, there are some things that you need to look out for. The version is still below 1.0, and the Axum team takes the liberty to change APIs fundamentally between versions, which can cause your apps to break big time. That's the deal with 0.x versions, we know, but some changes appear to be so subtle, yet require you to develop a different mental model of how things work underneath. If you included a `Timeout` layer (built-in in Tower, yay!), it worked easily in one version, needed a catch-all error handler in another, and an tied error handler in the next. This is not a big deal, but it can be frustrating when you're trying to get things done or you start a project with the latest version and things suddenly work differently. Also while you are able to leverage the entire Tokio ecosystem, you sometimes need to deal with glue types and traits, rather then going to the Tokio functions directly. One example is the use of anything stream and (web) socket related.
 
@@ -92,7 +92,7 @@ async fn integration_testable_handle_socket(mut socket: WebSocket) {
 
 ### Actix
 
-Actix is one of Rust's web frameworks that has been around for a while, and thus is very popular. Like any good open source project it has seen many iterations, but it has reached major versions other than 0 and keeps its stability guarantees: Within a major version, you can be sure that there are no breaking changes.
+Actix is one of Rust's web frameworks that has been around for a while, and is thus very popular. Like any good open source project it has seen many iterations, but it has reached major versions other than 0 and keeps its stability guarantees: Within a major version, you can be sure that there are no breaking changes.
 
 When we talk Actix, we specifically talk about [Actix Web](https://actix.rs), which is the web framework part of the Actix project. Actix itself is a project that provides a number of libraries for building concurrent applications, and is based on the actor model. The "Web" part of Actix abstracts lot of the actor model away, and provides a more traditional web framework API.
 
@@ -158,7 +158,7 @@ async fn main() -> std::io::Result<()> {
 
 Rocket has been the star in the Rust web framework ecosystem for quite a while, with it's unapologetic approach to developer experience, the reliance on familar and existing concepts, and its ambitious goal to provide a batteries-included experience.
 
-You can see its ambitions when you enter their beautiful [website](https://rocket.rs): Macro-based routing, built-in form handling, support for databases and state management, and its own veersion of templating! Rocket really tries to get everything done that you need to build a web application.
+You can see its ambitions when you enter their beautiful [website](https://rocket.rs): Macro-based routing, built-in form handling, support for databases and state management, and its own version of templating! Rocket really tries to get everything done that you need to build a web application.
 
 However, Rocket's ambitions take their toll. While still being actively developed, the releases are not as frequent as they used to be. Which means that users of the framework miss out on a lot of important stuff.
 
