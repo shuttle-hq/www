@@ -1,0 +1,537 @@
+---
+title: Best Rust Web Frameworks to Use in 2023
+description: Explore the top Rust web frameworks and their advantages and drawbacks. Discover the best choices for your projects. A comprehensive comparison to help you make informed decisions.
+author: stefan
+tags: [rust, guide, comparison]
+thumb: rust-best-frameworks-thumbnail.png
+cover: rust-best-frameworks-thumbnail.png
+date: '2023-08-23T18:18:00'
+---
+
+# Best Rust Web Frameworks to Use in 2023
+
+In the dynamic landscape of web development, Rust has emerged as a language of choice for building safe and performant applications. As Rust's popularity grows, so does the array of web frameworks designed to harness its strengths. This article compares some of the best Rust frameworks highlighting their respective advantages and drawbacks to help you make informed decisions for your projects. It also takes a lookout on frameworks to look out for, as they might change how we build web applications in Rust.
+
+Since most of the web frameworks feel very similar in use at a first glance, the differences are much more nuanced and in detail. I hope to highlight the most important differences in text, but to give you a better idea, I also show example code with every framework that does more than a simple hello world. All the examples are taken from the respective GitHub repos.
+
+Also note that this list is by no means exhaustive, and I definitely missed some of the frameworks that are out there. If you want to have your favourite framework included, please reach out to me on [Twitter](https://twitter.com/ddprrt) or [Mastodon](https://mastodon.social/deadparrot).
+
+## The Popular Rust Frameworks
+
+### Axum
+
+Axum is a web application framework with a special standing in the Rust ecosystem. It is part of the [Tokio](https://tokio.rs/) project, which is the runtime for writing asynchronous network applications with Rust. Not only does Axum use Tokio as its asynchronous runtime, but it also integrates with other libraries from the Tokio ecosystem, making use of _Hyper_ as its HTTP server and _Tower_ for middleware. In doing so, developers are able to reuse existing libraries and tools from the Tokio ecosystem.
+
+Axum also strives to deliver a best in class developer experience without relying on macros, but rather leveraging Rust's type system to provide a safe and ergonomic API. This is achieved by using traits to define the core abstractions of the framework, such as the `Handler` trait, which is used to define the core logic of an application. This approach allows developers to easily compose applications from smaller components, which can be reused across multiple applications.
+
+A handler in Axum is a function that takes a request and returns a response. This is similar to other backend frameworks, but with Axum's `FromRequest` trait, developers can specify the types of data that should be extracted from the request. The return type needs to implement the `IntoResponse` trait, and there are already a number of types that implement this trait, including tuple types that allow to easily change e.g. the status code of a response.
+
+If you've ever worked with Rust's type system, generics and especially async methods in traits (or more concretely: a returned `Future`), you know how complex Rust's error messages can get when you don't satisfy a trait bound. Especially when you try to match abstract trait bounds, it happens ever so often that you get a wall of text that is hard to decipher. Change the order of a few lines, and nothing works anymore! Axum provides a library with helper macros that put the error to where it actually happens, making it easier to understand what went wrong.
+
+Axum does a lot of things right, and it's very easy to get applications started that do _a lot_. However, there are some things that you need to look out for. The version is still below 1.0, and the Axum team takes the liberty to change APIs fundamentally between versions, which can cause your apps to break big time. That's the deal with 0.x versions, we know, but some changes appear to be so subtle, yet require you to develop a different mental model of how things work underneath. If you included a `Timeout` layer (built-in in Tower, yay!), it worked easily in one version, needed a catch-all error handler in another, and an tied error handler in the next. This is not a big deal, but it can be frustrating when you're trying to get things done or you start a project with the latest version and things suddenly work differently. Also while you are able to leverage the entire Tokio ecosystem, you sometimes need to deal with glue types and traits, rather then going to the Tokio functions directly. One example is the use of anything stream and (web) socket related.
+
+The good examples help, but you need to keep track.
+
+Nonetheless, Axum is my personal favourite, and also the framework I use for [Shuttle Launchpad](https://shuttle.rs/launchpad). I love the expressiveness and the concepts underneath, and there hasn't been a thing that I wanted to solve that I couldn't do inutitively by understanding the right concepts. If you want to get to know the Axum concepts, check out my [slides from my Tokio + Microservices workshop](https://fettblog.eu/slides/microservices-with-rust-and-tokio/).
+
+#### Axum Example
+
+An abbreviated example from the [Axum repo](https://github.com/tokio-rs/axum/blob/main/examples/testing-websockets/src/main.rs) showing a WebSocket handler that echos any message it receives.
+
+```rust
+#[tokio::main]
+async fn main() {
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
+        .await
+        .unwrap();
+    println!("listening on {}", listener.local_addr().unwrap());
+    axum::serve(listener, app()).await.unwrap();
+}
+
+fn app() -> Router {
+    // WebSocket routes can generally be tested in two ways:
+    //
+    // - Integration tests where you run the server and connect with a real WebSocket client.
+    // - Unit tests where you mock the socket as some generic send/receive type
+    //
+    // Which version you pick is up to you. Generally we recommend the integration test version
+    // unless your app has a lot of setup that makes it hard to run in a test.
+    Router::new()
+        .route("/integration-testable", get(integration_testable_handler))
+        .route("/unit-testable", get(unit_testable_handler))
+}
+
+// A WebSocket handler that echos any message it receives.
+//
+// This one we'll be integration testing so it can be written in the regular way.
+async fn integration_testable_handler(ws: WebSocketUpgrade) -> Response {
+    ws.on_upgrade(integration_testable_handle_socket)
+}
+
+async fn integration_testable_handle_socket(mut socket: WebSocket) {
+    while let Some(Ok(msg)) = socket.recv().await {
+        if let Message::Text(msg) = msg {
+            if socket
+                .send(Message::Text(format!("You said: {msg}")))
+                .await
+                .is_err()
+            {
+                break;
+            }
+        }
+    }
+}
+````
+
+#### Axum in a Nutshell
+
+- Macro-free API.
+- Strong ecosystem by leveraging Tokio, Tower, and Hyper.
+- Great developer experience.
+- Still in 0.x, so breaking changes can happen.
+
+### Actix
+
+Actix is one of Rust's web frameworks that has been around for a while, and is thus very popular. Like any good open source project it has seen many iterations, but it has reached major versions other than 0 and keeps its stability guarantees: Within a major version, you can be sure that there are no breaking changes.
+
+When we talk Actix, we specifically talk about [Actix Web](https://actix.rs), which is the web framework part of the Actix project. Actix itself is a project that provides a number of libraries for building concurrent applications, and is based on the actor model. The "Web" part of Actix abstracts lot of the actor model away, and provides a more traditional web framework API.
+
+At a first glance, Actix looks very familiar to other web frameworks in Rust. You use macros to define HTTP methods and routes (like Rocket), and you use extractors to get data from the request (like Axum). The similarities with Axum are striking, also in how they name concepts and traits. The biggest difference is that Actix does not tie itself to strong to the Tokio ecosystem. While Tokio is still the runtime underneath Actix, the framework comes with its own abstractions and traits, and also with its own ecosystem of crates. This has pros and cons. On one hand, you can be sure that things usually work well together, on the other hand you might miss out on a lot of things that are already available in the Tokio ecosystem.
+
+One thing that strikes me odd is that Actix implements its own Service trait, which is basically the same as Tower's, but still incompatible. Which means that most of the available Middleware in the Tower ecosystem is not available for Actix.
+
+What's also interesting is that if you need some special tasks in Actix that you need to implement on your own, you might get confronted with the Actor model that runs everything in the framework. This might add some layers of complexity that you might not want to deal with.
+
+But the community around Actix delivers. The framework supports HTTP/2 and Websocket upgrades, it has crates and guides for the most common tasks in a web framework, excellent (and I mean _excellent_) documentation, and it's fast. Actix is popular for a reason, and if you need to keep version guarantees, it might be your best choice right now.
+
+#### Actix Example
+
+A simple [websocket echo server](https://actix.rs/docs/websockets) in Actix looks like this:
+
+```rust
+use actix::{Actor, StreamHandler};
+use actix_web::{web, App, Error, HttpRequest, HttpResponse, HttpServer};
+use actix_web_actors::ws;
+
+/// Define HTTP actor
+struct MyWs;
+
+impl Actor for MyWs {
+    type Context = ws::WebsocketContext<Self>;
+}
+
+/// Handler for ws::Message message
+impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MyWs {
+    fn handle(&mut self, msg: Result<ws::Message, ws::ProtocolError>, ctx: &mut Self::Context) {
+        match msg {
+            Ok(ws::Message::Ping(msg)) => ctx.pong(&msg),
+            Ok(ws::Message::Text(text)) => ctx.text(text),
+            Ok(ws::Message::Binary(bin)) => ctx.binary(bin),
+            _ => (),
+        }
+    }
+}
+
+async fn index(req: HttpRequest, stream: web::Payload) -> Result<HttpResponse, Error> {
+    let resp = ws::start(MyWs {}, &req, stream);
+    println!("{:?}", resp);
+    resp
+}
+
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    HttpServer::new(|| App::new().route("/ws/", web::get().to(index)))
+        .bind(("127.0.0.1", 8080))?
+        .run()
+        .await
+}
+```
+
+#### Actix in a Nutshell
+
+- Strong, self-contained ecosystem.
+- Actor model based.
+- Stable API via major version guarantees.
+- Fantastic documentation.
+
+### Rocket
+
+Rocket has been the star in the Rust web framework ecosystem for quite a while, with it's unapologetic approach to developer experience, the reliance on familar and existing concepts, and its ambitious goal to provide a batteries-included experience.
+
+You can see its ambitions when you enter their beautiful [website](https://rocket.rs): Macro-based routing, built-in form handling, support for databases and state management, and its own version of templating! Rocket really tries to get everything done that you need to build a web application.
+
+However, Rocket's ambitions take their toll. While still being actively developed, the releases are not as frequent as they used to be. Which means that users of the framework miss out on a lot of important stuff.
+
+Also, with it's batteries-included approach, you also need to learn how Rocket does things. Rocket apps have a lifecycle, the building blocks are connected in a particular way, and if something goes wrong, you need to understand what goes wrong.
+
+Rocket is a great framework, and if you want to get started with Rust web development, it's a great choice. Personally, I have a soft spot for Rocket and I hope that development picks up. For many of us, Rocket was the first segue into Rust, and it's still fun to develop with it. Nonetheless, I usually rely on features that are not available in Rocket, and thus I don't use it in production.
+
+#### Rocket Example
+
+An abbreviated example of a Rocket application that deals with forms from their [example repo](https://github.com/SergioBenitez/Rocket/blob/v0.5-rc/examples/forms/src/main.rs):
+
+```rust
+#[derive(Debug, FromForm)]
+struct Password<'v> {
+    #[field(validate = len(6..))]
+    #[field(validate = eq(self.second))]
+    first: &'v str,
+    #[field(validate = eq(self.first))]
+    second: &'v str,
+}
+
+#[derive(Debug, FromForm)]
+#[allow(dead_code)]
+struct Submission<'v> {
+    #[field(validate = len(1..))]
+    title: &'v str,
+    date: Date,
+    #[field(validate = len(1..=250))]
+    r#abstract: &'v str,
+    #[field(validate = ext(ContentType::PDF))]
+    file: TempFile<'v>,
+    ready: bool,
+}
+
+#[derive(Debug, FromForm)]
+#[allow(dead_code)]
+struct Account<'v> {
+    #[field(validate = len(1..))]
+    name: &'v str,
+    password: Password<'v>,
+    #[field(validate = contains('@').or_else(msg!("invalid email address")))]
+    email: &'v str,
+}
+
+#[derive(Debug, FromForm)]
+#[allow(dead_code)]
+struct Submit<'v> {
+    account: Account<'v>,
+    submission: Submission<'v>,
+}
+
+#[get("/")]
+fn index() -> Template {
+    Template::render("index", &Context::default())
+}
+
+// NOTE: We use `Contextual` here because we want to collect all submitted form
+// fields to re-render forms with submitted values on error. If you have no such
+// need, do not use `Contextual`. Use the equivalent of `Form<Submit<'_>>`.
+#[post("/", data = "<form>")]
+fn submit<'r>(form: Form<Contextual<'r, Submit<'r>>>) -> (Status, Template) {
+    let template = match form.value {
+        Some(ref submission) => {
+            println!("submission: {:#?}", submission);
+            Template::render("success", &form.context)
+        }
+        None => Template::render("index", &form.context),
+    };
+
+    (form.context.status(), template)
+}
+
+#[launch]
+fn rocket() -> _ {
+    rocket::build()
+        .mount("/", routes![index, submit])
+        .attach(Template::fairing())
+        .mount("/", FileServer::from(relative!("/static")))
+}
+```
+
+#### Rocket in a Nutshell
+
+- Batteries-included approach.
+- Great developer experience.
+- Not as actively developed as it used to be.
+- Still a great choice for beginners.
+
+## The Experimental Rust Frameworks
+
+### Warp
+
+Oh, Warp! You are a beautiful, strange, and powerful beast. Warp is a web framework that is built on top of Tokio, and it's a very good one. It's also very different from the other frameworks that we have seen so far.
+
+[Warp](https://github.com/seanmonstar/warp) shares a few common traits (haha!) with Axum: It's built on Tokio and Hyper, and makes use of Tower middleware. However, it's very different in its approach. Warp is built on top of the `Filter` trait.
+
+In Warp, you build a pipeline of filters that are applied to the incoming request, and the request is passed through the pipeline until it reaches the end. Filters can be chained, and they can be composed. This allows you to build very complex pipelines that are still easy to understand.
+
+Warp is also a bit closer to the Tokio ecosystem than Axum, which means that you might deal with more Tokio structs and concepts without any glue traits.
+
+Warp takes a very functional approach and if that's your style of programming you are going to love the expressiveness and composability of Warp. When you look at a piece of Warp code, it often reads like a story of what's happening, and it's fun and amazing that this works in Rust.
+
+You might want to turn off inlay hints in your Rust Analyzer setting, though. With all those different functions and filters being chained, the types in Warp get very long and very complex, and also hard to decipher. Same goes for error messages, which can be pages of text that are hard to understand.
+
+Also, while the filter concept is great once you get through, sometimes you want to have the declarative router, handler and extractor style that you get with, well, all the other frameworks.
+
+Warp is a great framework, and I love it. However, it's not the most beginner-friendly framework, and it's also not the most popular one. Which means that you might have a harder time finding help and resources. But it's fun for quick and little apps, and it's experimental style might give you new ideas!
+
+#### Warp Example
+
+An abbreviated example of a websocket chat from [their example repo](https://github.com/seanmonstar/warp/blob/master/examples/websockets_chat.rs):
+
+```rust
+static NEXT_USER_ID: AtomicUsize = AtomicUsize::new(1);
+
+/// Our state of currently connected users.
+///
+/// - Key is their id
+/// - Value is a sender of `warp::ws::Message`
+type Users = Arc<RwLock<HashMap<usize, mpsc::UnboundedSender<Message>>>>;
+
+#[tokio::main]
+async fn main() {
+    let users = Users::default();
+    // Turn our "state" into a new Filter...
+    let users = warp::any().map(move || users.clone());
+
+    // GET /chat -> websocket upgrade
+    let chat = warp::path("chat")
+        // The `ws()` filter will prepare Websocket handshake...
+        .and(warp::ws())
+        .and(users)
+        .map(|ws: warp::ws::Ws, users| {
+            // This will call our function if the handshake succeeds.
+            ws.on_upgrade(move |socket| user_connected(socket, users))
+        });
+
+    // GET / -> index html
+    let index = warp::path::end().map(|| warp::reply::html(INDEX_HTML));
+
+    let routes = index.or(chat);
+
+    warp::serve(routes).run(([127, 0, 0, 1], 3030)).await;
+}
+
+async fn user_connected(ws: WebSocket, users: Users) {
+    // Use a counter to assign a new unique ID for this user.
+    let my_id = NEXT_USER_ID.fetch_add(1, Ordering::Relaxed);
+
+    eprintln!("new chat user: {}", my_id);
+
+    // Split the socket into a sender and receive of messages.
+    let (mut user_ws_tx, mut user_ws_rx) = ws.split();
+
+    let (tx, rx) = mpsc::unbounded_channel();
+    let mut rx = UnboundedReceiverStream::new(rx);
+
+    tokio::task::spawn(async move {
+        while let Some(message) = rx.next().await {
+            user_ws_tx
+                .send(message)
+                .unwrap_or_else(|e| {
+                    eprintln!("websocket send error: {}", e);
+                })
+                .await;
+        }
+    });
+
+    // Save the sender in our list of connected users.
+    users.write().await.insert(my_id, tx);
+
+    // Return a `Future` that is basically a state machine managing
+    // this specific user's connection.
+
+    // Every time the user sends a message, broadcast it to
+    // all other users...
+    while let Some(result) = user_ws_rx.next().await {
+        let msg = match result {
+            Ok(msg) => msg,
+            Err(e) => {
+                eprintln!("websocket error(uid={}): {}", my_id, e);
+                break;
+            }
+        };
+        user_message(my_id, msg, &users).await;
+    }
+
+    // user_ws_rx stream will keep processing as long as the user stays
+    // connected. Once they disconnect, then...
+    user_disconnected(my_id, &users).await;
+}
+
+async fn user_message(my_id: usize, msg: Message, users: &Users) {
+    // Skip any non-Text messages...
+    let msg = if let Ok(s) = msg.to_str() {
+        s
+    } else {
+        return;
+    };
+
+    let new_msg = format!("<User#{}>: {}", my_id, msg);
+
+    // New message from this user, send it to everyone else (except same uid)...
+    for (&uid, tx) in users.read().await.iter() {
+        if my_id != uid {
+            if let Err(_disconnected) = tx.send(Message::text(new_msg.clone())) {
+                // The tx is disconnected, our `user_disconnected` code
+                // should be happening in another task, nothing more to
+                // do here.
+            }
+        }
+    }
+}
+
+async fn user_disconnected(my_id: usize, users: &Users) {
+    eprintln!("good bye user: {}", my_id);
+
+    // Stream closed up, so remove from the user list
+    users.write().await.remove(&my_id);
+}
+```
+
+#### Warp in a Nutshell
+
+- Functional approach.
+- Very expressive.
+- Strong ecosystem by being close to Tokio, Tower, and Hyper.
+- Not the most beginner-friendly framework.
+
+### Tide
+
+[Tide](https://github.com/http-rs/tide) is a very minimalistic web framework that is built on top of the `async-std` runtime. The minimalistic approach means that you get a very small API surface. Handler functions in Tide are `async fn`s that take a `Request` and return a `tide::Result` of a `Response`. Extracting data or sending the right response format is up to you.
+
+While this is arguably more work for you, it's also a lot more direct, meaning that you have full control over what's happening. For some cases, being able to be so close to HTTP request and response is a delight and makes things easier.
+
+Its middleware approach is similar to what you know from Tower, but Tide exposes the [async trait crate](https://crates.io/crates/async-trait) to make implementation a lot easier. Since Tide is implement by folks who are also involved in the Rust async ecosystem, you can expect things like proper [async methods in traits](https://blog.rust-lang.org/inside-rust/2023/05/03/stabilizing-async-fn-in-trait.html) which recently landed in Nightly, to be adopted quickly.
+
+#### Tide Example
+
+User sessions example from their [example repo](https://github.com/http-rs/tide/blob/main/examples/sessions.rs).
+
+```rust
+#[async_std::main]
+async fn main() -> Result<(), std::io::Error> {
+    femme::start();
+    let mut app = tide::new();
+    app.with(tide::log::LogMiddleware::new());
+
+    app.with(tide::sessions::SessionMiddleware::new(
+        tide::sessions::MemoryStore::new(),
+        std::env::var("TIDE_SECRET")
+            .expect(
+                "Please provide a TIDE_SECRET value of at \
+                      least 32 bytes in order to run this example",
+            )
+            .as_bytes(),
+    ));
+
+    app.with(tide::utils::Before(
+        |mut request: tide::Request<()>| async move {
+            let session = request.session_mut();
+            let visits: usize = session.get("visits").unwrap_or_default();
+            session.insert("visits", visits + 1).unwrap();
+            request
+        },
+    ));
+
+    app.at("/").get(|req: tide::Request<()>| async move {
+        let visits: usize = req.session().get("visits").unwrap();
+        Ok(format!("you have visited this website {} times", visits))
+    });
+
+    app.at("/reset")
+        .get(|mut req: tide::Request<()>| async move {
+            req.session_mut().destroy();
+            Ok(tide::Redirect::new("/"))
+        });
+
+    app.listen("127.0.0.1:8080").await?;
+
+    Ok(())
+}
+```
+
+#### Tide in a Nutshell
+
+- Minimalistic approach.
+- Uses `async-std` runtime.
+- Simple handler functions.
+- Playground of async features.
+
+### Poem
+
+> A program is like a poem, you cannot write a poem without writing it. --- Dijkstra
+
+[Poem](https://github.com/poem-web/poem)'s Readme file greets you with these words. Poem claims to be a fully featured yet easy to use web framework. Bold claims, but Poem seems to deliver. At a first glance, it's usage is very similar to Axum, with the only difference that you need to mark handler functions with the respective macro. It also builds on Tokio and Hyper, and is fully compatible with Tower middleware, while still exposing its own middleware trait.
+
+Poem's middleware trait is also dead-simple to use. You can either implement the trait directly for all or specific `Endpoint`s (Poem's way of expressing everything that can handle HTTP requests), or you just write an async function that accepts an `Endpoint` as parameter. After dealing and sometimes struggling with [Tower and the Service Trait](outube.com/watch?v=z78_RnUPnpY) for such a long time, this is a breath of fresh air.
+
+Not only is Poem compatible with a lot of features from the broader ecosystem, it's also jam-packed with features itself, including full support for OpenAPI and Swagger docs. And it's not limited to HTTP based web services, it can also be used for gRPC services based on Tonic, or even in Lambda functions, without the need to switch frameworks. Add support for OpenTelemetry, Redis, Prometheus, and a lot more, and you check off all the boxes of a modern web framework for enterprise grade applications.
+
+Poem is still in a 0.x version, but if it keeps momentum and delivers a solid 1.0, this is a framework to look out for!
+
+#### Poem Example
+
+An abbreviated version of the websocket chat from [their example repo](https://github.com/poem-web/poem/blob/master/examples/poem/websocket-chat/src/main.rs):
+
+```rust
+#[handler]
+fn ws(
+    Path(name): Path<String>,
+    ws: WebSocket,
+    sender: Data<&tokio::sync::broadcast::Sender<String>>,
+) -> impl IntoResponse {
+    let sender = sender.clone();
+    let mut receiver = sender.subscribe();
+    ws.on_upgrade(move |socket| async move {
+        let (mut sink, mut stream) = socket.split();
+
+        tokio::spawn(async move {
+            while let Some(Ok(msg)) = stream.next().await {
+                if let Message::Text(text) = msg {
+                    if sender.send(format!("{name}: {text}")).is_err() {
+                        break;
+                    }
+                }
+            }
+        });
+
+        tokio::spawn(async move {
+            while let Ok(msg) = receiver.recv().await {
+                if sink.send(Message::Text(msg)).await.is_err() {
+                    break;
+                }
+            }
+        });
+    })
+}
+
+#[tokio::main]
+async fn main() -> Result<(), std::io::Error> {
+    let app = Route::new().at("/", get(index)).at(
+        "/ws/:name",
+        get(ws.data(tokio::sync::broadcast::channel::<String>(32).0)),
+    );
+
+    Server::new(TcpListener::bind("127.0.0.1:3000"))
+        .run(app)
+        .await
+}
+```
+
+#### Poem in a Nutshell
+
+- Vast feature set.
+- Compatible with the Tokio ecosystem.
+- Easy to use.
+- Adaptable for gRPC and Lambda.
+
+## On the Lookout
+
+### Pavex
+
+Initially I said that all Rust web frameworks look very similar at first glance. They are different in nuances, and sometimes do things better than others.
+
+Pavex is the exception to that rule. [Pavex](https://github.com/LukeMathWalker/pavex) is currently being implemented by no other than Luca Palmieri, the author of the popular [Zero To Production](https://www.zero2prod.com/index.html) book. You can say without a doubt that Luca knows what he is doing, and all his ideas and experience are going into Pavex.
+
+Pavex is significantly different as it sees itself as a _specialized compiler_ for building Rust APIs. It takes a high-level description of what your application should do, and the compiler a standalone API Server SDK crate, ready to be configured and launched.
+
+Pavex is still in its early stages, but it's definitely a project to keep an eye on. Check out Luca's [blog post](https://www.lpalmieri.com/posts/a-taste-of-pavex-rust-web-framework/) for more information.
+
+## Conclusion
+
+As you can see, the world of Rust web frameworks is very diverse. There is no one-size-fits-all solution, and you need to pick the framework that fits your needs best. If you are just starting out, I recommend you to go with Actix or Axum, as they are the most beginner-friendly frameworks and they have gread documentation. Personally, I'm interested on what Pavex will bring to the table, and to be honest, after being a long time Axum user, I'm really interested in checking out Poem.
+
+And obviously, all of the major Rust web frameworks work with Shuttle, so [try them out](https://docs.shuttle.rs/examples/) and see what works best for you!

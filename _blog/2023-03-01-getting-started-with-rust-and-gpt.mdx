@@ -1,11 +1,11 @@
 ---
 title: Getting Started with Rust & GPT-3
 description: Quick guide on how to get started with Rust & GPT-3 by building & deploying a simple app.
-author: Josh
+author: josh
 tags: [rust, tutorial]
 thumb: rust-gpt-banner.png
 cover: rust-gpt-banner.png
-date: "2022-12-23T15:00:00"
+date: '2022-12-23T15:00:00'
 ---
 
 Rust is a language that is starting to gain more and more traction within many large tech companies as it is starting to become more widely adopted due to its high level of efficiency, memory safety as well as the ability to inter-op with other languages like C and JavaScript making it easy to add in without requiring a full rewrite in Rust. We can also leverage the power of AI and language models through OpenAI's GPT-3 to create web apps that can generate useful text, which we will be covering in this tutorial.
@@ -33,11 +33,8 @@ You will need to set up your login for `cargo-shuttle` by simply going to our [l
 Before we start you'll also need to grab an API key from OpenAI's API by doing the following:
 
 1. Go to the [OpenAI API dashboard](https://platform.openai.com/overview) and sign in (create an account by signing in via Google or any other available method if you don't have one yet)
-    
 2. Click your profile in the top-right hand corner and select "View API Keys"
-    
 3. Create a new secret key and store it somewhere for safekeeping as we'll be using this later on.
-    
 
 Now we're ready to get started!
 
@@ -64,17 +61,19 @@ Once that's done, we can fill out our App.ts function component like so:
 ```typescript
 // App.ts
 function App() {
-  return (
-       <div className="w-full h-full flex flex-col align-center items-center mt-10 gap-4">
-      <p className='text-2xl'>Name Generator</p>
-      <form onSubmit={handleSubmit}>
-        <button type="submit" className='bg-gray-300 px-5 py-2 shadow-md'>Generate a name!</button>
-      </form>
-      <div id="prompt-container" className='text-2xl p-5 bg-stone-100 shadow-md w-[calc(100%-5rem)]'>
-        <p id="prompt-text">Try generating a name!</p>
-      </div>
-    </div>
-  )
+	return (
+		<div className='align-center mt-10 flex h-full w-full flex-col items-center gap-4'>
+			<p className='text-2xl'>Name Generator</p>
+			<form onSubmit={handleSubmit}>
+				<button type='submit' className='bg-gray-300 px-5 py-2 shadow-md'>
+					Generate a name!
+				</button>
+			</form>
+			<div id='prompt-container' className='w-[calc(100%-5rem)] bg-stone-100 p-5 text-2xl shadow-md'>
+				<p id='prompt-text'>Try generating a name!</p>
+			</div>
+		</div>
+	)
 }
 ```
 
@@ -82,33 +81,33 @@ Now we just simply need to add an function that makes an async/await API call to
 
 ```typescript
 // App.ts - Add this to your function component before the return
-  const [prompt, setPrompt] = React.useState<string>("");
+const [prompt, setPrompt] = React.useState<string>('')
 
-  const fetchData = async () => {
-    const res = await fetch('/api/prompt');
-    const data = await res.json()
-    return data;
-  }
+const fetchData = async () => {
+	const res = await fetch('/api/prompt')
+	const data = await res.json()
+	return data
+}
 
-  const setText = () => {
-    let text = document.querySelector('#prompt-text') as HTMLParagraphElement;
+const setText = () => {
+	let text = document.querySelector('#prompt-text') as HTMLParagraphElement
 
-        text.innerText = prompt;
-  }
+	text.innerText = prompt
+}
 
-  const handleSubmit = async (e: React.SyntheticEvent) => {
-    e.preventDefault()
-    try {
-      fetchData().then(data => {
-        setPrompt(data);
-        setText()
-      })
-    } catch (err: any) {
-      console.log(`Error: ${err}`);
-      setPrompt(`Error: ${err}`);
-      setText()
-    }
-  }
+const handleSubmit = async (e: React.SyntheticEvent) => {
+	e.preventDefault()
+	try {
+		fetchData().then((data) => {
+			setPrompt(data)
+			setText()
+		})
+	} catch (err: any) {
+		console.log(`Error: ${err}`)
+		setPrompt(`Error: ${err}`)
+		setText()
+	}
+}
 ```
 
 That's it! Our frontend is done. Now we can focus on the meat of the app, which will be the backend.
@@ -130,7 +129,7 @@ Once the project's been created, you'll have the following:
 #[shuttle_runtime::main]
 async fn axum() -> shuttle_axum::ShuttleAxum {
     let router = Router::new().route("/hello", get(hello_world));
-    
+
     Ok(router.into())
 }
 ```
@@ -191,7 +190,7 @@ async fn axum(
         .expect("You need to set GPT_API_KEY in your Secrets.toml file!");
 
     let router = handle_router(gpt_token);
-    
+
     Ok(router.into())
 }
 ```
@@ -203,10 +202,10 @@ Let's have a look at what our API route would look like:
 pub async fn generate_prompt(State(state): State<AppState>) -> impl IntoResponse {
 
     let prompt = "Generate a random name.
-    
+
     Example:
     Name: John Doe
-    
+
     Name:";
 
     match state.client.complete_prompt_sync(prompt) {
@@ -254,9 +253,9 @@ Colors: #000000 (Black), #FFFFFF (White), #0000FF (Blue)
 Shapes: Square, Circle
 Style: Minimal
 
-Design Brief: 
-Colors: 
-Shapes: 
+Design Brief:
+Colors:
+Shapes:
 Style:
 ```
 
@@ -269,12 +268,12 @@ Now that we've created both of our front and backend components, let's have a lo
 ```typescript
 // vite.config.ts
 export default defineConfig({
-  base: '',
-  plugins: [react()],
-  build: {
-    outDir: 'API/static',
-    emptyOutDir: true
-  }
+	base: '',
+	plugins: [react()],
+	build: {
+		outDir: 'API/static',
+		emptyOutDir: true,
+	},
 })
 ```
 
@@ -347,9 +346,8 @@ If there's no issues, it should deploy! We'll be able to view our app at the lin
 
 Now that we're done, there's quite a few ways we could easily extend this example. If you're looking to take this example further and generate a fully working app, here's a few ideas you could try:
 
-* A web app that will generate a PDF or word document based on what you want the document to contain.
-* A random color scheme generator that will generate random colour schemes.
-* A random password generator based on some random criteria.
-    
+-   A web app that will generate a PDF or word document based on what you want the document to contain.
+-   A random color scheme generator that will generate random colour schemes.
+-   A random password generator based on some random criteria.
 
 Working with GPT-3 has never been easier, and with some simple prompt refinement we can get results that we can turn into meaningful web applications for end users. We've also recently released a new version (v0.12.0) that implements some really cool new features like a Node CLI to easily bootstrap a Next.js + Rust application, as well as local secrets, so if you'd like to use it for other things, now is a better time than ever to try it out!

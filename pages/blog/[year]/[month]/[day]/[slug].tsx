@@ -21,6 +21,8 @@ import { BlogHeader, BlogPrevNext, BlogSidebar, CallToAction } from 'components/
 import { LinkedInLogo, Logo, TwitterLogo } from 'components/svgs'
 import { TwitterTweetEmbed } from 'react-twitter-embed'
 import { Pre } from 'components/blog/Pre'
+import MastodonLogo from 'components/svgs/MastodonLogo'
+import HNLogo from 'components/svgs/HNLogo'
 
 export async function getStaticPaths() {
 	const paths = getAllPostSlugs()
@@ -171,6 +173,7 @@ export default function BlogPostPage(props: Props) {
 		<>
 			<NextSeo
 				title={props.blog.title}
+				description={props.blog.description}
 				openGraph={{
 					title: props.blog.title,
 					description: props.blog.description,
@@ -230,7 +233,7 @@ export default function BlogPostPage(props: Props) {
 									'prose-headings:before:pt-36',
 									'prose-headings:lg:before:-mt-20',
 									'prose-headings:before:lg:pt-20',
-									'text-xl text-[#525151] prose-h2:text-5xl prose-h4:text-3xl prose-h5:text-2xl dark:text-[#7A7A7A]'
+									'text-xl text-[#525151] prose-h2:text-5xl prose-h3:text-4xl prose-h4:text-3xl prose-h5:text-2xl dark:text-[#7A7A7A]'
 								)}
 							>
 								<MDXRemote {...props.blog.content} components={mdxComponents} />
@@ -264,16 +267,42 @@ export default function BlogPostPage(props: Props) {
 						<div className='mb-20 mt-14 flex items-center space-x-4'>
 							<span className='text-[#525151] dark:text-[#C2C2C2]'>Share article</span>
 							<a
-								href={`https://twitter.com/share?text=${props.blog.title}&url=${SITE_URL}blog/${props.blog.slug}`}
+								href={`https://news.ycombinator.com/submitlink?u=${encodeURIComponent(
+									`${SITE_URL}blog/${props.blog.slug}`
+								)}&t=${encodeURIComponent(props.blog.title)}`}
+								className='flex items-center rounded-xl border border-black/10 bg-black p-3 dark:border-white/10'
+								target='_blank'
+								rel='noreferrer'
+							>
+								<HNLogo />
+							</a>
+							<a
+								href={`https://twitter.com/share?text=${encodeURIComponent(
+									props.blog.title
+								)}&url=${SITE_URL}blog/${props.blog.slug}`}
 								className='flex items-center rounded-xl border border border-black/10 bg-black p-3 dark:border-white/10'
+								target='_blank'
+								rel='noreferrer'
 							>
 								<TwitterLogo />
 							</a>
 							<a
 								href={`https://www.linkedin.com/shareArticle?url=${SITE_URL}blog/${props.blog.slug}&title=${props.blog.title}`}
 								className='flex items-center rounded-xl border border border-black/10 bg-black p-3 dark:border-white/10'
+								target='_blank'
+								rel='noreferrer'
 							>
 								<LinkedInLogo />
+							</a>
+							<a
+								href={`https://mastodon.social/share?text=${encodeURIComponent(
+									`${props.blog.title} ${SITE_URL}blog/${props.blog.slug}`
+								)}`}
+								className='flex items-center rounded-xl border border-black/10 bg-black p-3 dark:border-white/10'
+								target='_blank'
+								rel='noreferrer'
+							>
+								<MastodonLogo />
 							</a>
 						</div>
 						<BlogPrevNext prevPost={props.prevPost} nextPost={props.nextPost} />

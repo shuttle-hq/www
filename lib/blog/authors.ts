@@ -52,6 +52,38 @@ const authors: readonly Author[] = [
 		author_url: 'https://github.com/kaleidawave',
 		author_image_url: 'https://github.com/kaleidawave.png',
 	},
+	{
+		author_id: 'josh',
+		author: 'Joshua Mo',
+		position: '',
+		author_url: 'https://twitter.com/joshmo_dev',
+		author_image_url:
+			'https://cdn.discordapp.com/attachments/1084800035872587838/1143858032502124604/uyRG_Gi9_400x400.jpg',
+	},
+	{
+		author_id: 'stefan',
+		author: 'Stefan Baumgartner',
+		position: 'Owner at Oida.dev',
+		author_url: 'https://twitter.com/ddprrt',
+		author_image_url:
+			'https://cdn.discordapp.com/attachments/1084800035872587838/1143858032720220231/GxgFcPtm_400x400.jpeg',
+	},
+	{
+		author_id: 'ian',
+		author: 'Ian Rumac',
+		position: '',
+		author_url: 'https://twitter.com/IanIsSoAwesome',
+		author_image_url:
+			'https://cdn.discordapp.com/attachments/1084800035872587838/1143858032263057529/D-E2xjlK_400x400.jpg',
+	},
+	{
+		author_id: 'nathan',
+		author: 'Nathan Clark',
+		position: '',
+		author_url: 'https://twitter.com/nathanjclark',
+		author_image_url:
+			'https://cdn.discordapp.com/attachments/1084800035872587838/1143859769392779295/1660048323231.jpg',
+	},
 ]
 
 export default authors
