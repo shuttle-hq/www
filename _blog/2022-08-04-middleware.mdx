@@ -192,7 +192,7 @@ Using `AdHoc` and any of the names of the above mentioned hooks we can instead c
 
 ### [Axum](https://docs.rs/axum/latest/axum/index.html)
 
-Similar to Rocket, Axum is a HTTP framework for web applications. [Axum middleware](https://docs.rs/axum/latest/axum/index.html#middleware) is based of [tower](https://crates.io/crates/tower) which is a separate crate which deals with lower level base for networking in Rust. Axum and tower middleware is referred to a 'layers'.
+Similar to Rocket, Axum is a HTTP framework for web applications. [Axum middleware](https://docs.rs/axum/latest/axum/index.html#middleware) is based of [tower](https://github.com/tower-rs/tower) which is a separate crate which deals with lower level base for networking in Rust. Axum and tower middleware is referred to a 'layers'.
 
 There are several ways to write middleware for Axum. Similar to standard fairings you can create a type that implements the [Layer trait](https://docs.rs/tower/0.4.13/tower/trait.Layer.html). The layer trait decorates / acts apon the [Service trait](https://docs.rs/tower/0.4.13/tower/trait.Service.html).
 

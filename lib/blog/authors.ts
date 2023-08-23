@@ -21,7 +21,7 @@ const authors: readonly Author[] = [
 		author_id: 'christoshadjiaslanis',
 		author: 'Christos Hadjiaslanis',
 		position: 'Founder',
-		author_url: 'https://github.com/christoshadjiaslanis',
+		author_url: 'https://github.com/christos-h',
 		author_image_url: 'https://github.com/christoshadjiaslanis.png',
 	},
 	{

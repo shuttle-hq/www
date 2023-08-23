@@ -433,7 +433,7 @@ enum Errors {
 
 Some crates for making creating these unifying enums easier:
 
-### [thiserror](https://crates.io/crates/thiserror)
+### [thiserror](https://github.com/dtolnay/thiserror)
 
 `thiserror` provides a derive implementation which adds the Error trait for us.
 As previously mentioned, to implement Error we have to implement display and
@@ -458,7 +458,7 @@ pub enum DataStoreError {
 }
 ```
 
-### [anyhow](https://crates.io/crates/anyhow)
+### [anyhow](https://github.com/dtolnay/anyhow)
 
 `anyhow` provides an ergonomic and idiomatic alternative to explicitly
 handling errors. It is similar to the previously mentioned error trait but
@@ -498,7 +498,7 @@ Similar to the `Error` trait, `anyhow` suffers from the fact you can't match on
 `anyhow`'s result error variant. This is why it is suggested in `anyhow`'s
 docs to use `anyhow` for applications and `thiserror` for libraries.
 
-### [eyre](https://crates.io/crates/eyre)
+### [eyre](https://github.com/eyre-rs/eyre)
 
 Finally, `eyre` is a fork of `anyhow` and adds more backtrace information.
 It's highly customisable and using [color-eyre](https://lib.rs/crates/color-eyre) we get colors in our panic messages - a little color

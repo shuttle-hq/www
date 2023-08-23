@@ -271,7 +271,7 @@ With some idea of the code we want to write, we can get Rust to generate the abo
 
 Now we know what code we want to generate, we can write some Rust code to handle a structure and generate the an output token stream.
 
-Rust procedural macros require their own crate for their definition due to constraints on how they are compiled. The unofficial Rust convention for derive macros is the name of trait or crate name + derive. So let's run the following from our current folder `cargo new --lib binary-derive`. We need to let `cargo` know that this crate is a proc macro by defining it in its `Cargo.toml`. We'll also add the dependencies [syn](https://crates.io/crates/syn) for parsing the contents of our structure and [quote](https://crates.io/crates/quote) for generating the output:
+Rust procedural macros require their own crate for their definition due to constraints on how they are compiled. The unofficial Rust convention for derive macros is the name of trait or crate name + derive. So let's run the following from our current folder `cargo new --lib binary-derive`. We need to let `cargo` know that this crate is a proc macro by defining it in its `Cargo.toml`. We'll also add the dependencies [syn](https://github.com/dtolnay/syn) for parsing the contents of our structure and [quote](https://github.com/dtolnay/quote) for generating the output:
 
 ```toml
 [package]

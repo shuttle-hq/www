@@ -208,7 +208,7 @@ async fn shorten(url: String, pool: &State<PgPool>) -> Result<String, Status> {
 }
 ```
 
-I decided to start with the shorten method. The simplest implementation I could think of is to generate a unique id on the fly using the [`nanoid`](https://crates.io/crates/nanoid) crate and then running an `INSERT` statement. Hm - what about duplicates? I decided not to overthink it
+I decided to start with the shorten method. The simplest implementation I could think of is to generate a unique id on the fly using the [`nanoid`](https://github.com/nikolay-govorov/nanoid) crate and then running an `INSERT` statement. Hm - what about duplicates? I decided not to overthink it
 🤷.
 
 ```rust

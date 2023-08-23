@@ -244,7 +244,7 @@ The following will fail because the match arms have different types.
               found struct `std::collections::hash_set::Iter<'_, UserId>`
 ```
 
-The [`either` crate](https://crates.io/crates/either) offers a general purpose sum type [that implements many traits](https://docs.rs/either/1.7.0/either/enum.Either.html#trait-implementations). Using `either::Left` for the once iterator and `either::Right` we can build two iterators into what Rust considers as a single type.
+The [`either` crate](https://github.com/bluss/either) offers a general purpose sum type [that implements many traits](https://docs.rs/either/1.7.0/either/enum.Either.html#trait-implementations). Using `either::Left` for the once iterator and `either::Right` we can build two iterators into what Rust considers as a single type.
 
 ```rust
 impl PostUser {
