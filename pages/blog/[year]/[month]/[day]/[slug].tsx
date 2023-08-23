@@ -231,7 +231,7 @@ export default function BlogPostPage(props: Props) {
 									'prose-headings:before:pt-36',
 									'prose-headings:lg:before:-mt-20',
 									'prose-headings:before:lg:pt-20',
-									'text-xl text-[#525151] prose-h2:text-5xl prose-h4:text-3xl prose-h5:text-2xl dark:text-[#7A7A7A]'
+									'text-xl text-[#525151] prose-h2:text-5xl prose-h3:text-4xl prose-h4:text-3xl prose-h5:text-2xl dark:text-[#7A7A7A]'
 								)}
 							>
 								<MDXRemote {...props.blog.content} components={mdxComponents} />
