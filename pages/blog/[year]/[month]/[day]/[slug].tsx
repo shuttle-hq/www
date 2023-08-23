@@ -171,6 +171,7 @@ export default function BlogPostPage(props: Props) {
 		<>
 			<NextSeo
 				title={props.blog.title}
+				description={props.blog.description}
 				openGraph={{
 					title: props.blog.title,
 					description: props.blog.description,
@@ -264,7 +265,9 @@ export default function BlogPostPage(props: Props) {
 						<div className='mb-20 mt-14 flex items-center space-x-4'>
 							<span className='text-[#525151] dark:text-[#C2C2C2]'>Share article</span>
 							<a
-								href={`https://twitter.com/share?text=${props.blog.title}&url=${SITE_URL}blog/${props.blog.slug}`}
+								href={`https://twitter.com/share?text=${encodeURIComponent(
+									props.blog.title
+								)}&url=${SITE_URL}blog/${props.blog.slug}`}
 								className='flex items-center rounded-xl border border border-black/10 bg-black p-3 dark:border-white/10'
 							>
 								<TwitterLogo />
