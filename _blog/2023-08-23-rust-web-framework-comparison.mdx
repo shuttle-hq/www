@@ -90,23 +90,23 @@ async fn integration_testable_handle_socket(mut socket: WebSocket) {
 - Great developer experience.
 - Still in 0.x, so breaking changes can happen.
 
-### Actix
+### Actix Web
 
-Actix is one of Rust's web frameworks that has been around for a while, and is thus very popular. Like any good open source project it has seen many iterations, but it has reached major versions other than 0 and keeps its stability guarantees: Within a major version, you can be sure that there are no breaking changes.
+Actix Web is one of Rust's web frameworks that has been around for a while, and is thus very popular. Like any good open source project it has seen many iterations, but it has reached major versions other than 0 and keeps its stability guarantees: Within a major version, you can be sure that there are no breaking changes.
 
-When we talk Actix, we specifically talk about [Actix Web](https://actix.rs), which is the web framework part of the Actix project. Actix itself is a project that provides a number of libraries for building concurrent applications, and is based on the actor model. The "Web" part of Actix abstracts lot of the actor model away, and provides a more traditional web framework API.
+When we talk [Actix Web](https://actix.rs), it's easy to assume that it is based on the `actix` actor runtime. However, this has not been the case for over 4 years; the only remaining part of Actix Web which requires actors are WebSockets, but work is ongoing to remove its usage completely since `actix` cannot play nicely with the modern async Rust world. The wider Actix project and GitHub org provides a number of libraries for building concurrent applications, spanning from lower-level TCP server builders, through the HTTP / web layer, up to static file providers and session management crates.
 
-At a first glance, Actix looks very familiar to other web frameworks in Rust. You use macros to define HTTP methods and routes (like Rocket), and you use extractors to get data from the request (like Axum). The similarities with Axum are striking, also in how they name concepts and traits. The biggest difference is that Actix does not tie itself to strong to the Tokio ecosystem. While Tokio is still the runtime underneath Actix, the framework comes with its own abstractions and traits, and also with its own ecosystem of crates. This has pros and cons. On one hand, you can be sure that things usually work well together, on the other hand you might miss out on a lot of things that are already available in the Tokio ecosystem.
+At a first glance, Actix Web looks very familiar to other web frameworks in Rust. You use macros to define HTTP methods and routes (like Rocket), and you use extractors to get data from the request (like Axum). The similarities with Axum are striking, also in how they name concepts and traits. The biggest difference is that Actix Web does not tie itself too strongly to the Tokio ecosystem. While Tokio is still the runtime underneath Actix Web, the framework comes with its own abstractions and traits, and also with its own ecosystem of crates. This has pros and cons. On one hand, you can be sure that things usually work well together, on the other hand you might miss out on a lot of things that are already available in the Tokio ecosystem.
 
-One thing that strikes me odd is that Actix implements its own Service trait, which is basically the same as Tower's, but still incompatible. Which means that most of the available Middleware in the Tower ecosystem is not available for Actix.
+One thing that strikes me odd is that Actix Web implements its own Service trait, which is basically the same as Tower's, but still incompatible. Which means that most of the available Middleware in the Tower ecosystem is not available for Actix.
 
-What's also interesting is that if you need some special tasks in Actix that you need to implement on your own, you might get confronted with the Actor model that runs everything in the framework. This might add some layers of complexity that you might not want to deal with.
+What's also interesting is that if you need some special tasks in Actix Web that you need to implement on your own, you might get confronted with the Actor model that runs everything in the framework. This might add some layers of complexity that you might not want to deal with.
 
-But the community around Actix delivers. The framework supports HTTP/2 and Websocket upgrades, it has crates and guides for the most common tasks in a web framework, excellent (and I mean _excellent_) documentation, and it's fast. Actix is popular for a reason, and if you need to keep version guarantees, it might be your best choice right now.
+But the community around Actix Web delivers. The framework supports HTTP/2 and Websocket upgrades, it has crates and guides for the most common tasks in a web framework, excellent (and I mean _excellent_) documentation, and it's fast. Actix Web is popular for a reason, and if you need to keep version guarantees, it might be your best choice right now.
 
-#### Actix Example
+#### Actix Web Example
 
-A simple [websocket echo server](https://actix.rs/docs/websockets) in Actix looks like this:
+A simple [WebSocket echo server](https://actix.rs/docs/websockets) in Actix Web looks like this:
 
 ```rust
 use actix::{Actor, StreamHandler};
@@ -147,7 +147,7 @@ async fn main() -> std::io::Result<()> {
 }
 ```
 
-#### Actix in a Nutshell
+#### Actix Web in a Nutshell
 
 - Strong, self-contained ecosystem.
 - Actor model based.
