@@ -92,7 +92,7 @@ up a thread for each request[^benchmarks].
 # Getting started with async Rust
 
 Rust does not have a runtime[^rust-runtime] and so doesn't have a standard
-executor (at least for now). There are several popular executor runtimes. These are crates like any other library so you can use them by adding them to the `Cargo.toml`. For this demo we will pick [Tokio](https://tokio.rs/) as it the most popular executor. Other runtimes exist and prioritize different things. For example [async-std](https://docs.rs/async-std/latest/async_std/index.html) is focused on an async version of Rust's standard library and [smol](https://docs.rs/smol/1.2.5/smol/) which is focused on being lightweight. Overall Rust is designed to stay out the way, so it lets you pick which executor you run.
+executor (at least for now). There are several popular executor runtimes. These are crates like any other library so you can use them by adding them to the `Cargo.toml`. For this demo we will pick Tokio Rust (Tokio-rs) - [https://tokio.rs/](https://tokio.rs/) as it the most popular executor. Other runtimes exist and prioritize different things. For example [async-std](https://docs.rs/async-std/latest/async_std/index.html) is focused on an async version of Rust's standard library and [smol](https://docs.rs/smol/1.2.5/smol/) which is focused on being lightweight. Overall Rust is designed to stay out the way, so it lets you pick which executor you run.
 
 To start we will run `cargo new`. Then add `tokio = { version = "1.19", features = ["full"] }` to `Cargo.toml` (or if you have [cargo-edit](https://github.com/killercup/cargo-edit) installed: `cargo add tokio -F full`)
 
@@ -153,7 +153,7 @@ To keep this post short and to the basics we will stop here. If you want to read
 
 # Conclusion
 
-Async Rust is a practical and evolving aspect of the Rust language. While the async features continue to develop, there is room for improvement in the future. You can check the current status of async features and other aspects of the async ecosystem at [areweasyncyet.rs](areweasyncyet.r). This post provides an introductory guide to writing async Rust code, so you can definitely *await* a future post that digs deeper into async in Rust with topics such as; Rust streams, error handling in async code, advanced concurrency patterns, and practical examples of async Rust in real-world applications.
+Async Rust is a practical and evolving aspect of the Rust language. While the async features continue to develop, there is room for improvement in the future. You can check the current status of async features and other aspects of the async ecosystem at [areweasyncyet.rs](areweasyncyet.rs). This post provides an introductory guide to writing async Rust code, so you can definitely *await* a future post that digs deeper into async in Rust with topics such as; Rust streams, error handling in async code, advanced concurrency patterns, and practical examples of async Rust in real-world applications.
 
 
 <hr styles="margin-top: 10px"/>
