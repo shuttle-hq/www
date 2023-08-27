@@ -18,7 +18,7 @@ export const GITHUB_URL = 'https://github.com/shuttle-hq/shuttle'
 
 export const GITHUB_EXAMPLES_URL = 'https://github.com/shuttle-hq/examples'
 
-export const CONTACT_US_URI = 'mailto:hello@shuttle.rs?subject=I%27m%20interested%20in%20Shuttle%20Pro'
+export const CONTACT_US_URI = 'https://btl1d1x5z23.typeform.com/shuttle-pro'
 
 export const DISCORD_URL = 'https://discord.gg/shuttle'
 export const TWITTER_URL = 'https://twitter.com/shuttle_dev'
