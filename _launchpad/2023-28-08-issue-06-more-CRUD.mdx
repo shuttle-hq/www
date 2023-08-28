@@ -1,0 +1,211 @@
+---
+title: "Issue #7: A little more CRUD"
+date: "2023-08-28T16:00:00"
+---
+
+# Shuttle Launchpad #7: A little more CRUD
+
+Welcome to the next issue of Shuttle Launchpad! Before we start, we want to invite you to take a good look at an article we just published, where we [compare all popular Rust web frameworks](https://www.shuttle.rs/blog/2023/08/23/rust-web-framework-comparison). We spent a lot of time investigating and trying to go a bit deeper than just the surface. We hope you enjoy it!
+
+## Defining traits
+
+This time I want to go back to a launchpad issue that we did [the last time](https://www.shuttle.rs/launchpad/issues/2023-11-08-issue-06-CRUD-Postgres), where we created a simple CRUD application. The app is nice, but there is something that annoys me personally. Let's take a look at the two handler functions that we created.
+
+The `create_article` function is using the `QueryBuilder` and manually handles the result of the query execution. The `get_article` is much more direct as it executes an SQL statement and maps the result to a `Json<Article>`.
+
+```rust
+async fn create_article(
+    State(pool): State<PgPool>,
+    Json(new_article): Json<Article>,
+) -> impl IntoResponse {
+    // Insert the new article into the database
+    let mut query_builder: QueryBuilder<Postgres> =
+        QueryBuilder::new("INSERT INTO articles (title, content, published_date)");
+
+    query_builder.push_values([new_article], |mut b, article| {
+        b.push_bind(article.title)
+            .push_bind(article.content)
+            .push_bind(article.published_date);
+    });
+
+    let result = query_builder.build().execute(&pool).await;
+
+    match result {
+        Ok(_) => (StatusCode::OK, "Article created".to_string()),
+        Err(e) => (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            format!("Error creating article: {}", e.to_string()),
+        ),
+    }
+}
+
+async fn get_article(
+    Path(article_id): Path<usize>,
+    State(pool): State<PgPool>,
+) -> Result<Json<Article>, (StatusCode, String)> {
+    let query = format!(
+        "SELECT title, content, published_date FROM articles WHERE id = {}",
+        article_id
+    );
+    let result = sqlx::query_as(&query);
+
+    let article: Article = result.fetch_one(&pool).await.map_err(|_| {
+        (
+            StatusCode::NOT_FOUND,
+            format!("Article with id {} not found", article_id),
+        )
+    })?;
+    Ok(Json(article))
+}
+```
+
+While this works, you can see that it's noisy, too different, and probably confusing. Code should always be expressive and easy to read. So let's try to make the two handler functions look more similar.
+
+The reason why both functions look so different is how they create the SQL statements for their respective queries. The `create_article` function uses the `QueryBuilder` to create the SQL statement. We need the `QueryBuilder` because we want to map struct properties to an existing SQL statement. `get_article` on the other hand, uses a string literal to create the SQL statement. It's easier because the only thing we care about is the actual ID of the article.
+
+Both queries are related to how `Article` thinks about its properties. So why don't we create associated methods to `Article` that return the SQL statements?
+
+It would be easy to create an `impl` block and add a new method to it, but we can go one step further. Let's abstract the behavior of creating SQL statements into a trait. This way we can implement the trait for `Article` and any other struct that needs to create SQL statements.
+
+We define a new trait called `SQLStatements` that has two associated methods. One for inserting a new record and one for selecting a record. Both methods return a `String` because that's what we need to execute the query.
+
+```rust
+trait SQLStatements<T> {
+    fn insert(&self) -> String;
+    fn select(key: T) -> String;
+}
+```
+
+`insert` needs to take a shared reference `self`. `self` will be the `Article` once we implement it. We need this because we want to define which properties of the struct are actually added to a new row in our `articles` table.
+
+`select` doesn't need an instance, but it needs a key or selection criteria. In our case, we want to select an `Article` by its ID. However, we don't want to be too concrete when defining the trait. This is why we use a generic type parameter `T`, to tell Rust: This will be substituted by something concrete in the end.
+
+Let's write the `impl` block for `Article`, where we implement `SQLStatements` over a type `usize`. `usize` is the concrete type for `key` in `select`.
+
+```rust
+impl SQLStatements<usize> for Article {
+    // ...
+}
+```
+
+First, let's implement the `insert` function. We basically copy the code from `create_article` and replace `new_article` with `self`.
+
+We now refer to concrete properties from the `Article` instance, but something has changed. Since the ownership rules of `&self` tell us that we only have a reference, we can't move ownership of its properties to the `QueryBuilder`. This is why we need to clone the properties.
+
+Alternatively, you can think of changing the method signature of `insert` so it expects an owned `self`. This has some implications on what you can do with `Article` later on. Think about it, what could that be?
+
+The last line transforms the `query_builder` into a `String` that we can return.
+
+```rust
+fn insert(&self) -> String {
+    let mut query_builder: QueryBuilder<Postgres> =
+        QueryBuilder::new("INSERT INTO articles (title, content, published_date)");
+
+    query_builder.push_values([self], |mut b, article| {
+        b.push_bind(article.title.clone())
+            .push_bind(article.content.clone())
+            .push_bind(article.published_date.clone());
+    });
+    query_builder.into_sql()
+}
+```
+
+The `select` method is even easier. We get a `key` of type `usize` and return a `String`. So it's just the one line from before that we need to copy.
+
+```rust
+
+fn select(key: usize) -> String {
+    format!(
+        "SELECT title, content, published_date FROM articles WHERE id = {}",
+        key
+    )
+}
+```
+
+Okey-dokey! Now that we have our trait and its implementation, we can refactor our handlers. We create two helper functions that deal with standard errors that we might encounter.
+
+```rust
+fn not_found(e: sqlx::Error) -> (StatusCode, String) {
+    (
+        StatusCode::NOT_FOUND,
+        format!("Article with id {} not found", e),
+    )
+}
+
+fn internal_server_error(e: sqlx::Error) -> (StatusCode, String) {
+    (
+        StatusCode::INTERNAL_SERVER_ERROR,
+        format!("Error creating article: {}", e),
+    )
+}
+```
+
+We then refactor `create_article` to use our newly created associated methods. See that we do an `sqlx` query with the return value of `new_article.insert()`. Then we execute the query, and deal with the results in `map` or `map_err`.
+
+```rust
+async fn create_article(
+    State(pool): State<PgPool>,
+    Json(new_article): Json<Article>,
+) -> impl IntoResponse {
+    sqlx::query(&new_article.insert())
+        .execute(&pool)
+        .await
+        .map(|_| (StatusCode::OK, "Article created".to_string()))
+        .map_err(internal_server_error)
+}
+```
+
+The `get_article` function is very similar. We create an `sqlx` query with the return value of `Article::select(article_id)`. Here, we don't have an instance (that's what we query anyway), so we use the struct name and execute the `select` method.
+
+Then -- just like before -- we execute the query (`fetch_one`) and deal with the results in `map` or `map_err`.
+
+```rust
+async fn get_article(
+    Path(article_id): Path<usize>,
+    State(pool): State<PgPool>,
+) -> Result<Json<Article>, (StatusCode, String)> {
+    sqlx::query_as(&Article::select(article_id))
+        .fetch_one(&pool)
+        .await
+        .map(Json)
+        .map_err(not_found)
+}
+```
+
+Now look at that. See how beautiful and similar both functions look? We have abstracted the behavior of creating SQL statements into a trait and implemented it for `Article`. This way, we can easily add new structs that need to create SQL statements.
+
+And since it's a trait, you can implement the same for other structs as well! Suddenly all your functions become clearer, easier to write, and less error-prone. All by adding a little bit of abstraction.
+
+Don't forget to deploy your app:
+
+```bash
+$ cargo shuttle deploy
+```
+
+What could you do next? What about
+
+- Trying to abstract the SQL statement away as well. What if you get an actual article when calling `Article::select(key)`? How would you implement that? What would be a good abstraction?
+- And if you go that route, what about async methods in Rust? They are not so easily implemented at the time of this writing, but there are some crates that help you with that. Can you find it? How does it work?
+
+
+## Time for your feedback!
+
+We want to tailor Shuttle Launchpad to your needs! [Give us feedback](https://btl1d1x5z23.typeform.com/to/dTU2F8jI) on the most recent issue and your wishes here.
+
+## Join us!
+
+Shuttle has a very active community. Join us on [Discord](https://discord.gg/shuttle), star us on [GitHub](https://github.com/shuttle-hq/shuttle), follow us on [Twitter](https://twitter.com/shuttle_dev), and watch out for video content on [YouTube](https://www.youtube.com/@shuttle-dev).
+
+If you have any questions regarding _Launchpad_, join the `#launchpad` channel on Shuttle's [Discord](https://discord.gg/shuttle).
+
+## Links, Videos, Tutorials
+
+[_Launchpad Examples_](https://github.com/ddprrt/shuttle-launchpad-examples): Check out all Launchpad Examples on GitHub.
+
+[_Best Rust Web Frameworks to Use in 2023_](https://www.shuttle.rs/blog/2023/08/23/rust-web-framework-comparison): A detailled analysis of Rust web frameworks by your's truly.
+
+## Bye!
+
+That's it for today. Get in touch with us and let us know what you want to see!
+
+-- [Stefan](https://oida.dev) and your friends from [Shuttle](https://shuttle.rs)
