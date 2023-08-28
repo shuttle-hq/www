@@ -132,7 +132,7 @@ const Pricing = () => {
 						</p>
 						<p className='mt-1 text-sm text-[#C2C2C2]'>custom pricing</p>
 					</div>
-					<ContactUsButton variant='secondary'>Contact Us</ContactUsButton>
+					<ContactUsButton variant='secondary'>Get Started</ContactUsButton>
 				</div>
 			</div>
 			<div className='mt-24 lg:mt-32'>
