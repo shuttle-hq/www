@@ -41,21 +41,22 @@ CREATE TABLE IF NOT EXISTS sessions (
 );
 ```
 
-When we run our app we'll run the migrate macro, which will automatically attempt to run our migrations and add a new migration entry to the table so it won't automatically try to run the migration again. However, if you change your migrations file it'll return an invalid migrations error, which means you'll have to visit your database using psql or your favourite DB management application and delete all of the tables in your database.
+When we run our app we'll run the migrate macro, which will automatically attempt to run our migrations and add a new migration entry to the table so it won't automatically try to run the migration again.
 
 ## Getting Started
 To get started, you'll want to create a new project by running the following:
 ```sh
 cargo shuttle init
 ```
-For the purposes of this project we'll be initialising the backend within our frontend and initialising the directory as 
-`backend`. 
+We'll want to pick "axum" as the framework. For the purposes of the project we will refer to the project name as "oauth-rust".
+
+Looking to deploy? Make sure you enable initialising your project on the Shuttle servers!
 
 Next we'll want to install our dependencies - copy the script below to install everything in one go:
 ```sh
 cargo add axum --features multipart,macros
 cargo add axum-extra --features cookie-private
-cargo add chrono features --clock
+cargo add chrono --features clock
 cargo add shuttle-shared-db --features postgres,sqlx
 cargo add sqlx --features runtime-tokio-native-tls,macros,chrono
 cargo add tower-http --features cors,fs
@@ -71,19 +72,25 @@ GOOGLE_OAUTH_CLIENT_SECRET = "Your key here"
 Then we'll want to get started on setting up our main entrypoint function! We can get it set up like so:
 
 ```rs
+// main.rs
+use reqwest::Client as ReqwestClient;
 #[derive(Clone)]
 pub struct AppState {
     db: PgPool,
-    ctx: Client,
+    ctx: ReqwestClient,
     key: Key
 }
 
-// we are required to implement FromRef as it will allow axum's `Key` to be cloned
-// this means we can use a private cookie jar
+// implementing FromRef is required here so we can extract substate in Axum
+// read more here: https://docs.rs/axum/latest/axum/extract/trait.FromRef.html
 impl FromRef<AppState> for Key {
     fn from_ref(state: &AppState) -> Self {
         state.key.clone()
     }
+}
+
+async fn hello_world() -> &'static str {
+    "Hello world!"
 }
 
 #[shuttle_runtime::main]
@@ -93,11 +100,11 @@ async fn axum(
 ) -> shuttle_axum::ShuttleAxum {
     sqlx::migrate!().run(&db).await.expect("Failed migrations :(");
 
-    // getting secrets from our SecretsStore - safe to unwrap as they're required for the app to work
+    // Getting secrets from our SecretsStore - safe to unwrap as they're required for the app to work
     let oauth_id = secrets.get("GOOGLE_OAUTH_CLIENT_ID").unwrap();
     let oauth_secret = secrets.get("GOOGLE_OAUTH_CLIENT_SECRET").unwrap();
 
-    let ctx = Client::new();
+    let ctx = ReqwestClient::new();
 
     let state = AppState {
         db,
@@ -105,6 +112,10 @@ async fn axum(
         key: Key::generate()
     };
 
+    let router = Router::new().route("/", get(hello_world));
+
+    // More info about this below - we will build an oauth client that can interface with any OAuth service
+    // Depending on the URLs we pass into it - read more here: https://docs.rs/oauth2/latest/oauth2/struct.Client.html?search=bassiclient#method.new
     let client = build_oauth_client(oauth_id, oauth_secret);
         
     Ok(router.into())
@@ -113,13 +124,14 @@ async fn axum(
 ## But how do I use OAuth?
 First, we will need to write a function to create an `oauth2::BasicClient`. This client can take any OAuth authorization endpoint URL and token endpoint URL (as long as they're both from the same OAuth service). We can pass in our Google OAuth secrets that we created earlier, like so:
 
+Our redirect URL should be an endpoint that we create on our side so when the user gets successfully authorised, they get sent back to our application with a code we can exchange for a token that allows a user to stay authenticated.
 ```rs
 // main.rs
 fn build_oauth_client(client_id: String, client_secret: String) -> BasicClient {
-// in prod, http://localhost:8000 would get replaced by whatever your production URL is
+// In prod, http://localhost:8000 would get replaced by whatever your production URL is
     let redirect_url = "http://localhost:8000/api/auth/google_callback".to_string();
 
-// if you're not using Google OAuth, you can use whatever the relevant auth/token URL is for your given OAuth service
+// If you're not using Google OAuth, you can use whatever the relevant auth/token URL is for your given OAuth service
     let auth_url = AuthUrl::new("https://accounts.google.com/o/oauth2/v2/auth".to_string())
         .expect("Invalid authorization endpoint URL");
     let token_url = TokenUrl::new("https://www.googleapis.com/oauth2/v3/token".to_string())
@@ -154,14 +166,14 @@ async fn homepage(
 
 To get this route to work, you'll want to create a Router that layers an `axum::Extension`, then nest it onto your main router:
 ```rs
-// use the oauth_id from earlier in your main function
+// Use the oauth_id from earlier in your main function
 
 let homepage_router = Router::new()
    .route("/", get(homepage))
    .layer(Extension(oauth_id));
 ```
 
-Once we allow the application to use our user's credentials, Google will then fire a GET request to our chosen OAuth redirect URI as seen in the homepage router, with some URI query parameters. Although there's multiple parameters returned, for us we only need the code response given back by Google so we can exchange it for an access token. We can make a struct to extract the
+Once we allow the application to use our user's credentials, Google will fire a GET request to our chosen OAuth redirect URI as seen in the homepage router, with some URI query parameters. Although there's multiple parameters returned, for us we only need the code response given back by Google so we can exchange it for an access token. We can make a struct to extract the
 query parameters:
 ```rs
 #[derive(Debug, Deserialize)]
@@ -188,18 +200,18 @@ Then we need to exchange the code for a token by using our `BasicClient` we made
 The token returned by exchanging the token holds all of the information from the response and has methods to get all of the
 required fields that we need (life duration of the access token, the code, etc...).
 
-Because we requested for OpenID privileges earlier, we can now access any of Google's OpenID using the access token that was 
-given to us. Thankfully, this is pretty simple to do without the oauth2 crate and we only need to use a simple `Reqwest` client
-with bearer auth to get the user profile data, like so:
+Because we requested OpenID privileges earlier, we can now access any of Google's OpenID using the access token that was 
+given to us (that we required permissions for, as per the redirect URI). Thankfully, this is pretty simple to do without the 
+oauth2 crate and we only need to use a simple `Reqwest` client with bearer auth to get the user profile data, like so:
 ```rs
-// place this struct declaration outside of the function
 #[derive(Deserialize, sqlx::FromRow, Clone)]
 pub struct UserProfile {
     email: String
 }
 
-// note that in the full code, the reqwest client is already created in the main function
-// and passed to the AppState. Creating the client itself takes 300-500ms, saving time
+// Note that in the full code, the reqwest client is already created in the main function
+// and passed to the AppState. Rather than initializing a Reqwest client with a connection pool
+// for every request, we share it in the router state.
 let profile = match state.ctx.get("https://openidconnect.googleapis.com/v1/userinfo")
     .bearer_auth(token.access_token().secret().to_owned())
     .send().await {
@@ -211,11 +223,12 @@ let profile = profile.json::<UserProfile>().await.unwrap();
 ```
 As you can see, we needed to create a struct for the type. This particular OIDC endpoint returns much more than just an email
 and you'll be able to see that if you use `.text().await.unwrap()` instead of trying to convert the response to JSON - however,
-for our purposes currently we only need the email for the purposes of verification. 
+for our purposes currently we only need the email for verification - `serde` ignores unknown fields (unless [deny_unknown_fields](https://serde.rs/container-attrs.html#deny_unknown_fields) is enabled),
+so this is safe to do. 
 
 ## Using OAuth with Axum Extensions
-Now that we've got our access token, all we need to do is primarily is storing the token somewhere and allowing our service to
-find the token. We can do this with SQLx and usage of the `PrivateCookieJar` type from `axum_extra`, which uses cryptographically secure cookies. Let's have a look at what the code would look like:
+Now that we've got our access token, all we need to do is store the token somewhere our service can access it. We can do this with SQLx and usage of the 
+`PrivateCookieJar` type from `axum_extra`, which uses cryptographically secure cookies. Let's have a look at what the code would look like:
 
 ```rs
 let secs: i64 = token.expires_in().unwrap().as_secs().try_into().unwrap();
@@ -309,21 +322,23 @@ pub async fn google_callback(
         .bind(profile.email.clone())
         .execute(&state.db)
         .await {
-        error!("Error while trying to make account: {e}")
+        error!("Error while trying to make account: {e}");
+        return Err((StatusCode::INTERNAL_SERVER_ERROR, format!("Error trying to create account: {e}")))
     }
     
-    if let Err(e) = sqlx::query("INSERT INTO sessions (user_id, session_id, expires_at) VALUES (
+    if let Err(e) = sqlx::query(r#"INSERT INTO sessions (user_id, session_id, expires_at) VALUES (
         (SELECT ID FROM USERS WHERE email = $1 LIMIT 1),
          $2, $3)
         ON CONFLICT (user_id) DO UPDATE SET 
         session_id = excluded.session_id, 
-        expires_at = excluded.expires_at")
+        expires_at = excluded.expires_at"#)
         .bind(profile.email)
         .bind(token.access_token().secret().to_owned())
         .bind(max_age)
         .execute(&state.db)
         .await {
         error!("Error while trying to make session: {e}");
+        return Err((StatusCode::INTERNAL_SERVER_ERROR, format!("Error trying to create session: {e}")))
     }
 
     Ok((
@@ -336,7 +351,7 @@ pub async fn google_callback(
 So now that we've finished handling the callback, we'll want to add our protected route. However, before that we need to make sure it's actually protected - we can do that by writing a middleware that will check whether or not the user has a cookie, then grabs the email from our own database, adds it as an extension to the request itself and then the protected route will return the extension we passed in.
 
 ```rs
-pub async fn check_authenticated<B>(
+pub async fn check_authorized<B>(
     State(state): State<AppState>,
     jar: PrivateCookieJar,
     mut req: Request<B>,
@@ -344,7 +359,7 @@ pub async fn check_authenticated<B>(
 ) -> Result<impl IntoResponse, impl IntoResponse> {
 // return early if no cookie exists
     let Some(cookie) = jar.get("sid").map(|cookie| cookie.value().to_owned()) else {
-        return Err((StatusCode::FORBIDDEN, "Forbidden!".to_string()));
+        return Err((StatusCode::UNAUTHORIZED, "Unauthorized!".to_string()));
     };
     
     let res = match sqlx::query_as::<_, UserProfile>("SELECT 
@@ -359,19 +374,19 @@ pub async fn check_authenticated<B>(
         Ok(res) => res,
         Err(e) => {
         // if user has cookie but doesn't match, return forbidden
-                return Err((StatusCode::FORBIDDEN, e.to_string()))
+                return Err((StatusCode::UNAUTHORIZED, e.to_string()))
             }
     };
 
-    // initialise struct - feel free to extend this if you grabbed more information from the OIDC endpoint
+    // Initialise struct - feel free to extend this if you grabbed more information from the OIDC endpoint
     let user = UserProfile {
         email: res.email
     };
 
-    // grab extensions as mutable and insert the UserProfile struct
+    // Grab extensions as mutable and insert the UserProfile struct
     req.extensions_mut().insert(user);
     
-    // run the endpoint with the added extension
+    // Run the endpoint with the added extension
     Ok(next.run(req).await)
 }
 ```
@@ -406,6 +421,13 @@ async fn axum(
 
     let oauth_client = build_oauth_client(oauth_id.clone(), oauth_secret);
 
+    let router = init_router(state, oauth_client);
+
+    Ok(router.into())
+}
+
+fn init_router(state: AppState, oauth_client: BasicClient) -> Router {
+    
     let auth_router = Router::new()
         .route("/auth/google_callback", get(oauth::google_callback));
 
@@ -417,19 +439,19 @@ async fn axum(
         .route("/", get(homepage))
         .layer(Extension(oauth_id));
 
-    let router = Router::new()
+    Router::new()
         .nest("/api", auth_router)
         .nest("/protected", protected_router)
         .nest("/", homepage_router)
         .layer(Extension(oauth_client))
-        .with_state(state);
-
-    Ok(router.into())
+        .with_state(state)
 }
 ```
 
 ## Deploying to Production
 Once we're done implementing OAuth, all you need to do is use `cargo shuttle deploy` (with `--allow-dirty` if you're working on a dirty Git branch) and it'll work!
+
+If you didn't initialise your project on Shuttle servers before, make sure your project container is started. You can do so by running `cargo shuttle project start`.
 
 ## Finishing Up
 Thanks for reading! I hope you now have a better understanding of working with OAuth in Axum and leveraging the [oauth2](https://crates.io/crates/oauth2) library to be able to more easily communicate with OAuth services.
