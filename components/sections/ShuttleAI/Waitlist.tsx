@@ -20,7 +20,7 @@ export const Waitlist: FC<WaitListProps> = ({ cta, description, subDescription }
 			<h2 className='text-gradient mt-12 max-w-4xl bg-clip-text text-center font-gradual text-[56px] font-bold leading-[150%] text-[#C2C2C2]'>
 				{cta}
 			</h2>
-			<p className='mt-8 max-w-2xl text-center text-xl text-[#7A7A7A]'>{description}</p>
+			<p className='mt-8 max-w-2xl text-center text-xl text-[#BEBEBE]'>{description}</p>
 			<div className='mt-10 flex flex-col items-center justify-center text-center font-gradual text-lg font-bold sm:flex-row'>
 				<Link
 					href='https://btl1d1x5z23.typeform.com/shuttle-ai'
@@ -31,7 +31,7 @@ export const Waitlist: FC<WaitListProps> = ({ cta, description, subDescription }
 				</Link>
 			</div>
 
-			{subDescription && <p className='mt-4 text-center text-xl text-[#7A7A7A]'>{subDescription}</p>}
+			{subDescription && <p className='mt-4 text-center text-xl text-[#BEBEBE]'>{subDescription}</p>}
 		</section>
 	)
 }

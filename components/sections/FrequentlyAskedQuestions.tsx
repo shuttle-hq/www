@@ -2,10 +2,10 @@ import clsx from 'clsx'
 import { Button } from 'components/elements'
 import Image from 'next/image'
 import { FC, useState } from 'react'
-import {DISCORD_URL} from "../../lib/constants";
+import { DISCORD_URL } from '../../lib/constants'
 
 export interface QuestionAttrs {
-	question: string,
+	question: string
 	answer: string
 }
 
@@ -65,7 +65,7 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 										fill='none'
 										xmlns='http://www.w3.org/2000/svg'
 									>
-										<path d='M7 16.5L24 16.5' stroke='#7A7A7A' strokeWidth={2} />
+										<path d='M7 16.5L24 16.5' stroke='#BEBEBE' strokeWidth={2} />
 									</svg>
 								) : (
 									<svg
@@ -75,8 +75,8 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 										fill='none'
 										xmlns='http://www.w3.org/2000/svg'
 									>
-										<path d='M15.5 8V25' stroke='#7A7A7A' strokeWidth={2} />
-										<path d='M7 16.5L24 16.5' stroke='#7A7A7A' strokeWidth={2} />
+										<path d='M15.5 8V25' stroke='#BEBEBE' strokeWidth={2} />
+										<path d='M7 16.5L24 16.5' stroke='#BEBEBE' strokeWidth={2} />
 									</svg>
 								)}
 							</button>
@@ -89,13 +89,13 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 							src='/images/sections/frequently-asked-questions/stars.png'
 							alt='stars'
 							fill
-							className='pointer-events-none absolute top-0 left-0 z-[-1] h-full w-full object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
+							className='pointer-events-none absolute left-0 top-0 z-[-1] h-full w-full object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
 						/>
 						<Image
 							src='/images/sections/frequently-asked-questions/stars-2.png'
 							alt='stars 2'
 							fill
-							className='pointer-events-none absolute top-0 left-0 z-[-1] h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
+							className='pointer-events-none absolute left-0 top-0 z-[-1] h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
 						/>
 						<h3 className='text-2xl text-[#C2C2C2]'>Want to know more?</h3>
 						<p className='mt-2 text-[#C2C2C2]'>

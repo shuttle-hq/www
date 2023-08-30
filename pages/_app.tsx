@@ -39,7 +39,7 @@ export default function App({ Component, pageProps }: AppProps) {
 					cardType: 'summary_large_image',
 				}}
 			/>
-			<div className='min-h-screen bg-transparent text-black dark:text-[#7A7A7A]'>
+			<div className='min-h-screen bg-transparent text-black dark:text-[#BEBEBE]'>
 				<StarOnGithub />
 				{getLayout(<Component {...pageProps} />)}
 				<CookieConsent
@@ -47,7 +47,7 @@ export default function App({ Component, pageProps }: AppProps) {
 					contentClasses='text-base text-[#FFFFFF8F] !m-0 !flex-none tracking-tight self-start'
 					buttonWrapperClasses='!mt-3'
 					buttonClasses='!m-0 !py-3 !px-6 gap-2 whitespace-nowrap rounded-button font-bold transition-all duration-500 button-shadow dark:border-gradient dark:shadow-gradient bg-[#E9E9E9] text-black hover:bg-gradient-to-r hover:from-[#fc540c] hover:to-[#f5c57a] hover:text-white dark:bg-black dark:text-[#C2C2C2] dark:hover:bg-none'
-					declineButtonClasses='!p-0 !mr-6 !ml-0 !my-0 !bg-transparent text-[#7A7A7A] hover:text-[#FFFFFF] underline transition duration-500'
+					declineButtonClasses='!p-0 !mr-6 !ml-0 !my-0 !bg-transparent text-[#BEBEBE] hover:text-[#FFFFFF] underline transition duration-500'
 					enableDeclineButton={true}
 					declineButtonText='Decline'
 					buttonText='Allow'
