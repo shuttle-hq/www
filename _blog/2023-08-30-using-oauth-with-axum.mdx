@@ -7,9 +7,11 @@ thumb: rust-best-frameworks-thumbnail.png
 cover: rust-best-frameworks-thumbnail.png
 date: '2023-08-30T18:18:00'
 ---
-# Implementing OAuth 2.0 in Axum with Rust
-In this post, we'll be learning how to use OAuth with Axum in Rust by writing a backend service that will interact with
-[Google OAuth](https://developers.google.com/identity/protocols/oauth2) and will interact with an [OpenID Connect](https://auth0.com/docs/authenticate/protocols/openid-connect-protocol) ("OIDC") service from Google to retrieve a user's email. We'll first learn to use the [oauth2](https://crates.io/crates/oauth2) library to authorise our users using database-backed sessions to keep them authenticated with a private cookie jar, then we'll use a middleware to authenticate users and insert an extension to the request from the middleware.
+# Implementing OAuth 2.0 in Rust
+In this post, we'll be learning how to implement OAuth in Rust by writing a backend service that will interact with
+[Google OAuth](https://developers.google.com/identity/protocols/oauth2) and will interact with [OpenID Connect](https://auth0.com/docs/authenticate/protocols/openid-connect-protocol) ("OIDC") service from Google to retrieve a user's email.
+We'll first learn to use the [oauth2](https://crates.io/crates/oauth2) library to authorise our users using database-backed sessions to 
+keep them authenticated with a private cookie jar, then we'll use a middleware for Rust authentication to authenticate users and insert an extension to the request from the middleware. 
 
 The final code for the repository can be found [here.](https://github.com/joshua-mo-143/oauth-axum-shuttle-ex)
 
@@ -122,9 +124,7 @@ async fn axum(
 }
 ```
 ## But how do I use OAuth?
-First, we will need to write a function to create an `oauth2::BasicClient`. This client can take any OAuth authorization endpoint URL and token endpoint URL (as long as they're both from the same OAuth service). We can pass in our Google OAuth secrets that we created earlier, like so:
-
-Our redirect URL should be an endpoint that we create on our side so when the user gets successfully authorised, they get sent back to our application with a code we can exchange for a token that allows a user to stay authenticated.
+First, we will need to write a function to create an `oauth2::BasicClient`. This client can take any OAuth authorization endpoint URL and token endpoint URL (as long as they're both from the same OAuth service). We can pass in our Google OAuth secrets that we created earlier, as you'll be able to see below. Our redirect URL should be an endpoint that we create on our side so when the user gets successfully authorised, they get sent back to our application with a code we can exchange for a token that allows a user to stay authenticated.
 ```rs
 // main.rs
 fn build_oauth_client(client_id: String, client_secret: String) -> BasicClient {
@@ -200,9 +200,7 @@ Then we need to exchange the code for a token by using our `BasicClient` we made
 The token returned by exchanging the token holds all of the information from the response and has methods to get all of the
 required fields that we need (life duration of the access token, the code, etc...).
 
-Because we requested OpenID privileges earlier, we can now access any of Google's OpenID using the access token that was 
-given to us (that we required permissions for, as per the redirect URI). Thankfully, this is pretty simple to do without the 
-oauth2 crate and we only need to use a simple `Reqwest` client with bearer auth to get the user profile data, like so:
+Because we requested OpenID privileges earlier, we can now access any of Google's OpenID using the access token that was given to us (that we required permissions for, as per the redirect URI). Thankfully, this is pretty simple to do without the oauth2 crate and we only need to use a simple `Reqwest` client with bearer auth to get the user profile data, like so:
 ```rs
 #[derive(Deserialize, sqlx::FromRow, Clone)]
 pub struct UserProfile {
@@ -221,14 +219,11 @@ let profile = match state.ctx.get("https://openidconnect.googleapis.com/v1/useri
 
 let profile = profile.json::<UserProfile>().await.unwrap();
 ```
-As you can see, we needed to create a struct for the type. This particular OIDC endpoint returns much more than just an email
-and you'll be able to see that if you use `.text().await.unwrap()` instead of trying to convert the response to JSON - however,
-for our purposes currently we only need the email for verification - `serde` ignores unknown fields (unless [deny_unknown_fields](https://serde.rs/container-attrs.html#deny_unknown_fields) is enabled),
+As you can see, we needed to create a struct for the type. This particular OIDC endpoint returns much more than just an email and you'll be able to see that if you use `.text().await.unwrap()` instead of trying to convert the response to JSON - however, for our purposes currently we only need the email for verification - `serde` ignores unknown fields (unless [deny_unknown_fields](https://serde.rs/container-attrs.html#deny_unknown_fields) is enabled),
 so this is safe to do. 
 
 ## Using OAuth with Axum Extensions
-Now that we've got our access token, all we need to do is store the token somewhere our service can access it. We can do this with SQLx and usage of the 
-`PrivateCookieJar` type from `axum_extra`, which uses cryptographically secure cookies. Let's have a look at what the code would look like:
+Now that we've got our access token, all we need to do is store the token somewhere our service can access it. We can do this with SQLx and usage of the `PrivateCookieJar` type from `axum_extra`, which uses cryptographically secure cookies. Let's have a look at what the code would look like:
 
 ```rs
 let secs: i64 = token.expires_in().unwrap().as_secs().try_into().unwrap();
@@ -453,8 +448,8 @@ Once we're done implementing OAuth, all you need to do is use `cargo shuttle dep
 
 If you didn't initialise your project on Shuttle servers before, make sure your project container is started. You can do so by running `cargo shuttle project start`.
 
-## Finishing Up
-Thanks for reading! I hope you now have a better understanding of working with OAuth in Axum and leveraging the [oauth2](https://crates.io/crates/oauth2) library to be able to more easily communicate with OAuth services.
+# Finishing Up
+Thanks for reading! I hope you enjoyed this guide to implementing OAuth in Rust and leveraging the [oauth2](https://crates.io/crates/oauth2) library for Rust auth.
 
 Some extra ideas if you'd like to extend this article:
 - Silent token rotation
