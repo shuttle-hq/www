@@ -73,7 +73,7 @@ GOOGLE_OAUTH_CLIENT_SECRET = "Your key here"
 ```
 Then we'll want to get started on setting up our main entrypoint function! We can get it set up like so:
 
-```rs
+```rust
 // main.rs
 use reqwest::Client as ReqwestClient;
 #[derive(Clone)]
@@ -125,7 +125,7 @@ async fn axum(
 ```
 ## But how do I use OAuth?
 First, we will need to write a function to create an `oauth2::BasicClient`. This client can take any OAuth authorization endpoint URL and token endpoint URL (as long as they're both from the same OAuth service). We can pass in our Google OAuth secrets that we created earlier, as you'll be able to see below. Our redirect URL should be an endpoint that we create on our side so when the user gets successfully authorised, they get sent back to our application with a code we can exchange for a token that allows a user to stay authenticated.
-```rs
+```rust
 // main.rs
 fn build_oauth_client(client_id: String, client_secret: String) -> BasicClient {
 // In prod, http://localhost:8000 would get replaced by whatever your production URL is
@@ -151,7 +151,7 @@ Now that we've created our BasicClient, we can use it anywhere we wish! Before w
 first examine how OAuth works. First we need to make up our link to the Google OAuth for our backend. Here we have a premade
 route that has the oauth ID inserted in for you already (click [here](https://developers.google.com/identity/protocols/oauth2/web-server#creatingclient) to find out more about customising your OAuth URL):
 
-```rs
+```rust
 async fn homepage(
     Extension(oauth_id): Extension<String>
 ) -> Html<String> {
@@ -165,7 +165,7 @@ async fn homepage(
 ```
 
 To get this route to work, you'll want to create a Router that layers an `axum::Extension`, then nest it onto your main router:
-```rs
+```rust
 // Use the oauth_id from earlier in your main function
 
 let homepage_router = Router::new()
@@ -175,7 +175,7 @@ let homepage_router = Router::new()
 
 Once we allow the application to use our user's credentials, Google will fire a GET request to our chosen OAuth redirect URI as seen in the homepage router, with some URI query parameters. Although there's multiple parameters returned, for us we only need the code response given back by Google so we can exchange it for an access token. We can make a struct to extract the
 query parameters:
-```rs
+```rust
 #[derive(Debug, Deserialize)]
 pub struct AuthRequest {
     code: String
@@ -183,7 +183,7 @@ pub struct AuthRequest {
 ```
 
 Then we need to exchange the code for a token by using our `BasicClient` we made earlier:
-```rs
+```rust
 // "async_http_client" is from oauth2::reqwest::async_http_client
     let token = match oauth_client
         .exchange_code(AuthorizationCode::new(query.code))
@@ -201,7 +201,7 @@ The token returned by exchanging the token holds all of the information from the
 required fields that we need (life duration of the access token, the code, etc...).
 
 Because we requested OpenID privileges earlier, we can now access any of Google's OpenID using the access token that was given to us (that we required permissions for, as per the redirect URI). Thankfully, this is pretty simple to do without the oauth2 crate and we only need to use a simple `Reqwest` client with bearer auth to get the user profile data, like so:
-```rs
+```rust
 #[derive(Deserialize, sqlx::FromRow, Clone)]
 pub struct UserProfile {
     email: String
@@ -225,7 +225,7 @@ so this is safe to do.
 ## Using OAuth with Axum Extensions
 Now that we've got our access token, all we need to do is store the token somewhere our service can access it. We can do this with SQLx and usage of the `PrivateCookieJar` type from `axum_extra`, which uses cryptographically secure cookies. Let's have a look at what the code would look like:
 
-```rs
+```rust
 let secs: i64 = token.expires_in().unwrap().as_secs().try_into().unwrap();
 
 let max_age = Local::now().naive_local() + Duration::seconds(secs);
@@ -262,7 +262,7 @@ if let Err(e) = sqlx::query("INSERT INTO sessions (user_id, session_id, expires_
 ```
 
 Now that we've done everything, we want to make sure to include our token addition in the response and a redirect:
-```rs
+```rust
     Ok((
         jar.add(cookie),
         Redirect::to("/protected")
@@ -271,7 +271,7 @@ Now that we've done everything, we want to make sure to include our token additi
 
 Of course, our "protected" route doesn't actually exist yet - we'll create it in a moment. But first of all, let's see what the final OAuth callback handler looks like:
 
-```rs
+```rust
 pub async fn google_callback(
     State(state): State<AppState>,
     jar: PrivateCookieJar,
@@ -345,7 +345,7 @@ pub async fn google_callback(
 
 So now that we've finished handling the callback, we'll want to add our protected route. However, before that we need to make sure it's actually protected - we can do that by writing a middleware that will check whether or not the user has a cookie, then grabs the email from our own database, adds it as an extension to the request itself and then the protected route will return the extension we passed in.
 
-```rs
+```rust
 pub async fn check_authorized<B>(
     State(state): State<AppState>,
     jar: PrivateCookieJar,
@@ -386,7 +386,7 @@ pub async fn check_authorized<B>(
 }
 ```
 Now we just need to add the protected route!
-```rs
+```rust
 pub async fn protected(
     Extension(user): Extension<UserProfile>
 ) -> impl IntoResponse {
@@ -395,7 +395,7 @@ pub async fn protected(
 ```
 
 Now that we've filled out everything we need, we can come back to the main entrypoint function and fill back in all of our routes so that we can use them:
-```rs
+```rust
 #[shuttle_runtime::main]
 async fn axum(
     #[shuttle_shared_db::Postgres] db: PgPool,
