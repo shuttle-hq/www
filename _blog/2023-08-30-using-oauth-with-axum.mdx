@@ -21,7 +21,7 @@ Before we get started, you'll want the following:
 - A project in Google Cloud Console (you can get started [here](https://console.cloud.google.com) - it's free!)
 
 We'll want to also install [`sqlx-cli`](https://github.com/launchbadge/sqlx/blob/main/sqlx-cli/README.md), which we can do by running the following command:
-```sh
+```bash
 cargo install sqlx-cli
 ```
 
@@ -47,7 +47,7 @@ When we run our app we'll run the migrate macro, which will automatically attemp
 
 ## Getting Started
 To get started, you'll want to create a new project by running the following:
-```sh
+```bash
 cargo shuttle init
 ```
 We'll want to pick "axum" as the framework. For the purposes of the project we will refer to the project name as "oauth-rust".
@@ -55,7 +55,7 @@ We'll want to pick "axum" as the framework. For the purposes of the project we w
 Looking to deploy? Make sure you enable initialising your project on the Shuttle servers!
 
 Next we'll want to install our dependencies - copy the script below to install everything in one go:
-```sh
+```bash
 cargo add axum --features multipart,macros
 cargo add axum-extra --features cookie-private
 cargo add chrono --features clock
