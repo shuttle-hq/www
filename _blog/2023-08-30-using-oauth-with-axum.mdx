@@ -26,7 +26,7 @@ cargo install sqlx-cli
 ```
 
 Once we've created our project, we'll want to use `sqlx migrate add schema` to create our initial schema file which you will be able to find in the migrations folder. Once you open the file, it'll be empty with a simple comment to add your migrations - in which we'll add the following:
-```
+```sql
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
