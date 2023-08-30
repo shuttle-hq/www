@@ -38,7 +38,7 @@ const BlogHeader: FC<BlogHeaderProps> = ({ post }) => {
 										<div className='flex font-bold text-[#525151] dark:text-[#C2C2C2]'>
 											{author?.author || 'Shuttle'}
 											{author?.position ? ` - ${author.position}` : ''}
-											<span className='font-normal text-[#525151] dark:text-[#7A7A7A]'>
+											<span className='font-normal text-[#525151] dark:text-[#BEBEBE]'>
 												&nbsp;&nbsp;• {post.date}
 											</span>
 										</div>

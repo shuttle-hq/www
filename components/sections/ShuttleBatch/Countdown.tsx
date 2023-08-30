@@ -16,13 +16,13 @@ export const Countdown = () => {
 	return (
 		<>
 			<section className='mx-auto mt-24 w-full max-w-7xl items-center px-5 sm:px-10 lg:mt-28'>
-				<p className='mt-4 text-center text-xl text-[#7A7A7A]'>Shuttle Batch 2023 starts in</p>
+				<p className='mt-4 text-center text-xl text-[#BEBEBE]'>Shuttle Batch 2023 starts in</p>
 				<h2 className='text-gradient mt-12 bg-clip-text text-center font-gradual text-[80px] font-bold leading-[150%] text-[#C2C2C2]'>
 					<span className='text-transparent'>
 						<Counter date={1683007200000} renderer={renderer} />
 					</span>
 				</h2>
-				<div className='flex justify-center gap-24 text-[#7A7A7A]'>
+				<div className='flex justify-center gap-24 text-[#BEBEBE]'>
 					<p className='mt-4 text-lg'>Days</p>
 					<p className='mt-4 text-lg'>Hours</p>
 					<p className='mt-4 text-lg'>Minutes</p>

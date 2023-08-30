@@ -18,7 +18,7 @@ const Hero = () => {
 					from a <span className='text-gradient bg-clip-text text-transparent'>single prompt</span>
 				</span>
 			</h1>
-			<p className='mt-8 text-center text-xl text-[#7A7A7A]'>
+			<p className='mt-8 text-center text-xl text-[#BEBEBE]'>
 				Yes, we did it. From prompt to deployed app in under 5 minutes
 			</p>
 

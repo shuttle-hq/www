@@ -88,13 +88,13 @@ const BlogPost: FC<Post> = (post) => {
 						{firstAuthor?.author || 'Shuttle'}
 						{firstAuthor?.position ? ` - ${firstAuthor.position}` : ''}
 					</div>
-					<li className='list-disc text-[#7A7A7A]'>{post.date}</li>
+					<li className='list-disc text-[#BEBEBE]'>{post.date}</li>
 				</div>
 				<Link href={`/blog/${post.url}`}>
 					<h2 className='font-gradual text-2xl font-bold text-black dark:text-[#C2C2C2] lg:text-[1.75rem] lg:leading-9'>
 						{post.title}
 					</h2>
-					<p className='mt-3 text-[#525151] dark:text-[#7A7A7A]'>{post.description}</p>
+					<p className='mt-3 text-[#525151] dark:text-[#BEBEBE]'>{post.description}</p>
 				</Link>
 				<div className='flex flex-wrap items-center gap-[0.625rem] text-sm text-black dark:text-[#C2C2C2]'>
 					{(post?.tags || []).map((tag) => (
@@ -107,7 +107,7 @@ const BlogPost: FC<Post> = (post) => {
 						</Link>
 					))}
 
-					<div className='text-[#7A7A7A]'>{post.readingTime}</div>
+					<div className='text-[#BEBEBE]'>{post.readingTime}</div>
 				</div>
 			</div>
 			<Link href={`/blog/${post.url}`} className='relative h-full overflow-hidden rounded-[2rem]'>

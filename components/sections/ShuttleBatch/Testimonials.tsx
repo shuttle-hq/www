@@ -25,7 +25,7 @@ export const Testimonials = () => {
 
 				<div>
 					<p className='text-xl text-[#C2C2C2]'>- Oddbjørn Grødem</p>
-					<span className='text-base text-[#7A7A7A]'>Shuttle Batch 1.0, joined the Shuttle team</span>
+					<span className='text-base text-[#BEBEBE]'>Shuttle Batch 1.0, joined the Shuttle team</span>
 				</div>
 			</div>
 

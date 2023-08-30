@@ -58,7 +58,7 @@ export const Description = () => {
 
 					<div>
 						<p className='text-xl text-[#C2C2C2]'>- John Williams</p>
-						<span className='text-base text-[#7A7A7A]'>Shuttle Batch 1.0</span>
+						<span className='text-base text-[#BEBEBE]'>Shuttle Batch 1.0</span>
 					</div>
 				</div>
 			</section>
@@ -71,7 +71,7 @@ export const Description = () => {
 				/>
 				<div className='relative mx-auto mt-32 w-full max-w-7xl items-center px-5 sm:px-10 lg:mt-52'>
 					<h1 className='text-6xl text-[#C2C2C2]'>What’s Shuttle Batch</h1>
-					<p className='mt-4 text-2xl text-[#7A7A7A]'>
+					<p className='mt-4 text-2xl text-[#BEBEBE]'>
 						Batch is an immersive online program where Rust developers unite to learn, collaborate, and
 						contribute to an exciting open-source project, while receiving mentorship and forming
 						lasting connections within the community.

@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { Button, LoginButton } from 'components/elements'
 import Image from 'next/image'
 import { FC, ReactNode, useState } from 'react'
-import {ContactUsButton} from "../elements/Button";
+import { ContactUsButton } from '../elements/Button'
 
 const Pricing = () => {
 	const [selectedPricing, setSelectedPricing] = useState<'monthly' | 'annual'>('monthly')
@@ -14,7 +14,7 @@ const Pricing = () => {
 			{/* <div className='flex items-center justify-center gap-5 text-xl'>
 				<div
 					className={clsx(
-						selectedPricing === 'monthly' ? 'text-black dark:text-[#C2C2C2]' : 'text-[#7A7A7A]'
+						selectedPricing === 'monthly' ? 'text-black dark:text-[#C2C2C2]' : 'text-[#BEBEBE]'
 					)}
 				>
 					Monthly
@@ -25,7 +25,7 @@ const Pricing = () => {
 				/>
 				<div
 					className={clsx(
-						selectedPricing === 'annual' ? 'text-black dark:text-[#C2C2C2]' : 'text-[#7A7A7A]'
+						selectedPricing === 'annual' ? 'text-black dark:text-[#C2C2C2]' : 'text-[#BEBEBE]'
 					)}
 				>
 					Annual
@@ -123,7 +123,8 @@ const Pricing = () => {
 					<div>
 						<h3 className='font-gradual text-[2rem] font-bold leading-none text-[#C2C2C2]'>Pro</h3>
 						<p className='mt-2 text-[#C2C2C2]'>
-							We’re still test-driving Shuttle Pro, so do get in touch if you’d like to get more usage or features than is included in the Hobby tier.
+							We’re still test-driving Shuttle Pro, so do get in touch if you’d like to get more
+							usage or features than is included in the Hobby tier.
 						</p>
 					</div>
 					<div className='mt-auto'>
@@ -163,7 +164,7 @@ const Pricing = () => {
 							className={clsx(
 								selectedMobilePlan === 'hobby'
 									? 'text-gradient bg-clip-text text-4.5 text-transparent'
-									: 'text-xl text-[#7A7A7A]',
+									: 'text-xl text-[#BEBEBE]',
 								'!mt-auto font-bold leading-none transition-all'
 							)}
 						>
@@ -173,7 +174,7 @@ const Pricing = () => {
 							className={clsx(
 								selectedMobilePlan === 'starter'
 									? 'text-gradient bg-clip-text text-4.5 text-transparent'
-									: 'text-xl text-[#7A7A7A]',
+									: 'text-xl text-[#BEBEBE]',
 								'!mt-auto font-bold leading-none transition-all'
 							)}
 						>
@@ -183,7 +184,7 @@ const Pricing = () => {
 							className={clsx(
 								selectedMobilePlan === 'pro'
 									? 'text-gradient bg-clip-text text-4.5 text-transparent'
-									: 'text-xl text-[#7A7A7A]',
+									: 'text-xl text-[#BEBEBE]',
 								'!mt-auto font-bold leading-none transition-all'
 							)}
 						>
@@ -405,7 +406,7 @@ const MobilePlanFeatures: FC<MobilePlanFeaturesProps> = ({
 }) => {
 	return (
 		<div className='divide-y divide-black/10 text-xl dark:divide-white/10' hidden={!visible}>
-			<div className='py-[0.875rem] px-2 font-gradual font-bold'>Features</div>
+			<div className='px-2 py-[0.875rem] font-gradual font-bold'>Features</div>
 			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
 				<div className='text-[#525151] dark:text-[#C2C2C2]'>Team size</div>
 				<div className='text-right'>{teamSize}</div>
@@ -451,7 +452,7 @@ const MobilePlanFeatures: FC<MobilePlanFeaturesProps> = ({
 					)}
 				</div>
 			</div>
-			<div className='mt-16 py-[0.875rem] px-2 font-gradual font-bold lg:mt-0'>Support</div>
+			<div className='mt-16 px-2 py-[0.875rem] font-gradual font-bold lg:mt-0'>Support</div>
 			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
 				<div className='text-[#525151] dark:text-[#C2C2C2]'>Community</div>
 				<div className='text-right'>{community}</div>

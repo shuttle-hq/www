@@ -17,14 +17,14 @@ const Steps = () => {
 				<StepsDesktop />
 				<StepsMobile />
 			</div>
-			<p className='mb-10 w-full max-w-3xl text-xl leading-8 text-[#7A7A7A]'>
+			<p className='mb-10 w-full max-w-3xl text-xl leading-8 text-[#BEBEBE]'>
 				ShuttleAI is comprised of multiple LLM agents, working together to handle your request. Starting
 				from the beginning itself - they expand upon the user&apos;s prompt, reason about the project and
 				define a plan of action. While giving a detailed prompt works the best, even simpler prompts like
 				“Build me a todo app” will be enough for the agents to make assumptions and define the basic shape
 				of the app.
 			</p>
-			<p className='mb-10 w-full max-w-3xl text-xl leading-8 text-[#7A7A7A]'>
+			<p className='mb-10 w-full max-w-3xl text-xl leading-8 text-[#BEBEBE]'>
 				Once we have our plan decided, we pass it on to the code-generation agents that focus on generating
 				you a working codebase. Meanwhile, our Shuttlify agents take care of your infrastructure and
 				provisioning, while our compilation agents sit in the background and fix any potential errors or

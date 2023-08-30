@@ -14,43 +14,43 @@ const HowItWorks = () => {
 				</h2>
 			</div>
 			<div>
-				<div className='mt-4 space-y-7 text-[#525151] dark:text-[#7A7A7A] sm:mt-8 lg:text-xl'>
+				<div className='mt-4 space-y-7 text-[#525151] dark:text-[#BEBEBE] sm:mt-8 lg:text-xl'>
 					<p
 						className={clsx(
-							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
+							'text-[#525151] transition duration-200 dark:text-[#BEBEBE]',
 							selectedItem === 'hello-cloud' && '!text-black dark:text-[#C2C2C2]'
 						)}
-						onMouseOver={() => setSelectedItem("hello-cloud")}
+						onMouseOver={() => setSelectedItem('hello-cloud')}
 					>
 						With Shuttle you can take any Rust service code, and have it ready for deployment by adding
 						a single annotation to your main function.
 					</p>
 					<p
 						className={clsx(
-							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
+							'text-[#525151] transition duration-200 dark:text-[#BEBEBE]',
 							selectedItem === 'cargo-deploy' && '!text-black dark:text-[#C2C2C2]'
 						)}
-						onMouseOver={() => setSelectedItem("cargo-deploy")}
+						onMouseOver={() => setSelectedItem('cargo-deploy')}
 					>
 						Your code is packaged and sent to Shuttle where it is compiled and deployed. After a few
 						seconds, your app is already running in the cloud.
 					</p>
 					<p
 						className={clsx(
-							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
+							'text-[#525151] transition duration-200 dark:text-[#BEBEBE]',
 							selectedItem === 'using-sql' && '!text-black dark:text-[#C2C2C2]'
 						)}
-						onMouseOver={() => setSelectedItem("using-sql")}
+						onMouseOver={() => setSelectedItem('using-sql')}
 					>
 						You can then add more annotations that control cloud resources. Adding components like
 						databases, secrets or storage is as easy as adding arguments to a function.
 					</p>
 					<p
 						className={clsx(
-							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
+							'text-[#525151] transition duration-200 dark:text-[#BEBEBE]',
 							selectedItem === 'using-axum' && '!text-black dark:text-[#C2C2C2]'
 						)}
-						onMouseOver={() => setSelectedItem("using-axum")}
+						onMouseOver={() => setSelectedItem('using-axum')}
 					>
 						The next time you deploy your app, Shuttle provisions and configures the resources you
 						need. In minutes, you can build complex and scalable apps on industry-standard AWS products
