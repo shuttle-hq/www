@@ -255,8 +255,8 @@ export default function BlogPostPage(props: Props) {
 							/>
 							<Logo className='relative z-10 text-white' />
 							<span className='relative z-10 mt-5 text-[#FFFFFF8F] dark:text-[#BEBEBE]'>
-								This blog post is powered by shuttle - The Rust-native, open source, cloud
-								development platform. If you have any questions, or want to provide feedback, join
+								This blog post is powered by Shuttle - The Rust-native, open source, cloud development platform that let's you build backends fast.
+								If you have any questions or want to provide feedback, join
 								our{' '}
 								<a target='_blank' rel='noreferrer' className='text-[#FF8A3F]' href={DISCORD_URL}>
 									Discord server!
