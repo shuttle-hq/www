@@ -11,135 +11,7 @@ const Pricing = () => {
 
 	return (
 		<div className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
-			{/* <div className='flex items-center justify-center gap-5 text-xl'>
-				<div
-					className={clsx(
-						selectedPricing === 'monthly' ? 'text-black dark:text-[#C2C2C2]' : 'text-[#BEBEBE]'
-					)}
-				>
-					Monthly
-				</div>
-				<Switch
-					checked={selectedPricing !== 'monthly'}
-					setChecked={(checked) => setSelectedPricing(checked ? 'annual' : 'monthly')}
-				/>
-				<div
-					className={clsx(
-						selectedPricing === 'annual' ? 'text-black dark:text-[#C2C2C2]' : 'text-[#BEBEBE]'
-					)}
-				>
-					Annual
-					<sup className='ml-3 bg-gradient-to-r from-[#FC540C] to-[#FFD76F] bg-clip-text text-sm text-transparent'>
-						-10%
-					</sup>
-				</div>
-			</div> */}
-			<div className='mt-14 grid gap-5 lg:grid-cols-2'>
-				<div className='group relative z-10 flex flex-col items-start gap-8 overflow-hidden rounded-[2rem] bg-[#13292C] p-5 dark:bg-black sm:p-8'>
-					<Image
-						src='/images/sections/pricing/hobby/bg.png'
-						alt='background'
-						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-[2rem] object-cover'
-					/>
-					<Image
-						src='/images/sections/pricing/hobby/stars.png'
-						alt='stars'
-						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
-					/>
-					<Image
-						src='/images/sections/pricing/hobby/stars-2.png'
-						alt='stars 2'
-						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
-					/>
-					<div>
-						<h3 className='font-gradual text-[2rem] font-bold leading-none text-[#C2C2C2]'>Hobby</h3>
-						<p className='mt-2 text-[#C2C2C2]'>
-							The perfect confluence of features to run your hobby-projects for free - forever.
-						</p>
-					</div>
-					<div className='mt-auto'>
-						<p className='bg-gradient-to-r from-[#FC540C] to-[#D3893C] bg-clip-text font-gradual text-5xl font-bold text-transparent'>
-							$0
-						</p>
-						<p className='mt-1 text-sm text-[#C2C2C2]'>/ month</p>
-					</div>
-					<LoginButton variant='primary'>Get Started</LoginButton>
-				</div>
-				{/* <div className='group relative z-10 flex flex-col items-start gap-8 overflow-hidden rounded-[2rem] bg-[#13292C] p-5 shadow-[0px_0px_64px_rgba(252,84,12,0.25)] dark:bg-black sm:p-8'>
-					<Image
-						src='/images/sections/pricing/starter/bg.png'
-						alt='background'
-						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-[2rem] object-cover'
-					/>
-					<Image
-						src='/images/sections/pricing/starter/stars.png'
-						alt='stars'
-						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
-					/>
-					<Image
-						src='/images/sections/pricing/starter/stars-2.png'
-						alt='stars 2'
-						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
-					/>
-					<div>
-						<h3 className='font-gradual text-[2rem] font-bold leading-none text-[#C2C2C2]'>Starter</h3>
-						<p className='mt-2 text-[#C2C2C2]'>
-							The perfect confluence of features to run your hobby-projects for free - forever.
-						</p>
-					</div>
-					<div className='mt-auto'>
-						<p className='bg-gradient-to-r from-[#E87026] to-[#9BAC78] bg-clip-text font-gradual text-5xl font-bold text-transparent'>
-							$29
-						</p>
-						<p className='mt-1 text-sm text-[#C2C2C2]'>user / month</p>
-					</div>
-					<LoginButton variant='primary'>Get started for free</LoginButton>
-				</div> */}
-				<div className='group relative z-10 flex flex-col items-start gap-8 overflow-hidden rounded-[2rem] bg-[#13292C] p-5 dark:bg-black sm:p-8'>
-					<Image
-						src='/images/sections/pricing/pro/bg.png'
-						alt='background'
-						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-[2rem] object-cover'
-					/>
-					<Image
-						src='/images/sections/pricing/pro/stars.png'
-						alt='stars'
-						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
-					/>
-					<Image
-						src='/images/sections/pricing/pro/stars-2.png'
-						alt='stars 2'
-						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
-					/>
-					<div>
-						<h3 className='font-gradual text-[2rem] font-bold leading-none text-[#C2C2C2]'>Pro</h3>
-						<p className='mt-2 text-[#C2C2C2]'>
-							We’re still test-driving Shuttle Pro, so do get in touch if you’d like to get more
-							usage or features than is included in the Hobby tier.
-						</p>
-					</div>
-					<div className='mt-auto'>
-						<p className='bg-gradient-to-r from-[#BE964B] to-[#38D3E9] bg-clip-text font-gradual text-5xl font-bold text-transparent'>
-							Let’s chat
-						</p>
-						<p className='mt-1 text-sm text-[#C2C2C2]'>custom pricing</p>
-					</div>
-					<ContactUsButton variant='secondary'>Get Started</ContactUsButton>
-				</div>
-			</div>
 			<div className='mt-24 lg:mt-32'>
-				<h2 className='font-gradual text-5xl font-bold leading-none dark:text-[#C2C2C2] lg:text-[3.5rem]'>
-					Compare plans &amp; features
-				</h2>
 				<div className='mt-16'>
 					{/* Mobile */}
 					<Splide
@@ -164,7 +36,7 @@ const Pricing = () => {
 							className={clsx(
 								selectedMobilePlan === 'hobby'
 									? 'text-gradient bg-clip-text text-4.5 text-transparent'
-									: 'text-xl text-[#BEBEBE]',
+									: 'text-xl text-[#7A7A7A]',
 								'!mt-auto font-bold leading-none transition-all'
 							)}
 						>
@@ -174,7 +46,7 @@ const Pricing = () => {
 							className={clsx(
 								selectedMobilePlan === 'starter'
 									? 'text-gradient bg-clip-text text-4.5 text-transparent'
-									: 'text-xl text-[#BEBEBE]',
+									: 'text-xl text-[#7A7A7A]',
 								'!mt-auto font-bold leading-none transition-all'
 							)}
 						>
@@ -184,7 +56,7 @@ const Pricing = () => {
 							className={clsx(
 								selectedMobilePlan === 'pro'
 									? 'text-gradient bg-clip-text text-4.5 text-transparent'
-									: 'text-xl text-[#BEBEBE]',
+									: 'text-xl text-[#7A7A7A]',
 								'!mt-auto font-bold leading-none transition-all'
 							)}
 						>
@@ -241,135 +113,258 @@ const Pricing = () => {
 					</div>
 					{/* Desktop */}
 					<div className='hidden divide-y divide-black/10 text-xl dark:divide-white/10 lg:block'>
-						<div className='grid grid-cols-3 py-[0.875rem]'>
-							<div className='font-gradual font-bold'>Features</div>
-							<div className='text-center font-gradual text-2xl font-bold text-black dark:text-[#C2C2C2]'>
-								Hobby
-							</div>
-							{/* <div className='text-center font-gradual text-2xl font-bold text-black dark:text-[#C2C2C2]'>
-								Starter
-							</div> */}
-							<div className='text-center font-gradual text-2xl font-bold text-black dark:text-[#C2C2C2] '>
-								Pro
-							</div>
-						</div>
-						<div className='grid grid-cols-3 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>Team size</div>
-							<div>1</div>
-							{/* <div>5</div> */}
-							<div>custom</div>
-						</div>
-						<div className='grid grid-cols-3 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>
-								Deployment
-							</div>
-							<div>unlimited</div>
-							{/* <div>unlimited</div> */}
-							<div>unlimited</div>
-						</div>
-						<div className='grid grid-cols-3 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>
-								Number of projects
-							</div>
-							<div>5</div>
-							{/* <div>5</div> */}
-							<div>unlimited</div>
-						</div>
-						<div className='grid grid-cols-3 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>Requests</div>
-							<div>150k/month</div>
-							{/* <div>300k/month</div> */}
-							<div>custom</div>
-						</div>
-						<div className='grid grid-cols-3 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>Workers</div>
-							<div>1</div>
-							{/* <div>5</div> */}
-							<div>custom</div>
-						</div>
-						<div className='grid grid-cols-3 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>
-								Database storage
-							</div>
-							<div>500MB</div>
-							{/* <div>2TB</div> */}
-							<div>custom</div>
-						</div>
-						<div className='grid grid-cols-3 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>
-								Custom domains
-							</div>
-							<div>
-								<svg
-									width={15}
-									className='m-auto text-[#C2C2C2]'
-									height={15}
-									viewBox='0 0 15 15'
-									fill='none'
-									xmlns='http://www.w3.org/2000/svg'
+						<div className='mb-8 grid grid-cols-4 py-[0.875rem]'>
+							<div className='font-gradual font-bold'></div>
+							<div className='text-center text-black dark:text-[#7A7A7A]'>
+								<div className='mb-4 font-gradual text-2xl font-bold'>Community</div>
+
+								<div className='mx-auto mb-4 w-4/5 text-base text-[#7A7A7A]'>
+									Everything you need to run your hobby projects. On us.
+								</div>
+								<button
+									className={clsx(
+										'border-[1px] border-solid border-[#ffffff40] text-base text-white',
+										'z-[5] rounded-[14px] px-6 py-3 font-gradual transition-all hover:scale-[1.01]'
+									)}
 								>
-									<path
-										d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
-										stroke='currentColor'
-										strokeWidth={2}
-									/>
-								</svg>
+									Start deploying
+								</button>
 							</div>
-							{/* <div>2</div> */}
-							<div>custom</div>
-						</div>
-					</div>
-					<div className='mt-16 hidden divide-y divide-black/10 text-xl dark:divide-white/10 lg:block'>
-						<div className='mt-16 grid grid-cols-3 py-[0.875rem] lg:mt-0'>
-							<div className='font-gradual font-bold'>Support</div>
-						</div>
-						<div className='grid grid-cols-3 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>Community</div>
-							<div>Discord</div>
-							{/* <div>Discord</div> */}
-							<div>Discord</div>
-						</div>
-						<div className='grid grid-cols-3 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>
-								Request turnaround
-							</div>
-							<div>
-								<svg
-									width={15}
-									className='m-auto text-[#C2C2C2]'
-									height={15}
-									viewBox='0 0 15 15'
-									fill='none'
-									xmlns='http://www.w3.org/2000/svg'
-								>
-									<path
-										d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
-										stroke='currentColor'
-										strokeWidth={2}
-									/>
-								</svg>
-							</div>
-							{/* <div>24h</div> */}
-							<div>8h</div>
-						</div>
-						<div className='grid grid-cols-3 items-center pt-11 text-center'>
-							<div />
-							<div>
-								<LoginButton variant='primary' className='mx-auto bg-[#D8D8D8]'>
+							<div className='text-center text-black dark:text-[#7A7A7A]'>
+								<div className='mb-4 font-gradual text-2xl font-bold'>Pro</div>
+
+								<div className='mx-auto mb-4 w-4/5 text-base text-[#7A7A7A]'>
+									Everything in Hobby, plus higher limits and team features.
+								</div>
+								<Button variant='tertiary' className='mx-auto scale-[0.95]'>
 									Get Started
-								</LoginButton>
-							</div>
-							{/* <div>
-								<Button variant='primary' className='mx-auto bg-[#D8D8D8]'>
-									Get started
 								</Button>
-							</div> */}
-							<div>
-								<ContactUsButton variant='secondary' className='mx-auto'>
-									Contact Us
-								</ContactUsButton>
+							</div>
+							<div className='text-center text-black dark:text-[#7A7A7A]'>
+								<div className='mb-4 font-gradual text-2xl font-bold'>Team</div>
+
+								<div className='mb-4 text-base text-[#7A7A7A]'>
+									Custom-built tier to supercharge your team's productivity.
+								</div>
+								<button
+									className={clsx(
+										'border-[1px] border-solid border-[#ffffff40] text-base text-white',
+										'z-[5] rounded-[14px] px-6 py-3 font-gradual transition-all hover:scale-[1.01]'
+									)}
+								>
+									Contact us
+								</button>
 							</div>
 						</div>
+						<div className='grid grid-cols-4 items-center py-2 text-center'>
+							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
+								Max Team Size
+							</div>
+							<div className='text-[20px] text-[#ffffffa3]'>1</div>
+							<div className='text-[20px] text-[#ffffffa3]'>1</div>
+							<div className='text-[20px] text-[#ffffffa3]'>∞</div>
+						</div>
+						<div className='grid grid-cols-4 items-center py-2 text-center'>
+							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
+								Number of Projects
+							</div>
+							<div className='text-[20px] text-[#ffffffa3]'>3</div>
+							<div className='text-[20px] text-[#ffffffa3]'>15</div>
+							<div className='text-[20px] text-[#ffffffa3]'>∞</div>
+						</div>
+						<div className='grid grid-cols-4 items-center py-2 text-center'>
+							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
+								Custom Domains (with SSL)
+							</div>
+							<div className='text-[20px] text-[#ffffffa3]'>
+								<svg
+									width={15}
+									className='m-auto text-[#fff]'
+									height={15}
+									viewBox='0 0 15 15'
+									fill='none'
+									xmlns='http://www.w3.org/2000/svg'
+								>
+									<path
+										d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
+										stroke='currentColor'
+										strokeWidth={2}
+									/>
+								</svg>
+							</div>
+							<div className='text-[20px] text-[#ffffffa3]'>1 per project</div>
+							<div className='text-[20px] text-[#ffffffa3]'>∞</div>
+						</div>
+						<div className='grid grid-cols-4 items-center py-2 text-center'>
+							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
+								Shared DB Size
+							</div>
+							<div className='text-[20px] text-[#ffffffa3]'>1 GB</div>
+							<div className='text-[20px] text-[#ffffffa3]'>10 GB</div>
+							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
+						</div>
+						<div className='grid grid-cols-4 items-center py-2 text-center'>
+							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
+								Dedicated Database (RDS)
+							</div>
+							<div className='text-[20px] text-[#ffffffa3]'>
+								<svg
+									width={15}
+									className='m-auto text-[#fff]'
+									height={15}
+									viewBox='0 0 15 15'
+									fill='none'
+									xmlns='http://www.w3.org/2000/svg'
+								>
+									<path
+										d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
+										stroke='currentColor'
+										strokeWidth={2}
+									/>
+								</svg>
+							</div>
+							<div className='text-[20px] text-[#ffffffa3]'>
+								<svg
+									width={15}
+									className='m-auto text-[#fff]'
+									height={15}
+									viewBox='0 0 15 15'
+									fill='none'
+									xmlns='http://www.w3.org/2000/svg'
+								>
+									<path
+										id='Vector 820'
+										d='M1 6.5L6.33333 12L17 1'
+										stroke='white'
+										stroke-width='2'
+									/>
+								</svg>
+							</div>
+							<div className='text-[20px] text-[#ffffffa3]'>
+								<svg
+									width={15}
+									className='m-auto text-[#fff]'
+									height={15}
+									viewBox='0 0 15 15'
+									fill='none'
+									xmlns='http://www.w3.org/2000/svg'
+								>
+									<path
+										id='Vector 820'
+										d='M1 6.5L6.33333 12L17 1'
+										stroke='white'
+										stroke-width='2'
+									/>
+								</svg>
+							</div>
+						</div>
+						<div className='grid grid-cols-4 items-center py-2 text-center'>
+							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
+								Log Retention
+							</div>
+							<div className='text-[20px] text-[#ffffffa3]'>1 day</div>
+							<div className='text-[20px] text-[#ffffffa3]'>7 days</div>
+							<div className='text-[20px] text-[#ffffffa3]'>28 days</div>
+						</div>
+						<div className='grid grid-cols-4 items-center py-2 text-center'>
+							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>Support</div>
+							<div className='text-[20px] text-[#ffffffa3]'>Community</div>
+							<div className='text-[20px] text-[#ffffffa3]'>Enhanced</div>
+							<div className='text-[20px] text-[#ffffffa3]'>Dedicated</div>
+						</div>
+						<div className='grid grid-cols-4 items-center py-2 text-center'></div>
+					</div>
+
+					<div className='mt-16 hidden divide-y divide-black/10 text-xl dark:divide-white/10 lg:block'>
+						<div className='grid grid-cols-4 items-center py-2 text-center'></div>
+						<div className='grid grid-cols-4 items-center py-2 text-center'>
+							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
+								Network (egress)
+							</div>
+							<div className='text-[20px] text-[#ffffffa3]'>1 GB</div>
+							<div className='text-[20px] text-[#ffffffa3]'>10 GB</div>
+							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
+						</div>
+						<div className='grid grid-cols-4 items-center py-2 text-center'>
+							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
+								Max Delpoyments per day
+							</div>
+							<div className='text-[20px] text-[#ffffffa3]'>20</div>
+							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
+							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
+						</div>
+						<div className='grid grid-cols-4 items-center py-2 text-center'>
+							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
+								Max Build Time per Deployment
+							</div>
+							<div className='text-[20px] text-[#ffffffa3]'>20</div>
+							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
+							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
+						</div>
+						<div className='grid grid-cols-4 items-center py-2 text-center'>
+							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
+								Object Storage (coming soon)
+							</div>
+							<div className='text-[20px] text-[#ffffffa3]'>1 GB</div>
+							<div className='text-[20px] text-[#ffffffa3]'>10 GB</div>
+							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
+						</div>
+						<div className='grid grid-cols-4 items-center py-2 text-center'>
+							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
+								Persistent Volume (coming soon)
+							</div>
+							<div className='text-[20px] text-[#ffffffa3]'>
+								<svg
+									width={15}
+									className='m-auto text-[#fff]'
+									height={15}
+									viewBox='0 0 15 15'
+									fill='none'
+									xmlns='http://www.w3.org/2000/svg'
+								>
+									<path
+										d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
+										stroke='currentColor'
+										strokeWidth={2}
+									/>
+								</svg>
+							</div>
+							<div className='text-[20px] text-[#ffffffa3]'>
+								<svg
+									width={15}
+									className='m-auto text-[#fff]'
+									height={15}
+									viewBox='0 0 15 15'
+									fill='none'
+									xmlns='http://www.w3.org/2000/svg'
+								>
+									<path
+										id='Vector 820'
+										d='M1 6.5L6.33333 12L17 1'
+										stroke='white'
+										stroke-width='2'
+									/>
+								</svg>
+							</div>
+							<div className='text-[20px] text-[#ffffffa3]'>
+								<svg
+									width={15}
+									className='m-auto text-[#fff]'
+									height={15}
+									viewBox='0 0 15 15'
+									fill='none'
+									xmlns='http://www.w3.org/2000/svg'
+								>
+									<path
+										id='Vector 820'
+										d='M1 6.5L6.33333 12L17 1'
+										stroke='white'
+										stroke-width='2'
+									/>
+								</svg>
+							</div>
+						</div>
+						<div className='grid grid-cols-4 items-center py-2 text-center'></div>
 					</div>
 				</div>
 			</div>
