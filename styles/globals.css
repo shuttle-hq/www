@@ -296,4 +296,43 @@ body.dark {
 			}
 		}
 	}
+
+	.gradient-slider {
+		width: 100%;
+		background: none;
+	}
+
+	.gradient-slider::-webkit-slider-runnable-track {
+		border-radius: 21px;
+		height: 4px;
+		background: linear-gradient(72deg, #fc540c 27.87%, rgba(255, 215, 111, 0.72) 52.56%, #38d4e9 74.58%);
+	}
+
+	.gradient-slider::-webkit-slider-thumb {
+		box-shadow: 100vw 0 0 100vw #ffffff33;
+	}
+
+	.gradient-slider::-moz-range-progress {
+		border-radius: 21px;
+		height: 4px;
+		background: linear-gradient(72deg, #fc540c 27.87%, rgba(255, 215, 111, 0.72) 52.56%, #38d4e9 74.58%);
+	}
+
+	.gradient-slider::-moz-range-track {
+		border-radius: 21px;
+		height: 4px;
+		background-color: #ffffff33;
+	}
+
+	.gradient-slider::-ms-fill-lower {
+		border-radius: 21px;
+		height: 4px;
+		background: linear-gradient(72deg, #fc540c 27.87%, rgba(255, 215, 111, 0.72) 52.56%, #38d4e9 74.58%);
+	}
+
+	.gradient-slider::-ms-fill-upper {
+		border-radius: 21px;
+		height: 4px;
+		background-color: #ffffff33;
+	}
 }

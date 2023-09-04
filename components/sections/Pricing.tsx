@@ -7,7 +7,7 @@ import { ContactUsButton } from '../elements/Button'
 
 const Pricing = () => {
 	const [selectedPricing, setSelectedPricing] = useState<'monthly' | 'annual'>('monthly')
-	const [selectedMobilePlan, setSelectedMobilePlan] = useState<'hobby' | 'starter' | 'pro'>('hobby')
+	const [selectedMobilePlan, setSelectedMobilePlan] = useState<'community' | 'pro' | 'team'>('community')
 
 	return (
 		<div className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
@@ -16,7 +16,7 @@ const Pricing = () => {
 					{/* Mobile */}
 					<Splide
 						onMove={(splide, index) => {
-							setSelectedMobilePlan(index === 0 ? 'hobby' : 'pro')
+							setSelectedMobilePlan(index === 0 ? 'community' : index === 1 ? 'pro' : 'team')
 						}}
 						options={{
 							perPage: 3,
@@ -34,82 +34,361 @@ const Pricing = () => {
 					>
 						<SplideSlide
 							className={clsx(
-								selectedMobilePlan === 'hobby'
-									? 'text-gradient bg-clip-text text-4.5 text-transparent'
+								selectedMobilePlan === 'community'
+									? 'text-2xl text-[#D9D9D9] '
 									: 'text-xl text-[#7A7A7A]',
 								'!mt-auto font-bold leading-none transition-all'
 							)}
 						>
-							Hobby
+							Community
 						</SplideSlide>
-						{/* <SplideSlide
-							className={clsx(
-								selectedMobilePlan === 'starter'
-									? 'text-gradient bg-clip-text text-4.5 text-transparent'
-									: 'text-xl text-[#7A7A7A]',
-								'!mt-auto font-bold leading-none transition-all'
-							)}
-						>
-							Starter
-						</SplideSlide> */}
 						<SplideSlide
 							className={clsx(
 								selectedMobilePlan === 'pro'
-									? 'text-gradient bg-clip-text text-4.5 text-transparent'
+									? 'text-2xl text-[#D9D9D9] '
 									: 'text-xl text-[#7A7A7A]',
-								'!mt-auto font-bold leading-none transition-all'
+								'relative !mt-auto font-bold leading-none transition-all'
 							)}
 						>
 							Pro
 						</SplideSlide>
+
+						<SplideSlide
+							className={clsx(
+								selectedMobilePlan === 'team'
+									? 'text-2xl text-[#D9D9D9] '
+									: 'text-xl text-[#7A7A7A]',
+								'!mt-auto font-bold leading-none transition-all'
+							)}
+						>
+							Team
+						</SplideSlide>
 					</Splide>
+					<div className='absolute left-6 flex flex-row'>
+						<div className='relative'>
+							<div
+								className={clsx(
+									'absolute -top-1 z-[100] h-1 w-full translate-y-[20%] transition-all',
+									selectedMobilePlan === 'community' ? 'block' : 'hidden'
+								)}
+								style={{
+									background:
+										'linear-gradient(71.78deg, #FC540C 1.89%, rgba(255, 215, 111, 0.72) 52.56%, #38D4E9 87.48%)',
+								}}
+							/>
+							<div
+								className={clsx(
+									'select-none text-transparent',
+									selectedMobilePlan == 'community' ? 'text-2xl' : 'text-xl'
+								)}
+							>
+								Community
+							</div>
+						</div>
+						<div className='relative'>
+							<div
+								className={clsx(
+									'absolute -top-1 z-[100] h-1 w-full translate-x-[120%] translate-y-[20%] transition-all',
+									selectedMobilePlan === 'pro' ? 'block' : 'hidden'
+								)}
+								style={{
+									background:
+										'linear-gradient(71.78deg, #FC540C 1.89%, rgba(255, 215, 111, 0.72) 52.56%, #38D4E9 87.48%)',
+								}}
+							/>
+							<div
+								className={clsx(
+									'select-none text-transparent',
+									selectedMobilePlan == 'pro' ? 'text-2xl' : 'text-xl'
+								)}
+							>
+								Pro
+							</div>
+						</div>
+						<div className='relative'>
+							<div
+								className={clsx(
+									'absolute -top-1 z-[100] h-1 w-full translate-x-[150%] translate-y-[20%] transition-all',
+									selectedMobilePlan === 'team' ? 'block' : 'hidden'
+								)}
+								style={{
+									background:
+										'linear-gradient(71.78deg, #FC540C 1.89%, rgba(255, 215, 111, 0.72) 52.56%, #38D4E9 87.48%)',
+								}}
+							/>
+							<div
+								className={clsx(
+									'select-none text-transparent',
+									selectedMobilePlan == 'team' ? 'text-2xl' : 'text-xl'
+								)}
+							>
+								Team
+							</div>
+						</div>
+					</div>
+					<div className=' mt-8'>
+						<p className='mx-auto mb-4 w-3/4 text-center text-[#7A7A7A]'>
+							Everything you need to run your hobby projects. On us
+						</p>
+						<Button variant='secondary' className='mx-auto'>
+							Start Deploying
+						</Button>
+					</div>
 					<div className='space-y-8 lg:hidden'>
-						<MobilePlanFeatures
-							visible={selectedMobilePlan === 'hobby'}
-							teamSize='1'
-							deployment='unlimited'
-							numberOfProjects='5'
-							requests='150k/month'
-							workers='1'
-							databaseStorage='500MB'
-							community='Discord'
-							action={
-								<LoginButton variant='primary' className='bg-[#D8D8D8]'>
-									Get Started
-								</LoginButton>
-							}
-						/>
-						{/* <MobilePlanFeatures
-							visible={selectedMobilePlan === 'starter'}
-							teamSize='5'
-							deployment='unlimited'
-							numberOfProjects='5'
-							requests='300k/month'
-							workers='1'
-							databaseStorage='2TB'
-							subdomains='5'
-							customDomains='2'
-							community='Discord'
-							requestTurnaround='24h'
-							action={
-								<LoginButton variant='primary' className='bg-[#D8D8D8]'>
-									Get started
-								</LoginButton>
-							}
-						/> */}
-						<MobilePlanFeatures
-							visible={selectedMobilePlan === 'pro'}
-							teamSize='custom'
-							deployment='unlimited'
-							numberOfProjects='unlimited'
-							requests='custom'
-							workers='custom'
-							databaseStorage='custom'
-							customDomains='custom'
-							community='Discord'
-							requestTurnaround='8h'
-							action={<ContactUsButton variant='secondary'>Contact Us</ContactUsButton>}
-						/>
+						<div
+							className='divide-y divide-white/10 text-xl'
+							hidden={selectedMobilePlan !== 'community'}
+						>
+							<div className='px-2 py-[0.875rem] font-gradual text-base font-bold text-[#C2C2C2]'>
+								Features
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-5 text-[#7A7A7A]'>Max Team Size</div>
+								<div className='text-right text-[#FFFFFFA3]'>1</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-5 text-[#7A7A7A]'>Number of Projects</div>
+								<div className='text-right text-[#FFFFFFA3]'>3</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-5 text-[#7A7A7A]'>Custom Domains (with SSL)</div>
+								<div className='text-right text-[#FFFFFFA3]'>
+									<svg
+										width={15}
+										className='ml-auto h-full text-[#FFFFFFA3]'
+										height={15}
+										viewBox='0 0 15 15'
+										fill='none'
+										xmlns='http://www.w3.org/2000/svg'
+									>
+										<path
+											d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
+											stroke='currentColor'
+											strokeWidth={2}
+										/>
+									</svg>
+								</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-5 text-[#7A7A7A]'>Shared DB Size</div>
+								<div className='text-right text-[#FFFFFFA3]'>1 GB</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-5 text-[#7A7A7A]'>Dedicated Database (RDS)</div>
+								<div className='text-right text-[#FFFFFFA3]'>
+									<svg
+										width={15}
+										className='ml-auto h-full text-[#C2C2C2]'
+										height={15}
+										viewBox='0 0 15 15'
+										fill='none'
+										xmlns='http://www.w3.org/2000/svg'
+									>
+										<path
+											d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
+											stroke='currentColor'
+											strokeWidth={2}
+										/>
+									</svg>
+								</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-3 text-[#7A7A7A]'>Log Retention</div>
+								<div className=' col-span-3 text-right text-[#FFFFFFA3]'>1 day</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-3 text-[#7A7A7A]'>Support</div>
+								<div className='col-span-3 text-right text-[#FFFFFFA3]'>Community</div>
+							</div>
+							<div className='mb-8 px-2 py-[0.875rem] font-gradual font-bold lg:mt-0'></div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-5 text-[#7A7A7A]'>Network (egress)</div>
+								<div className='text-right text-[#FFFFFFA3]'>1 GB</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-5 text-[#7A7A7A]'>Deployments per day</div>
+								<div className='text-right text-[#FFFFFFA3]'>20</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-5 text-[#7A7A7A]'>Build Time per Deployment</div>
+								<div className='text-right text-[#FFFFFFA3]'>15min</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-5 text-[#7A7A7A]'>Object Storage (coming soon)</div>
+								<div className='text-right text-[#FFFFFFA3]'>1 GB</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-5 text-[#7A7A7A]'>Persistent Volume</div>
+								<div className='text-right text-[#FFFFFFA3]'>
+									<svg
+										width={15}
+										className='ml-auto h-full text-[#C2C2C2]'
+										height={15}
+										viewBox='0 0 15 15'
+										fill='none'
+										xmlns='http://www.w3.org/2000/svg'
+									>
+										<path
+											d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
+											stroke='currentColor'
+											strokeWidth={2}
+										/>
+									</svg>
+								</div>
+							</div>
+						</div>
+						<div className='divide-y divide-white/10 text-xl' hidden={selectedMobilePlan !== 'pro'}>
+							<div className='px-2 py-[0.875rem] font-gradual text-base font-bold text-[#C2C2C2]'>
+								Features
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-5 text-[#7A7A7A]'>Max Team Size</div>
+								<div className='text-right text-[#FFFFFFA3]'>5</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-5 text-[#7A7A7A]'>Number of Projects</div>
+								<div className='text-right text-[#FFFFFFA3]'>15</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-3 text-[#7A7A7A]'>Custom Domains (with SSL)</div>
+								<div className='col-span-3 text-right text-[#FFFFFFA3]'>1 per project</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-4 text-[#7A7A7A]'>Shared DB Size</div>
+								<div className='col-span-2 text-right text-[#FFFFFFA3]'>10 GB</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-5 text-[#7A7A7A]'>Dedicated Database (RDS)</div>
+								<div className='text-right text-[#FFFFFFA3]'>
+									<svg
+										width={18}
+										className='ml-auto h-full text-[#FFFFFFA3]'
+										height={15}
+										viewBox='0 0 18 15'
+										fill='none'
+										xmlns='http://www.w3.org/2000/svg'
+									>
+										<path d='M1 6.5L6.33333 12L17 1' stroke='white' stroke-width='2' />
+									</svg>
+								</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-3 text-[#7A7A7A]'>Log Retention</div>
+								<div className=' col-span-3 text-right text-[#FFFFFFA3]'>7 days</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-3 text-[#7A7A7A]'>Support</div>
+								<div className='col-span-3 text-right text-[#FFFFFFA3]'>Enhanced</div>
+							</div>
+							<div className='mb-8 px-2 py-[0.875rem] font-gradual font-bold lg:mt-0'></div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-4 text-[#7A7A7A]'>Network (egress)</div>
+								<div className='col-span-2 text-right text-[#FFFFFFA3]'>10 GB</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-4 text-[#7A7A7A]'>Deployments per day</div>
+								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-4 text-[#7A7A7A]'>Build Time per Deployment</div>
+								<div className='col-span-2 text-right text-[#FFFFFFA3]'>30min</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-4 text-[#7A7A7A]'>Object Storage (coming soon)</div>
+								<div className='col-span-2 text-right text-[#FFFFFFA3]'>10 GB</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-5 text-[#7A7A7A]'>Persistent Volume</div>
+								<div className='text-right text-[#FFFFFFA3]'>
+									<svg
+										width={18}
+										className='ml-auto h-full text-[#FFFFFFA3]'
+										height={15}
+										viewBox='0 0 18 15'
+										fill='none'
+										xmlns='http://www.w3.org/2000/svg'
+									>
+										<path d='M1 6.5L6.33333 12L17 1' stroke='white' stroke-width='2' />
+									</svg>
+								</div>
+							</div>
+						</div>
+						<div className='divide-y divide-white/10 text-xl' hidden={selectedMobilePlan !== 'team'}>
+							<div className='px-2 py-[0.875rem] font-gradual text-base font-bold text-[#C2C2C2]'>
+								Features
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-5 text-[#7A7A7A]'>Max Team Size</div>
+								<div className='text-right text-[#FFFFFFA3]'>∞</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-5 text-[#7A7A7A]'>Number of Projects</div>
+								<div className='text-right text-[#FFFFFFA3]'>∞</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-3 text-[#7A7A7A]'>Custom Domains (with SSL)</div>
+								<div className='col-span-3 text-right text-[#FFFFFFA3]'>∞</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-4 text-[#7A7A7A]'>Shared DB Size</div>
+								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-5 text-[#7A7A7A]'>Dedicated Database (RDS)</div>
+								<div className='text-right text-[#FFFFFFA3]'>
+									<svg
+										width={18}
+										className='ml-auto h-full text-[#FFFFFFA3]'
+										height={15}
+										viewBox='0 0 18 15'
+										fill='none'
+										xmlns='http://www.w3.org/2000/svg'
+									>
+										<path d='M1 6.5L6.33333 12L17 1' stroke='white' stroke-width='2' />
+									</svg>
+								</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-3 text-[#7A7A7A]'>Log Retention</div>
+								<div className=' col-span-3 text-right text-[#FFFFFFA3]'>28 days</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-3 text-[#7A7A7A]'>Support</div>
+								<div className='col-span-3 text-right text-[#FFFFFFA3]'>Dedicated</div>
+							</div>
+							<div className='mb-8 px-2 py-[0.875rem] font-gradual font-bold lg:mt-0'></div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-4 text-[#7A7A7A]'>Network (egress)</div>
+								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-4 text-[#7A7A7A]'>Deployments per day</div>
+								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-4 text-[#7A7A7A]'>Build Time per Deployment</div>
+								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-4 text-[#7A7A7A]'>Object Storage (coming soon)</div>
+								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
+							</div>
+							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
+								<div className=' col-span-5 text-[#7A7A7A]'>Persistent Volume</div>
+								<div className='text-right text-[#FFFFFFA3]'>
+									<svg
+										width={18}
+										className='ml-auto h-full text-[#FFFFFFA3]'
+										height={15}
+										viewBox='0 0 18 15'
+										fill='none'
+										xmlns='http://www.w3.org/2000/svg'
+									>
+										<path d='M1 6.5L6.33333 12L17 1' stroke='white' stroke-width='2' />
+									</svg>
+								</div>
+							</div>
+						</div>
 					</div>
 					{/* Desktop */}
 					<div className='hidden divide-y divide-black/10 text-xl dark:divide-white/10 lg:block'>
@@ -119,7 +398,7 @@ const Pricing = () => {
 								<div className='mb-4 font-gradual text-2xl font-bold'>Community</div>
 
 								<div className='mx-auto mb-4 w-4/5 text-base text-[#7A7A7A]'>
-									Everything you need to run your hobby projects. On us.
+									Everything you need to run your community projects. On us.
 								</div>
 								<button
 									className={clsx(
@@ -134,7 +413,7 @@ const Pricing = () => {
 								<div className='mb-4 font-gradual text-2xl font-bold'>Pro</div>
 
 								<div className='mx-auto mb-4 w-4/5 text-base text-[#7A7A7A]'>
-									Everything in Hobby, plus higher limits and team features.
+									Everything in Community, plus higher limits and team features.
 								</div>
 								<Button variant='tertiary' className='mx-auto scale-[0.95]'>
 									Get Started
@@ -371,111 +650,4 @@ const Pricing = () => {
 		</div>
 	)
 }
-
-interface MobilePlanFeaturesProps {
-	visible?: boolean
-	teamSize: string
-	deployment: string
-	numberOfProjects: string
-	requests: string
-	workers: string
-	databaseStorage: string
-	customDomains?: string
-	community: string
-	requestTurnaround?: string
-	action: ReactNode
-}
-
-const MobilePlanFeatures: FC<MobilePlanFeaturesProps> = ({
-	visible,
-	teamSize,
-	deployment,
-	numberOfProjects,
-	requests,
-	workers,
-	databaseStorage,
-	customDomains,
-	community,
-	requestTurnaround,
-	action,
-}) => {
-	return (
-		<div className='divide-y divide-black/10 text-xl dark:divide-white/10' hidden={!visible}>
-			<div className='px-2 py-[0.875rem] font-gradual font-bold'>Features</div>
-			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
-				<div className='text-[#525151] dark:text-[#C2C2C2]'>Team size</div>
-				<div className='text-right'>{teamSize}</div>
-			</div>
-			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
-				<div className='text-[#525151] dark:text-[#C2C2C2]'>Deployment</div>
-				<div className='text-right'>{deployment}</div>
-			</div>
-			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
-				<div className='text-[#525151] dark:text-[#C2C2C2]'>Number of projects</div>
-				<div className='text-right'>{numberOfProjects}</div>
-			</div>
-			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
-				<div className='text-[#525151] dark:text-[#C2C2C2]'>Requests</div>
-				<div className='text-right'>{requests}</div>
-			</div>
-			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
-				<div className='text-[#525151] dark:text-[#C2C2C2]'>Workers</div>
-				<div className='text-right'>{workers}</div>
-			</div>
-			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
-				<div className='text-[#525151] dark:text-[#C2C2C2]'>Database storage</div>
-				<div className='text-right'>{databaseStorage}</div>
-			</div>
-			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
-				<div className='text-[#525151] dark:text-[#C2C2C2]'>Custom domains</div>
-				<div className='text-right'>
-					{customDomains || (
-						<svg
-							width={15}
-							className='ml-auto h-full text-[#C2C2C2]'
-							height={15}
-							viewBox='0 0 15 15'
-							fill='none'
-							xmlns='http://www.w3.org/2000/svg'
-						>
-							<path
-								d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
-								stroke='currentColor'
-								strokeWidth={2}
-							/>
-						</svg>
-					)}
-				</div>
-			</div>
-			<div className='mt-16 px-2 py-[0.875rem] font-gradual font-bold lg:mt-0'>Support</div>
-			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
-				<div className='text-[#525151] dark:text-[#C2C2C2]'>Community</div>
-				<div className='text-right'>{community}</div>
-			</div>
-			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
-				<div className='text-[#525151] dark:text-[#C2C2C2]'>Request turnaround</div>
-				<div className='text-right'>
-					{requestTurnaround || (
-						<svg
-							width={15}
-							className='ml-auto h-full text-[#C2C2C2]'
-							height={15}
-							viewBox='0 0 15 15'
-							fill='none'
-							xmlns='http://www.w3.org/2000/svg'
-						>
-							<path
-								d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
-								stroke='currentColor'
-								strokeWidth={2}
-							/>
-						</svg>
-					)}
-				</div>
-			</div>
-			<div className='flex justify-center pt-5'>{action}</div>
-		</div>
-	)
-}
-
 export default Pricing

@@ -10,6 +10,7 @@ import LovedBy from 'components/sections/Pricing/LovedBy'
 import PriceCards from 'components/sections/Pricing/PriceCards'
 import Contact from 'components/sections/Pricing/Contact'
 import BenefitCards from 'components/sections/Pricing/BenefitsCards'
+import Calculator from 'components/sections/Pricing/Calculator'
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
 	const questions = Questions
@@ -34,10 +35,10 @@ export default function PricingPage({ questions }: Props) {
 			<Plans />
 			<LovedBy />
 			<PriceCards />
+			<Calculator />
 			<BenefitCards />
 			<Pricing />
 			<Contact />
-			{/* <TrustedBy /> */}
 			<Testimonials />
 			<FrequentlyAskedQuestions questions={questions} />
 			<CallToAction />

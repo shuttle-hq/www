@@ -1,14 +1,16 @@
 import { Button } from 'components/elements'
 
 const Contact = () => (
-	<div className='mx-auto mt-24 flex max-w-7xl flex-col items-center'>
-		<h1 className='mb-2.5 font-gradual text-[40px] font-bold text-white'>
-			Still not sure which plan is right for you?
-		</h1>
-		<h3 className='mb-8 text-2xl text-[#7A7A7A]'>Let us help you choose.</h3>
-		<Button variant='tertiary' invertOnDark>
-			Contact Us
-		</Button>
+	<div className='mx-auto mt-24  max-w-7xl '>
+		<div className=' mobile:border-gradient-card relative mx-5 flex flex-col items-center rounded-[32px] bg-black px-5 py-12 sm:mx-0 sm:px-0 sm:py-0'>
+			<h1 className='mb-2.5 text-center font-gradual text-2xl font-bold text-white sm:text-[40px]'>
+				Still not sure which plan is right for you?
+			</h1>
+			<h3 className='mb-8 text-base text-[#7A7A7A] sm:text-2xl'>Let us help you choose.</h3>
+			<Button variant='tertiary' invertOnDark>
+				Contact Us
+			</Button>
+		</div>
 	</div>
 )
 
