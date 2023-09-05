@@ -102,7 +102,7 @@ const Navigation = () => {
 						</Button>
 						<LoginButton variant='primary' invertOnDark>
 							{user ? (
-								'Dashboard'
+								'Console'
 							) : (
 								<>
 									<GithubLogo />

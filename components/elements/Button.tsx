@@ -48,9 +48,9 @@ const Button: FC<ButtonProps> = ({ variant = 'none', invertOnDark, className, ch
 
 export const LoginButton: FC<CommonButtonProps> = ({ children, ...inner }) => {
 	const { user } = useUser()
-	const dashboardBaseUrl = user ? 'https://console.shuttle.rs' : 'https://console.shuttle.rs/login'
+	const consoleBaseUrl = user ? 'https://console.shuttle.rs' : 'https://console.shuttle.rs/login'
 	return (
-		<Button href={dashboardBaseUrl} {...inner}>
+		<Button href={consoleBaseUrl} {...inner}>
 			{children}
 		</Button>
 	)
