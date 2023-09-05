@@ -216,7 +216,7 @@ export default function IssuePage(props: Props) {
 				openGraph={{
 					title: props.issue.title,
 					description: props.issue.description,
-					url: `${SITE_URL}blog/${props.issue.slug}`,
+					url: `${SITE_URL}launchpad/${props.issue.slug}`,
 					type: 'article',
 					article: {
 						publishedTime: props.issue.date,
@@ -225,14 +225,12 @@ export default function IssuePage(props: Props) {
 							return cat
 						}),
 					},
-					images: [
-						{
-							url: `${SITE_URL}${basePath}/images/blog/${props.issue.thumb}`,
-						},
-					],
 				}}
 			/>
 			<div className='mx-auto max-w-4xl p-4 sm:p-6 lg:p-8'>
+				<Link href='/launchpad/issues'>
+					<span className='mb-3'>← See all issues</span>
+				</Link>
 				<div className='grid grid-cols-1 gap-6 gap-y-12 lg:grid-cols-4'>
 					<div className='lg:col-span-3'>
 						{props.issue.content && (
