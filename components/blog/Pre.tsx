@@ -5,18 +5,17 @@ import { useMemo } from 'react'
 export const Pre = ({ children, ...props }: any) => {
 	let line = 1
 
-	const code = useMemo(() => {
-		return [children.props.children]
-			.flat()
-			.flatMap((child) => {
-				if (typeof child !== 'string') {
-					return child.props.children
-				} else {
-					return child
-				}
-			})
-			.join('')
-	}, [children])
+	function getChildren(children: any): string[] {
+		return [children].flat().flatMap((child: any) => {
+			if (typeof child === 'string') {
+				return child
+			}
+
+			return getChildren(child.props.children)
+		})
+	}
+
+	const code = getChildren(children.props.children).join('')
 
 	return (
 		<div className={clsx('relative')}>
