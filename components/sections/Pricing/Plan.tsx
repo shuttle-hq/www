@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { Information } from 'components/svgs'
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import Image from 'next/image'
 import { Button } from 'components/elements'
 
@@ -32,15 +32,32 @@ const Plan: FC<PlanProps> = ({
 	textGradient,
 	cta,
 }) => {
+	const [buttonHovered, setButtonHovered] = useState(false)
 	return (
 		<div
 			className={clsx(
-				'flex flex-col justify-between rounded-[32px] bg-black p-8',
+				'group flex flex-col justify-between rounded-[32px] bg-black p-8 ',
 				name === 'Pro'
 					? 'button-shadow border-[1px] border-solid border-[#ffffff33] bg-[#00000080]  lg:-mt-[17%] lg:h-[110%]'
 					: 'border-gradient-card relative'
 			)}
 		>
+			<Image
+				src={`/images/pages/pricing/sections/plans/stars-1.png`}
+				alt='stars'
+				fill
+				className={clsx(
+					'absolute left-0 top-0 h-full w-full transform duration-1000 group-hover:translate-x-12 group-hover:translate-y-3 '
+				)}
+			/>
+			<Image
+				src={`/images/pages/pricing/sections/plans/stars-2.png`}
+				alt='stars'
+				fill
+				className={clsx(
+					'absolute left-0 top-0 h-full w-full transform duration-1000 group-hover:-translate-x-5 group-hover:translate-y-3 '
+				)}
+			/>
 			{name === 'Pro' && (
 				<div className='absolute left-0 top-0 z-[0] h-full w-full rounded-[32px] bg-gradient-to-t from-[#FC540C] to-[#38D4E9] opacity-30' />
 			)}
@@ -87,14 +104,20 @@ const Plan: FC<PlanProps> = ({
 				))}
 			</div>
 			<button
+				onMouseEnter={() => setButtonHovered(true)}
+				onMouseLeave={() => setButtonHovered(false)}
 				className={clsx(
-					name === 'Pro' ? ' text-black' : ' border-[1px] border-solid border-[#ffffff40] text-white',
-					'z-[5] mt-8 w-full rounded-[14px] py-3 font-gradual transition-all hover:scale-[1.01]'
+					name === 'Pro'
+						? ' text-black hover:text-white'
+						: ' border-[1px] border-solid border-[#ffffff40] text-white hover:text-black',
+					'z-[5] mt-8 w-full rounded-[14px] py-3 font-gradual transition-all duration-1000'
 				)}
 				style={{
 					background:
-						name === 'Pro'
+						(name === 'Pro' && !buttonHovered) || (name !== 'Pro' && buttonHovered)
 							? 'linear-gradient(73deg, #FC540C -7.95%, rgba(255, 215, 111, 0.72) 45.94%, #38D4E9 116.73%)'
+							: name === 'Pro' && buttonHovered
+							? 'linear-gradient(70deg, #FC540C 34.41%, rgba(255, 215, 111, 0.72) 93.53%, #38D4E9 118.82%)'
 							: '',
 				}}
 			>

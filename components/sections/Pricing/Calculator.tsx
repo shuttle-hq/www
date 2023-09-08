@@ -105,7 +105,7 @@ const Calculator = () => {
 						}}
 					>
 						<h1 className='mr-2 font-gradual text-[32px] font-bold text-[#D8D8D8]'>
-							{(0.1 * hours * cpu - 4).toFixed(0)}$
+							{(0.1 * hours * cpu).toFixed(0)}$
 						</h1>
 						<p className='mt-4 text-[#D8D8D8]'> / month</p>
 					</div>

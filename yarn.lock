@@ -314,6 +314,11 @@
   dependencies:
     "@splidejs/splide" "^4.1.3"
 
+"@splidejs/splide-extension-auto-scroll@^0.5.3":
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/@splidejs/splide-extension-auto-scroll/-/splide-extension-auto-scroll-0.5.3.tgz#3d3f61229b27fae7923dba62bcd13f6e1b798410"
+  integrity sha512-vPJ8Tn4uebnHa6scBcIypW154HTDenkazX9Nw8T1na44n7OtLoz40R4RoirteV7taPWW7w7ZZPCiEpi2ReYFAQ==
+
 "@splidejs/splide-extension-grid@^0.4.1":
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/@splidejs/splide-extension-grid/-/splide-extension-grid-0.4.1.tgz#fad32e6a808a0e08979c6003653a3ea882ec4682"

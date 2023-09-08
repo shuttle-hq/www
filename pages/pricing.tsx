@@ -28,7 +28,7 @@ interface Props {
 export default function PricingPage({ questions }: Props) {
 	return (
 		<div
-			className='group relative flex-grow overflow-hidden bg-center bg-repeat'
+			className='relative flex-grow overflow-hidden bg-center bg-repeat'
 			style={{ backgroundImage: "url('/images/pages/shuttle-ai/stars.png')" }}
 		>
 			<Hero />

@@ -13,6 +13,7 @@
 		"@auth0/nextjs-auth0": "^2.0.1",
 		"@mapbox/rehype-prism": "^0.8.0",
 		"@splidejs/react-splide": "^0.7.12",
+		"@splidejs/splide-extension-auto-scroll": "^0.5.3",
 		"@splidejs/splide-extension-grid": "^0.4.1",
 		"@types/node": "18.11.11",
 		"@types/react": "18.0.26",

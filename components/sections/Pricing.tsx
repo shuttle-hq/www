@@ -64,7 +64,7 @@ const Pricing = () => {
 							Team
 						</SplideSlide>
 					</Splide>
-					<div className='absolute left-6 flex flex-row'>
+					<div className='absolute left-6 flex flex-row sm:hidden'>
 						<div className='relative'>
 							<div
 								className={clsx(
@@ -126,7 +126,7 @@ const Pricing = () => {
 							</div>
 						</div>
 					</div>
-					<div className=' mt-8'>
+					<div className=' mt-8 sm:hidden'>
 						<p className='mx-auto mb-4 w-3/4 text-center text-[#7A7A7A]'>
 							Everything you need to run your hobby projects. On us
 						</p>
