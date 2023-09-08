@@ -33,10 +33,6 @@ export const Questions: QuestionAttrs[] = [
 		question: 'What happens when I cancel my subscription?',
 		answer: "If you choose to cancel your subscription, you'll still have access to your existing resources until the end of your billing period. After that, your access to premium features and resources associated with your subscription will be downgraded to the free Community tier. Your data and projects will remain intact, and you can choose to reactivate a premium subscription at any time to regain access to the additional features and resources. We value your experience and strive to make transitions as smooth as possible.",
 	},
-	{
-		question: 'How much CPU and memory do I get on the Hobby Tier vs Pro Tier',
-		answer: 'Currently we have fairly relaxed limits on CPU/Memory (4vCPU/6GB) during our beta phase however we will be changing the limits on the Hobby Tier to xxx vCPU and yyy GB.',
-	},
 ]
 
 export default Questions

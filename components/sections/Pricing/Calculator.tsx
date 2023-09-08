@@ -128,8 +128,8 @@ const Calculator = () => {
 											style={{
 												backgroundColor: '#0C1616',
 												color: '#fff',
-												border: '1px solid #3F4848',
 												borderWidth: 1,
+												borderStyle: 'solid',
 												borderColor: '#3F4848',
 												borderRadius: 8,
 											}}
