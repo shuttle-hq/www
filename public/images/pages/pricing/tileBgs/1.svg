@@ -1,57 +1,58 @@
-<svg width="373" height="188" viewBox="0 0 373 188" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0_2822_34151)">
-<rect width="373" height="188" rx="20" fill="black"/>
-<g clip-path="url(#clip1_2822_34151)">
-<g opacity="0.5">
-<g filter="url(#filter0_f_2822_34151)">
-<circle cx="154.837" cy="38.8378" r="1.5" transform="rotate(-75 154.837 38.8378)" fill="#C2C2C2"/>
-</g>
-</g>
-<g opacity="0.5">
-<g filter="url(#filter1_f_2822_34151)">
-<circle cx="2.07149" cy="162.842" r="1.5" transform="rotate(-75 2.07149 162.842)" fill="#C2C2C2"/>
-</g>
-</g>
-<g opacity="0.5">
-<circle cx="0.75" cy="0.75" r="0.75" transform="matrix(-0.258819 -0.965926 -0.965926 0.258819 357 174.896)" fill="#C2C2C2"/>
-</g>
-<g opacity="0.4">
-</g>
-<g opacity="0.2">
-</g>
-<g opacity="0.5">
-<path d="M229 131L224.46 131.46L224 136L223.54 131.46L219 131L223.54 130.54L224 126L224.46 130.54L229 131Z" fill="#C2C2C2"/>
-</g>
-</g>
-<g filter="url(#filter2_f_2822_34151)">
-<ellipse cx="143.923" cy="192.765" rx="154.222" ry="174.122" transform="rotate(87.4989 143.923 192.765)" fill="url(#paint0_linear_2822_34151)" fill-opacity="0.7"/>
-</g>
-</g>
-<defs>
-<filter id="filter0_f_2822_34151" x="147.336" y="31.3379" width="15" height="15" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-<feGaussianBlur stdDeviation="3" result="effect1_foregroundBlur_2822_34151"/>
-</filter>
-<filter id="filter1_f_2822_34151" x="-5.42969" y="155.342" width="15" height="15" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-<feGaussianBlur stdDeviation="3" result="effect1_foregroundBlur_2822_34151"/>
-</filter>
-<filter id="filter2_f_2822_34151" x="-230.164" y="-161.5" width="748.172" height="708.531" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-<feGaussianBlur stdDeviation="100" result="effect1_foregroundBlur_2822_34151"/>
-</filter>
-<linearGradient id="paint0_linear_2822_34151" x1="195.647" y1="338.151" x2="-12.2259" y2="286.709" gradientUnits="userSpaceOnUse">
-<stop offset="0.302833" stop-color="#FC540C" stop-opacity="0.94"/>
-<stop offset="1" stop-color="#38D4E9" stop-opacity="0.68"/>
-</linearGradient>
-<clipPath id="clip0_2822_34151">
-<rect width="373" height="188" rx="20" fill="white"/>
-</clipPath>
-<clipPath id="clip1_2822_34151">
-<rect width="1920" height="1000" fill="white" transform="translate(-409 -240)"/>
-</clipPath>
-</defs>
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 373 188" width="373" height="188">
+	<title>1-svg</title>
+	<defs>
+		<clipPath clipPathUnits="userSpaceOnUse" id="cp1">
+			<path d="m0 20c0-11.05 8.95-20 20-20h333c11.05 0 20 8.95 20 20v148c0 11.05-8.95 20-20 20h-333c-11.05 0-20-8.95-20-20z"/>
+		</clipPath>
+		<clipPath clipPathUnits="userSpaceOnUse" id="cp2">
+			<path d="m-409-240h1920v1000h-1920z"/>
+		</clipPath>
+		<filter x="-50%" y="-50%" width="200%" height="200%" id="f1"> <feGaussianBlur stdDeviation="3"/> </filter>
+		<filter x="-50%" y="-50%" width="200%" height="200%" id="f2"> <feGaussianBlur stdDeviation="150"/> </filter>
+		<linearGradient id="g1" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(236.728,-690.601,805.75,276.199,224,479.144)">
+			<stop offset="0" stop-color="#fc540c" stop-opacity="1"/>
+			<stop offset=".526" stop-color="#ffd76f" stop-opacity=".17"/>
+			<stop offset=".926" stop-color="#38d4e9" stop-opacity="1"/>
+		</linearGradient>
+	</defs>
+	<style>
+		.s0 { fill: #000000 } 
+		.s1 { filter: url(#f1);fill: #c2c2c2 } 
+		.s2 { fill: #c2c2c2 } 
+		.s3 { opacity: .6;filter: url(#f2);fill: url(#g1) } 
+	</style>
+	<g id="Layer">
+		<g id="Clip-Path" clip-path="url(#cp1)">
+			<g id="Layer">
+				<path id="Layer" class="s0" d="m0 20c0-11 9-20 20-20h333c11 0 20 9 20 20v148c0 11-9 20-20 20h-333c-11 0-20-9-20-20z"/>
+				<g id="Clip-Path" clip-path="url(#cp2)">
+					<g id="Layer">
+						<g id="Layer" style="opacity: .5">
+							<g id="Layer">
+								<path id="Layer" class="s1" d="m156.3 39.2c-0.2 0.8-1 1.3-1.9 1.1-0.8-0.2-1.2-1-1-1.9 0.2-0.8 1-1.2 1.8-1 0.8 0.2 1.3 1 1.1 1.8z"/>
+							</g>
+						</g>
+						<g id="Layer" style="opacity: .5">
+							<g id="Layer">
+								<path id="Layer" class="s1" d="m3.5 163.2c-0.2 0.8-1 1.3-1.8 1.1-0.8-0.2-1.3-1-1.1-1.8 0.2-0.8 1.1-1.3 1.9-1.1 0.8 0.2 1.2 1 1 1.8z"/>
+							</g>
+						</g>
+						<g id="Layer" style="opacity: .5">
+							<path id="Layer" class="s2" d="m355.4 174.6c0.1 0.4 0.5 0.6 0.9 0.5 0.4-0.1 0.6-0.5 0.5-0.9-0.1-0.4-0.5-0.7-0.9-0.6-0.4 0.2-0.7 0.6-0.5 1z"/>
+						</g>
+						<g id="Layer" style="opacity: .4">
+						</g>
+						<g id="Layer" style="opacity: .2">
+						</g>
+						<g id="Layer" style="opacity: .5">
+							<path id="Layer" class="s2" d="m229 131l-4.5 0.5-0.5 4.5-0.5-4.5-4.5-0.5 4.5-0.5 0.5-4.5 0.5 4.5z"/>
+						</g>
+					</g>
+				</g>
+				<g id="Layer">
+					<path id="Layer" class="s3" d="m1040.9-31.3l-30.5 375.9-926.2 126.3 56.7-415.3z"/>
+				</g>
+			</g>
+		</g>
+	</g>
 </svg>

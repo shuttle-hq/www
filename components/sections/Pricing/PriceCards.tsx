@@ -9,7 +9,7 @@ const PriceCards = () => (
 					src='/images/pages/pricing/tileBgs/1.svg'
 					fill
 					alt='bg img'
-					className='opacity-75] absolute left-0 top-0 z-[1] h-[188px] overflow-hidden rounded-[20px] '
+					className='absolute left-0 top-0 z-[1] overflow-hidden rounded-[20px]'
 				/>
 				<Image
 					src={`/images/pages/pricing/sections/cards/stars-1.png`}
@@ -45,10 +45,10 @@ const PriceCards = () => (
 			</div>
 			<div className='group relative h-[188px] rounded-[20px]'>
 				<Image
-					src='/images/pages/pricing/tileBgs/3.svg'
+					src='/images/pages/pricing/tileBgs/2.svg'
 					fill
 					alt='bg img'
-					className='opacity-75] absolute left-0 top-0 z-[1] h-[188px] overflow-hidden rounded-[20px] '
+					className='absolute left-0 top-0 z-[1] overflow-hidden rounded-[20px] '
 				/>
 				<Image
 					src={`/images/pages/pricing/sections/cards/stars-1.png`}
@@ -82,10 +82,10 @@ const PriceCards = () => (
 			</div>
 			<div className='group relative h-[188px] rounded-[20px]'>
 				<Image
-					src='/images/pages/pricing/tileBgs/5.svg'
+					src='/images/pages/pricing/tileBgs/3.svg'
 					fill
 					alt='bg img'
-					className='opacity-75] absolute left-0 top-0 z-[1] h-[188px] overflow-hidden rounded-[20px] '
+					className='absolute left-0 top-0 z-[1] overflow-hidden rounded-[20px] '
 				/>
 				<Image
 					src={`/images/pages/pricing/sections/cards/stars-1.png`}
@@ -124,10 +124,10 @@ const PriceCards = () => (
 			</div>
 			<div className='group relative h-[188px] rounded-[20px]'>
 				<Image
-					src='/images/pages/pricing/tileBgs/2.svg'
+					src='/images/pages/pricing/tileBgs/4.svg'
 					fill
 					alt='bg img'
-					className='opacity-75] absolute left-0 top-0 z-[1] h-[188px] overflow-hidden rounded-[20px] '
+					className='absolute left-0 top-0 z-[1] overflow-hidden rounded-[20px]'
 				/>
 				<Image
 					src={`/images/pages/pricing/sections/cards/stars-1.png`}
@@ -163,10 +163,10 @@ const PriceCards = () => (
 			</div>
 			<div className='group relative h-[188px] rounded-[20px]'>
 				<Image
-					src='/images/pages/pricing/tileBgs/4.svg'
+					src='/images/pages/pricing/tileBgs/5.svg'
 					fill
 					alt='bg img'
-					className='opacity-75] absolute left-0 top-0 z-[1] h-[188px] overflow-hidden rounded-[20px] '
+					className='absolute left-0 top-0 z-[1] overflow-hidden rounded-[20px] '
 				/>
 				<Image
 					src={`/images/pages/pricing/sections/cards/stars-1.png`}
@@ -205,7 +205,7 @@ const PriceCards = () => (
 					src='/images/pages/pricing/tileBgs/6.svg'
 					fill
 					alt='bg img'
-					className='opacity-75] absolute left-0 top-0 z-[1] h-[188px] overflow-hidden rounded-[20px] '
+					className='absolute left-0 top-0 z-[1] overflow-hidden rounded-[20px]'
 				/>
 				<Image
 					src={`/images/pages/pricing/sections/cards/stars-1.png`}

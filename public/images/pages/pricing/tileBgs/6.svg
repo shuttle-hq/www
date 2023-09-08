@@ -1,41 +1,50 @@
-<svg width="373" height="188" viewBox="0 0 373 188" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0_2822_34160)">
-<rect width="373" height="188" rx="20" fill="black"/>
-<g filter="url(#filter0_f_2822_34160)">
-<ellipse cx="121.688" cy="-1.35945" rx="221.083" ry="148.038" transform="rotate(-45 121.688 -1.35945)" fill="url(#paint0_linear_2822_34160)" fill-opacity="0.7"/>
-</g>
-<g clip-path="url(#clip1_2822_34160)">
-<g opacity="0.5">
-</g>
-<g opacity="0.5">
-</g>
-<g opacity="0.5">
-</g>
-<g opacity="0.4">
-</g>
-<g opacity="0.2">
-<circle cx="93.8371" cy="114.838" r="1.5" transform="rotate(-75 93.8371 114.838)" fill="#C2C2C2"/>
-</g>
-<g opacity="0.5">
-<path d="M210 71L205.46 71.4596L205 76L204.54 71.4596L200 71L204.54 70.5404L205 66L205.46 70.5404L210 71Z" fill="#C2C2C2"/>
-</g>
-</g>
-</g>
-<defs>
-<filter id="filter0_f_2822_34160" x="-266.469" y="-389.518" width="776.312" height="776.316" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-<feGaussianBlur stdDeviation="100" result="effect1_foregroundBlur_2822_34160"/>
-</filter>
-<linearGradient id="paint0_linear_2822_34160" x1="30.4375" y1="-79.3732" x2="236.385" y2="45.2916" gradientUnits="userSpaceOnUse">
-<stop stop-color="#FC540C" stop-opacity="0.94"/>
-<stop offset="1" stop-color="#38D4E9" stop-opacity="0.68"/>
-</linearGradient>
-<clipPath id="clip0_2822_34160">
-<rect width="373" height="188" rx="20" fill="white"/>
-</clipPath>
-<clipPath id="clip1_2822_34160">
-<rect width="1920" height="1000" fill="white" transform="translate(-1218 -460)"/>
-</clipPath>
-</defs>
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 373 188" width="373" height="188">
+	<title>6-svg</title>
+	<defs>
+		<clipPath clipPathUnits="userSpaceOnUse" id="cp1">
+			<path d="m0 20c0-11.05 8.95-20 20-20h333c11.05 0 20 8.95 20 20v148c0 11.05-8.95 20-20 20h-333c-11.05 0-20-8.95-20-20z"/>
+		</clipPath>
+		<clipPath clipPathUnits="userSpaceOnUse" id="cp2">
+			<path d="m-1218-460h1920v1000h-1920z"/>
+		</clipPath>
+		<filter x="-50%" y="-50%" width="200%" height="200%" id="f1"> <feGaussianBlur stdDeviation="150"/> </filter>
+		<linearGradient id="g1" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(236.728,-690.601,805.754,276.201,-585,259.144)">
+			<stop offset="0" stop-color="#fc540c" stop-opacity="1"/>
+			<stop offset=".526" stop-color="#ffd76f" stop-opacity=".17"/>
+			<stop offset=".926" stop-color="#38d4e9" stop-opacity="1"/>
+		</linearGradient>
+	</defs>
+	<style>
+		.s0 { fill: #000000 } 
+		.s1 { fill: #c2c2c2 } 
+		.s2 { opacity: .6;filter: url(#f1);fill: url(#g1) } 
+	</style>
+	<g id="Layer">
+		<g id="Clip-Path" clip-path="url(#cp1)">
+			<g id="Layer">
+				<path id="Layer" class="s0" d="m0 20c0-11 9-20 20-20h333c11 0 20 9 20 20v148c0 11-9 20-20 20h-333c-11 0-20-9-20-20z"/>
+				<g id="Clip-Path" clip-path="url(#cp2)">
+					<g id="Layer">
+						<g id="Layer" style="opacity: .5">
+						</g>
+						<g id="Layer" style="opacity: .5">
+						</g>
+						<g id="Layer" style="opacity: .5">
+						</g>
+						<g id="Layer" style="opacity: .4">
+						</g>
+						<g id="Layer" style="opacity: .2">
+							<path id="Layer" class="s1" d="m95.3 115.2c-0.2 0.8-1 1.3-1.9 1.1-0.8-0.2-1.2-1-1-1.9 0.2-0.8 1-1.2 1.8-1 0.8 0.2 1.3 1 1.1 1.8z"/>
+						</g>
+						<g id="Layer" style="opacity: .5">
+							<path id="Layer" class="s1" d="m210 71l-4.5 0.5-0.5 4.5-0.5-4.5-4.5-0.5 4.5-0.5 0.5-4.5 0.5 4.5z"/>
+						</g>
+					</g>
+				</g>
+				<g id="Layer">
+					<path id="Layer" class="s2" d="m231.9-251.3l-30.5 375.9-926.2 126.3 56.7-415.3z"/>
+				</g>
+			</g>
+		</g>
+	</g>
 </svg>
