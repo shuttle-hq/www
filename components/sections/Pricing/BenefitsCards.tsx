@@ -87,7 +87,7 @@ const BenefitCards = () => (
 					</svg>
 					<h1 className='font-gradual text-2xl font-bold text-[#C2C2C2] '>Bypass DevOps</h1>
 					<p className='text-[#ffffff8f]'>
-						Leapfrog traditional DevOps with out 'Infrastructure from Code' approach.
+						Leapfrog traditional DevOps with out &apos;Infrastructure from Code&apos; approach.
 					</p>
 				</div>
 				<div
@@ -160,7 +160,7 @@ const BenefitCards = () => (
 						/>
 					</svg>
 					<h1 className='font-gradual text-2xl font-bold text-[#C2C2C2] '>
-						Got something you'd like to see here?
+						Got something you&apos;d like to see here?
 					</h1>
 					<p className='cursor-pointer text-[#ffffff8f] underline'>Request a feature</p>
 				</div>

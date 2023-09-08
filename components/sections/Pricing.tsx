@@ -423,7 +423,7 @@ const Pricing = () => {
 								<div className='mb-4 font-gradual text-2xl font-bold'>Team</div>
 
 								<div className='mb-4 text-base text-[#7A7A7A]'>
-									Custom-built tier to supercharge your team's productivity.
+									Custom-built tier to supercharge your team&apos;s productivity.
 								</div>
 								<button
 									className={clsx(

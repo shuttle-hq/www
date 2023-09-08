@@ -79,7 +79,7 @@ const Plan: FC<PlanProps> = ({
 				{billsResources && <p className='font-gradual text-[#7A7A7A]'>+ RESOURCE USAGE</p>}
 				<hr className={clsx('mb-5 border-[#7A7A7A]', billsResources ? ' mt-6 ' : ' mt-12')} />
 				{features.map((feature, i) => (
-					<div className='relative flex flex-row items-center gap-2'>
+					<div key={i} className='relative flex flex-row items-center gap-2'>
 						<p
 							className=' bg-clip-text text-2xl font-bold text-transparent '
 							style={{ backgroundImage: textGradient }}
