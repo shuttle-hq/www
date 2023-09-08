@@ -15,7 +15,7 @@ export default function Auth() {
 
 	return (
 		<div className='flex h-screen w-screen items-center justify-center bg-black'>
-			<p className='text-[#BEBEBE]'>Authenticating...</p>
+			<p className='text-[#7A7A7A]'>Authenticating...</p>
 		</div>
 	)
 }

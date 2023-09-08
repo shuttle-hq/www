@@ -8,7 +8,7 @@ const Info = () => {
 					<h2 className='font-gradual text-2xl font-bold text-[#C2C2C2] xl:text-6xl'>
 						You just need an idea
 					</h2>
-					<p className='mt-7 leading-8 text-[#BEBEBE] lg:text-xl'>
+					<p className='mt-7 leading-8 text-[#7A7A7A] lg:text-xl'>
 						Want to build a revolutionary new blogging service?
 						<br className='hidden sm:block' /> Just write&nbsp;
 						<code className='inline-block rounded-lg border border-white/10 px-2 py-1 text-base text-sm text-[#D8D8D8] lg:text-base'>
@@ -138,7 +138,7 @@ const Info = () => {
 					<h2 className='font-gradual text-2xl font-bold text-[#C2C2C2] xl:text-6xl'>
 						Missing a feature?
 					</h2>
-					<p className='mt-7 leading-8 text-[#BEBEBE] lg:text-xl'>
+					<p className='mt-7 leading-8 text-[#7A7A7A] lg:text-xl'>
 						Just write&nbsp;
 						<code className='inline-block rounded-lg border border-white/10 px-2 py-1 text-base text-sm text-[#D8D8D8] lg:text-base'>
 							shuttle-ai add-feature &quot;Add comment support&quot;
@@ -163,7 +163,7 @@ const Info = () => {
 				/>
 			</svg>
 			<div className='relative left-1/2 -ml-8 w-max -translate-x-1/2 transform rounded-2xl border border-white/20 px-8 py-5 text-xl text-[#C2C2C2] sm:-ml-16 md:-ml-48'>
-				Don&apos;t believe us? <span className='text-[#BEBEBE]'>Here is a demo</span>
+				Don&apos;t believe us? <span className='text-[#7A7A7A]'>Here is a demo</span>
 			</div>
 			{/* Squiggly Line 3 */}
 			<svg

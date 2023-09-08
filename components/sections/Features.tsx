@@ -1,7 +1,7 @@
 import { Compile, Database, Deploy, Free, Open, Skip } from 'components/svgs'
 import Image from 'next/image'
-import { Button, LoginButton } from '../elements'
-import { useUser } from '@auth0/nextjs-auth0/client'
+import {Button, LoginButton} from "../elements";
+import {useUser} from "@auth0/nextjs-auth0/client";
 
 const Features = () => {
 	return (
@@ -11,7 +11,7 @@ const Features = () => {
 					<h2 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-[3.5rem]'>
 						Bring your code, we&apos;ll handle the rest
 					</h2>
-					<p className='mt-5 text-xl text-[#525151] dark:text-[#BEBEBE] lg:text-2xl'>
+					<p className='mt-5 text-xl text-[#525151] dark:text-[#7A7A7A] lg:text-2xl'>
 						Leave the deployment to us and focus on what matters, writing good code.
 					</p>
 				</div>
@@ -62,7 +62,9 @@ const Features = () => {
 						Shuttle makes it easy to connect to databases, has out-of-the-box logging support, abundant
 						documentation and supports all major Rust frameworks. Yes, even if you are coming from JS.
 					</p>
-					<LoginButton variant='primary'>Log in</LoginButton>
+					<LoginButton variant='primary'>
+						Log in
+					</LoginButton>
 				</div>
 				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-[#C2C2C2] dark:bg-black dark:text-white sm:p-8 xl:row-[span_2]'>
 					<Image
@@ -84,9 +86,7 @@ const Features = () => {
 						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain transition-transform duration-1000 group-hover:-translate-x-10 group-hover:-translate-y-1'
 					/>
 					<h3 className='font-gradual text-2xl font-bold text-[#C2C2C2]'>Vercel for Backends</h3>
-					<p className='opacity-50'>
-						Get an entire infrastructure configured without writing any infrastructure config.
-					</p>
+					<p className='opacity-50'>Get an entire infrastructure configured without writing any infrastructure config.</p>
 					<Compile />
 				</div>
 				<div className='group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-[#C2C2C2] dark:bg-black dark:text-white sm:p-8 xl:row-[span_3] xl:justify-end'>
