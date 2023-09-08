@@ -171,7 +171,7 @@ const Calculator = () => {
 							</div>
 						</div>
 						<div
-							className='gradient-border mx-auto flex scale-125 items-center rounded-[24px] bg-contain  bg-center bg-no-repeat px-8 py-5'
+							className='gradient-border mx-auto flex h-[88px] w-[224px] scale-125 items-center justify-center rounded-[24px] bg-contain bg-center bg-no-repeat px-8 py-5'
 							style={{
 								backgroundImage: 'url(/images/pages/pricing/border.svg)',
 							}}

@@ -48,7 +48,7 @@ const PriceCards = () => (
 					src='/images/pages/pricing/tileBgs/2.svg'
 					fill
 					alt='bg img'
-					className='absolute left-0 top-0 z-[1] overflow-hidden rounded-[20px] '
+					className='absolute left-0 top-0 z-[1] overflow-hidden rounded-[20px]'
 				/>
 				<Image
 					src={`/images/pages/pricing/sections/cards/stars-1.png`}
