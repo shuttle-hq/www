@@ -16,18 +16,19 @@ In this guide to web scraping in Rust, we will write a Rust web scraper that wil
 Stuck or want to see the final code? The Github repository for this article can be found [here.](https://github.com/joshua-mo-143/reqshuttle)
 
 ## Getting Started
-Let's make a new project by using `cargo shuttle init`. For this project we'll simply call it `webscraper` - you'll want the `Custom` web service, which will spawn a new Cargo project with `shuttle-runtime` added.
+Let's make a new project by using `cargo shuttle init`. For this project we'll simply call it `webscraper` - you'll want the `none` option for the framework, which will spawn a new Cargo project with `shuttle-runtime` added (as we aren't currently using a web framework, we don't need to pick any of the other options).
 
 Let's install our dependencies with the following one liner:
 ```bash
 cargo add chrono reqwest scraper tracing shuttle-shared-db sqlx --features shuttle-shared-db/postgres,sqlx/runtime-tokio-native-tls,sqlx/postgres
 ```
-We'll also want to install `sqlx-cli`, which is a useful tool for managing our SQL migrations. We can install it by running te following:
+We'll also want to install `sqlx-cli`, which is a useful tool for managing our SQL migrations. We can install it by running the following:
 ```bash
 cargo install sqlx-cli
 ```
 If we then use `sqlx migrate add schema` in our project folder, we'll then get our SQL migration file, which can be found in the `migrations` folder! The file will be formatted with the date and time at which the migration was created, and then the name we gave it (in this case, `schema`). For our purposes, here are the migrations we'll be using:
 ```sql
+// migrations/schema.sql
 CREATE TABLE IF NOT EXISTS products (
         id SERIAL PRIMARY KEY,
         name VARCHAR NOT NULL,
@@ -40,17 +41,18 @@ CREATE TABLE IF NOT EXISTS products (
 
 Before we get started, we'll want to make a struct that implements `shuttle_runtime::Service`, which is an async trait. We'll also want to set our user agent so that there is less chance of us getting blocked. Thankfully, we can do all of this by returning a struct in our main function, like so:
 ```rust
+// src/main.rs
 use reqwest::Client;
 use tracing::error;
 use sqlx::PgPool;
 
-pub struct CustomService {
+struct CustomService {
     ctx: Client,
     db: PgPool
 }
 
 // Set up our user agent
-const USER_AGENT: &str = "Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148";
+const USER_AGENT: &str = "Mozilla/5.0 (Linux x86_64; rv:115.0) Gecko/20100101 Firefox/115.0";
 
 // note that we add our Database as an annotation here so we can easily get it provisioned to us
 #[shuttle_runtime::main]
@@ -67,7 +69,7 @@ async fn main(
 
 #[shuttle_runtime::async_trait]
 impl shuttle_runtime::Service for CustomService {
-    async fn bind(mut self, _addr: SocketAddr) -> Result<(), shuttle_runtime::Error> {
+    async fn bind(mut self, _addr: std::net::SocketAddr) -> Result<(), shuttle_runtime::Error> {
         scrape(self.ctx, self.db).await.expect("scraping should not finish");
         error!("The web scraper loop shouldn't finish!");
         Ok(())
@@ -81,15 +83,15 @@ Now that we're done, we can get started web scraping in Rust!
 The first part of making our web scraper is making a request to our target URL so we can grab the response body to process. Thankfully, Amazon's URL syntax is quite simple, so we can easily customise the URL query parameters by adding the name of the search terms we want to look for. Because Amazon returns multiple pages of results, we also want to be able to set our page number as a mutable dynamic variable that will get incremented by 1 every time the request is successful.
 
 ```rust
+// src/main.rs
 use chrono::NaiveDate;
 
 #[derive(Clone, Debug)]
-pub struct Product {
+struct Product {
     name: String,
     price: String,
     old_price: Option<String>,
     link: String,
-    scraped_at: NaiveDate,
 }
 
 async fn scrape(ctx: Client) -> Result<(), String> {
@@ -115,8 +117,11 @@ async fn scrape(ctx: Client) -> Result<(), String> {
 ```
 As you may have noticed, we added a variable named `retry_attempts`. This is because sometimes when we're scraping, Amazon (or any other site for that matter) may give us a 503 Service Unavailable, meaning that the scraping will fail. Sometimes this can be caused by server  overload or us scraping too quickly, so we can model our error handling like this:
 ```rust
-use std::thread::sleep as StdSleep;
-use std::time::Duration as StdDuration;
+// src/main.rs
+
+use reqwest::StatusCode;
+use std::thread::sleep as std_sleep;
+use tokio::time::Duration;
 
 if res.status() == StatusCode::SERVICE_UNAVAILABLE {
    error!("Amazon returned a 503 at page {pagenum}");
@@ -125,10 +130,10 @@ if res.status() == StatusCode::SERVICE_UNAVAILABLE {
     // take a break if too many retry attempts
         error!("It looks like Amazon is blocking us! We will rest for an hour.");
 	// sleep for an hour then retry on current iteration
-        StdSleep(StdDuration::from_secs(3600));
+        std_sleep(Duration::from_secs(3600));
         continue;
         } else {
-           StdSleep(StdDuration::from_secs(15));
+           std_sleep(Duration::from_secs(15));
             continue;
         }
 }
@@ -137,6 +142,9 @@ If the HTTP request was successful, we will then need to change `retry_attempts`
 
 Assuming the HTTP request is successful, we'll get a HTML body that we can parse using `scraper`. We'll want to make sure we prepare our HTML by parsing it as a HTML fragment, and then declaring our initial `scraper::Selector`:
 ```rust
+// src/main.rs
+use scraper::{Html, Selector};
+
 let html = Html::parse_fragment(&res);
 let selector = Selector::parse("div[data-component-type='s-search-result']").unwrap();
 ```
@@ -144,6 +152,7 @@ As you can see, the `Selector` uses CSS selectors to be able to parse the HTML. 
 
 If you attempt to run our program now and `html.select(&selector)` as per the `scraper` documentation, you'll see that it returns an iterator over HTML elements. However, because the iteration count can also technically be zero, we'll want to make sure that there are actually things we can iterate over - so let's make sure we cover that point by adding an if statement to check for the iterator count:
 ```rust
+// src/main.rs
 if html.select(&selector).count() == 0 {
     error!("There's nothing to parse here!");
     break
@@ -153,6 +162,7 @@ In our final iteration of the app, this should just break the loop as this will 
 
 Now that we've done our respective error handling, we can iterate through the entries and create a Product, then append it to our vector of Products.
 ```rust
+// src/main.rs
 for entry in html.select(&selector) {
 // declaring more Selectors to use on each entry
     let price_selector = Selector::parse("span.a-price > span.a-offscreen").unwrap();
@@ -179,12 +189,13 @@ for entry in html.select(&selector) {
 }
 
 pagenum += 1;
-std::thread::sleep(StdDuration::from_secs(20));
+std_sleep(Duration::from_secs(20));
 ```
 Note that in the above codeblock we use sleep from the standard library - if we attempt to use `tokio::time::sleep`, the compiler returns an error about holding a non-`Send` future across an await point. 
 
 Now that we've written our code for processing the data we've gathered from the web page, we can wrap what we've written so far in a loop, moving our `Vec<Product>` and `pagenum` declarations to an outer loop that will run infinitely. Next, we'll want to make sure we have somewhere to save our data! We'll want to use a batched transaction here, which thankfully we can do by using `db.begin` and `db.commit`. Check the code out below:
 ```rust
+// src/main.rs
 let transaction = db.begin().await.unwrap();
 	
 for product in vec {
@@ -214,7 +225,8 @@ All we're doing here is just running a for loop over the list of scraped product
 
 Now ideally we'll want the scraper to rest for some time so that the pages are given time to update - otherwise, if you comb the pages all the time you will more than likely end up with a huge amount of duplicate data. Let's say we wanted to wanted it to rest until midnight:
 ```rust
-use tokio::time::{sleep as TokioSleep, Duration as TokioDuration};
+// src/main.rs
+use tokio::time::{sleep as tokio_sleep, Duration};
 
 // get the local time, add a day then get the NaiveDate and set a time of 00:00 to it
 let tomorrow_midnight = Local::now()
@@ -231,13 +243,14 @@ let now = Local::now().naive_local();
 let duration_to_midnight =  tomorrow_midnight.signed_duration_since(now).to_std().unwrap();
 
 // sleep for the required time
-Sleep(Duration::from_secs(duration_to_midnight.as_secs())).await;
+tokio_sleep(Duration::from_secs(duration_to_midnight.as_secs())).await;
 ```
 Now we're pretty much done!
 
 Your final scraping function should look like this:
 ```rust
-pub async fn scrape(ctx: Client, db: PgPool) -> Result<(), String> {
+// src/main.rs
+async fn scrape(ctx: Client, db: PgPool) -> Result<(), String> {
     debug!("Starting scraper...");
     loop {
         let mut vec: Vec<Product> = Vec::new();
@@ -323,12 +336,10 @@ pub async fn scrape(ctx: Client, db: PgPool) -> Result<(), String> {
 
         for product in vec {
             if let Err(e) = sqlx::query(
-                "INSERT INTO
-        products
-       (name, price, old_price, link, scraped_at)
-       VALUES
-       ($1, $2, $3, $4, $5)
-      ",
+                "INSERT INTO products
+       		(name, price, old_price, link, scraped_at)
+       		VALUES
+       		($1, $2, $3, $4, $5)"
             )
             .bind(product.name)
             .bind(product.price)
