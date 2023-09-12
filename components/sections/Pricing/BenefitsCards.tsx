@@ -87,7 +87,7 @@ const BenefitCards = () => (
 					</svg>
 					<h1 className='font-gradual text-2xl font-bold text-[#C2C2C2] '>Bypass DevOps</h1>
 					<p className='text-[#ffffff8f]'>
-						Leapfrog traditional DevOps with out &apos;Infrastructure from Code&apos; approach.
+						Leapfrog traditional DevOps with our &apos;Infrastructure from Code&apos; approach.
 					</p>
 				</div>
 				<div
