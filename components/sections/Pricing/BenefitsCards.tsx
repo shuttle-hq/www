@@ -6,13 +6,13 @@ const BenefitCards = () => (
 			src='/images/pages/pricing/benefitBg1.png'
 			alt='bg img'
 			fill
-			className='absolute h-auto w-[839px] -translate-y-[40%] '
+			className='absolute -z-10 h-auto w-[839px] -translate-y-[40%]'
 		/>
 		<Image
 			src='/images/pages/pricing/benefitBg2.png'
 			alt='bg img'
 			fill
-			className='absolute ml-auto h-auto w-[1244px] -translate-y-[40%] '
+			className='absolute -z-10 ml-auto h-auto w-[1244px] -translate-y-[40%]'
 		/>
 		<div className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10'>
 			<h1 className='mb-12 text-center font-gradual text-4xl font-bold text-[#C2C2C2]'>

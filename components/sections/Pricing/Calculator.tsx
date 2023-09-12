@@ -35,15 +35,15 @@ const Calculator = () => {
 					src='/images/pages/pricing/calculatorBg.svg'
 					fill
 					alt='bg img'
-					className='absolute h-auto w-[1440px] -translate-y-[20%] translate-x-[20%] opacity-0 sm:opacity-100'
+					className='absolute -z-10 h-auto w-[1440px] -translate-y-[20%] translate-x-[20%] opacity-0 sm:opacity-100'
 				/>
 				<Image
 					src='/images/pages/pricing/calculatorBgSmall.svg'
 					fill
 					alt='bg img'
-					className='absolute z-[-1] h-[200vh] w-screen -translate-y-[20%] sm:hidden'
+					className='absolute -z-10 h-[200vh] w-screen -translate-y-[20%] sm:hidden'
 				/>
-				<div className='mx-auto mt-14 flex w-full max-w-7xl flex-col gap-[200px] px-5 sm:flex-row sm:px-10 lg:mt-14'>
+				<div className='z-10 mx-auto mt-14 flex w-full max-w-7xl flex-col gap-[200px] px-5 sm:flex-row sm:px-10 lg:mt-14'>
 					<div className=' flex max-w-[400px] flex-col items-start justify-center'>
 						<h1 className='mb-5 font-gradual text-4xl font-bold text-[#E0E0E0] sm:text-5xl sm:text-[#C2C2C2]'>
 							Estimate Your
