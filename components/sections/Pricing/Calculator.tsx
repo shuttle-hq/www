@@ -26,7 +26,7 @@ const Calculator = () => {
 
 	const ram = roundToClosest(cpu, [0.05, 0.1, 0.25, 0.5, 0.75, 1, 2, 4]) * 4
 	const requests = Math.round((hours / 36.5) * cpu * 150000).toLocaleString()
-	const price = Math.max(Math.round(0.1 * hours * cpu), 0)
+	const price = Math.max(Math.round(0.1 * hours * cpu) - 4, 0)
 
 	return (
 		<>
