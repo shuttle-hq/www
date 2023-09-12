@@ -1,13 +1,14 @@
 import clsx from 'clsx'
 import { CopyButton } from 'components/elements'
-import { useMemo } from 'react'
 
 export const Pre = ({ children, ...props }: any) => {
 	let line = 1
 
 	function getChildren(children: any): string[] {
 		return [children].flat().flatMap((child: any) => {
-			if (typeof child === 'string') {
+			// This is a fix for such code breaking mdx parser:
+			// <script src="/main.js"></script>
+			if (typeof child === 'string' || !child) {
 				return child
 			}
 
