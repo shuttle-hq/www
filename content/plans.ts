@@ -9,9 +9,6 @@ export const Plans: PlanProps[] = [
 		billsResources: false,
 		features: [
 			{
-				feature: 'Unlimited projects',
-			},
-			{
 				feature: 'Up to 3 projects',
 			},
 			{
