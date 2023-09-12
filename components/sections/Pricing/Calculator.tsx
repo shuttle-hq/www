@@ -19,11 +19,13 @@ function roundToClosest(num: number, arr: number[]) {
 	return closest
 }
 
+const VCPU_VALUES = [0.05, 0.1, 0.25, 0.5, 0.75, 1, 2, 4]
+
 const Calculator = () => {
 	const [hours, setHours] = useState(50)
 	const [cpu, setCpu] = useState(0.25)
 
-	const ram = roundToClosest(cpu, [0.05, 0.1, 0.25, 0.5, 0.75, 1, 2, 4]) * 4
+	const ram = roundToClosest(cpu, VCPU_VALUES) * 4
 	const requests = Math.round((hours / 36.5) * cpu * 150000).toLocaleString()
 	const price = Math.max(Math.round(0.1 * hours * cpu) - 4, 0)
 
@@ -155,7 +157,9 @@ const Calculator = () => {
 							}}
 							value={cpu}
 							onChange={(value: number | number[]) => {
-								if (typeof value === 'number') setCpu(value)
+								if (typeof value === 'number') {
+									setCpu(roundToClosest(value, VCPU_VALUES))
+								}
 							}}
 							className='mb-16'
 						/>
