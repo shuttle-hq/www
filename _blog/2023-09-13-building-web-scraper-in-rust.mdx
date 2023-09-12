@@ -28,7 +28,7 @@ cargo install sqlx-cli
 ```
 If we then use `sqlx migrate add schema` in our project folder, we'll then get our SQL migration file, which can be found in the `migrations` folder! The file will be formatted with the date and time at which the migration was created, and then the name we gave it (in this case, `schema`). For our purposes, here are the migrations we'll be using:
 ```sql
-// migrations/schema.sql
+-- migrations/schema.sql
 CREATE TABLE IF NOT EXISTS products (
         id SERIAL PRIMARY KEY,
         name VARCHAR NOT NULL,
