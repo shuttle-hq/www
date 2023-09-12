@@ -11,6 +11,7 @@ import PriceCards from 'components/sections/Pricing/PriceCards'
 import Contact from 'components/sections/Pricing/Contact'
 import BenefitCards from 'components/sections/Pricing/BenefitsCards'
 import Calculator from 'components/sections/Pricing/Calculator'
+import 'react-tooltip/dist/react-tooltip.css'
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
 	const questions = Questions

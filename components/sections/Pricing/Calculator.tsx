@@ -3,7 +3,6 @@ import Slider from 'rc-slider'
 import { useState } from 'react'
 import { Tooltip } from 'react-tooltip'
 import 'rc-slider/assets/index.css'
-import 'react-tooltip/dist/react-tooltip.css'
 
 function roundToClosest(num: number, arr: number[]) {
 	let closest = arr[0]

@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { Information } from 'components/svgs'
 import { FC, useState } from 'react'
 import Image from 'next/image'
-import { Button } from 'components/elements'
+import { Tooltip } from 'react-tooltip'
 
 export interface FeatureProps {
 	feature: string
@@ -32,7 +32,7 @@ const Plan: FC<PlanProps> = ({
 	textGradient,
 	cta,
 }) => {
-	const [buttonHovered, setButtonHovered] = useState(false)
+	const [buttonHovered, setButtonHovered] = useState(true)
 	return (
 		<div
 			className={clsx(
@@ -89,15 +89,24 @@ const Plan: FC<PlanProps> = ({
 						<p className='text-base text-[#C2C2C2]'>{feature.feature}</p>
 
 						{feature.iText && (
-							<div className=''>
-								<Information className='peer' />
-								<Image
-									src='/images/pages/pricing/iHover.png'
-									alt=''
-									width={307}
-									height={57}
-									className='absolute -top-12 right-0 -translate-x-[15%] scale-75 opacity-0 transition-all peer-hover:opacity-100'
+							<div
+								data-tooltip-id='i-text'
+								data-tooltip-content={feature.iText}
+								data-tooltip-place='top'
+								data-tooltip-float={true}
+								data-tooltip-offset={30}
+							>
+								<Tooltip
+									id='i-text'
+									style={{
+										color: '#fff',
+										border: '1px solid #3F4848',
+										borderWidth: 1,
+										borderColor: '#3F4848',
+										borderRadius: 8,
+									}}
 								/>
+								<Information className='peer' />
 							</div>
 						)}
 					</div>
