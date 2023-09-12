@@ -2,7 +2,6 @@ import matter from 'gray-matter'
 import { serialize } from 'next-mdx-remote/serialize'
 import { NextSeo } from 'next-seo'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 import { generateReadingTime } from 'lib/helpers'
 import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote'
 import gfm from 'remark-gfm'
@@ -142,8 +141,6 @@ interface Props {
 }
 
 export default function IssuePage(props: Props) {
-	const { basePath } = useRouter()
-
 	return (
 		<>
 			<NextSeo
