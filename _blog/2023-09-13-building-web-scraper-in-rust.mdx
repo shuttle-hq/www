@@ -123,6 +123,8 @@ use reqwest::StatusCode;
 use std::thread::sleep as std_sleep;
 use tokio::time::Duration;
 
+let mut retry_attempts = 0;
+
 if res.status() == StatusCode::SERVICE_UNAVAILABLE {
    error!("Amazon returned a 503 at page {pagenum}");
    retry_attempts += 1;
@@ -137,10 +139,16 @@ if res.status() == StatusCode::SERVICE_UNAVAILABLE {
             continue;
         }
 }
-```
-If the HTTP request was successful, we will then need to change `retry_attempts` back to 0.
 
-Assuming the HTTP request is successful, we'll get a HTML body that we can parse using `scraper`. We'll want to make sure we prepare our HTML by parsing it as a HTML fragment, and then declaring our initial `scraper::Selector`:
+retry_attempts = 0;
+```
+Assuming the HTTP request is successful, we'll get a HTML body that we can parse using `scraper`. 
+
+If you go to Amazon in your browser and search for "raspberry pi", you'll then receive a product list. You can examine this product list by using the dev tools function on your browser (in this instance, it's the Inspect function in Firefox but you can also use Chrome Devtools, Microsoft Edge DevTools, etc...). It should look like the following:
+
+![Devtools preview of webpage analysis for web scraping in a browser](/images/blog/web_scraper_amazon.png) 
+
+You might notice that the `div` element has a data attribute of `data-component-type` for which the value of `s-search-result`. This is helpful for us as no other page components other than the ones we want to scrape have that attribute! Therefore, we can scrape the data by selecting it as a CSS selector (see below for more information). We'll want to make sure we prepare our HTML by parsing it as a HTML fragment, and then we can declare our initial `scraper::Selector`:
 ```rust
 // src/main.rs
 use scraper::{Html, Selector};
@@ -384,7 +392,7 @@ And we're done!
 If you initialised your project on the Shuttle servers, you can get started by using `cargo shuttle deploy` (adding `--allow-dirty` if on a dirty Git branch). If not, you'll want to use `cargo shuttle project start --idle-minutes 0` to get your project up and running.
 
 ## Finishing Up
-Thanks for reading this article! I hope you have a more thorough understanding of how to start web scraping in Rust, using the Rust `Reqwest` and `scraper` crates.
+Thanks for reading this article! I hope you have a more thorough understanding of how to start web scraping in Rust, using the Rust Reqwest and scraper crates.
 
 Ways to extend this article:
 - Add a frontend so you can show stats for your scraper bot
