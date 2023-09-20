@@ -1,19 +1,19 @@
 ---
-title: What Rust Logger Crate Should You Use in 2023?
+title: Logging in Rust - How to Get Started
 description: This article talks about the most popular logging crates in Rust and what the best one for your use case is, including both simple and more complex crates. 
 author: josh
-tags: [rust, logging, comparison]
-thumb: 
-cover: 
-date: '2023-09-20T14:00:00'
+tags: [rust, logging, comparison, guide]
+thumb: logging-thumbnail.png 
+cover: logging-thumbnail.png
+date: '2023-09-20T15:00:00'
 ---
-# A Rust Logging Crate Comparison in 2023
+# Logging in Rust - How to Get Started
 With so many different libraries at our disposal for outputting logs in Rust, it's difficult to know which one to choose. When `println!`, `dbg!` and `eprintln!` don't cut it, having a way to structure your logs is extremely important, especially in production-grade applications. This article will help you gain insight on what the best log crate for your use case is when it comes to Rust logging. 
 
 ## How does logging work in Rust?
 In short: loggers in Rust depend on a library to act as a "logging facade" - a crate which provides the logging API that the logger can work with. So for example, if we have a crate like `log` that provides a logging implementation for us that we can use with a logger, we then will also need to add a crate that actually carries out the logging - for example, `simple-logger` being one of many crates that can use `log`. Some logging facades may only be able to be used by their own special logger - for example, `tracing` either requires you to use the `tracing-subscriber` crate, or otherwise implement your own custom type that implements `tracing::Subscriber`.
 
-Without further ado, let's start the review!
+Without further ado, let's start the Rust logging crate comparison!
 
 ## log
 [`log`](https://github.com/rust-lang/log) is a crate that calls itself a "lightweight logging facade". The crate defines a logging facade as a library that "provides a single logging API that abstracts over the actual logging implementation" - essentially, this means that we'll need to run another library that provides the actual logging and then use this crate to provide the logging messages. Log is also maintained by the Rust core team and is probably the first crate you'll see on [the Rust Cookbook](https://rust-lang-nursery.github.io/rust-cookbook/development_tools/debugging/log.html#log-a-debug-message-to-the-console), so there's that.
@@ -91,7 +91,7 @@ A quick summary:
 - Owned by the Rust CLI Working Group
 - Simple to use and feels good to use
 - Lack of documentation on more complex functionality like log appending/piping
-- Thread safety??
+- Some unclear issues on whether the crate is 100% thread-safe
 
 ## log4rs
 [log4rs](https://github.com/estk/log4rs) is a logging crate modeled after Java's log4j - a logging package that's probably one of the most deployed pieces of open source software. This crate requires a bit more setup than the others and configuration can be done with either a YAML file or programmatically. `log4rs` is compatible with `log`, which is great for us as it means we don't have to adopt a new paradigm just to use `log4rs`.
@@ -193,7 +193,7 @@ rolling_appender:
 ```
 Now we have a policy that fills up the main log file, then appends it to an archived log file once the main log file reaches 10 megabytes' worth of logs, then deletes the currently active log file ready to receive more logs.
 
-As you can see, `log4rs` is an extremely versatile crate that works with the previously mentioned `log` crate to provide powerful functionality with regards to logging in Rust. However, in exchange for this you have to learn how to set the logger up and the setup itself is quite complicated compared to other logging crates, so bear that in mind.
+As you can see, `log4rs` is an extremely versatile crate that works with the previously mentioned `log` crate to provide powerful functionality with regards to logging in Rust, and is espespecially great if you're coming from a language like Java where you already understand the mental model and just want to find out how to do logging in Rust. However, in exchange for this you have to learn how to set the logger up and the setup itself is quite complicated compared to other logging crates, so bear that in mind.
 
 Summary:
 - Large all-in-one crate that can do it all
@@ -202,7 +202,7 @@ Summary:
 - Works with `log`
 
 ## tracing
-[tracing](https://github.com/tokio-rs/tracing) is a crate that calls itself "a framework for instrumenting Rust programs to collect structured, event-based diagnostic information", requiring its logger counterpart `tracing-subscriber` to be used or a custom type that implements the `tracing::Subscriber` function. Developed by the Tokio team, it's fully built up from the ground for async which is perfect for web applications.
+[tracing](https://github.com/tokio-rs/tracing) is a crate that calls itself "a framework for instrumenting Rust programs to collect structured, event-based diagnostic information", requiring its logger counterpart `tracing-subscriber` to be used or a custom type that implements the `tracing::Subscriber` function. Developed by the Tokio team, it's fully built up from the ground for async which is perfect for web applications with Rust logs.
 
 `tracing` uses the concept of "spans" which are used to record the flow of execution through a program. Events can happen inside or outside of a span and can also be used similarly to unstructured logging (ie, just recording the event any which way) but can also represent a point of time within a span. See below:
 ```rust
@@ -285,7 +285,7 @@ tracing_subscriber::fmt()
     .with_writer(non_blocking)
     .init();
 ```
-As you can see, the `tracing` family of crates offers a tonne of power in terms of what it can do and is robust enough for any web application and it's maintained by the Tokio team so it is sure to be supported for a long time. However, using it requires learning about how `tracing` works as it uses concepts that are not utilised in other logging crates - so you'll be locked in if you need to migrate from the crate for whatever reason and you're using spans. 
+As you can see, the `tracing` family of crates offers a tonne of power in terms of what it can do and is robust enough for any web application and it's maintained by the Tokio team so it is sure to be supported for a long time. However, using it requires learning about how `tracing` works as it uses concepts that are not utilised in other logging crates - so you'll be locked in if you need to migrate from the crate for whatever reason and you're using spans. However, if you're asking yourself "what is the best logger crate in Rust", you can't go wrong with `tracing` crates in terms of how powerful this family of crates is. 
 
 Summary:
 - Requires some learning about spans, etc to utilise fully
