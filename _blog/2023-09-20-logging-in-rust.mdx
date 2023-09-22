@@ -21,20 +21,20 @@ Without further ado, let's start the Rust logging crate comparison!
 As taken from the GitHub repository, here's a simple example on how it can be used:
 
 ```rust
-use log::{info, trace, warn};
+use log;
 
 pub fn shave_the_yak(yak: &mut Yak) {
-    trace!("Commencing yak shaving");
+    log::trace!("Commencing yak shaving");
 
     loop {
         match find_a_razor() {
             Ok(razor) => {
-                info!("Razor located: {}", razor);
+                log::info!("Razor located: {}", razor);
                 yak.shave(razor);
                 break;
             }
             Err(err) => {
-                warn!("Unable to locate a razor: {}, retrying", err);
+                log::warn!("Unable to locate a razor: {}, retrying", err);
             }
         }
     }
@@ -206,20 +206,28 @@ Summary:
 
 `tracing` uses the concept of "spans" which are used to record the flow of execution through a program. Events can happen inside or outside of a span and can also be used similarly to unstructured logging (ie, just recording the event any which way) but can also represent a point of time within a span. See below:
 ```rust
-use tracing::{event, span, Level};
+use tracing::Level;
 
 // records an event outside of any span context:
-event!(Level::INFO, "something happened");
+tracing::event!(Level::DEBUG, "something happened");
 
 // create the span while entering it
-let span = span!(Level::INFO, "my_span").entered();
+let span = tracing::span!(Level::INFO"my_span").entered();
 
 // records an event within "my_span".
-event!(Level::DEBUG, "something happened inside my_span");
+tracing::event!(Level::DEBUG, "something happened inside my_span");
 ```
 Spans can form a tree structure, and the entire subtree is represented by its children - therefore, a parent span will always last as long as its longest-lived child span if not longer.
 
 Because all of this can be a bit excessive, `tracing` has also included the regular macros that would be in other log facade libraries for logging - namely, `info!`, `error!`, `debug!`, `warn!` and `trace!`. There's also a span version of each of these crates - but if you're coming from `log` and want to try `tracing` out without getting lost in the complexity of trying to make sure everything is in a span, tracing's got your back.
+
+```rust
+use tracing;
+
+tracing::debug!("Looks just like the log crate!");
+
+tracing::info_span!("a more convenient version of creating spans!");
+```
 
 [tracing-subscriber](https://github.com/tokio-rs/tracing/tree/master/tracing-subscriber) is the logger crate designed to work with `tracing` by letting you define a logger that implements the `Subscriber` trait from `tracing`. 
 
