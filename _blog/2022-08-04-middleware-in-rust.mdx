@@ -1,14 +1,14 @@
 ---
-title: What is server middleware
-description: A look at middleware and some implementations in Rust server applications
+title: Implementing Middleware in Rust
+description: This article explores how you can use and write your own middleware in Rust web servers, using Rocket and Axum as examples. 
 author: ben
-tags: [rust, tutorial]
+tags: [rust, tutorial, middleware]
 thumb: middleware-banner.png
 cover: middleware-banner.png
 date: "2022-08-04T15:00:00"
 ---
 
-In this post we will take a general look into what middleware is, the benefits of the pattern and then how to use middleware in a Rust server application.
+In this post we will take a general look into what middleware in Rust is, the benefits of using middleware and then how to use middleware in a Rust server application.
 
 ## What is middleware?
 
@@ -18,7 +18,7 @@ Most server frameworks have a system called a 'router' which routes requests bas
 
 Individual path handlers are great, but sometimes you want logic which applies to a group of paths or indeed all paths. This is where **middleware** comes in. Unlike a handler, middleware is called on **every request and path** that it's registered on. Like handlers, middleware are functions.
 
-Middleware is very much **implementor dependent**. We will have a look at some concrete examples, but different frameworks have opted for different tradeoffs in their middleware implementation. Some middleware implementations work on an immutable state and act as a transformer on request and responses. Other frameworks treat the inputs as mutable and can freely modify / mutate the request objects. Some frameworks implement middleware that can fail or short circuit.
+Middleware is very much **implementor dependent**. We will have a look at some concrete examples, but different frameworks have opted for different tradeoffs in their middleware implementation. Some middleware implementations work on an immutable state and act as a transformer on request and responses. Other frameworks treat the inputs as mutable and can freely modify / mutate the request objects. Some frameworks implement Rust middleware that can fail or short circuit.
 
 ### Middleware as a stack
 
@@ -156,7 +156,7 @@ fn rocket() -> _ {
 }
 ```
 
-Rocket's fairings have several hooks. Each of them has a default implementation so can be left out (you don't have to explicitly write a method for each hook).
+Rocket middleware has several hooks. Each of them has a default implementation so can be left out (you don't have to explicitly write a method for each hook).
 
 #### Requests using `on_request`
 
@@ -194,7 +194,7 @@ Using `AdHoc` and any of the names of the above mentioned hooks we can instead c
 
 Similar to Rocket, Axum is a HTTP framework for web applications. [Axum middleware](https://docs.rs/axum/latest/axum/index.html#middleware) is based of [tower](https://github.com/tower-rs/tower) which is a separate crate which deals with lower level base for networking in Rust. Axum and tower middleware is referred to a 'layers'.
 
-There are several ways to write middleware for Axum. Similar to standard fairings you can create a type that implements the [Layer trait](https://docs.rs/tower/0.4.13/tower/trait.Layer.html). The layer trait decorates / acts apon the [Service trait](https://docs.rs/tower/0.4.13/tower/trait.Service.html).
+There are several ways to write middleware in Axum. Similar to standard fairings you can create a type that implements the [Layer trait](https://docs.rs/tower/0.4.13/tower/trait.Layer.html). The layer trait decorates / acts apon the [Service trait](https://docs.rs/tower/0.4.13/tower/trait.Service.html).
 
 This demo was taken from the [Tower docs](https://docs.rs/tower/0.4.13/tower/trait.Layer.html#log) **and before you get scared off we will see a much simpler way to implement middleware shortly**.
 
@@ -380,7 +380,7 @@ Unlike Rocket fairings, in Axum we could return our own Response from the middle
 
 ### Attaching the middleware
 
-We first attach it to out Axum application using:
+We first attach it to our Axum application using:
 
 ```rust
 let middleware_database = database_pool.clone();
@@ -391,7 +391,7 @@ Router::new()
     }))
 ```
 
-Because our middleware also needs application state (in this case the database pool) we create a intermediate function which pulls that in. 
+Because our middleware also needs application state (in this case the database pool), we create a intermediate function which pulls that in. 
 
 ### Using the middleware
 
@@ -413,10 +413,6 @@ I was actually surprised when this worked, Axum's handler parameter system is qu
 
 ## Conclusion
 
-In summary middleware helps you abstract common logic for paths into reusable stateful and stateless objects. Middleware might not be applicative for every scenario but when you need it, it is super useful!
+I hope you enjoyed reading this guide to using middleware in Rust! In summary, middleware helps you abstract common logic for paths into reusable stateful and stateless objects. Middleware might not be applicative for every scenario but when you need it, it is super useful!
 
-## [Shuttle](https://www.shuttle.rs/): Stateful Serverless for Rust
-
-Deploying and managing your Rust web apps can be an expensive, anxious and time consuming process.
-
-If you want a batteries included and ops-free experience, [try out Shuttle](https://docs.rs/shuttle-service/latest/shuttle_service/).
+Did this article help you? Feel free to [give us a star on GitHub!](https://www.github.com/shuttle-hq/shuttle)
