@@ -3,7 +3,7 @@ import { QuestionAttrs } from '../components/sections/FrequentlyAskedQuestions'
 export const Questions: QuestionAttrs[] = [
 	{
 		question: 'What makes Shuttle different from other solutions like Heroku, Supabase, or Vercel?',
-		answer: 'Shuttle revolutionizes backend development by saving you valuable time. With our infrastructure from code approach {linked to docs}, you can provision resources directly within your Rust codebase. Say goodbye to complex config files and the need to navigate through the AWS console. With a single line of code, your resources are ready. This efficiency translates to faster development cycles, allowing you to focus on building your application instead of managing or learning how to manage infrastructure.',
+		answer: 'Shuttle revolutionizes backend development by saving you valuable time. With our <a href="https://docs.shuttle.rs/resources/shuttle-static-folder" target="_blank" style="text-decoration: underline;">infrastructure from code approach</a>, you can provision resources directly within your Rust codebase. Say goodbye to complex config files and the need to navigate through the AWS console. With a single line of code, your resources are ready. This efficiency translates to faster development cycles, allowing you to focus on building your application instead of managing or learning how to manage infrastructure.',
 	},
 	{
 		question: 'Is Shuttle open source?',
@@ -15,7 +15,7 @@ export const Questions: QuestionAttrs[] = [
 	},
 	{
 		question: 'What about frontend hosting?',
-		answer: 'You can provision a static folder {link to docs} and serve your frontend counterpart seamlessly.',
+		answer: 'You can provision a <a href="https://docs.shuttle.rs/resources/shuttle-static-folder" target="_blank" style="text-decoration: underline;">static folder</a> and serve your frontend counterpart seamlessly.',
 	},
 	{
 		question: 'Why should I use Rust?',
@@ -30,8 +30,8 @@ export const Questions: QuestionAttrs[] = [
 		answer: "Absolutely! You can upgrade or downgrade your plan at any time to better align with your project's requirements. Whether you're expanding or scaling back, we adapt to your needs, ensuring you have the resources necessary to succeed.",
 	},
 	{
-		question: 'What happens when I cancel my subscription?',
-		answer: "If you choose to cancel your subscription, you'll still have access to your existing resources until the end of your billing period. After that, your access to premium features and resources associated with your subscription will be downgraded to the free Community tier. Your data and projects will remain intact, and you can choose to reactivate a premium subscription at any time to regain access to the additional features and resources. We value your experience and strive to make transitions as smooth as possible.",
+		question: 'What happens if I cancel my subscription?',
+		answer: "If you choose to cancel your subscription, you'll still have access to your existing resources until the end of your billing period. After that, your access to premium features and resources associated with your subscription will be downgraded to the free Community tier.",
 	},
 ]
 

@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 
 const BenefitCards = () => (
 	<div className='relative hidden sm:block'>
@@ -162,7 +163,9 @@ const BenefitCards = () => (
 					<h1 className='font-gradual text-2xl font-bold text-[#C2C2C2] '>
 						Got something you&apos;d like to see here?
 					</h1>
-					<p className='cursor-pointer text-[#ffffff8f] underline'>Request a feature</p>
+					<Link href='https://github.com/shuttle-hq/shuttle/issues' target='_blank'>
+						<p className='cursor-pointer text-[#ffffff8f] underline'>Request a feature</p>
+					</Link>
 				</div>
 			</div>
 		</div>

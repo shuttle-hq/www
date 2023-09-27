@@ -2,10 +2,10 @@ import clsx from 'clsx'
 import { Button } from 'components/elements'
 import Image from 'next/image'
 import { FC, useState } from 'react'
-import {DISCORD_URL} from "../../lib/constants";
+import { DISCORD_URL } from '../../lib/constants'
 
 export interface QuestionAttrs {
-	question: string,
+	question: string
 	answer: string
 }
 
@@ -53,7 +53,12 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 											: 'max-h-0 overflow-hidden pb-0 pr-0 opacity-0'
 									)}
 								>
-									<p className='text-[#525151] dark:text-[#C2C2C2]'>{answer}</p>
+									<p
+										className='text-[#525151] dark:text-[#C2C2C2]'
+										dangerouslySetInnerHTML={{
+											__html: answer,
+										}}
+									/>
 								</div>
 							</div>
 							<button className='flex-shrink-0' onClick={() => updateActiveQuestion(index)}>
@@ -89,13 +94,13 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 							src='/images/sections/frequently-asked-questions/stars.png'
 							alt='stars'
 							fill
-							className='pointer-events-none absolute top-0 left-0 z-[-1] h-full w-full object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
+							className='pointer-events-none absolute left-0 top-0 z-[-1] h-full w-full object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
 						/>
 						<Image
 							src='/images/sections/frequently-asked-questions/stars-2.png'
 							alt='stars 2'
 							fill
-							className='pointer-events-none absolute top-0 left-0 z-[-1] h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
+							className='pointer-events-none absolute left-0 top-0 z-[-1] h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
 						/>
 						<h3 className='text-2xl text-[#C2C2C2]'>Want to know more?</h3>
 						<p className='mt-2 text-[#C2C2C2]'>
