@@ -1565,10 +1565,10 @@ For Golang, you can use any cloud provider that supports Docker.
 We won't go into details here, as there are plenty of services that support this.
 
 You can do the same with Rust, but there are also some other options.
-One of them is [shuttle](https://www.shuttle.rs/), of course and the way
+One of them is [Shuttle](https://www.shuttle.rs/), of course and the way
 it works is different to other services: You don't need to build a Docker image
 and push it to a registry. Instead, you just push your code to a git repository
-and shuttle will run the binary for you.
+and Shuttle will run the binary for you.
 
 Thanks to Rust's procedural macros, you can enhance your code with additional
 functionality quickly.
@@ -1582,15 +1582,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-To get started, [install the shuttle CLI](https://docs.shuttle.rs/getting-started/installation) and dependencies:
-
+To get started, [install the Shuttle CLI](https://docs.shuttle.rs/getting-started/installation) and dependencies:
 ```bash
 cargo binstall cargo-shuttle
 cargo add shuttle-axum shuttle-runtime
 ```
 
-Let's modify our `main` function to use shuttle.
-Note how we no longer need the port binding, as shuttle will take care of that for us! We just hand it the router and it will take care of the rest.
+Let's modify our `main` function to use Shuttle.
+Note how we no longer need the port binding, as Shuttle will take care of that for us! We just hand it the router and it will take care of the rest.
 
 ```rust
 #[shuttle_runtime::main]
@@ -1633,10 +1632,11 @@ async fn main(#[shuttle_shared_db::Postgres] pool: PgPool) -> shuttle_axum::Shut
     	.with_state(pool);
 
 	Ok(router.into())
-}```
+}
+```
 
 See that part about the schema? That's how we initialize our database with
-our existing table definitions. [Migrations are also supported](https://docs.shuttle.rs/migration/migrating-to-shuttle)
+our existing table definitions. [Migrations are also supported through sqlx](https://docs.rs/sqlx/latest/sqlx/macro.migrate.html) and [sqlx-cli](https://crates.io/crates/sqlx-cli).
 
 We got rid of a lot of boilerplate code and can now deploy our app
 with ease.
@@ -1686,7 +1686,7 @@ However, don’t underestimate the long-term benefits of Rust. Its rich type
 system paired with its awesome error handling mechanisms and compile-time checks
 can help you build apps which are not only fast but also robust and extensible.
 
-With regards to developer velocity, shuttle can substantially lower the
+With regards to developer velocity, Shuttle can substantially lower the
 operational burden from running Rust code in production. As we’ve seen, you
 don’t need to write a Dockerfile to get started and your code builds natively in
 the cloud, which allows for very fast deployment- and iteration cycles.
