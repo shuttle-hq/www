@@ -5,7 +5,7 @@ import { useUser } from '@auth0/nextjs-auth0/client'
 import { CONTACT_US_URI } from '../../lib/constants'
 
 interface CommonButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-	variant: 'primary' | 'secondary'
+	variant: 'primary' | 'secondary' | 'tertiary'
 	children: ReactNode
 	invertOnDark?: boolean
 }
@@ -29,10 +29,20 @@ const Button: FC<ButtonProps> = ({ variant = 'none', invertOnDark, className, ch
 				? 'button-shadow dark:border-gradient dark:shadow-gradient bg-[#E9E9E9] text-black hover:bg-gradient-to-r hover:from-[#fc540c] hover:to-[#f5c57a] hover:text-white dark:bg-black dark:text-[#C2C2C2] dark:hover:bg-none'
 				: 'button-shadow border-gradient shadow-gradient bg-black text-[#C2C2C2] hover:bg-none'
 			: '',
+		variant === 'tertiary' && 'button-shadow shadow-gradient text-black',
 		className
 	)
 
-	children = <button className={classNames}>{children}</button>
+	const tertBg = {
+		backgroundImage:
+			'linear-gradient(73deg, #FC540C -7.95%, rgba(255, 215, 111, 0.72) 45.94%, #38D4E9 116.73%',
+	}
+
+	children = (
+		<button className={classNames} style={variant === 'tertiary' ? tertBg : {}}>
+			{children}
+		</button>
+	)
 
 	if (href)
 		if (href.startsWith('/')) children = <Link href={href}>{children}</Link>

@@ -53,7 +53,12 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 											: 'max-h-0 overflow-hidden pb-0 pr-0 opacity-0'
 									)}
 								>
-									<p className='text-[#525151] dark:text-[#C2C2C2]'>{answer}</p>
+									<p
+										className='text-[#525151] dark:text-[#C2C2C2]'
+										dangerouslySetInnerHTML={{
+											__html: answer,
+										}}
+									/>
 								</div>
 							</div>
 							<button className='flex-shrink-0' onClick={() => updateActiveQuestion(index)}>
@@ -65,7 +70,7 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 										fill='none'
 										xmlns='http://www.w3.org/2000/svg'
 									>
-										<path d='M7 16.5L24 16.5' stroke='#BEBEBE' strokeWidth={2} />
+										<path d='M7 16.5L24 16.5' stroke='#7A7A7A' strokeWidth={2} />
 									</svg>
 								) : (
 									<svg
@@ -75,8 +80,8 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 										fill='none'
 										xmlns='http://www.w3.org/2000/svg'
 									>
-										<path d='M15.5 8V25' stroke='#BEBEBE' strokeWidth={2} />
-										<path d='M7 16.5L24 16.5' stroke='#BEBEBE' strokeWidth={2} />
+										<path d='M15.5 8V25' stroke='#7A7A7A' strokeWidth={2} />
+										<path d='M7 16.5L24 16.5' stroke='#7A7A7A' strokeWidth={2} />
 									</svg>
 								)}
 							</button>

@@ -2,7 +2,6 @@ import matter from 'gray-matter'
 import { serialize } from 'next-mdx-remote/serialize'
 import { NextSeo } from 'next-seo'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 import { generateReadingTime } from 'lib/helpers'
 import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote'
 import gfm from 'remark-gfm'
@@ -110,7 +109,7 @@ const mdxComponents: MDXRemoteProps['components'] = {
 		return (
 			<div className='mb-24 text-left text-xl'>
 				<span className='font-bold text-[#C2C2C2]'>TLDR;</span>
-				<span className='text-[#BEBEBE] prose-p:!my-2'>{props.children}</span>
+				<span className='text-[#7A7A7A] prose-p:!my-2'>{props.children}</span>
 			</div>
 		)
 	},
@@ -130,7 +129,7 @@ const mdxComponents: MDXRemoteProps['components'] = {
 	},
 	blockquote(props) {
 		return (
-			<blockquote className='border-none bg-[linear-gradient(180deg,_#FC540C_25.63%,_rgba(255,_215,_111,_0.72)_60.67%,_#38D4E9_88.15%)] pl-2 text-left text-2xl font-normal not-italic text-[#525151] dark:text-[#BEBEBE]'>
+			<blockquote className='border-none bg-[linear-gradient(180deg,_#FC540C_25.63%,_rgba(255,_215,_111,_0.72)_60.67%,_#38D4E9_88.15%)] pl-2 text-left text-2xl font-normal not-italic text-[#525151] dark:text-[#7A7A7A]'>
 				<div className='bg-[#E9E9E9] py-1 pl-8 prose-p:!my-0 dark:bg-black'>{props.children}</div>
 			</blockquote>
 		)
@@ -142,8 +141,6 @@ interface Props {
 }
 
 export default function IssuePage(props: Props) {
-	const { basePath } = useRouter()
-
 	return (
 		<>
 			<NextSeo
