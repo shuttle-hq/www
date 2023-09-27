@@ -1,5 +1,5 @@
 ---
-title: Rust Vs Go: A Hands-On Comparison
+title: 'Rust Vs Go: A Hands-On Comparison'
 description: Rust versus Go is a controversial topic that pops up from time. In this post, we will compare both languages in the context of web development by writing a small web service which shows weather data in both languages.
 author: matthias
 tags: [rust, go, project, comparison, guide]
@@ -28,7 +28,7 @@ By the end of this post, you should have a good idea of which
 language is the right one for you.
 Although that we are aware of our own biases and preferences, we
 we will try to be as objective as possible and
-highlight the strengths and weaknesses of *both* languages.
+highlight the strengths and weaknesses of _both_ languages.
 
 ## Building a small web service
 
@@ -37,17 +37,17 @@ the language features. But in the end, what matters is how
 easy it is to use them for a non-trivial project.
 
 Since we are a platform-as-a-service provider, we think that
-we can contribute the most by *showing* you how to build a small
+we can contribute the most by _showing_ you how to build a small
 web service in both languages. We will use the same task and
 popular libraries for both languages to compare the solutions
 side-by-side so that you can make up your own mind.
 
 We will cover the following topics:
 
-- Routing
-- Templating
-- Database access
-- Deployment
+-   Routing
+-   Templating
+-   Database access
+-   Deployment
 
 We will leave out topics like client-side rendering or migrations,
 and focus on the server-side only.
@@ -58,18 +58,18 @@ Picking a task that is representative for web development is
 not easy: On one hand, we want to keep it simple enough so
 that we can focus on the language features and libraries.
 On the other hand, we want to make sure that the task is
-not *too* simple so that we can show how to use the language
+not _too_ simple so that we can show how to use the language
 features and libraries in a realistic setting.
 
-We decided to build a *weather forecast service*.
+We decided to build a _weather forecast service_.
 The user should be able to enter a city name and get the
 current weather forecast for that city. The service should
 also show a list of recently searched cities.
 
 As we extend the service, we will add the following features:
 
-- A simple UI to display the weather forecast
-- A database to store recently searched cities
+-   A simple UI to display the weather forecast
+-   A database to store recently searched cities
 
 ## The Weather API
 
@@ -77,10 +77,10 @@ For the weather forecast, we will use the [Open-Meteo API](https://open-meteo.co
 
 We will use these two API endpoints:
 
-- The [GeoCoding API](https://open-meteo.com/en/docs/geocoding-api) to get the coordinates of a city.
-- The [Weather Forecast API](https://open-meteo.com/en/docs) to get the weather forecast for the given coordinates.
+-   The [GeoCoding API](https://open-meteo.com/en/docs/geocoding-api) to get the coordinates of a city.
+-   The [Weather Forecast API](https://open-meteo.com/en/docs) to get the weather forecast for the given coordinates.
 
-There are libraries for both Go ([omgo]( https://github.com/HectorMalot/omgo))
+There are libraries for both Go ([omgo](https://github.com/HectorMalot/omgo))
 and Rust ([openmeteo](https://github.com/angelodlfrtr/open-meteo-rs)), which we would use in a production service. However, for the sake of comparison, we want to see what it takes to make a "raw" HTTP request in both languages and convert the response to an idiomatic data structure.
 
 ### A Go web service
@@ -226,7 +226,7 @@ Then, let's replace our `main()` function with a server and a route that takes a
 
 Gin supports path parameters and query parameters.
 
-```go
+````go
 // Path parameter
 r.GET("/weather/:city", func(c *gin.Context) {
    	 city := c.Param("city")
@@ -266,7 +266,7 @@ func main() {
 
     r.Run()
 }
-```
+````
 
 In a separate terminal, we can start the server with `go run .` and make a request to it:
 
@@ -401,24 +401,24 @@ Finally, we can create a template file `weather.html` in the `views` directory:
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Weather Forecast</title>
-</head>
-<body>
-	<h1>Weather for {{ .City }}</h1>
-	<table border="1">
-    	<tr>
-        	<th>Date</th>
-        	<th>Temperature</th>
-    	</tr>
-    	{{ range .Forecasts }}
-    	<tr>
-        	<td>{{ .Date }}</td>
-        	<td>{{ .Temperature }}</td>
-    	</tr>
-    	{{ end }}
-	</table>
-</body>
+	<head>
+		<title>Weather Forecast</title>
+	</head>
+	<body>
+		<h1>Weather for {{ .City }}</h1>
+		<table border="1">
+			<tr>
+				<th>Date</th>
+				<th>Temperature</th>
+			</tr>
+			{{ range .Forecasts }}
+			<tr>
+				<td>{{ .Date }}</td>
+				<td>{{ .Temperature }}</td>
+			</tr>
+			{{ end }}
+		</table>
+	</body>
 </html>
 ```
 
@@ -443,17 +443,17 @@ And a new template file `index.html`:
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Weather Forecast</title>
-</head>
-<body>
-	<h1>Weather Forecast</h1>
-	<form action="/weather" method="get">
-    	<label for="city">City:</label>
-    	<input type="text" id="city" name="city">
-    	<input type="submit" value="Submit">
-	</form>
-</body>
+	<head>
+		<title>Weather Forecast</title>
+	</head>
+	<body>
+		<h1>Weather Forecast</h1>
+		<form action="/weather" method="get">
+			<label for="city">City:</label>
+			<input type="text" id="city" name="city" />
+			<input type="submit" value="Submit" />
+		</form>
+	</body>
 </html>
 ```
 
@@ -494,7 +494,7 @@ have to generate the IDs ourselves on insert.
 To make things fast, we will also add an index on the `name` column.
 
 It's probably easiest to use Docker or any of the cloud providers. At the end of
-the day, you just need *a database URL*, which you can pass to your web service
+the day, you just need _a database URL_, which you can pass to your web service
 as an environment variable.
 
 We won't go into the details of setting up a database here, but a simple way to
@@ -625,38 +625,37 @@ Our `stats.html` template is simple enough:
 ```html
 <!DOCTYPE html>
 <html>
+	<head>
+		<title>Latest Queries</title>
+	</head>
 
-<head>
-	<title>Latest Queries</title>
-</head>
-
-<body>
-	<h1>Latest Lat/Long Lookups</h1>
-	<table border="1">
-    	<tr>
-        	<th>Cities</th>
-    	</tr>
-    	{{ range . }}
-    	<tr>
-        	<td>{{ . }}</td>
-    	</tr>
-    	{{ end }}
-	</table>
-</body>
-
+	<body>
+		<h1>Latest Lat/Long Lookups</h1>
+		<table border="1">
+			<tr>
+				<th>Cities</th>
+			</tr>
+			{{ range . }}
+			<tr>
+				<td>{{ . }}</td>
+			</tr>
+			{{ end }}
+		</table>
+	</body>
 </html>
 ```
 
 And with that, we have a working web service! Congratulations!
 
 We have achieved the following:
-- A web service that fetches the latitude and longitude for a given city from an external API
-- Stores the latitude and longitude in a database
-- Fetches the latitude and longitude from the database on subsequent requests
-- Prints the last search queries on the `/stats` endpoint
-- Basic-auth to protect the `/stats` endpoint
-- Uses middleware to log requests
-- Templates to render HTML
+
+-   A web service that fetches the latitude and longitude for a given city from an external API
+-   Stores the latitude and longitude in a database
+-   Fetches the latitude and longitude from the database on subsequent requests
+-   Prints the last search queries on the `/stats` endpoint
+-   Basic-auth to protect the `/stats` endpoint
+-   Uses middleware to log requests
+-   Templates to render HTML
 
 That's quite a lot of functionality for a few lines of code!
 Let's see how Rust stacks up!
@@ -817,18 +816,18 @@ response
 
 A few things are happening here:
 
-- `response.results.get(0)` returns an `Option<&LatLong>`. It is an
-  `Option` because the `get` function might return `None` if the vector
-  is empty.
-- `cloned()` clones the value inside the `Option` and converts the
-  `Option<&LatLong>` into an `Option<LatLong>`. This is necessary,
-  because we want to return a `LatLong` and not a reference. Otherwise,
-  we would have to add a lifetime specifier to the function signature and
-  it makes the code less readable.
-- `ok_or("No results found".into())` converts the `Option<LatLong>` into
-  a `Result<LatLong, Box<dyn std::error::Error>>`. If the `Option` is
-  `None`, it will return the error message. The `into()` function
-  converts the string into a `Box<dyn std::error::Error>`.
+-   `response.results.get(0)` returns an `Option<&LatLong>`. It is an
+    `Option` because the `get` function might return `None` if the vector
+    is empty.
+-   `cloned()` clones the value inside the `Option` and converts the
+    `Option<&LatLong>` into an `Option<LatLong>`. This is necessary,
+    because we want to return a `LatLong` and not a reference. Otherwise,
+    we would have to add a lifetime specifier to the function signature and
+    it makes the code less readable.
+-   `ok_or("No results found".into())` converts the `Option<LatLong>` into
+    a `Result<LatLong, Box<dyn std::error::Error>>`. If the `Option` is
+    `None`, it will return the error message. The `into()` function
+    converts the string into a `Box<dyn std::error::Error>`.
 
 An alternative way to write this would be:
 
@@ -840,7 +839,7 @@ match response.results.get(0) {
 ```
 
 It is a matter of taste which version you prefer.
- 
+
 Rust is an expression-based language, which means that we don't have to
 use `return` to return a value from a function. Instead, the last value
 of a function is returned.
@@ -949,7 +948,6 @@ async fn weather(Query(params): Query<WeatherQuery>) -> Result<String, StatusCod
 	}
 }
 ```
-
 
 This will return a `404` status code if the city is not found.
 We use `match` to match on the result of `fetch_lat_long`. If it is
@@ -1120,7 +1118,7 @@ Note how we mix the parsing logic with the handler logic.
 Let's clean this up a bit by moving the parsing logic into a
 constructor function:
 
-```rust
+````rust
 impl WeatherDisplay {
 	/// Create a new `WeatherDisplay` from a `WeatherResponse`.
 	fn new(city: String, response: WeatherResponse) -> Self {
@@ -1154,7 +1152,7 @@ async fn weather(Query(params): Query<WeatherQuery>) -> Result<String, StatusCod
 	let display = WeatherDisplay::new(params.city, weather);
 	Ok(format!("{:?}", display))
 }
-```
+````
 
 That's already a little bit better.
 What's distracting is the `map_err` boilerplate.
@@ -1252,29 +1250,29 @@ similar to the Go table template we created earlier:
 ```html
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-	<meta charset="UTF-8" />
-	<title>Weather</title>
-  </head>
-  <body>
-	<h1>Weather for {{ city }}</h1>
-	<table>
-  	<thead>
-    	<tr>
-      	<th>Date</th>
-      	<th>Temperature</th>
-    	</tr>
-  	</thead>
-  	<tbody>
-    	{% for forecast in forecasts %}
-    	<tr>
-      	<td>{{ forecast.date }}</td>
-      	<td>{{ forecast.temperature }}</td>
-    	</tr>
-    	{% endfor %}
-  	</tbody>
-	</table>
-  </body>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Weather</title>
+	</head>
+	<body>
+		<h1>Weather for {{ city }}</h1>
+		<table>
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Temperature</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for forecast in forecasts %}
+				<tr>
+					<td>{{ forecast.date }}</td>
+					<td>{{ forecast.temperature }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</body>
 </html>
 ```
 
@@ -1307,20 +1305,22 @@ Adding our input mask is easy.
 We can use the exact same HTML we used for the Go version:
 
 ```html
-<form action="/weather" method="get"><!DOCTYPE html>
-<html>
-<head>
-	<title>Weather Forecast</title>
-</head>
-<body>
-	<h1>Weather Forecast</h1>
-	<form action="/weather" method="get">
-    	<label for="city">City:</label>
-    	<input type="text" id="city" name="city">
-    	<input type="submit" value="Submit">
-	</form>
-</body>
-</html>
+<form action="/weather" method="get">
+	<!DOCTYPE html>
+	<html>
+		<head>
+			<title>Weather Forecast</title>
+		</head>
+		<body>
+			<h1>Weather Forecast</h1>
+			<form action="/weather" method="get">
+				<label for="city">City:</label>
+				<input type="text" id="city" name="city" />
+				<input type="submit" value="Submit" />
+			</form>
+		</body>
+	</html>
+</form>
 ```
 
 and here is the handler:
@@ -1392,9 +1392,9 @@ async fn main() -> anyhow::Result<()> {
 
 Here's what changed:
 
-- We added a `DATABASE_URL` environment variable and read it in `main`.
-- We create a database connection pool with `sqlx::PgPool::connect`.
-- Then we pass the pool to `with_state` to make it available to all handlers.
+-   We added a `DATABASE_URL` environment variable and read it in `main`.
+-   We create a database connection pool with `sqlx::PgPool::connect`.
+-   Then we pass the pool to `with_state` to make it available to all handlers.
 
 In each route, we can (but don't have to) access the database pool like this:
 
@@ -1475,9 +1475,10 @@ There are numerous authentication libraries for axum, but very little
 information on how to do basic auth.
 
 I ended up writing a custom middleware, that would
-- check if the request has an `Authorization` header
-- if it does, check if the header contains a valid username and password
-- if it does, return an "unauthorized" response and a `WWW-Authenticate` header, which instructs the browser to show a login dialog.
+
+-   check if the request has an `Authorization` header
+-   if it does, check if the header contains a valid username and password
+-   if it does, return an "unauthorized" response and a `WWW-Authenticate` header, which instructs the browser to show a login dialog.
 
 Here's the code:
 
@@ -1582,6 +1583,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ```
 
 To get started, [install the shuttle CLI](https://docs.shuttle.rs/getting-started/installation) and dependencies:
+
 ```bash
 cargo binstall cargo-shuttle
 cargo add shuttle-axum shuttle-runtime
@@ -1617,7 +1619,7 @@ cargo add shuttle-shared-db --features=postgres
 
 and
 
-```rust
+````rust
 #[shuttle_runtime::main]
 async fn main(#[shuttle_shared_db::Postgres] pool: PgPool) -> shuttle_axum::ShuttleAxum {
 	pool.execute(include_str!("../schema.sql"))
@@ -1645,7 +1647,7 @@ cargo shuttle project start
 
 # Run as often as you like
 cargo shuttle deploy
-```
+````
 
 When it's done, it will print the URL to the service.
 It should work just like before, but now it's running on a server in the cloud.
@@ -1653,15 +1655,16 @@ It should work just like before, but now it's running on a server in the cloud.
 
 ## Which language is right for you?
 
-- Go:
-  * easy to learn, fast, good for web services
-  * batteries included. We did a lot with just the standard library.
-  * Our only dependency was Gin, which is a very popular web framework.
- 
-- Rust:
-  * fast, safe, evolving ecosystem for web services
-  * no batteries included. We had to add a lot of dependencies to get the same functionality as in Go and write our own small middleware.
-  * the final handler code was free from distracting error handling, because we used our own error type and the `?` operator. This makes for very readable code, at the cost of having to write additional adapter logic.
+-   Go:
+
+    -   easy to learn, fast, good for web services
+    -   batteries included. We did a lot with just the standard library.
+    -   Our only dependency was Gin, which is a very popular web framework.
+
+-   Rust:
+    -   fast, safe, evolving ecosystem for web services
+    -   no batteries included. We had to add a lot of dependencies to get the same functionality as in Go and write our own small middleware.
+    -   the final handler code was free from distracting error handling, because we used our own error type and the `?` operator. This makes for very readable code, at the cost of having to write additional adapter logic.
 
 That bags the question...
 
@@ -1681,7 +1684,7 @@ a batteries-included development environment and is great for web apps.
 
 However, don’t underestimate the long-term benefits of Rust. Its rich type
 system paired with its awesome error handling mechanisms and compile-time checks
-can help you build apps which are not only fast but also robust and extensible. 
+can help you build apps which are not only fast but also robust and extensible.
 
 With regards to developer velocity, shuttle can substantially lower the
 operational burden from running Rust code in production. As we’ve seen, you
@@ -1697,4 +1700,3 @@ like better.
 In any case, it was fun to build the same project in two different languages and
 look at the differences in idioms and ecosystem. Even though the end result is
 the same, the way we got there was quite different.
-
