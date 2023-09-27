@@ -42,19 +42,19 @@ const CommunitySupportedNumbers = () => {
 				</svg>
 				<div className='text-center lg:py-12'>
 					<p className='bg-gradient-to-r from-[#FB540C] to-[#DD7D31] bg-clip-text font-gradual text-[2.5rem] font-bold leading-none text-transparent sm:text-[3.5rem]'>
-						3k+
+						3.7k+
 					</p>
 					<h3 className='mt-1 text-sm text-[#525151] dark:text-[#C2C2C2] sm:text-base'>Github Stars</h3>
 				</div>
 				<div className='text-center lg:py-12'>
 					<p className='bg-gradient-to-r from-[#B59C53] to-[#A5A76B] bg-clip-text font-gradual text-[2.5rem] font-bold leading-none text-transparent sm:text-[3.5rem]'>
-						2k+
+						2.7k+
 					</p>
 					<h3 className='mt-1 text-sm text-[#525151] dark:text-[#C2C2C2] sm:text-base'>Discord Users</h3>
 				</div>
 				<div className='text-center lg:py-12'>
 					<p className='bg-gradient-to-r from-[#93B083] to-[#7BBB9F] bg-clip-text font-gradual text-[2.5rem] font-bold leading-none text-transparent sm:text-[3.5rem]'>
-						65+
+						80+
 					</p>
 					<h3 className='mt-1 text-sm text-[#525151] dark:text-[#C2C2C2] sm:text-base'>Contributors</h3>
 				</div>

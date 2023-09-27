@@ -45,7 +45,7 @@ async fn axum() -> shuttle_service::ShuttleAxum {
 
 ### Templates
 
-For generating HTML we will be using [Tera](https://tera.netlify.app/docs), so we can go ahead and add this with `cargo add tera`. We will store all our templates in a `template` directory in the project root.
+For generating HTML we will be using [Tera](https://docs.rs/tera/latest/tera/), so we can go ahead and add this with `cargo add tera`. We will store all our templates in a `template` directory in the project root.
 
 We want a general layout for our site, so we create a base layout. In our base layout, we can add specific tags that will apply to all pages such as a [Google font](https://fonts.google.com/). With this layout all the content will be injected in place of `{% block content %}{% endblock content %}`:
 
