@@ -49,7 +49,7 @@ const Plan: FC<PlanProps> = ({
 				alt='stars'
 				fill
 				className={clsx(
-					'absolute left-0 top-0 h-full w-full transform duration-1000 group-hover:translate-x-12 group-hover:translate-y-3 '
+					'absolute left-0 top-0 h-full w-full transform duration-1000 group-hover:translate-x-12'
 				)}
 			/>
 			<Image
@@ -57,7 +57,7 @@ const Plan: FC<PlanProps> = ({
 				alt='stars'
 				fill
 				className={clsx(
-					'absolute left-0 top-0 h-full w-full transform duration-1000 group-hover:-translate-x-5 group-hover:translate-y-3 '
+					'absolute left-0 top-0 h-full w-full transform duration-1000 group-hover:-translate-x-5'
 				)}
 			/>
 			{name === 'Pro' && (
@@ -122,7 +122,7 @@ const Plan: FC<PlanProps> = ({
 					name === 'Pro'
 						? ' text-black hover:text-white'
 						: ' border-[1px] border-solid border-[#ffffff40] text-white hover:text-black',
-					'z-[5] mt-8 w-full rounded-[14px] py-3 font-gradual transition-all duration-1000 hover:border-none'
+					'z-[5] mt-8 w-full rounded-[14px] py-3 font-gradual transition-all duration-1000 hover:border-black'
 				)}
 				style={{
 					background:
