@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import Image from 'next/image'
 import Link from 'next/link'
-import {DISCORD_URL} from "../../lib/constants";
+import { DISCORD_URL } from '../../lib/constants'
 
 const Testimonials = () => {
 	return (
@@ -12,63 +12,63 @@ const Testimonials = () => {
 					alt='bg mobile'
 					width={375}
 					height={1047}
-					className='absolute top-0 left-0 -z-10 aspect-[2/3] h-full w-full object-cover md:aspect-auto xl:hidden'
+					className='absolute left-0 top-0 -z-10 aspect-[2/3] h-full w-full object-cover md:aspect-auto xl:hidden'
 				/>
 				<Image
 					src='/images/sections/testimonials/bg.png'
 					alt='bg'
 					width={600}
 					height={1000}
-					className='absolute top-0 left-[-22.1%] -z-10 hidden aspect-[2/3] h-full w-full object-cover transition-all duration-1000 group-hover:left-[-15.8%] md:block md:aspect-auto xl:block'
+					className='absolute left-[-22.1%] top-0 -z-10 hidden aspect-[2/3] h-full w-full object-cover transition-all duration-1000 group-hover:left-[-15.8%] md:block md:aspect-auto xl:block'
 				/>
 				<Image
 					src='/images/sections/testimonials/stars-1.png'
 					alt='stars'
 					width={1920}
 					height={1000}
-					className='absolute top-0 left-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:translate-x-12 group-hover:translate-y-3 md:block'
+					className='absolute left-0 top-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:translate-x-12 group-hover:translate-y-3 md:block'
 				/>
 				<Image
 					src='/images/sections/testimonials/stars-2.png'
 					alt='stars 2'
 					width={1920}
 					height={1000}
-					className='absolute top-0 left-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-5 md:block'
+					className='absolute left-0 top-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-5 md:block'
 				/>
 				<Image
 					src='/images/sections/testimonials/comet-1.png'
 					alt='comet 1'
 					width={1920}
 					height={1000}
-					className='absolute top-0 left-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-52 group-hover:translate-y-52 md:block'
+					className='absolute left-0 top-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-52 group-hover:translate-y-52 md:block'
 				/>
 				<Image
 					src='/images/sections/testimonials/comet-2.png'
 					alt='comet 2'
 					width={1920}
 					height={1000}
-					className='absolute top-0 left-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-96 group-hover:translate-y-96 md:block'
+					className='absolute left-0 top-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-96 group-hover:translate-y-96 md:block'
 				/>
 				<Image
 					src='/images/sections/testimonials/comet-3.png'
 					alt='comet 3'
 					width={1920}
 					height={1000}
-					className='absolute top-0 left-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-52 group-hover:translate-y-52 md:block'
+					className='absolute left-0 top-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-52 group-hover:translate-y-52 md:block'
 				/>
 				<Image
 					src='/images/sections/testimonials/moon.png'
 					alt='moon'
 					width={1920}
 					height={1000}
-					className='absolute top-0 left-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-8 group-hover:-translate-y-8 md:block'
+					className='absolute left-0 top-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-8 group-hover:-translate-y-8 md:block'
 				/>
 				<Image
 					src='/images/sections/testimonials/earth.png'
 					alt='earth'
 					width={1920}
 					height={1000}
-					className='absolute top-0 left-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:translate-x-8 group-hover:translate-y-8 md:block'
+					className='absolute left-0 top-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:translate-x-8 group-hover:translate-y-8 md:block'
 				/>
 			</span>
 			<div className='mx-auto w-full max-w-[1280px] px-5 sm:px-10'>
@@ -76,7 +76,7 @@ const Testimonials = () => {
 					What the community says
 				</h2>
 				<p className='mt-3 text-xl text-white/40 sm:mt-5 lg:text-2xl'>
-					Join thousands of developers using shuttle. Connect with them on&nbsp;
+					Join thousands of developers using Shuttle. Connect with them on&nbsp;
 					<Link href={DISCORD_URL} className='underline'>
 						Discord
 					</Link>
@@ -121,7 +121,7 @@ const Testimonials = () => {
 								</div>
 							</div>
 							<p className='mt-5 text-[#C2C2C2]'>
-								Deployed my second service with shuttle and I really like it! It's fast and
+								Deployed my second service with Shuttle and I really like it! It's fast and
 								integrates well with cargo, so I can focus on the Rust code instead of the
 								deployment. Well done!
 							</p>
@@ -218,7 +218,7 @@ const Testimonials = () => {
 								</div>
 							</div>
 							<p className='mt-5 text-[#C2C2C2]'>
-								I tried migrating my project from heroku to shuttle and it works perfectly! Looking
+								I tried migrating my project from heroku to Shuttle and it works perfectly! Looking
 								forward to more of it
 							</p>
 						</div>

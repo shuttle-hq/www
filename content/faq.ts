@@ -19,7 +19,7 @@ export const Questions: QuestionAttrs[] = [
 	},
 	{
 		question: 'Why should I use Rust?',
-		answer: 'We believe Rust is the language of the future because of the safety guarantees Rust provides and the efficiency of running Rust code. Also, with Rust you build once and everything just works - saving you tons of time on maintenance. And shuttle makes the experience of building your backend with Rust better than anything you can find for any other language.',
+		answer: 'We believe Rust is the language of the future because of the safety guarantees Rust provides and the efficiency of running Rust code. Also, with Rust you build once and everything just works - saving you tons of time on maintenance. And Shuttle makes the experience of building your backend with Rust better than anything you can find for any other language.',
 	},
 	{
 		question: 'How do I handle payments and access invoices?',
