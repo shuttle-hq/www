@@ -61,6 +61,14 @@ const authors: readonly Author[] = [
 			'https://cdn.discordapp.com/attachments/1084800035872587838/1143858032502124604/uyRG_Gi9_400x400.jpg',
 	},
 	{
+		author_id: 'matthias',
+		author: 'Matthias Endler',
+		position: 'Consultant at Corrode.dev',
+		author_url: 'https://corrode.dev/',
+		author_image_url:
+			'https://endler.dev/about/matthias-endler.jpg'
+	},
+	{
 		author_id: 'stefan',
 		author: 'Stefan Baumgartner',
 		position: 'Owner at Oida.dev',
