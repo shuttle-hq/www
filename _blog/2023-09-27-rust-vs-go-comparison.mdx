@@ -5,7 +5,7 @@ author: matthias
 tags: [rust, go, project, comparison, guide]
 thumb: rust-go-thumb.png
 cover: rust-go-thumb.png
-date: '2023-09-27T17:00:00'
+date: '2023-09-28T17:00:00'
 ---
 
 Rust vs Go is a topic that keeps popping up and there has been a
@@ -17,16 +17,14 @@ After all, both languages can be used to write fast and reliable
 web services. On the other hand, their approaches to achieve that
 are quite different, and it is hard to find a good comparison that
 tries to be fair to both languages.
-This post is my attempt to give you an overview of the differences
+This post is my attempt to give you a fair overview of the differences
 between Go and Rust with a focus on web development. We will compare
 the syntax, the web ecosystem, the way they handle typical web tasks
 like routing, middleware, templating, and more.
-We will also take a quick look at the concurrency models of both
-languages and how they affect the way you write web applications.
 
 By the end of this post, you should have a good idea of which
 language is the right one for you.
-Although that we are aware of our own biases and preferences, we
+Although we are aware of our own biases and preferences, we
 we will try to be as objective as possible and
 highlight the strengths and weaknesses of _both_ languages.
 
@@ -101,7 +99,7 @@ a full-featured framework like Gin or Echo.
 
 Both options are fine, but for the purpose of this comparison,
 we will choose [Gin](https://gin-gonic.com) because it is
-one of the most popular frameworks and it supports all
+[one of the most popular frameworks](https://github.com/mingrammer/go-web-framework-stars) and it supports all
 the features we need for our weather service.
 
 #### Making HTTP requests
@@ -187,7 +185,7 @@ func getWeather(latLong LatLong) (string, error) {
 For a start, let's call these two functions in order and print the result:
 
 ```go
-func main() func main() {
+func main() {
     latlong, err := getLatLong("London") // you know it will rain
     if err != nil {
    	 log.Fatalf("Failed to get latitude and longitude: %s", err)
@@ -226,7 +224,7 @@ Then, let's replace our `main()` function with a server and a route that takes a
 
 Gin supports path parameters and query parameters.
 
-````go
+```go
 // Path parameter
 r.GET("/weather/:city", func(c *gin.Context) {
    	 city := c.Param("city")
@@ -238,7 +236,7 @@ r.GET("/weather", func(c *gin.Context) {
     city := c.Query("city")
     // ...
 })
-```go
+```
 
 Which one you want to use depends on your use case.
 In our case, we want to submit the city name from a form in the end, so we will use a query parameter.
@@ -266,7 +264,7 @@ func main() {
 
     r.Run()
 }
-````
+```
 
 In a separate terminal, we can start the server with `go run .` and make a request to it:
 
@@ -358,7 +356,7 @@ func extractWeatherData(city string, rawWeather string) (WeatherDisplay, error) 
 ```
 
 Date handling is done with the built-in `time` package.
-To learn more about date handling in Go, check out [this "Go by Example" article](https://blog.golang.org/using-go-modules).
+To learn more about date handling in Go, check out [this article](https://gobyexample.com/time).
 
 We extend our route handler to render the HTML page:
 
@@ -459,7 +457,12 @@ And a new template file `index.html`:
 
 Now we can start our web service and open [http://localhost:8080](http://localhost:8080) in our browser:
 
-![index page](./images/index.png)
+![index page](/images/blog/rust-vs-go-index.png)
+
+The weather forecast for London looks like this.
+It's not pretty, but... functional! (And it works without JavaScript and in terminal browsers!)
+
+![forecast page](/images/blog/rust-vs-go-forecast.png)
 
 As an exercise, you can add some styling to the HTML page,
 but since we care more about the backend, we will leave it at that.
@@ -473,7 +476,7 @@ API calls.
 
 To do so, let's add a database to our web service.
 We will use [PostgreSQL](https://www.postgresql.org/) as our database and
-[pgx](https://github.com/jackc/pgx) as the database driver.
+[sqlx](https://github.com/jmoiron/sqlx) as the database driver.
 
 First, we create a file named `init.sql`, which will be used to initialize our database:
 
@@ -489,8 +492,7 @@ CREATE INDEX IF NOT EXISTS cities_name_idx ON cities (name);
 ```
 
 We store the latitude and longitude for a given city.
-The `SERIAL` type is a PostgreSQL auto-incrementing integer. Otherwise, we would
-have to generate the IDs ourselves on insert.
+The `SERIAL` type is a PostgreSQL auto-incrementing integer.
 To make things fast, we will also add an index on the `name` column.
 
 It's probably easiest to use Docker or any of the cloud providers. At the end of
@@ -664,7 +666,9 @@ Let's see how Rust stacks up!
 
 Historically, Rust didn't have a good story for web services.
 There were a few frameworks, but they were quite low-level.
-Only recently, with the emergence of async/await, did the Rust web ecosystem really take off. Suddenly, it was possible to write highly performant web services without a garbage collector and with fearless concurrency.
+Only with the emergence of async/await, did the Rust web ecosystem really take
+off. Suddenly, it was possible to write highly performant web services without a
+garbage collector and with fearless concurrency.
 
 We will see how Rust compares to Go in terms of ergonomics, performance and safety. But first, we need to choose a web framework.
 
@@ -687,7 +691,8 @@ They both support middleware and routing. Each of them would be a good choice fo
 
 #### Routing
 
-Let's start the project with a `cargo new forecast` and add the following dependencies to our `Cargo.toml`:
+Let's start the project with a `cargo new forecast` and add the following dependencies to our `Cargo.toml`.
+(We will need a few more, but we will add them later.)
 
 ```toml
 [dependencies]
@@ -779,7 +784,11 @@ pub struct LatLong {
 }
 ```
 
-In comparison to Go, we don't use tags to specify the field names. Instead, we use the `#[derive(Deserialize)]` attribute to automatically derive the `Deserialize` trait for our structs. These derive macros are very powerful and allow us to do a lot of things with very little code. It is a very common pattern in Rust.
+In comparison to Go, we don't use tags to specify the field names. Instead, we
+use the `#[derive(Deserialize)]` attribute from [serde](https://serde.rs/) to automatically derive the
+`Deserialize` trait for our structs. These derive macros are very powerful and
+allow us to do a lot of things with very little code, including handling parsing
+errors for our types. It is a very common pattern in Rust.
 
 Let's use the new types to fetch the latitude and longitude for a given city:
 
@@ -799,10 +808,11 @@ async fn fetch_lat_long(city: &str) -> Result<LatLong, Box<dyn std::error::Error
 ```
 
 The code is a bit less verbose than the Go version. We don't have to
-write `if err != nil` constructs, because we can use the `?` operator to
-propagate errors. This is also mandatory, as each step returns a
-`Result` type. If we don't handle the error, we won't get access to the
-value.
+write `if err != nil` constructs, because we can use the [`?`
+operator](https://doc.rust-lang.org/rust-by-example/std/result/question_mark.html)
+to propagate errors. This is also mandatory, as each step returns a
+[`Result`](https://doc.rust-lang.org/std/result/) type. If we don't handle the
+error, we won't get access to the value.
 
 That last part might look a bit unfamiliar:
 
@@ -991,7 +1001,7 @@ curl -I "localhost:3000/weather?city=abcdedfg"
 HTTP/1.1 404 Not Found
 ```
 
-Let's write second function, which will return the weather for a given
+Let's write our second function, which will return the weather for a given
 latitude and longitude:
 
 ```rust
@@ -1118,7 +1128,7 @@ Note how we mix the parsing logic with the handler logic.
 Let's clean this up a bit by moving the parsing logic into a
 constructor function:
 
-````rust
+```rust
 impl WeatherDisplay {
 	/// Create a new `WeatherDisplay` from a `WeatherResponse`.
 	fn new(city: String, response: WeatherResponse) -> Self {
@@ -1152,7 +1162,7 @@ async fn weather(Query(params): Query<WeatherQuery>) -> Result<String, StatusCod
 	let display = WeatherDisplay::new(params.city, weather);
 	Ok(format!("{:?}", display))
 }
-````
+```
 
 That's already a little bit better.
 What's distracting is the `map_err` boilerplate.
@@ -1335,13 +1345,13 @@ async fn index() -> IndexTemplate {
 }
 ```
 
-We reached "feature parity" with the Go version.
 Let's move on to storing the latitudes and longitudes in a database.
 
 #### Database access
 
 We will use [sqlx](https://github.com/launchbadge/sqlx) for database access.
-It's a very popular crate that supports multiple databases. In our case, we will use Postgres, just like in the Go version.
+It's a very popular crate that supports multiple databases. In our case, we will
+use Postgres, just like in the Go version.
 
 Add this to your `Cargo.toml`:
 
@@ -1360,9 +1370,8 @@ We need to add a `DATABASE_URL` environment variable to our `.env` file:
 export DATABASE_URL="postgres://forecast:forecast@localhost:5432/forecast?sslmode=disable"
 ```
 
-I'll assume that you have a Postgres database running on your machine and that
-the schema is already set up.
-If not, jump back to the Go version and follow the instructions there.
+If you don't have Postgres running still, you can start it with the same Docker
+snippet from our Go section.
 
 With that, let's adjust our code to use the database.
 First, the `main` function:
@@ -1551,6 +1560,13 @@ struct StatsTemplate {
 	pub cities: Vec<City>,
 }
 
+async fn get_last_cities(pool: &PgPool) -> Result<Vec<City>, AppError> {
+    let cities = sqlx::query_as::<_, City>("SELECT name FROM cities ORDER BY id DESC LIMIT 10")
+        .fetch_all(pool)
+        .await?;
+    Ok(cities)
+}
+
 async fn stats(_user: User, State(pool): State<PgPool>) -> Result<StatsTemplate, AppError> {
 	let cities = get_last_cities(&pool).await?;
 	Ok(StatsTemplate { cities })
@@ -1561,14 +1577,24 @@ async fn stats(_user: User, State(pool): State<PgPool>) -> Result<StatsTemplate,
 
 Lastly, let's talk about deployment.
 
-For Golang, you can use any cloud provider that supports Docker.
-We won't go into details here, as there are plenty of services that support this.
+Since both languages compile to a statically linked binary, they can be hosted
+on any Virtual Machine (VM) or Virtual Private Server (VPS).
+That is amazing because it means that you can run your application
+natively on bare metal if you like.
 
-You can do the same with Rust, but there are also some other options.
-One of them is [Shuttle](https://www.shuttle.rs/), of course and the way
+Another option is to use containers, which run your application in an isolated
+environment. They are very popular because they are easy to use and can be
+deployed virtually anywhere.
+
+For Golang, you can use any cloud provider that supports running static binaries
+or containers. One of the more popular options is [Google Cloud
+Run](https://cloud.google.com/run).
+
+You can of course also use containers to ship Rust, but there are other options,
+too. One of them is [Shuttle](https://www.shuttle.rs/), of course, and the way
 it works is different to other services: You don't need to build a Docker image
-and push it to a registry. Instead, you just push your code to a git repository
-and Shuttle will run the binary for you.
+and push it to a registry. Instead, you just push your code to a Git repository
+and Shuttle will build and run the binary for you.
 
 Thanks to Rust's procedural macros, you can enhance your code with additional
 functionality quickly.
@@ -1582,14 +1608,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-To get started, [install the Shuttle CLI](https://docs.shuttle.rs/getting-started/installation) and dependencies:
+To get started, [install the Shuttle
+CLI](https://docs.shuttle.rs/getting-started/installation) and dependencies.
+
+You can utilize [cargo binstall](https://github.com/cargo-bins/cargo-binstall),
+a Cargo plugin designed to install binaries from crates.io. First, ensure you
+have the plugin installed. After that, you'll be able to install the Shuttle
+CLI:
+
 ```bash
 cargo binstall cargo-shuttle
 cargo add shuttle-axum shuttle-runtime
 ```
 
 Let's modify our `main` function to use Shuttle.
-Note how we no longer need the port binding, as Shuttle will take care of that for us! We just hand it the router and it will take care of the rest.
+Note how we no longer need the port binding, as Shuttle will take care of that
+for us! We just hand it the router and it will take care of the rest.
 
 ```rust
 #[shuttle_runtime::main]
@@ -1647,36 +1681,123 @@ cargo shuttle project start
 
 # Run as often as you like
 cargo shuttle deploy
-````
+```
 
 When it's done, it will print the URL to the service.
 It should work just like before, but now it's running on a server in the cloud.
 🚀
 
-## Which language is right for you?
+## A Comparison Between Go And Rust
+
+Let's see how the two versions stacked up against each other.
+
+### The Go version
+
+The Go version is very simple and straightforward. We only needed to add two
+dependencies: `Gin` (the web framework) and `sqlx` (the database driver). Apart
+from that, everything was provided by the standard library: the templating engine, the
+JSON parser, the datetime handling, etc.
+
+Even though I'm personally not a big fan of Go's templating engine and error handling
+mechanisms, I felt productive throughout the entire development process.
+We could have used an external templating library, but we didn't need to as the
+built-in one was just fine for our use case.
+
+### The Rust version
+
+The Rust code is a little more involved. We needed to add a lot of dependencies
+to get the same functionality as in Go. For example, we needed to add a templating
+engine, a JSON parser, a datetime library, a database driver, and a web framework.
+
+This is by design. Rust's standard library is very minimal and only provides the
+most basic building blocks. The idea is that you can pick and choose the
+dependencies that you need for your project. It helps the ecosystem to evolve
+faster and allows for more experimentation while the core of the language stays
+stable.
+
+Even though it took longer to get started, I enjoyed the process of working
+my way up to higher levels of abstraction. At no point did I feel like I was
+stuck with a suboptimal solution. With the proper abstractions in place,
+such as the `?` operator and the `FromRequest` trait, the code felt easy to read
+without any boilerplate or unnecessarily verbose error handling.
+
+### Summary
 
 -   Go:
 
-    -   easy to learn, fast, good for web services
-    -   batteries included. We did a lot with just the standard library.
-    -   Our only dependency was Gin, which is a very popular web framework.
+    -   Easy to learn, fast, good for web services
+    -   Batteries included. We did a lot with just the standard library.
+        For example, we didn't need to add a templating engine or a separate auth library.
+    -   Our only external dependencies were `Gin` and `sqlx`
 
 -   Rust:
-    -   fast, safe, evolving ecosystem for web services
-    -   no batteries included. We had to add a lot of dependencies to get the same functionality as in Go and write our own small middleware.
-    -   the final handler code was free from distracting error handling, because we used our own error type and the `?` operator. This makes for very readable code, at the cost of having to write additional adapter logic.
+    -   Fast, safe, evolving ecosystem for web services
+    -   No batteries included. We had to add a lot of dependencies to get the
+        same functionality as in Go and write our own small middleware.
+    -   The final handler code was free from distracting error handling, because
+        we used our own error type and the `?` operator. This makes for very
+        readable code, at the cost of having to write additional adapter logic.
+		The handlers are succinct, and there's a natural separation of concerns.
 
-That bags the question...
+That begs the question...
 
 ## Is Rust better than Go, or will Rust replace Go?
 
 Personally, I'm a big fan of Rust and I think it's a great language for web
-services. But there are still a lot of rough edges and missing pieces in the
-ecosystem.
+services. But there are still a few rough edges and missing pieces in the
+ecosystem. 
+
+Especially for newcomers, the error messages when using axum can at times be
+quite cryptic. For example, a [common one is this error
+message](https://github.com/tokio-rs/axum/discussions/2239), which occurs on
+routes that do not implement the handler trait because of type mismatches:
+
+```rust
+error[E0277]: the trait bound `(): Handler<_, _>` is not satisfied
+   --> src\router.rs:22:50
+    |
+22  |         router = router.route("/", get(handler));
+    |                                    --- ^^^^^^^^^^^^^^^^^^^^^^^ the trait `Handler<_, _>` is not implemented for `()`
+    |                                    |
+    |                                    required by a bound introduced by this call
+    |
+note: required by a bound in `axum::routing::get`
+```
+
+For this case, I recommend the axum `debug_handler`,
+which simplifies the error messages quite a bit. Read more about it in their
+[documentation](https://docs.rs/axum-macros/latest/axum_macros/attr.debug_handler.html).
+
+In comparison to Go, the authorization part was also more involved. In Go, we
+could just use a middleware and be done with it. In Rust, we had to write our
+own middleware and error type. This is not necessarily a bad thing, but it
+requires some research in the axum docs to find the right solution.
+Granted, basic auth is not a common use case for real-world applications,
+and there are plenty of advanced auth libraries to choose from.
+
+The mentioned issues are not deal breakers and mostly papercuts related to
+specific crates. Core Rust has reached a point of stability and maturity that
+makes it suitable for production use. The ecosystem is still evolving, but it's
+[already in a good place](https://www.arewewebyet.org/).
+
+On the other hand, I personally find the final Go code a little bit too verbose.
+The error handling is very explicit, but it also distracts from the actual
+business logic. 
+In general, I found myself reaching for higher-level abstractions in Go (like the
+aforementioned `FromRequest` trait in the Rust version). The final Rust
+code feels more succinct. It felt like the Rust compiler was quietly guiding me
+towards a better design throughout the entire process.
+There's certainly a higher upfront cost to using Rust, but the ergonomics are
+great once you get over the initial scaffolding phase.
+
+I don't think one language is better than the other. It's a matter of taste and
+personal preference. The philosophies of the two languages are quite different,
+but they both allow you to build fast and reliable web services.
+
+## Should I use Rust or Go in 2023?
 
 If you’re just starting out with a new project, and you and your team could
-freely pick a language to use, you might be wondering “should I use Rust or Go
-in 2023?”.
+freely pick a language to use, you might be wondering which one to choose.
 
 It depends on the timeframe for the project and your team's experience. If
 you're looking to get started quickly, Go might be the better choice. It offers
