@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import Slider from 'rc-slider'
 import { useState } from 'react'
-import { Tooltip } from 'react-tooltip'
 import 'rc-slider/assets/index.css'
 
 function roundToClosest(num: number, arr: number[]) {
@@ -77,7 +76,7 @@ const Calculator = () => {
 												left: node.props.style?.left,
 											}}
 										>
-											{handleProps.value} hours
+											{handleProps.value === 730 ? '1 month' : `${handleProps.value} hours`}
 										</span>
 										{node}
 									</div>
