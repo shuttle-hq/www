@@ -22,8 +22,8 @@ function roundToClosest(num: number, arr: number[]) {
 const VCPU_VALUES = [0.05, 0.1, 0.25, 0.5, 0.75, 1, 2, 4]
 
 const Calculator = () => {
-	const [hours, setHours] = useState(50)
-	const [cpu, setCpu] = useState(0.25)
+	const [hours, setHours] = useState(730)
+	const [cpu, setCpu] = useState(0.05)
 
 	const ram = roundToClosest(cpu, VCPU_VALUES) * 4
 	const price = Math.max(Math.round(0.1 * hours * cpu) - 4, 0)
@@ -66,24 +66,15 @@ const Calculator = () => {
 							min={10}
 							handleRender={(node, handleProps) => {
 								return (
-									<div
-										data-tooltip-id='hours'
-										data-tooltip-content={`${handleProps.value} hours`}
-										data-tooltip-place='top'
-										data-tooltip-float={true}
-										data-tooltip-offset={30}
-									>
-										<Tooltip
-											id='hours'
+									<div>
+										<span
+											className='absolute -top-14 z-50 flex h-[40px] w-[155px] -translate-x-1/2 select-none items-center justify-center rounded-xl border border-solid border-[#3C4343] bg-[#0C1616] text-white opacity-100'
 											style={{
-												backgroundColor: '#0C1616',
-												color: '#fff',
-												border: '1px solid #3F4848',
-												borderWidth: 1,
-												borderColor: '#3F4848',
-												borderRadius: 8,
+												left: node.props.style?.left,
 											}}
-										/>
+										>
+											{handleProps.value} hours
+										</span>
 										{node}
 									</div>
 								)
@@ -116,24 +107,15 @@ const Calculator = () => {
 							step={0.01}
 							handleRender={(node, handleProps) => {
 								return (
-									<div
-										data-tooltip-id='cpu'
-										data-tooltip-content={`${handleProps.value} vCPU`}
-										data-tooltip-place='top'
-										data-tooltip-float={true}
-										data-tooltip-offset={30}
-									>
-										<Tooltip
-											id='cpu'
+									<div>
+										<span
+											className='absolute -top-14 z-50 flex h-[40px] w-[155px] -translate-x-1/2 select-none items-center justify-center rounded-xl border border-solid border-[#3C4343] bg-[#0C1616] text-white opacity-100'
 											style={{
-												backgroundColor: '#0C1616',
-												color: '#fff',
-												borderWidth: 1,
-												borderStyle: 'solid',
-												borderColor: '#3F4848',
-												borderRadius: 8,
+												left: node.props.style?.left,
 											}}
-										/>
+										>
+											{handleProps.value} vCPU
+										</span>
 										{node}
 									</div>
 								)
