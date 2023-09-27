@@ -6,11 +6,10 @@ import { FC, ReactNode, useState } from 'react'
 import { ContactUsButton } from '../elements/Button'
 
 const Pricing = () => {
-	const [selectedPricing, setSelectedPricing] = useState<'monthly' | 'annual'>('monthly')
 	const [selectedMobilePlan, setSelectedMobilePlan] = useState<'community' | 'pro' | 'team'>('community')
 
 	return (
-		<div className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
+		<div className='mx-auto mt-36 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
 			<div className='mt-24 lg:mt-32'>
 				<div className='mt-16'>
 					{/* Mobile */}
@@ -34,20 +33,16 @@ const Pricing = () => {
 					>
 						<SplideSlide
 							className={clsx(
-								selectedMobilePlan === 'community'
-									? 'text-2xl text-[#D9D9D9] '
-									: 'text-xl text-[#7A7A7A]',
-								'!mt-auto font-bold leading-none transition-all'
+								selectedMobilePlan === 'community' ? 'text-[#D9D9D9] ' : 'text-[#7A7A7A]',
+								'!mt-auto text-xl font-bold leading-none transition-all'
 							)}
 						>
 							Community
 						</SplideSlide>
 						<SplideSlide
 							className={clsx(
-								selectedMobilePlan === 'pro'
-									? 'text-2xl text-[#D9D9D9] '
-									: 'text-xl text-[#7A7A7A]',
-								'relative !mt-auto font-bold leading-none transition-all'
+								selectedMobilePlan === 'pro' ? 'text-[#D9D9D9] ' : 'text-[#7A7A7A]',
+								'relative !mt-auto text-xl font-bold leading-none transition-all'
 							)}
 						>
 							Pro
@@ -55,10 +50,8 @@ const Pricing = () => {
 
 						<SplideSlide
 							className={clsx(
-								selectedMobilePlan === 'team'
-									? 'text-2xl text-[#D9D9D9] '
-									: 'text-xl text-[#7A7A7A]',
-								'!mt-auto font-bold leading-none transition-all'
+								selectedMobilePlan === 'team' ? 'text-[#D9D9D9] ' : 'text-[#7A7A7A]',
+								'!mt-auto text-xl font-bold leading-none transition-all'
 							)}
 						>
 							Team
