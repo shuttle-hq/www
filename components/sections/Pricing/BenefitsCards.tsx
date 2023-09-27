@@ -67,7 +67,7 @@ const BenefitCards = () => (
 					</svg>
 					<h1 className='font-gradual text-2xl font-bold text-[#C2C2C2] '>Infrastructure from Code</h1>
 					<p className='text-[#ffffff8f]'>
-						Get your entire infrastructure configured without writing any infrastructure config
+						Get your entire infrastructure configured without writing any infrastructure config.
 					</p>
 				</div>
 				<div
