@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import Slider from 'rc-slider'
 import { useState } from 'react'
-import { Tooltip } from 'react-tooltip'
 import 'rc-slider/assets/index.css'
 
 function roundToClosest(num: number, arr: number[]) {
@@ -77,7 +76,7 @@ const Calculator = () => {
 												left: node.props.style?.left,
 											}}
 										>
-											{handleProps.value} hours
+											{handleProps.value === 730 ? '1 month' : `${handleProps.value} hours`}
 										</span>
 										{node}
 									</div>
@@ -152,17 +151,26 @@ const Calculator = () => {
 							className='mb-16'
 						/>
 						<div className='mb-12 grid grid-cols-2 gap-8'>
-							<div className='flex flex-col items-center rounded-[24px] bg-[#00000033] p-5'>
+							<div className='flex flex-col items-center rounded-[24px] bg-[#171C1A] p-5'>
 								<h1 className='font-gradual text-[32px] font-bold text-white'>{ram} GB</h1>
 								<p className='text-[20px]'>RAM</p>
 							</div>
 
-							<div className='flex items-center justify-center rounded-[24px] bg-[#00000033] p-5'>
+
+
+              <div className="rounded-[24px] p-[1px] relative" style={{
+                background: 'linear-gradient(71.78deg, rgba(252, 84, 12, 0.3) 27.87%, rgba(255, 215, 111, 0.216) 52.56%, rgba(56, 212, 233, 0.3) 74.58%)'
+              }}>
+
+              
+							<div className='flex items-center justify-center rounded-[24px] bg-[#171C1A] p-5 w-full h-full opacity-100'>
 								<h1 className='mr-2 font-gradual text-[32px] font-bold text-[#D8D8D8]'>
 									{price}$
 								</h1>
-								<p className='mt-4 text-[#D8D8D8]'> / month</p>
+							  <p className='mt-4 text-[#D8D8D8]'> / month</p>
 							</div>
+              </div>
+            
 						</div>
 					</div>
 				</div>
