@@ -26,7 +26,6 @@ const Calculator = () => {
 	const [cpu, setCpu] = useState(0.25)
 
 	const ram = roundToClosest(cpu, VCPU_VALUES) * 4
-	const requests = Math.round((hours / 36.5) * cpu * 150000).toLocaleString()
 	const price = Math.max(Math.round(0.1 * hours * cpu) - 4, 0)
 
 	return (
@@ -168,19 +167,13 @@ const Calculator = () => {
 								<h1 className='font-gradual text-[32px] font-bold text-white'>{ram} GB</h1>
 								<p className='text-[20px]'>RAM</p>
 							</div>
-							<div className='flex flex-col items-center rounded-[24px] bg-[#00000033] p-5'>
-								<h1 className='font-gradual text-[32px] font-bold text-white'>{requests}</h1>
-								<p className='text-[20px]'>Approx. # of requests</p>
+
+							<div className='flex items-center justify-center rounded-[24px] bg-[#00000033] p-5'>
+								<h1 className='mr-2 font-gradual text-[32px] font-bold text-[#D8D8D8]'>
+									{price}$
+								</h1>
+								<p className='mt-4 text-[#D8D8D8]'> / month</p>
 							</div>
-						</div>
-						<div
-							className='gradient-border mx-auto flex h-[88px] w-[224px] scale-125 items-center justify-center rounded-[24px] bg-contain bg-center bg-no-repeat px-8 py-5'
-							style={{
-								backgroundImage: 'url(/images/pages/pricing/border.svg)',
-							}}
-						>
-							<h1 className='mr-2 font-gradual text-[32px] font-bold text-[#D8D8D8]'>{price}$</h1>
-							<p className='mt-4 text-[#D8D8D8]'> / month</p>
 						</div>
 					</div>
 				</div>
