@@ -400,12 +400,7 @@ const Pricing = () => {
 								<div className='mx-auto mb-4 w-4/5 text-base text-[#7A7A7A]'>
 									Everything you need to run your community projects. On us.
 								</div>
-								<button
-									className={clsx(
-										'border-[1px] border-solid border-[#ffffff40] text-base text-white',
-										'z-[5] rounded-[14px] px-6 py-3 font-gradual transition-all hover:scale-[1.01]'
-									)}
-								>
+								<button className='z-[5] rounded-[14px] border-[1px] border-solid border-[#ffffff40] px-6 py-3 font-gradual text-base text-white transition-all hover:border-none hover:bg-gradient-1'>
 									Start deploying
 								</button>
 							</div>
@@ -415,7 +410,7 @@ const Pricing = () => {
 								<div className='mx-auto mb-4 w-4/5 text-base text-[#7A7A7A]'>
 									Everything in Community, plus higher limits and team features.
 								</div>
-								<Button variant='tertiary' className='mx-auto scale-[0.95]'>
+								<Button variant='tertiary' className='mx-auto scale-[0.95] hover:bg-gradient-2'>
 									Get Started
 								</Button>
 							</div>
@@ -428,7 +423,7 @@ const Pricing = () => {
 								<button
 									className={clsx(
 										'border-[1px] border-solid border-[#ffffff40] text-base text-white',
-										'z-[5] rounded-[14px] px-6 py-3 font-gradual transition-all hover:scale-[1.01]'
+										'z-[5] rounded-[14px] px-6 py-3 font-gradual transition-all hover:border-none hover:bg-gradient-1'
 									)}
 								>
 									Contact us

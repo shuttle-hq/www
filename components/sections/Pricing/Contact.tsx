@@ -7,7 +7,7 @@ const Contact = () => (
 				Still not sure which plan is right for you?
 			</h1>
 			<h3 className='mb-8 text-base text-[#7A7A7A] sm:text-2xl'>Let us help you choose.</h3>
-			<Button variant='tertiary' invertOnDark>
+			<Button variant='tertiary' invertOnDark className='hover:bg-gradient-2'>
 				Contact Us
 			</Button>
 		</div>

@@ -120,7 +120,7 @@ const Plan: FC<PlanProps> = ({
 					name === 'Pro'
 						? ' text-black hover:text-white'
 						: ' border-[1px] border-solid border-[#ffffff40] text-white hover:text-black',
-					'z-[5] mt-8 w-full rounded-[14px] py-3 font-gradual transition-all duration-1000'
+					'z-[5] mt-8 w-full rounded-[14px] py-3 font-gradual transition-all duration-1000 hover:border-none'
 				)}
 				style={{
 					background:

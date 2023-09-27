@@ -5,12 +5,18 @@ import { Tooltip } from 'react-tooltip'
 const PriceCards = () => (
 	<div className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
 		<div className='grid gap-8 lg:grid-cols-3'>
-			<div className='group relative h-[188px] rounded-[20px]'>
+			<div className='group relative order-2 h-[188px] rounded-[20px] sm:order-1'>
 				<Image
 					src='/images/pages/pricing/tileBgs/1.svg'
 					fill
 					alt='bg img'
-					className='absolute left-0 top-0 z-[1] overflow-hidden rounded-[20px]'
+					className='absolute left-0 top-0 z-[1] hidden overflow-hidden rounded-[20px] sm:block'
+				/>
+				<Image
+					src='/images/pages/pricing/tileBgs/4.svg'
+					fill
+					alt='bg img'
+					className='absolute left-0 top-0 z-[1] overflow-hidden rounded-[20px] sm:hidden'
 				/>
 				<Image
 					src={`/images/pages/pricing/sections/cards/stars-1.png`}
@@ -38,7 +44,7 @@ const PriceCards = () => (
 					<h4>per GB/month</h4>
 				</div>
 			</div>
-			<div className='group relative h-[188px] rounded-[20px]'>
+			<div className='group relative order-1 h-[188px] rounded-[20px] sm:order-2'>
 				<Image
 					src='/images/pages/pricing/tileBgs/2.svg'
 					fill
@@ -69,12 +75,18 @@ const PriceCards = () => (
 					</h1>
 				</div>
 			</div>
-			<div className='group relative h-[188px] rounded-[20px]'>
+			<div className='group relative order-3 h-[188px] rounded-[20px]'>
 				<Image
 					src='/images/pages/pricing/tileBgs/3.svg'
 					fill
 					alt='bg img'
-					className='absolute left-0 top-0 z-[1] overflow-hidden rounded-[20px] '
+					className='absolute left-0 top-0 z-[1] hidden overflow-hidden rounded-[20px] sm:block'
+				/>
+				<Image
+					src='/images/pages/pricing/tileBgs/6.svg'
+					fill
+					alt='bg img'
+					className='absolute left-0 top-0 z-[1] overflow-hidden rounded-[20px] sm:hidden'
 				/>
 				<Image
 					src={`/images/pages/pricing/sections/cards/stars-1.png`}
@@ -123,7 +135,7 @@ const PriceCards = () => (
 					</div>
 				</div>
 			</div>
-			<div className='group relative h-[188px] rounded-[20px]'>
+			<div className='group relative order-4 h-[188px] rounded-[20px]'>
 				<Image
 					src='/images/pages/pricing/tileBgs/4.svg'
 					fill
@@ -156,7 +168,7 @@ const PriceCards = () => (
 					<h4>per instance</h4>
 				</div>
 			</div>
-			<div className='group relative h-[188px] rounded-[20px]'>
+			<div className='group relative order-5 h-[188px] rounded-[20px]'>
 				<Image
 					src='/images/pages/pricing/tileBgs/5.svg'
 					fill
@@ -189,7 +201,7 @@ const PriceCards = () => (
 					<h4>per GB/month</h4>
 				</div>
 			</div>
-			<div className='group relative h-[188px] rounded-[20px]'>
+			<div className='group relative order-6 h-[188px] rounded-[20px]'>
 				<Image
 					src='/images/pages/pricing/tileBgs/6.svg'
 					fill
