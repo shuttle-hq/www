@@ -32,7 +32,8 @@ const Plan: FC<PlanProps> = ({
 	textGradient,
 	cta,
 }) => {
-	const [buttonHovered, setButtonHovered] = useState(true)
+	const [buttonHovered, setButtonHovered] = useState(false)
+
 	return (
 		<div
 			className={clsx(
