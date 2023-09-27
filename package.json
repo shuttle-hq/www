@@ -39,7 +39,7 @@
 		"react-dom": "18.2.0",
 		"react-scrollchor": "^7.0.2",
 		"react-syntax-highlighter": "^15.5.0",
-		"react-tooltip": "^5.21.3",
+		"react-tooltip": "^5.21.4",
 		"react-twitter-embed": "^4.0.4",
 		"react-use": "^17.4.0",
 		"rehype-slug": "^5.1.0",
