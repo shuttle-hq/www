@@ -3,6 +3,7 @@ import { Information } from 'components/svgs'
 import { FC, useState } from 'react'
 import Image from 'next/image'
 import { Tooltip } from 'react-tooltip'
+import Link from 'next/link'
 
 export interface FeatureProps {
 	feature: string
@@ -113,6 +114,7 @@ const Plan: FC<PlanProps> = ({
 					</div>
 				))}
 			</div>
+
 			<button
 				onMouseEnter={() => setButtonHovered(true)}
 				onMouseLeave={() => setButtonHovered(false)}
@@ -131,7 +133,9 @@ const Plan: FC<PlanProps> = ({
 							: '',
 				}}
 			>
-				{cta}
+				<Link href={url} target='_blank'>
+					{cta}
+				</Link>
 			</button>
 		</div>
 	)

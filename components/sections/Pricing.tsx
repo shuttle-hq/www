@@ -4,6 +4,8 @@ import { Button, LoginButton } from 'components/elements'
 import Image from 'next/image'
 import { FC, ReactNode, useState } from 'react'
 import { ContactUsButton } from '../elements/Button'
+import Link from 'next/link'
+import { CONTACT_US_URI } from 'lib/constants'
 
 const Pricing = () => {
 	const [selectedMobilePlan, setSelectedMobilePlan] = useState<'community' | 'pro' | 'team'>('community')
@@ -123,7 +125,8 @@ const Pricing = () => {
 						<p className='mx-auto mb-4 w-3/4 text-center text-[#7A7A7A]'>
 							Everything you need to run your hobby projects. On us
 						</p>
-						<Button variant='secondary' className='mx-auto'>
+
+						<Button variant='secondary' className='mx-auto' href='https://console.shuttle.rs'>
 							Start Deploying
 						</Button>
 					</div>
@@ -393,9 +396,11 @@ const Pricing = () => {
 								<div className='mx-auto mb-4 w-4/5 text-base text-[#7A7A7A]'>
 									Everything you need to run your community projects. On us.
 								</div>
-								<button className='z-[5] rounded-[14px] border-[1px] border-solid border-[#ffffff40] px-6 py-3 font-gradual text-base text-white transition-all hover:border-none hover:bg-gradient-1'>
-									Start deploying
-								</button>
+								<Link href='https://console.shuttle.rs' target='_blank'>
+									<button className='z-[5] rounded-[14px] border-[1px] border-solid border-[#ffffff40] px-6 py-3 font-gradual text-base text-white transition-all hover:border-none hover:bg-gradient-1'>
+										Start deploying
+									</button>
+								</Link>
 							</div>
 							<div className='text-center text-black dark:text-[#7A7A7A]'>
 								<div className='mb-4 font-gradual text-2xl font-bold'>Pro</div>
@@ -403,7 +408,11 @@ const Pricing = () => {
 								<div className='mx-auto mb-4 w-4/5 text-base text-[#7A7A7A]'>
 									Everything in Community, plus higher limits and team features.
 								</div>
-								<Button variant='tertiary' className='mx-auto scale-[0.95] hover:bg-gradient-2'>
+								<Button
+									variant='tertiary'
+									className='mx-auto scale-[0.95] hover:bg-gradient-2'
+									href={CONTACT_US_URI}
+								>
 									Get Started
 								</Button>
 							</div>
@@ -413,14 +422,16 @@ const Pricing = () => {
 								<div className='mb-4 text-base text-[#7A7A7A]'>
 									Custom-built tier to supercharge your team&apos;s productivity.
 								</div>
-								<button
-									className={clsx(
-										'border-[1px] border-solid border-[#ffffff40] text-base text-white',
-										'z-[5] rounded-[14px] px-6 py-3 font-gradual transition-all hover:border-none hover:bg-gradient-1'
-									)}
-								>
-									Contact us
-								</button>
+								<Link href={CONTACT_US_URI} target='_blank'>
+									<button
+										className={clsx(
+											'border-[1px] border-solid border-[#ffffff40] text-base text-white',
+											'z-[5] rounded-[14px] px-6 py-3 font-gradual transition-all hover:border-none hover:bg-gradient-1'
+										)}
+									>
+										Contact us
+									</button>
+								</Link>
 							</div>
 						</div>
 						<div className='grid grid-cols-4 items-center py-2 text-center'>

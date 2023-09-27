@@ -65,10 +65,14 @@ const Calculator = () => {
 							max={730}
 							min={10}
 							handleRender={(node, handleProps) => {
+								// const mobileoOffset =
+								// 	handleProps.value > 570 ? '77.7778%' : handleProps.value < 170 ? '22.2222%' : 0
+
 								return (
 									<div>
 										<span
-											className='absolute -top-14 z-50 flex h-[40px] w-[155px] -translate-x-1/2 select-none items-center justify-center rounded-xl border border-solid border-[#3C4343] bg-[#0C1616] text-white opacity-100'
+											className={`absolute -top-14 z-50 flex h-[40px] w-[155px] -translate-x-1/2
+                       select-none items-center justify-center rounded-xl border border-solid border-[#3C4343] bg-[#0C1616] text-white opacity-100`}
 											style={{
 												left: node.props.style?.left,
 											}}
@@ -106,6 +110,9 @@ const Calculator = () => {
 							min={0.05}
 							step={0.01}
 							handleRender={(node, handleProps) => {
+								// const mobileoOffset =
+								// handleProps.value > 2 ? '77.7778%' : handleProps.value < 1 ? '22.2222%' : 0
+
 								return (
 									<div>
 										<span

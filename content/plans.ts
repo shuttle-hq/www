@@ -1,4 +1,5 @@
 import { PlanProps } from 'components/sections/Pricing/Plan'
+import { CONTACT_US_URI } from 'lib/constants'
 
 export const Plans: PlanProps[] = [
 	{
@@ -77,7 +78,7 @@ export const Plans: PlanProps[] = [
 				feature: 'Enhanced support',
 			},
 		],
-		url: 'https://console.shuttle.rs/login',
+		url: CONTACT_US_URI,
 		textGradient:
 			'linear-gradient(70deg, #FC540C -115.42%, rgba(255, 215, 111, 0.72) 61.13%, #38D4E9 291.19%)',
 		cta: 'Get started',
@@ -108,7 +109,7 @@ export const Plans: PlanProps[] = [
 				feature: 'Dedicated support',
 			},
 		],
-		url: 'https://console.shuttle.rs/login',
+		url: CONTACT_US_URI,
 		textGradient:
 			'linear-gradient(70deg, #FC540C -115.42%, rgba(255, 215, 111, 0.72) -8.73%, #38D4E9 114.38%)',
 		cta: 'Contact us',

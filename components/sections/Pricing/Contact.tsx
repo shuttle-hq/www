@@ -1,4 +1,5 @@
 import { Button } from 'components/elements'
+import { CONTACT_US_URI } from 'lib/constants'
 
 const Contact = () => (
 	<div className='mx-auto mt-24  max-w-7xl '>
@@ -7,7 +8,7 @@ const Contact = () => (
 				Still not sure which plan is right for you?
 			</h1>
 			<h3 className='mb-8 text-base text-[#7A7A7A] sm:text-2xl'>Let us help you choose.</h3>
-			<Button variant='tertiary' invertOnDark className='hover:bg-gradient-2'>
+			<Button variant='tertiary' invertOnDark className='hover:bg-gradient-2' href={CONTACT_US_URI}>
 				Contact Us
 			</Button>
 		</div>
