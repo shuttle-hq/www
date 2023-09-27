@@ -186,7 +186,7 @@ const PriceCards = () => (
 					>
 						$0.15
 					</h1>
-					<h4>per GB/day</h4>
+					<h4>per GB/month</h4>
 				</div>
 			</div>
 			<div className='group relative h-[188px] rounded-[20px]'>
