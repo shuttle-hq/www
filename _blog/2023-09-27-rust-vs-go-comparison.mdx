@@ -5,40 +5,60 @@ author: matthias
 tags: [rust, go, project, comparison, guide]
 thumb: rust-go-thumb.png
 cover: rust-go-thumb.png
-date: '2023-09-28T17:00:00'
+date: '2023-09-27T17:00:00'
 ---
 
-Rust vs Go is a topic that keeps popping up and there has been a
-lot written about it already. That is in part because developers are
-looking for information to help them decide which language to use for
-their next (web) project.
+Oh no, not another 'Is Rust better than Go?' article. Seriously, haven't we all
+had our fill of these comparisons by now? But before you sigh in exasperation,
+hear us out! 
 
-After all, both languages can be used to write fast and reliable
-web services. On the other hand, their approaches to achieve that
-are quite different, and it is hard to find a good comparison that
-tries to be fair to both languages.
-This post is my attempt to give you a fair overview of the differences
-between Go and Rust with a focus on web development. We will compare
-the syntax, the web ecosystem, the way they handle typical web tasks
-like routing, middleware, templating, and more.
+Many comparisons between Go and Rust emphasize their differences in syntax and
+the initial learning curve. However, ultimately, what matters is the ease of
+use for non-trivial projects.
+
+Since we are a platform-as-a-service provider, we think that we can contribute
+the most by _showing_ you how to build a small web service in both languages. We
+will use the same task and popular libraries for both languages to compare the
+solutions side-by-side so that you can make up your own mind and get a *feel*
+for what it's like to work in each ecosystem.
+
+So, before you dismiss this as 'just another comparison', give it a read. There
+might be some details that other comparisons have missed before.
+
+## That old "Rust versus Go" debate
+
+Rust vs Go is a topic that keeps popping up and there has been a lot written
+about it already. That is in part because developers are looking for information
+to help them decide which language to use for their next web project, and both
+languages get frequently mentioned in that context. We looked around, but there
+really is not much in-depth content on the topic out there, so developers are
+left to figure it out on their own and run the risk of dismissing an option too
+early due to misguided reasons.
+
+Both communities often face misconceptions and biases. Some view Rust primarily
+as a systems programming language, questioning its suitability for web
+development. Meanwhile, others label Go as overly simplistic, doubting its
+capacity to handle intricate web applications. However, these are merely
+superficial judgments. 
+
+In reality, both languages are fine to be used for writing fast and reliable
+web services. However, their approaches are quite different, and it is hard to
+find a good comparison that tries to be fair to both.
+
+This post is our attempt to give you an overview of the differences
+between Go and Rust with a focus on web development by building a non-trivial
+real-world application in both languages.
+We will go beyond the syntax and take a closer look at how the langauges handle
+typical web tasks like routing, middleware, templating, db access and more.
 
 By the end of this post, you should have a good idea of which
 language is the right one for you.
+
 Although we are aware of our own biases and preferences, we
 we will try to be as objective as possible and
 highlight the strengths and weaknesses of _both_ languages.
 
 ## Building a small web service
-
-Many comparisons between Go and Rust focus on the syntax and
-the language features. But in the end, what matters is how
-easy it is to use them for a non-trivial project.
-
-Since we are a platform-as-a-service provider, we think that
-we can contribute the most by _showing_ you how to build a small
-web service in both languages. We will use the same task and
-popular libraries for both languages to compare the solutions
-side-by-side so that you can make up your own mind.
 
 We will cover the following topics:
 
