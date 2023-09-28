@@ -1,10 +1,9 @@
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import clsx from 'clsx'
-import { Button, LoginButton } from 'components/elements'
-import Image from 'next/image'
-import { FC, ReactNode, useState } from 'react'
-import { ContactUsButton } from '../elements/Button'
+import { Button } from 'components/elements'
+import { useState } from 'react'
 import Link from 'next/link'
+import va from '@vercel/analytics'
 import { CONTACT_US_URI } from 'lib/constants'
 
 const Pricing = () => {
@@ -126,7 +125,9 @@ const Pricing = () => {
 							Everything you need to run your hobby projects. On us
 						</p>
 
-						<Button variant='secondary' className='mx-auto' href='https://console.shuttle.rs'>
+						<Button variant='secondary' className='mx-auto' href='https://console.shuttle.rs' onClick={() => {
+              va.track('cta-clicked', { name: 'Start Deploying', section: 'table'})
+            }}>
 							Start Deploying
 						</Button>
 					</div>
@@ -412,6 +413,9 @@ const Pricing = () => {
 									variant='tertiary'
 									className='mx-auto scale-[0.95] hover:bg-gradient-2'
 									href={CONTACT_US_URI}
+                  onClick={() => {
+                    va.track('cta-clicked', { name: 'Get Started', section: 'table'})
+                  }}
 								>
 									Get Started
 								</Button>
@@ -422,7 +426,9 @@ const Pricing = () => {
 								<div className='mb-4 text-base text-[#7A7A7A]'>
 									Custom-built tier to supercharge your team&apos;s productivity.
 								</div>
-								<Link href={CONTACT_US_URI} target='_blank'>
+								<Link href={CONTACT_US_URI} target='_blank' onClick={() => {
+                  va.track('cta-clicked', { name: 'Contact us', section: 'table'})
+                }}>
 									<button
 										className={clsx(
 											'border-[1px] border-solid border-[#ffffff40] text-base text-white',

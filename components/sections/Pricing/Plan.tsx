@@ -4,6 +4,7 @@ import { FC, useState } from 'react'
 import Image from 'next/image'
 import { Tooltip } from 'react-tooltip'
 import Link from 'next/link'
+import va from '@vercel/analytics'
 
 export interface FeatureProps {
 	feature: string
@@ -133,7 +134,14 @@ const Plan: FC<PlanProps> = ({
 							: '',
 				}}
 			>
-				<Link href={url} target='_blank' className='inline-block h-full w-full'>
+				<Link
+					href={url}
+					target='_blank'
+					className='inline-block h-full w-full'
+					onClick={() => {
+						va.track('cta-clicked', { name: cta, section: 'cards' })
+					}}
+				>
 					{cta}
 				</Link>
 			</button>
