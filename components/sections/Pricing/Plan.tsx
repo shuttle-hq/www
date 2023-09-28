@@ -134,9 +134,14 @@ const Plan: FC<PlanProps> = ({
 							: '',
 				}}
 			>
-				<Link href={url} target='_blank' onClick={() => {
-          va.track('cta-clicked', { name: cta, section: 'cards'})
-        }}>
+				<Link
+					href={url}
+					target='_blank'
+					className='inline-block h-full w-full'
+					onClick={() => {
+						va.track('cta-clicked', { name: cta, section: 'cards' })
+					}}
+				>
 					{cta}
 				</Link>
 			</button>
