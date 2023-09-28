@@ -133,7 +133,7 @@ const Plan: FC<PlanProps> = ({
 							: '',
 				}}
 			>
-				<Link href={url} target='_blank'>
+				<Link href={url} target='_blank' className='inline-block h-full w-full'>
 					{cta}
 				</Link>
 			</button>
