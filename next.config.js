@@ -22,6 +22,11 @@ const nextConfig = {
 				destination: '/blog/tags/all',
 				permanent: true,
 			},
+			{
+				source: '/install',
+				destination: 'https://raw.githubusercontent.com/shuttle-hq/shuttle/main/install.sh',
+				permanent: false,
+			},
 		]
 	},
 	async headers() {
