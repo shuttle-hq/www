@@ -58,7 +58,7 @@ const Pricing = () => {
 							Team
 						</SplideSlide>
 					</Splide>
-					<div className='absolute left-6 flex flex-row sm:hidden'>
+					<div className='absolute flex sm:hidden'>
 						<div className='relative'>
 							<div
 								className={clsx(
@@ -82,7 +82,7 @@ const Pricing = () => {
 						<div className='relative'>
 							<div
 								className={clsx(
-									'absolute -top-1 z-[100] h-1 w-full translate-x-[120%] translate-y-[20%] transition-all',
+									'absolute -top-1 z-[100] h-1 w-full translate-x-[110%] translate-y-[20%] transition-all',
 									selectedMobilePlan === 'pro' ? 'block' : 'hidden'
 								)}
 								style={{
@@ -102,7 +102,7 @@ const Pricing = () => {
 						<div className='relative'>
 							<div
 								className={clsx(
-									'absolute -top-1 z-[100] h-1 w-full translate-x-[150%] translate-y-[20%] transition-all',
+									'absolute -top-1 z-[100] h-1 w-full translate-x-[140%] translate-y-[20%] transition-all',
 									selectedMobilePlan === 'team' ? 'block' : 'hidden'
 								)}
 								style={{
@@ -171,7 +171,7 @@ const Pricing = () => {
 								<div className='text-right text-[#FFFFFFA3]'>1 GB</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Dedicated Database (RDS)</div>
+								<div className=' col-span-5 text-[#7A7A7A]'>Add-on: Dedicated Database (AWS RDS)</div>
 								<div className='text-right text-[#FFFFFFA3]'>
 									<svg
 										width={15}
@@ -199,39 +199,24 @@ const Pricing = () => {
 							</div>
 							<div className='mb-8 px-2 py-[0.875rem] font-gradual font-bold lg:mt-0'></div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Network (egress)</div>
+								<div className=' col-span-5 text-[#7A7A7A]'>Free Network egress</div>
 								<div className='text-right text-[#FFFFFFA3]'>1 GB</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Deployments per day</div>
+								<div className=' col-span-5 text-[#7A7A7A]'>Max Deployments per day</div>
 								<div className='text-right text-[#FFFFFFA3]'>20</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Build Time per Deployment</div>
-								<div className='text-right text-[#FFFFFFA3]'>15min</div>
+								<div className=' col-span-5 text-[#7A7A7A]'>Max Build minutes per Deployment</div>
+								<div className='text-right text-[#FFFFFFA3]'>10</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Object Storage (coming soon)</div>
+								<div className=' col-span-5 text-[#7A7A7A]'>Free Object Storage <span className='text-sm'><span className='text-sm'>(coming soon)</span></span></div>
 								<div className='text-right text-[#FFFFFFA3]'>1 GB</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Persistent Volume</div>
-								<div className='text-right text-[#FFFFFFA3]'>
-									<svg
-										width={15}
-										className='ml-auto h-full text-[#C2C2C2]'
-										height={15}
-										viewBox='0 0 15 15'
-										fill='none'
-										xmlns='http://www.w3.org/2000/svg'
-									>
-										<path
-											d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
-											stroke='currentColor'
-											strokeWidth={2}
-										/>
-									</svg>
-								</div>
+								<div className=' col-span-5 text-[#7A7A7A]'>Persistent Volume <span className='text-sm'>(coming soon)</span></div>
+								<div className='text-right text-[#FFFFFFA3]'>TDB</div>
 							</div>
 						</div>
 						<div className='divide-y divide-white/10 text-xl' hidden={selectedMobilePlan !== 'pro'}>
@@ -255,7 +240,7 @@ const Pricing = () => {
 								<div className='col-span-2 text-right text-[#FFFFFFA3]'>10 GB</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Dedicated Database (RDS)</div>
+								<div className=' col-span-5 text-[#7A7A7A]'>Add-on: Dedicated Database (AWS RDS)</div>
 								<div className='text-right text-[#FFFFFFA3]'>
 									<svg
 										width={18}
@@ -279,35 +264,24 @@ const Pricing = () => {
 							</div>
 							<div className='mb-8 px-2 py-[0.875rem] font-gradual font-bold lg:mt-0'></div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-4 text-[#7A7A7A]'>Network (egress)</div>
+								<div className=' col-span-4 text-[#7A7A7A]'>Free Network egress</div>
 								<div className='col-span-2 text-right text-[#FFFFFFA3]'>10 GB</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-4 text-[#7A7A7A]'>Deployments per day</div>
+								<div className=' col-span-4 text-[#7A7A7A]'>Max Deployments per day</div>
 								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-4 text-[#7A7A7A]'>Build Time per Deployment</div>
-								<div className='col-span-2 text-right text-[#FFFFFFA3]'>30min</div>
+								<div className=' col-span-4 text-[#7A7A7A]'>Max Build minutes per Deployment</div>
+								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-4 text-[#7A7A7A]'>Object Storage (coming soon)</div>
+								<div className=' col-span-4 text-[#7A7A7A]'>Free Object Storage <span className='text-sm'>(coming soon)</span></div>
 								<div className='col-span-2 text-right text-[#FFFFFFA3]'>10 GB</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Persistent Volume</div>
-								<div className='text-right text-[#FFFFFFA3]'>
-									<svg
-										width={18}
-										className='ml-auto h-full text-[#FFFFFFA3]'
-										height={15}
-										viewBox='0 0 18 15'
-										fill='none'
-										xmlns='http://www.w3.org/2000/svg'
-									>
-										<path d='M1 6.5L6.33333 12L17 1' stroke='white' stroke-width='2' />
-									</svg>
-								</div>
+								<div className=' col-span-5 text-[#7A7A7A]'>Persistent Volume <span className='text-sm'>(coming soon)</span></div>
+								<div className='text-right text-[#FFFFFFA3]'>TBD</div>
 							</div>
 						</div>
 						<div className='divide-y divide-white/10 text-xl' hidden={selectedMobilePlan !== 'team'}>
@@ -331,7 +305,7 @@ const Pricing = () => {
 								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Dedicated Database (RDS)</div>
+								<div className=' col-span-5 text-[#7A7A7A]'>Add-on: Dedicated Database (AWS RDS)</div>
 								<div className='text-right text-[#FFFFFFA3]'>
 									<svg
 										width={18}
@@ -355,35 +329,24 @@ const Pricing = () => {
 							</div>
 							<div className='mb-8 px-2 py-[0.875rem] font-gradual font-bold lg:mt-0'></div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-4 text-[#7A7A7A]'>Network (egress)</div>
+								<div className=' col-span-4 text-[#7A7A7A]'>Free Network egress</div>
 								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-4 text-[#7A7A7A]'>Deployments per day</div>
+								<div className=' col-span-4 text-[#7A7A7A]'>Max Deployments per day</div>
 								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-4 text-[#7A7A7A]'>Build Time per Deployment</div>
+								<div className=' col-span-4 text-[#7A7A7A]'>Max Build minutes per Deployment</div>
 								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-4 text-[#7A7A7A]'>Object Storage (coming soon)</div>
+								<div className=' col-span-4 text-[#7A7A7A]'>Free Object Storage <span className='text-sm'>(coming soon)</span></div>
 								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Persistent Volume</div>
-								<div className='text-right text-[#FFFFFFA3]'>
-									<svg
-										width={18}
-										className='ml-auto h-full text-[#FFFFFFA3]'
-										height={15}
-										viewBox='0 0 18 15'
-										fill='none'
-										xmlns='http://www.w3.org/2000/svg'
-									>
-										<path d='M1 6.5L6.33333 12L17 1' stroke='white' stroke-width='2' />
-									</svg>
-								</div>
+								<div className=' col-span-5 text-[#7A7A7A]'>Persistent Volume <span className='text-sm'>(coming soon)</span></div>
+								<div className='text-right text-[#FFFFFFA3]'>Custom</div>
 							</div>
 						</div>
 					</div>
@@ -395,7 +358,7 @@ const Pricing = () => {
 								<div className='mb-4 font-gradual text-2xl font-bold'>Community</div>
 
 								<div className='mx-auto mb-4 w-4/5 text-base text-[#7A7A7A]'>
-									Everything you need to run your community projects. On us.
+									Everything you need to run your hobby projects. On us.
 								</div>
 								<Link href='https://console.shuttle.rs' target='_blank'>
 									<button className='z-[5] rounded-[14px] border-[1px] border-solid border-[#ffffff40] px-6 py-3 font-gradual text-base text-white transition-all hover:border-none hover:bg-gradient-1'>
@@ -407,7 +370,7 @@ const Pricing = () => {
 								<div className='mb-4 font-gradual text-2xl font-bold'>Pro</div>
 
 								<div className='mx-auto mb-4 w-4/5 text-base text-[#7A7A7A]'>
-									Everything in Community, plus higher limits and team features.
+									Everything in Community, plus higher limits and more add-ons.
 								</div>
 								<Button
 									variant='tertiary'
@@ -489,7 +452,7 @@ const Pricing = () => {
 						</div>
 						<div className='grid grid-cols-4 items-center py-2 text-center'>
 							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
-								Dedicated Database (RDS)
+								Add-on: Dedicated Database (AWS RDS)
 							</div>
 							<div className='text-[20px] text-[#ffffffa3]'>
 								<svg
@@ -563,7 +526,7 @@ const Pricing = () => {
 						<div className='grid grid-cols-4 items-center py-2 text-center'></div>
 						<div className='grid grid-cols-4 items-center py-2 text-center'>
 							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
-								Network (egress)
+								Free Network egress
 							</div>
 							<div className='text-[20px] text-[#ffffffa3]'>1 GB</div>
 							<div className='text-[20px] text-[#ffffffa3]'>10 GB</div>
@@ -571,7 +534,15 @@ const Pricing = () => {
 						</div>
 						<div className='grid grid-cols-4 items-center py-2 text-center'>
 							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
-								Max Delpoyments per day
+								Max Deployments per day
+							</div>
+							<div className='text-[20px] text-[#ffffffa3]'>10</div>
+							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
+							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
+						</div>
+						<div className='grid grid-cols-4 items-center py-2 text-center'>
+							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
+								Max Build minutes per Deployment
 							</div>
 							<div className='text-[20px] text-[#ffffffa3]'>20</div>
 							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
@@ -579,15 +550,7 @@ const Pricing = () => {
 						</div>
 						<div className='grid grid-cols-4 items-center py-2 text-center'>
 							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
-								Max Build Time per Deployment
-							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>20</div>
-							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
-							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
-						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
-								Object Storage (coming soon)
+								Free Object Storage <span className='text-sm'>(coming soon)</span>
 							</div>
 							<div className='text-[20px] text-[#ffffffa3]'>1 GB</div>
 							<div className='text-[20px] text-[#ffffffa3]'>10 GB</div>
@@ -595,58 +558,11 @@ const Pricing = () => {
 						</div>
 						<div className='grid grid-cols-4 items-center py-2 text-center'>
 							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
-								Persistent Volume (coming soon)
+								Persistent Volume <span className='text-sm'>(coming soon)</span>
 							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>
-								<svg
-									width={15}
-									className='m-auto text-[#fff]'
-									height={15}
-									viewBox='0 0 15 15'
-									fill='none'
-									xmlns='http://www.w3.org/2000/svg'
-								>
-									<path
-										d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
-										stroke='currentColor'
-										strokeWidth={2}
-									/>
-								</svg>
-							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>
-								<svg
-									width={15}
-									className='m-auto text-[#fff]'
-									height={15}
-									viewBox='0 0 15 15'
-									fill='none'
-									xmlns='http://www.w3.org/2000/svg'
-								>
-									<path
-										id='Vector 820'
-										d='M1 6.5L6.33333 12L17 1'
-										stroke='white'
-										stroke-width='2'
-									/>
-								</svg>
-							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>
-								<svg
-									width={15}
-									className='m-auto text-[#fff]'
-									height={15}
-									viewBox='0 0 15 15'
-									fill='none'
-									xmlns='http://www.w3.org/2000/svg'
-								>
-									<path
-										id='Vector 820'
-										d='M1 6.5L6.33333 12L17 1'
-										stroke='white'
-										stroke-width='2'
-									/>
-								</svg>
-							</div>
+							<div className='text-[20px] text-[#ffffffa3]'>TDB</div>
+							<div className='text-[20px] text-[#ffffffa3]'>TDB</div>
+							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
 						</div>
 						<div className='grid grid-cols-4 items-center py-2 text-center'></div>
 					</div>

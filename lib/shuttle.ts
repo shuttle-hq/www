@@ -71,4 +71,6 @@ export class Shuttle {
 	}
 }
 
-export default new Shuttle()
+const ShuttleInstance = new Shuttle()
+
+export default ShuttleInstance

@@ -16,7 +16,7 @@ import { Analytics } from '@vercel/analytics/react'
 export default function App({ Component, pageProps }: AppProps) {
 	const router = useRouter()
 	const { user } = pageProps
-	useEffect(() => setupFathomAnalytics(router), [])
+	useEffect(() => setupFathomAnalytics(router), [router])
 
 	const getLayout = (Component as any).getLayout || ((page: ReactNode) => <Page>{page}</Page>)
 

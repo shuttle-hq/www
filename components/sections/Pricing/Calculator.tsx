@@ -20,6 +20,25 @@ function roundToClosest(num: number, arr: number[]) {
 
 const VCPU_VALUES = [0.05, 0.1, 0.25, 0.5, 0.75, 1, 2, 4]
 
+const SLIDER_STYLES = {
+	rail: { backgroundColor: '#ffffff33', height: 5 },
+	track: {
+		background:
+			'linear-gradient(72deg, #fc540c 27.87%, rgba(255, 215, 111, 0.72) 52.56%, #38d4e9 74.58%)',
+		height: 4,
+	},
+	handle: {
+		opacity: 1,
+		borderRadius: 21,
+		width: 21,
+		height: 21,
+		top: 1,
+		background:
+			'linear-gradient(66deg, #FC540C -101.68%, rgba(255, 215, 111, 0.72) 2.02%, #38D4E9 84.49%)',
+		border: '3px solid #ffffff',
+	}
+}
+
 const Calculator = () => {
 	const [hours, setHours] = useState(730)
 	const [cpu, setCpu] = useState(0.05)
@@ -50,8 +69,10 @@ const Calculator = () => {
 							Compute Costs
 						</h1>
 						<p className='mb-10 text-[#7A7A7A] sm:text-xl'>
-							Use our interactive pricing estimator to find out your compute resources requirements
-							and get an accurate projection of additional usage-based cost
+							Use our interactive pricing estimator to calculate your usage-based compute cost.
+						</p>
+						<p className='mb-10 text-[#7A7A7A] sm:text-xl'>
+							The monthly cost is based on the product of vCPU cores and active hours.
 						</p>
 						<p className='text-[#7A7A7A] sm:text-xl'>Need a more precise estimate?</p>
 						<p className='cursor-pointer text-[#C2C2C2] underline sm:text-xl'>
@@ -59,19 +80,45 @@ const Calculator = () => {
 						</p>
 					</div>
 					<div className='z-[10] flex w-full flex-col'>
-						<div className='w-full sm:h-32 ' />
+						<div className='w-full sm:h-44' />
+						<Slider
+							max={4}
+							min={0.05}
+							step={0.05}
+							handleRender={(node, handleProps) => {
+								return (
+									<div className='text-center'>
+										<span
+											className='absolute -top-[4.6rem] z-50 flex h-[60px] w-[125px] -translate-x-1/2 select-none items-center justify-center rounded-xl border border-solid border-[#3C4343] bg-[#0C1616] text-white opacity-100'
+											style={{
+												left: node.props.style?.left,
+											}}
+										>
+											{handleProps.value} vCPU
+											<br />
+											{ram} GB RAM
+										</span>
+										{node}
+									</div>
+								)
+							}}
+							styles={SLIDER_STYLES}
+							value={cpu}
+							onChange={(value: number | number[]) => {
+								if (typeof value === 'number') {
+									setCpu(roundToClosest(value, VCPU_VALUES))
+								}
+							}}
+							className='-mt-32 mb-20 sm:mt-0 '
+						/>
 						<Slider
 							max={730}
 							min={10}
 							handleRender={(node, handleProps) => {
-								// const mobileoOffset =
-								// 	handleProps.value > 570 ? '77.7778%' : handleProps.value < 170 ? '22.2222%' : 0
-
 								return (
 									<div>
 										<span
-											className={`absolute -top-14 z-50 flex h-[40px] w-[155px] -translate-x-1/2
-                       select-none items-center justify-center rounded-xl border border-solid border-[#3C4343] bg-[#0C1616] text-white opacity-100`}
+											className='absolute -top-14 z-50 flex h-[40px] w-[125px] -translate-x-1/2 select-none items-center justify-center rounded-xl border border-solid border-[#3C4343] bg-[#0C1616] text-white opacity-100'
 											style={{
 												left: node.props.style?.left,
 											}}
@@ -82,88 +129,23 @@ const Calculator = () => {
 									</div>
 								)
 							}}
-							railStyle={{ backgroundColor: '#ffffff33', height: 5 }}
-							trackStyle={{
-								background:
-									'linear-gradient(72deg, #fc540c 27.87%, rgba(255, 215, 111, 0.72) 52.56%, #38d4e9 74.58%)',
-								height: 4,
-							}}
-							handleStyle={{
-								opacity: 1,
-								borderRadius: 21,
-								width: 21,
-								height: 21,
-								top: 1,
-								background:
-									'linear-gradient(66deg, #FC540C -101.68%, rgba(255, 215, 111, 0.72) 2.02%, #38D4E9 84.49%)',
-								border: '3px solid #ffffff',
-							}}
+							styles={SLIDER_STYLES}
 							value={hours}
 							onChange={(value: number | number[]) => {
 								if (typeof value === 'number') setHours(value)
 							}}
-							className='-mt-32 mb-20 sm:mt-0 '
-						/>
-						<Slider
-							max={4}
-							min={0.05}
-							step={0.01}
-							handleRender={(node, handleProps) => {
-								// const mobileoOffset =
-								// handleProps.value > 2 ? '77.7778%' : handleProps.value < 1 ? '22.2222%' : 0
-
-								return (
-									<div>
-										<span
-											className='absolute -top-14 z-50 flex h-[40px] w-[155px] -translate-x-1/2 select-none items-center justify-center rounded-xl border border-solid border-[#3C4343] bg-[#0C1616] text-white opacity-100'
-											style={{
-												left: node.props.style?.left,
-											}}
-										>
-											{handleProps.value} vCPU
-										</span>
-										{node}
-									</div>
-								)
-							}}
-							railStyle={{ backgroundColor: '#ffffff33', height: 5 }}
-							trackStyle={{
-								background:
-									'linear-gradient(72deg, #fc540c 27.87%, rgba(255, 215, 111, 0.72) 52.56%, #38d4e9 74.58%)',
-								height: 4,
-							}}
-							handleStyle={{
-								opacity: 1,
-								borderRadius: 21,
-								background:
-									'linear-gradient(66deg, #FC540C -101.68%, rgba(255, 215, 111, 0.72) 2.02%, #38D4E9 84.49%)',
-								border: '3px solid #ffffff',
-								width: 21,
-								height: 21,
-								top: 1,
-							}}
-							value={cpu}
-							onChange={(value: number | number[]) => {
-								if (typeof value === 'number') {
-									setCpu(roundToClosest(value, VCPU_VALUES))
-								}
-							}}
 							className='mb-16'
 						/>
-						<div className='mb-12 grid grid-cols-2 gap-8'>
-							<div className='flex flex-col items-center rounded-[24px] bg-[#171C1A] p-5'>
-								<h1 className='font-gradual text-[32px] font-bold text-white'>{ram} GB</h1>
-								<p className='text-[20px]'>RAM</p>
-							</div>
+						<div className='mb-12 flex justify-center'>
 
 
 
-              <div className="rounded-[24px] p-[1px] relative" style={{
+              <div className="rounded-[24px] p-[2px] relative" style={{
                 background: 'linear-gradient(71.78deg, rgba(252, 84, 12, 0.3) 27.87%, rgba(255, 215, 111, 0.216) 52.56%, rgba(56, 212, 233, 0.3) 74.58%)'
               }}>
 
               
-							<div className='flex items-center justify-center rounded-[24px] bg-[#171C1A] p-5 w-full h-full opacity-100'>
+							<div className='flex items-center justify-center rounded-[24px] bg-[#171C1A] p-5 w-[250px] h-full opacity-100'>
 								<h1 className='mr-2 font-gradual text-[32px] font-bold text-[#D8D8D8]'>
 									{price}$
 								</h1>

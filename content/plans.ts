@@ -13,20 +13,20 @@ export const Plans: PlanProps[] = [
 				feature: 'Up to 3 projects',
 			},
 			{
-				feature: 'Infra config with code annotations',
-			},
-			{
-				feature: 'Enough CPU to get you started',
+				feature: 'Enough CPU & RAM to get you started',
 				iText: 'See project budget estimator below.',
 			},
 			{
 				feature: 'Starter Database',
 			},
 			{
-				feature: 'Deploy from GitHub',
+				feature: 'Infra config with code annotations',
 			},
 			{
 				feature: 'Easy plug-in instrumentation',
+			},
+			{
+				feature: 'Deploy from GitHub Actions',
 			},
 			{
 				feature: '20 deploys per day',
@@ -50,10 +50,10 @@ export const Plans: PlanProps[] = [
 		billsResources: true,
 		features: [
 			{
-				feature: 'More projects (up to 15)',
+				feature: 'Up to 15 projects',
 			},
 			{
-				feature: 'Higher vCPU limits (usage-based)',
+				feature: 'Higher CPU & RAM limits',
 				iText: 'See project budget estimator below.',
 			},
 			{
@@ -63,13 +63,13 @@ export const Plans: PlanProps[] = [
 				feature: 'More storage',
 			},
 			{
-				feature: 'Add-on: RDS',
+				feature: 'Add-on: AWS RDS',
 			},
 			{
 				feature: 'Configurable instances',
 			},
 			{
-				feature: 'Easy access to Shuttle AI (alpha)',
+				feature: 'Early access to Shuttle AI (coming soon)',
 			},
 			{
 				feature: 'Longer logs retention',
@@ -94,16 +94,17 @@ export const Plans: PlanProps[] = [
 				feature: 'Unlimited projects',
 			},
 			{
-				feature: 'Longer logs retention',
+				feature: 'Higher CPU & RAM limits',
+				iText: 'See project budget estimator below.',
 			},
 			{
-				feature: 'Higher CPU limits',
-			},
-			{
-				feature: 'Bring your own cloud (Coming soon)',
+				feature: 'Bring your own cloud (coming soon)',
 			},
 			{
 				feature: 'Custom SLA',
+			},
+			{
+				feature: 'Longer logs retention',
 			},
 			{
 				feature: 'Dedicated support',
