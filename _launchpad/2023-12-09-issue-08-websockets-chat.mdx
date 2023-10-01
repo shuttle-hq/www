@@ -295,7 +295,7 @@ function createMsg(message) {
 function send() {
   conn.send(
     JSON.stringify({
-      name: nome,
+      name: name,
       message: document.getElementById("input").value,
     }),
   );
