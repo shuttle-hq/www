@@ -207,7 +207,7 @@ const Pricing = () => {
 								<div className='text-right text-[#FFFFFFA3]'>20</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Max Build minutes per Deployment</div>
+								<div className=' col-span-5 text-[#7A7A7A]'>Max Build Minutes per Deployment</div>
 								<div className='text-right text-[#FFFFFFA3]'>10</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
@@ -268,7 +268,7 @@ const Pricing = () => {
 								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-4 text-[#7A7A7A]'>Max Build minutes per Deployment</div>
+								<div className=' col-span-4 text-[#7A7A7A]'>Max Build Minutes per Deployment</div>
 								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
@@ -329,7 +329,7 @@ const Pricing = () => {
 								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-4 text-[#7A7A7A]'>Max Build minutes per Deployment</div>
+								<div className=' col-span-4 text-[#7A7A7A]'>Max Build Minutes per Deployment</div>
 								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
@@ -524,15 +524,15 @@ const Pricing = () => {
 							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
 								Max Deployments per day
 							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>10</div>
+							<div className='text-[20px] text-[#ffffffa3]'>20</div>
 							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
 							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
 						</div>
 						<div className='grid grid-cols-4 items-center py-2 text-center'>
 							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
-								Max Build minutes per Deployment
+								Max Build Minutes per Deployment
 							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>20</div>
+							<div className='text-[20px] text-[#ffffffa3]'>10</div>
 							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
 							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
 						</div>
