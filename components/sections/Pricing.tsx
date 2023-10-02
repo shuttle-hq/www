@@ -211,7 +211,7 @@ const Pricing = () => {
 								<div className='text-right text-[#FFFFFFA3]'>10</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Free Object Storage <span className='text-sm'><span className='text-sm'>(coming soon)</span></span></div>
+								<div className=' col-span-5 text-[#7A7A7A]'>Free Object Storage <span className='text-sm'>(coming soon)</span></div>
 								<div className='text-right text-[#FFFFFFA3]'>1 GB</div>
 							</div>
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
