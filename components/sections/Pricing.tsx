@@ -214,10 +214,6 @@ const Pricing = () => {
 								<div className=' col-span-5 text-[#7A7A7A]'>Free Object Storage <span className='text-sm'>(coming soon)</span></div>
 								<div className='text-right text-[#FFFFFFA3]'>1 GB</div>
 							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Persistent Volume <span className='text-sm'>(coming soon)</span></div>
-								<div className='text-right text-[#FFFFFFA3]'>TBD</div>
-							</div>
 						</div>
 						<div className='divide-y divide-white/10 text-xl' hidden={selectedMobilePlan !== 'pro'}>
 							<div className='px-2 py-[0.875rem] font-gradual text-base font-bold text-[#C2C2C2]'>
@@ -279,10 +275,6 @@ const Pricing = () => {
 								<div className=' col-span-4 text-[#7A7A7A]'>Free Object Storage <span className='text-sm'>(coming soon)</span></div>
 								<div className='col-span-2 text-right text-[#FFFFFFA3]'>10 GB</div>
 							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Persistent Volume <span className='text-sm'>(coming soon)</span></div>
-								<div className='text-right text-[#FFFFFFA3]'>TBD</div>
-							</div>
 						</div>
 						<div className='divide-y divide-white/10 text-xl' hidden={selectedMobilePlan !== 'team'}>
 							<div className='px-2 py-[0.875rem] font-gradual text-base font-bold text-[#C2C2C2]'>
@@ -343,10 +335,6 @@ const Pricing = () => {
 							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
 								<div className=' col-span-4 text-[#7A7A7A]'>Free Object Storage <span className='text-sm'>(coming soon)</span></div>
 								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Persistent Volume <span className='text-sm'>(coming soon)</span></div>
-								<div className='text-right text-[#FFFFFFA3]'>Custom</div>
 							</div>
 						</div>
 					</div>
@@ -556,15 +544,6 @@ const Pricing = () => {
 							<div className='text-[20px] text-[#ffffffa3]'>10 GB</div>
 							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
 						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
-								Persistent Volume <span className='text-sm'>(coming soon)</span>
-							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>TBD</div>
-							<div className='text-[20px] text-[#ffffffa3]'>TBD</div>
-							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
-						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'></div>
 					</div>
 				</div>
 			</div>
