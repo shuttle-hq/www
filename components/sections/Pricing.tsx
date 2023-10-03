@@ -396,7 +396,7 @@ const Pricing = () => {
 								Max Team Size
 							</div>
 							<div className='text-[20px] text-[#ffffffa3]'>1</div>
-							<div className='text-[20px] text-[#ffffffa3]'>1</div>
+							<div className='text-[20px] text-[#ffffffa3]'>5</div>
 							<div className='text-[20px] text-[#ffffffa3]'>∞</div>
 						</div>
 						<div className='grid grid-cols-4 items-center py-2 text-center'>
