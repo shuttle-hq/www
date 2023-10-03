@@ -61,7 +61,7 @@ const Calculator = () => {
 					alt='bg img'
 					className='absolute -z-10 h-[200vh] w-screen -translate-y-[20%] sm:hidden'
 				/>
-				<div className='z-10 mx-auto mt-14 flex w-full max-w-7xl flex-col gap-[200px] px-5 sm:flex-row sm:px-10 lg:mt-14'>
+				<div className='z-10 mx-auto mt-14 flex w-full max-w-7xl flex-col gap-[210px] px-5 sm:flex-row sm:px-10 lg:mt-14'>
 					<div className=' flex max-w-[400px] flex-col items-start justify-center'>
 						<h1 className='mb-5 font-gradual text-4xl font-bold text-[#E0E0E0] sm:text-5xl sm:text-[#C2C2C2]'>
 							Estimate Your
@@ -79,7 +79,7 @@ const Calculator = () => {
 							Set up a call with our team
 						</p>
 					</div>
-					<div className='z-[10] flex w-full flex-col'>
+					<div className='z-[10] flex w-full flex-col px-8 sm:px-0'>
 						<div className='w-full sm:h-44' />
 						<Slider
 							max={4}
