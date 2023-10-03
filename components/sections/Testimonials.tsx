@@ -204,7 +204,7 @@ const Testimonials = () => {
 							<div className='flex items-start gap-4'>
 								<div className='h-[3.125rem] w-[3.125rem] flex-shrink-0 rounded-full bg-gradient-to-r from-[#FC540C] via-[#4E452F] to-[#38D4E9] p-px'>
 									<Image
-										src='/images/sections/user.jpg'
+										src='/images/sections/testimonials/glen.jpg'
 										alt='profile picture'
 										width={40}
 										height={40}
@@ -212,14 +212,15 @@ const Testimonials = () => {
 									/>
 								</div>
 								<div>
-									<h3 className='font-gradual font-bold text-white'>Deep</h3>
-									<p className='text-[#C2C2C2]'>@deepg</p>
-									<p className='text-[#C2C2C2]'>Rust Software Engineer</p>
+									<h3 className='font-gradual font-bold text-white'>Glen De Cauwsemaecker</h3>
+									<p className='text-[#C2C2C2]'>@glendc</p>
+									<p className='text-[#C2C2C2]'>Founder @ Plabayo</p>
 								</div>
 							</div>
 							<p className='mt-5 text-[#C2C2C2]'>
-								I tried migrating my project from heroku to Shuttle and it works perfectly! Looking
-								forward to more of it
+								Shuttle turns shipping web services into child play.
+								The full power of the Rust ecosystem together with zero effort deployments and
+								no infrastructure work allows us to hit market as quickly as we can develop the product. Magic!
 							</p>
 						</div>
 					</div>
