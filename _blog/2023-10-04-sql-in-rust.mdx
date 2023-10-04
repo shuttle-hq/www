@@ -188,7 +188,7 @@ This particular macro also, of course, supports struct binding and scalar querie
 
 Something of note is that if you *only* want to compile-time check the syntax and not whether or not the database inputs and outputs are correct for a query macro, you can add `unchecked` at the end of a macro. For example: `query!` would become `query_unchecked!`. This is useful in cases where you don't actually have a database set up yet or there's no convenient method for retrieving the database URL (or in other such circumstances where you don't want to give SQLx direct access to your database). 
 
-## PostgresQL List/Notify
+## PostgreSQL Listen/Notify
 
 With as many as features as Postgres has, it's a good thing that SQLx supports them - while SQLx is primarily about writing raw SQL, there is no reason why we should have to write everything in it. SQLx supports channels, `LISTEN` and more importantly `pg_notify`, which is a great way for us to be able to handle notifications from Postgres when records are updated. Let's have a look at the example below on how we can set up an event listener:
 
