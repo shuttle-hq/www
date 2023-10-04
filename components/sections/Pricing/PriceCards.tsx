@@ -31,7 +31,7 @@ const PriceCards = () => (
 					className='absolute left-0 top-0 z-[1] h-full w-full transform duration-1000 group-hover:-translate-x-5 group-hover:translate-y-3 '
 				/>
 				<div className='absolute left-0 top-0 z-[10] flex h-full w-full flex-col items-center gap-4 rounded-[20px] p-6'>
-					<h3 className='text-xl text-[#C2C2C2]'>Network (egress)</h3>
+					<h3 className='text-xl text-[#C2C2C2]'>Network egress</h3>
 					<h1
 						className='bg-clip-text font-gradual text-5xl font-bold text-transparent'
 						style={{
@@ -41,7 +41,7 @@ const PriceCards = () => (
 					>
 						$0.15
 					</h1>
-					<h4>per GB/month</h4>
+					<h4>per GB</h4>
 				</div>
 			</div>
 			<div className='group relative order-1 h-[188px] rounded-[20px] sm:order-2'>

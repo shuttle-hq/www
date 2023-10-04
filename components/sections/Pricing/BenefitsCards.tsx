@@ -17,8 +17,7 @@ const BenefitCards = () => (
 		/>
 		<div className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10'>
 			<h1 className='mb-12 text-center font-gradual text-4xl font-bold text-[#C2C2C2]'>
-				{' '}
-				Included in all plans{' '}
+				Included in all plans
 			</h1>
 			<div className='grid gap-8 lg:grid-cols-3'>
 				<div
@@ -110,9 +109,9 @@ const BenefitCards = () => (
 							fill='#D8D8D8'
 						/>
 					</svg>
-					<h1 className='font-gradual text-2xl font-bold text-[#C2C2C2] '>Compile-time Insurance</h1>
+					<h1 className='font-gradual text-2xl font-bold text-[#C2C2C2] '>Compile-time assurance</h1>
 					<p className='text-[#ffffff8f]'>
-						Be confident that you are getting the resources you need at compile time. No surprises.
+						Be confident at compile time that you will get the resources you need. No surprises.
 					</p>
 				</div>
 				<div

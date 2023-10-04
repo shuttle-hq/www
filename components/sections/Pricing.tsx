@@ -1,22 +1,202 @@
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import clsx from 'clsx'
 import { Button } from 'components/elements'
-import { useState } from 'react'
-import Link from 'next/link'
+import { ReactElement, useState } from 'react'
 import va from '@vercel/analytics'
 import { CONTACT_US_URI } from 'lib/constants'
 
+
+type TierName = 'community' | 'pro' | 'team';
+interface PricingTier {
+	name: TierName
+	displayName: string
+	desc: string
+	cta: string
+	ctaPrimaryButton?: boolean
+	ctaLink: string
+}
+interface PricingTableRow {
+	desc: string
+	desc2?: string
+	values: Record<TierName, PricingTableCell>
+}
+type PricingTableCell = string | boolean
+
+
+const TIERS: PricingTier[] = [
+	{
+		name: 'community',
+		displayName: 'Community',
+		desc: 'Everything you need to run your hobby projects, on us. Get projects deployed in minutes.',
+		cta: 'Start deploying',
+		ctaLink: 'https://console.shuttle.rs'
+	},
+	{
+		name: 'pro',
+		displayName: 'Pro',
+		desc: 'Raise limits and get access to custom domains, team features, and more.',
+		cta: 'Get Started',
+		ctaPrimaryButton: true,
+		ctaLink: CONTACT_US_URI,
+	},
+	{
+		name: 'team',
+		displayName: 'Team',
+		desc: "Custom-built tier to supercharge your team's productivity.",
+		cta: 'Contact us',
+		ctaLink: CONTACT_US_URI,
+	},
+];
+
+const PRICING_ROWS: PricingTableRow[] = [
+	{
+		desc: 'Max Team Size',
+		values: {
+			'community': '1',
+			'pro': '5',
+			'team': '∞',
+		},
+	},
+	{
+		desc: 'Number of Projects',
+		values: {
+			'community': '3',
+			'pro': '15',
+			'team': '∞',
+		},
+	},
+	{
+		desc: 'Custom Domains',
+		desc2: '(with SSL)',
+		values: {
+			'community': false,
+			'pro': '1 per project',
+			'team': '∞',
+		},
+	},
+	{
+		desc: 'Shared DB Size',
+		values: {
+			'community': '1 GB',
+			'pro': '10 GB',
+			'team': 'Custom',
+		},
+	},
+	{
+		desc: 'Add-on: Dedicated Database',
+		desc2: '(AWS RDS)',
+		values: {
+			'community': false,
+			'pro': 'Custom',
+			'team': 'Custom',
+		},
+	},
+	{
+		desc: 'Log Retention',
+		values: {
+			'community': '1 day',
+			'pro': '7 days',
+			'team': '28 days',
+		},
+	},
+	{
+		desc: 'Support',
+		values: {
+			'community': 'Community',
+			'pro': 'Enhanced',
+			'team': 'Dedicated',
+		},
+	},
+	{
+		desc: 'Free Network egress',
+		desc2: 'per day',
+		values: {
+			'community': '1 GB',
+			'pro': '10 GB',
+			'team': 'Custom',
+		},
+	},
+	{
+		desc: 'Max Deployments',
+		desc2: 'per day',
+		values: {
+			'community': '20',
+			'pro': 'Custom',
+			'team': 'Custom',
+		},
+	},
+	{
+		desc: 'Max Build Minutes',
+		desc2: 'per deployment',
+		values: {
+			'community': '10',
+			'pro': 'Custom',
+			'team': 'Custom',
+		},
+	},
+	{
+		desc: 'Free Object Storage',
+		desc2: '(AWS S3) (coming soon)',
+		values: {
+			'community': '1 GB',
+			'pro': '10 GB',
+			'team': 'Custom',
+		},
+	},
+]
+
+const CROSS = (
+	<svg
+		width={15}
+		className='m-auto inline text-[#aaa]'
+		height={15}
+		viewBox='0 0 15 15'
+		fill='none'
+		xmlns='http://www.w3.org/2000/svg'
+	>
+		<path
+			d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
+			stroke='currentColor'
+			strokeWidth='2'
+		/>
+	</svg>
+)
+
+const CHECK = (
+	<svg
+		width={15}
+		className='m-auto inline text-[#aaa]'
+		height={15}
+		viewBox='0 0 15 15'
+		fill='none'
+		xmlns='http://www.w3.org/2000/svg'
+	>
+		<path
+			d='M1 6.5L6.33333 12L17 1'
+			stroke='currentColor'
+			stroke-width='2'
+		/>
+	</svg>
+)
+
+const toCellContent = (c: PricingTableCell): ReactElement => {
+	if (typeof c === 'boolean') {
+		return c ? CHECK : CROSS
+	}
+	return <>{c}</>
+}
+
 const Pricing = () => {
-	const [selectedMobilePlan, setSelectedMobilePlan] = useState<'community' | 'pro' | 'team'>('community')
+	const [selectedMobilePlan, setSelectedMobilePlan] = useState<TierName>('community')
 
 	return (
-		<div className='mx-auto mt-36 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
+		<div className='mx-auto mt-36 w-full max-w-7xl px-4 sm:px-10 lg:mt-28'>
 			<div className='mt-24 lg:mt-32'>
 				<div className='mt-16'>
 					{/* Mobile */}
 					<Splide
 						onMove={(splide, index) => {
-							setSelectedMobilePlan(index === 0 ? 'community' : index === 1 ? 'pro' : 'team')
+							setSelectedMobilePlan(TIERS[index].name)
 						}}
 						options={{
 							perPage: 3,
@@ -30,625 +210,93 @@ const Pricing = () => {
 							clones: 0,
 							perMove: 1,
 						}}
-						className='border-b border-black/10 py-2 dark:border-white/10 lg:hidden'
+						className='py-2 lg:hidden'
 					>
-						<SplideSlide
-							className={clsx(
-								selectedMobilePlan === 'community' ? 'text-[#D9D9D9] ' : 'text-[#7A7A7A]',
-								'!mt-auto text-xl font-bold leading-none transition-all'
-							)}
-						>
-							Community
-						</SplideSlide>
-						<SplideSlide
-							className={clsx(
-								selectedMobilePlan === 'pro' ? 'text-[#D9D9D9] ' : 'text-[#7A7A7A]',
-								'relative !mt-auto text-xl font-bold leading-none transition-all'
-							)}
-						>
-							Pro
-						</SplideSlide>
-
-						<SplideSlide
-							className={clsx(
-								selectedMobilePlan === 'team' ? 'text-[#D9D9D9] ' : 'text-[#7A7A7A]',
-								'!mt-auto text-xl font-bold leading-none transition-all'
-							)}
-						>
-							Team
-						</SplideSlide>
+						{
+							TIERS.map(t =>
+								<SplideSlide
+									key={t.name}
+									className={clsx(
+										selectedMobilePlan === t.name ? 'text-[#D9D9D9] ' : 'text-[#7A7A7A]',
+										'!mt-auto mb-[8px] text-xl font-bold leading-none transition-all'
+									)}
+								>
+									{t.displayName}
+									<div
+										className={clsx(
+											'absolute -top-1 z-[100] h-1 w-[calc(100%+10px)] translate-x-[-5px] translate-y-[1.5em]',
+											selectedMobilePlan === t.name ? 'block' : 'hidden'
+										)}
+										style={{
+											background:
+												'linear-gradient(71.78deg, #FC540C 1.89%, rgba(255, 215, 111, 0.72) 52.56%, #38D4E9 87.48%)',
+										}}
+									/>
+								</SplideSlide>
+							)
+						}
 					</Splide>
-					<div className='absolute left-6 flex flex-row sm:hidden'>
-						<div className='relative'>
-							<div
-								className={clsx(
-									'absolute -top-1 z-[100] h-1 w-full translate-y-[20%] transition-all',
-									selectedMobilePlan === 'community' ? 'block' : 'hidden'
-								)}
-								style={{
-									background:
-										'linear-gradient(71.78deg, #FC540C 1.89%, rgba(255, 215, 111, 0.72) 52.56%, #38D4E9 87.48%)',
-								}}
-							/>
-							<div
-								className={clsx(
-									'select-none text-transparent',
-									selectedMobilePlan == 'community' ? 'text-2xl' : 'text-xl'
-								)}
-							>
-								Community
-							</div>
-						</div>
-						<div className='relative'>
-							<div
-								className={clsx(
-									'absolute -top-1 z-[100] h-1 w-full translate-x-[120%] translate-y-[20%] transition-all',
-									selectedMobilePlan === 'pro' ? 'block' : 'hidden'
-								)}
-								style={{
-									background:
-										'linear-gradient(71.78deg, #FC540C 1.89%, rgba(255, 215, 111, 0.72) 52.56%, #38D4E9 87.48%)',
-								}}
-							/>
-							<div
-								className={clsx(
-									'select-none text-transparent',
-									selectedMobilePlan == 'pro' ? 'text-2xl' : 'text-xl'
-								)}
-							>
-								Pro
-							</div>
-						</div>
-						<div className='relative'>
-							<div
-								className={clsx(
-									'absolute -top-1 z-[100] h-1 w-full translate-x-[150%] translate-y-[20%] transition-all',
-									selectedMobilePlan === 'team' ? 'block' : 'hidden'
-								)}
-								style={{
-									background:
-										'linear-gradient(71.78deg, #FC540C 1.89%, rgba(255, 215, 111, 0.72) 52.56%, #38D4E9 87.48%)',
-								}}
-							/>
-							<div
-								className={clsx(
-									'select-none text-transparent',
-									selectedMobilePlan == 'team' ? 'text-2xl' : 'text-xl'
-								)}
-							>
-								Team
-							</div>
-						</div>
-					</div>
-					<div className=' mt-8 sm:hidden'>
-						<p className='mx-auto mb-4 w-3/4 text-center text-[#7A7A7A]'>
-							Everything you need to run your hobby projects. On us
-						</p>
-
-						<Button variant='secondary' className='mx-auto' href='https://console.shuttle.rs' onClick={() => {
-              va.track('cta-clicked', { name: 'Start Deploying', section: 'table'})
-            }}>
-							Start Deploying
-						</Button>
-					</div>
-					<div className='space-y-8 lg:hidden'>
-						<div
-							className='divide-y divide-white/10 text-xl'
-							hidden={selectedMobilePlan !== 'community'}
-						>
-							<div className='px-2 py-[0.875rem] font-gradual text-base font-bold text-[#C2C2C2]'>
-								Features
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Max Team Size</div>
-								<div className='text-right text-[#FFFFFFA3]'>1</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Number of Projects</div>
-								<div className='text-right text-[#FFFFFFA3]'>3</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Custom Domains (with SSL)</div>
-								<div className='text-right text-[#FFFFFFA3]'>
-									<svg
-										width={15}
-										className='ml-auto h-full text-[#FFFFFFA3]'
-										height={15}
-										viewBox='0 0 15 15'
-										fill='none'
-										xmlns='http://www.w3.org/2000/svg'
-									>
-										<path
-											d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
-											stroke='currentColor'
-											strokeWidth={2}
-										/>
-									</svg>
+					<div className='pt-2 lg:hidden'>
+						{
+							TIERS.map(t => (
+								<div
+									key={t.name}
+									className='divide-y divide-white/10 text-xl'
+									hidden={selectedMobilePlan !== t.name}
+								>
+									{
+										PRICING_ROWS.map(r => (
+											<div key={r.desc} className='flex justify-between gap-6 py-[0.625rem]'>
+												<div className='grow basis-3/5 text-[#7A7A7A]'>
+													{r.desc}{r.desc2 ? <>{" "}<span className='text-sm'>{r.desc2}</span></> : null}
+												</div>
+												<div className='text-right text-[#FFFFFFA3]'>
+													{toCellContent(r.values[t.name])}
+												</div>
+											</div>
+										))
+									}
 								</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Shared DB Size</div>
-								<div className='text-right text-[#FFFFFFA3]'>1 GB</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Dedicated Database (RDS)</div>
-								<div className='text-right text-[#FFFFFFA3]'>
-									<svg
-										width={15}
-										className='ml-auto h-full text-[#C2C2C2]'
-										height={15}
-										viewBox='0 0 15 15'
-										fill='none'
-										xmlns='http://www.w3.org/2000/svg'
-									>
-										<path
-											d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
-											stroke='currentColor'
-											strokeWidth={2}
-										/>
-									</svg>
-								</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-3 text-[#7A7A7A]'>Log Retention</div>
-								<div className=' col-span-3 text-right text-[#FFFFFFA3]'>1 day</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-3 text-[#7A7A7A]'>Support</div>
-								<div className='col-span-3 text-right text-[#FFFFFFA3]'>Community</div>
-							</div>
-							<div className='mb-8 px-2 py-[0.875rem] font-gradual font-bold lg:mt-0'></div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Network (egress)</div>
-								<div className='text-right text-[#FFFFFFA3]'>1 GB</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Deployments per day</div>
-								<div className='text-right text-[#FFFFFFA3]'>20</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Build Time per Deployment</div>
-								<div className='text-right text-[#FFFFFFA3]'>15min</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Object Storage (coming soon)</div>
-								<div className='text-right text-[#FFFFFFA3]'>1 GB</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Persistent Volume</div>
-								<div className='text-right text-[#FFFFFFA3]'>
-									<svg
-										width={15}
-										className='ml-auto h-full text-[#C2C2C2]'
-										height={15}
-										viewBox='0 0 15 15'
-										fill='none'
-										xmlns='http://www.w3.org/2000/svg'
-									>
-										<path
-											d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
-											stroke='currentColor'
-											strokeWidth={2}
-										/>
-									</svg>
-								</div>
-							</div>
-						</div>
-						<div className='divide-y divide-white/10 text-xl' hidden={selectedMobilePlan !== 'pro'}>
-							<div className='px-2 py-[0.875rem] font-gradual text-base font-bold text-[#C2C2C2]'>
-								Features
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Max Team Size</div>
-								<div className='text-right text-[#FFFFFFA3]'>5</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Number of Projects</div>
-								<div className='text-right text-[#FFFFFFA3]'>15</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-3 text-[#7A7A7A]'>Custom Domains (with SSL)</div>
-								<div className='col-span-3 text-right text-[#FFFFFFA3]'>1 per project</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-4 text-[#7A7A7A]'>Shared DB Size</div>
-								<div className='col-span-2 text-right text-[#FFFFFFA3]'>10 GB</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Dedicated Database (RDS)</div>
-								<div className='text-right text-[#FFFFFFA3]'>
-									<svg
-										width={18}
-										className='ml-auto h-full text-[#FFFFFFA3]'
-										height={15}
-										viewBox='0 0 18 15'
-										fill='none'
-										xmlns='http://www.w3.org/2000/svg'
-									>
-										<path d='M1 6.5L6.33333 12L17 1' stroke='white' stroke-width='2' />
-									</svg>
-								</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-3 text-[#7A7A7A]'>Log Retention</div>
-								<div className=' col-span-3 text-right text-[#FFFFFFA3]'>7 days</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-3 text-[#7A7A7A]'>Support</div>
-								<div className='col-span-3 text-right text-[#FFFFFFA3]'>Enhanced</div>
-							</div>
-							<div className='mb-8 px-2 py-[0.875rem] font-gradual font-bold lg:mt-0'></div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-4 text-[#7A7A7A]'>Network (egress)</div>
-								<div className='col-span-2 text-right text-[#FFFFFFA3]'>10 GB</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-4 text-[#7A7A7A]'>Deployments per day</div>
-								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-4 text-[#7A7A7A]'>Build Time per Deployment</div>
-								<div className='col-span-2 text-right text-[#FFFFFFA3]'>30min</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-4 text-[#7A7A7A]'>Object Storage (coming soon)</div>
-								<div className='col-span-2 text-right text-[#FFFFFFA3]'>10 GB</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Persistent Volume</div>
-								<div className='text-right text-[#FFFFFFA3]'>
-									<svg
-										width={18}
-										className='ml-auto h-full text-[#FFFFFFA3]'
-										height={15}
-										viewBox='0 0 18 15'
-										fill='none'
-										xmlns='http://www.w3.org/2000/svg'
-									>
-										<path d='M1 6.5L6.33333 12L17 1' stroke='white' stroke-width='2' />
-									</svg>
-								</div>
-							</div>
-						</div>
-						<div className='divide-y divide-white/10 text-xl' hidden={selectedMobilePlan !== 'team'}>
-							<div className='px-2 py-[0.875rem] font-gradual text-base font-bold text-[#C2C2C2]'>
-								Features
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Max Team Size</div>
-								<div className='text-right text-[#FFFFFFA3]'>∞</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Number of Projects</div>
-								<div className='text-right text-[#FFFFFFA3]'>∞</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-3 text-[#7A7A7A]'>Custom Domains (with SSL)</div>
-								<div className='col-span-3 text-right text-[#FFFFFFA3]'>∞</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-4 text-[#7A7A7A]'>Shared DB Size</div>
-								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Dedicated Database (RDS)</div>
-								<div className='text-right text-[#FFFFFFA3]'>
-									<svg
-										width={18}
-										className='ml-auto h-full text-[#FFFFFFA3]'
-										height={15}
-										viewBox='0 0 18 15'
-										fill='none'
-										xmlns='http://www.w3.org/2000/svg'
-									>
-										<path d='M1 6.5L6.33333 12L17 1' stroke='white' stroke-width='2' />
-									</svg>
-								</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-3 text-[#7A7A7A]'>Log Retention</div>
-								<div className=' col-span-3 text-right text-[#FFFFFFA3]'>28 days</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-3 text-[#7A7A7A]'>Support</div>
-								<div className='col-span-3 text-right text-[#FFFFFFA3]'>Dedicated</div>
-							</div>
-							<div className='mb-8 px-2 py-[0.875rem] font-gradual font-bold lg:mt-0'></div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-4 text-[#7A7A7A]'>Network (egress)</div>
-								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-4 text-[#7A7A7A]'>Deployments per day</div>
-								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-4 text-[#7A7A7A]'>Build Time per Deployment</div>
-								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-4 text-[#7A7A7A]'>Object Storage (coming soon)</div>
-								<div className='col-span-2 text-right text-[#FFFFFFA3]'>Custom</div>
-							</div>
-							<div className='grid grid-cols-6 px-2 py-[0.625rem]'>
-								<div className=' col-span-5 text-[#7A7A7A]'>Persistent Volume</div>
-								<div className='text-right text-[#FFFFFFA3]'>
-									<svg
-										width={18}
-										className='ml-auto h-full text-[#FFFFFFA3]'
-										height={15}
-										viewBox='0 0 18 15'
-										fill='none'
-										xmlns='http://www.w3.org/2000/svg'
-									>
-										<path d='M1 6.5L6.33333 12L17 1' stroke='white' stroke-width='2' />
-									</svg>
-								</div>
-							</div>
-						</div>
+							))
+						}
 					</div>
 					{/* Desktop */}
 					<div className='hidden divide-y divide-black/10 text-xl dark:divide-white/10 lg:block'>
-						<div className='mb-8 grid grid-cols-4 py-[0.875rem]'>
-							<div className='font-gradual font-bold'></div>
-							<div className='text-center text-black dark:text-[#7A7A7A]'>
-								<div className='mb-4 font-gradual text-2xl font-bold'>Community</div>
-
-								<div className='mx-auto mb-4 w-4/5 text-base text-[#7A7A7A]'>
-									Everything you need to run your community projects. On us.
+						<div className='mb-8 grid grid-cols-[5fr_4fr_4fr_4fr] py-[0.875rem]'>
+							<div>{/* grid filler */}</div>
+							{
+								TIERS.map(t => (
+									<div key={t.name} className='text-center text-black dark:text-[#7A7A7A]'>
+										<div className='mb-4 font-gradual text-2xl font-bold'>{t.displayName}</div>
+										<div className='mx-auto mb-4 w-4/5 text-base text-[#7A7A7A]'>
+											{t.desc}
+										</div>
+										<Button
+											variant={t.ctaPrimaryButton ? 'tertiary' : 'blackwhite'}
+											className='mx-auto scale-[0.95] hover:bg-gradient-2'
+											href={t.ctaLink}
+											onClick={() => {
+												va.track('cta-clicked', { name: t.cta, section: 'table' })
+											}}
+										>
+											{t.cta}
+										</Button>
+									</div>
+								))
+							}
+						</div>
+						{
+							PRICING_ROWS.map(r => (
+								<div key={r.desc} className='grid grid-cols-[5fr_4fr_4fr_4fr] items-center py-2 text-center'>
+									<div className='text-left text-[#7A7A7A]'>
+										{r.desc}{r.desc2 ? <>{" "}<span className='text-sm'>{r.desc2}</span></> : null}
+									</div>
+									<div className='text-[#aaa]'>{toCellContent(r.values['community'])}</div>
+									<div className='text-[#aaa]'>{toCellContent(r.values['pro'])}</div>
+									<div className='text-[#aaa]'>{toCellContent(r.values['team'])}</div>
 								</div>
-								<Link href='https://console.shuttle.rs' target='_blank'>
-									<button className='z-[5] rounded-[14px] border-[1px] border-solid border-[#ffffff40] px-6 py-3 font-gradual text-base text-white transition-all hover:border-none hover:bg-gradient-1'>
-										Start deploying
-									</button>
-								</Link>
-							</div>
-							<div className='text-center text-black dark:text-[#7A7A7A]'>
-								<div className='mb-4 font-gradual text-2xl font-bold'>Pro</div>
-
-								<div className='mx-auto mb-4 w-4/5 text-base text-[#7A7A7A]'>
-									Everything in Community, plus higher limits and team features.
-								</div>
-								<Button
-									variant='tertiary'
-									className='mx-auto scale-[0.95] hover:bg-gradient-2'
-									href={CONTACT_US_URI}
-                  onClick={() => {
-                    va.track('cta-clicked', { name: 'Get Started', section: 'table'})
-                  }}
-								>
-									Get Started
-								</Button>
-							</div>
-							<div className='text-center text-black dark:text-[#7A7A7A]'>
-								<div className='mb-4 font-gradual text-2xl font-bold'>Team</div>
-
-								<div className='mb-4 text-base text-[#7A7A7A]'>
-									Custom-built tier to supercharge your team&apos;s productivity.
-								</div>
-								<Link href={CONTACT_US_URI} target='_blank' onClick={() => {
-                  va.track('cta-clicked', { name: 'Contact us', section: 'table'})
-                }}>
-									<button
-										className={clsx(
-											'border-[1px] border-solid border-[#ffffff40] text-base text-white',
-											'z-[5] rounded-[14px] px-6 py-3 font-gradual transition-all hover:border-none hover:bg-gradient-1'
-										)}
-									>
-										Contact us
-									</button>
-								</Link>
-							</div>
-						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
-								Max Team Size
-							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>1</div>
-							<div className='text-[20px] text-[#ffffffa3]'>1</div>
-							<div className='text-[20px] text-[#ffffffa3]'>∞</div>
-						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
-								Number of Projects
-							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>3</div>
-							<div className='text-[20px] text-[#ffffffa3]'>15</div>
-							<div className='text-[20px] text-[#ffffffa3]'>∞</div>
-						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
-								Custom Domains (with SSL)
-							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>
-								<svg
-									width={15}
-									className='m-auto text-[#fff]'
-									height={15}
-									viewBox='0 0 15 15'
-									fill='none'
-									xmlns='http://www.w3.org/2000/svg'
-								>
-									<path
-										d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
-										stroke='currentColor'
-										strokeWidth={2}
-									/>
-								</svg>
-							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>1 per project</div>
-							<div className='text-[20px] text-[#ffffffa3]'>∞</div>
-						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
-								Shared DB Size
-							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>1 GB</div>
-							<div className='text-[20px] text-[#ffffffa3]'>10 GB</div>
-							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
-						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
-								Dedicated Database (RDS)
-							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>
-								<svg
-									width={15}
-									className='m-auto text-[#fff]'
-									height={15}
-									viewBox='0 0 15 15'
-									fill='none'
-									xmlns='http://www.w3.org/2000/svg'
-								>
-									<path
-										d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
-										stroke='currentColor'
-										strokeWidth={2}
-									/>
-								</svg>
-							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>
-								<svg
-									width={15}
-									className='m-auto text-[#fff]'
-									height={15}
-									viewBox='0 0 15 15'
-									fill='none'
-									xmlns='http://www.w3.org/2000/svg'
-								>
-									<path
-										id='Vector 820'
-										d='M1 6.5L6.33333 12L17 1'
-										stroke='white'
-										stroke-width='2'
-									/>
-								</svg>
-							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>
-								<svg
-									width={15}
-									className='m-auto text-[#fff]'
-									height={15}
-									viewBox='0 0 15 15'
-									fill='none'
-									xmlns='http://www.w3.org/2000/svg'
-								>
-									<path
-										id='Vector 820'
-										d='M1 6.5L6.33333 12L17 1'
-										stroke='white'
-										stroke-width='2'
-									/>
-								</svg>
-							</div>
-						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
-								Log Retention
-							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>1 day</div>
-							<div className='text-[20px] text-[#ffffffa3]'>7 days</div>
-							<div className='text-[20px] text-[#ffffffa3]'>28 days</div>
-						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>Support</div>
-							<div className='text-[20px] text-[#ffffffa3]'>Community</div>
-							<div className='text-[20px] text-[#ffffffa3]'>Enhanced</div>
-							<div className='text-[20px] text-[#ffffffa3]'>Dedicated</div>
-						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'></div>
-					</div>
-
-					<div className='mt-16 hidden divide-y divide-black/10 text-xl dark:divide-white/10 lg:block'>
-						<div className='grid grid-cols-4 items-center py-2 text-center'></div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
-								Network (egress)
-							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>1 GB</div>
-							<div className='text-[20px] text-[#ffffffa3]'>10 GB</div>
-							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
-						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
-								Max Delpoyments per day
-							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>20</div>
-							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
-							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
-						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
-								Max Build Time per Deployment
-							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>20</div>
-							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
-							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
-						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
-								Object Storage (coming soon)
-							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>1 GB</div>
-							<div className='text-[20px] text-[#ffffffa3]'>10 GB</div>
-							<div className='text-[20px] text-[#ffffffa3]'>Custom</div>
-						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#7A7A7A]'>
-								Persistent Volume (coming soon)
-							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>
-								<svg
-									width={15}
-									className='m-auto text-[#fff]'
-									height={15}
-									viewBox='0 0 15 15'
-									fill='none'
-									xmlns='http://www.w3.org/2000/svg'
-								>
-									<path
-										d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
-										stroke='currentColor'
-										strokeWidth={2}
-									/>
-								</svg>
-							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>
-								<svg
-									width={15}
-									className='m-auto text-[#fff]'
-									height={15}
-									viewBox='0 0 15 15'
-									fill='none'
-									xmlns='http://www.w3.org/2000/svg'
-								>
-									<path
-										id='Vector 820'
-										d='M1 6.5L6.33333 12L17 1'
-										stroke='white'
-										stroke-width='2'
-									/>
-								</svg>
-							</div>
-							<div className='text-[20px] text-[#ffffffa3]'>
-								<svg
-									width={15}
-									className='m-auto text-[#fff]'
-									height={15}
-									viewBox='0 0 15 15'
-									fill='none'
-									xmlns='http://www.w3.org/2000/svg'
-								>
-									<path
-										id='Vector 820'
-										d='M1 6.5L6.33333 12L17 1'
-										stroke='white'
-										stroke-width='2'
-									/>
-								</svg>
-							</div>
-						</div>
-						<div className='grid grid-cols-4 items-center py-2 text-center'></div>
+							))
+						}
 					</div>
 				</div>
 			</div>

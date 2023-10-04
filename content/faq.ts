@@ -7,19 +7,19 @@ export const Questions: QuestionAttrs[] = [
 	},
 	{
 		question: 'Is Shuttle open source?',
-		answer: 'Yes, Shuttle is open source enabling developers to not only use but also contribute to our platform. We believe in the power of open collaboration and transparency. ',
+		answer: 'Yes, Shuttle is <a href="https://github.com/shuttle-hq" target="_blank" style="text-decoration: underline;">open source</a> enabling developers to not only use but also contribute to our platform. We believe in the power of open collaboration and transparency.',
 	},
 	{
 		question: 'Is Shuttle secure?',
-		answer: 'We build and deploy every project in its own container. This gives you safe isolation from other users, and also across all the projects that are owned by your account.',
+		answer: 'We build and deploy every project in its own container. This gives you safe isolation from other users and all the other projects that are owned by your account.',
 	},
 	{
 		question: 'What about frontend hosting?',
-		answer: 'You can provision a <a href="https://docs.shuttle.rs/resources/shuttle-static-folder" target="_blank" style="text-decoration: underline;">static folder</a> and serve your frontend counterpart seamlessly.',
+		answer: 'You can build any frontend app compiled to HTML/CSS/JS/WASM. Then, deploy and serve it with your Shuttle app.',
 	},
 	{
 		question: 'Why should I use Rust?',
-		answer: 'We believe Rust is the language of the future because of the safety guarantees Rust provides and the efficiency of running Rust code. Also, with Rust you build once and everything just works - saving you tons of time on maintenance. And Shuttle makes the experience of building your backend with Rust better than anything you can find for any other language.',
+		answer: 'We believe Rust is the language of the future because of the safety guarantees Rust provides and the efficiency of running Rust code. Also, with Rust you build once and everything just works - saving you tons of time on maintenance. Shuttle makes the experience of building your backend with Rust better than anything you can find for any other language.',
 	},
 	{
 		question: 'How do I handle payments and access invoices?',
