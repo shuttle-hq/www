@@ -11,21 +11,21 @@ import {
 	LogosReferences,
 	Testimonials,
 } from 'components/sections'
-import { getAllTags, getSortedPosts, Post } from 'lib/blog/posts'
+import { getSortedPosts, Post } from 'lib/blog/posts'
 import { GetStaticPropsResult } from 'next'
-import { StarterAttrs } from "../components/elements/Starter"
-import { QuestionAttrs } from "../components/sections/FrequentlyAskedQuestions"
-import { Questions, FeaturedStartersContent } from "../content"
+import { StarterAttrs } from '../components/elements/Starter'
+import { QuestionAttrs } from '../components/sections/FrequentlyAskedQuestions'
+import { landingQuestions, FeaturedStartersContent } from '../content'
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
 	const posts = getSortedPosts(3)
 	const starters = FeaturedStartersContent
-	const questions = Questions
+
 	return {
 		props: {
 			posts,
 			starters,
-			questions,
+			questions: landingQuestions,
 		},
 	}
 }
@@ -36,7 +36,7 @@ interface Props {
 	readonly questions: QuestionAttrs[]
 }
 
-export default function Home({posts, starters, questions}: Props) {
+export default function Home({ posts, starters, questions }: Props) {
 	return (
 		<>
 			<Hero />
@@ -44,11 +44,11 @@ export default function Home({posts, starters, questions}: Props) {
 			<LogosReferences />
 			<Features />
 			<CommunitySupportedNumbers />
-			<FeaturedStarters starters={starters}/>
+			<FeaturedStarters starters={starters} />
 			<HowItWorks />
 			<Testimonials />
-			<CallToAction/>
-			<FrequentlyAskedQuestions questions={questions}/>
+			<CallToAction />
+			<FrequentlyAskedQuestions questions={questions} />
 			<FeaturedBlogPosts posts={posts} />
 		</>
 	)
