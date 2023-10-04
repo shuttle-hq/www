@@ -196,7 +196,7 @@ With as many as features as Postgres has, it's a good thing that SQLx supports t
 // set up pool beforehand
 
 let mut listener = PgListener::connect_with(&pool).await.unwrap();
-listener.listen("chan0").await.unwrap();
+listener.listen("testNotify").await.unwrap();
 
 // set up a loop to receive notifications
 tokio::spawn(async move || {
