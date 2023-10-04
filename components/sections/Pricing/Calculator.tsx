@@ -2,6 +2,8 @@ import Image from 'next/image'
 import Slider from 'rc-slider'
 import { useState } from 'react'
 import 'rc-slider/assets/index.css'
+import Link from 'next/link'
+import { CONTACT_US_URI } from 'lib/constants'
 
 function roundToClosest(num: number, arr: number[]) {
 	let closest = arr[0]
@@ -75,9 +77,11 @@ const Calculator = () => {
 							The monthly cost is based on the product of vCPU cores and active hours.
 						</p>
 						<p className='text-[#7A7A7A] sm:text-xl'>Need a more precise estimate?</p>
-						<p className='cursor-pointer text-[#C2C2C2] underline sm:text-xl'>
-							Set up a call with our team
-						</p>
+						<Link href={CONTACT_US_URI} target='_blank'>
+							<p className='cursor-pointer text-[#C2C2C2] underline sm:text-xl'>
+								Set up a call with our team
+							</p>
+						</Link>
 					</div>
 					<div className='z-[10] flex w-full flex-col px-8 sm:px-0'>
 						<div className='w-full sm:h-44' />

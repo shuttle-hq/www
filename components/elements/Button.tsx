@@ -30,7 +30,7 @@ const Button: FC<ButtonProps> = ({ variant = 'none', invertOnDark, className, ch
 				: 'button-shadow border-gradient shadow-gradient bg-black text-[#C2C2C2] hover:bg-none'
 			: '',
 		variant === 'tertiary' && 'button-shadow shadow-gradient text-black',
-		variant === 'blackwhite' && 'rounded-[14px] border-[1px] border-solid border-[#ffffff40] px-6 py-3 font-gradual text-base text-white transition-all hover:border-none hover:bg-gradient-1',
+		variant === 'blackwhite' && 'rounded-[14px] border-[1px] border-solid border-[#ffffff40] px-6 py-3 font-gradual text-base text-white transition-all hover:bg-gradient-1',
 		className
 	)
 

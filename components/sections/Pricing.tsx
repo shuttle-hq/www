@@ -27,14 +27,14 @@ const TIERS: PricingTier[] = [
 	{
 		name: 'community',
 		displayName: 'Community',
-		desc: 'Everything you need to run your hobby projects. On us.',
+		desc: 'Everything you need to run your hobby projects, on us. Get projects deployed in minutes.',
 		cta: 'Start deploying',
 		ctaLink: 'https://console.shuttle.rs'
 	},
 	{
 		name: 'pro',
 		displayName: 'Pro',
-		desc: 'Everything in Community, plus higher limits and more add-ons.',
+		desc: 'Raise limits and get access to custom domains, team features, and more.',
 		cta: 'Get Started',
 		ctaPrimaryButton: true,
 		ctaLink: CONTACT_US_URI,
