@@ -1,0 +1,285 @@
+---
+title: 'Raw SQL in Rust with SQLx'
+description:  This article shows you how you can use SQL in Rust with SQLx - you will find a rundown of all the advantages SQLx offers you, the best ways to use it and how to use SQLx with Shuttle.
+author: josh
+tags: [rust, sql, sqlx, guide]
+thumb: sql-in-rust-thumb.png 
+cover: sql-in-rust-thumb.png 
+date: '2023-10-04T14:30:00'
+---
+When it comes to using SQL, the Rust ecosystem has us spoiled for choice: thankfully, there are already a few that have come out on top which we can use. SQLx is a purely async, runtime-agnostic Rust SQL crate that allows you to use compile-time type checked queries without a DSL. As [one of the most popular ways to use SQL in Rust,](https://github.com/search?q=sql+rust+language%3ARust&type=repositories&s=stars&o=desc&l=Rust) it offers the following advantages:
+- It's compatible with all your favourite flavours of SQL (MySQL, SQLite, Postgres, MSSQL)
+- Compile-time checked queries ensure type and query validity
+- Support for extra features like Postgres listen/notify
+- Many different ways to build and use queries
+- You can also make your own query builder using SQLx!
+
+Let's look at SQLx in action!
+
+## Getting Started
+To get started you'll need to add `sqlx` to your Rust program:
+```bash
+cargo add sqlx
+```
+
+You'll also want to install `sqlx-cli`, the official SQLx CLI which helps you manage your migrations more easily amongst other things. You can install it by running the commands below:
+```bash
+cargo add sqlx-cli
+```
+
+## Migrations
+
+First step: migrations. If you wanted to, you could just manually create the tables yourself - but that would be a lot of time and effort... and you'd need to remember what you did! Thankfully, we can write `.sql` files to represent our migrations and then migrate them over to whatever database we're using, either through `sqlx-cli` or by using `sqlx::execute` command. A simple SQL schema might look like this:
+
+```sql
+-- this only creates a table if it doesn't exist, avoiding the issue of tables being wiped
+CREATE TABLE IF NOT EXISTS foo (
+  id SERIAL PRIMARY KEY,
+  message TEXT
+);
+```
+
+As long as it's valid SQL, whichever method you decide to use will succeed and will create a `_sqlx_migrations` table in your database, with a list of the migrations that have been applied. 
+
+An in-app migrate command might look like this:
+```rust
+pool.execute(include_str!("../schema.sql"))
+    	.await
+    	.context("Failed to initialize DB")?;
+```
+
+As a personal recommendation, I use `sqlx-cli` and use `sqlx migrate -r add <filename>`. This command essentially adds a new migration, but the `-r` flag allows you to revert your migrations at any time, should things go wrong. It's a handy way to be able to revert things, should anything go wrong after deploying a new migration to production.
+
+## Queries
+
+By default, you can use raw SQL queries by quickly running a query then executing it with your connection pool:
+
+```rust
+let query = sqlx::query("SELECT * FROM TABLE")
+  .execute(&pool)
+  .await
+  .unwrap();
+```
+
+By default, SQLx promotes using bound parameters which are very important for preventing SQL injection - you can do so simply by adding them to your query (find more about this [here](https://docs.rs/sqlx/latest/sqlx/query/struct.Query.html#method.bind)):
+```rust
+sqlx::query("INSERT INTO TABLE (foo) VALUES ($1)")
+  .bind("bar".to_string())
+  .execute(&pool)
+  .await
+  .unwrap();
+```
+
+Now let's say you're writing a query that returns something. When you fetch the rows from that query, you will more than likely have to grab each value individually - at a small scale this is fine, but when you're using `fetch_all`, you'll have to make an iterator to get what you need from each row. Conveniently, SQLx knows this and has thankfully provided a macro for us to be able to extract a vector of structs from a vector of SQL rows - you can use `query_as` to bind the return results to a struct that uses `#[derive(Sqlx::FromRow)]`.
+
+You'd use it like so:
+
+```rust
+#[derive(sqlx::FromRow)]
+struct Foo {
+  id: i32,
+  message: String
+}
+
+async fn foo(pool: PgPool) -> Vec<Foo> {
+let res = sqlx::query_as::<_, Foo>("SELECT * FROM FOO")
+  .fetch_all(&pool).await.unwrap();
+  
+  Ok(res)
+}
+```
+
+Looking for something a bit more complex? You can also use the [QueryBuilder](https://docs.rs/sqlx/latest/sqlx/struct.QueryBuilder.html) type to construct queries. While it's great for programatically adding dynamic phrases to queries, you should be careful while using this as it has methods for adding values that are not bound parameters - you would ideally want to use `push_bind` if you are not sure about whether or not what you're using is secure.
+
+A usage example:
+```rust
+const BIND_LIMIT: usize = 65535;
+
+// This would normally produce values forever!
+let records = (0..).map(|i| Foo {
+    id: i,
+    message: format!("This is note {i}"),
+});
+
+let mut query_builder: QueryBuilder<MySql> = QueryBuilder::new(
+    // Note the trailing space; most calls to `QueryBuilder` don't automatically insert
+    // spaces as that might interfere with identifiers or quoted strings where exact
+    // values may matter.
+    "SELECT * FROM users WHERE (id, username, email, password) in"
+);
+
+// Note that `.into_iter()` wasn't needed here since `users` is already an iterator.
+query_builder.push_tuples(records.take(BIND_LIMIT / 2), |mut bound, foo| {
+    // If you wanted to bind these by-reference instead of by-value,
+    // you'd need an iterator that yields references that live as long as `query_builder`,
+    // e.g. collect it to a `Vec` first.
+    bound.push_bind(foo.id)
+    .push_bind(foo.username);
+});
+
+let mut query = query_builder.build();
+
+let res = query.fetch_all(&pool).await.unwrap();
+```
+
+Now if you try to run this, you'll be able to get a vector of `Foo` structs! Bear in mind however, that this method does have its caveats as you'll see below: you won't benefit from SQLx compile-time checking macros, and this method of query generation can be somewhat unsafe if you aren't careful. However, when you need to dynamically generate queries using SQL in Rust it's quite powerful.
+
+One last type of query we can also use is a scalar query, which returns the result as a tuple. If we don't specifically know how many fields there are (for example) when we're executing a `SELECT * FROM TABLE` query, we can use `query_scalar` to be able to refer to the columns simply by what order they appear in rather than a given name. See the example below:
+
+```rust
+let query = sqlx::query_scalar("SELECT * FROM FOO LIMIT 1").fetch_one(&pool).await.unwrap();
+
+println!("{:?}", query.0);
+```
+
+## Macros
+
+Now onto one of SQLx's strengths as a crate: compile time query checking. If you're using raw SQL, having some kind of garuantee that your SQL is valid is almost never a bad thing: unless you're a database admin, if you're running a query with several joins on it you'll definitely want to make sure it's actually valid before it gets ran. It should be said here that you will need `sqlx-cli` installed for this to be able to take advantage of this feature: if not, you'll have to use the previous methods.
+
+A simple query using the `query!` macro might look like this:
+
+```rust
+// note that bound parameters are added to the query macro
+let query = query!("SELECT * FROM FOO WHERE ID = $1", 1).fetch_one(&pool).await.unwrap();
+```
+
+Likewise, an equivalent query using the `Foo` struct we made earlier can be used to bind our results directly to create a vector of Structs:
+
+```rust
+#[derive(sqlx::FromRow)]
+struct Foo {
+  id: i32,
+  message: String
+}
+
+let query = query_as!(Foo, "SELECT * FROM FOO").fetch_all(&pool).await.unwrap();
+```
+
+When you use the `query!` or a `query_as!` macro, you'll need to use `cargo sqlx prepare` which will generate JSON files for your queries. When you compile your program, it'll automatically check it during compile time: if anything is wrong, it'll automatically check it for you.
+
+There is one particular gotcha that may trip you up while using the compile-time checking macros, specifically with Postgres: if you're using `as _` to rename your SQL fields, the type will be automatically wrapped in an Option if you don't explicitly set it as a non-nullable value. SQLx has an answer for this in being able to use raw strings to declare values explicitly as a non-nullable column. For example, take the following statement below:
+
+```rust
+let query = query_as!(Foo, "SELECT id, message as message from foo").fetch_all(&pool).await.unwrap();
+```
+
+If we still had the Message type as a String, this query would actually fail to compile because `message` is now an `Option<String>` and not a `String` type. However, by converting the query above to a raw string above, we can force the field to be non-nullable again:
+
+```rust
+// note that message is now "message!"
+let query = query_as!(Foo, r#"SELECT id, message as "message!" from foo"#).fetch_all(&pool).await.unwrap();
+```
+
+You can read more about this [here](https://docs.rs/sqlx/latest/sqlx/macro.query.html#type-overrides-output-columns).
+
+Similarly of course, `query_scalar` also has a macro associated with it and can be used similarly to the `query!` macro, while returning tuples.
+
+Something else that we can also do that's really awesome is storing a SQL query within a file and running a macro to run the contents of the SQL file, while still binding our paramaters. See below:
+
+```sql query.sql
+SELECT * FROM FOO WHERE id = $1;
+```
+
+```rust
+let query = query_file!("query.sql", 1i32).fetch_one(&pool).await.unwrap();
+```
+
+This particular macro also, of course, supports struct binding and scalar queries with `query_file_as!` and `query_file_scalar!`.
+
+Something of note is that if you *only* want to compile-time check the syntax and not whether or not the database inputs and outputs are correct for a query macro, you can add `unchecked` at the end of a macro. For example: `query!` would become `query_unchecked!`. This is useful in cases where you don't actually have a database set up yet or there's no convenient method for retrieving the database URL (or in other such circumstances where you don't want to give SQLx direct access to your database). 
+
+## PostgresQL List/Notify
+
+With as many as features as Postgres has, it's a good thing that SQLx supports them - while SQLx is primarily about writing raw SQL, there is no reason why we should have to write everything in it. SQLx supports channels, `LISTEN` and more importantly `pg_notify`, which is a great way for us to be able to handle notifications from Postgres when records are updated. Let's have a look at the example below on how we can set up an event listener:
+
+```rust
+// set up pool beforehand
+
+let mut listener = PgListener::connect_with(&pool).await.unwrap();
+listener.listen("chan0").await.unwrap();
+
+// set up a loop to receive notifications
+tokio::spawn(async move || {
+  while let Some(notification) = listener.try_recv().await.unwrap() {
+  println!("{notification:?}");
+  }
+});
+
+loop {
+  sqlx::query("SELECT pg_notify('chan0', 'Hello world!')").execute(&pool).await;
+}
+```
+As you can see here, we've spawned a Tokio task to be able to asynchronously loop and receive notifications then print them out - meanwhile, within the main execution thread we've also set up a loop to continuously send a query that sends "Hello world!" down the channel which gets received by our `PgListener`.
+
+For a more advanced implementation in a web service that implements a stream of database updates as an endpoint, you would want to use the `.into_stream()` method as frameworks will typically accept a stream of data that is then wrapped in the frameworks' relevant type. For example, in Axum you'd use the `axum::response::Sse` type (note this assumes you already have a web service set up):
+
+```rust
+use axum::{Extension, response::{Sse, sse::Event}};
+use tokio_stream::StreamExt as _ ;
+use futures_util::stream::{self, Stream};
+use std::convert::Infallbile;
+async fn return_stream(Extension(listener): Extension<PgListener>) -> Sse<impl Stream<Item = Result<Event, Infallible>>> {
+  let stream = listener.into_stream();
+
+  Sse::new(stream
+    .map(|msg| {
+      let msg = msg.uwnrap();
+    
+      let json = json!(msg).to_string();
+     Event::default().data(json)
+    }).map(Ok),
+   ).keep_alive(KeepAlive::default())
+}
+```
+
+When we're setting up our web service, we can create notifications through one of two ways:
+- Using SQL
+- Using `pg_notify` on specific events
+
+Using `pg_notify` itself is pretty easy, although you could do this without SQL by just using Tokio channels instead. Let's take it up a notch and use SQL to set up our channels so that we don't have to manually generate it in-code.
+
+```rust
+CREATE TABLE IF NOT EXISTS test_table (
+  id SERIAL PRIMARY KEY,
+  message TEXT NOT NULL
+);
+
+CREATE TRIGGER "testNotify"
+AFTER INSERT ON test_table
+FOR EACH ROW EXECUTE PROCEDURE testNotify();
+
+CREATE OR REPLACE FUNCTION testNotify()
+  RETURNS TRIGGER AS $$
+DECLARE
+BEGIN
+  PERFORM pg_notify('testNotify', ROW_TO_JSON(NEW)::text);
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+Now if we add this to an SQL migration file then run the app we're using and go to the endpoint we're using for our stream, now we'll be able to receive a stream of notifications!
+
+## Using SQLx with Shuttle
+
+Shuttle currently offers SQLx as a default connection via our annotation macros that save you time by letting you provision your infrastructure straight from code. All you need to do is to declare the macro in-code, like so:
+
+```rust main.rs
+use sqlx::PgPool;
+
+#[shuttle_runtime::main]
+async fn main(
+  #[shuttle_shared_db::Postgres] db: PgPool // gets declared here
+) -> shuttle_axum::ShuttleAxum {
+  sqlx::migrate!().run(&db).await.map_err(|e| format!("Oh no! Migrations failed :( {e}");
+  
+  ... the rest of your code
+}
+```
+Our free database offering is via a shared database server (with users having separate databases for each application). However, we are now offering 100% isolated AWS RDS databases with our Pro tier which you can find more about [here](https://www.shuttle.rs/pricing) which supports MySQL, Postgres and MariaDB. 
+
+## Finishing Up
+
+Thanks for reading this article! I hope you've gained a good understanding of how to use SQL in Rust, as well as how much utility SQLx provides when it comes to making the power of raw, compile-time checked SQL queries work for you when using Rust SQL.
+
+Did this article help you? Feel free to [give us a star on GitHub!](https://www.github.com/shuttle-hq/shuttle)
