@@ -1,7 +1,7 @@
 import { CallToAction, FrequentlyAskedQuestions, Pricing, Testimonials, TrustedBy } from 'components/sections'
 import { QuestionAttrs } from '../components/sections/FrequentlyAskedQuestions'
 import { GetStaticPropsResult } from 'next'
-import { Questions } from '../content'
+import { pricingQuestions } from '../content'
 import Hero from 'components/sections/Pricing/Hero'
 import { Page } from 'components/templates'
 import { ReactNode } from 'react'
@@ -14,10 +14,9 @@ import Calculator from 'components/sections/Pricing/Calculator'
 import 'react-tooltip/dist/react-tooltip.css'
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
-	const questions = Questions
 	return {
 		props: {
-			questions,
+			questions: pricingQuestions,
 		},
 	}
 }
