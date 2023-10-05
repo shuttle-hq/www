@@ -10,10 +10,6 @@ export const pricingQuestions: QuestionAttrs[] = [
 		answer: 'Yes, Shuttle is <a href="https://github.com/shuttle-hq" target="_blank" style="text-decoration: underline;">open source</a> enabling developers to not only use but also contribute to our platform. We believe in the power of open collaboration and transparency.',
 	},
 	{
-		question: 'Is Shuttle secure?',
-		answer: 'We build and deploy every project in its own container. This gives you safe isolation from other users and all the other projects that are owned by your account.',
-	},
-	{
 		question: 'What about frontend hosting?',
 		answer: 'You can build any frontend app compiled to HTML/CSS/JS/WASM. Then, deploy and serve it with your Shuttle app.',
 	},
