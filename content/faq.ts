@@ -33,10 +33,6 @@ export const pricingQuestions: QuestionAttrs[] = [
 
 export const landingQuestions: QuestionAttrs[] = [
 	{
-		question: 'How secure is Shuttle?',
-		answer: 'We build and deploy every project in its own container. This gives you safe isolation from other users, and also across all the projects that are owned by your account.',
-	},
-	{
 		question: 'What happens when I deploy to Shuttle?',
 		answer: 'Your code is analyzed and built on our servers. The first time you introduce additional resources in your code, like the first time you use a database, we will add that resource to your project and wire it automatically to your deployment.',
 	},
