@@ -28,14 +28,15 @@ interface Props {
 	readonly code: string
 	readonly showLineNumbers?: boolean
 	readonly className?: string
+	readonly copyBtn?: boolean
 }
 
-export default function CodeBlock({ code, language, showLineNumbers, className }: Props) {
+export default function CodeBlock({ code, language, showLineNumbers, className, copyBtn }: Props) {
 	useWindowSize()
 
 	return (
 		<div className={clsx('relative rounded !bg-black p-4 shadow-lg', className)}>
-			<CopyButton code={code} className='absolute right-2 top-2 inline-flex items-center' />
+			{copyBtn && <CopyButton code={code} className='absolute right-2 top-2 inline-flex items-center' />}
 
 			<HeightMagic>
 				<SyntaxHighlighter

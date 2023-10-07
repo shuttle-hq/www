@@ -1,11 +1,11 @@
-export const APP_NAME = 'shuttle'
+export const APP_NAME = 'Shuttle'
 
 export const SITE_TITLE = 'Build Backends. Fast.'
 
 export const SITE_DESCRIPTION =
 	'Stop worrying about the infrastructure. Focus on writing code, shuttle will do the rest.'
 
-export const SITE_URL = 'https://shuttle.rs/'
+export const SITE_URL = 'https://www.shuttle.rs/'
 
 export const TWITTER_HANDLE = '@shuttle_dev'
 

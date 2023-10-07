@@ -2,6 +2,7 @@ import {Button, LoginButton} from 'components/elements'
 import Image from 'next/image'
 import {useUser} from "@auth0/nextjs-auth0/client";
 import {DISCORD_URL} from "../../lib/constants";
+import codeImage from "public/images/sections/hero/shuttle-axum-hello-world.png"
 
 const Hero = () => {
 	const { user } = useUser();
@@ -27,26 +28,16 @@ const Hero = () => {
 				</div>
 				<div className='relative z-10 mt-8 overflow-hidden rounded-3xl bg-[#13292C] p-5 dark:bg-black sm:mt-10 sm:p-8 lg:mt-0 lg:p-10'>
 					<Image
-						src='/images/sections/code.png'
+						src={codeImage}
 						alt='code'
-						width={420}
-						height={349}
-						className='mx-auto rounded-3xl'
+						className='mx-auto rounded-3xl pointer-events-none select-none'
 					/>
 					<Image
 						src='/images/sections/hero/bg.png'
 						alt='hero background'
 						width={702}
 						height={438}
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full'
-					/>
-					<Image
-						src='/images/sections/hero/stars.png'
-						alt='stars'
-						width={840}
-						height={687}
-						sizes='100vw, (min-width: 768px) 768px'
-						className='pointer-events-none absolute left-0 top-0 -z-10'
+						className='pointer-events-none select-none absolute left-0 top-0 -z-10 h-full w-full'
 					/>
 				</div>
 			</header>
