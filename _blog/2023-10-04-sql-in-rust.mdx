@@ -8,7 +8,7 @@ cover: sql-in-rust-thumb.png
 date: '2023-10-04T14:30:00'
 ---
 When it comes to using SQL, the Rust ecosystem has us spoiled for choice: thankfully, there are already a few that have come out on top which we can use. SQLx is a purely async, runtime-agnostic Rust SQL crate that allows you to use compile-time type checked queries without a DSL. As [one of the most popular ways to use SQL in Rust,](https://github.com/search?q=sql+rust+language%3ARust&type=repositories&s=stars&o=desc&l=Rust) it offers the following advantages:
-- It's compatible with all your favourite flavours of SQL (MySQL, SQLite, Postgres, MSSQL)
+- It's compatible with all your favourite flavours of SQL (MySQL, SQLite, Postgres)
 - Compile-time checked queries ensure type and query validity
 - Support for extra features like Postgres listen/notify
 - Many different ways to build and use queries
@@ -196,7 +196,7 @@ With as many as features as Postgres has, it's a good thing that SQLx supports t
 // set up pool beforehand
 
 let mut listener = PgListener::connect_with(&pool).await.unwrap();
-listener.listen("chan0").await.unwrap();
+listener.listen("testNotify").await.unwrap();
 
 // set up a loop to receive notifications
 tokio::spawn(async move || {
@@ -206,7 +206,7 @@ tokio::spawn(async move || {
 });
 
 loop {
-  sqlx::query("SELECT pg_notify('chan0', 'Hello world!')").execute(&pool).await;
+  sqlx::query("SELECT pg_notify('testNotify', 'Hello world!')").execute(&pool).await;
 }
 ```
 As you can see here, we've spawned a Tokio task to be able to asynchronously loop and receive notifications then print them out - meanwhile, within the main execution thread we've also set up a loop to continuously send a query that sends "Hello world!" down the channel which gets received by our `PgListener`.
