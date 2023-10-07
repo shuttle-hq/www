@@ -295,9 +295,17 @@ export default function BlogPostPage(props: Props) {
 								<LinkedInLogo />
 							</a>
 							<a
-								href={`https://mastodon.social/share?text=${encodeURIComponent(
-									`${props.blog.title} ${SITE_URL}blog/${props.blog.slug}`
-								)}`}
+								href='#'
+								onClick={(e) => {
+									e.preventDefault()
+
+									const instance = window.prompt('Enter your Mastodon instance:')
+									if (instance) {
+										window.location.href = `https://${instance}/share?text=${encodeURIComponent(
+											`${props.blog.title} ${SITE_URL}blog/${props.blog.slug}`
+										)}`
+									}
+								}}
 								className='flex items-center rounded-xl border border-black/10 bg-black p-3 dark:border-white/10'
 								target='_blank'
 								rel='noreferrer'
