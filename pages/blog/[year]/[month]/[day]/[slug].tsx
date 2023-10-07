@@ -299,7 +299,7 @@ export default function BlogPostPage(props: Props) {
 								onClick={(e) => {
 									e.preventDefault()
 
-									const instance = window.prompt('Enter your Mastodon instance:')
+									const instance = window.prompt('Enter your Mastodon instance (ex. mastodon.social):')
 									if (instance) {
 										window.location.href = `https://${instance}/share?text=${encodeURIComponent(
 											`${props.blog.title} ${SITE_URL}blog/${props.blog.slug}`
