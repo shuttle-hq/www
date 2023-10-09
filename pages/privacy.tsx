@@ -4,1256 +4,633 @@ export default function Privacy() {
 			<div className='mb-[98px]'>
 				<h1 className='mb-[19px] text-[64px] font-bold text-[#D8D8D8]'>Privacy policy</h1>
 				<p className='mb-6 text-xl'>
-					Thank you for your interest in OpenQuery, Inc., (&quot;Shuttle,&quot; &quot;we&quot;,
-					&quot;our&quot; or &quot;us&quot;). Shuttle provides a suite of open source tools, stitched
-					together to build a seamless developer experience. This Privacy Notice explains how information
-					about you, that directly identifies you, or that makes you identifiable (&quot;personal
-					information&quot;) is collected, used and disclosed by Shuttle in connection with our website
-					at shuttle.rs (the &quot;Site&quot;) and our services offered in connection with the Site
-					(collectively with the Site, the &quot;Service&quot;).
+					At Openquery Ltd we respect your privacy and are committed to protecting your Personal Data and
+					respecting your privacy. This policy sets out how we look after your Personal Data we collect
+					from you, how we use it, who we share it with and how long we keep it for (the Privacy Policy).
+					This Privacy Policy relates to your access and use of our website at{' '}
+					<a href='https://shuttle.rs ' target='_blank'>
+						https://shuttle.rs
+					</a>{' '}
+					(the Website), and any other solutions, software, tool, features or functionality in relation
+					thereto, in order to, inter alia, our cloud development platform (the Services).
 				</p>
 				<p className='mb-6 text-xl'>
-					We may also provide you with additional privacy notices or disclosures where the scope of the
-					inquiry, request, or personal information we require falls outside the scope of this Privacy
-					Notice. In that case, the additional Privacy Notice or disclosures will govern how we may
-					process the information you provide at that time. Please note that this Privacy Notice does not
-					cover or apply to our processing of information about our employees or contractors.
+					This Privacy Policy will also tell you about privacy rights and how the law protects you.
+					Unless otherwise stated, any defined terms herein shall have the same meaning as provided in
+					the Terms and Conditions{' '}
+					<a href='https://www.shuttle.rs/terms' target='_blank'>
+						https://www.shuttle.rs/terms
+					</a>{' '}
+					(the Terms).
 				</p>
 				<p className='mb-6 text-xl'>
-					This Policy explains how we use your personal information when we act as a data controller. As
-					far as you use our Service as a natural person, we are the controller of your personal
-					information. We are responsible for, and control, the processing of your personal information.
-				</p>
-				<p className='mb-6 text-xl'>
-					Wherever our customers use our Service to submit, manage, or otherwise use content relating to
-					our customers’ end users (&quot;Customer Data&quot;) during the provision of our Service, we
-					have contractually committed ourselves to only process such information on behalf and under the
-					instruction of the respective customer, who is the data controller. This Privacy Notice does
-					not apply to such processing and we recommend you read the Privacy Notice of the respective
-					customer, if their processing concerns your personal information.
-				</p>
-			</div>
-			<div className='mb-10 mt-10 text-xl'>
-				<h2 className='mb-8 text-[44px] font-bold text-[#C2C2C2]'>Region-specific Disclosures</h2>
-				<ul className='ml-5 list-disc'>
-					<li className='mb-6'>
-						<strong>California - Your California Privacy Rights:</strong> If you are a California
-						resident, California Civil Code Section 1798.83 permits you to request information
-						regarding the disclosure of personal information to third parties for their direct
-						marketing purposes during the immediately preceding calendar year. Note we do not share
-						your personal information with third parties for their own marketing purposes.
-					</li>
-					<li className='mb-6'>
-						<strong>Nevada:</strong> Chapter 603A of the Nevada Revised Statutes permits a Nevada
-						resident to opt out of future sales of certain covered information that a website operator
-						has collected or will collect about the resident. Note we do not sell your personal
-						information within the meaning of Chapter 603A. However, if you would still like to submit
-						such a request, please contact us at <a href='mailto:hello@shuttle.rs'>hello@shuttle.rs</a>
-						.
-					</li>
-					<li className='mb-6'>
-						<strong>European Economic Area, United Kingdom or Switzerland:</strong> If you are located
-						in the European Economic Area (&quot;EEA&quot;), United Kingdom or Switzerland, or
-						otherwise engage with Shuttle’s European operations, please see the 
-						<strong>
-							Privacy Disclosures for the European Economic Area, United Kingdom and Switzerland
-						</strong>{' '}
-						for additional European-specific privacy disclosures, including what constitutes your
-						personal information, the lawful bases we rely on to process your personal information, how
-						we use cookies when you access our Sites from the EEA, UK or Switzerland and your rights in
-						respect of your personal information.
-					</li>
-				</ul>
-				<p className='mb-5 mt-5'>
-					<strong>Note for International Visitors:</strong> Personal information may be transferred to,
-					stored and processed in a country other than the one in which it was collected. For example,
-					the Sites are primarily hosted in and provided from the United Kingdom. Please note the country
-					to which personal data is transferred may not provide the same level of protection for personal
-					information as the country from which it was transferred.
+					If you have any questions about this Privacy Policy or any other matter relating to how we use
+					your Personal Data, please email us at hello@shuttle.rs including “DATA PRIVACY REQUEST” as a
+					subject line.
 				</p>
 			</div>
 
 			<div className='mb-10 mt-10'>
+				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>1. Who we are</h2>
+				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Company</h3>
+				<p className='mb-5 text-xl'>
+					Openquery Ltd, a company registered in England under number 12268176, with its registered
+					office at George House, 39 Fitzroy Square, London, England, W1T 6EZ (we or us).
+				</p>
+
+				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Controller of User Data</h3>
+				<p className='mb-5 text-xl'>
+					We are a data controller of the Personal Data you provide to us when you surf on our Website,
+					directly engage with us, set up an account with us, as set out in this Privacy Notice, and/or
+					use our Services. This means we are responsible for deciding how we hold and use your Personal
+					Data in your interaction with our Website and Services.
+				</p>
+
+				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Processor of Customer Data</h3>
+				<p className='mb-5 text-xl'>
+					You are a data controller of the/your customer’s Personal Data (Customer Data) you submit to us
+					to host your behalf (Hosting Services). We process such Customer Data on your behalf, in our
+					capacity as data processor, in accordance with our Data Processing Addendum
+					https://www.shuttle.rs/dpa
+				</p>
+
+				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>
+					Changes to this Privacy Policy and your duty to inform us of changes
+				</h3>
+				<p className='mb-5 text-xl'>
+					We keep this Privacy Policy under regular review. This version is dated 30 September 2023. We
+					may update this Privacy Policy from time to time. Any changes we make in the future will be
+					posted on our Website. Please check back regularly to see any updates or changes to this
+					Privacy Policy. It is important that the Personal Data we hold about you is accurate and
+					current. Please keep us informed if your Personal Data changes during your relationship with
+					us.
+				</p>
+
+				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Third-party links</h3>
+				<p className='mb-5 text-xl'>
+					Our Website and/or Services may include links to third-party websites, plug-ins and
+					applications. Clicking on those links or enabling those connections may allow third parties to
+					collect or share data about you. We do not control these third-party websites and are not
+					responsible for their privacy statements. When you leave our Website and/or Services, we
+					encourage you to read the privacy policy of every website you visit.
+				</p>
+
+				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>2. The data we collect about you</h2>
+
+				<p className='mb-5 text-xl'>
+					Personal data, or personal information, means any information about an individual from which
+					that person can be identified (Personal Data). It does not include data where the identity has
+					been removed (anonymous data).
+				</p>
+
+				<p className='mb-5 text-xl'>
+					We may collect, use, store and transfer different kinds of Personal Data about you which we
+					have grouped together as follows:
+				</p>
+
+				<ol className='mb-5 list-disc space-y-4 pl-[25px] text-xl'>
+					<li className='mb-2'>Identity Data includes your name, username and profile picture. </li>
+					<li className='mb-2'>
+						Contact Data includes your billing address, email address, and telephone number.
+					</li>
+
+					<li className='mb-2'>Financial Data includes the last four digit of your credit card. </li>
+					<li className='mb-2'>
+						Transaction Data includes details about payments to and from you and other details of
+						services you have purchased from us.
+					</li>
+					<li className='mb-2'>
+						Technical Data includes internet protocol (IP) address, browser type and version, time zone
+						setting and location, browser plug-in types and versions, operating system and platform,
+						and other technology on the devices you use to access our Website and/or Services.
+					</li>
+					<li className='mb-2'>
+						Profile Data includes your log in details, purchases or orders made by you, your interests,
+						preferences, feedback and survey responses.
+					</li>
+					<li className='mb-2'>
+						Usage Data includes information about how you use our Website and Services.
+					</li>
+					<li className='mb-2'>
+						Marketing and Communications Data includes your preferences in receiving marketing from us
+						and our third parties and your communication preferences.
+					</li>
+				</ol>
+				<p className='mb-5 text-xl'>
+					We also collect, use and share Aggregated Data such as statistical or demographic data for any
+					purpose. Aggregated Data could be derived from your Personal Data but is not considered
+					Personal Data in law as this data will not directly or indirectly reveal your identity. For
+					example, we may aggregate your Usage Data to calculate the percentage of users accessing a
+					specific feature of our Website. However, if we combine or connect Aggregated Data with your
+					Personal Data so that it can directly or indirectly identify you, we treat the combined data as
+					Personal Data which will be used in accordance with this Privacy Policy.
+				</p>
+
+				<p className='mb-5 text-xl'>
+					We do not collect any Special Categories of Personal Data about you (this includes details
+					about your race or ethnicity, religious or philosophical beliefs, sex life, sexual orientation,
+					political opinions, trade union membership, information about your health, and genetic and
+					biometric data). Nor do we collect any information about criminal convictions and offences.
+				</p>
+
+				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>If you fail to provide Personal Data</h3>
+
+				<p className='mb-5 text-xl'>
+					Where we need to collect Personal Data by law, or under the terms of a contract we have with
+					you, and you fail to provide that data when requested, we may not be able to perform the
+					contract we have or are trying to enter into with you (for example, to provide you the
+					Services). In this case, we may have to cancel the Services you have with us. If you do not
+					want us to process your Personal Data in the way set out in this Privacy Policy, you should not
+					use our Website or Services.
+				</p>
+				<p className='mb-5 text-xl'>
+					You may also choose not to provide us with any optional personal data (marked as non-mandatory
+					where applicable). However, please note that doing so might prevent us from providing you with
+					the full range of our Services, or the best user experience when using our Website and
+					Services.
+				</p>
+
 				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>
-					1. Information we collect and our use
+					3. How is your Personal Data collected?
 				</h2>
+
 				<p className='mb-5 text-xl'>
-					We collect personal information in connection with your visits to and use of the Service. This
-					collection includes information that you provide in connection with the Service, information
-					from third parties, and information that is collected automatically such as through the use of
-					cookies and other technologies.
+					We use different methods to collect data from and about you including through:
 				</p>
-				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Information That You Provide</h3>
-				<p className='mb-5 text-xl'>
-					We collect personal information from you. The categories of information we collect can include:
-				</p>
+
 				<ol className='mb-5 list-disc space-y-4 pl-[25px] text-xl'>
 					<li className='mb-2'>
-						<strong>Registration information.</strong> We collect personal and/or business information
-						that you provide when you register for an account at the Site. This information may include
-						your name, email address, GitHub username. We use this information to administer your
-						account, provide you with the relevant services and information, communicate with you
-						regarding your account, the Site and for customer support purposes.
-					</li>
-					<li className='mb-2'>
-						<strong>Information collected through the Use of the Service.</strong> After registration,
-						you may create, upload or transmit files, documents, videos, images, data or information as
-						part of your use of the Service (collectively, &quot;User Content&quot;). User Content and
-						any information contained in the User Content, including personal information you may have
-						included, is stored and collected as part of the Service. You have full control of the
-						information included in the User Content.
-					</li>
-					<li className='mb-2'>
-						<strong>Payment information.</strong> If you make a purchase or payment on the Site, such
-						as for a subscription, we collect transactional information provided in connection with
-						your purchase or payment. Please note that we use third party payment processors, including
-						Stripe, to process payments made to us. As such, we do not retain any personally
-						identifiable financial information such as credit card numbers. Rather, all such
-						information is provided directly by you to our third-party processor. The payment
-						processor&rsquo;s use of your personal information is governed by their privacy notice. To
-						view Stripe&rsquo;s privacy notice, please visit:{' '}
-						<a href='https://stripe.com/privacy'>https://stripe.com/privacy</a>.
-					</li>
-					<li className='mb-2'>
-						<strong>Communications.</strong> If you communicate with us through any paper or electronic
-						form, we may collect your name, email address, mailing address, phone number, or any other
-						personal information you choose to provide to us. We use this information to investigate
-						and respond to your inquiries, and to communicate with you, to enhance the services we
-						offer to our users and to manage and grow our organization. If you register for our
-						newsletters or updates, we may communicate with you by email. To unsubscribe from
-						promotional messages, please follow the instructions within our messages and review the{' '}
-						<strong>Control Over Your Information</strong> section below. If you become a contributor,
-						we may also collect your GitHub name and feature you on our website.
-					</li>
-					<li className='mb-2'>
-						<strong>Inquiries and Feedback.</strong> If you contact us, we will collect the information
-						that you provide us, such as your contact information and the contents of your
-						communication with us.
-					</li>
-				</ol>
-				<p className='mb-5 text-xl'>
-					You are free to choose which personal information you want to provide to us or whether you want
-					to provide us with personal information at all. However, some information, such as your name,
-					address, payment transaction information, and information on your requested Services may be
-					necessary for the performance of our contractual obligations.
-				</p>
-				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Information from Third Party Sources</h3>
-				<p className='mb-5 text-xl'>
-					We may receive personal information about you from our business partners and service providers
-					and combine this information with other data we collect from you. The third-parties may include
-					website and service operators, payment processors, marketing partners, and shipping providers.
-					The information may include contact information, demographic information, information about
-					your communications and related activities, and information about your orders. We may use this
-					information to administer and facilitate our services, your orders and our marketing
-					activities.
-				</p>
-				<ul className='mb-5 list-disc space-y-4 pl-[25px] text-xl'>
-					<li className='mb-2'>
-						<strong>Single Sign-On.</strong> We use single sign-on (&quot;<strong>SSO</strong>&quot;)
-						such as GitHub to allow a user to authenticate their account using one set of login
-						information. We will have access to certain information from those third parties in
-						accordance with the authorization procedures determined by those third parties, including,
-						for example, your name, username, email address, language preference, and profile picture.
-						We use this information to operate, maintain, and provide to you the features and
-						functionality of the Service. We may also send you service-related emails or messages
-						(e.g., account verification, purchase confirmation, customer support, changes or updates to
-						features of the Site, technical and security notices).
-					</li>
-					<li className='mb-2'>
-						<strong>Social Media.</strong> When you interact with our Site through various social
-						media, such as when you click on the social media icon on the Site, follow us on a social
-						media site, or post a comment to one of our pages, we may receive information from the
-						social network such as your profile information, profile picture, gender, user name, user
-						ID associated with your social media account, age range, language, country, and any other
-						information you permit the social network to share with third parties. The data we receive
-						is dependent upon your privacy settings with the social network. We use this information to
-						operate, maintain, and provide to you the features and functionality of the Service, as
-						well as to communicate directly with you, such as to send you email messages about products
-						and services that may be of interest to you.
-					</li>
-					<li className='mb-2'>
-						<strong>Employment Applications.</strong> If you apply for employment, we collect your
-						contact and demographic information, educational and work history, employment interests,
-						information obtained during interviews and any other information you choose to provide. We
-						use the information provided to evaluate your candidacy for employment, to communicate with
-						you during the application process and to facilitate the onboarding process.
-					</li>
-					<li className='mb-2'>
-						<strong>Information from Other Sources.</strong> We may obtain information from other
-						sources, including through third-party information providers, our shareholders, customers,
-						or through transactions such as mergers and acquisitions. We may combine this information
-						with other information we collect from or about you. In these cases, our Privacy Notice
-						governs the handling of the combined personal information. We use this information to
-						operate, maintain, and provide to you the features and functionality of the Service, as
-						well as to communicate directly with you, such as to send you email messages about products
-						and services that may be of interest to you.
-					</li>
-				</ul>
-				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Other Uses of Personal Information</h3>
-				<p className='mb-5 text-xl'>
-					In addition to the uses described above, we may collect and use personal information for the
-					following purposes:
-				</p>
-				<ul className='mb-5 list-disc space-y-4 pl-[25px] text-xl'>
-					<li className='mb-2'>
-						For our business activities, including to operate the Service and to provide you with the
-						features and functionality of the Service;
-					</li>
-					<li className='mb-2'>
-						To communicate with you and respond to your requests, such as to respond to your questions,
-						contact you about changes to the Service, and communicate about account related matters;
-					</li>
-					<li className='mb-2'>
-						For marketing and advertising purposes, such as to market to you or offer you with
-						information and updates on our products or services we think that you may be interested in.
-						While we may use your personal information in this manner, please note that we do not use
-						User Content to serve you ads, and we will never share User Content with any third parties
-						for marketing or advertising purposes, unless you have explicitly submitted it to us for
-						that purpose;
-					</li>
-					<li className='mb-2'>For analytics and research purposes;</li>
-					<li className='mb-2'>
-						To enforce our <strong>Terms of Service</strong>, to resolve disputes, to carry out our
-						obligations and enforce our rights, and to protect our business interests and the interests
-						and rights of third parties;
-					</li>
-					<li className='mb-2'>To comply with contractual and legal obligations and requirements;</li>
-					<li className='mb-2'>
-						To fulfil any other purpose for which you provide personal information; and
-					</li>
-					<li className='mb-2'>For any other lawful purpose, or other purpose that you consent to.</li>
-				</ul>
-			</div>
-
-			<div className='mb-[88px] space-y-6 text-xl'>
-				<h2 className='mb-5 text-[40px] font-bold text-[#D8D8D8]'>2. How we share personal information</h2>
-				<p>
-					We may share your personal information in the instances described below. For further
-					information on your choices regarding your information, see{' '}
-					<strong>Control Over Your Information</strong>.
-				</p>
-				<ul className='mb-5 list-disc space-y-4 pl-[25px] text-xl'>
-					<li className='mb-2'>
-						We may share your personal information with third-party service providers or business
-						partners who help us deliver or improve our Site or services, or who perform services on
-						our behalf, which are subject to reasonable confidentiality terms, and may include
-						processing payments, providing web hosting services, or providing analytics.
-					</li>
-					<li className='mb-2'>
-						Third parties as required by law or subpoena or if we reasonably believe that such action
-						is necessary to (a) comply with the law and the reasonable requests of law enforcement; (b)
-						to enforce our <strong>Terms of Service</strong> or other agreements or to protect the
-						security or integrity of the Shuttle services, including to prevent harm or financial loss,
-						or in connection with preventing fraud or illegal activity; and/or (c) to exercise or
-						protect the rights, property, or personal safety of Shuttle, our Customers, visitors, or
-						others.
-					</li>
-					<li className='mb-2'>
-						We may share with other companies and brands owned or controlled by Shuttle, and other
-						companies owned by or under common ownership as Shuttle. These companies will use your
-						personal information in the same way as we can under this Privacy Notice.
-					</li>
-					<li className='mb-2'>
-						We may transfer any information we collect in the event we sell or transfer all or a
-						portion of our business or assets (including any shares in the company) or any portion or
-						combination of our products, services, businesses and/or assets. Should such a transaction
-						occur (whether a divestiture, merger, acquisition, bankruptcy, dissolution, reorganization,
-						liquidation, or similar transaction or proceeding), we will use reasonable efforts to
-						ensure that any transferred information is treated in a manner consistent with this Privacy
-						Notice.
-					</li>
-					<li className='mb-2'>
-						We may disclose your information publicly or with another third party with your prior
-						authorization.
-					</li>
-					<li className='mb-2'>
-						With others in an aggregated or otherwise anonymized form that does not reasonably identify
-						you directly as an individual.
-					</li>
-				</ul>
-			</div>
-			<div className='mb-[88px] space-y-6 text-xl'>
-				<h2 className='mb-5 text-[40px] font-bold text-[#D8D8D8]'>3. Control over your information</h2>
-				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Email Communications</h3>
-				<p className='mb-5'>
-					From time to time, we may send you emails regarding updates to our Service, products or
-					services, notices about our organization, or information about products/services we offer (or
-					promotional offers from third parties) that we think may be of interest to you. If you wish to
-					unsubscribe from such emails, simply click the &quot;unsubscribe link&quot; provided at the
-					bottom of the email communication. Note that you cannot unsubscribe from certain
-					services-related email communications (e.g., account verification, confirmations of
-					transactions, technical or legal notices).
-				</p>
-				<h3 className='mb-2 mt-2 text-2xl font-bold text-[#D8D8D8]'>Modifying Account Information</h3>
-				<p className='mb-5'>
-					If you have an online account with us, you have the ability to modify certain information in
-					your account (e.g., your contact information) through the account options provided on the Site.
-					If there is personal information in your User Content, you can use the features and
-					functionality of the Service to edit or delete the personal information or User Content. Not
-					all personal information is maintained in a format that you can access or change. If you would
-					like to request access to, or correction or deletion of personal information, you may send your
-					request to us at the email provided below. We will review your request and may require you to
-					provide additional information to identify yourself, but we do not promise that we will be able
-					to satisfy your request.
-				</p>
-			</div>
-
-			<div className='mb-[88px] space-y-6 text-xl'>
-				<h2 className='mb-5 text-[40px] font-bold leading-none text-[#D8D8D8]'>
-					4. How We Use Cookies and Other Tracking Technology to Collect Information
-				</h2>
-				<p>
-					We, and our third-party partners, automatically collect certain types of usage information when
-					you visit our Site, read our emails, or otherwise engage with us. We typically collect this
-					information through a variety of tracking technologies, including cookies, web beacons,
-					embedded scripts, location-identifying technologies, file information, and similar technology
-					(collectively, &quot;<strong>tracking technologies</strong>&quot;).
-				</p>
-				<p>
-					We, and our third-party partners, use tracking technologies to automatically collect usage and
-					device information, such as:
-				</p>
-				<ul className='mb-5 list-disc space-y-4 pl-[25px] text-xl'>
-					<li className='mb-2'>
-						Information about your device and its software, such as your IP address, browser type,
-						Internet service provider, device type/model/manufacturer, operating system, date and time
-						stamp, and a unique ID that allows us to uniquely identify your browser or your account
-						(including, for example, a persistent device identifier), and other such information.
-					</li>
-					<li className='mb-2'>
-						When you access our sites from a mobile device, we may collect unique identification
-						numbers associated with your device or our mobile application mobile carrier, device type,
-						model and manufacturer, mobile device operating system brand and model, and depending on
-						your mobile device settings, we may be able to approximate a device’s location by analyzing
-						other information, like an IP address.
-					</li>
-					<li className='mb-2'>
-						Information about the way you access and use our services, for example, the site from which
-						you came and the site to which you are going when you leave our services, the pages you
-						visit, the links you click, whether you open emails or click the links contained in emails,
-						whether you access the services from multiple devices, and other actions you take on the
-						Sites.
-					</li>
-				</ul>
-				<p>
-					We use the data collected through tracking technologies to: (a) remember information so that
-					you will not have to re-enter it during your visit or the next time you visit the site; (b)
-					provide custom content and information; (c) identify you across multiple devices; (d) provide
-					and monitor the effectiveness of our services; (e) monitor aggregate metrics such as total
-					number of visitors, traffic, usage, and demographic patterns on our Site; (f) diagnose or fix
-					technology problems; and (g) to provide, plan for, and enhance our services.
-				</p>
-				<p>
-					<strong>Note:</strong> We do not engage in online targeted advertising.
-				</p>
-				<p>
-					<strong>Cookies and Other Tracking Technologies Opt-Out.</strong> Depending on your browser or
-					mobile device, you may be able to set your browser to delete or notify you of cookies and other
-					tracking technology by actively managing the settings on your browser or mobile device.
-				</p>
-				<p>
-					If you would prefer not to accept cookies, most browsers will allow you to: Change your browser
-					settings to notify you when you receive a cookie, which lets you choose whether or not to
-					accept it; Disable existing cookies; or Set your browser to automatically reject cookies.
-					Please note that doing so may negatively impact your experience using the sites, as some
-					features and services on our sites may not work properly. Depending on your mobile device and
-					operating system, you may not be able to delete or block all cookies. You may also set your
-					e-mail options to prevent the automatic downloading of images that may contain technologies
-					that would allow us to know whether you have accessed our e-mail and performed certain
-					functions with it.
-				</p>
-			</div>
-
-			<div className='mb-[88px] space-y-6 text-xl'>
-				<h2 className='mb-5 text-[40px] font-bold leading-none text-[#D8D8D8]'>
-					5. Data Retention and Security
-				</h2>
-				<p>
-					We will retain your personal information for the length of time needed to fulfill the purposes
-					outlined in this Privacy Notice, unless a longer retention period is required or permitted by
-					law. We store data on servers in the U.K. or any other country in which Shuttle or its
-					affiliates, subsidiaries, agents or contractors maintain facilities. If you are located in the
-					European Union or other regions with laws governing data collection and use that may differ
-					from U.S. law, please note that your personal information may be transferred to a country and
-					jurisdiction that does not have the same data protection laws as your jurisdiction. When you
-					register for use with Shuttle, you have the option of where you store your information, and we
-					will not transfer it without providing information to you in advance.
-				</p>
-				<p>
-					Shuttle cares about the security of your information and uses commercially reasonable physical,
-					technical, and organizational measures designed to preserve the integrity and security of all
-					information we collect. However, no security system is impenetrable, and we cannot guarantee
-					the security of our systems 100%. In the event that any information under our control is
-					compromised as a result of a breach of security, we will take reasonable steps to investigate
-					the situation and, where appropriate, notify those individuals whose information may have been
-					compromised and take other steps, in accordance with any applicable laws and regulations.
-				</p>
-			</div>
-
-			<div className='mb-[88px] space-y-6 text-xl'>
-				<h2 className='mb-5 text-[40px] font-bold leading-none text-[#D8D8D8]'>
-					6. Links to Third-Party Websites and Services
-				</h2>
-				<p>
-					For your convenience, our Site may provide links to third-party websites or services that we do
-					not own or operate. We are not responsible for the practices employed by any websites or
-					services linked to or from the services, including the information or content contained within
-					them. Your browsing and interaction on any other website or service are subject to the
-					applicable third party’s rules and policies, not ours. If you are using a third-party website
-					or service, you do so at your own risk. We encourage you to review the privacy policies of any
-					site or service before providing any personal information.
-				</p>
-			</div>
-			<div className='mb-[88px] space-y-6 text-xl'>
-				<h2 className='mb-5 text-[40px] font-bold leading-none text-[#D8D8D8]'>7. Children’s Privacy</h2>
-				<p>
-					Our services are not intended for children under the age of 13. We do not knowingly solicit or
-					collect personal information from children under the age of 13. If we learn that any personal
-					information has been collected inadvertently from a child under 13, we will delete the
-					information as soon as possible. If you believe that we might have collected information from a
-					child under 13, please contact us at{' '}
-					<a href='mailto:privacy@shuttle.rs' className='text-[#C2C2C2] underline'>
-						privacy@shuttle.rs
-					</a>
-					.
-				</p>
-			</div>
-			<div className='mb-[88px] space-y-6 text-xl'>
-				<h2 className='mb-5 text-[40px] font-bold leading-none text-[#D8D8D8]'>
-					8. Changes to Privacy Notice
-				</h2>
-				<p>
-					We reserve the right to change this Privacy Notice from time to time in our sole discretion. We
-					will notify you about material changes in the way we treat personal data by sending a notice to
-					the primary email address specified in your Shuttle account and/or by placing a prominent
-					notice on our Site. It is your responsibility to review this Privacy Notice periodically. When
-					we do change the Privacy Notice, we will also revise the &quot;last modified&quot; date.
-				</p>
-			</div>
-			<div className='mb-[88px] space-y-6 text-xl'>
-				<h2 className='mb-5 text-[40px] font-bold leading-none text-[#D8D8D8]'>9. Contact Us</h2>
-				<p>
-					For additional inquiries about this Privacy Notice, please send us an email at{' '}
-					<a href='mailto:privacy@shuttle.rs' className='text-[#C2C2C2] underline'>
-						privacy@shuttle.rs
-					</a>
-					.
-				</p>
-				<p>This Privacy Notice was last modified on 30th May 2023.</p>
-			</div>
-
-			<div className='mb-10 mt-10'>
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>
-					Privacy disclosures for the European economic area, United Kingdom, and Switzerland.
-				</h2>
-				<p className='mb-5 text-xl'>
-					While we are primarily based in the United States, Shuttle maintains operations in Europe and
-					may direct our services to individuals located in the European Economic Area (&quot;
-					<strong>EEA</strong>&quot;), United Kingdom and Switzerland, including through our Site 
-					<a href='https://shuttle.rs' className='text-[#C2C2C2] underline'>
-						shuttle.rs
-					</a>{' '}
-					(collectively, our &quot;
-					<strong>European Services</strong>&quot;). The following disclosures (&quot;
-					<strong>Privacy Disclosures</strong>&quot;) apply to our processing of personal data in
-					connection with our European Services.
-				</p>
-				<p className='mb-5 text-xl'>
-					OpenQuery, Inc. is the data controller responsible for the processing of personal data in
-					connection with our European Services. This means that we determine and are responsible for how
-					your personal information is used.
-				</p>
-				<p className='mb-5 text-xl'>
-					<strong>Personal Data:</strong> When we use the term &quot;personal data&quot; in this section,
-					we mean information relating to an identified or identifiable natural person.
-				</p>
-			</div>
-
-			<div className='mb-10 mt-10'>
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>
-					1. Personal data we collect from you when you use the Shuttle European Services, and how we use
-					it.
-				</h2>
-				<p className='mb-5 text-xl'>
-					<strong>
-						We collect the categories of personal data that you voluntarily submit directly to us when
-						you use the European Services, as set forth in our Privacy Notice under the section
-						entitled Information We Collect and Our Use.
-					</strong>
-				</p>
-				<p className='mb-5 text-xl'>
-					The table at <strong>Annex 1</strong> sets out in detail the categories of personal data we
-					collect about you and how we use that information when you use the European Services, as well
-					as the legal basis which we rely on to process the personal information and recipients of that
-					personal information.
-				</p>
-			</div>
-
-			<div className='mb-10 mt-10'>
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>
-					2. Information we collect about you automatically.
-				</h2>
-				<p className='mb-5 text-xl'>
-					<strong>
-						We also automatically collect personal information indirectly about how you access and use
-						the European Services, and information about the device you use to access the European
-						Services. For example, we may collect:
-					</strong>
-				</p>
-				<ol className='mb-5 list-[lower-alpha] space-y-4 pl-[25px] text-xl'>
-					<li>
-						<strong>
-							information about the features you use and the pages you view on the European Services;
-						</strong>
-					</li>
-					<li>
-						<strong>
-							information about your device (such as your IP address, device identifier, device type,
-							model and manufacturer); and
-						</strong>
-					</li>
-					<li>
-						<strong>
-							information about your usage patterns (such as how often you use the Shuttle European
-							Services and your language settings).
-						</strong>
-					</li>
-				</ol>
-				<p className='mb-5 text-xl'>
-					We use this information to provide you the features and functionality of the European Services,
-					to monitor and improve the European Services, and to develop new services.
-				</p>
-				<p className='mb-5 text-xl'>
-					The table at <strong>Annex 2</strong> sets out further information about the categories of
-					personal information we collect about you automatically and how we use that information. The
-					table also lists the legal basis which we rely on to process the personal information and
-					recipients of that personal information.
-				</p>
-				<p className='mb-5 text-xl'>
-					We may link or combine the personal information we collect about you and the information we
-					collect automatically.
-				</p>
-				<p className='mb-5 text-xl'>
-					We may anonymise and aggregate any of the personal information we collect (so that it does not
-					directly identify you). We may use anonymised information for purposes that include testing our
-					IT systems, research, data analysis, and improving the Shuttle European Services. We may also
-					share such anonymised and aggregated information with others.
-				</p>
-			</div>
-
-			<div className='mb-10 mt-10'>
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>
-					3. How long will we store your personal information
-				</h2>
-				<p className='mb-5 text-xl'>
-					<strong>
-						We will usually store the personal information we collect about you for no longer than
-						necessary for the purposes set out in Annex 1 and Annex 2, in accordance with our legal
-						obligations and legitimate business interests.
-					</strong>
-				</p>
-				<p className='mb-5 text-xl'>
-					The criteria used to determine the period for which personal information about you will be
-					retained varies depending on the legal basis under which we process the personal information:
-				</p>
-				<ol className='mb-5 list-decimal space-y-4 pl-[25px] text-xl'>
-					<li>
-						<strong>Legitimate Interests:</strong> Where we are processing personal information based
-						on our legitimate interests, we generally will retain such information for a reasonable
-						period of time based on the particular interest, taking into account the fundamental
-						interests and the rights and freedoms of data subjects.
-					</li>
-					<li>
-						<strong>Consent:</strong> Where we are processing personal information based on your
-						consent, we generally will retain the information until you withdraw your consent, or
-						otherwise for the period of time necessary to fulfill the underlying agreement with you or
-						provide you with the applicable service for which we process that personal information.
-					</li>
-					<li>
-						<strong>Contract:</strong> Where we are processing personal information based on contract,
-						we generally will retain the information for the duration of the contract plus some
-						additional limited period of time that is necessary to comply with law or that represents
-						the statute of limitations for legal claims that could arise from the contractual
-						relationship.
-					</li>
-					<li>
-						<strong>Legal Obligation:</strong> Where we are processing personal information based on a
-						legal obligation, we generally will retain the information for the period of time necessary
-						to fulfill the legal obligation.
-					</li>
-					<li>
-						<strong>Legal Claim:</strong> We may need to apply a &quot;legal hold&quot; that retains
-						information beyond our typical retention period where we face threat of legal claim. In
-						that case, we will retain the information until the hold is removed, which typically means
-						the claim or threat of claim has been resolved.
-					</li>
-				</ol>
-				<p className='mb-5 text-xl'>
-					In all cases, in addition to the purposes and legal bases, we consider the amount, nature and
-					sensitivity of the personal information, as well as the potential risk of harm from
-					unauthorized use or disclosure of your personal information.
-				</p>
-			</div>
-
-			<div className='mb-10 mt-10'>
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>
-					4. Recipients of Personal Information
-				</h2>
-				<p className='mb-5 text-xl'>
-					<strong>
-						In addition to the recipients listed in Annexes 1 and 2, we may also share your personal
-						information with the following (as required in accordance with the uses set out in Annexes
-						1 and 2):
-					</strong>
-				</p>
-				<ol className='mb-5 list-decimal space-y-4 pl-[25px] text-xl'>
-					<li>
-						<strong>Service providers and advisors:</strong> we may share your personal information
-						with third party vendors and other service providers that perform services for us or on our
-						behalf, which may include providing professional services, such as legal and accounting
-						services, mailing, email or chat services, fraud prevention, web hosting, or providing
-						analytic services.
-					</li>
-					<li>
-						<strong>Affiliates:</strong> Other companies owned by or under common ownership as Shuttle,
-						including our subsidiaries (i.e., any organization we own or control) and our ultimate
-						holding company (i.e., any organization that owns or controls us) and any subsidiaries it
-						owns. These companies will use your personal information in the same way as we can under
-						these Privacy Disclosures.
-					</li>
-					<li>
-						<strong>Purchasers and third parties in connection with a business transaction:</strong>{' '}
-						your personal information may be disclosed to third parties in connection with a
-						transaction, such as a merger, sale of assets or shares, reorganization, financing, change
-						of control or acquisition of all or a portion of our business.
-					</li>
-					<li>
-						<strong>Law enforcement, regulators and other parties for legal reasons:</strong> we may
-						share your personal information with third parties as required by law or if we reasonably
-						believe that such action is necessary to (i) comply with the law and the reasonable
-						requests of law enforcement; (ii) detect and investigate illegal activities and breaches of
-						agreements, including our Terms; and/or (iii) exercise or protect the rights, property, or
-						personal safety of Shuttle, its users or others.
-					</li>
-				</ol>
-			</div>
-
-			<div className='mb-10 mt-10 text-xl'>
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>5. Marketing and Advertising</h2>
-				<p className='mb-5 text-xl'>
-					<strong>
-						From time to time we may contact you with information about our services, including sending
-						you marketing messages and asking for your feedback on our services.
-					</strong>{' '}
-					Most marketing messages we send will be by email. For some marketing messages, we may use
-					personal information we collect about you to help us determine the most relevant marketing
-					information to share with you.
-				</p>
-				<p className='mb-5 text-xl'>
-					We will only send you marketing messages if you have given us your consent to do so. You can
-					withdraw your consent at a later date by clicking on the unsubscribe link at the bottom of our
-					marketing emails or by updating your preferences via your account on the Site.
-				</p>
-			</div>
-
-			<div className='mb-10 mt-10 text-xl'>
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>
-					6. Storing and transferring your personal information
-				</h2>
-				<p className='mb-5 text-xl'>
-					<strong>Security</strong>. We implement appropriate technical and organizational measures to
-					protect your personal information against accidental or unlawful destruction, loss, change or
-					damage. All personal information we collect will be stored by our cloud hosting provider on
-					secure servers. We will never send you unsolicited emails or contact you by phone requesting
-					credit or debit card information or national identification numbers.
-				</p>
-				<p className='mb-5 text-xl'>
-					<strong>International Transfers of your Personal Information</strong>. The personal information
-					we collect may be transferred to and stored in countries outside of the jurisdiction you are in
-					where we and our third party service providers have operations. If you are located in the EEA,
-					United Kingdom or Switzerland, your personal information may be processed outside of those
-					regions, including in the United States.
-				</p>
-				<p className='mb-5 text-xl'>
-					In the event of such a transfer, we ensure that: (i) the personal information is transferred to
-					countries recognized as offering an equivalent level of protection; or (ii) the transfer is
-					made pursuant to appropriate safeguards, such as standard data protection clauses adopted by
-					the European Commission.
-				</p>
-				<p className='mb-5 text-xl'>
-					If you wish to enquire further about these safeguards used, please contact us using the details
-					set out at the end of these Privacy Disclosures.
-				</p>
-			</div>
-
-			<div className='mb-10 mt-10 text-xl'>
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>7. Profiling</h2>
-				<p className='mb-5 text-xl'>
-					We may analyze personal data we have collected about you to create a profile of your interests
-					and send product updates. We may also use personal data about you to detect and reduce fraud.
-				</p>
-			</div>
-
-			<div className='mb-10 mt-10 text-xl'>
-				<h2 className='mb-5 text-[32px] font-bold text-[#C2C2C2]'>
-					8. Your rights in respect of your personal information
-				</h2>
-				<p className='mb-5 text-xl'>
-					In accordance with applicable privacy law, you have the following rights in respect of your
-					personal information that we hold:
-				</p>
-				<ol className='mb-5 ml-6 list-decimal space-y-4'>
-					<li>
-						<strong>Right of access</strong>. You have the right to obtain:
-						<ol className='ml-6 list-[lower-alpha] space-y-4'>
-							<li>
-								confirmation of whether, and where, we are processing your personal information;
-							</li>
-							<li>
-								information about the categories of personal information we are processing, the
-								purposes for which we process your personal information and information as to how
-								we determine applicable retention periods;
-							</li>
-							<li>
-								information about the categories of recipients with whom we may share your personal
-								information; and
-							</li>
-							<li>a copy of the personal information we hold about you.</li>
+						Direct interactions. You may give us your Identity, Contact and Financial Data by filing in
+						forms or by corresponding with us by post, phone, email or otherwise. This includes
+						Personal Data you provide when you:
+						<ol className='mb-5 list-disc space-y-4 pl-[25px] text-xl'>
+							<li className='mb-2'>apply for or subscribe to our Services;</li>
+							<li className='mb-2'>create an account on our Website;</li>
+							<li className='mb-2'>request marketing to be sent to you;</li>
+							<li className='mb-2'>[enter a competition, promotion or survey; ]or</li>
+							<li className='mb-2'>give us feedback or contact us. </li>
 						</ol>
 					</li>
-					<li>
-						<strong>Right of portability</strong>. You have the right, in certain circumstances, to
-						receive a copy of the personal information you have provided to us in a structured,
-						commonly used, machine-readable format that supports re-use, or to request the transfer of
-						your personal data to another person.
+					<li className='mb-2'>
+						Automated technologies or interactions. As you interact with our Website and Services, we
+						will automatically collect Technical Data about your equipment, browsing actions and
+						patterns. We collect this Personal Data by using cookies and other similar technologies.
+						Please see our Cookie Policy https://www.shuttle.rs/cookies for further details.
 					</li>
-					<li>
-						<strong>Right to rectification</strong>. You have the right to obtain rectification of any
-						inaccurate or incomplete personal information we hold about you without undue delay.
-					</li>
-					<li>
-						<strong>Right to erasure</strong>. You have the right, in some circumstances, to require us
-						to erase your personal information without undue delay if the continued processing of that
-						personal information is not justified.
-					</li>
-					<li>
-						<strong>Right to restriction</strong>. You have the right, in some circumstances, to
-						require us to limit the purposes for which we process your personal information if the
-						continued processing of the personal information in this way is not justified, such as
-						where the accuracy of the personal information is contested by you.
-					</li>
-					<li>
-						<strong>Right to withdraw consent</strong>. There are certain circumstances where we
-						require your consent to process your personal information. In these instances, and if you
-						have provided consent, you have the right to withdraw your consent. If you withdraw your
-						consent, this will not affect the lawfulness of our use of your personal information before
-						your withdrawal.
+
+					<li className='mb-2'>
+						Third parties or publicly available sources. We will receive Personal Data about you from
+						various third parties as set out below:{' '}
+						<ol className='mb-5 list-disc space-y-4 pl-[25px] text-xl'>
+							<li className='mb-2'>
+								Identity Data and Profile Data when you log in using your Github account.
+							</li>
+							<li className='mb-2'>
+								Contact, Financial and Transaction Data from providers of technical payment and
+								delivery services, such as Stripe Inc. based outside the UK. Stripe’s privacy
+								policy is available here: https://stripe.com/en-fi/privacy.
+							</li>
+						</ol>
 					</li>
 				</ol>
-				<p className='mb-5 text-xl'>
-					<strong>
-						You also have the right to object to any processing based on our legitimate interests where
-						there are grounds relating to your particular situation. There may be compelling reasons
-						for continuing to process your personal information, and we will assess and inform you if
-						that is the case. You can object to marketing activities for any reason.
-					</strong>
-				</p>
-				<p className='mb-5 text-xl'>
-					You also have the right to lodge a complaint to your local data protection authority. If you
-					are based in the European Union, information about how to contact your local data protection
-					authority is available{' '}
-					<a
-						className='underline'
-						href='http://ec.europa.eu/justice/data-protection/bodies/authorities/index_en.htm'
-					>
-						here
-					</a>
-					. If you are based in the UK or Switzerland, your local data protection authorities are the UK
-					Information Commissioner&apos;s Office (
-					<a className='text-[#D8D8D8] underline' href='https://ico.org.uk/global/contact-us/'>
-						https://ico.org.uk/global/contact-us/
-					</a>
-					) and the Swiss Federal Data Protection and Information Commissioner (
-					<a
-						className='text-[#D8D8D8] underline'
-						href='https://www.edoeb.admin.ch/edoeb/en/home/deredoeb/kontakt.html'
-					>
-						https://www.edoeb.admin.ch/edoeb/en/home/deredoeb/kontakt.html
-					</a>
-					).
-				</p>
-				<p className='mb-5 text-xl'>
-					If you wish to exercise one of these rights, please contact us using the contact details at the
-					end of these Privacy Disclosures.
-				</p>
-				<p className='mb-5 text-xl'>
-					Due to the confidential nature of data processing we may ask you to provide proof of identity
-					when exercising the above rights. This can be done by providing a scanned copy of a valid
-					identity document or a signed photocopy of a valid identity document.
-				</p>
-			</div>
 
-			<div className='mb-10 mt-10 text-xl'>
-				<h2 className='mb-5 text-[32px] font-bold text-[#C2C2C2]'>
-					9. Cookies and similar technologies used on our European Services
-				</h2>
+				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>4. How we use your Personal Data</h2>
+
 				<p className='mb-5 text-xl'>
-					Our European Services uses cookies and similar technologies such as pixels and Local Storage
-					Objects (LSOs) like HTML5 (together &ldquo;cookies&rdquo;) to distinguish you from other users
-					of our European Services. This helps us to provide you with a good experience when you browse
-					our European Services and also allows us to monitor and analyse how you use and interact with
-					our European Services so that we can continue to improve our European Services.
+					We will only use your Personal Data when the law allows us to. Most commonly, we will use your
+					Personal Data in the following circumstances:
 				</p>
-				<p className='mb-5 text-xl'>
-					Cookies are pieces of code that allow for personalization of our European Services experience
-					by saving your information such as user ID and other preferences. A cookie is a small data file
-					that we transfer to your computer&rsquo;s hard disk for record-keeping purposes.
-				</p>
-				<p className='mb-5 text-xl'>We use the following types of cookies:</p>
-				<ol className='mb-5 ml-6 list-decimal'>
-					<li>
-						<strong>Strictly necessary cookies</strong>. These are cookies that are required for the
-						operation of our European Services. They include, for example, cookies that enable you to
-						log into secure areas of our European Services.
+
+				<ol className='mb-5 list-disc space-y-4 pl-[25px] text-xl'>
+					<li className='mb-2'>
+						where we need to perform the contract we are about to enter into or have entered into with
+						you;
+					</li>
+					<li className='mb-2'>
+						where it is necessary for our legitimate interests (or those of a third party) and your
+						interests and fundamental rights do not override those interest;
+					</li>
+					<li className='mb-2'>where we need to comply with a legal obligation; or</li>
+					<li className='mb-2'>
+						we may rely on legitimate interest for any information used for marketing purposes. You may
+						remove consent and unsubscribe from these communications at any time.
 					</li>
 				</ol>
-				<p className='mb-5 text-xl'>
-					Please see&nbsp;<strong>Annex 3</strong>&nbsp;for more information about the cookies we use on
-					the European Services.
-				</p>
-				<p className='mb-5 text-xl'>
-					Most browsers also allow you to change your cookie settings to block certain cookies. Depending
-					on your mobile device and operating system, you may not be able to delete or block all cookies.
-					Please note that if you choose to refuse all cookies you may not be able to use the full
-					functionality of our European Services. These settings will typically be found in the
-					&ldquo;options&rdquo; or &ldquo;preferences&rdquo; menu of your browser. In order to understand
-					these settings, the following links may be helpful, otherwise you should use the
-					&ldquo;Help&rdquo; option in your browser for more details.
-				</p>
-				<ul className='mb-5 ml-6 list-disc text-[#D8D8D8]'>
-					<li>
-						<a
-							className='underline'
-							href='https://support.microsoft.com/en-gb/help/278835/how-to-delete-cookie-files-in-internet-explorer'
-						>
-							Cookie settings in Internet Explorer
-						</a>
-					</li>
-					<li>
-						<a className='underline' href='http://support.mozilla.org/en-US/kb/cookies'>
-							Cookie settings in Firefox
-						</a>
-					</li>
-					<li>
-						<a className='underline' href='https://support.google.com/chrome/answer/95647?hl=en'>
-							Cookie settings in Chrome
-						</a>
-					</li>
-					<li>
-						<a
-							className='underline'
-							href='https://support.apple.com/en-gb/guide/safari/manage-cookies-and-website-data-sfri11471/mac'
-						>
-							Cookies settings in Safari web
-						</a>{' '}
-						and{' '}
-						<a className='underline' href='https://support.apple.com/en-gb/HT201265'>
-							iOS
-						</a>
-					</li>
-				</ul>
-				<p className='mb-5 text-xl'>
-					If you would like to find out more about cookies and other similar technologies, please visit{' '}
-					<a href='http://www.allaboutcookies.org/' className='text-[#D8D8D8] underline'>
-						allaboutcookies.org
-					</a>
-					.
-				</p>
-				<p className='mb-5 text-xl'>
-					Please note that deleting or blocking cookies may not be effective for all types of tracking
-					technologies, such as Local Storage Objects (LSOs) like HTML5.
-				</p>
-			</div>
 
-			<div className='mb-10 mt-10 text-xl'>
-				<h2 className='mb-5 text-[32px] font-bold text-[#C2C2C2]'>
-					10. Tracking technologies used in our emails
-				</h2>
+				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>
+					Purposes for which we will use your Personal Data
+				</h3>
+
 				<p className='mb-5 text-xl'>
-					Our emails may contain tracking pixels that identify if and when you have opened an email that
-					we have sent you, how many times you have read it and whether you have clicked on any links in
-					that email. This helps us measure the effectiveness of our marketing email campaigns, make the
-					emails we send to you more relevant to your interests and to understand if you have opened and
-					read any important administrative emails we might send you.
+					We have set out below, in a table format, a description of all the ways we plan to use your
+					Personal Data, and which of the legal bases we rely on to do so. We have also identified what
+					our legitimate interests are where appropriate.
 				</p>
+
 				<p className='mb-5 text-xl'>
-					Most popular email clients will allow you to block these pixels by disabling certain external
-					images in emails. You can do this through the settings on your email client – these generally
-					give you the option of choosing whether emails will display &ldquo;remote images&rdquo;,
-					&ldquo;remote content&rdquo; or &ldquo;images&rdquo; by default.
-				</p>
-				<p className='mb-5 text-xl'>
-					Some browsers also give you the option of downloading and installing extensions that block
-					pixels and other tracking technologies.
+					Note that we may process your Personal Data for more than one lawful ground depending on the
+					specific purpose for which we are using your data. Please contact us if you need details about
+					the specific legal ground we are relying on to process your Personal Data where more than one
+					ground has been set out in the table below.
 				</p>
 			</div>
 			<div className='mb-10 mt-10 text-xl'>
-				<h2 className='mb-12 text-[44px] font-bold text-[#C2C2C2]'>
-					Annex 1 – Personal information you provide to us
-				</h2>
-
 				<table className='mb-20 table-fixed text-xs lg:text-sm'>
 					<thead>
 						<tr className='text-left text-[#C2C2C2] children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<th>Category of Personal Information</th>
-							<th>How we may use the Personal Information</th>
-							<th>Legal Bases for Processing</th>
-							<th>Recipients of Personal Information</th>
+							<th>Purpose/Activity</th>
+							<th>Type of data</th>
+							<th>Lawful basis for processing including basis of legitimate interest</th>
 						</tr>
 					</thead>
 
 					<tbody>
 						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<td>Contact information, such as first name, last name and email address.</td>
+							<td>To register you as a new user and create your account </td>
 							<td>
-								We may use this information to set up and authenticate your account on the Service.
+								(a) Identity <br />
+								(b) Contact
 							</td>
-							<td>
-								The processing is necessary for the performance of a contract with you and to take
-								steps prior to entering into a contract with you, namely our Terms of Service.
-							</td>
-							<td>
-								We may share this information with the following service providers through the
-								provision of the Service: Auth0, Amazon Web Services and Notion.
-							</td>
-						</tr>
-						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<td></td>
-							<td>
-								We may use this information to communicate with you, including sending
-								service-related communications.
-							</td>
-							<td>
-								The processing is necessary for the performance of a contract with you, namely our
-								Terms of Service.
-							</td>
-							<td></td>
-						</tr>
-						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<td></td>
-							<td>
-								We may use this information to deal with enquiries and complaints made by or about
-								you relating to the Service.
-							</td>
-							<td>
-								The processing is necessary for our legitimate interests, namely administering the
-								Service, and for communicating with you effectively to respond to your queries or
-								complaints.
-							</td>
-							<td></td>
-						</tr>
-						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<td></td>
-							<td>
-								We may use this information in connection with providing you with marketing
-								communications in accordance with your preferences.
-							</td>
-							<td>
-								We will only use your personal information in this way to the extent you have given
-								us consent to do so.
-							</td>
-							<td></td>
+							<td>Performance of a contract with you</td>
 						</tr>
 						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
 							<td>
-								Your registration / account information such as your full name, email, and
-								password.
+								To process and delivery your order including: <br />
+								(a) Manage payments, fees and charges
+								<br />
+								(b) Collect and recover money owed to us
 							</td>
-							<td>We may use this information to create your account on the Service.</td>
-							<td>The processing is necessary for the performance of a contract with you.</td>
 							<td>
-								We may share this information with the following service providers through the
-								provision of the Service: Auth0, Amazon Web Services, Snowflake, Dbt and Lightdash.
+								(a) Identify <br />
+								(b) Contact <br />
+								(c) Financial <br />
+								(d) Transaction <br />
+								(e) Marketing and Communications
+							</td>
+							<td>
+								(a) Performance of a contract with you <br />
+								(b) Necessary for our legitimate interests (to recover debts due to us)
 							</td>
 						</tr>
 						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<td></td>
 							<td>
-								We use this information to deal with enquiries and complaints made by or about you
-								relating to the Service.
+								To manage our relationship with you which will include: <br />
+								(a) Notifying you about any changes to our Terms or this Privacy Policy; <br />
+								(b) Notifying you about changes to our services
+								<br />
+								(c) Respond to any questions or issues you may have
+								<br />
+								(d) Asking you to leave a review or take a survey
 							</td>
 							<td>
-								The processing is necessary for our legitimate interests, namely for communicating
-								with our members effectively to respond to any queries or complaints.
-							</td>
-							<td></td>
-						</tr>
-						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<td></td>
-							<td>
-								We may use this information to monitor and improve the Service and business,
-								resolve issues and to inform the development of new products and services.
+								(a) Identity <br />
+								(b) Contact <br />
+								(c) Profile <br />
+								(d) Marketing and Communications
 							</td>
 							<td>
-								The processing is necessary for our legitimate interests, namely to monitor and
-								resolve issues with the Service and to improve the Service generally.
-							</td>
-							<td></td>
-						</tr>
-						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<td>
-								Payment transaction information. When you make a purchase, we may collect
-								information such as your billing address and other information such as date and
-								time of your transaction.
-							</td>
-							<td>We may use this information to process your orders through the Service.</td>
-							<td>The processing is necessary for the performance of a contract.</td>
-							<td>
-								We may share this information with the following service providers through the
-								provision of the Service: Stripe, and Amazon Web Services.
+								(a) Performance of a contract with you <br /> (b) Necessary to comply with a legal
+								obligation <br /> (c) Necessary for our legitimate interests (to keep our records
+								updated and to study how our users use our Services)
 							</td>
 						</tr>
 						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<td></td>
+							<td>To enable you to complete a survey</td>
 							<td>
-								We may use this information to verify your identity in connection with the
-								detection and prevention of fraud or financial crime.
+								(a) Identity <br />
+								(b) Contact <br />
+								(c) Profile <br />
+								(d) Usage <br />
+								(e) Marketing and Communications
 							</td>
 							<td>
-								The processing is necessary for our and third partiers&apos; legitimate interests,
-								namely the detection and prevention of fraud and financial crime.
-							</td>
-							<td></td>
-						</tr>
-						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<td>
-								Chat, comments and opinions. When you contact us directly, e.g. by email or phone
-								we will record your comments and opinions.
-							</td>
-							<td>
-								We may use this information to verify your identity in connection with the
-								detection and prevention of fraud or financial crime.
-							</td>
-							<td>
-								The processing is necessary for our legitimate interests, namely communicating with
-								you and responding to queries, complaints and concerns.
-							</td>
-							<td>
-								We may share this information with the following service providers through the
-								provision of the Service: Discord, Google Gsuite and Notion.
+								(a) Performance of a contract with you <br />
+								(b) Necessary for our legitimate interests (to study how our user s use our
+								Services, to develop them and grow our business)
 							</td>
 						</tr>
 						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<td></td>
-							<td>We may use this information to improve the Service.</td>
 							<td>
-								The processing is necessary for our legitimate interests (to develop and improve
-								our service).
-							</td>
-							<td></td>
-						</tr>
-						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<td>
-								Information received from third parties, such as social networks. If you interact
-								with us through a social network, we may receive information from the social
-								network such as your name, profile information, and any other information you
-								permit the social network to share with third parties. We use single sign-on
-								(&quot;SSO&quot;) such as GitHub to allow a user to authenticate their account
-								using one set of login information. The data we receive is dependent on your
-								privacy settings with the social network.
+								To administer and protect our business and our Website (including troubleshooting,
+								data analysis, testing, system maintenance, support, reporting and hosting of data)
 							</td>
 							<td>
-								We may use this information to reshare content created through the use of the
-								Service
+								(a) Identity <br />
+								(b) Contact <br />
+								(c) Technical
 							</td>
 							<td>
-								The processing is necessary for our legitimate interests (to develop our service
-								and inform our marketing strategy)
-							</td>
-							<td>
-								We may share this information with the following service providers through the
-								provision of the Service: Auth0, Notion and Discord.
+								(a) Necessary for our legitimate interests (for running our business, provision of
+								administration and IT services, network security, to prevent fraud and in the
+								context of a business reorganisation or group restructuring exercise) <br />
+								(b) Necessary to comply with a legal obligation
 							</td>
 						</tr>
 						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<td></td>
+							<td>To deliver relevant Website content </td>
 							<td>
-								We may use this information to authenticate you and allow you to access the
-								Service.
-							</td>
-							<td>The processing is necessary for the performance of a contract with you.</td>
-							<td></td>
-						</tr>
-						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<td>
-								Your preferences, such as preferences set for notifications, marketing
-								communications, how the Service is displayed and the active functionalities on the
-								Service.
+								(a) Identity <br />
+								(b) Contact <br />
+								(c) Profile <br />
+								(d) Usage <br />
+								(e) Marketing and Communications <br />
+								(f) Technical
 							</td>
 							<td>
-								We use this information to provide notifications, send news, alerts and marketing
-								communications and provide the Service in accordance with your choices.
-							</td>
-							<td>
-								The processing is necessary for our legitimate interest, namely ensuring the user
-								receives the correct marketing and other communications, and that this is displayed
-								in accordance with the user&apos;s preferences.
-							</td>
-							<td>
-								We may share this information with the following service providers through the
-								provision of the Service: emailOctopus and Buttondown.
+								Necessary for our legitimate interests (to study how our user s use our Services,
+								to develop them, to grow our business and to inform our marketing strategy)
 							</td>
 						</tr>
 						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<td></td>
 							<td>
-								We use this information to ensure that we comply with our legal obligation to send
-								only those marketing communications to which you have consented.
+								To use data analytics to improve our Website, Services, marketing, user experiences
 							</td>
 							<td>
-								The processing is necessary for compliance with a legal obligation to which we are
-								subject.
+								(a) Technical <br />
+								(b) Usage
 							</td>
-							<td></td>
+							<td>
+								Necessary for our legitimate interests (to define types of users for our Services,
+								to keep our Website updated and relevant, to develop our business and to inform our
+								marketing strategy)
+							</td>
+						</tr>
+						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
+							<td>
+								To make suggestions and recommendations to you about goods or services that may be
+								of interest to you
+							</td>
+							<td>
+								(a) Identity <br />
+								(b) Contact <br />
+								(c) Technical <br />
+								(d) Usage <br />
+								(e) Profile <br />
+								(f) Marketing and Communications
+							</td>
+							<td>
+								Necessary for our legitimate interests (to develop our products/services and grow
+								our business)
+							</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
+
 			<div className='mb-10 mt-10 text-xl'>
-				<h2 className='mb-12 text-[44px] font-bold text-[#C2C2C2]'>
-					Annex 2 – Personal information collected automatically
-				</h2>
+				<p className='mb-5 text-xl'>In this Privacy Policy:</p>
 
-				<table className='mb-20 table-fixed text-xs lg:text-sm'>
-					<thead>
-						<tr className='text-left text-[#C2C2C2] children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<th>Category of Personal Information</th>
-							<th>How we may use the Personal Information</th>
-							<th>Legal Bases for Processing</th>
-							<th>Recipients of Personal Information</th>
-						</tr>
-					</thead>
+				<ol className='mb-5 list-disc space-y-4 pl-[25px] text-xl'>
+					<li className='mb-2'>
+						Legitimate Interest means the interest of our business in conducting and managing our
+						business to enable us to give you the best service/product and the best and most secure
+						experience. We make sure we consider and balance any potential impact on you (both positive
+						and negative) and your rights before we process your Personal Data for our legitimate
+						interests. We do not use your Personal Data for activities where our interests are
+						overridden by the impact on you (unless we have your consent or are otherwise required or
+						permitted to by law). You can obtain further information about how we assess our legitimate
+						interests against any potential impact on you in respect of specific activities by
+						contacting us.
+					</li>
+					<li className='mb-2'>
+						Performance of Contract means processing your data where it is necessary for the
+						performance of a contract to which you are a party or to take steps at your request before
+						entering into such a contract.
+					</li>
+					<li className='mb-2'>
+						Comply with a legal obligation means processing your Personal Data where it is necessary
+						for compliance with a legal obligation that we are subject to.
+					</li>
+				</ol>
 
-					<tbody>
-						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<td>
-								Approximate location information. Other than information you choose to provide to
-								us, we do not collect information about your precise location. Your device’s IP
-								address may however help us determine an approximate location.
-							</td>
-							<td>
-								We may use information you provide to us about your location to monitor and detect
-								fraud or suspicious activity in relation to your Shuttle account.
-							</td>
-							<td>
-								The processing is necessary for our legitimate interests, namely to protect our
-								business and your account from fraud and other illegal activities.
-							</td>
-							<td>
-								Approximate location information: We may share this information with the following
-								service providers through the provision of the Service: Fathom Analytics, Mintlify.
-							</td>
-						</tr>
-						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<td>
-								Information about how you access and use the Service. For example, how frequently
-								you access the Service, the time you access the Service and how long you use it
-								for, the approximate location that you access the Service from, the site from which
-								you came and the site to which you are going when you leave our website, the
-								website pages you visit, the links you click, whether you open emails or click the
-								links contained in emails, whether you access the Service from multiple devices,
-								and other actions you take on the Service.
-							</td>
-							<td>
-								We may use information about how you use and connect to the Service to present the
-								Service to you on your device.
-							</td>
-							<td>
-								The processing is necessary for our legitimate interests, namely to tailor the
-								Service to the user.
-							</td>
-							<td>
-								Information about how you access and use the Service. We may share this information
-								with the following service providers through the provision of the Service: Fathom
-								Analytics, Mintlify
-							</td>
-						</tr>
-						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<td></td>
-							<td>
-								We may use this information to monitor and improve the Service and business,
-								resolve issues and to inform the development of new products and services.
-							</td>
-							<td>
-								The processing is necessary for our legitimate interests, namely to monitor and
-								resolve issues with the Service and to improve the Service generally.
-							</td>
-							<td></td>
-						</tr>
-						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<td>
-								Log files and information about your device. We also collect information about the
-								tablet, smartphone or other electronic device you use to connect to the Service.
-								This information can include details about the, operating systems, browsers and
-								applications connected to the Service through the device and your IP address.
-							</td>
-							<td>
-								We may use information about how you use and connect to the Service to present the
-								Service to you on your device.
-							</td>
-							<td>
-								The processing is necessary for our legitimate interests, namely to tailor the
-								Service to the user.
-							</td>
-							<td>
-								Log files and information about your device. We may share this information with the
-								following service providers through the provision of the Service: Amazon Web
-								Services, Fathom Analytics, Mintlify
-							</td>
-						</tr>
-						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<td></td>
-							<td>
-								We may use this information to monitor and improve the Service and business,
-								resolve issues and to inform the development of new products and services.
-							</td>
-							<td>
-								The processing is necessary for compliance with a legal obligation to which we are
-								subject.
-							</td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div className='mb-10 mt-10 text-xl'>
-				<h2 className='mb-12 text-[44px] font-bold text-[#C2C2C2]'>Annex 3 - Cookies</h2>
+				<p className='mb-5 text-xl'>
+					If you reside or are using our Website or Services in a country or region in which data
+					protection laws require our processing of some or all Personal Data only with your consent,
+					your acceptance of our Terms and this Privacy Policy when you signed up to use our Services
+					will constitute your consent to the processing of your Personal Data for all the purposes set
+					out in this Privacy Policy. You may revoke consent at any time by contacting us at
+					hello@shuttle.rs. However, if you revoke consent, you may not be able to use our Services.
+				</p>
 
-				<table className='mb-20 table-fixed text-xs lg:text-sm'>
-					<thead>
-						<tr className='text-left text-[#C2C2C2] children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<th>Cookie Name</th>
-							<th>Type of cookie</th>
-							<th>How long does the cookie stay on my device?</th>
-							<th>Purpose of the cookie</th>
-						</tr>
-					</thead>
+				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Promotional offers from us</h3>
 
-					<tbody>
-						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<td>a0:session</td>
-							<td>Strictly necessary</td>
-							<td>1 Day</td>
-							<td>Authentication Purposes.</td>
-						</tr>
-						<tr className='align-top children:w-1/4 children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-							<td>a0:state</td>
-							<td>Strictly necessary</td>
-							<td>2 Hours</td>
-							<td>Authentication Purposes.</td>
-						</tr>
-					</tbody>
-				</table>
+				<p className='mb-5 text-xl'>
+					We may use your Identity, Contact, Technical, Usage and Profile Data to form a view on what we
+					think you may want or need, or what may be of interest to you. This is how we decide which
+					products, services and offers may be relevant for you (we call this marketing).
+				</p>
+
+				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Third-party marketing</h3>
+
+				<p className='mb-5 text-xl'>
+					We will get your express opt-in consent before we share your Personal Data with any third party
+					for marketing purposes.
+				</p>
+
+				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Opting out</h3>
+
+				<p className='mb-5 text-xl'>
+					You can ask us or third parties to stop sending you marketing messages at any time by
+					contacting us at any time.
+				</p>
+
+				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Cookies</h3>
+
+				<p className='mb-5 text-xl'>
+					You can set your browser to refuse all or some browser cookies, or to alert you when websites
+					set or access cookies. If you disable or refuse cookies, please note that some parts of this
+					website may become inaccessible or not function properly. For more information about the
+					cookies we use, please see our Cookies Policy https://www.shuttle.rs/cookies .
+				</p>
+
+				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Change of purpose</h3>
+
+				<p className='mb-5 text-xl'>
+					We will only use your Personal Data for the purposes for which we collected it, unless we
+					reasonably consider that we need to use it for another reason and that reason is compatible
+					with the original purpose. If you wish to get an explanation as to how the processing for the
+					new purpose is compatible with the original purpose, please contact us.
+				</p>
+				<p className='mb-5 text-xl'>
+					If we need to use your Personal Data for an unrelated purpose, we will notify you and we will
+					explain the legal basis which allows us to do so.
+				</p>
+				<p className='mb-5 text-xl'>
+					Please note that we may process your Personal Data without your knowledge or consent, in
+					compliance with the above rules, where this is required or permitted by law.
+				</p>
+
+				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>5. Disclosures of your Personal Data</h2>
+
+				<p className='mb-5 text-xl'>
+					We may share your Personal Data with the parties set out below for the purposes set out in the
+					table Purposes for which we will use your Personal Data above:
+				</p>
+
+				<ol className='mb-5 list-disc space-y-4 pl-[25px] text-xl'>
+					<li className='mb-2'>
+						Service providers acting as processors based in the UK and US who provide hosting and
+						server co-location services, authentication services, communications and content delivery
+						networks (CDNs), billing and payment processing services, web and mobile analytics, email
+						and communication distribution and monitoring services, session or activity recording
+						services, call recording, analytics and transcription services, event production and
+						hosting services, performance measurement, data optimization and marketing services, social
+						and advertising networks, content, lead generating and data enrichment providers, email,
+						video conferencing solutions, support and customer relation management systems, third-party
+						customer support providers, and legal, compliance and financial advisors and auditors.
+					</li>
+					<li className='mb-2'>
+						Professional advisers including lawyers, bankers, auditors and insurers based in the UK and
+						Israel who provide consultancy, banking, legal, insurance and accounting services.
+					</li>
+					<li className='mb-2'>
+						HM Revenue & Customs, regulators and other authorities based in the United Kingdom or in
+						your jurisdiction.
+					</li>
+					<li className='mb-2'>
+						Where required by law or a court of competent jurisdiction, or to protect ourselves and our
+						business in the event of a claim against us.
+					</li>
+					<li className='mb-2'>
+						Third parties to whom we may choose to sell, transfer or merge parts of our business or our
+						assets. Alternatively, we may seek to acquire other businesses or merge with them. If a
+						change happens to our business, then the new owners may use your Personal Data in the same
+						way as set out in this Privacy Policy.
+					</li>
+					<li className='mb-2'>
+						We require all third parties to respect the security of your Personal Data and to treat it
+						in accordance with the law. We do not allow our third-party service providers to use your
+						Personal Data for their own purposes and only permit them to process your Personal Data for
+						specified purposes and in accordance with our instructions.
+					</li>
+				</ol>
+
+				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>6. International transfers</h2>
+
+				<p className='mb-5 text-xl'>
+					Our legal advisors are located in Israel, a country which offers adequate level of protection
+					for personal data of individuals located in the UK and the European Economic Area. We transfer
+					data from the UK or EEA to Israel on this basis.
+				</p>
+
+				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>7. Data security</h2>
+
+				<p className='mb-5 text-xl'>
+					We have put in place appropriate security measures to prevent your Personal Data from being
+					accidentally lost, used or accessed in an unauthorised way, altered or disclosed. In addition,
+					we limit access to your Personal Data to those employees, agents, contractors and other third
+					parties who have a business need to know. They will only process your Personal Data on our
+					instructions and they are subject to a duty of confidentiality.
+				</p>
+
+				<p className='mb-5 text-xl'>
+					We have put in place procedures to deal with any suspected Personal Data breach and will notify
+					you and any applicable regulator of a breach where we are legally required to do so.
+				</p>
+
+				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>8. Data retention</h2>
+
+				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>
+					How long will you use my Personal Data for?
+				</h3>
+
+				<p className='mb-5 text-xl'>
+					We will only retain your Personal Data for as long as reasonably necessary to fulfil the
+					purposes we collected it for, including for the purposes of satisfying any legal, regulatory,
+					tax, accounting or reporting requirements. We may retain your Personal Data for a longer period
+					in the event of a complaint or if we reasonably believe there is a prospect of litigation in
+					respect to our relationship with you.
+				</p>
+				<p className='mb-5 text-xl'>
+					To determine the appropriate retention period for Personal Data, we consider the amount, nature
+					and sensitivity of the Personal Data, the potential risk of harm from unauthorised use or
+					disclosure of your Personal Data, the purposes for which we process your Personal Data and
+					whether we can achieve those purposes through other means, and the applicable legal,
+					regulatory, tax, accounting or other requirements.
+				</p>
+				<p className='mb-5 text-xl'>
+					In some circumstances we will anonymise your Personal Data (so that it can no longer be
+					associated with you) for research or statistical purposes, in which case we may use this
+					information indefinitely without further notice to you.
+				</p>
+
+				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>9. Your legal rights</h2>
+
+				<p className='mb-5 text-xl'>Under certain circumstances, by law you have the right to:</p>
+
+				<ol className='mb-5 list-disc space-y-4 pl-[25px] text-xl'>
+					<li className='mb-2'>
+						Request access to personal information (commonly known as a “data subject access request”).
+						This enables you to receive a copy of the personal information we hold about you and to
+						check that we are lawfully processing it.
+					</li>
+					<li className='mb-2'>
+						Request correction of the personal information that we hold about you. This enables you to
+						have any incomplete or inaccurate information we hold about you corrected.
+					</li>
+					<li className='mb-2'>
+						Request erasure of personal information. This enables you to ask us to delete or remove
+						personal information where there is no good reason for us to continue processing it. You
+						also have the right to ask us to delete or remove personal information where you have
+						exercised your right to object to processing (see below).
+					</li>
+					<li className='mb-2'>
+						Object to the processing of personal information where we are relying on a legitimate
+						interest (or those of a third party) and there is something about your particular situation
+						which makes you want to object to processing on this ground. You also have the right to
+						object where we process personal information for direct marketing purposes.
+					</li>
+					<li className='mb-2'>
+						Request restriction of processing of personal information. This enables you to ask us to
+						suspend the processing of personal information about you, for example, if you want us to
+						establish its accuracy or the reason for processing it.
+					</li>
+					<li className='mb-2'>
+						Request the transfer of your Personal Data to you or to a third party. We will provide to
+						you, or a third party you have chosen, your Personal Data in a structured, commonly used,
+						machine-readable format. Note that this right only applies to automated information which
+						you initially provided consent for us to use or where we used the information to perform a
+						contract with you.
+					</li>
+					<li className='mb-2'>
+						Withdraw consent at any time where we are relying on consent to process your Personal Data.
+						However, this will not affect the lawfulness of any processing carried out before you
+						withdraw your consent. If you withdraw your consent, we may not be able to provide certain
+						products or services to you. We will advise you if this is the case at the time you
+						withdraw your consent.
+					</li>
+				</ol>
+
+				<p className='mb-5 text-xl'>
+					If you wish to exercise any of the rights set out above, please contact us at hello@shuttle.rs
+				</p>
+
+				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>No fee usually required</h3>
+
+				<p className='mb-5 text-xl'>
+					You will not have to pay a fee to access your Personal Data (or to exercise any of the other
+					rights). However, we may charge a reasonable fee if your request is clearly unfounded,
+					repetitive or excessive. Alternatively, we could refuse to comply with your request in these
+					circumstances.
+				</p>
+
+				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>What we may need from you</h3>
+
+				<p className='mb-5 text-xl'>
+					We may need to request specific information from you to help us confirm your identity and
+					ensure your right to access your Personal Data (or to exercise any of your other rights). This
+					is a security measure to ensure that Personal Data is not disclosed to any person who has no
+					right to receive it. We may also contact you to ask you for further information in relation to
+					your request to speed up our response.
+				</p>
+
+				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Time limit to respond</h3>
+
+				<p className='mb-5 text-xl'>
+					We try to respond to all legitimate requests within one month. Occasionally it could take us
+					longer than a month if your request is particularly complex or you have made a number of
+					requests. In this case, we will notify you and keep you updated.
+				</p>
 			</div>
 		</main>
 	)
