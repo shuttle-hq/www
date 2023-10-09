@@ -77,6 +77,18 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 							>
 								Acceptable Use Policy
 							</Link>
+							<Link
+								href='/cookies'
+								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+							>
+								Cookie Policy
+							</Link>
+							<Link
+								href='/dpa'
+								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+							>
+								Data Processing Addendum
+							</Link>
 						</div>
 					</div>
 					<div className='grid grid-cols-2 divide-x divide-black/10 text-xl dark:divide-white/10'>
