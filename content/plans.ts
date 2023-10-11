@@ -1,5 +1,5 @@
 import { PlanProps } from 'components/sections/Pricing/Plan'
-import { CONTACT_US_URI } from 'lib/constants'
+import { CONTACT_US_URI, GET_STARTED_URI } from 'lib/constants'
 
 export const Plans: PlanProps[] = [
 	{
@@ -78,7 +78,7 @@ export const Plans: PlanProps[] = [
 				feature: 'Enhanced support',
 			},
 		],
-		url: CONTACT_US_URI,
+		url: GET_STARTED_URI,
 		textGradient:
 			'linear-gradient(70deg, #FC540C -115.42%, rgba(255, 215, 111, 0.72) 61.13%, #38D4E9 291.19%)',
 		cta: 'Get started',

@@ -3,10 +3,9 @@ import clsx from 'clsx'
 import { Button } from 'components/elements'
 import { ReactElement, useState } from 'react'
 import va from '@vercel/analytics'
-import { CONTACT_US_URI } from 'lib/constants'
+import { CONTACT_US_URI, GET_STARTED_URI } from 'lib/constants'
 
-
-type TierName = 'community' | 'pro' | 'team';
+type TierName = 'community' | 'pro' | 'team'
 interface PricingTier {
 	name: TierName
 	displayName: string
@@ -22,14 +21,13 @@ interface PricingTableRow {
 }
 type PricingTableCell = string | boolean
 
-
 const TIERS: PricingTier[] = [
 	{
 		name: 'community',
 		displayName: 'Community',
 		desc: 'Everything you need to run your hobby projects, on us. Get projects deployed in minutes.',
 		cta: 'Start deploying',
-		ctaLink: 'https://console.shuttle.rs'
+		ctaLink: 'https://console.shuttle.rs',
 	},
 	{
 		name: 'pro',
@@ -37,7 +35,7 @@ const TIERS: PricingTier[] = [
 		desc: 'Raise limits and get access to custom domains, team features, and more.',
 		cta: 'Get Started',
 		ctaPrimaryButton: true,
-		ctaLink: CONTACT_US_URI,
+		ctaLink: GET_STARTED_URI,
 	},
 	{
 		name: 'team',
@@ -46,101 +44,101 @@ const TIERS: PricingTier[] = [
 		cta: 'Contact us',
 		ctaLink: CONTACT_US_URI,
 	},
-];
+]
 
 const PRICING_ROWS: PricingTableRow[] = [
 	{
 		desc: 'Max Team Size',
 		values: {
-			'community': '1',
-			'pro': '5',
-			'team': '∞',
+			community: '1',
+			pro: '5',
+			team: '∞',
 		},
 	},
 	{
 		desc: 'Number of Projects',
 		values: {
-			'community': '3',
-			'pro': '15',
-			'team': '∞',
+			community: '3',
+			pro: '15',
+			team: '∞',
 		},
 	},
 	{
 		desc: 'Custom Domains',
 		desc2: '(with SSL)',
 		values: {
-			'community': false,
-			'pro': '1 per project',
-			'team': '∞',
+			community: false,
+			pro: '1 per project',
+			team: '∞',
 		},
 	},
 	{
 		desc: 'Shared DB Size',
 		values: {
-			'community': '1 GB',
-			'pro': '10 GB',
-			'team': 'Custom',
+			community: '1 GB',
+			pro: '10 GB',
+			team: 'Custom',
 		},
 	},
 	{
 		desc: 'Add-on: Dedicated Database',
 		desc2: '(AWS RDS)',
 		values: {
-			'community': false,
-			'pro': 'Custom',
-			'team': 'Custom',
+			community: false,
+			pro: 'Custom',
+			team: 'Custom',
 		},
 	},
 	{
 		desc: 'Log Retention',
 		values: {
-			'community': '1 day',
-			'pro': '7 days',
-			'team': '28 days',
+			community: '1 day',
+			pro: '7 days',
+			team: '28 days',
 		},
 	},
 	{
 		desc: 'Support',
 		values: {
-			'community': 'Community',
-			'pro': 'Enhanced',
-			'team': 'Dedicated',
+			community: 'Community',
+			pro: 'Enhanced',
+			team: 'Dedicated',
 		},
 	},
 	{
 		desc: 'Free Network egress',
 		desc2: 'per day',
 		values: {
-			'community': '1 GB',
-			'pro': '10 GB',
-			'team': 'Custom',
+			community: '1 GB',
+			pro: '10 GB',
+			team: 'Custom',
 		},
 	},
 	{
 		desc: 'Max Deployments',
 		desc2: 'per day',
 		values: {
-			'community': '20',
-			'pro': 'Custom',
-			'team': 'Custom',
+			community: '20',
+			pro: 'Custom',
+			team: 'Custom',
 		},
 	},
 	{
 		desc: 'Max Build Minutes',
 		desc2: 'per deployment',
 		values: {
-			'community': '10',
-			'pro': 'Custom',
-			'team': 'Custom',
+			community: '10',
+			pro: 'Custom',
+			team: 'Custom',
 		},
 	},
 	{
 		desc: 'Free Object Storage',
 		desc2: '(AWS S3) (coming soon)',
 		values: {
-			'community': '1 GB',
-			'pro': '10 GB',
-			'team': 'Custom',
+			community: '1 GB',
+			pro: '10 GB',
+			team: 'Custom',
 		},
 	},
 ]
@@ -154,11 +152,7 @@ const CROSS = (
 		fill='none'
 		xmlns='http://www.w3.org/2000/svg'
 	>
-		<path
-			d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
-			stroke='currentColor'
-			strokeWidth='2'
-		/>
+		<path d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1' stroke='currentColor' strokeWidth='2' />
 	</svg>
 )
 
@@ -171,11 +165,7 @@ const CHECK = (
 		fill='none'
 		xmlns='http://www.w3.org/2000/svg'
 	>
-		<path
-			d='M1 6.5L6.33333 12L17 1'
-			stroke='currentColor'
-			stroke-width='2'
-		/>
+		<path d='M1 6.5L6.33333 12L17 1' stroke='currentColor' stroke-width='2' />
 	</svg>
 )
 
@@ -212,91 +202,94 @@ const Pricing = () => {
 						}}
 						className='py-2 lg:hidden'
 					>
-						{
-							TIERS.map(t =>
-								<SplideSlide
-									key={t.name}
+						{TIERS.map((t) => (
+							<SplideSlide
+								key={t.name}
+								className={clsx(
+									selectedMobilePlan === t.name ? 'text-[#D9D9D9] ' : 'text-[#7A7A7A]',
+									'!mt-auto mb-[8px] text-xl font-bold leading-none transition-all'
+								)}
+							>
+								{t.displayName}
+								<div
 									className={clsx(
-										selectedMobilePlan === t.name ? 'text-[#D9D9D9] ' : 'text-[#7A7A7A]',
-										'!mt-auto mb-[8px] text-xl font-bold leading-none transition-all'
+										'absolute -top-1 z-[100] h-1 w-[calc(100%+10px)] translate-x-[-5px] translate-y-[1.5em]',
+										selectedMobilePlan === t.name ? 'block' : 'hidden'
 									)}
-								>
-									{t.displayName}
-									<div
-										className={clsx(
-											'absolute -top-1 z-[100] h-1 w-[calc(100%+10px)] translate-x-[-5px] translate-y-[1.5em]',
-											selectedMobilePlan === t.name ? 'block' : 'hidden'
-										)}
-										style={{
-											background:
-												'linear-gradient(71.78deg, #FC540C 1.89%, rgba(255, 215, 111, 0.72) 52.56%, #38D4E9 87.48%)',
-										}}
-									/>
-								</SplideSlide>
-							)
-						}
+									style={{
+										background:
+											'linear-gradient(71.78deg, #FC540C 1.89%, rgba(255, 215, 111, 0.72) 52.56%, #38D4E9 87.48%)',
+									}}
+								/>
+							</SplideSlide>
+						))}
 					</Splide>
 					<div className='pt-2 lg:hidden'>
-						{
-							TIERS.map(t => (
-								<div
-									key={t.name}
-									className='divide-y divide-white/10 text-xl'
-									hidden={selectedMobilePlan !== t.name}
-								>
-									{
-										PRICING_ROWS.map(r => (
-											<div key={r.desc} className='flex justify-between gap-6 py-[0.625rem]'>
-												<div className='grow basis-3/5 text-[#7A7A7A]'>
-													{r.desc}{r.desc2 ? <>{" "}<span className='text-sm'>{r.desc2}</span></> : null}
-												</div>
-												<div className='text-right text-[#FFFFFFA3]'>
-													{toCellContent(r.values[t.name])}
-												</div>
-											</div>
-										))
-									}
-								</div>
-							))
-						}
+						{TIERS.map((t) => (
+							<div
+								key={t.name}
+								className='divide-y divide-white/10 text-xl'
+								hidden={selectedMobilePlan !== t.name}
+							>
+								{PRICING_ROWS.map((r) => (
+									<div key={r.desc} className='flex justify-between gap-6 py-[0.625rem]'>
+										<div className='grow basis-3/5 text-[#7A7A7A]'>
+											{r.desc}
+											{r.desc2 ? (
+												<>
+													{' '}
+													<span className='text-sm'>{r.desc2}</span>
+												</>
+											) : null}
+										</div>
+										<div className='text-right text-[#FFFFFFA3]'>
+											{toCellContent(r.values[t.name])}
+										</div>
+									</div>
+								))}
+							</div>
+						))}
 					</div>
 					{/* Desktop */}
 					<div className='hidden divide-y divide-black/10 text-xl dark:divide-white/10 lg:block'>
 						<div className='mb-8 grid grid-cols-[5fr_4fr_4fr_4fr] py-[0.875rem]'>
 							<div>{/* grid filler */}</div>
-							{
-								TIERS.map(t => (
-									<div key={t.name} className='text-center text-black dark:text-[#7A7A7A]'>
-										<div className='mb-4 font-gradual text-2xl font-bold'>{t.displayName}</div>
-										<div className='mx-auto mb-4 w-4/5 text-base text-[#7A7A7A]'>
-											{t.desc}
-										</div>
-										<Button
-											variant={t.ctaPrimaryButton ? 'tertiary' : 'blackwhite'}
-											className='mx-auto scale-[0.95] hover:bg-gradient-2'
-											href={t.ctaLink}
-											onClick={() => {
-												va.track('cta-clicked', { name: t.cta, section: 'table' })
-											}}
-										>
-											{t.cta}
-										</Button>
-									</div>
-								))
-							}
-						</div>
-						{
-							PRICING_ROWS.map(r => (
-								<div key={r.desc} className='grid grid-cols-[5fr_4fr_4fr_4fr] items-center py-2 text-center'>
-									<div className='text-left text-[#7A7A7A]'>
-										{r.desc}{r.desc2 ? <>{" "}<span className='text-sm'>{r.desc2}</span></> : null}
-									</div>
-									<div className='text-[#aaa]'>{toCellContent(r.values['community'])}</div>
-									<div className='text-[#aaa]'>{toCellContent(r.values['pro'])}</div>
-									<div className='text-[#aaa]'>{toCellContent(r.values['team'])}</div>
+							{TIERS.map((t) => (
+								<div key={t.name} className='text-center text-black dark:text-[#7A7A7A]'>
+									<div className='mb-4 font-gradual text-2xl font-bold'>{t.displayName}</div>
+									<div className='mx-auto mb-4 w-4/5 text-base text-[#7A7A7A]'>{t.desc}</div>
+									<Button
+										variant={t.ctaPrimaryButton ? 'tertiary' : 'blackwhite'}
+										className='mx-auto scale-[0.95] hover:bg-gradient-2'
+										href={t.ctaLink}
+										onClick={() => {
+											va.track('cta-clicked', { name: t.cta, section: 'table' })
+										}}
+									>
+										{t.cta}
+									</Button>
 								</div>
-							))
-						}
+							))}
+						</div>
+						{PRICING_ROWS.map((r) => (
+							<div
+								key={r.desc}
+								className='grid grid-cols-[5fr_4fr_4fr_4fr] items-center py-2 text-center'
+							>
+								<div className='text-left text-[#7A7A7A]'>
+									{r.desc}
+									{r.desc2 ? (
+										<>
+											{' '}
+											<span className='text-sm'>{r.desc2}</span>
+										</>
+									) : null}
+								</div>
+								<div className='text-[#aaa]'>{toCellContent(r.values['community'])}</div>
+								<div className='text-[#aaa]'>{toCellContent(r.values['pro'])}</div>
+								<div className='text-[#aaa]'>{toCellContent(r.values['team'])}</div>
+							</div>
+						))}
 					</div>
 				</div>
 			</div>
