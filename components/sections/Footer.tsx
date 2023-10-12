@@ -107,16 +107,16 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 								Guides
 							</Link>
 							<Link
+								href='https://docs.shuttle.rs/examples/axum'
+								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+							>
+								Examples
+							</Link>
+							<Link
 								href='/shuttle-heroes'
 								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
 							>
 								Shuttle Heroes
-							</Link>
-							<Link
-								href='/shuttle-batch'
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								Shuttle Batch
 							</Link>
 							<Link
 								href='/launchpad'

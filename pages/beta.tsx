@@ -129,6 +129,9 @@ export default function Beta() {
             <p className='mt-4 max-w-xl text-white dark:text-[#7A7A7A] sm:text-xl lg:text-2xl'>
               Today, we&apos;re moving into Beta.
             </p>
+            <p className='mt-2 max-w-xl text-grey dark:text-[#7A7A7A] sm:text-m lg:text-l'>
+              <i>Shuttle Team, 2023-06-28</i>
+            </p>
           </header>
         </div>
       </div>
@@ -478,9 +481,11 @@ export default function Beta() {
         </p>
 
         <div className='mt-[58px] flex gap-2'>
-          <button className='mt-4 h-[56px] w-full rounded-[14px] bg-[#D8D8D8] text-lg text-black sm:mt-0 sm:w-[154px]'>
-            Try Shuttle
-          </button>
+          <Link href='https://console.shuttle.rs/login'>
+            <button className='mt-4 h-[56px] w-full rounded-[14px] bg-[#D8D8D8] text-lg text-black sm:mt-0 sm:w-[154px]'>
+              Try Shuttle
+            </button>
+          </Link>
           <Link href={DISCORD_URL}>
             <button className='button-shadow dark:border-gradient dark:shadow-gradient mt-4 h-[56px] w-full rounded-[14px] bg-[#000] bg-[#E9E9E9] text-lg text-[#C2C2C2] text-black hover:bg-gradient-to-r hover:from-[#fc540c] hover:to-[#f5c57a] hover:text-white dark:bg-black dark:text-[#C2C2C2] dark:hover:bg-none sm:mt-0 sm:w-[154px]'>
               Join Discord
