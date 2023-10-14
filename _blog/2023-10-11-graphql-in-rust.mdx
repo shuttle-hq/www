@@ -5,9 +5,8 @@ author: josh
 tags: [rust, graphql, sql, guide]
 thumb: graphql-in-rust-thumb.png 
 cover: graphql-in-rust-thumb.png 
-date: '2023-10-04T14:30:00'
+date: '2023-10-14T13:30:00'
 ---
-# Building a GraphQL Server in Rust
 When it comes to writing an API, sometimes you might have several data sources and want to coalesce them into one easy-to-query API on the frontend. This is where GraphQL comes in: an query language made for APIs and declarative data fetching (you only query what you want). Here are some advantages that GraphQL can bring to your Rust web application:
 - Test your queries out in real-time via the GraphQL playground
 - Makes it much easier for your frontend to query your backend
@@ -26,7 +25,7 @@ cargo shuttle init
 
 For this article we'll be using the project name "graphql-example". When the CLI asks you what framework you want, pick Axum.
 
-Next, you'll want to make a migrations schema file like so:
+Next, you'll want to make a migrations schema file like so in the root of your project:
 ```sql schema.sql
 CREATE TABLE IF NOT EXISTS dogs (
     id serial primary key,
@@ -46,7 +45,10 @@ cargo add async-graphql async-graphql-axum async-stream axum futures-channel fut
 ## Setting up GraphQL
 
 At the very minimum, we'll want to create an endpoint that serves the GraphQL playground so we can quickly try queries out, and then a basic "Hello world!" query in GraphQL. Let's have a look at how this would look in code:
-``` rust src/main.rs
+``` rust src/queries.rs
+use sqlx::PgPool;
+use async_graphql::{context::Context, Object};
+
 pub struct Query;
 
 #[Object]
@@ -69,6 +71,10 @@ async fn graphiql() -> impl IntoResponse {
 pub async fn axum(
     #[shuttle_shared_db::Postgres] db: PgPool
 ) -> Router {
+    pool.execute(include_str!("../schema.sql"))
+    	.await
+    	.context("Failed to initialize DB")?;
+
     let schema = Schema::build(EmptyQuery, EmptyMutation, EmptySubscription)
         .data(db)
         .finish();
@@ -93,7 +99,7 @@ Now we're ready to get started on more complex topics: nested queries, mutations
 ## Queries
 
 Now that we've made a simple query called `howdy` that returns "partner", we probably want to figure out how to do more complicated queries: for example, returning some records from our SQL data source. Let's change our `impl Query` to include a method for getting a list of Dogs:
-```rust
+```rust src/queries.rs
 // the records we want to return - the struct currently reflects the schema of the table
 // however if you you don't want to return everything, you can change it accordingly
 #[derive(sqlx::FromRow, Clone, Debug)]
@@ -136,7 +142,7 @@ As you can see, we've written a function that returns the vector of structs. Bec
 
 What about if we want to query only specific rows based on filter criteria? We will want to make sure to add a description on each of the parameters so that when anyone visits our GraphQL playground, they'll be able to understand what each of the parameters actually does - then in our SQL query, we will want to filter conditionally based on what parameters have been filled in:
 
-```rust
+```rust src/queries.rs
 async fn dogs(&self, ctx: &Context<'_>,
 	#[graphql(desc = "Filter by specific ID")]
         id: Option<i32>, 
@@ -174,7 +180,7 @@ async fn dogs(&self, ctx: &Context<'_>,
 
 Now that we've written our query, we want to be able to use GraphQL to extract data out of it by only calling specific fields - now that we've retrieved our records, we can write an `impl` for our Dog struct, like so (make sure to attach the `#[Object]` macro so it gets picked up by GraphQL!):
 
-```rust
+```rust src/queries.rs
 #[Object]
 impl Dog {
     async fn id(&self) -> i32 {
@@ -194,7 +200,7 @@ Now if you run `cargo shuttle run` and go to http://localhost:8000, you'll be ab
 
 Now for the next part: mutations! Mutations in GraphQL are methods for changing our data through GraphQL. To use a mutation, we need to create a unit struct (for this article we'll call it "Mutation") and create an `impl` for it with the `#[Object]` macro, just like with the GraphQL queries.
 
-```rust
+```rust src/mutations.rs
 pub struct Mutation;
 
 #[Object]
@@ -223,7 +229,7 @@ impl Mutation {
 ```
 As you can see, it's practically the same as if we just did it normally in SQL - we grab the SQL connection and insert the record, then return the ID. We'll also want to be able to only update certain parameters - for example, if a dog's name needs to be updated but not their age. We learned about how we can use optional parameters in `async-graphql`, and we can write the function like so:
 
-```rust
+```rust src/mutations.rs
 
 #[Object]
 impl Mutation {
@@ -270,7 +276,7 @@ In `async-graphql`, subscriptions are types that implement `futures_util::Stream
 
 We can get started by defining some types:
 
-```rust
+```rust src/broker.rs
 use std::{
     any::{Any, TypeId},
     collections::HashMap,
@@ -470,7 +476,10 @@ pub fn init_router(db: PgPool) -> Router {
 async fn shuttle_main(
 	#[shuttle_shared_db::Postgres] db: PgPool
 ) -> shuttle_axum::ShuttleAxum {
-    sqlx::migrate!().run(&db).await.unwrap();
+    pool.execute(include_str!("../schema.sql"))
+    	.await
+    	.context("Failed to initialize DB")?;`
+
 
     let router = init_router(db);
 
