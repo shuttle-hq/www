@@ -90,15 +90,15 @@ pub async fn axum(
 }
 ```
 
-Although we don't actually have any queries yet, if we use `cargo shuttle run` to load up our program and go to `http://localhost:8000`, we should see the GraphQL playground.
+If we use `cargo shuttle run` to load up our program and go to `http://localhost:8000`, we should see the GraphQL playground.
 
-If we click the Queries on the left hand side, it'll show us all the queries we can run - there should be one called "howdy" (which corresponds to the function we wrote under the Query implementation). You can verify it works by running it.
+Clicking the Queries on the left hand side will show us all the queries we can run - there should be one called "howdy" (which corresponds to the function we wrote under the Query implementation). You can verify it works by running it.
 
-Now we're ready to get started on more complex topics: nested queries, mutations and subscriptions!
+Now we're ready to get started on queries, mutations and subscriptions!
 
 ## Queries
 
-Now that we've made a simple query called `howdy` that returns "partner", we probably want to figure out how to do more complicated queries: for example, returning some records from our SQL data source. Let's change our `impl Query` to include a method for getting a list of Dogs:
+Although a simple "hello world" query shows how basic data fetching works, we probably want to figure out how to do more complicated queries: for example, returning some records from our SQL data source. Let's change our `impl Query` to include a method for getting a list of Dogs:
 ```rust src/queries.rs
 // the records we want to return - the struct currently reflects the schema of the table
 // however if you you don't want to return everything, you can change it accordingly
@@ -178,7 +178,7 @@ async fn dogs(&self, ctx: &Context<'_>,
     }
 ```
 
-Now that we've written our query, we want to be able to use GraphQL to extract data out of it by only calling specific fields - now that we've retrieved our records, we can write an `impl` for our Dog struct, like so (make sure to attach the `#[Object]` macro so it gets picked up by GraphQL!):
+Ideally, we want to be able to use GraphQL to extract data out of it by only calling specific fields. Now that we've retrieved our records, we can write an `impl` for our Dog struct, like so (make sure to attach the `#[Object]` macro so it gets picked up by GraphQL!):
 
 ```rust src/queries.rs
 #[Object]
@@ -194,11 +194,11 @@ impl Dog {
     }
 }
 ```
-Now if you run `cargo shuttle run` and go to http://localhost:8000, you'll be able to see that if you click on Queries on the left-hand side, it'll let you use `dogs` as a query!
+If you run `cargo shuttle run` and go to http://localhost:8000, you'll be able to see that if you click on Queries on the left-hand side, it'll let you use `dogs` as a query.
 
 ## Mutations
 
-Now for the next part: mutations! Mutations in GraphQL are methods for changing our data through GraphQL. To use a mutation, we need to create a unit struct (for this article we'll call it "Mutation") and create an `impl` for it with the `#[Object]` macro, just like with the GraphQL queries.
+Now for the next part: mutations! Mutations in GraphQL are methods for changing our data through GraphQL. To use a mutation, we need to create a unit struct (for this article we'll call it `Mutation`) and create an `impl` for it with the `#[Object]` macro, just like with the GraphQL queries.
 
 ```rust src/mutations.rs
 pub struct Mutation;
@@ -348,10 +348,9 @@ impl<T: Sync + Send + Clone + 'static> Stream for BrokerStream<T> {
     }
 }
 ```
-Now that all of the background work required to make our hashmap of subscribers work is done, we can get started with implementing the stream itself!
-
 Note that the T type, as above, requires `Sync + Send + Clone + 'static` - this is also required for us to use more than one type with the `SimpleBroker`. Otherwise, we will end up being able to only stream one type - which is good in some cases, but let's assume we want to stream more than one type eventually and will therefore, need to make it generic.
-								     
+
+Once we're done with the above, we need to write the implementation for the broker itself. See below:								     
 ```rust
 impl<T: Sync + Send + Clone + 'static> SimpleBroker<T> {
     /// Publish a message that all subscription streams can receive.
@@ -378,7 +377,7 @@ impl<T: Sync + Send + Clone + 'static> SimpleBroker<T> {
 }
 ```
 
-Now that that's done, we can get started with the GraphQL subscription:
+Our code for writing the broker is done, so we can get started with the GraphQL subscription as below:
 
 ```rust
 pub struct Subscription;
@@ -396,10 +395,7 @@ pub struct DogChanged {
     pub mutation_type: MutationType,
     pub id: i32,
 }
-```
-As you can see, we've created a struct with the mutation type, as well as the ID of the record. Like the queries and mutations we wrote before, we can also use `#[Object]` to add a GraphQL implementation.
-	
-```rust
+
 #[Object]
 impl DogChanged {
     async fn mutation_type(&self) -> MutationType {
@@ -412,7 +408,7 @@ impl DogChanged {
 }
 ```
 
-Now that we've written the implementation we can now add the subscription method itself:
+We can now add the subscription method itself:
 	
 ```rust
 #[Subscription]
@@ -435,20 +431,20 @@ impl Subscription {
     }
 }
 ```
-Now that we're done with the subscription endpoint itself, we can publish our mutation updates to the `SimpleBroker` by using the `SimpleBroker::publish` method after a successful SQL update, like so:
+
+However, this won't work on its own and we still need to push the messages to the broker. We can publish our mutation updates to the `SimpleBroker` by using the `SimpleBroker::publish` method after a successful SQL update, like so:
 ```rust
 SimpleBroker::publish(DogChanged {
 	mutation_type: MutationType::Created,
 	id: res.id,
 }); 
 ```
-Now we're done with the Subscriptions part! This part was an extremely long read, but if you've gotten up to this part then kudos to you. 
+We've finished all of the parts we need to make our GraphQL server fully functional, so it's time to hook it all up!
 	
 ## Connecting it all up
 	
-Now that we've finished everything, we can plug it all back up into our main functions!
-
-```rust
+See below for what your main file should look like: 
+```rust src/main.rs
 async fn graphiql() -> impl IntoResponse {
     Html(
         GraphiQLSource::build()
@@ -487,7 +483,7 @@ async fn shuttle_main(
 }
 ```
 
-Now if you use `cargo shuttle run` and go to `http://localhost:8000`, you'll be able to access all of your queries, mutations and the subscription we created!
+If you use `cargo shuttle run` and go to `http://localhost:8000`, you'll be able to access all of your queries, mutations and the subscription we created.
 
 ## Deployment
 
