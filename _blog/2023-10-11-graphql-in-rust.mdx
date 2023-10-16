@@ -1,0 +1,497 @@
+---
+title: 'Using GraphQL in Rust'
+description: This article details how to build a GraphQL server in Rust. We will explore using queries, mutations as well as subscriptions to make a fully working endpoint.
+author: josh
+tags: [rust, graphql, sql, guide]
+thumb: graphql-in-rust-thumb.png 
+cover: graphql-in-rust-thumb.png 
+date: '2023-10-14T13:30:00'
+---
+When it comes to writing an API, sometimes you might have several data sources and want to coalesce them into one easy-to-query API on the frontend. This is where GraphQL comes in: an query language made for APIs and declarative data fetching (you only query what you want). Here are some advantages that GraphQL can bring to your Rust web application:
+- Test your queries out in real-time via the GraphQL playground
+- Makes it much easier for your frontend to query your backend
+- You can use any data source
+
+In this example, we will use GraphQL through the `async-graphql` Rust crate as an Axum endpoint with an SQL data source and we'll be creating an API that can create, update, and delete a table of records about dogs, as well as subscribing to any updates.
+
+Stuck or want to know what the final code looks like? [You can find the repository here.](https://github.com/joshua-mo-143/shuttle-axum-gql-ex)
+
+# Getting Started
+
+You'll want to initiate a new Shuttle project (requires `cargo-shuttle`):
+```bash
+cargo shuttle init
+```
+
+For this article we'll be using the project name "graphql-example". When the CLI asks you what framework you want, pick Axum.
+
+Next, you'll want to make a migrations schema file like so in the root of your project:
+```sql schema.sql
+CREATE TABLE IF NOT EXISTS dogs (
+    id serial primary key,
+    name TEXT NOT NULL,
+    age INT NOT NULL,
+);
+```
+Now you'll want to install the required dependencies. We can do this with a one-line command:
+```bash
+cargo add async-graphql async-graphql-axum async-stream axum futures-channel futures-core \
+          futures-util once-cell shuttle-axum shuttle-runtime shuttle-shared-db slab \
+          sqlx tokio tokio-stream --features \
+          shuttle-shared-db/postgres,sqlx/postgres,\
+	  sqlx/runtime-tokio-native-tls,tokio/sync,tokio-stream/sync
+```
+
+## Setting up GraphQL
+
+At the very minimum, we'll want to create an endpoint that serves the GraphQL playground so we can quickly try queries out, and then a basic "Hello world!" query in GraphQL. Let's have a look at how this would look in code:
+``` rust src/queries.rs
+use sqlx::PgPool;
+use async_graphql::{context::Context, Object};
+
+pub struct Query;
+
+#[Object]
+impl Query {
+    async fn howdy(&self) -> &'static str {
+        "partner"
+    }
+}
+
+async fn graphiql() -> impl IntoResponse {
+    Html(
+        GraphiQLSource::build()
+            .endpoint("/")
+            .subscription_endpoint("/ws")
+            .finish(),
+    )
+}
+
+#[shuttle_runtime::main]
+pub async fn axum(
+    #[shuttle_shared_db::Postgres] db: PgPool
+) -> Router {
+    pool.execute(include_str!("../schema.sql"))
+    	.await
+    	.context("Failed to initialize DB")?;
+
+    let schema = Schema::build(EmptyQuery, EmptyMutation, EmptySubscription)
+        .data(db)
+        .finish();
+
+    // start the http server
+    let router = Router::new()
+        .route(
+            "/",
+            get(graphiql).post_service(GraphQL::new(schema.clone())),
+        );
+        
+        Ok(router.into())
+}
+```
+
+If we use `cargo shuttle run` to load up our program and go to `http://localhost:8000`, we should see the GraphQL playground.
+
+Clicking the Queries on the left hand side will show us all the queries we can run - there should be one called "howdy" (which corresponds to the function we wrote under the Query implementation). You can verify it works by running it.
+
+Now we're ready to get started on queries, mutations and subscriptions!
+
+## Queries
+
+Although a simple "hello world" query shows how basic data fetching works, we probably want to figure out how to do more complicated queries: for example, returning some records from our SQL data source. Let's change our `impl Query` to include a method for getting a list of Dogs:
+```rust src/queries.rs
+// the records we want to return - the struct currently reflects the schema of the table
+// however if you you don't want to return everything, you can change it accordingly
+#[derive(sqlx::FromRow, Clone, Debug)]
+pub struct Dog {
+    pub id: i32,
+    name: String,
+    age: i32,
+}
+
+#[Object]
+impl Query {
+    async fn howdy(&self) -> &'static str {
+        "partner"
+    }
+
+    async fn dogs(&self, ctx: &Context<'_>) -> Result<Option<Vec<Dog>>, String> {
+    // unwrap the database value that we passed as data into the GraphQL builder
+    // if there's an error, just return the error
+        let db = match ctx.data::<PgPool>() {
+            Ok(db) => db,
+            Err(err) => return Err(err.message.to_string()),
+        };
+
+    // write an sql query to grab all the fields we need
+    // change the SQL query accordingly if you don't need it
+        let res = match sqlx::query_as::<_, Dog>("SELECT * FROM dogs")
+            .fetch_all(db)
+            .await
+        {
+            Ok(res) => res,
+            Err(err) => return Err(err.to_string()),
+        };
+
+        Ok(Some(res))
+    }
+}
+```
+
+As you can see, we've written a function that returns the vector of structs. Because we're using `query_as`, it automatically binds the query results to the structs so we don't have to worry about mapping it out - you can find more about this [here](https://www.shuttle.rs/blog/2023/10/04/sql-in-rust).
+
+What about if we want to query only specific rows based on filter criteria? We will want to make sure to add a description on each of the parameters so that when anyone visits our GraphQL playground, they'll be able to understand what each of the parameters actually does - then in our SQL query, we will want to filter conditionally based on what parameters have been filled in:
+
+```rust src/queries.rs
+async fn dogs(&self, ctx: &Context<'_>,
+	#[graphql(desc = "Filter by specific ID")]
+        id: Option<i32>, 
+        #[graphql(desc = "Filter by specific name")]
+        name: Option<String>, 
+        #[graphql(desc = "Filter by exact age")]
+        age: Option<i32>
+) -> Result<Option<Vec<Dog>>, String> {
+    // unwrap the database value that we passed as data into the GraphQL builder
+    // if there's an error, just return the error
+        let db = match ctx.data::<PgPool>() {
+            Ok(db) => db,
+            Err(err) => return Err(err.message.to_string()),
+        };
+        
+	// note that we use a CASE for SQL - this is like a "switch case" or pattern match
+        let res = match sqlx::query_as::<_, Dog>("SELECT * FROM dogs
+                 WHERE (CASE when $1 is not null then (id = $1) else (id = id) end)
+                AND (CASE WHEN $2 is not null then (name = $2) else (name = name) end)
+                AND (CASE when $3 is not null then (age = $3) else (age = age) end)
+                 ")
+                .bind(id)
+                .bind(name)    
+                .bind(age)    
+            .fetch_all(db)
+            .await
+        {   
+            Ok(res) => res,
+            Err(err) => return Err(err.to_string()),
+        };  
+
+        Ok(Some(res))
+    }
+```
+
+Ideally, we want to be able to use GraphQL to extract data out of it by only calling specific fields. Now that we've retrieved our records, we can write an `impl` for our Dog struct, like so (make sure to attach the `#[Object]` macro so it gets picked up by GraphQL!):
+
+```rust src/queries.rs
+#[Object]
+impl Dog {
+    async fn id(&self) -> i32 {
+        self.id
+    }
+    async fn name(&self) -> String {
+        self.name.clone()
+    }
+    async fn age(&self) -> i32 {
+        self.age
+    }
+}
+```
+If you run `cargo shuttle run` and go to http://localhost:8000, you'll be able to see that if you click on Queries on the left-hand side, it'll let you use `dogs` as a query.
+
+## Mutations
+
+Now for the next part: mutations! Mutations in GraphQL are methods for changing our data through GraphQL. To use a mutation, we need to create a unit struct (for this article we'll call it `Mutation`) and create an `impl` for it with the `#[Object]` macro, just like with the GraphQL queries.
+
+```rust src/mutations.rs
+pub struct Mutation;
+
+#[Object]
+impl Mutation {
+    async fn create_dog(&self, ctx: &Context<'_>, name: String, age: i32) -> Result<i32, String> {
+        let db = match ctx.data::<PgPool>() {
+            Ok(db) => db,
+            Err(err) => return Err(err.message.to_string()),
+        };
+
+        let res = match sqlx::query_as::<_, Dog>(
+            "INSERT INTO dogs (NAME, AGE) VALUES ($1, $2) RETURNING id, name, age",
+        )
+        .bind(name)
+        .bind(age)
+        .fetch_one(db)
+        .await
+        {
+            Ok(res) => res,
+            Err(err) => return Err(err.to_string()),
+        };
+
+	Ok(res.id)	
+    }
+}
+```
+As you can see, it's practically the same as if we just did it normally in SQL - we grab the SQL connection and insert the record, then return the ID. We'll also want to be able to only update certain parameters - for example, if a dog's name needs to be updated but not their age. We learned about how we can use optional parameters in `async-graphql`, and we can write the function like so:
+
+```rust src/mutations.rs
+
+#[Object]
+impl Mutation {
+// ... your other functions
+async fn update_dog(&self, ctx: &Context<'_>, 
+        #[graphql(desc = "New name value to update to")]
+        name: Option<String>, 
+        #[graphql(desc = "New age value to update to")]
+        age: Option<i32>, 
+        #[graphql(desc = "(REQUIRED) The ID of the record to update")]
+        id: i32) -> Result<i32, String> {
+        let db = match ctx.data::<PgPool>() {
+            Ok(db) => db, 
+            Err(err) => return Err(err.message.to_string()),
+        };  
+
+        let res = match sqlx::query_as::<_, Dog>(
+            "UPDATE dogs SET 
+                NAME = (CASE when $1 IS NOT NULL THEN $1 ELSE name END),
+                AGE = (CASE when $2 IS NOT NULL THEN $2 ELSE age END)   
+          WHERE id = $3 RETURNING id, name, age",
+        )   
+        .bind(name)
+        .bind(age)
+        .bind(id)
+        .fetch_one(db)
+        .await
+        {
+            Ok(res) => res,
+            Err(err) => return Err(err.to_string()),
+        };
+    
+        Ok(res.id)    
+    } 
+}
+```
+Similarly, we can do it exactly the same way for delete functions. 
+
+## Subscriptions
+
+Subscriptions in GraphQL are a way of subscribing to changes - for example, when a new record gets created or updated, you might want a way for your users to know about or get real time updates. Subscriptions in this respect are similar to PostgreSQL Listen/Notify functions which you can use to listen and notify updates through channels in Postgres - which if you don't know about yet, which you can read more about [here](https://www.shuttle.rs/blog/2023/10/04/sql-in-rust#postgresql-listennotify). 
+
+In `async-graphql`, subscriptions are types that implement `futures_util::Stream` and always return an `impl Stream<Item = T>`; that is to say, the type we're returning needs to implement `Stream` so that the compiler knows that the type can return a stream of data. The most common way to do this is through types that wrap channel Senders/Receivers, and we will show how to do this below.
+
+We can get started by defining some types:
+
+```rust src/broker.rs
+use std::{
+    any::{Any, TypeId},
+    collections::HashMap,
+    sync::Mutex,
+};
+use futures_channel::mpsc::{self, UnboundedReceiver, UnboundedSender};
+use once_cell::sync::Lazy;
+use slab::Slab;
+
+// a HashMap wrapped in the Arc<Mutex<T>> pattern (which makes it thread safe)
+// a Lazy once_cell here is used to allow initialisation only on first access
+// once_cell allows us to get a shared reference to inner without requiring a Mutex guard or Ref<T>
+static SUBSCRIBERS: Lazy<Mutex<HashMap<TypeId, Box<dyn Any + Send>>>> = Lazy::new(Default::default);
+
+// slab is used here for allocation purposes
+// we want to make the type generic so we can send anything we want across
+struct Senders<T>(Slab<UnboundedSender<T>>);
+
+// this will be the type that gets sent back to the HTTP client on successful subscription
+struct BrokerStream<T: Sync + Send + Clone + 'static>(usize, UnboundedReceiver<T>);
+
+// PhantomData is a type that allows us to act as if the broker type can own the type
+// without PhantomData we can't add the generic 
+pub struct SimpleBroker<T>(PhantomData<T>);
+```
+
+The `BrokerStream` struct doesn't get added to the Subscribers hashmap itself, but is returned to the users. When users subscribe to the GraphQL subscription, we create a channel with a Sender/Receiver and then insert the `Sender<T>` into the subscribers list while returning the receiver to the HTTP client.
+
+Next, we'll want to set up the methods needed for our stuff to work. Let's start with retrieving the list of senders from the HashMap:
+
+```rust
+fn with_senders<T, F, R>(f: F) -> R
+where
+    T: Sync + Send + Clone + 'static,
+    F: FnOnce(&mut Senders<T>) -> R,
+{
+   // get access to the subscribers hashmap
+    let mut map = SUBSCRIBERS.lock().unwrap();
+    // using .or_insert_with() ensures we can insert a value if .entry() returns nothing 
+    // ie, if there's nobody connected to the GraphQL subscription
+    let senders = map
+        .entry(TypeId::of::<Senders<T>>())
+        .or_insert_with(|| Box::new(Senders::<T>(Default::default())));
+     
+     // do some work on the message senders, which are downcasted to Senders
+    f(senders.downcast_mut::<Senders<T>>().unwrap())
+}
+```
+There's quite a few generics here, but don't be intimidated: these are simply required in order for the function to be usable with more than one time. Let's break it down:
+- The `T` type must implement Sync, Send, Clone and 'static. This means that the type must be able to be marked as being able to safely share and synchronise across threads.
+- The `F` type is a function that must implement a closure, where the item inside a closure is a `Senders<T>` (which we created earlier).
+
+Next, we need to implement `Drop` and `futures_util::Stream` for our type - for `Drop` we want a custom implementation because we need it to work a specific way. `futures_util::Stream` is required by `async-graphql` for the type to work.
+```rust
+// because we want to remove our BrokerStream from the hashmap we need to implement
+// our own Drop function
+impl<T: Sync + Send + Clone + 'static> Drop for BrokerStream<T> {
+    fn drop(&mut self) {
+        with_senders::<T, _, _>(|senders| senders.0.remove(self.0));
+    }
+}
+
+// implement `futures_util::Stream` for our BrokerStream
+impl<T: Sync + Send + Clone + 'static> Stream for BrokerStream<T> {
+    type Item = T;
+
+    fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
+        self.1.poll_next_unpin(cx)
+    }
+}
+```
+Note that the T type, as above, requires `Sync + Send + Clone + 'static` - this is also required for us to use more than one type with the `SimpleBroker`. Otherwise, we will end up being able to only stream one type - which is good in some cases, but let's assume we want to stream more than one type eventually and will therefore, need to make it generic.
+
+Once we're done with the above, we need to write the implementation for the broker itself. See below:								     
+```rust
+impl<T: Sync + Send + Clone + 'static> SimpleBroker<T> {
+    /// Publish a message that all subscription streams can receive.
+    pub fn publish(msg: T) {
+    // note that we use the with_senders function before to get the list of senders to send messages through
+    // FnOnce dictates that we need to use a closure for this in particular
+        with_senders::<T, _, _>(|senders| {
+            for (_, sender) in senders.0.iter_mut() {
+                sender.start_send(msg.clone()).ok();
+            }
+        });
+    }
+
+    /// Subscribe to the message of the specified type and returns a `Stream`.
+    pub fn subscribe() -> impl Stream<Item = T> {
+    // note that we use the with_senders function before to get the list of senders to send messages through
+    // FnOnce dictates that we need to use a closure for this in particular
+        with_senders::<T, _, _>(|senders| {
+            let (tx, rx) = mpsc::unbounded();
+            let id = senders.0.insert(tx);
+            BrokerStream(id, rx)
+        })
+    }
+}
+```
+
+Our code for writing the broker is done, so we can get started with the GraphQL subscription as below:
+
+```rust
+pub struct Subscription;
+
+#[derive(Enum, Eq, PartialEq, Copy, Clone)]
+pub enum MutationType {
+    Created,
+    Updated,
+    Deleted,
+}
+
+#[derive(Clone)]
+// the type we will be sending/receiving through the BrokerStream we set up earlier
+pub struct DogChanged {
+    pub mutation_type: MutationType,
+    pub id: i32,
+}
+
+#[Object]
+impl DogChanged {
+    async fn mutation_type(&self) -> MutationType {
+        self.mutation_type
+    }
+
+    async fn id(&self) -> i32 {
+        self.id
+    }
+}
+```
+
+We can now add the subscription method itself:
+	
+```rust
+#[Subscription]
+impl Subscription {
+    async fn dogs_changed(
+        &self,
+        mutation_type: Option<MutationType>,
+    ) -> impl Stream<Item = DogChanged> {
+        SimpleBroker::<DogChanged>::subscribe().filter(move |evt| {
+	 // if the mutation_type input param is not none,
+	// filter out all where the event mutation type is not the same
+            let res = if let Some(mutation_type) = mutation_type {
+                evt.mutation_type == mutation_type
+            } else {
+                true
+            };
+
+            async move { res }
+        })
+    }
+}
+```
+
+However, this won't work on its own and we still need to push the messages to the broker. We can publish our mutation updates to the `SimpleBroker` by using the `SimpleBroker::publish` method after a successful SQL update, like so:
+```rust
+SimpleBroker::publish(DogChanged {
+	mutation_type: MutationType::Created,
+	id: res.id,
+}); 
+```
+We've finished all of the parts we need to make our GraphQL server fully functional, so it's time to hook it all up!
+	
+## Connecting it all up
+	
+See below for what your main file should look like: 
+```rust src/main.rs
+async fn graphiql() -> impl IntoResponse {
+    Html(
+        GraphiQLSource::build()
+            .endpoint("/")
+            .subscription_endpoint("/ws")
+            .finish(),
+    )
+}
+
+pub fn init_router(db: PgPool) -> Router {
+    let schema = Schema::build(Query, Mutation, Subscription)
+        .data(db)
+        .finish();
+
+    // start the http server
+    Router::new()
+        .route(
+            "/",
+            get(graphiql).post_service(GraphQL::new(schema.clone())),
+        )
+        .route_service("/ws", GraphQLSubscription::new(schema))
+}
+
+#[shuttle_runtime::main]
+async fn shuttle_main(
+	#[shuttle_shared_db::Postgres] db: PgPool
+) -> shuttle_axum::ShuttleAxum {
+    pool.execute(include_str!("../schema.sql"))
+    	.await
+    	.context("Failed to initialize DB")?;`
+
+
+    let router = init_router(db);
+
+    Ok(router.into())
+}
+```
+
+If you use `cargo shuttle run` and go to `http://localhost:8000`, you'll be able to access all of your queries, mutations and the subscription we created.
+
+## Deployment
+
+Once you're done, feel free to deploy by using `cargo shuttle deploy` (with `--allow-dirty` if on a dirty Git branch). Your app will then be deployed to Shuttle servers along with a provisioned database - nothing more is needed! When finished, you'll be able to view your connection string (if you lose it for whatever reason, you can use `cargo-shuttle resource list` to get the connection string again).
+
+If you're looking for something a bit more isolated, Shuttle's Pro tier is also offering a completely isolated AWS RDS database as an add-on. Find out more about our pricing [here.](https://www.shuttle.rs/pricing)
+
+## Finishing Up
+	
+I hope you enjoyed reading this article about using GraphQL in Rust! It can be a powerful resource for data fetching if you're in a team, but it's important to cover all angles so that we can make the most of it.
+
