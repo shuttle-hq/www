@@ -15,7 +15,7 @@ const Info = () => {
 							shuttle-ai build &quot;Build me a blog service&quot;
 						</code>{' '}
 						and while you go and grab a cup of coffee, Shuttle&apos;s AI agents will breakdown the
-						project, generate the needed code, ensure it compiles, provision the infrustructure and
+						project, generate the needed code, ensure it compiles, provision the infrastructure and
 						deploy it to Shuttle&apos;s Cloud, returning you a live, fully-working backend app and the
 						generated code.
 					</p>
