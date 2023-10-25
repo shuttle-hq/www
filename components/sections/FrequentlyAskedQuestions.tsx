@@ -113,7 +113,14 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 						<p className='mt-2 text-[#C2C2C2]'>
 							Join our Discord, we&apos;re happy to answer any questions!
 						</p>
-						<Button variant='primary' className='mt-8' href={DISCORD_URL}>
+						<Button
+							variant='primary'
+							className='mt-8'
+							href={DISCORD_URL}
+							onClick={() => {
+								trackEvent('homepage_faq_discord')
+							}}
+						>
 							Join Discord
 						</Button>
 					</div>
