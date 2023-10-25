@@ -1,5 +1,6 @@
 import { getAuthors } from 'lib/blog/authors'
 import { Post } from 'lib/blog/posts'
+import { trackEvent } from 'lib/posthog'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC, useState } from 'react'
@@ -29,7 +30,12 @@ const FeaturedBlogPost: FC<Post> = (post) => {
 						</div>
 						<li className='list-disc text-[#7A7A7A]'>{post.date}</li>
 					</div>
-					<Link href={`/blog/${post.url}`}>
+					<Link
+						href={`/blog/${post.url}`}
+						onClick={() => {
+							trackEvent(`homepage_footer_site_${post.title}`)
+						}}
+					>
 						<h2 className='font-gradual text-2xl font-bold text-black dark:text-[#C2C2C2] lg:text-[2.5rem] lg:leading-9'>
 							{post.title}
 						</h2>

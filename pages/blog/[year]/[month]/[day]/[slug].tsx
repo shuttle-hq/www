@@ -23,6 +23,7 @@ import { TwitterTweetEmbed } from 'react-twitter-embed'
 import { Pre } from 'components/blog/Pre'
 import MastodonLogo from 'components/svgs/MastodonLogo'
 import HNLogo from 'components/svgs/HNLogo'
+import { trackEvent } from 'lib/posthog'
 
 export async function getStaticPaths() {
 	const paths = getAllPostSlugs()
@@ -258,7 +259,15 @@ export default function BlogPostPage(props: Props) {
 								This blog post is powered by shuttle - The Rust-native, open source, cloud
 								development platform. If you have any questions, or want to provide feedback, join
 								our{' '}
-								<a target='_blank' rel='noreferrer' className='text-[#FF8A3F]' href={DISCORD_URL}>
+								<a
+									target='_blank'
+									rel='noreferrer'
+									className='text-[#FF8A3F]'
+									href={DISCORD_URL}
+									onClick={() => {
+										trackEvent(`blog_article_${props.blog.title}_Discord`)
+									}}
+								>
 									Discord server!
 								</a>
 							</span>
@@ -273,6 +282,9 @@ export default function BlogPostPage(props: Props) {
 								className='flex items-center rounded-xl border border-black/10 bg-black p-3 dark:border-white/10'
 								target='_blank'
 								rel='noreferrer'
+								onClick={() => {
+									trackEvent(`blog_article_${props.blog.title}_hackernews`)
+								}}
 							>
 								<HNLogo />
 							</a>
@@ -283,6 +295,9 @@ export default function BlogPostPage(props: Props) {
 								className='flex items-center rounded-xl border border border-black/10 bg-black p-3 dark:border-white/10'
 								target='_blank'
 								rel='noreferrer'
+								onClick={() => {
+									trackEvent(`blog_article_${props.blog.title}_twitter`)
+								}}
 							>
 								<TwitterLogo />
 							</a>
@@ -291,6 +306,9 @@ export default function BlogPostPage(props: Props) {
 								className='flex items-center rounded-xl border border border-black/10 bg-black p-3 dark:border-white/10'
 								target='_blank'
 								rel='noreferrer'
+								onClick={() => {
+									trackEvent(`blog_article_${props.blog.title}_linkedin`)
+								}}
 							>
 								<LinkedInLogo />
 							</a>
@@ -299,7 +317,11 @@ export default function BlogPostPage(props: Props) {
 								onClick={(e) => {
 									e.preventDefault()
 
-									const instance = window.prompt('Enter your Mastodon instance (ex. mastodon.social):')
+									trackEvent(`blog_article_${props.blog.title}_mastodon`)
+
+									const instance = window.prompt(
+										'Enter your Mastodon instance (ex. mastodon.social):'
+									)
 									if (instance) {
 										window.location.href = `https://${instance}/share?text=${encodeURIComponent(
 											`${props.blog.title} ${SITE_URL}blog/${props.blog.slug}`
