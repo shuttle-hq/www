@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { Tooltip } from 'react-tooltip'
 import Link from 'next/link'
 import { TierName } from '../Pricing'
+import { trackEvent } from 'lib/posthog'
 
 export interface FeatureProps {
 	feature: string
@@ -136,7 +137,14 @@ const Plan: FC<PlanProps> = ({
 							: '',
 				}}
 			>
-				<Link href={url} target='_blank' className='inline-block h-full w-full'>
+				<Link
+					href={url}
+					target='_blank'
+					className='inline-block h-full w-full'
+					onClick={() => {
+						trackEvent(`pricing_tiers_${name.toLowerCase()}`)
+					}}
+				>
 					{cta}
 				</Link>
 			</button>

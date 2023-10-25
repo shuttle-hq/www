@@ -13,9 +13,10 @@ export interface QuestionAttrs {
 interface FrequentlyAskedQuestionsProps {
 	questions: QuestionAttrs[]
 	hideDiscord?: boolean
+	page: 'pricing' | 'homepage'
 }
 
-const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions, hideDiscord }) => {
+const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions, hideDiscord, page }) => {
 	const [activeQuestion, setActiveQuestion] = useState<number | null>(null)
 
 	const updateActiveQuestion = (index: number) => {
@@ -43,7 +44,7 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 							<div className='w-full'>
 								<button
 									onClick={() => {
-										trackEvent(`homepage_faq_question_${question}`)
+										trackEvent(`${page}_faq_question_${question}`)
 										updateActiveQuestion(index)
 									}}
 									className='w-full text-left'
@@ -118,7 +119,7 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 							className='mt-8'
 							href={DISCORD_URL}
 							onClick={() => {
-								trackEvent('homepage_faq_discord')
+								trackEvent(`${page}_faq_discord`)
 							}}
 						>
 							Join Discord

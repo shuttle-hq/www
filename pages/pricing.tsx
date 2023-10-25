@@ -40,7 +40,7 @@ export default function PricingPage({ questions }: Props) {
 			<Pricing />
 			<Contact />
 			<Testimonials />
-			<FrequentlyAskedQuestions questions={questions} />
+			<FrequentlyAskedQuestions questions={questions} page='pricing' />
 			<CallToAction />
 		</div>
 	)
