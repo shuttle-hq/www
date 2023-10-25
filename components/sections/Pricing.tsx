@@ -3,7 +3,6 @@ import clsx from 'clsx'
 import { Button } from 'components/elements'
 import { ReactElement, useState } from 'react'
 import { CONTACT_US_URI, GET_STARTED_URI } from 'lib/constants'
-import { trackEvent } from 'lib/posthog'
 
 export type TierName = 'community' | 'pro' | 'team'
 
@@ -263,11 +262,6 @@ const Pricing = () => {
 										variant={t.ctaPrimaryButton ? 'tertiary' : 'blackwhite'}
 										className='mx-auto scale-[0.95] hover:bg-gradient-2'
 										href={t.ctaLink}
-										onClick={() => {
-											trackEvent(`${t.name}-plan-intent`, {
-												domain: 'www',
-											})
-										}}
 									>
 										{t.cta}
 									</Button>

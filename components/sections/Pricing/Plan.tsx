@@ -4,7 +4,6 @@ import { FC, useState } from 'react'
 import Image from 'next/image'
 import { Tooltip } from 'react-tooltip'
 import Link from 'next/link'
-import { trackEvent } from 'lib/posthog'
 import { TierName } from '../Pricing'
 
 export interface FeatureProps {
@@ -137,16 +136,7 @@ const Plan: FC<PlanProps> = ({
 							: '',
 				}}
 			>
-				<Link
-					href={url}
-					target='_blank'
-					className='inline-block h-full w-full'
-					onClick={() => {
-						trackEvent(`${key}-plan-intent`, {
-							domain: 'www',
-						})
-					}}
-				>
+				<Link href={url} target='_blank' className='inline-block h-full w-full'>
 					{cta}
 				</Link>
 			</button>
