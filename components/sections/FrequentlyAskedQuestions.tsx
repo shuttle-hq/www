@@ -3,6 +3,7 @@ import { Button } from 'components/elements'
 import Image from 'next/image'
 import { FC, useState } from 'react'
 import { DISCORD_URL } from '../../lib/constants'
+import { trackEvent } from 'lib/posthog'
 
 export interface QuestionAttrs {
 	question: string
@@ -40,7 +41,13 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 					{questions.map(({ question, answer }, index) => (
 						<div className='flex items-center justify-between px-5' key={question}>
 							<div className='w-full'>
-								<button onClick={() => updateActiveQuestion(index)} className='w-full text-left'>
+								<button
+									onClick={() => {
+										trackEvent(`homepage_faq_question_${question}`)
+										updateActiveQuestion(index)
+									}}
+									className='w-full text-left'
+								>
 									<h3 className='cursor-pointer py-5 pr-5 text-[#525151] dark:text-[#C2C2C2] md:text-xl'>
 										{question}
 									</h3>
