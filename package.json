@@ -31,6 +31,7 @@
 		"next-mdx-remote": "^4.2.0",
 		"next-seo": "^5.15.0",
 		"next-sitemap": "^4.2.2",
+		"posthog-js": "^1.83.3",
 		"prism-themes": "^1.9.0",
 		"rc-slider": "^10.2.1",
 		"react": "18.2.0",

@@ -2,10 +2,11 @@ import { Splide, SplideSlide } from '@splidejs/react-splide'
 import clsx from 'clsx'
 import { Button } from 'components/elements'
 import { ReactElement, useState } from 'react'
-import va from '@vercel/analytics'
 import { CONTACT_US_URI, GET_STARTED_URI } from 'lib/constants'
+import { trackEvent } from 'lib/posthog'
 
-type TierName = 'community' | 'pro' | 'team'
+export type TierName = 'community' | 'pro' | 'team'
+
 interface PricingTier {
 	name: TierName
 	displayName: string
@@ -263,7 +264,7 @@ const Pricing = () => {
 										className='mx-auto scale-[0.95] hover:bg-gradient-2'
 										href={t.ctaLink}
 										onClick={() => {
-											va.track('cta-clicked', { name: t.cta, section: 'table' })
+											trackEvent(`pricing_comparison_${t.name}`)
 										}}
 									>
 										{t.cta}
