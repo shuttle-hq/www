@@ -9,7 +9,7 @@ export default function Auth() {
 
 	useEffect(() => {
 		if (user) {
-			router.push('/dashboard')
+			router.push('/')
 		}
 	}, [user, router])
 
