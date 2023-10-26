@@ -2,50 +2,42 @@ import { Splide, SplideSlide } from '@splidejs/react-splide'
 import { Grid } from '@splidejs/splide-extension-grid'
 import { Starter } from 'components/elements'
 import { Discord, Paperclip, React } from 'components/svgs'
-import { GetStaticPropsResult } from 'next'
-import { StarterAttrs, StarterProps, StarterXProps } from '../elements/Starter'
-import { FeaturedStartersContent } from '../../content/starters'
+import {GetStaticPropsResult} from "next";
+import {StarterAttrs, StarterProps, StarterXProps} from "../elements/Starter";
+import {FeaturedStartersContent} from "../../content/starters";
 
 const StartersXProps: StarterXProps[] = [
 	{
 		bg: '/images/sections/featured-starters/1-bg.png',
 		bgClassName: 'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover',
 		stars: '/images/sections/featured-starters/1-stars.png',
-		starsClassName:
-			'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3',
+		starsClassName: 'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3',
 		stars2: '/images/sections/featured-starters/1-stars-2.png',
-		stars2ClassName: 'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover',
-		templateKey: 1,
+		stars2ClassName: 'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover'
 	},
 	{
 		bg: '/images/sections/featured-starters/2-bg.png',
 		bgClassName: 'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover',
 		stars: '/images/sections/featured-starters/2-stars.png',
-		starsClassName:
-			'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3',
+		starsClassName: 'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3',
 		stars2: '/images/sections/featured-starters/2-stars-2.png',
-		stars2ClassName:
-			'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1',
-		templateKey: 2,
+		stars2ClassName: 'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
 	},
 	{
 		bg: '/images/sections/featured-starters/3-bg.png',
 		bgClassName: 'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover',
 		stars: '/images/sections/featured-starters/3-stars.png',
-		starsClassName:
-			'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3',
+		starsClassName: 'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3',
 		stars2: '/images/sections/featured-starters/3-stars-2.png',
-		stars2ClassName:
-			'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1',
-		templateKey: 3,
-	},
+		stars2ClassName: 'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
+	}
 ]
 
-const FeaturedStarters = ({ starters }: { starters: StarterAttrs[] }) => {
+const FeaturedStarters = ({starters}: {starters: StarterAttrs[]}) => {
 	const children = StartersXProps.slice(0, 3).map((xprops, idx) => {
 		return (
 			<SplideSlide className='splide__slide overflow-hidden p-px' key={idx}>
-				<Starter {...{ ...xprops, ...starters[idx] }} templateKey={idx + 1} />
+				<Starter {...{...xprops, ...starters[idx]}}/>
 			</SplideSlide>
 		)
 	})
@@ -107,7 +99,6 @@ const FeaturedStarters = ({ starters }: { starters: StarterAttrs[] }) => {
 						starsClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
 						stars2='/images/sections/featured-starters/4-stars-2.png'
 						stars2ClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
-						templateKey={4}
 					/>
 				</SplideSlide>
 			</Splide>

@@ -4,8 +4,7 @@ import { FC, useState } from 'react'
 import Image from 'next/image'
 import { Tooltip } from 'react-tooltip'
 import Link from 'next/link'
-import { TierName } from '../Pricing'
-import { trackEvent } from 'lib/posthog'
+import va from '@vercel/analytics'
 
 export interface FeatureProps {
 	feature: string
@@ -13,7 +12,6 @@ export interface FeatureProps {
 }
 
 export interface PlanProps {
-	key: TierName
 	name: string
 	description: string
 	price: string
@@ -26,7 +24,6 @@ export interface PlanProps {
 }
 
 const Plan: FC<PlanProps> = ({
-	key,
 	name,
 	description,
 	price,
@@ -142,7 +139,7 @@ const Plan: FC<PlanProps> = ({
 					target='_blank'
 					className='inline-block h-full w-full'
 					onClick={() => {
-						trackEvent(`pricing_tiers_${name.toLowerCase()}`)
+						va.track('cta-clicked', { name: cta, section: 'cards' })
 					}}
 				>
 					{cta}

@@ -4,12 +4,6 @@ import clsx from 'clsx'
 import { Copy } from 'components/svgs'
 import { CodeBlock } from 'components/elements'
 import { useCopyToClipboard, useIntersection } from 'react-use'
-import { trackEvent } from 'lib/posthog'
-
-type GetStartedStep =
-	| 'homepage_getstartedinseconds_clipboard_install'
-	| 'homepage_getstartedinseconds_clipboard_initalize'
-	| 'homepage_getstartedinseconds_clipboard_deploy'
 
 const GetStarted = () => {
 	const [selectedSlide, setSelectedSlide] = useState(0)
@@ -29,20 +23,16 @@ const GetStarted = () => {
 					all the infrastructure.
 				</p>
 			</div>
-			<div className='mx-auto mt-10 w-full max-w-7xl gap-x-6 px-5 sm:px-10 lg:mt-16 lg:grid lg:grid-cols-[1fr_400px] lg:gap-5 xl:mt-20 xl:items-center xl:gap-12'>
-				<div className='group relative z-10 block h-full items-end overflow-hidden rounded-2xl bg-[#13292C] px-8 pt-16 dark:bg-black sm:mt-10 sm:items-center sm:px-12 sm:px-4 sm:py-24 lg:mt-0 lg:items-end lg:items-center lg:px-8 lg:py-12 xl:flex xl:p-[4.375rem] desktop:items-end desktop:pb-0 desktop:pt-[2.75rem]'>
+			<div
+				className='mx-auto mt-10 w-full max-w-7xl gap-x-6 px-5 sm:px-10 lg:mt-16 lg:grid lg:grid-cols-[1fr_400px] lg:gap-5 xl:mt-20 xl:items-center xl:gap-12'
+			>
+				<div className='group relative z-10 block h-full items-end overflow-hidden rounded-2xl bg-[#13292C] px-8 pt-16 dark:bg-black sm:mt-10 sm:items-center sm:px-4 sm:px-12 sm:py-24 lg:mt-0 lg:items-end lg:items-center lg:px-8 lg:py-12 xl:flex xl:p-[4.375rem] desktop:items-end desktop:pt-[2.75rem] desktop:pb-0'>
 					<CodeBlock
-						language={selectedSlide === 1 ? 'rust' : 'none'}
+						language={selectedSlide === 1 ? 'rust' : 'none' }
 						showLineNumbers={selectedSlide === 1}
 						copyBtn={selectedSlide === 1}
-						code={
-							selectedSlide === 0
-								? SHUTTLE_INSTALL
-								: selectedSlide === 1
-								? SHUTTLE_INIT
-								: SHUTTLE_DEPLOY
-						}
-						className='absolute left-1/2 mx-auto h-full -translate-x-1/2 transform overflow-auto rounded-t-xl sm:rounded-xl lg:w-full lg:rounded-b-3xl lg:rounded-t-3xl xl:overflow-hidden desktop:relative desktop:-bottom-px desktop:rounded-b-none'
+						code={selectedSlide === 0 ? SHUTTLE_INSTALL : selectedSlide === 1 ? SHUTTLE_INIT : SHUTTLE_DEPLOY }
+						className='absolute left-1/2 mx-auto h-full -translate-x-1/2 transform overflow-auto rounded-t-xl sm:rounded-xl lg:w-full lg:rounded-t-3xl lg:rounded-b-3xl xl:overflow-hidden desktop:relative desktop:-bottom-px desktop:rounded-b-none'
 					/>
 					<Image
 						src='/images/sections/get-started/noise.png'
@@ -55,14 +45,14 @@ const GetStarted = () => {
 						alt='get started background'
 						width={739}
 						height={422}
-						className='pointer-events-none absolute bottom-0 left-0 -z-10 w-full opacity-50 transition duration-500 group-hover:opacity-70'
+						className='pointer-events-none absolute left-0 bottom-0 -z-10 w-full opacity-50 transition duration-500 group-hover:opacity-70'
 					/>
 					<Image
 						src='/images/sections/get-started/top-left.png'
 						alt='get started top'
 						width={366}
 						height={233}
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full object-cover group-hover:-left-5 group-hover:-top-5'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full object-cover group-hover:-top-5 group-hover:-left-5'
 					/>
 					{/* Tablet */}
 					<Image
@@ -77,7 +67,7 @@ const GetStarted = () => {
 						width={595}
 						height={487}
 						sizes='100vw, (min-width: 768px) 768px'
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-y-3 group-hover:translate-x-20 sm:hidden lg:block'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full object-contain transition-transform duration-1000 group-hover:translate-x-20 group-hover:-translate-y-3 sm:hidden lg:block'
 					/>
 					<Image
 						src='/images/sections/get-started/stars-2.png'
@@ -93,22 +83,20 @@ const GetStarted = () => {
 					<GetStartedSlide
 						number={0}
 						title='Install'
-						command='cargo install cargo-shuttle'
+						command="cargo install cargo-shuttle"
 						text='Install the CLI'
 						handleClick={handleClick}
 						isSelected={0 === selectedSlide}
 						gradient='from-[#FC540C] to-[#C39348]'
-						step='homepage_getstartedinseconds_clipboard_install'
 					/>
 					<GetStartedSlide
 						number={1}
 						title='Initialize'
-						command='cargo shuttle init'
+						command="cargo shuttle init"
 						text='Bootstrap your project'
 						handleClick={handleClick}
 						isSelected={1 === selectedSlide}
 						gradient='from-[#D1883C] to-[#ABA363]'
-						step='homepage_getstartedinseconds_clipboard_initalize'
 					/>
 					<GetStartedSlide
 						number={2}
@@ -118,7 +106,6 @@ const GetStarted = () => {
 						handleClick={handleClick}
 						isSelected={2 === selectedSlide}
 						gradient='from-[#C19549] to-[#8AB58D]'
-						step='homepage_getstartedinseconds_clipboard_deploy'
 					/>
 				</div>
 			</div>
@@ -134,7 +121,6 @@ interface GetStartedSlideProps {
 	gradient?: string
 	handleClick: (id: number, lock?: boolean) => void
 	isSelected: boolean
-	step: GetStartedStep
 }
 
 const GetStartedSlide: FC<GetStartedSlideProps> = ({
@@ -145,9 +131,8 @@ const GetStartedSlide: FC<GetStartedSlideProps> = ({
 	gradient,
 	handleClick,
 	isSelected,
-	step,
 }) => {
-	const [_, copyToClipboard] = useCopyToClipboard()
+	const [_, copyToClipboard] = useCopyToClipboard();
 	// React splide is 0-indexed
 	const adjustedNumber = number + 1
 
@@ -155,15 +140,15 @@ const GetStartedSlide: FC<GetStartedSlideProps> = ({
 		<div
 			onMouseEnter={() => handleClick(number)}
 			className={clsx(
-				'group relative h-max min-w-max cursor-pointer cursor-pointer rounded-2xl p-[1px] transition after:rounded-2xl',
+				'group relative h-max min-w-max cursor-pointer p-[1px] cursor-pointer rounded-2xl transition after:rounded-2xl',
 				isSelected ? clsx('bg-gradient-to-r to-transparent', gradient) : 'transparent'
 			)}
 		>
-			<div className={clsx('rounded-2xl bg-[#E9E9E9] p-6 after:rounded-2xl dark:bg-black')}>
+			<div className={clsx('bg-[#E9E9E9] dark:bg-black p-6 rounded-2xl after:rounded-2xl')}>
 				<h3 className='font-gradual text-2xl font-bold dark:text-[#C2C2C2]'>
-					<span className={clsx('bg-gradient-to-r bg-clip-text text-transparent', gradient)}>
-						0{adjustedNumber}
-					</span>
+				<span className={clsx('bg-gradient-to-r bg-clip-text text-transparent', gradient)}>
+					0{adjustedNumber}
+				</span>
 					&nbsp;{title}
 				</h3>
 				<p className='mt-2'>{text}</p>
@@ -172,18 +157,16 @@ const GetStartedSlide: FC<GetStartedSlideProps> = ({
 					$ {command}
 					<button
 						className='absolute right-3 rounded-lg border border-transparent p-1 hover:border-[#484848] hover:bg-[#343434] dark:text-[#C2C2C2]'
-						onClick={() => {
-							trackEvent(step)
-							copyToClipboard(command)
-						}}
+						onClick={() => copyToClipboard(command)}
 					>
-						<Copy />
+						<Copy/>
 					</button>
 				</div>
 
 				<hr className='absolute -bottom-px left-6 w-[calc(100%-3rem)] border-black/10 dark:border-[#191919]' />
 			</div>
 		</div>
+
 	)
 }
 

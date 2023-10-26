@@ -6,7 +6,6 @@ import { useState } from 'react'
 import clsx from 'clsx'
 import { useUser } from '@auth0/nextjs-auth0/client'
 import { DISCORD_URL } from '../../../lib/constants'
-import { trackEvent } from 'lib/posthog'
 
 const ThemeSwitcher = dynamic(() => import('./ThemeSwitcher'), { ssr: false })
 
@@ -36,7 +35,6 @@ const Navigation = () => {
 						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='/blog/tags/all'
 						onClick={() => {
-							trackEvent('homepage_mainnav_blog')
 							setOpen(false)
 						}}
 					>
@@ -46,7 +44,6 @@ const Navigation = () => {
 						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='/pricing'
 						onClick={() => {
-							trackEvent('homepage_mainnav_pricing')
 							setOpen(false)
 						}}
 					>
@@ -56,7 +53,6 @@ const Navigation = () => {
 						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='https://docs.shuttle.rs'
 						onClick={() => {
-							trackEvent('homepage_mainnav_docs')
 							setOpen(false)
 						}}
 					>
@@ -66,7 +62,6 @@ const Navigation = () => {
 						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='/beta'
 						onClick={() => {
-							trackEvent('homepage_mainnav_beta')
 							setOpen(false)
 						}}
 					>
@@ -76,7 +71,6 @@ const Navigation = () => {
 						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='/shuttle-heroes'
 						onClick={() => {
-							trackEvent('homepage_mainnav_heroes')
 							setOpen(false)
 						}}
 					>
@@ -86,7 +80,6 @@ const Navigation = () => {
 						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='/ai'
 						onClick={() => {
-							trackEvent('homepage_mainnav_ai')
 							setOpen(false)
 						}}
 					>
@@ -96,7 +89,6 @@ const Navigation = () => {
 						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='/launchpad'
 						onClick={() => {
-							trackEvent('homepage_mainnav_launchpad')
 							setOpen(false)
 						}}
 					>
@@ -105,23 +97,10 @@ const Navigation = () => {
 				</div>
 				<div className='mt-10 xl:ml-auto xl:mt-0 xl:flex xl:items-center xl:gap-5'>
 					<div className='mt-10 flex flex-wrap items-center gap-5 xl:mt-0'>
-						<Button
-							variant='secondary'
-							invertOnDark
-							href={DISCORD_URL}
-							onClick={() => {
-								trackEvent('homepage_mainnav_discord')
-							}}
-						>
+						<Button variant='secondary' invertOnDark href={DISCORD_URL}>
 							Join Discord
 						</Button>
-						<LoginButton
-							variant='primary'
-							invertOnDark
-							onClick={() => {
-								trackEvent('homepage_mainnav_login')
-							}}
-						>
+						<LoginButton variant='primary' invertOnDark>
 							{user ? (
 								'Console'
 							) : (

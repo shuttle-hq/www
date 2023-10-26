@@ -1,7 +1,6 @@
 import { Splide, SplideSlide, SplideTrack } from '@splidejs/react-splide'
 import clsx from 'clsx'
 import { CodeBlock } from 'components/elements'
-import { trackEvent } from 'lib/posthog'
 import { useState } from 'react'
 
 type SelectedItem = 'hello-world' | 'deploy1' | 'postgres' | 'deploy2'
@@ -23,7 +22,7 @@ const HowItWorks = () => {
 							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
 							selectedItem === 'hello-world' && '!text-black dark:text-[#C2C2C2]'
 						)}
-						onMouseOver={() => setSelectedItem('hello-world')}
+						onMouseOver={() => setSelectedItem("hello-world")}
 					>
 						With Shuttle you can take any Rust service code, and have it ready for deployment by adding
 						a single annotation to your main function.
@@ -33,7 +32,7 @@ const HowItWorks = () => {
 							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
 							selectedItem === 'deploy1' && '!text-black dark:text-[#C2C2C2]'
 						)}
-						onMouseOver={() => setSelectedItem('deploy1')}
+						onMouseOver={() => setSelectedItem("deploy1")}
 					>
 						Your code is packaged and sent to Shuttle where it is compiled and deployed. After a few
 						seconds, your app is already running in the cloud.
@@ -43,7 +42,7 @@ const HowItWorks = () => {
 							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
 							selectedItem === 'postgres' && '!text-black dark:text-[#C2C2C2]'
 						)}
-						onMouseOver={() => setSelectedItem('postgres')}
+						onMouseOver={() => setSelectedItem("postgres")}
 					>
 						You can then add more annotations that control cloud resources. Adding components like
 						databases, secrets or storage is as easy as adding arguments to a function.
@@ -53,7 +52,7 @@ const HowItWorks = () => {
 							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
 							selectedItem === 'deploy2' && '!text-black dark:text-[#C2C2C2]'
 						)}
-						onMouseOver={() => setSelectedItem('deploy2')}
+						onMouseOver={() => setSelectedItem("deploy2")}
 					>
 						The next time you deploy your app, Shuttle provisions and configures the resources you
 						need. In minutes, you can build complex and scalable apps on industry-standard AWS products
@@ -88,10 +87,7 @@ const HowItWorks = () => {
 										? 'border border-[#191919] bg-[#13292C] text-[#D8D8D8] dark:bg-black'
 										: 'tab-shadow dark:text-[#C2C2C2]'
 								)}
-								onClick={() => {
-									trackEvent('homepage_howitworks_getstarted')
-									setSelectedItem('hello-world')
-								}}
+								onClick={() => setSelectedItem('hello-world')}
 							>
 								Get Started
 							</button>
@@ -104,10 +100,7 @@ const HowItWorks = () => {
 										? 'border border-[#191919] bg-[#13292C] text-[#D8D8D8] dark:bg-black'
 										: 'tab-shadow dark:text-[#C2C2C2]'
 								)}
-								onClick={() => {
-									trackEvent('homepage_howitworks_deploy')
-									setSelectedItem('deploy1')
-								}}
+								onClick={() => setSelectedItem('deploy1')}
 							>
 								Deploy
 							</button>
@@ -120,10 +113,7 @@ const HowItWorks = () => {
 										? 'border border-[#191919] bg-[#13292C] text-[#D8D8D8] dark:bg-black'
 										: 'tab-shadow dark:text-[#C2C2C2]'
 								)}
-								onClick={() => {
-									trackEvent('homepage_howitworks_addadatabase')
-									setSelectedItem('postgres')
-								}}
+								onClick={() => setSelectedItem('postgres')}
 							>
 								Add a Database
 							</button>
@@ -136,10 +126,7 @@ const HowItWorks = () => {
 										? 'border border-[#191919] bg-[#13292C] text-[#D8D8D8] dark:bg-black'
 										: 'tab-shadow dark:text-[#C2C2C2]'
 								)}
-								onClick={() => {
-									trackEvent('homepage_howitworks_deployagain')
-									setSelectedItem('deploy2')
-								}}
+								onClick={() => setSelectedItem('deploy2')}
 							>
 								Deploy Again
 							</button>
@@ -157,7 +144,7 @@ const HowItWorks = () => {
 								? POSTGRES
 								: DEPLOY2
 						}
-						language={selectedItem === 'deploy1' || selectedItem === 'deploy2' ? 'none' : 'rust'}
+						language={(selectedItem === 'deploy1' || selectedItem === 'deploy2') ? 'none' : 'rust'}
 						showLineNumbers={selectedItem === 'hello-world' || selectedItem === 'postgres'}
 						className='py-6'
 					/>

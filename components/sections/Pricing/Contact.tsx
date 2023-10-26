@@ -1,6 +1,6 @@
 import { Button } from 'components/elements'
 import { CONTACT_US_URI } from 'lib/constants'
-import { trackEvent } from 'lib/posthog'
+import va from '@vercel/analytics'
 
 const Contact = () => (
 	<div className='mx-auto mt-24  max-w-7xl '>
@@ -15,7 +15,7 @@ const Contact = () => (
 				className='hover:bg-gradient-2'
 				href={CONTACT_US_URI}
 				onClick={() => {
-					trackEvent('pricing_contactus')
+					va.track('cta-clicked', { name: 'Get Started', section: 'post-table' })
 				}}
 			>
 				Contact Us

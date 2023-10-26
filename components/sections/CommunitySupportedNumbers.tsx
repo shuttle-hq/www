@@ -1,12 +1,11 @@
-import { trackEvent } from 'lib/posthog'
-import { DISCORD_URL } from '../../lib/constants'
+import { DISCORD_URL } from "../../lib/constants";
 
 import Link from 'next/link'
 
 const CommunitySupportedNumbers = () => {
 	return (
 		<div className='mt-24 border-y border-black/10 py-12 dark:border-[#191919] lg:py-0'>
-			<div className='mx-auto grid w-full max-w-[1280px] grid-cols-3 gap-x-8 gap-y-12 px-5 sm:gap-14 sm:px-10 lg:grid-cols-[1fr_51px_1fr_1fr_1fr] lg:items-center'>
+			<div className='mx-auto grid w-full max-w-[1280px] grid-cols-3 gap-y-12 gap-x-8 px-5 sm:gap-14 sm:px-10 lg:grid-cols-[1fr_51px_1fr_1fr_1fr] lg:items-center'>
 				<div className='col-span-3 lg:col-span-1 lg:py-12'>
 					<h2 className='font-gradual text-2xl font-bold text-black dark:text-[#C2C2C2]'>
 						Powered by our Community
@@ -14,9 +13,6 @@ const CommunitySupportedNumbers = () => {
 					<Link
 						href={DISCORD_URL}
 						className='group mt-3 inline-flex items-center text-[#525151] dark:text-[#C2C2C2]'
-						onClick={() => {
-							trackEvent('homepage_poweredbyourcommunity_joinusnow')
-						}}
 					>
 						Join us now
 						{/* Right Arrow */}

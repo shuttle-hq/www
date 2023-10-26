@@ -1,5 +1,4 @@
 import { Button } from 'components/elements'
-import { trackEvent } from 'lib/posthog'
 import Image from 'next/image'
 
 const ShuttleHeroesHero = () => {
@@ -20,9 +19,6 @@ const ShuttleHeroesHero = () => {
 							invertOnDark
 							className='bg-[#13292C] text-white'
 							href='https://btl1d1x5z23.typeform.com/to/WAu53vBi'
-							onClick={() => {
-								trackEvent('heroes_becomeahero')
-							}}
 						>
 							Become a Shuttle hero
 						</Button>
