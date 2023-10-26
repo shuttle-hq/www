@@ -5,18 +5,23 @@ import { FC, ReactNode } from 'react'
 import Button from './Button'
 
 import { Calendar, Discord, Paperclip, React } from 'components/svgs'
+import { trackEvent } from 'lib/posthog'
 
 export type StarterIcon = 'paperclip' | 'discord' | 'react' | 'calendar'
 
 export function getStarterIcon(icon: StarterIcon): ReactNode {
 	const props = {
-		className: 'mb-auto'
+		className: 'mb-auto',
 	}
 	switch (icon) {
-		case 'paperclip': return <Paperclip {...props}/>
-		case 'discord': return <Discord {...props}/>
-		case 'react': return <React {...props}/>
-		case 'calendar': return <Calendar {...props}/>
+		case 'paperclip':
+			return <Paperclip {...props} />
+		case 'discord':
+			return <Discord {...props} />
+		case 'react':
+			return <React {...props} />
+		case 'calendar':
+			return <Calendar {...props} />
 	}
 }
 
@@ -36,6 +41,7 @@ export interface StarterXProps {
 	starsClassName?: string
 	stars2: string
 	stars2ClassName?: string
+	templateKey: number
 }
 
 export interface StarterProps extends StarterXProps, StarterAttrs {}
@@ -53,9 +59,10 @@ const Starter: FC<StarterProps> = ({
 	sourceLink,
 	postLink,
 	deployLink,
+	templateKey,
 }) => {
 	return (
-		<div className='border-gradient group relative relative h-full overflow-visible rounded-4xl bg-[#13292C] px-5 pt-8 pb-6 shadow-[0_0_0_1px_#191919] after:rounded-[2rem] hover:shadow-none dark:bg-black'>
+		<div className='border-gradient group relative relative h-full overflow-visible rounded-4xl bg-[#13292C] px-5 pb-6 pt-8 shadow-[0_0_0_1px_#191919] after:rounded-[2rem] hover:shadow-none dark:bg-black'>
 			<Image src={bg} alt='bg' fill className={bgClassName} />
 			<Image src={stars} alt='stars' fill className={starsClassName} />
 			<Image src={stars2} alt='stars 2' fill className={stars2ClassName} />
@@ -69,19 +76,37 @@ const Starter: FC<StarterProps> = ({
 				>
 					{title}
 				</h3>
-				<p className='opacity-60 mt-1 text-[#C2C2C2]'>{description}</p>
+				<p className='mt-1 text-[#C2C2C2] opacity-60'>{description}</p>
 				{sourceLink ? (
 					<div className='mt-auto flex items-center justify-between gap-5 pt-5 text-[#C2C2C2]'>
 						<span>
-							<Link href={sourceLink} className='hover:underline'>
+							<Link
+								href={sourceLink}
+								className='hover:underline'
+								onClick={() => {
+									trackEvent(`homepage_starters_${templateKey}_source`)
+								}}
+							>
 								Source
 							</Link>
 							<span className='px-[0.375rem]'>•</span>
-							<Link href={postLink || '/blog'} className='hover:underline'>
+							<Link
+								href={postLink || '/blog'}
+								className='hover:underline'
+								onClick={() => {
+									trackEvent(`homepage_starters_${templateKey}_post`)
+								}}
+							>
 								Post
 							</Link>
 						</span>
-						<Button variant='primary' href={deployLink || '/login'}>
+						<Button
+							variant='primary'
+							href={deployLink || '/login'}
+							onClick={() => {
+								trackEvent(`homepage_starters_${templateKey}_deploy`)
+							}}
+						>
 							Deploy
 						</Button>
 					</div>
@@ -90,7 +115,7 @@ const Starter: FC<StarterProps> = ({
 						View all
 						{/* Right Arrow */}
 						<svg
-							className='relative my-4 left-2 text-[#D8D8D8] transition-all duration-300 ease-in-out group-hover:left-4'
+							className='relative left-2 my-4 text-[#D8D8D8] transition-all duration-300 ease-in-out group-hover:left-4'
 							width={17}
 							height={14}
 							viewBox='0 0 17 14'
@@ -106,7 +131,5 @@ const Starter: FC<StarterProps> = ({
 		</div>
 	)
 }
-
-
 
 export default Starter

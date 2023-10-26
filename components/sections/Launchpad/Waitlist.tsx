@@ -1,3 +1,4 @@
+import { trackEvent } from 'lib/posthog'
 import Image from 'next/image'
 import { FC } from 'react'
 
@@ -37,6 +38,9 @@ export const Waitlist: FC<WaitListProps> = ({ cta, description, subDescription }
 					type='submit'
 					value='Subscribe'
 					className='mt-4 h-[56px] w-full rounded-[14px] bg-[#D8D8D8] text-lg text-black sm:mt-0 sm:w-[154px]'
+					onClick={() => {
+						trackEvent('launchpad_subscribe')
+					}}
 				/>
 			</form>
 

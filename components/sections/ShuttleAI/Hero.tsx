@@ -1,3 +1,4 @@
+import { trackEvent } from 'lib/posthog'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -27,6 +28,9 @@ const Hero = () => {
 					href='https://btl1d1x5z23.typeform.com/shuttle-ai'
 					target='_blank'
 					className='mt-4 flex h-[56px] cursor-pointer items-center rounded-[14px] bg-[#D8D8D8] px-6 text-lg text-black sm:mt-0'
+					onClick={() => {
+						trackEvent('ai_waitlist')
+					}}
 				>
 					Join the waitlist
 				</Link>

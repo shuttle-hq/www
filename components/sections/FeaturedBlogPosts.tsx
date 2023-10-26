@@ -3,6 +3,7 @@ import { Grid } from '@splidejs/splide-extension-grid'
 import { Button } from 'components/elements'
 import { getAuthors } from 'lib/blog/authors'
 import { Post } from 'lib/blog/posts'
+import { trackEvent } from 'lib/posthog'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC, useState } from 'react'
@@ -87,6 +88,9 @@ const Article: FC<ArticleProps> = ({ post, className }) => {
 			<Link
 				href={`/blog/${post.url}`}
 				className='group block rounded-2.5xl bg-[#13292C] transition duration-500 hover:shadow-[0px_4px_64px_0px_rgba(252,84,12,0.25)] dark:border dark:border-[#1E1B19] dark:bg-black'
+				onClick={() => {
+					trackEvent(`homepage_whatsnew_blogpost_${post.title}`)
+				}}
 			>
 				<div className='relative aspect-[381/214] w-full overflow-hidden rounded-t-2.5xl'>
 					<Image

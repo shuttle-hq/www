@@ -2,6 +2,7 @@ import { Splide, SplideSlide } from '@splidejs/react-splide'
 import clsx from 'clsx'
 import { getAuthors } from 'lib/blog/authors'
 import { Post } from 'lib/blog/posts'
+import { trackEvent } from 'lib/posthog'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -51,6 +52,9 @@ const Blog: FC<BlogProps> = ({ tags, posts }) => {
 								'p-2 transition-all lg:hover:pl-4',
 								tag === activeTag && 'pl-4 text-transparent'
 							)}
+							onClick={() => {
+								trackEvent(`blog_tag_${tag}`)
+							}}
 						>
 							{tag}
 						</Link>
@@ -90,7 +94,12 @@ const BlogPost: FC<Post> = (post) => {
 					</div>
 					<li className='list-disc text-[#7A7A7A]'>{post.date}</li>
 				</div>
-				<Link href={`/blog/${post.url}`}>
+				<Link
+					href={`/blog/${post.url}`}
+					onClick={() => {
+						trackEvent(`homepage_footer_site_${post.title}`)
+					}}
+				>
 					<h2 className='font-gradual text-2xl font-bold text-black dark:text-[#C2C2C2] lg:text-[1.75rem] lg:leading-9'>
 						{post.title}
 					</h2>
@@ -102,6 +111,9 @@ const BlogPost: FC<Post> = (post) => {
 							key={tag}
 							href={`/blog/tags/${tag}`}
 							className='border-gradient-h relative rounded-full px-2 py-1 outline outline-1 outline-black/10 hover:outline-transparent hover:after:rounded-full hover:after:bg-gradient-to-r hover:after:from-[#FC540C] hover:after:to-[#FFD76F] dark:bg-black dark:outline-[#1E1B19]'
+							onClick={() => {
+								trackEvent(`blog_tag_${tag}`)
+							}}
 						>
 							{tag}
 						</Link>

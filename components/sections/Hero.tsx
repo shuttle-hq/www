@@ -1,11 +1,10 @@
-import {Button, LoginButton} from 'components/elements'
+import { Button, LoginButton } from 'components/elements'
 import Image from 'next/image'
-import {useUser} from "@auth0/nextjs-auth0/client";
-import {DISCORD_URL} from "../../lib/constants";
-import codeImage from "public/images/sections/hero/shuttle-axum-hello-world.png"
+import { DISCORD_URL } from '../../lib/constants'
+import codeImage from 'public/images/sections/hero/shuttle-axum-hello-world.png'
+import { trackEvent } from 'lib/posthog'
 
 const Hero = () => {
-	const { user } = useUser();
 	return (
 		<div className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
 			<header className='md:grid md:grid-cols-2 md:items-center lg:grid-cols-[1.2fr_1fr] lg:gap-8'>
@@ -15,13 +14,27 @@ const Hero = () => {
 						Fast.
 					</h1>
 					<p className='mt-4 sm:text-xl lg:text-2xl'>
-						Build & ship a backend without writing any infrastructure files. Instead get your infrastructure definitions from your code function signatures and annotations.
+						Build & ship a backend without writing any infrastructure files. Instead get your
+						infrastructure definitions from your code function signatures and annotations.
 					</p>
 					<div className='mt-5 flex flex-wrap items-center gap-5 sm:mt-10 lg:mt-12 xl:mt-16'>
-						<LoginButton variant='primary' invertOnDark>
+						<LoginButton
+							variant='primary'
+							invertOnDark
+							onClick={() => {
+								trackEvent('homepage_buildbackendsfast_startbuilding')
+							}}
+						>
 							Start Building
 						</LoginButton>
-						<Button variant='secondary' invertOnDark href={DISCORD_URL}>
+						<Button
+							variant='secondary'
+							invertOnDark
+							href={DISCORD_URL}
+							onClick={() => {
+								trackEvent('homepage_buildbackendsfast_discord')
+							}}
+						>
 							Join Discord
 						</Button>
 					</div>
@@ -30,14 +43,14 @@ const Hero = () => {
 					<Image
 						src={codeImage}
 						alt='code'
-						className='mx-auto rounded-3xl pointer-events-none select-none'
+						className='pointer-events-none mx-auto select-none rounded-3xl'
 					/>
 					<Image
 						src='/images/sections/hero/bg.png'
 						alt='hero background'
 						width={702}
 						height={438}
-						className='pointer-events-none select-none absolute left-0 top-0 -z-10 h-full w-full'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full select-none'
 					/>
 				</div>
 			</header>
