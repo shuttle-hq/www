@@ -3,7 +3,6 @@ import { Button } from 'components/elements'
 import Image from 'next/image'
 import { FC, useState } from 'react'
 import { DISCORD_URL } from '../../lib/constants'
-import { trackEvent } from 'lib/posthog'
 
 export interface QuestionAttrs {
 	question: string
@@ -13,10 +12,9 @@ export interface QuestionAttrs {
 interface FrequentlyAskedQuestionsProps {
 	questions: QuestionAttrs[]
 	hideDiscord?: boolean
-	page: 'pricing' | 'homepage'
 }
 
-const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions, hideDiscord, page }) => {
+const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions, hideDiscord }) => {
 	const [activeQuestion, setActiveQuestion] = useState<number | null>(null)
 
 	const updateActiveQuestion = (index: number) => {
@@ -42,13 +40,7 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 					{questions.map(({ question, answer }, index) => (
 						<div className='flex items-center justify-between px-5' key={question}>
 							<div className='w-full'>
-								<button
-									onClick={() => {
-										trackEvent(`${page}_faq_question_${question}`)
-										updateActiveQuestion(index)
-									}}
-									className='w-full text-left'
-								>
+								<button onClick={() => updateActiveQuestion(index)} className='w-full text-left'>
 									<h3 className='cursor-pointer py-5 pr-5 text-[#525151] dark:text-[#C2C2C2] md:text-xl'>
 										{question}
 									</h3>
@@ -114,14 +106,7 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 						<p className='mt-2 text-[#C2C2C2]'>
 							Join our Discord, we&apos;re happy to answer any questions!
 						</p>
-						<Button
-							variant='primary'
-							className='mt-8'
-							href={DISCORD_URL}
-							onClick={() => {
-								trackEvent(`${page}_faq_discord`)
-							}}
-						>
+						<Button variant='primary' className='mt-8' href={DISCORD_URL}>
 							Join Discord
 						</Button>
 					</div>

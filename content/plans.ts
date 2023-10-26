@@ -3,7 +3,6 @@ import { CONTACT_US_URI, GET_STARTED_URI } from 'lib/constants'
 
 export const Plans: PlanProps[] = [
 	{
-		key: 'community',
 		name: 'Community',
 		description: 'Everything you need to simply run your hobby projects. On us.',
 		price: '$0',
@@ -44,7 +43,6 @@ export const Plans: PlanProps[] = [
 		cta: 'Start deploying',
 	},
 	{
-		key: 'pro',
 		name: 'Pro',
 		description: 'For more professional use cases - raise limits and get access to more resources.',
 		price: '$20',
@@ -86,7 +84,6 @@ export const Plans: PlanProps[] = [
 		cta: 'Get started',
 	},
 	{
-		key: 'team',
 		name: 'Team',
 		description: `Custom-built tier to supercharge your team's productivity.`,
 		price: 'Custom',

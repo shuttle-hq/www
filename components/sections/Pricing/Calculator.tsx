@@ -4,7 +4,6 @@ import { useState } from 'react'
 import 'rc-slider/assets/index.css'
 import Link from 'next/link'
 import { CONTACT_US_URI } from 'lib/constants'
-import { trackEvent } from 'lib/posthog'
 
 function roundToClosest(num: number, arr: number[]) {
 	let closest = arr[0]
@@ -26,7 +25,8 @@ const VCPU_VALUES = [0.05, 0.1, 0.25, 0.5, 0.75, 1, 2, 4]
 const SLIDER_STYLES = {
 	rail: { backgroundColor: '#ffffff33', height: 5 },
 	track: {
-		background: 'linear-gradient(72deg, #fc540c 27.87%, rgba(255, 215, 111, 0.72) 52.56%, #38d4e9 74.58%)',
+		background:
+			'linear-gradient(72deg, #fc540c 27.87%, rgba(255, 215, 111, 0.72) 52.56%, #38d4e9 74.58%)',
 		height: 4,
 	},
 	handle: {
@@ -35,9 +35,10 @@ const SLIDER_STYLES = {
 		width: 21,
 		height: 21,
 		top: 1,
-		background: 'linear-gradient(66deg, #FC540C -101.68%, rgba(255, 215, 111, 0.72) 2.02%, #38D4E9 84.49%)',
+		background:
+			'linear-gradient(66deg, #FC540C -101.68%, rgba(255, 215, 111, 0.72) 2.02%, #38D4E9 84.49%)',
 		border: '3px solid #ffffff',
-	},
+	}
 }
 
 const Calculator = () => {
@@ -76,13 +77,7 @@ const Calculator = () => {
 							The monthly cost is based on the product of vCPU cores and active hours.
 						</p>
 						<p className='text-[#7A7A7A] sm:text-xl'>Need a more precise estimate?</p>
-						<Link
-							href={CONTACT_US_URI}
-							target='_blank'
-							onClick={() => {
-								trackEvent('pricing_setupcall')
-							}}
-						>
+						<Link href={CONTACT_US_URI} target='_blank'>
 							<p className='cursor-pointer text-[#C2C2C2] underline sm:text-xl'>
 								Set up a call with our team
 							</p>
@@ -115,10 +110,7 @@ const Calculator = () => {
 							value={cpu}
 							onChange={(value: number | number[]) => {
 								if (typeof value === 'number') {
-									const rounded = roundToClosest(value, VCPU_VALUES)
-
-									trackEvent(`pricing_estimator_vcpu_${rounded}`)
-									setCpu(rounded)
+									setCpu(roundToClosest(value, VCPU_VALUES))
 								}
 							}}
 							className='-mt-32 mb-20 sm:mt-0 '
@@ -144,28 +136,27 @@ const Calculator = () => {
 							styles={SLIDER_STYLES}
 							value={hours}
 							onChange={(value: number | number[]) => {
-								if (typeof value === 'number') {
-									trackEvent(`pricing_estimator_hours_${value}`)
-									setHours(value)
-								}
+								if (typeof value === 'number') setHours(value)
 							}}
 							className='mb-16'
 						/>
 						<div className='mb-12 flex justify-center'>
-							<div
-								className='relative rounded-[24px] p-[2px]'
-								style={{
-									background:
-										'linear-gradient(71.78deg, rgba(252, 84, 12, 0.3) 27.87%, rgba(255, 215, 111, 0.216) 52.56%, rgba(56, 212, 233, 0.3) 74.58%)',
-								}}
-							>
-								<div className='flex h-full w-[250px] items-center justify-center rounded-[24px] bg-[#171C1A] p-5 opacity-100'>
-									<h1 className='mr-2 font-gradual text-[32px] font-bold text-[#D8D8D8]'>
-										{price}$
-									</h1>
-									<p className='mt-4 text-[#D8D8D8]'> / month</p>
-								</div>
+
+
+
+              <div className="rounded-[24px] p-[2px] relative" style={{
+                background: 'linear-gradient(71.78deg, rgba(252, 84, 12, 0.3) 27.87%, rgba(255, 215, 111, 0.216) 52.56%, rgba(56, 212, 233, 0.3) 74.58%)'
+              }}>
+
+              
+							<div className='flex items-center justify-center rounded-[24px] bg-[#171C1A] p-5 w-[250px] h-full opacity-100'>
+								<h1 className='mr-2 font-gradual text-[32px] font-bold text-[#D8D8D8]'>
+									{price}$
+								</h1>
+							  <p className='mt-4 text-[#D8D8D8]'> / month</p>
 							</div>
+              </div>
+            
 						</div>
 					</div>
 				</div>

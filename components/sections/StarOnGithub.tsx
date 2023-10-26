@@ -1,4 +1,3 @@
-import { trackEvent } from 'lib/posthog'
 import { useEffect, useState } from 'react'
 
 const StarOnGithub = () => {
@@ -20,14 +19,7 @@ const StarOnGithub = () => {
 				display: starOpen && mounted ? 'flex' : 'none',
 			}}
 		>
-			<a
-				href='https://github.com/shuttle-hq/shuttle'
-				target='_blank'
-				rel='noopener noreferrer'
-				onClick={() => {
-					trackEvent('github_star_cta')
-				}}
-			>
+			<a href='https://github.com/shuttle-hq/shuttle' target='_blank' rel='noopener noreferrer'>
 				⭐️ If you like Shuttle, give it a star on GitHub!
 			</a>
 			<button
