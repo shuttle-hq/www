@@ -115,22 +115,22 @@ const Navigation = () => {
 						>
 							Join Discord
 						</Button>
-						<LoginButton
-							variant='primary'
-							invertOnDark
+						<div
 							onClick={() => {
 								trackEvent('homepage_mainnav_login')
 							}}
 						>
-							{user ? (
-								'Console'
-							) : (
-								<>
-									<GithubLogo />
-									Log in
-								</>
-							)}
-						</LoginButton>
+							<LoginButton variant='primary' invertOnDark>
+								{user ? (
+									'Console'
+								) : (
+									<>
+										<GithubLogo />
+										Log in
+									</>
+								)}
+							</LoginButton>
+						</div>
 					</div>
 					<ThemeSwitcher className='mt-5 xl:-order-1 xl:mt-0' hidden />
 				</div>
