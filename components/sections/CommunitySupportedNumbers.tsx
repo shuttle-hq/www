@@ -1,9 +1,30 @@
 import { trackEvent } from 'lib/posthog'
-import { DISCORD_URL } from '../../lib/constants'
-
+import { DISCORD_URL, GITHUB_REPO } from '../../lib/constants'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 const CommunitySupportedNumbers = () => {
+	const [stars, setStars] = useState(null);
+	const githubToken = process.env.GITHUB_ACCESS_TOKEN;
+	useEffect(() => {
+		const apiUrl = `https://api.github.com/repos/${GITHUB_REPO}`;
+		const options = {
+			headers: {
+				Authorization: `token ${githubToken}`,
+			},
+		};
+		fetch(apiUrl, options)
+			.then((response) => response.json())
+			.then((data) => {
+				if (data.stargazers_count !== undefined) {
+					setStars(data.stargazers_count);
+				}
+			})
+			.catch((error) => {
+				console.error('Error fetching GitHub data:', error);
+			});
+	}, [githubToken]);
+
 	return (
 		<div className='mt-24 border-y border-black/10 py-12 dark:border-[#191919] lg:py-0'>
 			<div className='mx-auto grid w-full max-w-[1280px] grid-cols-3 gap-x-8 gap-y-12 px-5 sm:gap-14 sm:px-10 lg:grid-cols-[1fr_51px_1fr_1fr_1fr] lg:items-center'>
@@ -46,7 +67,7 @@ const CommunitySupportedNumbers = () => {
 				</svg>
 				<div className='text-center lg:py-12'>
 					<p className='bg-gradient-to-r from-[#FB540C] to-[#DD7D31] bg-clip-text font-gradual text-[2.5rem] font-bold leading-none text-transparent sm:text-[3.5rem]'>
-						3.7k+
+						{stars !== null ? `${formatNumberToK(stars)}+` : 'Loading...'}
 					</p>
 					<h3 className='mt-1 text-sm text-[#525151] dark:text-[#C2C2C2] sm:text-base'>Github Stars</h3>
 				</div>
@@ -65,6 +86,17 @@ const CommunitySupportedNumbers = () => {
 			</div>
 		</div>
 	)
+}
+
+function formatNumberToK(number: number) {
+	if (number >= 1000) {
+		const suffixes = ["", "k", "M", "G", "T", "P"];
+		const magnitude = Math.floor(Math.log10(number) / 3);
+		const scaledNumber = number / Math.pow(1000, magnitude);
+		const formattedNumber = scaledNumber.toFixed(1);
+		return `${formattedNumber}${suffixes[magnitude]}`;
+	}
+	return number.toString();
 }
 
 export default CommunitySupportedNumbers

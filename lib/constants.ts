@@ -15,6 +15,7 @@ export const FATHOM_TRACKING_CODE = process.env.NEXT_PUBLIC_FATHOM_TRACKING_CODE
 export const BUTTONDOWN_API_KEY = process.env.NEXT_PUBLIC_BUTTONDOWN_API_KEY
 
 export const GITHUB_URL = 'https://github.com/shuttle-hq/shuttle'
+export const GITHUB_REPO = 'shuttle-hq/shuttle'
 
 export const GITHUB_EXAMPLES_URL = 'https://github.com/shuttle-hq/examples'
 
