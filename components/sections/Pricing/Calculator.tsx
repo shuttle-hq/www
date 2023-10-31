@@ -117,9 +117,11 @@ const Calculator = () => {
 								if (typeof value === 'number') {
 									const rounded = roundToClosest(value, VCPU_VALUES)
 
-									trackEvent(`pricing_estimator_vcpu_${rounded}`)
 									setCpu(rounded)
 								}
+							}}
+							onBlur={() => {
+								trackEvent(`pricing_estimator_vcpu_${cpu}`)
 							}}
 							className='-mt-32 mb-20 sm:mt-0 '
 						/>
@@ -145,9 +147,11 @@ const Calculator = () => {
 							value={hours}
 							onChange={(value: number | number[]) => {
 								if (typeof value === 'number') {
-									trackEvent(`pricing_estimator_hours_${value}`)
 									setHours(value)
 								}
+							}}
+							onBlur={() => {
+								trackEvent(`pricing_estimator_hours_${hours}`)
 							}}
 							className='mb-16'
 						/>
