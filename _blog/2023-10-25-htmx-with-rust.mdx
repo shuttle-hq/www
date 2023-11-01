@@ -1,11 +1,11 @@
 ---
-title: "Using htmx with Rust"
-description: This article details how to use htmx with Rust using Axum and Askama. We will write an SQL-backed to do list that can also emit live changes.
+title: "htmx, Rust & Shuttle: A New Rapid Prototyping Stack"
+description: This article details how htmx with Rust and Shuttle can speed up your workflow and let you focus on the code with the assistance of Axum and Askama. 
 author: josh
 tags: [rust, htmx, html, guide]
-thumb: 
-cover: 
-date: '2023-10-25T14:30:00'
+thumb: htmx-with-rust-thumb.png 
+cover: htmx-with-rust-thumb.png
+date: '2023-11-01T14:30:00'
 ---
 When it comes to Rust, although it's lauded as a language that is memory-safe, blazing fast and efficient, it's also known for having a compiler that will complain at you for everything (hence terms like "compiler-driven development" becoming a thing) and complex trait bounds that can getting it just right take time. In this article, we'll talk about tools that you can use to speed up your workflow: htmx with a templating engine and the web framework Axum (and of course, Shuttle!).
 
@@ -14,7 +14,10 @@ htmx is a JavaScript library designed to help you ship faster by allowing you to
 ## Using Shuttle
 Shuttle is a service designed to make deployment as easy as possible, by provisioning a runtime that lets you add macros (or "annotations") as function arguments to your entrypoint function. The runtime will then do static code analysis to figure out what needs provisioning and will then spin up the relevant infrastructure required - for example, if you need a Postgres instance, you can just declare it in your `fn main` arguments, use `cargo shuttle run` to run locally and then it'll spin up a container for you using Docker without any further input on your part!
 
-TODO: ADD GIF
+  <video width="700" height="500" loop autoPlay muted>
+  <source src="/videos/blog/htmx-with-rust.mp4" type="video/mp4"></source>
+Your browser does not support the video tag.
+</video> 
 
 By using Shuttle, we can turn this:
 ```rust
@@ -160,7 +163,7 @@ async fn main(#[shuttle_shared_db::Postgres] db: PgPool) -> shuttle_axum::Shuttl
         .await
         .expect("Looks like something went wrong with migrations :(");
 
-        let (tx, rx) = channel::<TodoUpdate>(10);
+    let (tx, rx) = channel::<TodoUpdate>(10);
     let state = AppState { db };
 
     let router = Router::new()
@@ -181,6 +184,8 @@ async fn main(#[shuttle_shared_db::Postgres] db: PgPool) -> shuttle_axum::Shuttl
 Now we want to send a message from our `create_todo` and `delete_todo` handlers through our channel - we can add them by including our extension in the function signature, then after a successful SQL transaction we simply send a message to the channel:
 ```rust
 // src/main.rs
+type TodosStream = Sender<TodoUpdate>;
+
 async fn create_todo(
     State(state): State<AppState>,
     Extension(tx): Extension<TodosStream>,          
@@ -195,8 +200,8 @@ async fn create_todo(
     .unwrap();
 
     if let Err(e) = tx.send( TodoUpdate {mutation_kind: MutationKind::Create, id: todo.id }) {
-      eprintln!("Tried to send log of record with ID {} created but something went wrong: {e}", todo.id);
-     }
+      	eprintln!("Tried to send log of record with ID {} created but something went wrong: {e}", todo.id);
+    }
      
     TodoNewTemplate { todo }
 }
@@ -213,7 +218,7 @@ State(state): State<AppState>,
         .unwrap();
 
     if let Err(e) = tx.send( TodoUpdate {mutation_kind: MutationKind::Delete, id }) {
-      eprintln!("Tried to send log of record with ID {id} created but something went wrong: {e}");
+    	eprintln!("Tried to send log of record with ID {id} created but something went wrong: {e}");
     }
     StatusCode::OK
 }
@@ -222,10 +227,21 @@ State(state): State<AppState>,
 Now we need to implement the stream handler, which we can do by creating a `BroadcastStream` and then mapping our stream to Axum SSE events:
 
 ```rust
+use std::convert::Infallible;
+use tokio_stream::{Stream, StreamExt as _};
+use std::time::Duration;
+use tokio::sync::broadcast::{channel, Sender, Receiver}; 
+use axum::{
+    http::StatusCode,
+    response::{sse::Event, IntoResponse, Sse, Response},
+    Extension
+};
+use serde_json::json;
+
 pub async fn handle_stream(
     Extension(tx): Extension<TodosStream>,
+    Extension(rx): Extension<Receiver<TodoUpdate>>
 ) -> Sse<impl Stream<Item = Result<Event, Infallible>>> {
-    let rx = tx.subscribe();
 
     let stream = BroadcastStream::new(rx);
 
@@ -263,3 +279,5 @@ When you have the `hx-sse` HTML element and then add or delete an item from the 
 Thanks for reading! I hope this guide to using htmx with Rust has helped you get a better insight into why it's currently rising in popularity at the moment. htmx is a great library that can be taken to new heights by using it in conjunction with HTML templating in Rust. 
 
 Did this article help you? Feel free to [give us a star on GitHub!](https://www.github.com/shuttle-hq/shuttle)
+
+You can find the article code [here.](https://github.com/joshua-mo-143/shuttle-axum-htmx-ex)
