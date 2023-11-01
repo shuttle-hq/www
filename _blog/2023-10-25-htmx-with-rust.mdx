@@ -9,7 +9,7 @@ date: '2023-11-01T14:30:00'
 ---
 When it comes to Rust, although it's lauded as a language that is memory-safe, blazing fast and efficient, it's also known for having a compiler that will complain at you for everything (hence terms like "compiler-driven development" becoming a thing) and complex trait bounds that can getting it just right take time. In this article, we'll talk about tools that you can use to speed up your workflow: htmx with a templating engine and the web framework Axum (and of course, Shuttle!).
 
-htmx is a JavaScript library designed to help you ship faster by allowing you to call endpoints from HTML elements instead of being required to do it manually which when combined with a HTML templating engine makes prototyping extremely quick - and we don't need to set anything up to do it, only being required as a minimum to use the CDN script (although we can also use it as an npm package). Shuttle allows you to move quickly by declaratively provisioning infrastructure like databases, key-store values and more as main function parameters using the Shuttle runtime, letting you prototype new projects extremely quickly when used with htmx.
+htmx is a JavaScript library designed to help you ship faster by allowing you to call endpoints from HTML elements instead of being required to do it manually which when combined with a HTML templating engine makes prototyping extremely quick - and we don't need to set anything up to do it, only being required as a minimum to use the CDN script (although we can also use it as an npm package). Shuttle allows you to move quickly by declaratively provisioning infrastructure like databases, key-value stores and more as main function parameters using the Shuttle runtime, letting you prototype new projects extremely quickly when used with htmx.
 
 ## Using Shuttle
 Shuttle is a service designed to make deployment as easy as possible, by provisioning a runtime that lets you add macros (or "annotations") as function arguments to your entrypoint function. The runtime will then do static code analysis to figure out what needs provisioning and will then spin up the relevant infrastructure required - for example, if you need a Postgres instance, you can just declare it in your `fn main` arguments, use `cargo shuttle run` to run locally and then it'll spin up a container for you using Docker without any further input on your part!
@@ -208,7 +208,7 @@ async fn create_todo(
 
 async fn delete_todo(
 State(state): State<AppState>, 
-        Path(id): Path<i32>,
+    Path(id): Path<i32>,
     Extension(tx): Extension<TodosStream>,          
 ) -> impl IntoResponse {
     sqlx::query("DELETE FROM TODOS WHERE ID = $1")
