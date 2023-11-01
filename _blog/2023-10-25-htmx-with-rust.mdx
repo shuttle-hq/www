@@ -14,21 +14,21 @@ htmx is a JavaScript library designed to help you ship faster by allowing you to
 ## Using Shuttle
 Shuttle is a service designed to make deployment as easy as possible, by provisioning a runtime that lets you add macros (or "annotations") as function arguments to your entrypoint function. The runtime will then do static code analysis to figure out what needs provisioning and will then spin up the relevant infrastructure required - for example, if you need a Postgres instance, you can just declare it in your `fn main` arguments, use `cargo shuttle run` to run locally and then it'll spin up a container for you using Docker without any further input on your part!
 
-  <video width="700" height="500" loop autoPlay muted>
-  <source src="/videos/blog/htmx-with-rust.mp4" type="video/mp4"></source>
-Your browser does not support the video tag.
-</video> 
+<video width="700" height="500" loop autoPlay muted>
+    <source src="/videos/blog/htmx-with-rust.mp4" type="video/mp4"></source>
+    Your browser does not support the video tag.
+</video>
 
 By using Shuttle, we can turn this:
 ```rust
 #[tokio::main]
 async fn main() {
     let sqlx_connection = PgPoolOptions::new().connect("your-addr-here").await.unwrap();
-  
+
     let router = Router::new().route("/", get(hello_world)).layer(Extension(Arc::new(sqlx_connection)));
-    
+
     let addr = SocketAddr::from(([0, 0, 0, 0], 8000));
-    
+
     axum::Server::bind(&addr).serve(router.into_make_service()).await.unwrap()
 }
 ```
@@ -39,7 +39,7 @@ async fn main(
     #[shuttle_shared_db::Postgres] sqlx_connection: PgPool
 ) -> shuttle_axum::ShuttleAxum {
     let router = Router::new().route("/", get(hello_world)).layer(Extension(Arc::new(sqlx_connection)));
-    
+
     Ok(router.into())
 }
 ```
@@ -52,21 +52,21 @@ To start off with, we want a `base.html` file that includes the head - which we'
 
 ```html
 <!-- templates/base.html -->
-<!DOCTYPE html> 
-<html lang="en"> 
-<head> 
-<script src="https://unpkg.com/htmx.org@1.9.6" 
-    integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" 
-    crossorigin="anonymous"></script> 
-<link rel="stylesheet" href="/styles.css"/>
-    <title>Index</title> 
-        {% block head %}{% endblock %} 
-</head> 
-    <body> 
-        <div id="content"> 
-            {% block content %}<p>Placeholder content</p>{% endblock %} 
-        </div> 
-    </body> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/htmx.org@1.9.6"
+        integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/styles.css"/>
+    <title>Index</title>
+    {% block head %}{% endblock %}
+</head>
+    <body>
+        <div id="content">
+            {% block content %}<p>Placeholder content</p>{% endblock %}
+        </div>
+    </body>
 </html>
 ```
 
@@ -80,10 +80,10 @@ Now let's make our `index.html` file:
 
 {% block content %}
 <h1>Shuttle Todos</h1>
-    <form id="add-form">
-        <input placeholder="Your todo description..." required type=text name="description">
-            <button hx-post="/todos" hx-trigger="click" hx-target="#todos-content" hx-swap="beforeend">Add</button>
-    </form>
+<form id="add-form">
+    <input placeholder="Your todo description..." required type=text name="description">
+    <button hx-post="/todos" hx-trigger="click" hx-target="#todos-content" hx-swap="beforeend">Add</button>
+</form>
 <div id="list" hx-get="/todos" hx-target="this" hx-trigger="load" hx-swap="outerHTML">
     Loading...
 </div>
@@ -98,17 +98,17 @@ For the next part, we'll want to have some of our HTML already written, so let's
 <div id="todos">
 <table>
     <thead>
-    <tr>
-    <th>ID</th>
-    <th>Description</th>
-    <th>Delete</th>
-    </tr>
+        <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Delete</th>
+        </tr>
     </thead>
     <tbody id="todos-content">
-<!-- As you can see here Askama allows for conditional and rendering an array of things -->
-{% for todo in todos %}
-    {% include "todo.html" %}
-{% endfor %}
+        <!-- Askama allows for rendering an array of things -->
+        {% for todo in todos %}
+            {% include "todo.html" %}
+        {% endfor %}
     </tbody>
 </table>
 </div>
@@ -120,10 +120,13 @@ For the next part, we'll want to have some of our HTML already written, so let's
     <td> {{ todo.id }} </td>
     <td id="shuttle-todo-desc-{{todo.id}}"> {{ todo.description }} </td>
     <td>
-	<button hx-delete="/todos/{{todo.id}}" 
-            hx-trigger="click" hx-target="#shuttle-todo-{{todo.id}}" 
-            hx-swap="delete">
-             Delete
+        <button
+            hx-delete="/todos/{{todo.id}}"
+            hx-trigger="click"
+            hx-target="#shuttle-todo-{{todo.id}}"
+            hx-swap="delete"
+        >
+            Delete
         </button>
     </td>
 </tr>
@@ -135,7 +138,14 @@ htmx allows you to make an API call without explicitly writing JavaScript for it
 ```html
 <form id="add-form">
     <input placeholder="Your todo description..." required type=text name="description">
-    <button hx-post="/todos" hx-trigger="click" hx-target="#todos-content" hx-swap="beforeend">Add</button>
+    <button
+        hx-post="/todos"
+        hx-trigger="click"
+        hx-target="#todos-content"
+        hx-swap="beforeend"
+    >
+        Add
+    </button>
 </form>
 ```
 
@@ -151,13 +161,13 @@ Being able to quickly mock up a CRUD app with htmx is great. However, Server Sen
 #[derive(Clone, Serialize, Debug)]
 enum MutationKind {
     Create,
-    Delete
-
+    Delete,
+}
 
 #[derive(Clone, Serialize, Debug)]
 pub struct TodoUpdate {
     mutation_kind: MutationKind,
-    id: i32
+    id: i32,
 }
 
 #[shuttle_runtime::main]
@@ -192,28 +202,28 @@ type TodosStream = Sender<TodoUpdate>;
 
 async fn create_todo(
     State(state): State<AppState>,
-    Extension(tx): Extension<TodosStream>,          
+    Extension(tx): Extension<TodosStream>,
     Form(form): Form<TodoNew>,
 ) -> impl IntoResponse {
     let todo = sqlx::query_as::<_, Todo>(
         "INSERT INTO TODOS (description) VALUES ($1) RETURNING id, description",
-    )   
+    )
     .bind(form.description)
     .fetch_one(&state.db)
     .await
     .unwrap();
 
-    if let Err(e) = tx.send( TodoUpdate {mutation_kind: MutationKind::Create, id: todo.id }) {
+    if let Err(e) = tx.send(TodoUpdate { mutation_kind: MutationKind::Create, id: todo.id }) {
       	eprintln!("Tried to send log of record with ID {} created but something went wrong: {e}", todo.id);
     }
-     
+
     TodoNewTemplate { todo }
 }
 
 async fn delete_todo(
-State(state): State<AppState>, 
+    State(state): State<AppState>,
     Path(id): Path<i32>,
-    Extension(tx): Extension<TodosStream>,          
+    Extension(tx): Extension<TodosStream>,
 ) -> impl IntoResponse {
     sqlx::query("DELETE FROM TODOS WHERE ID = $1")
         .bind(id)
@@ -221,9 +231,10 @@ State(state): State<AppState>,
         .await
         .unwrap();
 
-    if let Err(e) = tx.send( TodoUpdate {mutation_kind: MutationKind::Delete, id }) {
+    if let Err(e) = tx.send(TodoUpdate { mutation_kind: MutationKind::Delete, id }) {
     	eprintln!("Tried to send log of record with ID {id} created but something went wrong: {e}");
     }
+
     StatusCode::OK
 }
 ```
@@ -234,7 +245,7 @@ Now we need to implement the stream handler, which we can do by creating a `Broa
 use std::convert::Infallible;
 use tokio_stream::{Stream, StreamExt as _};
 use std::time::Duration;
-use tokio::sync::broadcast::{channel, Sender, Receiver}; 
+use tokio::sync::broadcast::{channel, Sender, Receiver};
 use axum::{
     http::StatusCode,
     response::{sse::Event, IntoResponse, Sse, Response},
@@ -249,7 +260,7 @@ pub async fn handle_stream(
 
     let stream = BroadcastStream::new(rx);
 
-// map the stream to axum Events which get sent through the SSE stream
+    // map the stream to axum Events which get sent through the SSE stream
     Sse::new(
         stream
             .map(|msg| {
@@ -259,12 +270,12 @@ pub async fn handle_stream(
                 Event::default().data(json)
             })
             .map(Ok),
-    )   
+    )
     .keep_alive(
         axum::response::sse::KeepAlive::new()
             .interval(Duration::from_secs(600))
             .text("keep-alive-text"),
-    )   
+    )
 }
 ```
 Then in our HTML, we will want to add an element that looks like this:
@@ -272,9 +283,9 @@ Then in our HTML, we will want to add an element that looks like this:
 <!-- templates/stream.html -->
 
 <!-- Using hx-swap here will still allow us to swap into the inner element, despite not having any triggers -->
-<div hx-sse="connect:/todos/stream swap:message" hx-swap="beforeend">  
+<div hx-sse="connect:/todos/stream swap:message" hx-swap="beforeend">
 
-</div> 
+</div>
 ```
 
 When you have the `hx-sse` HTML element and then add or delete an item from the main page, you will then see a log of what ID the record had and what the action was. The item will get appended to the inner div without any other input from our side!
