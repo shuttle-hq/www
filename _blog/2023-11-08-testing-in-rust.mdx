@@ -18,18 +18,18 @@ As you may know (or not!) already, you will generally need to put your tests in 
 
 ![A picture of file/folder setup for JS testing](/images/blog/testing-article-screenshots/javascript.png)
 
-In comparison when it comes to using Rust, tests are an inbuilt part of the language tooling via Cargo, the language's build system and package maanger. You don't need any external crates (libraries) - you just use `cargo test` and if there's any tests, it will run them. You can either place tests within the same files as your code, or you can create your own tests folder and run the tests from there. Either way, `cargo test` will recognise and run it. You can also specify whether the tests are unit tests or integration tests. A test folder for Rust might look like this:
+In comparison when it comes to using Rust, tests are an inbuilt part of the language tooling via Cargo, the language's build system and package manager. You don't need any external crates (libraries) - you just use `cargo test` and if there's any tests, it will run them. You can either place tests within the same files as your code, or you can create your own tests folder and run the tests from there. Either way, `cargo test` will recognise and run it. You can also specify whether the tests are unit tests or integration tests. A test folder for Rust might look like this:
 
 ![A picture of file/folder setup for Rust testing](/images/blog/testing-article-screenshots/rust.png)
 
-Although the language tooling itself has good testing capabiilities, we can take this one step further by using packages like `cargo-nextest`, a test runner CLI for Rust projects that builds on top of the already-existing test capabilities to greatly improve the user experience when it comes to identifying slow and leaky tests (meaning tests which are either slow, or create things during the tests that are not cleaned up after), test speed improvements and Continuous Integration pipeline compatibility. You can get started with it by using the following:
+Although the language tooling itself has good testing capabiliities, we can take this one step further by using packages like `cargo-nextest`, a test runner CLI for Rust projects that builds on top of the already-existing test capabilities to greatly improve the user experience when it comes to identifying slow and leaky tests (meaning tests which are either slow, or create things during the tests that are not cleaned up after), test speed improvements and Continuous Integration pipeline compatibility. You can get started with it by using the following:
 
 ```bash
 cargo install cargo-nextest
 ```
 When it's installed, you can use `cargo nextest run` and it will run all tests within a workspace. Interested? Find more about cargo-nextest [here.](https://nexte.st/)
 
-Although we will primarily be focusing on the Rust standard testing capabiilities for ease of use, there are also quite a few helper libraries for testing; for example, `test-case` which helps you build up test cases for tests by providing macros that you can stack on top of a test function and `lets_expect` which provides a macro in the form of `lets_expect!()` to help you test faster and more ergonomically. 
+Although we will primarily be focusing on the Rust standard testing capabilities for ease of use, there are also quite a few helper libraries for testing; for example, `test-case` which helps you build up test cases for tests by providing macros that you can stack on top of a test function and `lets_expect` which provides a macro in the form of `lets_expect!()` to help you test faster and more ergonomically. 
 
 Some Rust crates may also have their own testing library, in addition to this. Backend web frameworks in particular have their own Rust testing crates that let you do things like calling specific handler functions by themselves, so that you don't have to mock the entire API - we'll discuss this later on in the article.
 
