@@ -36,7 +36,7 @@ Some Rust crates may also have their own testing library, in addition to this. B
 ## Unit Testing
 With regards to unit testing, there is not a huge amount of difference between JavaScript and Rust. You import what files you need, and then run them.
 
-For example, if you have a file called `sum.js` with the following:
+For example, if you have a file called `sum.js` with the following JS unit test:
 ```javascript
 // sum.js
 // This function we're testing adds two numbers together
@@ -104,6 +104,8 @@ In comparison to Jest, Rust doesn't have test grouping enabled by default in the
 
 ## Setup and Teardown
 Sometimes, you might need to do some work before or after every test: with testing in JavaScript via Jest, this is very simple to do. You need to create functions that carry out what you need to do, then either attach them to a `beforeEach` or `afterEach` statement, depending on what you want to do.
+
+In JS testing with Jest, this is quite simple:
 ```javascript
 async function initialiseCityDatabase {
   // ... your code for setting up the test database here
@@ -346,7 +348,7 @@ describe('Testing routes', () => {
 ```
 As you can see, using `supertest` with `jest` boosts its capabilities considerably by allowing it to expect things from the response - for example, the status code or what the body contains. This makes it much, much easier to test your backend and makes the testing experience much better.
 
-With regards to testing Rust code, although there's no default helper library you can still write integration tests by just writing tests that utilise many parts or functions from your program together. For example, you might have some code to setup an SQL database instance, then an integration test that adds and manipulates some data that's contained in your database and finally the teardown code to reset your test database.
+With regards to Rust integration tests, although there's no default helper library you can still write integration tests by just writing tests that utilise many parts or functions from your program together. For example, you might have some code to setup an SQL database instance, then an integration test that adds and manipulates some data that's contained in your database and finally the teardown code to reset your test database.
 
 ```rust
 // tests/common/mod.rs
@@ -479,7 +481,7 @@ As you can see, this is pretty easy!
 
 
 ## Finishing Up
-Thanks for reading this article! I hope you have gained a better understanding of how testing in Rust works versus JavaScript and maybe a little bit of knowledge about setting up a basic web router in Rust using Axum.
+Thanks for reading this article! I hope you have gained a better understanding of testing in Rust vs JS and maybe a little bit of knowledge about setting up a basic web router in Rust using Axum.
 
 Looking for more info? Check out some of our other articles:
 - Check out our docs page for the fundamentals on writing an Axum web service [here.](https://docs.shuttle.rs/tutorials/rest-http-service-with-axum)
