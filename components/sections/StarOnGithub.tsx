@@ -1,9 +1,12 @@
 import { trackEvent } from 'lib/posthog'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
 const StarOnGithub = () => {
 	const [starOpen, setStarOpen] = useState<boolean>(false)
 	const [mounted, setMounted] = useState<boolean>(false)
+
+	const router = useRouter()
 
 	useEffect(() => {
 		if (localStorage.getItem('starred')) setStarOpen(false)
@@ -11,6 +14,8 @@ const StarOnGithub = () => {
 
 		setMounted(true)
 	}, [])
+
+	if (router.pathname === '/cch') return null
 
 	return (
 		<div
