@@ -1,22 +1,21 @@
-import { Logo } from 'components/svgs'
 import { Page } from 'components/templates'
 import { CONTACT_US_URI, DISCORD_URL } from 'lib/constants'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ReactNode } from 'react'
 
-export default function ShuttleAIPage() {
+export default function CCHPage() {
 	return (
-		<section className='mx-auto w-full max-w-7xl px-4 pt-6 font-mono font-normal text-[#DEDEDE]'>
-			<div className='mb-8 flex flex-col'>
+		<section className='mx-auto w-full max-w-7xl px-4 pt-[100px] font-mono font-normal text-[#DEDEDE]'>
+			<div className='mx-auto mb-8 flex max-w-[686px] flex-col items-end'>
 				<h1 className='text-center text-[60px]'>
 					<span className='relative'>
 						<Image
 							src='/images/cch/santa-hat.png'
 							alt=''
-							width={100}
-							height={70}
-							className='z-1 absolute left-[-34px] top-0 ml-auto mr-auto max-w-5xl'
+							width={80}
+							height={60}
+							className='z-1 absolute left-[-28px] top-0 ml-auto mr-auto max-w-5xl'
 						/>
 						C
 					</span>
@@ -25,7 +24,9 @@ export default function ShuttleAIPage() {
 
 				<p className='flex items-center gap-2 self-end text-base text-[#AFAFAF]'>
 					powered by
-					<Image src='/images/cch/logo.svg' alt='' width={115} height={37} />
+					<Link href='/'>
+						<Image src='/images/cch/logo.svg' alt='' width={115} height={37} />
+					</Link>
 				</p>
 			</div>
 
@@ -78,4 +79,8 @@ export default function ShuttleAIPage() {
 	)
 }
 
-ShuttleAIPage.getLayout = (children: ReactNode) => <Page>{children}</Page>
+CCHPage.getLayout = (children: ReactNode) => (
+	<Page disableFooter disableHeader>
+		{children}
+	</Page>
+)
