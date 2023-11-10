@@ -1,10 +1,11 @@
 import { Page } from 'components/templates'
-import { CONTACT_US_URI, DISCORD_URL } from 'lib/constants'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 
 export default function CCHPage() {
+	const [scoreboard, setScoreboard] = useState(null); // todo
+
 	return (
 		<section className='mx-auto w-full max-w-7xl px-4 pt-[100px] font-mono font-normal text-[#DEDEDE]'>
 			<div className='mx-auto mb-8 flex max-w-[686px] flex-col items-end'>
@@ -34,46 +35,51 @@ export default function CCHPage() {
 				<p>
 					<span className='text-[#F09050]'>&gt;</span> what
 				</p>
-				<p className='mb-8'>
-					Shuttle&apos;s Christmas Code Hunt, inspired by Advent of Code, invites Rust enthusiasts to
-					solve daily challenges using Rust and Shuttle in a relaxed environment. Join the fun, solve
-					puzzles, embrace the holiday spirit and get rewarded! 🎄🚀
+				<p>
+					Shuttle&apos;s Christmas Code Hunt, inspired by Advent of Code, invites you to solve daily challenges
+					using Rust in a relaxed environment. Each weekday, you will be implementing an HTTP endpoint that
+					returns the solution to the daily challenge, and deploy it on <Link href="/">Shuttle</Link>.
+					Join the fun, solve puzzles, embrace the holiday spirit, and get rewarded! 🎄🚀
 				</p>
 
-				<p>
+				<p className='mt-8'>
 					<span className='text-[#F09050]'>&gt;</span> when
 				</p>
-				<p className='mb-8'>
-					The first challenge will be available to participants on the 1st of December.
+				<p>
+					The first challenge will be released on December 1, 12:00 UTC
+					(<Link href="https://everytimezone.com/s/297d565e" target='_blank' className='text-[#F09050]'>check your timezone</Link>).
+					A total of 16 challenges will be released each weekday between December 1 and December 22.
 				</p>
 
-				<p>
+				<p className='mt-8'>
 					<span className='text-[#F09050]'>&gt;</span> where
 				</p>
-				<p className='mb-8'>
-					The Shuttle Discord will serve as a point for getting the neededresources, discussing
-					challenges, and so on. You can apply for the code hunt either{' '}
-					<Link href={DISCORD_URL} target='_blank' className='text-[#F09050]'>
-						via Discord
-					</Link>{' '}
-					or{' '}
-					<Link href={CONTACT_US_URI} target='_blank' className='text-[#F09050]'>
-						via mail
-					</Link>{' '}
-					. The Shuttle Discord will serve as a point for getting the neededresources, discussing
-					challenges, and so on.
+				<p>
+					The Shuttle Discord will serve as the main point for getting announcements, discussing challenges, and more.
+					You can also sign up for announcements via email.
+					Participating requires logging in to the Shuttle Console with a GitHub account.
+					Register now to stay updated and have a chance to win exciting prizes!{' '}
+					<Link href="https://shuttlerust.typeform.com/to/hkPkbXab" target='_blank' className='text-[#F09050]'>Sign up here</Link>.
 				</p>
 
-				<p>
+				<p className='mt-8'>
 					<span className='text-[#F09050]'>&gt;</span> prizes
 				</p>
-				<p>Prizes are:</p>
+				<p>
+					1st place: $200 Amazon voucher + Shuttle swag box<br/>
+					2nd place: &nbsp;$50 Amazon voucher + Shuttle swag box<br/>
+					3rd place: &nbsp;$25 Amazon voucher + Shuttle swag box
+				</p>
 
-				<ul className='list-inside'>
-					<li className='list-disc'>One</li>
-					<li className='list-disc'>Two</li>
-					<li className='list-disc'>Three</li>
-				</ul>
+				<p className='mt-8'>
+					<span className='text-[#F09050]'>&gt;</span> rules
+				</p>
+				<p>Coming soon</p>
+
+				<p className='mt-8'>
+					<span className='text-[#F09050]'>&gt;</span> scoreboard
+				</p>
+				<p>Coming soon</p>
 			</div>
 		</section>
 	)
