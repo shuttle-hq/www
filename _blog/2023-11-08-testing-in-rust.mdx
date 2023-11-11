@@ -146,7 +146,7 @@ async fn do_stuff() {
   teardown_database(database).await;
 }
 ```
-You can also use libraries like [text-context](https://docs.rs/test-context/latest/test_context/) to be able to write your setup and teardown, which makes it much easier as you can use a macro on top of a test function and you can also implement test contexts for multiple structs. A small snippet from the library's documentation follows below:
+You can also use libraries like [test-context](https://docs.rs/test-context/latest/test_context/) to be able to write your setup and teardown, which makes it much easier as you can use a macro on top of a test function and you can also implement test contexts for multiple structs. A small snippet from the library's documentation follows below:
 ```rust
 use test_context::{test_context, TestContext};
 
