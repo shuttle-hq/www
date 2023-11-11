@@ -38,7 +38,7 @@ export default function CCHPage() {
 				<p>
 					Shuttle&apos;s Christmas Code Hunt, inspired by Advent of Code, invites you to solve daily challenges
 					using Rust in a relaxed environment. Each weekday, you will be implementing an HTTP endpoint that
-					returns the solution to the daily challenge, and deploy it on <Link href="/">Shuttle</Link>.
+					returns the solution to the daily challenge, and deploy it on <Link href="/" className='text-[#F09050]'>Shuttle</Link>.
 					Join the fun, solve puzzles, embrace the holiday spirit, and get rewarded! 🎄🚀
 				</p>
 
