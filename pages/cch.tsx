@@ -7,7 +7,7 @@ export default function CCHPage() {
 	const [scoreboard, setScoreboard] = useState(null); // todo
 
 	return (
-		<section className='mx-auto w-full max-w-7xl px-4 pt-[100px] font-mono font-normal text-[#DEDEDE]'>
+		<section className='mx-auto mb-64 w-full max-w-5xl px-4 pt-[100px] font-mono font-normal text-[#DEDEDE]'>
 			<div className='mx-auto mb-8 flex max-w-[686px] flex-col items-end'>
 				<h1 className='text-center text-[60px]'>
 					<span className='relative'>
