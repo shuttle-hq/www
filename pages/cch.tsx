@@ -1,4 +1,5 @@
 import { Page } from 'components/templates'
+import { trackEvent } from 'lib/posthog'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ReactNode, useState } from 'react'
@@ -68,6 +69,9 @@ export default function CCHPage() {
 						href='https://shuttlerust.typeform.com/to/hkPkbXab'
 						target='_blank'
 						className='text-[#F09050]'
+						onClick={() => {
+							trackEvent('cch_sign_up')
+						}}
 					>
 						Sign up here
 					</Link>
