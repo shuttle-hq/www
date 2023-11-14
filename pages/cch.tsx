@@ -52,7 +52,7 @@ export default function CCHPage() {
 				<p>
 					By participating, you get the chance to improve your Rust skills,
 					build new friendships with like minded Rusteceans and enjoy the run up to the holidays!
-					We also have an array of prizes in store for this year's winners.
+					We also have an array of prizes in store for this years winners.
 				</p>
 
 				<p className='mt-8'>
@@ -91,11 +91,11 @@ export default function CCHPage() {
 					<span className='text-[#F09050]'>&gt;</span> prizes
 				</p>
 				<p>
-					1st place: $200 Amazon voucher + Shuttle swag box + 6 months of Shuttle's PRO Tier
+					1st place: $200 Amazon voucher + Shuttle swag box + 6 months of Shuttles PRO Tier
 					<br />
-					2nd place: &nbsp;$50 Amazon voucher + Shuttle swag box + 3 months of Shuttle's PRO Tier
+					2nd place: &nbsp;$50 Amazon voucher + Shuttle swag box + 3 months of Shuttles PRO Tier
 					<br />
-					3rd place: &nbsp;Shuttle swag box + 1 month of Shuttle's PRO Tier
+					3rd place: &nbsp;Shuttle swag box + 1 month of Shuttles PRO Tier
 					<br />
 					Completing all the challenges: &nbsp;TBA
 				</p>
