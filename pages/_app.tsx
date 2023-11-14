@@ -23,7 +23,7 @@ if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_POSTHOG_KEY) {
 		loaded: (posthog) => {
 			if (process.env.NODE_ENV === 'development') posthog.debug()
 		},
-		capture_pageview: false, // Disable automatic pageview capture, as we capture manually
+		// capture_pageview: false, // Disable automatic pageview capture, as we capture manually
 	})
 }
 

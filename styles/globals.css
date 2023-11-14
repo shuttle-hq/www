@@ -99,6 +99,13 @@ body.dark {
 		font-weight: 900;
 		src: url('/fonts/Bw-Gradual/woff2/BwGradualBlackItalic.woff2');
 	}
+
+	@font-face {
+		font-family: 'Fira Mono';
+		font-style: normal;
+		font-style: 400;
+		src: url('/fonts/Fira_Mono/FiraMono-Regular.ttf');
+	}
 }
 
 @layer components {

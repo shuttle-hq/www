@@ -33,6 +33,16 @@ const Navigation = () => {
 			>
 				<div className='flex flex-col gap-4 xl:flex-row xl:gap-8'>
 					<Link
+						className='nav-link-shadow transition-all text-sky-300'
+						href='/cch'
+						onClick={() => {
+							trackEvent('homepage_mainnav_cch')
+							setOpen(false)
+						}}
+					>
+						CCH
+					</Link>
+					<Link
 						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='/blog/tags/all'
 						onClick={() => {
