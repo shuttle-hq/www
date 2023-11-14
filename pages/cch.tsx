@@ -87,6 +87,8 @@ export default function CCHPage() {
 					2nd place: &nbsp;$50 Amazon voucher + Shuttle swag box
 					<br />
 					3rd place: &nbsp;$25 Amazon voucher + Shuttle swag box
+					<br />
+					Completing all the challenges: &nbsp;TBA
 				</p>
 
 				<p className='mt-8'>
