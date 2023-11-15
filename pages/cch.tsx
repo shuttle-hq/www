@@ -33,6 +33,16 @@ export default function CCHPage() {
 			</div>
 
 			<div className='flex flex-col text-base'>
+				<Link
+						href='https://shuttlerust.typeform.com/to/hkPkbXab'
+						target='_blank'
+						className='text-[#F09050]'
+						onClick={() => {
+							trackEvent('cch_sign_up')
+						}}
+					>
+						Sign up for the event
+					</Link>
 				<p>
 					<span className='text-[#F09050]'>&gt;</span> what
 				</p>
