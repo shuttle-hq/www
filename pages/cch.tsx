@@ -41,8 +41,9 @@ export default function CCHPage() {
 							trackEvent('cch_sign_up')
 						}}
 					>
-						Sign up for the event
+						Click here to sign up!
 					</Link>
+				
 				<p>
 					<span className='text-[#F09050]'>&gt;</span> what
 				</p>
