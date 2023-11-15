@@ -7,13 +7,15 @@ thumb: ssg-in-rust-thumb.png
 cover: ssg-in-rust-thumb.png
 date: '2023-11-15T14:30:00'
 ---
-We'll be making a website in the form of a Rust static site generator that we'll be able to add our own pages to. <strong>If you want to skip straight to the project, deploy your own instance and try it out, you can follow the instructions below:</strong>
+We'll be making a website in the form of a Rust static site generator that we'll be able to add our own pages to. <strong>If you want to skip straight to the project, deploy your own instance and try it out, you can follow the instructions below: </strong>
 
 1) Run `cargo shuttle init --from joshua-mo-143/shuttle-ssg` and follow the prompt
 2) `cd` to the folder
 3) Run `cargo shuttle deploy --allow-dirty` and your static site generator is live!
 
 Don't forget to make sure that `cargo-shuttle` is installed and that you're logged in! You can also visit the repo [here.](https://www.github.com/joshua-mo-143/shuttle-ssg)
+
+<hr/> 
 
 Rust has always been seen from the outside as a language that takes quite a long time to write something in. While that might be true for more things involving more advanced type machinery (implementing your own job queues, implementing async traits manually, lifetimes), for a lot of things that don't require things that amount to mental space rocketry you can knock out a project surprisingly quickly. I want to challenge the assumption that Rust is a slow language to program in by writing a usable, extendable web service in an hour that also provides immediate value to anyone who would also like to use it. 
 
