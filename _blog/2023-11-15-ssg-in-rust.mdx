@@ -3,8 +3,8 @@ title: "Building and Deploying A Static Site Generator with Rust in one hour"
 description: This article documents how someone built and deployed a static site generator using Rust in an hour, converting Markdown to HTML as well as adding OG tag support and CSS. 
 author: josh
 tags: [rust, static site generator, frontend, guide]
-thumb: 
-cover: 
+thumb: ssg-in-rust-thumb.png 
+cover: ssg-in-rust-thumb.png
 date: '2023-11-15T14:30:00'
 ---
 Rust has always been seen from the outside as a language that takes quite a long time to write something in. While that might be true for more things involving more advanced type machinery (implementing your own job queues, implementing async traits manually, lifetimes), for a lot of things that don't require things that amount to mental space rocketry you can knock out a project surprisingly quickly. I want to challenge the assumption that Rust is a slow language to program in by writing a usable, extendable web service in an hour that also provides immediate value to anyone who would also like to use it. 
@@ -53,7 +53,7 @@ async fn parser(State(state): State<AppState>, Path(page): Path<String>) -> impl
 ```
 
 I made the handler generic by using the Path extractor, then quickly made the `templates` folder and put in a `hello_world.md` file:
-```markdown
+```md
 ## Hello world!
 ```
 
@@ -62,14 +62,17 @@ I then used `cargo clippy` to make sure it all works. There's no errors. After t
 ## 47:12 - Adding CSS styling
 Now that we've got basic Rust markdown parsing functionality, we can move to the next part: styling our pages. I didn't want to spend a lot of time on this - if you're not careful, styling can eat up quite a lot of your time! I primarily wanted to just make sure the page didn't look horrible, so I added a small amount of CSS to center-align the text:
 ```css
-// templates/styles.css
+/* templates/styles.css */
 html {
     display: flex;
     text-align: center;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 90%;
+}
+
+body {
+    width: 80%;
 }
 ```
 As you can see, it's not quite [Awwwards](https://www.awwwards.com)-worthy CSS. However, it'll do for making our pages look at least somewhat aligned.
@@ -131,7 +134,7 @@ fn get_page_header(input: &str) -> String {
 I only added two tags for now as a matter of convenience. I didn't want to spend too much more time on it and I'd already used quite a lot of time just trying to figure out what library to use. 
 
 Then I added the following to my `hello_world.md` file:
-```markdown
+```md
 ---                                                                            
 title: 'Hello world!'                                                         
 description: 'Hello world!'               
@@ -230,7 +233,7 @@ async fn hello_world() -> impl IntoResponse {
 
     let string_output = std::str::from_utf8(&markdown_input).unwrap();
 
-    let mut html_output = get_page_header(string_output, &state.domain, state.filenames);
+    let mut html_output = get_page_header(string_output, &state.domain);
 
     let regex = regex::Regex::new(r"---((.|\n)*?)---").unwrap();
 
@@ -284,29 +287,66 @@ async fn main(
     Ok(router.into())
 }
 ```
-I decided for now to only add pages in the main pages directory - the rest can come later. Now that the filename vector is in the app state, we can add it as an argument to our function for creating the header, then iterate through it and push anchor tags for each route.
+I decided for now to only add pages in the home page - the rest can come later. Now that the filename vector is in the app state, we can use it in our handler functions.
 
+An small addition was made to the HTML head function to add access back to the main page:
 ```rust
 // src/main.rs
-fn get_page_header(input: &str, domain: &str, links: Vec<String>) -> String {
+fn get_page_header(input: &str, domain: &str) -> String {
 // .. rest of code
     html_output.push_str("<div id=\"nav\">");
-    for link in links {
-        html_output.push_str(&format!("<a href=\"{link}\">{link}</a>"));
-        }
+    html_output.push_str("<a href=\"/\">Home</a>"));
     html_output.push_str("</div>");
     html_output
 }
 ```
 
+Then I added the article links to my index route:
+```rust
+async fn hello_world(State(state): State<AppState>) -> impl IntoResponse {
+    let markdown_input = match tokio::fs::read("templates/index.md").await {
+        Ok(res) => res,
+        Err(_) => return Html("Couldn't find this page - does it exist?".to_string()),
+    };
+
+    let string_output = std::str::from_utf8(&markdown_input).unwrap();
+
+    let mut html_output = get_page_header(string_output, &state.domain);
+
+    let regex = regex::Regex::new(r"---((.|\n)*?)---").unwrap();
+
+    let res = regex.replace(string_output, "");
+    let parser = pulldown_cmark::Parser::new(&res);
+	
+    pulldown_cmark::html::push_html(&mut html_output, parser);
+
+    html_output.push_str("<div id=\"content\">");
+
+    for link in &state.filenames {
+	html_output.push_str(&format!("<a href=\"/{link}\">{link}</a>"));
+    }
+
+    html_output.push_str("<div id=\"content\">");
+
+    Html(html_output)
+}
+```
+
 I spun up the local server and checked to see if it works or not - it does! I had previously created an index file and the `hello_world` route appear on the navbar. However, the links have no space between each other - which is bad. I made a quick, small addition to the styling file so the site links aren't running headlong into each other:
 ```css
-// templates/styles.css
+/* templates/styles.css */
 #nav {
     display: flex;
     justify-content: center;
     gap: 2em;
 }
+
+#content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+} 
 ```
 Next, I wanted to add the OpenGraph tag for URL (`og:url`). Thankfully, Shuttle has a helper crate for this thing exactly called `shuttle-metadata` that gives you all the information about your project! I `cargo add`ed it, then added it into my main function and added a variable that forms the domain string based on whether we're in debug or release mode:
 ```rust
@@ -348,6 +388,7 @@ I hammered out `cargo shuttle deploy --allow-dirty` to deploy my program from a 
 So, I'd finally done it! I wrote a fully working Rust SSG in an hour. It wasn't quite the behemoth I thought it would be to get working, and for my personal blog it would *actually* be something I'd consider using. However, although we accomplished quite a bit in the alloted time, we could have extended it by doing things that wouldn't have taken too much more time than we have spent (although perhaps adding all of them would maybe double the time!) that could have provided some value:
 - Adding OG image tags which would have made the app fully compatible with OpenGraph and make it much better for SEO
 - Make the navbar a bit more flexible
+- Potentially adding the files in directories to the navigation
 - Adding a sitemap
 - Adding a hits counter
 
