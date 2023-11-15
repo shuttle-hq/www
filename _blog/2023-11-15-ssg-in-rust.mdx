@@ -7,20 +7,20 @@ thumb:
 cover: 
 date: '2023-11-15T14:30:00'
 ---
-So it's about that time where I want to re-do my personal portfolio for the Nth time already. I don't want to use React, or Next, or whatever people call those JS frameworks. I want to build it with the language I've been using for quite a while now: Rust - and I want to prove that I can do it quickly. From my own experiences, Rust has always been seen from the outside as a language that's "overkill" and takes too much time to write anything in because of types/function signatures. While that might be true for more things involving more advanced type machinery (implementing your own job queues, implementing async traits manually, lifetimes), for a lot of things that don't require things that amount to mental space rocketry you can knock out a project surprisingly quickly. 
+Rust has always been seen from the outside as a language that takes quite a long time to write something in. While that might be true for more things involving more advanced type machinery (implementing your own job queues, implementing async traits manually, lifetimes), for a lot of things that don't require things that amount to mental space rocketry you can knock out a project surprisingly quickly. I want to challenge the assumption that Rust is a slow language to program in by writing a usable, extendable web service in an hour that also provides immediate value to anyone who would also like to use it. 
 
-We'll be making a website in the form of a Rust static site generator that we'll be able to add our own pages to: if you want to see the final result so you can deploy it straight to Shuttle, you can follow the instructions below:
+We'll be making a website in the form of a Rust static site generator that we'll be able to add our own pages to. If you want to see the final result so you can deploy it straight to Shuttle, you can follow the instructions below:
 
 1) Run `cargo shuttle init --from joshua-mo-143/shuttle-ssg` and follow the prompt
 2) `cd` to the folder
-3) Run `cargo shuttle deploy --allow-dirty` and you're done!
+3) Run `cargo shuttle deploy --allow-dirty` and your static site generator is live!
 
-Don't forget to make sure that `cargo-shuttle` is installed and that you're logged in!
+Don't forget to make sure that `cargo-shuttle` is installed and that you're logged in! You can also visit the repo [here.](https://www.github.com/joshua-mo-143/shuttle-ssg)
 
 ## 59:59 - Getting Started
-It's time to lock in. I went on Youtube and put on a breakcore playlist, then used `cargo shuttle init --template axum` to quickly spin up what I wanted. I used the project name `ssg` and put it in my projects folder, then got to work. If you want to deploy a project in the fastest time possible with no time lag between finishing a project and deploying it, Shuttle's definitely the way to go - you don't need a Dockerfile or any config files, you just use their runtime, provision the things you need and go.
+It's time to lock in. I went on Youtube and put on a breakcore playlist, then used `cargo shuttle init --template axum` to quickly spin up what I wanted. I used the project name `ssg` and put it in my projects folder, then got to work. What helps me move quickly is that with Shuttle I don't need a Dockerfile; I just use the runtime, provision the things I need and I'm ready to get cracking.
 
-I created a `Shuttle.toml` file and added the following:
+To finish my preparations, I created a `Shuttle.toml` file and added the following:
 ```rust
 // Shuttle.toml
 assets = ["templates/*", "templates/**/*"]
@@ -57,7 +57,7 @@ I made the handler generic by using the Path extractor, then quickly made the `t
 ## Hello world!
 ```
 
-I then used `cargo clippy` to make sure it all works. There's no errors. After that I used `cargo shuttle run` to get it working and then made the mistake of going to the base route at `/` instead of at `/hello_world` where the web service could read the Markdown file. Never mind! I'll fix that later - it looks like going to `/hello_world` works. Unfortunately, this part took the better part of 10 minutes due to waiting for Rust to compile; granted however, I'm on a laptop with 4GB of RAM. We're not exactly expecting NASA-level performance out of this one.
+I then used `cargo clippy` to make sure it all works. There's no errors. After that I used `cargo shuttle run` to get it working and then made the mistake of going to the base route at `/` instead of at `/hello_world` where the web service could read the Markdown file. Never mind! I'll fix that later - it looks like going to `/hello_world` works. Unfortunately, this part took the better part of 10 minutes due to waiting for Rust to compile; granted however, I'm on a laptop. We're not exactly expecting NASA-level performance out of this one.
 
 ## 47:12 - Adding CSS styling
 Now that we've got basic Rust markdown parsing functionality, we can move to the next part: styling our pages. I didn't want to spend a lot of time on this - if you're not careful, styling can eat up quite a lot of your time! I primarily wanted to just make sure the page didn't look horrible, so I added a small amount of CSS to center-align the text:
@@ -91,9 +91,9 @@ Then I added it to the HTML output before pushing the HTML to the empty string b
 html_output.push_str(r#"<link rel="stylesheet" type="text/css" href="/styles.css">"#);
 ```
 
-After starting up local development and quickly checking the `/hello_world` route, I could see that the text was in fact now centre-aligned on the page. Great. Time to move onto the next part.
+After starting up local development using `cargo shuttle run` and quickly checking the `/hello_world` route, I could see that the text was in fact now centre-aligned on the page. Great. Time to move onto the next part. With Shuttle's easy-to-use local development environment, you can also specify a port with the `-p` flag or test on a local network using `--external` to expose your web app to the local network.
 
-## 36:28 - Adding Open Graph tags
+## 36:28 - Adding OpenGraph tags
 Now it's time to add OpenGraph tags so I can get better SEO using the static site generator! This was a part I struggled with quite a lot. I remember when I last logged into Bearblog for my own blog articles that there was a bit at the top indented by three dashes where you could just add properties to an article and it would add the properties in the fenced off text block to OpenGraph meta tags, but I didn't know what it was called. I did some extensive Googling, and realised it was called "frontmatter" - as in the first bit of a book. That makes sense.
 
 I had a quick look for `pulldown-cmark` compatible libraries to see what would turn up. Unfortunately, there was nothing and I lost quite a bit of time trying to figure out what I was supposed to do. I did some more extensive searching and concluded that I needed to parse the text manually - which was when I came across the library `yaml-front-matter`. This had to be it. I used `cargo add yaml-front-matter` and then quickly checked the GitHub repo. Thankfully, there was a great example showing an example that had both the front-matter block as well as some other text below it - meaning I can use it!
@@ -245,7 +245,7 @@ async fn hello_world() -> impl IntoResponse {
 ## 10:05 - Navigation, more OG tags
 At this point, we're going pretty smoothly and things are moving quickly - except for one thing: Navigation. I didn't consider that a user might actually want to consider moving between pages, despite it being such a normal part of using the Internet.
 
-At this point, I panicked a little bit and had a quick look at how to iterate through files in a directory with Tokio. I rememebered that it returned a stream - so you could use `while let Some...` to retrieve a stream of files and then append them all to a vector. Great!
+At this point, I panicked a little bit and had a quick look at how to iterate through files in a directory with Tokio. I remembered that it returned a stream - so you could use `while let Some...` to retrieve a stream of files and then append them all to a vector. Great!
 
 I added the directory parsing to the main function, then added it to an `AppState` struct which I appended to my router:
 ```rust
@@ -308,7 +308,7 @@ I spun up the local server and checked to see if it works or not - it does! I ha
     gap: 2em;
 }
 ```
-Next, I wanted to add the Open Graph tag for URL (`og:url`). Thankfully, Shuttle has a helper crate for this thing exactly called `shuttle-metadata` that gives you all the information about your project! I `cargo add`ed it, then added it into my main function and added a variable that forms the domain string based on whether we're in debug or release mode:
+Next, I wanted to add the OpenGraph tag for URL (`og:url`). Thankfully, Shuttle has a helper crate for this thing exactly called `shuttle-metadata` that gives you all the information about your project! I `cargo add`ed it, then added it into my main function and added a variable that forms the domain string based on whether we're in debug or release mode:
 ```rust
 // src/main.rs
 #[shuttle_runtime::main]
