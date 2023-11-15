@@ -1,0 +1,399 @@
+---
+title: "Building and Deploying A Static Site Generator with Rust in one hour" 
+description: This article documents how someone built and deployed a static site generator using Rust in an hour, converting Markdown to HTML as well as adding OG tag support and CSS. 
+author: josh
+tags: [rust, static site generator, frontend, guide]
+thumb: ssg-in-rust-thumb.png 
+cover: ssg-in-rust-thumb.png
+date: '2023-11-15T14:30:00'
+---
+Rust has always been seen from the outside as a language that takes quite a long time to write something in. While that might be true for more things involving more advanced type machinery (implementing your own job queues, implementing async traits manually, lifetimes), for a lot of things that don't require things that amount to mental space rocketry you can knock out a project surprisingly quickly. I want to challenge the assumption that Rust is a slow language to program in by writing a usable, extendable web service in an hour that also provides immediate value to anyone who would also like to use it. 
+
+We'll be making a website in the form of a Rust static site generator that we'll be able to add our own pages to. If you want to see the final result so you can deploy it straight to Shuttle, you can follow the instructions below:
+
+1) Run `cargo shuttle init --from joshua-mo-143/shuttle-ssg` and follow the prompt
+2) `cd` to the folder
+3) Run `cargo shuttle deploy --allow-dirty` and your static site generator is live!
+
+Don't forget to make sure that `cargo-shuttle` is installed and that you're logged in! You can also visit the repo [here.](https://www.github.com/joshua-mo-143/shuttle-ssg)
+
+## 59:59 - Getting Started
+It's time to lock in. I went on Youtube and put on a breakcore playlist, then used `cargo shuttle init --template axum` to quickly spin up what I wanted. I used the project name `ssg` and put it in my projects folder, then got to work. What helps me move quickly is that with Shuttle I don't need a Dockerfile; I just use the runtime, provision the things I need and I'm ready to get cracking.
+
+To finish my preparations, I created a `Shuttle.toml` file and added the following:
+```toml
+// Shuttle.toml
+assets = ["templates/*", "templates/**/*"]
+```
+This lets Shuttle know where we keep all of our files so that when we deploy, it should just include the files automatically.
+
+Anyway, onto the next part!
+
+## 59:39 - Adding basic functionality
+I knew initially from previous experience that you can use `pulldown-cmark` to turn Markdown to HTML, so I quickly added it using `cargo add pulldown-cmark`. I remember that they had an example on their GitHub repo for parsing Markdown, so I grabbed it and quickly threw it in a handler function:
+```rust
+// src/main.rs
+async fn parser(State(state): State<AppState>, Path(page): Path<String>) -> impl IntoResponse {
+    let mut file = format!("templates/{page}.md");
+
+    let markdown_input = match tokio::fs::read(file).await {
+        Ok(res) => res,
+        Err(_) => return Html("Couldn't find this page - does it exist?".to_string()),
+    };
+
+    let string_output = std::str::from_utf8(&markdown_input).unwrap();
+
+    let mut html_output = String::new();
+    let parser = pulldown_cmark::Parser::new(&string_output);
+    
+    pulldown_cmark::html::push_html(&mut html_output, parser);
+
+    Html(html_output)
+
+```
+
+I made the handler generic by using the Path extractor, then quickly made the `templates` folder and put in a `hello_world.md` file:
+```md
+## Hello world!
+```
+
+I then used `cargo clippy` to make sure it all works. There's no errors. After that I used `cargo shuttle run` to get it working and then made the mistake of going to the base route at `/` instead of at `/hello_world` where the web service could read the Markdown file. Never mind! I'll fix that later - it looks like going to `/hello_world` works. Unfortunately, this part took the better part of 10 minutes due to waiting for Rust to compile; granted however, I'm on a laptop. We're not exactly expecting NASA-level performance out of this one.
+
+## 47:12 - Adding CSS styling
+Now that we've got basic Rust markdown parsing functionality, we can move to the next part: styling our pages. I didn't want to spend a lot of time on this - if you're not careful, styling can eat up quite a lot of your time! I primarily wanted to just make sure the page didn't look horrible, so I added a small amount of CSS to center-align the text:
+```css
+/* templates/styles.css */
+html {
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+body {
+    width: 80%;
+}
+```
+As you can see, it's not quite [Awwwards](https://www.awwwards.com)-worthy CSS. However, it'll do for making our pages look at least somewhat aligned.
+
+Then I added a handler function to send the CSS text as a response. I struggled with it for a few minutes by trying to set the response type to `Response` and using `cargo clippy` before remembering that I needed to set it as `impl IntoResponse`:
+```rust
+// src/main.rs
+async fn styles() -> impl IntoResponse {
+    Response::builder()
+        .status(StatusCode::OK)
+        .header("Content-Type", "text/css")
+        .body(include_str!("../templates/styles.css").to_owned())
+        .unwrap()
+}
+```
+
+Then I added it to the HTML output before pushing the HTML to the empty string buffer:
+```rust
+html_output.push_str(r#"<link rel="stylesheet" type="text/css" href="/styles.css">"#);
+```
+
+After starting up local development using `cargo shuttle run` and quickly checking the `/hello_world` route, I could see that the text was in fact now centre-aligned on the page. Great. Time to move onto the next part. With Shuttle's easy-to-use local development environment, you can also specify a port with the `-p` flag or test on a local network using `--external` to expose your web app to the local network.
+
+## 36:28 - Adding OpenGraph tags
+Now it's time to add OpenGraph tags so I can get better SEO using the static site generator! This was a part I struggled with quite a lot. I remember when I last logged into Bearblog for my own blog articles that there was a bit at the top indented by three dashes where you could just add properties to an article and it would add the properties in the fenced off text block to OpenGraph meta tags, but I didn't know what it was called. I did some extensive Googling, and realised it was called "frontmatter" - as in the first bit of a book. That makes sense.
+
+I had a quick look for `pulldown-cmark` compatible libraries to see what would turn up. Unfortunately, there was nothing and I lost quite a bit of time trying to figure out what I was supposed to do. I did some more extensive searching and concluded that I needed to parse the text manually - which was when I came across the library `yaml-front-matter`. This had to be it. I used `cargo add yaml-front-matter` and then quickly checked the GitHub repo. Thankfully, there was a great example showing an example that had both the front-matter block as well as some other text below it - meaning I can use it!
+
+I got to work and wrote a function that would comprise of the HTML page head, which would get inserted before the markdown text itself, as well as moving the stylesheet link tag into this function and adding some extra helpful HTML boilerplate:
+```rust
+// src/main.rs
+#[derive(Deserialize)] 
+struct PageMetadata { 
+    title: String, 
+    description: String, 
+} 
+ 
+fn get_page_header(input: &str) -> String { 
+    let document: Document<PageMetadata> = YamlFrontMatter::parse::<PageMetadata>(input).unwrap(); 
+    let PageMetadata { title, description } = document.metadata; 
+ 
+    let mut html_output = String::new(); 
+    html_output.push_str("<head>"); 
+    html_output.push_str( 
+        r#"<meta charset="UTF-8"/> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/> 
+    <link rel="stylesheet" type="text/css" href="/styles.css">"#); 
+    html_output.push_str(&format!( 
+        "<title>{title}</title> 
+        <meta property=\"og:title\" content=\"{title}\"/> 
+        <meta property=\"og:description\" content=\"{description}\"/>" 
+    )); 
+    html_output.push_str("</head>"); 
+    html_output 
+}
+```
+
+I only added two tags for now as a matter of convenience. I didn't want to spend too much more time on it and I'd already used quite a lot of time just trying to figure out what library to use. 
+
+Then I added the following to my `hello_world.md` file:
+```md
+---                                                                            
+title: 'Hello world!'                                                         
+description: 'Hello world!'               
+---                     
+                                                                                                          
+## Hello world!  
+```
+
+Then I spun up local run, went to the route and... oh no. It looks like there was just a huge line at the top, with the title and description showing up as h2 tags. That's definitely not what I wanted to happen.
+
+I quickly made a new regex pattern to detect the first instance of three hyphens, followed by any characters (including newlines) and then another three hyphens on the handler function. It's not bulletproof, but it'll work for now:
+```rust
+// src/main.rs
+async fn parser(State(state): State<AppState>, Path(page): Path<String>) -> impl IntoResponse {
+    let mut file = format!("templates/{page}.md");
+
+    let markdown_input = match tokio::fs::read(file).await {
+        Ok(res) => res,
+        Err(_) => return Html("Couldn't find this page - does it exist?".to_string()),
+    };  
+
+    let string_output = std::str::from_utf8(&markdown_input).unwrap();
+
+    let mut html_output = get_page_header(string_output);
+
+    let regex = regex::Regex::new(r"---((.|\n)*?)---").unwrap();
+
+    let res = regex.replace(string_output, "");
+    let parser = pulldown_cmark::Parser::new(&res);
+    pulldown_cmark::html::push_html(&mut html_output, parser);
+
+    Html(html_output)
+}
+```
+
+I quickly span up local run again, then went to `/hello_world` and checked everything worked. I only saw a large "Hello world!" on the page. I breathed a sigh of relief - the worst was somewhat over, for now. 
+
+## 16:20 - Pages in directories
+Now that the hard part was over, I could turn my attention to other things: for one, I'd like to be able to serve pages that are in a directory. I quickly cloned the handler function for one route and then augmented it very quickly to be able to accept multiple path arguments:
+```rust
+// src/main.rs
+async fn parser_dir(
+    Path((dir, page)): Path<(String, String)>,
+) -> impl IntoResponse {
+    let file = format!("templates/{dir}/{page}.md");
+
+    let markdown_input = match tokio::fs::read(file).await {
+        Ok(res) => res,
+        Err(_) => return Html("Couldn't find this page - does it exist?".to_string()),
+    };  
+
+    let string_output = std::str::from_utf8(&markdown_input).unwrap();
+
+    let mut html_output = get_page_header(string_output);
+
+    let regex = regex::Regex::new(r"---((.|\n)*?)---").unwrap();
+
+    let res = regex.replace(string_output, "");
+    let parser = pulldown_cmark::Parser::new(&res);
+    pulldown_cmark::html::push_html(&mut html_output, parser);
+
+    Html(html_output)
+}
+```
+
+Nothing much needed to be changed really - at this point it was just adding extra arguments and then adding them to the filepath for the file to be parsed. I added the route to the Axum router.
+
+I remembered I also wanted to make sure that if a directory had an index, that the parser would still be able to reach it - which meant I had to quickly change the error handling for the file reading pattern matching in the original parser handler function:
+```rust
+// src/main.rs
+async fn parser(State(state): State<AppState>, Path(page): Path<String>) -> impl IntoResponse {
+    // .. rest of code
+    let markdown_input = match tokio::fs::read(file).await {
+        Ok(res) => res,
+        Err(_) => {
+            file = format!("templates/{page}/index.md");
+            match tokio::fs::read(file).await {
+                Ok(res) => res,
+                Err(_) => return Html("Couldn't find this page - does it exist?".to_string()),
+            }
+        }
+    };
+    // .. rest of code
+}
+```
+Not much to change besides just trying to read the index file. 
+
+I also remembered I needed to actually serve `index.md` at the base route - so I quickly replaced the base route function with a similar function to the other handlers, except it's just trying to read `templates/index.md`:
+```rust
+// src/main.rs
+async fn hello_world() -> impl IntoResponse {
+    let markdown_input = match tokio::fs::read("templates/index.md").await {
+        Ok(res) => res,
+        Err(_) => return Html("Couldn't find this page - does it exist?".to_string()),
+    };
+
+    let string_output = std::str::from_utf8(&markdown_input).unwrap();
+
+    let mut html_output = get_page_header(string_output, &state.domain);
+
+    let regex = regex::Regex::new(r"---((.|\n)*?)---").unwrap();
+
+    let res = regex.replace(string_output, "");
+    let parser = pulldown_cmark::Parser::new(&res);
+    pulldown_cmark::html::push_html(&mut html_output, parser);
+
+    Html(html_output)
+}
+```
+
+## 10:05 - Navigation, more OG tags
+At this point, we're going pretty smoothly and things are moving quickly - except for one thing: Navigation. I didn't consider that a user might actually want to consider moving between pages, despite it being such a normal part of using the Internet.
+
+At this point, I panicked a little bit and had a quick look at how to iterate through files in a directory with Tokio. I remembered that it returned a stream - so you could use `while let Some...` to retrieve a stream of files and then append them all to a vector. Great!
+
+I added the directory parsing to the main function, then added it to an `AppState` struct which I appended to my router:
+```rust
+// src/main.rs
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_metadata::ShuttleMetadata] metadata: Metadata,
+) -> shuttle_axum::ShuttleAxum {
+    let domain = if cfg!(debug_assertions) {
+        "http://localhost:8000".to_string()
+    } else {
+        format!("https://{}.shuttleapp.rs", metadata.project_name)
+    };
+
+    let mut files = tokio::fs::read_dir("templates").await.unwrap();
+
+    let mut filenames: Vec<String> = Vec::new();
+
+    while let Some(file) = files.next_entry().await.unwrap() {
+        let meme = file.file_name().into_string().unwrap();
+
+        if meme.ends_with(".md") {
+            filenames.push(meme.replace(".md", ""));
+            }
+    }
+
+    let state = AppState { domain , filenames};
+
+    let router = Router::new()
+        .route("/", get(hello_world))
+        .route("/:page", get(parser))
+        .route("/:dir/:page", get(parser_dir))
+        .route("/styles.css", get(styles))
+        .with_state(state);
+
+    Ok(router.into())
+}
+```
+I decided for now to only add pages in the home page - the rest can come later. Now that the filename vector is in the app state, we can use it in our handler functions.
+
+An small addition was made to the HTML head function to add access back to the main page:
+```rust
+// src/main.rs
+fn get_page_header(input: &str, domain: &str) -> String {
+// .. rest of code
+    html_output.push_str("<div id=\"nav\">");
+    html_output.push_str("<a href=\"/\">Home</a>"));
+    html_output.push_str("</div>");
+    html_output
+}
+```
+
+Then I added the article links to my index route:
+```rust
+async fn hello_world(State(state): State<AppState>) -> impl IntoResponse {
+    let markdown_input = match tokio::fs::read("templates/index.md").await {
+        Ok(res) => res,
+        Err(_) => return Html("Couldn't find this page - does it exist?".to_string()),
+    };
+
+    let string_output = std::str::from_utf8(&markdown_input).unwrap();
+
+    let mut html_output = get_page_header(string_output, &state.domain);
+
+    let regex = regex::Regex::new(r"---((.|\n)*?)---").unwrap();
+
+    let res = regex.replace(string_output, "");
+    let parser = pulldown_cmark::Parser::new(&res);
+	
+    pulldown_cmark::html::push_html(&mut html_output, parser);
+
+    html_output.push_str("<div id=\"content\">");
+
+    for link in &state.filenames {
+	html_output.push_str(&format!("<a href=\"/{link}\">{link}</a>"));
+    }
+
+    html_output.push_str("<div id=\"content\">");
+
+    Html(html_output)
+}
+```
+
+I spun up the local server and checked to see if it works or not - it does! I had previously created an index file and the `hello_world` route appear on the navbar. However, the links have no space between each other - which is bad. I made a quick, small addition to the styling file so the site links aren't running headlong into each other:
+```css
+/* templates/styles.css */
+#nav {
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+}
+
+#content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+} 
+```
+Next, I wanted to add the OpenGraph tag for URL (`og:url`). Thankfully, Shuttle has a helper crate for this thing exactly called `shuttle-metadata` that gives you all the information about your project! I `cargo add`ed it, then added it into my main function and added a variable that forms the domain string based on whether we're in debug or release mode:
+```rust
+// src/main.rs
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_metadata::ShuttleMetadata] metadata: Metadata,
+) -> shuttle_axum::ShuttleAxum {
+    let domain = if cfg!(debug_assertions) {
+        "http://localhost:8000".to_string()
+    } else {
+        format!("https://{}.shuttleapp.rs", metadata.project_name)
+    };  
+    
+    // .. rest of code
+}
+```
+Shuttle will always run in release mode during deployment, so we can safely assume that when we deploy, it'll always refer to the correct URL. 
+
+I added the domain as a variable in the `AppState` struct - we'll pass it in the HTML head function, like so:
+```rust
+let mut html_output = get_page_header(string_output, 
+  &format!("{}/{dir}/{page}", state.domain), 
+  state.filenames);
+```
+
+Then we can simply add another line in our function to add another OpenGraph tag:
+```rust
+html_output.push_str(format!("<meta property=\"og:url\" content=\"{domain}\"/>);
+```
+
+
+## 00:40 - Finishing Up
+At this point, I'm basically done and there isn't much time left so I gave the app a quick `cargo clippy && cargo fmt`. I took a sip of my tea and realised it had gone cold. So much for being able to develop things quickly, I guess.
+
+I hammered out `cargo shuttle deploy --allow-dirty` to deploy my program from a dirty Git branch straight to the Shuttle servers. It started compiling and I leaned back and breathed a sigh of relief.
+
+## 00:00 - Retrospective
+So, I'd finally done it! I wrote a fully working Rust SSG in an hour. It wasn't quite the behemoth I thought it would be to get working, and for my personal blog it would *actually* be something I'd consider using. However, although we accomplished quite a bit in the alloted time, we could have extended it by doing things that wouldn't have taken too much more time than we have spent (although perhaps adding all of them would maybe double the time!) that could have provided some value:
+- Adding OG image tags which would have made the app fully compatible with OpenGraph and make it much better for SEO
+- Make the navbar a bit more flexible
+- Potentially adding the files in directories to the navigation
+- Adding a sitemap
+- Adding a hits counter
+
+Despite the CSS being extremely minimal, we still managed to make it look relatively good. It shouldn't go without saying, of course, that real-world software engineering is much more than just creating an application in a vacuum. You have to deal with business logic, technical constraints, and many other things: coding is merely one piece of the puzzle. But for those of us who value being able to get code done quickly, being able to learn how to adapt to and use new things quickly is a valuable tool. 
+
+Thanks for reading! I hope this has served as a helpful tutorial on how to make a static site generator in Rust if you're also looking to make something very quickly for your own website.
+
+Interested in Shuttle? Make sure to [give us a star on GitHub!](https://www.github.com/shuttle-hq/shuttle)
