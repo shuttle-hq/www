@@ -21,7 +21,7 @@ Don't forget to make sure that `cargo-shuttle` is installed and that you're logg
 It's time to lock in. I went on Youtube and put on a breakcore playlist, then used `cargo shuttle init --template axum` to quickly spin up what I wanted. I used the project name `ssg` and put it in my projects folder, then got to work. What helps me move quickly is that with Shuttle I don't need a Dockerfile; I just use the runtime, provision the things I need and I'm ready to get cracking.
 
 To finish my preparations, I created a `Shuttle.toml` file and added the following:
-```rust
+```toml
 // Shuttle.toml
 assets = ["templates/*", "templates/**/*"]
 ```
