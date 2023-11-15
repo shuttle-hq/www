@@ -71,7 +71,7 @@ html {
     width: 90%;
 }
 ```
-As you can see, it's not quite Awwwards-worthy CSS. However, it'll do for making our pages look at least somewhat aligned.
+As you can see, it's not quite [Awwwards](https://www.awwwards.com)-worthy CSS. However, it'll do for making our pages look at least somewhat aligned.
 
 Then I added a handler function to send the CSS text as a response. I struggled with it for a few minutes by trying to set the response type to `Response` and using `cargo clippy` before remembering that I needed to set it as `impl IntoResponse`:
 ```rust
@@ -202,8 +202,8 @@ I remembered I also wanted to make sure that if a directory had an index, that t
 ```rust
 // src/main.rs
 async fn parser(State(state): State<AppState>, Path(page): Path<String>) -> impl IntoResponse {
-// .. rest of code
-let markdown_input = match tokio::fs::read(file).await {
+    // .. rest of code
+    let markdown_input = match tokio::fs::read(file).await {
         Ok(res) => res,
         Err(_) => {
             file = format!("templates/{page}/index.md");
@@ -213,7 +213,7 @@ let markdown_input = match tokio::fs::read(file).await {
             }
         }
     };
-// .. rest of code
+    // .. rest of code
 }
 ```
 Not much to change besides just trying to read the index file. 
@@ -302,9 +302,9 @@ I spun up the local server and checked to see if it works or not - it does! I ha
 ```css
 // templates/styles.css
 #nav {
-display: flex;
-justify-content: center;
-gap: 2em;
+    display: flex;
+    justify-content: center;
+    gap: 2em;
 }
 ```
 Next, I wanted to add the Open Graph tag for URL (`og:url`). Thankfully, Shuttle has a helper crate for this thing exactly called `shuttle-metadata` that gives you all the information about your project! I `cargo add`ed it, then added it into my main function and added a variable that forms the domain string based on whether we're in debug or release mode:
