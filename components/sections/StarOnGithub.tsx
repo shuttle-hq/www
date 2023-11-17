@@ -25,6 +25,7 @@ const StarOnGithub = () => {
 				display: starOpen && mounted ? 'flex' : 'none',
 			}}
 		>
+			⭐️ If you like Shuttle,&nbsp;
 			<a
 				href='https://github.com/shuttle-hq/shuttle'
 				target='_blank'
@@ -33,7 +34,18 @@ const StarOnGithub = () => {
 					trackEvent('github_star_cta')
 				}}
 			>
-				⭐️ If you like Shuttle, give it a star on GitHub!
+				give it a star on GitHub
+			</a>
+			&nbsp;or&nbsp;
+			<a
+				href='https://twitter.com/shuttle_dev'
+				target='_blank'
+				rel='noopener noreferrer'
+				onClick={() => {
+					trackEvent('twitter_follow_cta')
+				}}
+			>
+				follow us on Twitter
 			</a>
 			<button
 				className='absolute right-3'
