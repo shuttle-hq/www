@@ -3,7 +3,6 @@ import type { AppProps } from 'next/app'
 import { DefaultSeo } from 'next-seo'
 import CookieConsent from 'react-cookie-consent'
 import Head from 'next/head'
-import { setupFathomAnalytics } from '../lib/fathom'
 import { APP_NAME, SITE_TITLE, SITE_DESCRIPTION, SITE_URL, TWITTER_HANDLE } from '../lib/constants'
 import { ReactNode, useEffect } from 'react'
 import { useRouter } from 'next/router'
@@ -29,7 +28,6 @@ if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_POSTHOG_KEY) {
 
 export default function App({ Component, pageProps }: AppProps) {
 	const router = useRouter()
-	const { user } = pageProps
 
 	useEffect(() => {
 		// Track page views
@@ -41,8 +39,6 @@ export default function App({ Component, pageProps }: AppProps) {
 			router.events.off('routeChangeComplete', handleRouteChange)
 		}
 	}, [router.events])
-
-	useEffect(() => setupFathomAnalytics(router), [router])
 
 	const getLayout = (Component as any).getLayout || ((page: ReactNode) => <Page>{page}</Page>)
 
