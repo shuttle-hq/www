@@ -1,0 +1,299 @@
+---
+title: "Issue #11 & #12: Structuring and Testing Axum Applications"
+date: "2023-11-17T16:00:00"
+---
+# Issue 11 & 12: Structuring and Testing Axum Applications
+
+Quick announcement: we are hosting a **Christmas Code Hunt**! It's a 16-day long event inspired by the Advent of Code! Check it out here: [shuttle.rs/cch](https://shuttle.rs/cch). Now, without further ado;
+
+We're back! Did you miss us? After a short break, we will continue with fresh Rust tutorials directly in your inbox! Just recently, Joshua published an extensive guide on testing in Rust for JavaScript developers [on the Shuttle.rs website](https://www.shuttle.rs/blog/2023/11/08/testing-in-rust). This is quite a coincidence because I also wanted to show you how I usually test my Axum applications.
+
+So see this issue as a little extension to Joshua's article. And since you had to wait a bit, I'm going to make sure that you get as much value as possible out of this issue. So let's get started!
+
+## Step 1: A Testing Setup
+
+As you might know, Rust has good support for testing and a built-in testing framework.
+
+The easiest way to test your code is by creating a test module and test functions directly where your original code is located. This works great for unit tests and is my preferred way of testing small chunks of my code.
+
+However, in an Axum application, I usually want to test if my routes are working as expected. A black-box test. I do an HTTP request with some parameters and I expect a certain response.
+
+For this, we want to use integration tests, which are located in a separate folder. The test runner will automatically look for tests in the `tests` folder and execute them. This is also nothing new, but something that you see in any Rust testing documentation.
+
+To prepare ourselves for tests like this, we need to restructure our application a bit. So before we go into any nitty gritty details, let's create some structure in our application so we are ready for testing.
+
+In all the previous tutorials, it was mostly a single file with some code that did everything we needed to do perfectly. This is not how you would structure your application in a scenario where you expect your application to grow over time.
+
+So, instead of _just_ having a single file, let's create a bit of structure.
+
+As an example, we use the key-value store we created in previous issues: Based on a parameter we either store bytes in a `HashMap`, or load the stored bytes from them.
+
+In a Rust binary application, you have to have a `main.rs` file with a main function that serves as the entry point of your app. I tend to keep these files as minimal as possible, basically just some bootstrapping code. The actual logic of my application then lies in a different file, the `lib.rs` file.
+
+The `main.rs` file consists of setting up the server.
+
+```rust
+use std::net::SocketAddr;
+
+type BoxError = Box<dyn std::error::Error>;
+
+#[tokio::main]
+async fn main() -> Result<(), BoxError> {
+    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+
+    let app = router();
+
+    axum::Server::bind(&addr)
+        .serve(app.into_make_service())
+        .await?;
+
+    Ok(())
+}
+```
+
+The equivalent Shuttle version that you created with `cargo shuttle new` looks like this.
+
+```rust
+#[shuttle_runtime::main]
+async fn axum() -> shuttle_axum::ShuttleAxum {
+    let router = router();
+    Ok(router.into())
+}
+```
+
+But where does the `router` function come from? The `router` function is in a different file, the `lib.rs` file. All it does is create the Axum router that we want to use.
+
+
+```rust
+pub fn router() -> Router {
+    Router::new()
+}
+```
+
+Use your IDE to help with getting the right imports.
+
+> `lib.rs` is also a crate's entry point for all publicly exposed functions. Your crate's name will point to the `lib.rs` file. So if you have a crate called `my_crate`, you can import the `router` function with `use my_crate::router`.
+
+This seems like a very small change, but it helps us greatly with many situations.
+
+- We are able to develop our application in a more modular way. We define the router in `lib.rs`, and can integrate it in a standalone Axum application, but also in a Shuttle application.
+- Since the `router` function is self-contained, we can also use it in an integration test completely independent of an actual server. So we can test the behaviour of our router without opening up network connections or similar!
+
+Alright! But there's more to do.
+
+## Step 2: Adding State
+
+We want to store our keys and values in a `HashMap`. This is a very simple data structure that is available in the standard library. We can use it to store our data in memory.
+
+Since the `HashMap` needs to work in a multi-threaded scenario, we need some helper types to make it accessible across different route invocations. For that, we need a `RwLock` (makes sure that only one thread writes to it at the same time), and an `Arc` that keeps track of the number of references to the `HashMap`.
+
+Create a file called `state.rs` and add the following code.
+
+```rust
+use std::{
+    collections::HashMap,
+    sync::{Arc, RwLock},
+};
+
+use hyper::body::Bytes;
+#[derive(Default)]
+pub struct AppState {
+    pub db: HashMap<String, Bytes>,
+}
+
+/// Custom type for a shared state
+pub type SharedState = Arc<RwLock<AppState>>;
+```
+
+The type alias `SharedState` makes creating a new instance easier. Usually, we would need to write.
+
+```rust
+let state = Arc::new(RwLock::new(AppState::default()));
+```
+
+But since all types that are used implement the `Default` trait, all we need to write is
+
+```rust
+let state = SharedState::default();
+```
+
+Handy!
+
+The state will be created in our `main.rs` file. We treat the state as a dependency, meaning that the router can work with different instantiations of the state. This is useful for testing!
+
+```rust
+use microservice_rust_workshop::{router, state::SharedState};
+
+#[shuttle_runtime::main]
+async fn axum() -> shuttle_axum::ShuttleAxum {
+    let state = SharedState::default();
+    let router = router(&state);
+    Ok(router.into())
+}
+```
+
+In our `lib.rs` file, we need to take care of the state as well.
+
+```rust
+pub mod state;
+use state::SharedState;
+
+pub fn router(state: &SharedState) -> Router<SharedState> {
+    Router::with_state(Arc::clone(state))
+}
+```
+
+Again, this looks like a small change, but it helps us greatly in creating a proper application and test setup:
+
+- In your tests, you can create a blank state independently of any actual application. This means that you can test the contents of your state without the remnants of the previous tests.
+- If you create a `SharedState` trait instead of a concrete type, you can easily swap out the state for a different implementation. For example, you could use a `HashMap` in your tests, but a `Redis` instance in production. Or even better, use [Shuttle Perist](https://docs.shuttle.rs/resources/shuttle-persist).
+
+Okay, so with all that in place, we can finally test.
+
+## Step 3: Testing
+
+Okay, the changes were not that big, were they? But small changes sometimes need big explanations. Those little structural adaptions are important for you to create proper apps! And it helps us greatly with what we want to test.
+
+So, we want to create our first routes. We want to...
+
+- Store bytes in our state, based on a key. We use a `POST` request for that.
+- Retrieve bytes from our state, based on a key. We use a `GET` request for that.
+
+The functions are very simple:
+
+```rust
+type BoxError = Box<dyn std::error::Error>;
+
+pub async fn kv_set(
+    Path(key): Path<String>,
+    State(state): State<SharedState>,
+    bytes: Bytes,
+) -> Result<(), BoxError> {
+    state.write()?.db.insert(key, bytes);
+    Ok(())
+}
+
+pub async fn kv_get(
+    Path(key): Path<String>,
+    State(state): State<SharedState>,
+) -> Result<Bytes, BoxError> {
+    let db = &state.read()?.db;
+    if let Some(val) = db.get(&key) {
+        Ok(val.to_owned())
+    } else {
+        Err(StatusCode::NOT_FOUND.into())
+    }
+}
+```
+
+You have seen this in previous issues of Launchpad as well. Btw. since we spoke about structure, create a folder `kv_store` in your `src` folder, and add the two functions in a file called `mod.rs`. You can now the functions in your `lib.rs` file like this:
+
+```rust
+mod kv_store;
+use kv_store::{kv_get, kv_set};
+```
+
+Alright, so we have our functions. Now we need to add them to our router. We do that in the `router` function.
+
+```rust
+pub fn router(state: &SharedState) -> Router<SharedState> {
+    Router::with_state(Arc::clone(state))
+        .route("/kv/:key", get(kv_get).post(kv_set))
+}
+```
+
+Alright! We now want to check if our routes work. We can do that with a simple integration test. Create a folder called `tests` at the root of your application, then, add a file called `kv_store.rs` with the following content.
+
+```rust
+use axum::{
+    body::Body,
+    http::{Request, StatusCode},
+};
+
+use my_app::{router, state::SharedState};
+use tower::Service; // for `call`
+
+#[tokio::test] // 1
+async fn basic_db_test() {
+    let state = SharedState::default();
+    let mut app = router(&state); // 2
+
+    let response = app // 3
+        .call(
+            Request::builder() // 4
+                .uri("/kv/test")
+                .method("POST")
+                .body("Hello World".into())
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK); // 5
+
+    let response = app  // 6
+        .call(
+            Request::builder()
+                .uri("/kv/test")
+                .method("GET")
+                .body(Body::empty())
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+
+    let body = hyper::body::to_bytes(
+        response.into_body()
+    ).await.unwrap(); // 7
+    assert_eq!(&body[..], b"Hello World");
+}
+```
+
+Okay, there is a lot to unpack. Let's go through it step by step, follow the numbers!
+
+1. We mark the function as a test. Since we're working in an `async` context, we need to mark the function as `async` as well, and we need to apply the `#[tokio::test]` attribute. With that, we create a small Tokio runtime taking care of proper async execution.
+2. We create a new instance of our router. We need to pass in the state, so we create a new instance of `SharedState` as well. Note that we didn't create a server, we just focused on the application logic! We can test that independently of any server. Also, if our app works with an _actual_ database like [Shuttle Persist](https://docs.shuttle.rs/resources/shuttle-persist), we could still use a different state for testing if we use a trait instead of a concrete type.
+3. We call the `call` function on our app. This `call` method exists because we bring the `tower:Service` trait into scope. This trait is implemented for `Router`, which means that we can call the `call` method on it. The `call` method takes a `Request` and returns a `Response`. We can use the `call` method to test our routes. Again, no server is needed. We just fake a request, and expect a properly created response for it!
+4. The `Request` is created using the respective builder. We set the URI, the method, and the body. The body contains the bytes we want to set.
+5. We expect the response to be `200 OK`. This means that storing data was successful. We didn't produce any errors.
+6. Then, we want to see if we can retrieve the same data again. We create another call, this time we do a `GET` request instead of a `POST` request. Note that we use the `Body::empty()` method for the `GET` request.
+7. Last, but not least, we need to extract the bytes from the response. We do that using the `hyper::body::to_bytes` function. This function takes a `Body` and returns a `Bytes` instance. We can then compare the bytes with the bytes we stored in the first place.
+
+And that's it! That's a basic test for Axum. From there on, it's up to your imagination.
+
+## Step 4: Where to go from here.
+
+Here are a few things you can try out to improve your app.
+
+1. Create a `SharedState` trait and implement it for `HashMap` and an actual persistence. What do you need to change in your app to make it work? How do you deal with allocations?
+2. Create a `kv_delete` function. How do you deal with errors? What status code do you return? Test accordingly!
+3. Try to compare strings and not bytes. Which methods do you need to call to make that work?
+4. Create modules for your errors and types.
+5. Create Routers for all your sub-routes that you can nest in the main router.
+
+And much more! And don't forget to share your results with us! Write an app, and `$ cargo shuttle deploy` it! We're looking forward to your apps!
+
+
+## Time for your feedback!
+
+We want to tailor Shuttle Launchpad to your needs! [Give us feedback](https://btl1d1x5z23.typeform.com/to/dTU2F8jI) on the most recent issue and your wishes here.
+
+## Join us!
+
+Shuttle has a very active community. Join us on [Discord](https://discord.gg/shuttle), star us on [GitHub](https://github.com/shuttle-hq/shuttle), follow us on [Twitter](https://twitter.com/shuttle_dev), and watch out for video content on [YouTube](https://www.youtube.com/@shuttle-dev).
+
+If you have any questions regarding _Launchpad_, join the `#launchpad` channel on Shuttle's [Discord](https://discord.gg/shuttle).
+
+## Links, Videos, Tutorials
+
+[_Launchpad Examples_](https://github.com/ddprrt/shuttle-launchpad-examples): Check out all Launchpad Examples on GitHub.
+
+[_Microservices in Rust_](https://github.com/ddprrt/microservice-rust-workshop/): Files and tests to the code examples above.
+
+[Rust for JavaScript developers: Testing in Rust](https://www.shuttle.rs/blog/2023/11/08/testing-in-rust): Joshua's article on all things testing from the perspective of a JavaScript developer.
+
+## Bye!
+
+That's it for today. Get in touch with us and let us know what you want to see!
+
+-- [Stefan](https://oida.dev) and your friends from [Shuttle](https://shuttle.rs)
