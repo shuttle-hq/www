@@ -36,7 +36,7 @@ const StarOnGithub = () => {
 			>
 				give it a star on GitHub
 			</a>
-			&nbsp;or&nbsp;
+			<span className='hidden sm:block'>&nbsp;or&nbsp;</span>
 			<a
 				href='https://twitter.com/shuttle_dev'
 				target='_blank'
@@ -44,6 +44,7 @@ const StarOnGithub = () => {
 				onClick={() => {
 					trackEvent('twitter_follow_cta')
 				}}
+				className='hidden sm:block'
 			>
 				follow us on Twitter
 			</a>
