@@ -32,19 +32,19 @@ export default function CCHPage() {
 				</p>
 			</div>
 
-			<div className='flex flex-col text-base'>
+			<div className='flex flex-col text-base mb-8'>
 				<Link
-						href='https://shuttlerust.typeform.com/to/hkPkbXab'
-						target='_blank'
-						className='text-[#F09050]'
-						onClick={() => {
-							trackEvent('cch_sign_up')
-						}}
-					>
-						Click here to sign up!
-					</Link>
-				
-				<p>
+					href='https://shuttlerust.typeform.com/to/hkPkbXab'
+					target='_blank'
+					className='text-[#F09050] text-center text-xl font-bold border rounded p-6'
+					onClick={() => {
+						trackEvent('cch_sign_up')
+					}}
+				>
+					Click here to sign up!
+				</Link>
+
+				<p className='mt-8 font-bold'>
 					<span className='text-[#F09050]'>&gt;</span> what
 				</p>
 				<p>
@@ -57,7 +57,7 @@ export default function CCHPage() {
 					. Join the fun, solve puzzles, embrace the holiday spirit, and get rewarded! 🎄🚀
 				</p>
 
-				<p className='mt-8'>
+				<p className='mt-8 font-bold'>
 					<span className='text-[#F09050]'>&gt;</span> why
 				</p>
 				<p>
@@ -66,7 +66,7 @@ export default function CCHPage() {
 					We also have an array of prizes in store for this years winners.
 				</p>
 
-				<p className='mt-8'>
+				<p className='mt-8 font-bold'>
 					<span className='text-[#F09050]'>&gt;</span> when
 				</p>
 				<p>
@@ -77,7 +77,7 @@ export default function CCHPage() {
 					). A total of 16 challenges will be released each weekday between December 1 and December 22.
 				</p>
 
-				<p className='mt-8'>
+				<p className='mt-8 font-bold'>
 					<span className='text-[#F09050]'>&gt;</span> where
 				</p>
 				<p>
@@ -93,12 +93,12 @@ export default function CCHPage() {
 							trackEvent('cch_sign_up')
 						}}
 					>
-						Sign up here
+						Sign up now
 					</Link>
-					.
+					!
 				</p>
 
-				<p className='mt-8'>
+				<p className='mt-8 font-bold'>
 					<span className='text-[#F09050]'>&gt;</span> prizes
 				</p>
 				<p>
@@ -111,12 +111,41 @@ export default function CCHPage() {
 					Completing all the challenges: &nbsp;TBA
 				</p>
 
-				<p className='mt-8'>
+				<p className='mt-8 font-bold'>
+					<span className='text-[#F09050]'>&gt;</span> scoring system
+				</p>
+				<p>
+					The scoring is determined by gathering points:
+				</p>
+				<ul className="list-disc ml-8">
+					<li>Complete the core tasks of a challenge: 1000 points</li>
+					<li>Complete bonus tasks on challenges: Up to 800 points per challenge</li>
+					<li>Time score based on when your solution was submitted: Up to 48 points</li>
+					<li>Tie breaker: TBA</li>
+				</ul>
+				<p>Time score is added based on the time between the challenge release and your submission time:</p>
+				<ul className="list-disc ml-8">
+					<li>Under 24 hours: 48 time points</li>
+					<li>After 24 hours, lose 1 time point per hour that passes</li>
+					<li>After 72 hours, you’ll get 0 time points</li>
+				</ul>
+				<p>Your highest scoring submission (sum of task points and time points) per challenge is the one that counts.</p>
+
+				<p className='mt-8 font-bold'>
 					<span className='text-[#F09050]'>&gt;</span> rules
 				</p>
-				<p>Coming soon</p>
+				<ul className="list-disc ml-8">
+					<li>The competition ends on December 31, 23:59 UTC. A snapshot of the scoreboard will be taken at that time.</li>
+					<li>Challenges are released at 12:00 UTC each weekday between Dec 1 and Dec 22.</li>
+					<li>In order to be eligible for prizes, the solutions need to be genuine. In other words, you can&apos;t return hard-coded or pre-computed answers to the tests. Additionally, your solutions should be your own work. (These conditions will be verified.)</li>
+					<li>Shuttle reserves the right to change, update, or amend: release times of challenges, challenge contents, the scoring system, the prizes, and these rules.</li>
+					<li>Challenge -1 is a warmup challenge and gives no score.</li>
+					<li>Sharing tips about how to solve tasks is allowed, but don&apos;t spoil any solution in the official Discord channel. Feel free to use the Discord to find collaborators</li>
+					<li>Follow the Shuttle <Link href='https://www.shuttle.rs/acceptable-use' target='_blank' className='text-[#F09050]'>Acceptable Use Policy</Link>. TL;DR It is not allowed to disrupt access to our services or other participants&apos; projects.</li>
+					<li>Shuttle employees are not eligible for leaderboard spots.</li>
+				</ul>
 
-				<p className='mt-8'>
+				<p className='mt-8 font-bold'>
 					<span className='text-[#F09050]'>&gt;</span> scoreboard
 				</p>
 				<p>Coming soon</p>
