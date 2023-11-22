@@ -8,6 +8,7 @@ module.exports = {
 			fontFamily: {
 				gradual: 'BwGradual, sans-serif',
 				mono: 'Fira Mono, sans-serif',
+				atkinson: 'Atkinson, sans-serif',
 			},
 			borderRadius: {
 				'2.5xl': '1.5rem',
