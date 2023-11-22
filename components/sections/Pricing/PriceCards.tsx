@@ -1,5 +1,6 @@
 import { Information } from 'components/svgs'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Tooltip } from 'react-tooltip'
 
 const PriceCards = () => (
@@ -163,9 +164,18 @@ const PriceCards = () => (
 								'linear-gradient(72deg, #FC540C -20%, rgba(255, 215, 111, 0.72) 45%, #38D4E9 150%)',
 						}}
 					>
-						Custom
+						$15
 					</h1>
-					<h4>per instance</h4>
+					<h4>
+						per instance{' '}
+						<Link
+							href='https://docs.shuttle.rs/resources/shuttle-aws-rds'
+							target='_blank'
+							className='cursor-pointer'
+						>
+							&#9432;
+						</Link>
+					</h4>
 				</div>
 			</div>
 			<div className='group relative order-5 h-[188px] rounded-[20px]'>
