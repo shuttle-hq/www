@@ -1,15 +1,20 @@
 ---
 title: "Building & Deploying A Web Analytics Tool with JS, htmx and Rust"
-description: This article documents how you can build a simple privacy-respecting analytics tool using a JavaScript script and handle the backend with Rust. 
+description: This article documents how you can build a simple privacy-respecting analytics tool using a custom JavaScript web analytics script and handle the backend with Rust - dashboard included. 
 author: josh
 tags: [rust, web analytics, htmx, frontend, guide]
 thumb: ssg-in-rust-thumb.png 
 cover: ssg-in-rust-thumb.png
-date: '2023-11-15T14:30:00'
+date: '2023-11-22T15:30:00'
 ---
 
-With privacy becoming more and more of a concern on the Internet, it is important to learn how to build tools that respect user privacy. According to [this 2020 study](https://arxiv.org/pdf/1911.09964.pdf) saying things like "ensuring a proper functionality and legal compliance of a cookie banner is usually left to the website publisher and is completely obscure for the website visitor", it's not particularly clear  how users' privacy is being respected (if it is). To this extent, we've decided to show you how you can roll your own privacy-respecting analytics, with a backend written Rust and a dashboard written using the [`tera`](https://keats.github.io/tera) HTML templating crate and [htmx](https://htmx.org/), which is a lightweight JavaScript library for dynamic web development, enabling real-time content updates without full-page reloads. 
+With privacy becoming more and more of a concern on the Internet, it is important to learn how to build tools that respect user privacy. According to [this 2020 study](https://arxiv.org/pdf/1911.09964.pdf) saying things like "ensuring a proper functionality and legal compliance of a cookie banner is usually left to the website publisher and is completely obscure for the website visitor", it's not particularly clear  how users' privacy is being respected (if it is) since cookie banners and HTML elements that serve similar functionality tend to be very intrusive and worsen the user experience. To this extent, we've decided to show you how you can roll your own privacy-respecting analytics, with a backend written in Rust and a dashboard written using the [`tera`](https://keats.github.io/tera) HTML templating crate and [htmx](https://htmx.org/), which is a lightweight JavaScript library for dynamic web development, enabling real-time content updates without full-page reloads. 
 
+The advantages of building a dashboard with htmx, powered by HTML templating, are as follows:
+- htmx itself is quite a lightweight library 
+- No JS knowledge required - you can focus on using HTML, CSS and Rust!
+- You can focus on the dealing with the data
+ 
 If you're interested in deploying and trying this out for yourself, you can follow the instructions below to get started quickly:
 1) Run `cargo shuttle init --from joshua-mo-143/shuttle-analytics-ex` and follow the prompt
 2) `cd` to the folder
@@ -19,24 +24,35 @@ If you're interested in deploying and trying this out for yourself, you can foll
 Don't forget to make sure that `cargo-shuttle` is installed and that you're logged in! You can also visit the repo [here.](https://www.github.com/joshua-mo-143/shuttle-analytics-ex)
 
 ## Getting Started
-You'll need to use `cargo shuttle init --template axum` to get started (if you don't have it installed, you can use `cargo install cargo-shuttle` then log in using `cargo shuttle login` to get started!). Once you're done, you'll want to use the following one-liner to install your dependencies:
+You'll need to use `cargo shuttle init --template axum` to get started (if you don't have it installed, you can use `cargo install cargo-shuttle` then log in using `cargo shuttle login` to get started!). Once you're done, you'll want to check out the dependency list below (feel free to copy and paste the full list or use `cargo add` to add them individually):
 
-```bash
-cargo add axum chrono serde serde-json shuttle-metadata shuttle-shared-db sqlx tera tokio url -F \
-axum/headers,axum/macros,chrono/clock,chrono/serde,shuttle-shared-db/postgres,sqlx/runtime-tokio-native-tls,\
-sqlx/postgres,sqlx/chrono,url/serde
+```toml
+# Cargo.toml
+[dependencies]
+axum = { version = "0.6.20", features = ["headers", "macros"] }
+chrono = { version = "0.4.31", features = ["clock", "serde"] }
+serde = { version = "1.0.190", features = ["derive"] }
+serde_json = "1.0.108"
+shuttle-axum = "0.33.0"
+shuttle-metadata = "0.33.0"
+shuttle-runtime = "0.333.0"
+shuttle-shared-db = { version = "0.33.0", features = ["postgres"] }
+sqlx = { version = "0.7.2", features = ["runtime-tokio-native-tls", "postgres", "chrono"] }
+tera = "1.19.1"
+tokio = "1.28.2"
+url = { version = "2.4.1", features = ["serde"] }
 ```
 
 Next, you will want to add some migrations like so:
 ```rust
 # migrations.sql
 CREATE TABLE IF NOT EXISTS stats (
-        id SERIAL PRIMARY KEY,
-        uri VARCHAR NOT NULL,
-        domain VARCHAR NOT NULL,
-        session_uuid VARCHAR NOT NULL,
-        date_time TIMESTAMP WITH TIME ZONE NOT NULL,
-        duration INT NOT NULL
+    id SERIAL PRIMARY KEY,
+    uri VARCHAR NOT NULL,
+    domain VARCHAR NOT NULL,
+    session_uuid VARCHAR NOT NULL,
+    date_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    duration INT NOT NULL
 );
 ```
 
@@ -57,14 +73,16 @@ async fn main(
     #[shuttle_shared_db::Postgres] db: PgPool,
     #[shuttle_metadata::ShuttleMetadata] metadata: Metadata,
 ) -> shuttle_axum::ShuttleAxum {
-    sqlx::migrate!().run(&db).await.unwrap();
+    db.execute(include_str!("../schema.sql")).await.unwrap();
 
     // if running in debug mode (local), use localhost
     // else if in release mode, use the deployed url
-    let domain = if cfg!(debug_assertions) {
-        "http://localhost:8000".to_string()
-    } else {
-        format!("https://{}.shuttleapp.rs", metadata.project_name.to_string())
+    let domain = match metadata.env  {
+        Environment::Local => "http://localhost:8000".to_string(),
+        Environment::Deployment => format!(
+            "https://{}.shuttleapp.rs",
+            metadata.project_name
+        )
     };
 
     let state = AppState { db, domain };
@@ -75,6 +93,12 @@ async fn main(
 
     Ok(router.into())
 }
+```
+
+We'll also want to set up a `Shuttle.toml` file that lets Shuttle know where our static files are:
+```toml
+# Shuttle.toml
+assets = ["templates/*"]
 ```
 
 ## Setting up CSS
@@ -98,22 +122,23 @@ button + button {
 }
 
 #dashboard {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
 }
 
 #content {
-        display: flex;
-        text-align: center;
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
 }
 ```
+As you can see, the CSS is quite minimal - but by doing it this way, it's much easier to focus on the numbers.
 
-Now we can set up a function handler for returning the CSS body that our webpages can retrieve:
+We can set up a function handler for returning the CSS body that our webpages can retrieve like so:
 ```rust
 // src/frontend.rs
 pub async fn styles() -> impl IntoResponse {
@@ -127,7 +152,9 @@ pub async fn styles() -> impl IntoResponse {
 Now we just need to hook this up to our `axum::Router` as the `/styles.css` route and we're done!
 
 ## Setting up htmx
+
 htmx is quite simple to set up - we can add it to the head of our `base.html` file:
+
 ```html
 <!-- templates/base.html -->
 <!DOCTYPE html>
@@ -142,10 +169,10 @@ htmx is quite simple to set up - we can add it to the head of our `base.html` fi
     <script src="https://unpkg.com/htmx.org@1.9.9" integrity="sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX" crossorigin="anonymous"></script>
 </head>
 <body>
-        <div id="content">
-        <!-- as you can see, we have a {% %} block here for content - which we will declare later -->
-        {% block content %}{% endblock content %}
-        </div>
+    <div id="content">
+    <!-- as you can see, we have a {% %} block here for content - which we will declare later -->
+    {% block content %}{% endblock content %}
+    </div>
 </body>
 </html>
 ```
@@ -175,10 +202,10 @@ Tera is a HTML templating library that uses Jinja-like syntax to parse HTML page
     <link href="./styles.css" rel="stylesheet">
 </head>
 <body>
-        <div id="content">
-        <!-- as you can see, we have a {% %} block here for content - which we will declare later -->
-        {% block content %}{% endblock content %}
-        </div>
+    <div id="content">
+    <!-- as you can see, we have a {% %} block here for content - which we will declare later -->
+    {% block content %}{% endblock content %}
+    </div>
 </body>
 </html>
 ```
@@ -240,11 +267,11 @@ A HTML file that includes our base HTML file might look like this - we extend th
 
 Interested in finding out more about Tera? You can find their docs [here.](https://keats.github.io/tera/)
 
-## Writing Our Analytics Script
+## Writing An Analytics Script
 
-For this part,  we'll need to engage in writing some JavaScript. For this part, it is not too complex: we use search parameters to hold a randomly-generated, anonymous user ID and if the referrer from the last page has the same domain host, use the same UUID - otherwise, generate a new one. The UUID is necessary so that we can distinguish user sessions from each other.
+Next,  we'll need to write some JavaScript so we can collect some (anonymous) data. We will use search parameters to hold a randomly-generated, anonymous user ID and if the referrer from the last page has the same domain host, use the same UUID - otherwise, generate a new one. The UUID is necessary so that we can distinguish user sessions from each other.
 
-We then replace the last page history (the current page) with the flat URL so the user doesn't see the analytics tracking parameters, as well as taking note of what the current time is. Once the page loads, we then add the UUID to every anchor link where the page has the same host as the current webpage. We also add an event trigger on page visibility change to Show so that the page will automatically send a HTTP request to our analytics endpoint.
+We then replace the last page history (the current page) with the flat URL so the user doesn't see the analytics tracking parameters (having it in the URL makes the URL significantly longer and more ugly when shared), as well as taking note of what the current time is. Once the page loads, we then add the UUID to every anchor link where the page has the same host as the current webpage. We also add an event trigger on page visibility change to Show so that the page will automatically send a HTTP request to our analytics endpoint through our JS web analytics script.
 
 ```javascript
 const url = new URL(window.location.href);
@@ -271,22 +298,22 @@ for (let i = 0; i < links.length; i++) {
 document.addEventListener("visibilitychange", send_logs(), false);
 
 async function send_logs() {
-        if (!Document.hidden) {
-        let res = await fetch("{{domain}}/push", {
-                method: "POST",
-                keepalive: true,
-                headers: {
-                        "content-type":"application/json",
-                },
-                body: JSON.stringify({
-                        "uri": window.location.href,
-                        "sessionUuid": uuid,
-                        "domain": window.location.host,
-                        "dateTime": datetime_entered_isostring,
-                        "duration": 0
-                }),
-        });
-        }
+    if (!Document.hidden) {
+    let res = await fetch("{{domain}}/push", {
+        method: "POST",
+        keepalive: true,
+        headers: {
+            "content-type":"application/json",
+        },
+        body: JSON.stringify({
+            "uri": window.location.href,
+            "sessionUuid": uuid,
+            "domain": window.location.host,
+            "dateTime": datetime_entered_isostring,
+            "duration": 0
+        }),
+    });
+    }
 }
 ```
 
@@ -411,19 +438,19 @@ Then we can write up the Dashboard page HTML:
 {% extends 'base.html' %}
 
 {% block content %}
-        <h1>Shuttle Analytics - Dashboard</h1>
+    <h1>Shuttle Analytics - Dashboard</h1>
 <a href="/">Back to the homepage</a>
-        <div id="dashboard">
-                <h2> Click below to go to check out the stats for the relevant website. </h2>
-        <!-- if data exists, map it to an array of buttons - if not, return "No data collected :(" -->
-        {% if data %}
-        {% for website in data %}
-        <button hx-get="/stats/domains?domain={{ website.domain }}" hx-target="#dashboard">{{ website.domain}} - {{website.count}}</button>
-        {% endfor %}
-        {% else %}
-                <p> No data collected :( </p>
-        {% endif %}
-        </div>
+    <div id="dashboard">
+        <h2> Click below to go to check out the stats for the relevant website. </h2>
+    <!-- if data exists, map it to an array of buttons - if not, return "No data collected :(" -->
+    {% if data %}
+    {% for website in data %}
+    <button hx-get="/stats/domains?domain={{ website.domain }}" hx-target="#dashboard">{{ website.domain}} - {{website.count}}</button>
+    {% endfor %}
+    {% else %}
+        <p> No data collected :( </p>
+    {% endif %}
+    </div>
 {% endblock content %}
 ```
 Note that for the links, we are actually using buttons that utilise the `hx-get` attribute and target the `div` with the `dashboard` ID - this is so that when we are navigate through links, the content will simply replace whatever is inside the dashboard div so we can use the `/dashboard` route to contain all the frontend data.
@@ -473,16 +500,16 @@ See the HTML frontend below for how the page would look when it is slotted into 
 {% extends 'base.html' %}
 
 {% block content %}
-        <button hx-get="/dashboard" hx-target="body">Back to main dashboard</button>
-        <h1>Stats by Domain - {{domain}}</h1>
-        <p>Number of page hits from the last 30 days, sorted by URI:</p>
-        {% if data %}
-        {% for website in data %}
-                <button hx-get="/stats/uri?domain={{ website.uri }}" hx-target="#dashboard">{{website.uri}} - {{ website.count }}</a>
-        {% endfor %}
-        {% else %}
-                <p> No data :( </p>
-        {% endif %}
+    <button hx-get="/dashboard" hx-target="body">Back to main dashboard</button>
+    <h1>Stats by Domain - {{domain}}</h1>
+    <p>Number of page hits from the last 30 days, sorted by URI:</p>
+    {% if data %}
+    {% for website in data %}
+        <button hx-get="/stats/uri?domain={{ website.uri }}" hx-target="#dashboard">{{website.uri}} - {{ website.count }}</a>
+    {% endfor %}
+    {% else %}
+            <p> No data :( </p>
+    {% endif %}
 {% endblock content %}
 ```
 As noted above, the links for navigating within the dashboard utilise htmx so that we can simply replace the content that is on the webpage instead of using actual page navigation. 
@@ -543,25 +570,25 @@ See the HTML below:
 {% extends 'base.html' %}
 
 {% block content %}
-        <button hx-get="/stats/domains?domain={{domain_base}}" hx-target="#dashboard">Back to domain page</button>
-        <h1>Stats by URI - {{domain}}</h1>
-        <p>Number of page hits from the last 7 days, sorted by date:</p>
-        {% if data %}
-        {% for website in data %}
-                <p> {{ website.date }} - {{ website.count }}
-        {% endfor %}
-        {% else %}
-                <p> No data :( </p>
-        {% endif %}
+    <button hx-get="/stats/domains?domain={{domain_base}}" hx-target="#dashboard">Back to domain page</button>
+    <h1>Stats by URI - {{domain}}</h1>
+    <p>Number of page hits from the last 7 days, sorted by date:</p>
+    {% if data %}
+    {% for website in data %}
+        <p> {{ website.date }} - {{ website.count }}
+    {% endfor %}
+    {% else %}
+        <p> No data :( </p>
+    {% endif %}
 
 {% endblock content %}
 ```
 
 ## Deployment
-Now that we're done, all you need to do is `cargo shuttle deploy` (with the `--ad` flag if on a dirty Git branch) and you're up and away!
+Now that we're done, all you need to do is `cargo shuttle deploy` (with the `--ad` flag if on a dirty Git branch) and you're up and away! When it's finished deploying, you'll see your project deployment URL as well as any resources you were provisioned.
 
 ## Finishing Up
-Thanks for reading! I hope this has given some insight into how you can incorporate htmx in applications, as well as how you can build privacy-respecting web analytics tools.
+Thanks for reading! I hope this has given some insight into how you can write Rust htmx assisted web applications, as well as building privacy-respecting web analytics tools.
 
 A couple of ideas for extending this example:
 - Lock the dashboard behind authentication
