@@ -1,20 +1,20 @@
 ---
-title: "Building a Web Analytics Tool with JS, htmx and Rust" 
+title: "Building & Deploying A Web Analytics Tool with JS, htmx and Rust"
 description: This article documents how you can build a simple privacy-respecting analytics tool using a JavaScript script and handle the backend with Rust. 
 author: josh
-tags: [rust, static site generator, frontend, guide]
+tags: [rust, web analytics, htmx, frontend, guide]
 thumb: ssg-in-rust-thumb.png 
 cover: ssg-in-rust-thumb.png
 date: '2023-11-15T14:30:00'
 ---
 
-htmx is a lightweight JavaScript library for dynamic web development, enabling real-time content updates without full-page reloads. 
+With privacy becoming more and more of a concern on the Internet, it is important to learn how to build tools that respect user privacy. According to [this 2020 study](https://arxiv.org/pdf/1911.09964.pdf) saying things like "ensuring a proper functionality and legal compliance of a cookie banner is usually left to the website publisher and is completely obscure for the website visitor", it's not particularly clear  how users' privacy is being respected (if it is). To this extent, we've decided to show you how you can roll your own privacy-respecting analytics, with a backend written Rust and a dashboard written using the [`tera`](https://keats.github.io/tera) HTML templating crate and [htmx](https://htmx.org/), which is a lightweight JavaScript library for dynamic web development, enabling real-time content updates without full-page reloads. 
 
-This time, we're building a privacy-respecting analytics tool which uses htmx, Tera and Axum with Shuttle.
-
+If you're interested in deploying and trying this out for yourself, you can follow the instructions below to get started quickly:
 1) Run `cargo shuttle init --from joshua-mo-143/shuttle-analytics-ex` and follow the prompt
 2) `cd` to the folder
-3) Run `cargo shuttle deploy --allow-dirty` and your static site generator is live!
+3) Run `cargo shuttle deploy --allow-dirty` and your analytics tool is live!
+4) You can add a script with the source as the `/script.js` route to any web page you own and it will now start tracking users.
 
 Don't forget to make sure that `cargo-shuttle` is installed and that you're logged in! You can also visit the repo [here.](https://www.github.com/joshua-mo-143/shuttle-analytics-ex)
 
