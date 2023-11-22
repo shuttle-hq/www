@@ -514,15 +514,26 @@ pub async fn query_uri(
         }
     };
 
-    let mut meme = format!("{}{}{}", query.domain.host_str().unwrap(), 
-             if query.domain.port().is_some() {":"} else {},
-    if query.domain.port().is_some() {query.domain.port().unwrap()} else {}
-    );
+
+    let domain_base = format!(
+            "{}{}{}",
+            query.domain.host_str().unwrap(),
+            if query.domain.port().is_some() {
+                ":"
+            } else {
+                ""
+            },
+            if query.domain.port().is_some() {
+                query.domain.port().unwrap().to_string()
+            } else {
+                String::new()
+            }
+        );
 
     let mut ctx = Context::new();
     ctx.insert("data", &data);
     ctx.insert("domain", &query.domain.clone().into_string());
-    ctx.insert("domain_base", &meme);
+    ctx.insert("domain_base", &domain_base);
     Html(frontend.render("uri", &ctx).unwrap())
 }
 ```
@@ -550,4 +561,8 @@ See the HTML below:
 Now that we're done, all you need to do is `cargo shuttle deploy` (with the `--ad` flag if on a dirty Git branch) and you're up and away!
 
 ## Finishing Up
-Thanks for reading! I hope this has given some insight into how you can incorporate htmx in applications.
+Thanks for reading! I hope this has given some insight into how you can incorporate htmx in applications, as well as how you can build privacy-respecting web analytics tools.
+
+A couple of ideas for extending this example:
+- Lock the dashboard behind authentication
+- Add more periods for viewing data
