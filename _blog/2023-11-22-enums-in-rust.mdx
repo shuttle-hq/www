@@ -129,7 +129,7 @@ impl IntoResponse for MyError {
   }
 }
 ```
-As you can see, enums can be extremely effective as error types: by setting an error type as an enum, you only ever need to match against each arm of the enum and you don't need to use a non-exhaustive patten marker (`_`) - although you may want to, if you only want to match against certain enum variants. To do this, you simply just replace the enum variants you don't want to match against with a single `_` then return something for it.
+Enums can be extremely effective as error types: by setting an error type as an enum, you only ever need to match against each arm of the enum and you don't need to use a non-exhaustive patten marker (`_`) - although you may want to, if you only want to match against certain enum variants. To do this, you simply just replace the enum variants you don't want to match against with a single `_` then return something for it.
 
 ## Enums as Newtypes ("Wrapper Types")
 We can also wrap a type in an enum that may also have several variants that contain types from a single crate, or multiple crates. The benefit of this versus just exposing another bit of said crates' API is that you can introduce new functionality for your own program while maintaining backwards compatibility by not needing to interact with the original type itself - you can also use it to create an abstraction over the original type. For example, the `poise` crate builds on top of the `serenity` crate by exposing new types as abstractions to provide a more high-level function instead of using low-level functions.
@@ -180,8 +180,10 @@ impl PasswordEnum {
 }
 ```
 
+As you can see, it's quite easy to use the new-type pattern to your advantage with enums! You can also do this with structs.
+
 ## Finishing up
-Thank you for reading! As you can see, enums in Rust are extremely powerful and form part of a strong backbone for Rust development. 
+Thank you for reading! Enums in Rust are extremely powerful and form part of a strong backbone for Rust development. 
 
 Interested in learning more about Rust? Here's some ideas:
 - Find out more about macros [here.](https://www.shuttle.rs/blog/2022/12/23/procedural-macros)
