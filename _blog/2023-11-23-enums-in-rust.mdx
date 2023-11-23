@@ -12,7 +12,7 @@ A commonly said piece of feedback from someone who's learning Rust as a second l
 In this article we'll talk about what makes Rust enums significantly better than in other languages, as well as some use cases for them.
 
 ## A quick recap about Enums
-First, a quick recap of what enums actually are for the uninitiated (or those who need a reminder!) Enums are types that are able to represent a defined number of variants. Consider the following enum:
+First, a quick recap of what Rust enums actually are for the uninitiated: (or those who need a reminder!) Enums are types that are able to represent a defined number of variants. Consider the following enum:
 ```rust
 enum Directions {
   Up,
@@ -24,7 +24,7 @@ enum Directions {
 This represents some directions. The advantage of using an enum over just strings is that when we're pattern matching, we can simply match against the different variants instead of having to account for variations in strings.
 
 ## Enums in Other Languages
-For some context, let's have a look at what enums look like in other languages. In TypeScript, a cursory Google search for enums will return a number of results that either tell you the following:
+For some context, let's have a look at what enums look like in other languages. In TypeScript, a cursory Google search for Typescript enums will return a number of results that either tell you the following:
 - Don't use enums in TypeScript because they are bad
 - There is only one correct way to use enums
 - There are a number of wrong ways to use enums that are not immediately obvious because enums aren't a thing when compiled to JavaScript
@@ -183,7 +183,7 @@ impl PasswordEnum {
 As you can see, it's quite easy to use the new-type pattern to your advantage with enums! You can also do this with structs.
 
 ## Finishing up
-Thank you for reading! Enums in Rust are extremely powerful and form part of a strong backbone for Rust development. 
+Thank you for reading and I hope you learned something about how to use enums in Rust! Enums are extremely powerful and form part of a strong backbone for Rust development. 
 
 Interested in learning more about Rust? Here's some ideas:
 - Find out more about macros [here.](https://www.shuttle.rs/blog/2022/12/23/procedural-macros)
