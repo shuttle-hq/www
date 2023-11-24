@@ -12,7 +12,7 @@ export interface Release {
 	published_at: string
 }
 
-function ReleasesPage() {
+export default function ReleasesPage() {
 	const [releases, setReleases] = useState<Release[]>([])
 	const [hasMore, setHasMore] = useState(true)
 	const [page, setPage] = useState(1)
@@ -77,6 +77,3 @@ function ReleasesPage() {
 	)
 }
 
-export default ReleasesPage
-
-ReleasesPage.getLayout = (children: ReactNode) => <Page disableFooterMargin>{children}</Page>
