@@ -10,7 +10,7 @@ export interface Release {
 	published_at: string
 }
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
 	const response = await axios(`https://api.github.com/repos/shuttle-hq/shuttle/releases`)
 
 	return {
