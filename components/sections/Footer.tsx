@@ -25,6 +25,11 @@ const SHUTTLE_LINKS = [
 		name: 'Status',
 		href: 'https://status.shuttle.rs',
 	},
+	{
+		key: 'releases',
+		name: 'Releases',
+		href: '/releases',
+	},
 ]
 
 const COMPANY_LINKS = [
