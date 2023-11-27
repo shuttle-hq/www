@@ -1,22 +1,11 @@
 import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
 import { useState } from 'react'
 import AnimateHeight from 'react-animate-height'
 import PlusIcon from 'components/svgs/PlusIcon'
 import MinusIcon from 'components/svgs/MinusIcon'
 import { Release } from 'pages/releases'
 
-export default function ReleaseCard({
-	release,
-	releaseCount,
-	idx,
-	lastItemRef,
-}: {
-	release: Release
-	releaseCount: number
-	idx: number
-	lastItemRef: (node: HTMLDivElement) => void
-}) {
+export default function ReleaseCard({ release }: { release: Release }) {
 	const [height, setHeight] = useState<'auto' | number>('auto')
 
 	const releaseId = release.id.toString()
@@ -24,7 +13,7 @@ export default function ReleaseCard({
 
 	return (
 		<AnimateHeight id={releaseId} duration={300} height={height}>
-			<div className='border-t border-[#282828] pt-3' ref={releaseCount === idx + 1 ? lastItemRef : null}>
+			<div className='border-t border-[#282828] pt-3'>
 				<div
 					aria-expanded={height !== SrhunkHeight}
 					aria-controls={releaseId}
@@ -45,7 +34,6 @@ export default function ReleaseCard({
 				</div>
 
 				<ReactMarkdown
-					remarkPlugins={[remarkGfm]}
 					components={{
 						h1: ({ children }) => <h1 className='mb-3 text-sm text-[#7B7B7B]'>{children}</h1>,
 						h2: ({ children }) => <h2 className='mb-2 text-xl text-[#EDEDED]'>{children}</h2>,
