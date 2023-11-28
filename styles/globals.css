@@ -106,6 +106,20 @@ body.dark {
 		font-style: 400;
 		src: url('/fonts/Fira_Mono/FiraMono-Regular.ttf');
 	}
+
+	@font-face {
+		font-family: 'Atkinson';
+		font-style: normal;
+		font-style: 400;
+		src: url('/fonts/Atkinson/AtkinsonHyperlegible-Regular.ttf');
+	}
+
+	@font-face {
+		font-family: 'Atkinson';
+		font-style: bold;
+		font-style: 700;
+		src: url('/fonts/Atkinson/AtkinsonHyperlegible-Bold.ttf');
+	}
 }
 
 @layer components {
