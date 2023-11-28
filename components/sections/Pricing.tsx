@@ -108,7 +108,7 @@ const PRICING_ROWS: PricingTableRow[] = [
 	},
 	{
 		desc: 'Free Network egress',
-		desc2: 'per day',
+		desc2: 'per month',
 		values: {
 			community: '1 GB',
 			pro: '10 GB',
