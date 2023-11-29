@@ -4,8 +4,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ReactNode, useState, useEffect } from 'react'
 
+interface ScoreboardEntry {
+	name: string;
+	completed: number;
+	points: number;
+}
+
 export default function CCHPage() {
-	const [scoreboard, setScoreboard] = useState([])
+	const [scoreboard, setScoreboard] = useState<ScoreboardEntry[]>([])
 
 	 const getScoreboard = async () => {
 		let res = await fetch("https://cch23.shuttleapp.rs/leaderboard");
@@ -13,9 +19,9 @@ export default function CCHPage() {
 		 console.log(res)	
 		}
 		
-		let data = await res.json();
+		let data: ScoreboardEntry[] = await res.json();
 		
-		data.sort((a, b) => (b.points - a.points));
+		data.sort((a: ScoreboardEntry, b: ScoreboardEntry) => (b.points - a.points));
 		setScoreboard(data) 
 		
 	}
