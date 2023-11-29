@@ -179,7 +179,7 @@ export default function CCHPage() {
 				</thead>
 				<tbody>
 				 { scoreboard.map((score, position) => (
-				<tr>
+				<tr key={`${score.name}`}>
 					<td className='w-min text-right px-8'>{position + 1}</td>
 					<td className='w-max text-left px-10 block'>{score.name}</td>
 					<td className='w-min text-right px-20'>{score.completed}</td>
