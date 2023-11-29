@@ -168,7 +168,7 @@ export default function CCHPage() {
 					<li>Shuttle employees are not eligible for leaderboard spots.</li>
 				</ul>
 
-				<p className='mt-8 font-bold'>
+				<p className='mt-8 font-bold' id='scoreboard'>
 					<span className='text-[#F09050]'>&gt;</span> scoreboard
 				</p>
 
