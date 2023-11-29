@@ -1,0 +1,115 @@
+---
+title: "Why Type Safety is Important"
+description: This article takes a deep dive into type safety, language features that enable type safety, and why type safety is a good idea.
+author: josh
+tags: [rust, type safety, tutorial, guide]
+thumb: type-safety-thumb.png
+cover: type-safety-thumb.png
+date: '2023-11-29T14:30:00'
+---
+
+Type safety: two words that, when put together, have the potential to cause plenty of heated debate. While many software engineers advocate for type safety no matter the situation, other people of note like [DHH](https://world.hey.com/dhh/programming-types-and-mindsets-5b8490bc) would consider themselves to be dynamic typing enjoyers and are much more skeptical. Although there are a lot of strong opinions on what is "better", it is not quite a clear-cut deal. Let's talk about it.
+
+## Using Dynamically-Typed Languages
+One example that is often used as a target of a reason why type safety is important is JavaScript. Despite it being a highly recommended language for beginner developers due to how easy it is to learn, the simplicity of the language combined with the use of type coercion can lead to language quirks. It's no secret that while true is equal to 1 and false is equal to 0 in a lot of languages, JavaScript takes this further. The following classic JavaScript snippet can be used to illustrate this:
+```javascript
+"b" + "a" + +"a" + "a"; // -> 'baNaNa'
+```
+As you can see, this leads to 'baNaNa' - but why?
+
+In the middle of the expression it has `+ +"a"` which gets evaluated to `+(+'a')` which ends up ultimately becoming `"NaN"`. This is pretty funny in isolation, but when you're trying to build production-grade codebases based around a language that has type coercion, it can be difficult to ensure things are the same type. This has caused a lot of people to initially use JavaScript early on in their software development careers, and then transfer later on to something else where there is more of a solid typing system. This has also caused the rise of TypeScript and libraries like JSDoc, which aim to make typing much easier (although this doesn't stop the fact that it still compiles to JavaScript).
+
+In addition to the core types, the TypeScript types system itself is quite expressive. You can use Interfaces to define the shape of an object or its structure - for example, let's say we have an interface called Message:
+```typescript
+interface Message {
+    message: string;
+    user_id: number;
+    created_at: Date;
+}
+
+/* now we can instantiate the interface by declaring a variable and the type */
+let message: Message = { message: "Hello world!", user_id: 1, created_at: Date.now() };
+```
+You can also of course add optional parameters by adding question marks to the variable names, like so:
+```typescript
+interface Message {
+    message: string;
+    user_id: number;
+    created_at: Date;
+    updated_at?: Date;
+}
+```
+In addition to having interfaces, you can also use enum types in TypeScript! Enums are a way of having conceptual containers that hold all the variants of a concept. For example, you can have a Directions enum that can hold all the various directions that something can be facing in:
+```typescript
+enum Direction {
+  Up,
+  Down,
+  Left,
+  Right,
+}
+```
+However, due to it not being a JavaScript type-level feature, it is often heavily recommended against using enums in TypeScript as compilation can typically cause problems; for example, `const enum` and `enum` are two different things. In this case, you would need to either learn how to use enums properly or not use them at all.
+
+In addition to this, TypeScript also has other issues of varying severity; many libraries have either non-existent or poor support for TypeScript. Many non-trivial codebases will also require a more complex setup and it takes time to configure everything. It should also be noted that if you're working in a team where you're the only person who knows TypeScript, this can also make it exponentially more difficult as you'll need to potentially upscale your team to be able to use TypeScript.
+
+However, if you can get past this, it's much easier to refactor things in your codebase because you can be assured that when it compiles there are no errors. It should be said that type inference makes this much easier - so you can just declare a variable and TypeScript will guess what the variable type is. No declarations are required! Of course, when you're working by yourself on a small codebase (like a product POC for example), it doesn't matter much; just fix the error and move on. However, it's worth considering that by using typing, you can also eliminate the mental overhead of having to think about whether something is the correct type or not. There are also efforts to recreate other type concepts in other languages in TypeScript - for example, there is a [Typescript library for adding functional programming types](https://github.com/gcanti/fp-ts).
+
+Another example of dynamic typing would be Python - although it is strongly typed, so if you get a typing error, it'll tell you. Being dynamically yet strongly typed allows Python to be more ergonomic because you don't need to think about what type something is - which is great for new developers, and has led Python to also be another highly recommended language for beginners that can be used for a wide variety of things. The method that Python uses when you add types to things is called type hinting - like so:
+```python
+def greeting(name: str) -> str:
+    return 'Hello ' + name
+```
+
+However, because it's not statically typed it loses some of the benefits of being statically typed; there's no way to check types automatically so fewer errors are caught before runtime (unless you use static type analysis tools like `mypy`), and if you're migrating a large codebase where there is little type hinting it will take a considerable effort to do so. Needless to say, there are far fewer quirks in Python than JavaScript.
+
+## Using Statically Typed Languages
+Statically typed languages are exactly that: languages where the type of variables and similar things must be known by the compiler. With the advent of typed inference, the developer experience when using statically typed languages has been greatly improved - primarily because you don't need to declare the type explicitly; you can just declare the variable and instantiate it, and then the compiler will infer what type the variable is by looking at what the value is. 
+
+In the C family of languages, you need to declare that you want the compiler to infer the type by using a keyword. In C# you would use the `var` keyword:
+```csharp
+var text = "Hello world!";
+```
+With C++ types, you would instead use `auto`:
+```cpp
+auto x = 4;
+```
+It's not particularly ergonomic, but it's there! Of course, in C++ you can also use `void* ' for a variable to signify a universal pointer - however, most C++ devs will tell you that this is almost certainly a huge footgun that's going to end badly whichever way you use it. 
+
+Other languages like Rust have type inference by default and simply let you declare what the variable is without a specific keyword:
+```rust
+let name = "Shuttle";
+```
+
+The advantages of strong static typing are numerous; you can catch errors during compilation rather than during runtime, documentation for libraries will always have proper typing support and your team will always be on the same page when talking about types. It's not hard to see why people like using it. On the other hand, you need to compile every time you want to run a new version; incremental builds and caching help (via ccache or sccache), but all the same, if you're running a large codebase it can take time to do so.
+
+Additionally, in some languages type signatures can also play a role in informing the compiler of what type of functionality a function or other thing may require. This is particularly notable in Rust with trait bounds - for example, a function may require that an argument be of a type that implements the `Send` trait - both of these being required for a variable to be sent to another thread. You would represent this like so:
+```rust
+async fn<T: Send>(thing: T) {}
+```
+This further enhances the "static typing" functionality for Rust types as it ensures that your variables are not only the correct type - but that they have the correct functionality. This is also relevant in languages like Haskell that have a `Traits` class that you can use:
+```haskell
+-- "a" here is a generic variable where it just needs to be an int when instantiated
+class FloatTraits a where
+    mantissaDigits :: a -> Int
+
+-- as you can see here, we implement FloatTraits for Float, with mantissaDigits being 24
+instance FloatTraits Float where
+    mantissaDigits _ = 24
+```
+
+It should be noted that languages like Java have their own equivalent in the form of Interfaces (not to be confused with TypeScript interfaces!).
+  
+## Can type safety ever be a bad thing?
+While it is difficult to justify why exactly it could be a bad thing, typing can complicate things. Especially in languages that have language features that define specific functional behaviour of a type, it can be very easy to create a long type signature even during regular use. For example, a common design pattern for async Rust is to use `Arc<Mutex<T>>` to wrap a generic type in a type that locks access while in use on a thread, but then can be copied to other threads. This is fine at first but then can escalate quite quickly when you need to use things like `UnboundedSender` for things like hashmaps of websocket client lists (for example). This is particularly relevant in async Rust as when working with complex functions or writing Rust async libraries, you need to implement functions that may require generics - and the generics will likely require several trait bounds, or more.
+
+Suffice it to say, it can get complicated pretty quickly and people who are discovering this for the first time with Rust will soon find themselves with brain freeze. However, there is a good reason for this. Let's take the `String` type in Rust for example; trying to copy a `String` type in Rust will simply tell you through the compiler that `String does not implement Copy` (or some variation of this message). Why doesn't it implement it? The [docs.rs page for the Copy trait](https://doc.rust-lang.org/std/marker/trait.Copy.html) has the following:
+
+> Types whose values can be duplicated simply by copying bits. 
+
+Strings in Rust are actually smart pointers and not the data itself - if you try to copy a String, you will only be copying the pointer which will lead to a double-free error down the line and a memory leak. Although traits themselves are language features and not type, this is a good example of how language features in combination with typing can be used to ensure that errors are caught upfront instead of during runtime (and potentially, in production!).
+
+There's also the annoyance of many languages not having type inference, meaning you have to explicitly declare every variable's type. This makes type safety considerably more awkward to use and can turn people off from it, which has led to newer programming languages adopting type inference.
+
+## Finishing Up
+Type safety, while being a very good thing to have, does come with some annoyances - some much larger than others, depending on what programming language you're using. Although there are a lot of fans of both sides of the spectrum when it comes to typing, with the advent of certain features of functional programming [making its way into other languages](https://typeable.io/blog/2021-11-15-fp-features) it's almost certain that there is more that can be learned from functional programming about how typing can be made easier.
+
