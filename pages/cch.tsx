@@ -2,10 +2,33 @@ import { Page } from 'components/templates'
 import { trackEvent } from 'lib/posthog'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ReactNode, useState } from 'react'
+import { ReactNode, useState, useEffect } from 'react'
+
+interface ScoreboardEntry {
+	name: string;
+	completed: number;
+	points: number;
+}
 
 export default function CCHPage() {
-	const [scoreboard, setScoreboard] = useState(null) // todo
+	const [scoreboard, setScoreboard] = useState<ScoreboardEntry[]>([])
+
+	 const getScoreboard = async () => {
+		let res = await fetch("https://cch23.shuttleapp.rs/leaderboard");
+		if (!res.ok) {
+		 console.log(res)	
+		}
+		
+		let data: ScoreboardEntry[] = await res.json();
+		
+		data.sort((a: ScoreboardEntry, b: ScoreboardEntry) => (b.points - a.points));
+		setScoreboard(data) 
+		
+	}
+
+	useEffect(() => {
+		getScoreboard()
+	}, [])
 
 	return (
 		<section className='mx-auto w-full max-w-5xl px-4 py-12 font-mono font-normal text-[#DEDEDE]'>
@@ -145,10 +168,35 @@ export default function CCHPage() {
 					<li>Shuttle employees are not eligible for leaderboard spots.</li>
 				</ul>
 
-				<p className='mt-8 font-bold'>
+				<p className='mt-8 font-bold' id='scoreboard'>
 					<span className='text-[#F09050]'>&gt;</span> scoreboard
 				</p>
-				<p>Coming soon</p>
+
+				{ scoreboard.length > 0 ?
+				<div className='flex flex-row justify-center'> 
+				<table className='border-spacing-x-10 gap-4 w-max'>
+				<thead>
+				<tr>
+					<th className='w-min'>Position</th>
+					<th className='w-min  px-20'>Name</th>
+					<th className='w-min  px-8'>Completed</th>
+					<th className='w-max  px-20'>Score</th>
+				</tr>
+				</thead>
+				<tbody>
+				 { scoreboard.map((score, position) => (
+				<tr key={score.name}>
+					<td className='w-min text-right px-8'>{position + 1}</td>
+					<td className='w-max text-left px-10 block'>{score.name}</td>
+					<td className='w-min text-right px-20'>{score.completed}</td>
+					<td className='w-min text-right px-24'>{score.points}</td>
+				</tr>	
+				)) }
+				</tbody>
+				</table>
+				</div>
+				:
+				<p> Nothing submitted yet :(</p> }
 			</div>
 		</section>
 	)
