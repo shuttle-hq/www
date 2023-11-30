@@ -13,21 +13,13 @@ interface ScoreboardEntry {
 export default function CCHPage() {
 	const [scoreboard, setScoreboard] = useState<ScoreboardEntry[]>([])
 
-	 const getScoreboard = async () => {
-		let res = await fetch("https://cch23.shuttleapp.rs/leaderboard");
-		if (!res.ok) {
-		 console.log(res)	
-		}
-		
-		let data: ScoreboardEntry[] = await res.json();
-		
-		data.sort((a: ScoreboardEntry, b: ScoreboardEntry) => (b.points - a.points));
-		setScoreboard(data) 
-		
-	}
-
 	useEffect(() => {
-		getScoreboard()
+		fetch("https://cch23.shuttleapp.rs/leaderboard")
+			.then(r => r.json())
+			.then(j => {
+				j.sort((a: ScoreboardEntry, b: ScoreboardEntry) => (b.points - a.points))
+				setScoreboard(j)
+			})
 	}, [])
 
 	return (
@@ -85,7 +77,7 @@ export default function CCHPage() {
 				</p>
 				<p>
 					By participating, you get the chance to improve your Rust skills,
-					build new friendships with like minded Rusteceans and enjoy the run up to the holidays!
+					build new friendships with like minded Rustaceans and enjoy the run up to the holidays!
 					We also have an array of prizes in store for this years winners.
 				</p>
 
@@ -125,11 +117,11 @@ export default function CCHPage() {
 					<span className='text-[#F09050]'>&gt;</span> prizes
 				</p>
 				<p>
-					1st place: $200 Amazon voucher + Shuttle swag box + 6 months of Shuttles PRO Tier
+					1st place: $200 Amazon voucher + Shuttle swag box + 6 months of Shuttle PRO Tier
 					<br />
-					2nd place: &nbsp;$50 Amazon voucher + Shuttle swag box + 3 months of Shuttles PRO Tier
+					2nd place: &nbsp;$50 Amazon voucher + Shuttle swag box + 3 months of Shuttle PRO Tier
 					<br />
-					3rd place: &nbsp;Shuttle swag box + 1 month of Shuttles PRO Tier
+					3rd place: &nbsp;Shuttle swag box + 1 month of Shuttle PRO Tier
 					<br />
 					Completing all the challenges: &nbsp;TBA
 				</p>
@@ -165,38 +157,35 @@ export default function CCHPage() {
 					<li>Challenge -1 is a warmup challenge and gives no score.</li>
 					<li>Sharing tips about how to solve tasks is allowed, but don&apos;t spoil any solution in the official Discord channel. Feel free to use the Discord to find collaborators</li>
 					<li>Follow the Shuttle <Link href='https://www.shuttle.rs/acceptable-use' target='_blank' className='text-[#F09050]'>Acceptable Use Policy</Link>. TL;DR It is not allowed to disrupt access to our services or other participants&apos; projects.</li>
-					<li>Shuttle employees are not eligible for leaderboard spots.</li>
+					<li>Shuttle employees are not eligible for scoreboard spots.</li>
 				</ul>
 
 				<p className='mt-8 font-bold' id='scoreboard'>
 					<span className='text-[#F09050]'>&gt;</span> scoreboard
 				</p>
 
-				{ scoreboard.length > 0 ?
-				<div className='flex flex-row justify-center'> 
-				<table className='border-spacing-x-10 gap-4 w-max'>
-				<thead>
-				<tr>
-					<th className='w-min'>Position</th>
-					<th className='w-min  px-20'>Name</th>
-					<th className='w-min  px-8'>Completed</th>
-					<th className='w-max  px-20'>Score</th>
-				</tr>
-				</thead>
-				<tbody>
-				 { scoreboard.map((score, position) => (
-				<tr key={score.name}>
-					<td className='w-min text-right px-8'>{position + 1}</td>
-					<td className='w-max text-left px-10 block'>{score.name}</td>
-					<td className='w-min text-right px-20'>{score.completed}</td>
-					<td className='w-min text-right px-24'>{score.points}</td>
-				</tr>	
-				)) }
-				</tbody>
-				</table>
+				<div className='flex flex-row justify-center'>
+					<table className='border-spacing-x-10 gap-4 w-max'>
+						<thead>
+							<tr>
+								<th className='w-min'>Position</th>
+								<th className='w-min px-20'>Name</th>
+								<th className='w-min px-8'>Completed</th>
+								<th className='w-max px-20'>Score</th>
+							</tr>
+						</thead>
+						<tbody>
+							{scoreboard.map((score, position) => (
+								<tr key={position}>
+									<td className='w-min text-right px-8'>{position + 1}</td>
+									<td className='w-max text-left px-10 block'>{score.name}</td>
+									<td className='w-min text-right px-20'>{score.completed}</td>
+									<td className='w-min text-right px-24'>{score.points}</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
 				</div>
-				:
-				<p> Nothing submitted yet :(</p> }
 			</div>
 		</section>
 	)
