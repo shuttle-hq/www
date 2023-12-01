@@ -169,18 +169,18 @@ export default function CCHPage() {
 						<thead>
 							<tr>
 								<th className='w-min'>Position</th>
-								<th className='w-min px-20'>Name</th>
-								<th className='w-min px-8'>Completed</th>
-								<th className='w-max px-20'>Score</th>
+								<th className='w-min md:px-20'>Name</th>
+								<th className='w-min md:px-8'>Completed</th>
+								<th className='md:w-max w-min md:px-20'>Score</th>
 							</tr>
 						</thead>
 						<tbody>
 							{scoreboard.map((score, position) => (
 								<tr key={position}>
-									<td className='w-min text-right px-8'>{position + 1}</td>
-									<td className='w-max text-left px-10 block'>{score.name}</td>
-									<td className='w-min text-right px-20'>{score.completed}</td>
-									<td className='w-min text-right px-24'>{score.points}</td>
+									<td className='w-min md:text-right md:px-8 px-4'>{position + 1}</td>
+									<td className='w-max text-left md:px-10 block'>{score.name}</td>
+									<td className='w-min text-right md:px-20 px-10'>{score.completed}</td>
+									<td className='w-min text-right md:px-24 px-6'>{score.points}</td>
 								</tr>
 							))}
 						</tbody>
