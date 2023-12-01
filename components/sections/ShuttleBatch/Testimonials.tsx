@@ -37,7 +37,7 @@ export const Testimonials = () => {
 						variant='primary'
 						invertOnDark
 						className='bg-[#13292C] text-white'
-						href='https://btl1d1x5z23.typeform.com/shuttle-batch-2'
+						href='https://shuttlerust.typeform.com/shuttle-batch-2'
 					>
 						Apply now
 					</Button>
