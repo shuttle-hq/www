@@ -69,7 +69,7 @@ async fn my_function() -> ApiResponse {
 }
 ```
 
-Of course, we can also use a Result type for returns! Although the error type will also technically accept anything that can be turned into a HTTP response similarly to a successful request, we can also implement an error type that can illustrate several different ways a HTTP request can fail within our application just like we did with our successful HTTP request enum. See below:
+Of course, we can also use a Result type for returns! Although the error type will also technically accept anything that can be turned into a HTTP response, we can also implement an error type that can illustrate several different ways a HTTP request can fail within our application just like we did with our successful HTTP request enum. See below:
 ```rust
 enum ApiError {
     BadRequest,
@@ -85,10 +85,10 @@ async fn my_function() -> Result<ApiResponse, ApiError> {
 }
 ```
 
-This allows us to clearly differentiate between errors and successful requests when writing our Axum routing. 
+This allows us to differentiate between errors and successful requests when writing our Axum routing. 
 
 ## Adding a Database in Axum
-Normally when setting up a database, you might need to set up your own database connection:
+Normally when setting up a database, you might need to set up your database connection:
 ```rust
 use axum::{Router, Extension};
 use sqlx::PgPoolOptions;
@@ -105,7 +105,7 @@ async fn main() {
 }
 ```
 
-You would then need to provision your own Postgres instance, whether installed locally on your computer, provisioned through Docker or something else. However, with Shuttle we can eliminate this entirely as the runtime provisions the database for you:
+You would then need to provision your own Postgres instance, whether installed locally on your computer, provisioned through Docker, or something else. However, with Shuttle we can eliminate this as the runtime provisions the database for you:
 
 ```rust
 #[shuttle_runtime::main]
@@ -117,7 +117,7 @@ async fn axum(
     // .. the rest of your code
 }
 ```
-Locally this is done through Docker, but in deployment there is an overarching process that does this for you! No extra work required. We also have an AWS RDS database offering that requires zero AWS knowledge to set up - visit [here](https://shuttle.rs/pricing) to find out more.
+Locally this is done through Docker, but in deployment there is an overarching process that does this for you! No extra work is required. We also have an AWS RDS database offering that requires zero AWS knowledge to set up - visit [here](https://shuttle.rs/pricing) to find out more.
 
 ## App State
 Now you might be wondering, "how do I store my database pool and other state-wide variables? I don't want to initialise my connection pool every time I want to do something!" - which is a perfectly valid question and is easily answered! You may have noticed that before we used `axum::Extension` to store it - this is perfectly fine for some use cases, but comes with the disadvantage of not being entirely typesafe. In most Rust web frameworks, Axum included, we use what is called "app state" - a struct dedicated to holding all of your variables that you want to share across your routes on the app. The only requirement to do this in Axum is that the struct needs to implement `Clone`, which we can do like so. For example:
@@ -170,7 +170,7 @@ let state = Arc::new(AppState { db });
 ```
 When you add the state to your application now, you would need to make sure to refer to the State extractor type as `State<Arc<AppState>>` rather than `State<AppState>`. 
 
-From personal observation it does not seem to be clear which method is better. It is likely that `Arcs` are going to perform better in a micro-benchmark but whether this leads to real-world improvements will likely depend on your use case.
+From personal observation, it does not seem to be clear which method is better. It is likely that `Arcs` are going to perform better in a micro-benchmark but whether this leads to real-world improvements will likely depend on your use case.
 
 You can also derive sub-state from an application state! This is great for when we need some variables from the main state but want to limit access control on what a given route has access to. See below:
 ```rust
@@ -195,7 +195,7 @@ impl FromRef<AppState> for ApiState {
 ```
 
 ## Extractors in Axum
-Extractors are exactly that: they extract things from the HTTP request, and work by allowing you to let them be passed as parameters into the handler function. Currently this already has native support for a wide range of things like getting separate headers, paths and queries, forms and JSON, as well as there being community support for things like MsgPack, JWT extractors and more! You can also create your own extractors, which we will get to in a bit.
+Extractors are exactly that: they extract things from the HTTP request, and work by allowing you to let them be passed as parameters into the handler function. Currently, this already has native support for a wide range of things like getting separate headers, paths and queries, forms and JSON, as well as there being community support for things like MsgPack, JWT extractors, and more! You can also create your own extractors, which we will get to in a bit.
 
 As an example, we can use the `axum::Json` type to consume the HTTP request by extracting a JSON request body from the HTTP request. See below for how this can be done:
 
@@ -228,7 +228,7 @@ async fn my_function(
     // ... your code
 }
 ```
-Note that any fields which are not in the struct <strong>will be ignored</strong> - depending on your use case, this can be a good thing; for example, if you're receiving a webhook but only want to look at certain fields from the webhook request. 
+Note that any fields that are not in the struct **will be ignored** - depending on your use case, this can be a good thing; for example, if you're receiving a webhook but only want to look at certain fields from the webhook request. 
 
 Forms and URL query parameters can be handled the same way by adding the appropriate type to your handler function - so for example, a form extractor might look like this:
 ```rust
@@ -264,7 +264,7 @@ async fn my_function(
 
 You can find the docs for the `TypedHeader` extractor/response [here.](https://docs.rs/axum-extra/latest/axum_extra/struct.TypedHeader.html)
 
-In addition to `TypedHeaders`, `axum-extra` also offers many other helpful types we can use. For example it has a `CookieJar` extractor which helps with managing cookies and has additional features built into the cookie jar like having cryptographic security if you need it (although it should be noted that there are different cookie jar features depending on which one you need), and a `protobuf` extractor for working with gRPC. You can find the documentation for the library [here.](https://docs.rs/axum-extra/latest/axum_extra/index.html)
+In addition to `TypedHeaders`, `axum-extra` also offers many other helpful types we can use. For example, it has a `CookieJar` extractor which helps with managing cookies and has additional features built into the cookie jar like having cryptographic security if you need it (although it should be noted that there are different cookie jar features depending on which one you need), and a `protobuf` extractor for working with gRPC. You can find the documentation for the library [here.](https://docs.rs/axum-extra/latest/axum_extra/index.html)
 
 ## Custom Extractors in Axum
 Now that we know a bit more about extractors, you probably want to know how we can create our own extractors - for example, let's say that you need to create an extractor that parses based on whether the request body is either Json or a Form. Let's set up our structs and the handler function:
@@ -408,8 +408,6 @@ If you need to add app state to your middleware, you can add it to your handler 
 
 
 ```rust
-use axum::middleware::self;
-
 fn init_router() -> Router {
     let state = setup_state(); // app state initialisation goes here
     
@@ -456,7 +454,6 @@ Deployment with Rust backend programs in general can be less than ideal due to h
 
 ## Finishing Up
 Thanks for reading! Axum is a great framework that has a strong team backing and is highly compatible with the Rust web ecosystem. 
-
 Interested in more?
 - Check out how you can implement authentication in Axum [here!](https://www.shuttle.rs/blog/2022/08/11/authentication-tutorial)
 - Have a look at how you can get started with logging for your web application [here.](https://www.shuttle.rs/blog/2023/09/20/logging-in-rust)
