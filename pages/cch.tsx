@@ -17,13 +17,12 @@ export default function CCHPage() {
 		fetch("https://cch23.shuttleapp.rs/leaderboard")
 			.then(r => r.json())
 			.then(j => {
-				j.sort((a: ScoreboardEntry, b: ScoreboardEntry) => (b.points - a.points))
 				setScoreboard(j)
 			})
 	}, [])
 
 	return (
-		<section className='mx-auto w-full max-w-5xl px-4 py-12 font-mono font-normal text-[#DEDEDE]'>
+		<section className='mx-auto mb-10 w-full max-w-5xl px-4 py-12 font-mono font-normal text-[#DEDEDE]'>
 			<div className='mx-auto mb-8 flex max-w-[686px] flex-col items-end'>
 				<h1 className='text-center text-[60px]'>
 					<span className='relative'>
@@ -144,7 +143,10 @@ export default function CCHPage() {
 					<li>After 24 hours, lose 1 time point per hour that passes</li>
 					<li>After 72 hours, you’ll get 0 time points</li>
 				</ul>
-				<p>Your highest scoring submission (sum of task points and time points) per challenge is the one that counts.</p>
+				<p>
+					Your highest scoring submission (sum of task points and time points) per challenge is the one that counts.
+					Challenge -1 is a warmup challenge and gives no score.
+				</p>
 
 				<p className='mt-8 font-bold'>
 					<span className='text-[#F09050]'>&gt;</span> rules
@@ -153,11 +155,23 @@ export default function CCHPage() {
 					<li>The competition ends on December 31, 23:59 UTC. A snapshot of the scoreboard will be taken at that time.</li>
 					<li>Challenges are released at 12:00 UTC each weekday between Dec 1 and Dec 22.</li>
 					<li>In order to be eligible for prizes, the solutions need to be genuine. In other words, you can&apos;t return hard-coded or pre-computed answers to the tests. Additionally, your solutions should be your own work. (These conditions will be verified.)</li>
+					<li>Collaboration is allowed. A team of players can at most win one of the prizes.</li>
 					<li>Shuttle reserves the right to change, update, or amend: release times of challenges, challenge contents, the scoring system, the prizes, and these rules.</li>
-					<li>Challenge -1 is a warmup challenge and gives no score.</li>
 					<li>Sharing tips about how to solve tasks is allowed, but don&apos;t spoil any solution in the official Discord channel. Feel free to use the Discord to find collaborators</li>
 					<li>Follow the Shuttle <Link href='https://www.shuttle.rs/acceptable-use' target='_blank' className='text-[#F09050]'>Acceptable Use Policy</Link>. TL;DR It is not allowed to disrupt access to our services or other participants&apos; projects.</li>
 					<li>Shuttle employees are not eligible for scoreboard spots.</li>
+				</ul>
+
+				<p className='mt-8 font-bold'>
+					<span className='text-[#F09050]'>&gt;</span> tips and tricks
+				</p>
+				<ul className="list-disc ml-8">
+					<li>Solve Day -1 and keep adding endpoints as new challenges release. No need to create new projects.</li>
+					<li>Unit tests can be useful.</li>
+					<li>The Shuttle docs can be helpful.</li>
+					<li>Keep your solutions private to avoid solution theft.</li>
+					<li>You can try our <Link href='https://github.com/shuttle-hq/deploy-action' target='_blank' className='text-[#F09050]'>deploy action</Link> if you want to automate deployments on git pushes.</li>
+					<li>The example tests don't cover all scenarios that our tests have in store, especially on bonus tasks.</li>
 				</ul>
 
 				<p className='mt-8 font-bold' id='scoreboard'>
