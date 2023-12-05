@@ -19,7 +19,7 @@ const ShuttleHeroesHero = () => {
 							variant='primary'
 							invertOnDark
 							className='bg-[#13292C] text-white'
-							href='https://btl1d1x5z23.typeform.com/to/WAu53vBi'
+							href='https://shuttlerust.typeform.com/to/WAu53vBi'
 							onClick={() => {
 								trackEvent('heroes_becomeahero')
 							}}
