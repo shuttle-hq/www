@@ -1,0 +1,410 @@
+---
+title: "Issue #13: Generics, Traits, Testing vs Production!"
+date: "2023-12-05T16:00:00"
+---
+
+# Shuttle Launchpad #13: Generics, Traits, Testing vs Production!
+
+Hey, hey, Shuttle fans! Are you already in the Christmas spirit? Well, we are! First of all, Austria is covered in snow! It's quite a sight and something that hasn't happened to that extent in decades! Check out some [satellite images](https://twitter.com/WxNB_/status/1731362088138818048). ⛄️
+
+In this issue, we want to build upon what we learned last time and extend our testing possibilities. We will look at how we can set up our application to have a proper database in production (provided through Shuttle), and an in-memory database for testing purposes.
+
+The application itself will store and read blog articles.
+
+## The Setup
+
+First, create a new project using Shuttle and select Axum.
+
+```bash
+$ cargo shuttle new
+```
+
+Then, install some dependencies. We will make use of Shuttle's `shuttle-shared-db` crate, which provides us with a database connection pool and spins up a database for us when deploying.
+
+
+
+```toml
+async-trait = "0.1.74"
+axum = "0.6.2"
+axum-macros = "0.4.0"
+hyper = "0.14"
+mime = "0.3"
+serde = { version = "1.0.193", features = ["derive"] }
+serde_json = "1.0.108"
+shuttle-axum = "0.34.0"
+shuttle-runtime = "0.34.0"
+shuttle-shared-db = { version = "0.34.1", features = ["postgres", "sqlx"] }
+sqlx = { version = "0.7.3", features = ["postgres", "macros", "uuid"] }
+tokio = "1.28.2"
+tower = "0.4.13"
+tracing = "0.1.40"
+uuid = "1.6.1"
+```
+
+As Axum constantly evolves, we set the versions this time to the ones listed below. A few methods or calls might not work on later versions, but there are alternatives available. Anyhow, this setup works.
+
+## The Database
+
+Let's get started by setting up the database. We need an SQL file that defines our database schema.
+
+```sql
+-- Create the articles table if it doesn't exist
+CREATE TABLE IF NOT EXISTS articles (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    title VARCHAR(255),
+    content TEXT,
+    published_date VARCHAR(255)
+);
+```
+
+In our `main.rs` file, we remove everything we don't need and add the following code.
+
+```rust
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_shared_db::Postgres] pool: PgPool
+) -> shuttle_axum::ShuttleAxum {
+    pool.execute(include_str!("../main.sql"))
+        .await
+        .map_err(shuttle_runtime::CustomError::new)?;
+
+    // this line will change.
+    let router = Router::new().with_state(Arc::new(pool));
+
+    Ok(router.into())
+}
+```
+
+Add the missing dependencies as you go. This is enough for now, but we will come back once more later on.
+
+## The Structure
+
+This app will be too complex to put everything into one file. That's why we split up everything from the get-go. First of all, we create a `lib.rs` file. This is the entry point of all our modules and can be used in the integration tests as well as in our binary file. This way we can develop one module (or crate), and reuse it in multiple places.
+
+The `lib.rs` file will serve as the entry point for all other modules. Every time you create a new file, add a new module to the `lib.rs` file.
+
+```rust
+pub mod article;
+pub mod article_repository;
+pub mod article_error;
+pub mod article_routes;
+```
+
+You can also decide to go for sub-modules (e.g. `article::repository`), but for this example, we will keep it simple.
+
+In the following sections, we will go through each module and explain what it does, but we will start with the one with the least amount of dependencies.
+
+## The Model
+
+As we are storing and retrieving articles, we need a model that represents an article. We will use a struct for that.
+
+```rust
+use serde::{Deserialize, Serialize};
+use sqlx::FromRow;
+
+#[derive(Deserialize, FromRow, Serialize, Clone, Debug)]
+pub struct Article {
+    pub title: String,
+    pub content: String,
+    pub published_date: String,
+}
+```
+
+Note that we don't need to do any implementations ourselves. The struct simply has public accessors to the fields and derives some traits. The `FromRow` trait is provided by the `sqlx` crate and allows us to convert a database row into a struct. Similarly, the `Serialize` and `Deserialize` traits are provided by the `serde` crate and allow us to convert the struct into a JSON object and vice versa. Last, but not least, we add the `Clone` and `Debug` traits, which are provided by the standard library.
+
+If you like, you can work on the visibility modifiers, and add some methods and a constructor to create new instances of the struct. It depends on what you want to do with it. For example, if you don't like any field to be public, you can add a `new` method that takes all the fields as parameters and returns a new instance of the struct. By using the right traits, you can control the way it will be presented to the outside world. Be it as a JSON object, or as a database row, or as a debug message. Conversion traits like `From` help you to add even more conversions if needed.
+
+## The Repository
+
+The repository will be the place where we store and retrieve our articles. We first define the desired behavior in an abstract manner, a trait.
+
+```rust
+#[async_trait]
+pub trait ArticleRepository: Send + Sync + 'static {
+    async fn get_article(&self, id: Uuid)
+        -> Result<Article, ArticleRepositoryError>;
+    async fn create_article(&self, article: Article)
+        -> Result<Uuid, ArticleRepositoryError>;
+}
+
+pub enum ArticleRepositoryError {
+    NotFound,
+    Other,
+}
+```
+
+The trait defines two methods. One to retrieve an article by its ID, and one to create a new article. Both methods return a `Result` type. The `get_article` method returns an `Article` if it was found, or an error if it wasn't. The `create_article` method returns the ID of the newly created article, or an error if something went wrong.
+
+Also, note that we defined a few bounds for the trait. It needs to be `Send`, `Sync` and `'static`. Those bounds are necessary to make sure that we only add structs that can be sent and shared across threads safely. The `'static` bound defines that it doesn't contain any non-static references. This means that it can only own its data, or have references to data with a static lifetime. Since we're sharing the repository across threads and it will be used by lots of invocations, potentially simultaneously, it makes sense that there is not some reference somewhere to data that might go out of scope independently from the execution in our handlers.
+
+The `ArticleRepositoryError` enum defines two variants. One for the case that the article was not found, and one for the case that something else went wrong.
+
+By using the enum we can easily add potential error types when we need to. It becomes really clear what happened and from where it happened. All it says is that "This was an error in the article repository because we haven't found your article". Nothing more, nothing less. You can decide to add more information to the error, like a string message, but it's not necessary.
+
+The `#[async_trait]` macro is provided by the `async-trait` crate and allows us to define async methods in traits. This is not possible in the most recent Rust releases. But I can tell, I'm really looking forward to the day async methods in traits will come to stable! 💪
+
+With the trait in place, we also want to implement the first version of the repository. Our application will deal with a Postgres database, so we will implement the trait for that database using the type `PgPool` from the `sqlx` crate.
+
+```rust
+#[async_trait]
+impl ArticleRepository for PgPool {
+    async fn get_article(&self, id: Uuid)
+        -> Result<Article, ArticleRepositoryError> {
+        let query = format!(
+            r#"
+            SELECT title, content, published_date
+            FROM articles
+            WHERE id = '{}'
+            "#,
+            id
+        );
+
+        let result = sqlx::query_as(&query);
+        let article = result
+            .fetch_one(self)
+            .await
+            .map_err(|_| ArticleRepositoryError::NotFound)?;
+        Ok(article)
+    }
+
+    async fn create_article(&self, article: Article)
+        -> Result<Uuid, ArticleRepositoryError> {
+        let query = format!(
+            r#"
+            INSERT INTO articles (title, content, published_date)
+            VALUES ('{}', '{}', '{}')
+            RETURNING id
+            "#,
+            article.title, article.content, article.published_date
+        );
+
+        let result = sqlx::query_scalar(&query);
+        let id: sqlx::types::Uuid = result.fetch_one(self).await.map_err(|e| {
+            ArticleRepositoryError::Other
+        })?;
+        Ok(id)
+    }
+}
+```
+
+Both methods are very straightforward. We create an SQL query, send it to the database, and do something with the result. Thanks to the `FromRow` trait, we can directly convert the result into an `Article` struct.
+
+Note that in `create_article` we map the result to a `sqlx::types::Uuid` type. This is an alias for the `Uuid` type that we use elsewhere, but `sqlx` implemented a few traits on top of it so we can do a `FromRow` conversion. If you "Go to definition" on `sqlx::types::Uuid`, you will see that you hop to your installed `uuid` crate.
+
+## The Application Error
+
+Alright, we are already _very_ far. However, we only took care of storing and retrieving articles in our database. Nothing that connects us yet to the real app.
+
+Before we continue: Cool! You see, we can take the entire world of articles and store them in a separate module, even a separate crate!
+
+Alright, back to the app. We know that some of our calls might result in errors. Either we retrieve an article that's not here, or we can't create a new article for whatever reason. We have those errors already defined as an `ArticleRepositoryError` enum. But we want to handle our application errors differently.
+
+For that, we create a new `app_error` file. We will define a new enum that will represent all the errors that can happen in our application.
+
+```rust
+pub enum AppError {
+    ArticleRepositoryError(ArticleRepositoryError),
+}
+```
+
+We also create a conversion from an `ArticleRepositoryError` to an `AppError`. This is necessary because we want to use the `?` operator in our handlers.
+
+```rust
+impl From<ArticleRepositoryError> for AppError {
+    fn from(error: ArticleRepositoryError) -> Self {
+        AppError::ArticleRepositoryError(error)
+    }
+}
+```
+
+But why are we doing the separation of `ArticleRepositoryError` and `AppError` anyway? Because we can make the `AppError` compatible with the Axum framework, without needing to dig into the internals of our article repository.
+
+To make `AppError` compatible, we need to implement the `IntoResponse` trait.
+
+```rust
+impl IntoResponse for AppError {
+    fn into_response(self) -> Response {
+        match self {
+            AppError::ArticleRepositoryError(ArticleRepositoryError::NotFound)
+                => {
+                (
+                    StatusCode::NOT_FOUND, "Article not found"
+                ).into_response()
+            }
+            AppError::ArticleRepositoryError(ArticleRepositoryError::Other)
+                => {
+                (
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    "Something went wrong"
+                ).into_response()
+            }
+        }
+    }
+}
+```
+
+And that's it. If you decided to carry over some metadata, this would be a good place to put it out.
+
+Alright! All the setup is done. Now we can finally start with the handlers.
+
+## The Handlers
+
+After all that setup, the handlers are the most boring part. Here you go, that's it:
+
+```rust
+async fn get_article<T: ArticleRepository>(
+    Path(id): Path<Uuid>,
+    State(repository): State<Arc<T>>,
+) -> Result<Json<Article>, AppError> {
+    let article = repository.get_article(id).await?;
+    Ok(Json(article))
+}
+
+async fn create_article<T: ArticleRepository>(
+    State(repository): State<Arc<T>>,
+    Json(article): Json<Article>,
+) -> Result<Json<Uuid>, AppError> {
+    let id = repository.create_article(article).await?;
+    Ok(Json(id))
+}
+```
+
+Read something, write something. You get the idea. The only thing interesting is that we are not using the `PgPool` directly, but a generic parameter that needs to implement `ArticleRepository`. With that, we can easily swap out the database implementation with something else.
+
+The same goes for the router as well:
+
+```rust
+pub fn router<T: ArticleRepository>(repository: Arc<T>) -> Router {
+    Router::new()
+        .route("/articles/:id", get(get_article))
+        .route("/articles", post(create_article))
+        .with_state(repository)
+}
+```
+
+A generic over `ArticleRepository`. That's it. Boring! Please note that I've decided to add the `Arc` to the function signature even though for `PgPool` you wouldn't need it. It helps however with all the other implementations and doesn't cost too much.
+
+## The Main Function
+
+Again, back to the main function. Let's change this one line we were talking about earlier:
+
+```rust
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_shared_db::Postgres] pool: PgPool
+) -> shuttle_axum::ShuttleAxum {
+    pool.execute(include_str!("../main.sql"))
+        .await
+        .map_err(shuttle_runtime::CustomError::new)?;
+
+    let router = router(Arc::new(pool));
+
+    Ok(router.into())
+}
+```
+
+And that's it! The app is ready! Now on for the tests!
+
+## The Tests
+
+We want to create some integration tests. They live in the `tests` folder. But for those tests we want to use an in-memory database so we don't need to spin up Postgres locally when testing.
+
+Let's decide on a Hashmap that stores articles based on their Uuids. We want to implement `ArticleRepository` for that, but we run into the coherence rule. Integration tests can include the crate they are testing, but they can't implement traits for types that are defined in the crate. They are like a different crate that doesn't own anything defined in `lib.rs` So we need to create a new type that wraps the Hashmap.
+
+```rust
+#[derive(Default)]
+pub struct InMemoryArticleRepository(RwLock<HashMap<Uuid, Article>>);
+```
+
+And we implement the `ArticleRepository` trait for it:
+
+```rust
+#[async_trait]
+impl ArticleRepository for InMemoryArticleRepository {
+    async fn get_article(&self, id: Uuid)
+        -> Result<Article, ArticleRepositoryError> {
+        self.0
+            .read()
+            .await
+            .get(&id)
+            .map(ToOwned::to_owned)
+            .ok_or(ArticleRepositoryError::NotFound)
+    }
+
+    async fn create_article(&self, article: Article)
+        -> Result<Uuid, ArticleRepositoryError> {
+        let uuid = Uuid::new_v4();
+        self.0.write().await.insert(uuid, article);
+        Ok(uuid)
+    }
+}
+```
+
+Now we can write our integration tests. For example, is it possible to create a new article and get a `Uuid` back?
+
+```rust
+#[tokio::test]
+async fn create_article() {
+    let repository = InMemoryArticleRepository::default();
+    let mut router = router(sync::Arc::new(repository));
+
+    let request = Request::builder()
+        .method("POST")
+        .uri("/articles")
+        .header("content-type", "application/json")
+        .body(Body::from(
+            r#"{
+                "title": "Hello",
+                "content": "World",
+                "published_date": "2024-01-01"
+            }"#,
+        ))
+        .unwrap();
+
+    let response = router.call(request).await.unwrap();
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let body = hyper::body::to_bytes(response.into_body()).await.unwrap();
+    let id: Uuid = serde_json::from_slice(&body).unwrap();
+
+    assert!(id != Uuid::nil());
+}
+```
+
+Maybe try to write a test where you can retrieve the article you just stored by sending the `Uuid` back? Or how would you test for a non-existing article? Let's try it out yourselves!
+
+## Deploy!
+
+And don't forget to run
+
+```bash
+$ cargo shuttle deploy
+```
+
+And try it out live!
+
+## Conclusion
+
+Wow. This might have been one of the biggest Launchpad issues so far. But you see that if you want to have a good setup, some testing data, and some real-world database in production, you need to do a few things. But in the end, we get a setup where we can easily swap out implementations.
+
+Also, with the errors and traits setup, it will become easy to add new methods like e.g. a `delete_article` endpoint. Everything will be clear, nicely abstracted, and easy to test. And your handler functions will be concise and beautifully readable!
+
+## What about the Front-end?
+
+A little shameless plug from myself. I love doing Rust, but I have a long history with TypeScript as well. I love type systems, and I love writing about them, and maybe if you use TypeScript you want to check out 100 recipes for everyday TypeScript problems in my book "The TypeScript Cookbook". Check it out at [Amazon](https://www.amazon.com/TypeScript-Cookbook-World-Type-Level-Programming/dp/1098136659/).
+
+## Time for your feedback!
+
+We want to tailor Shuttle Launchpad to your needs! [Give us feedback](https://btl1d1x5z23.typeform.com/to/dTU2F8jI) on the most recent issue and your wishes here.
+
+## Join us!
+
+Shuttle has a very active community. Join us on [Discord](https://discord.gg/shuttle), star us on [GitHub](https://github.com/shuttle-hq/shuttle), follow us on [Twitter](https://twitter.com/shuttle_dev), and watch out for video content on [YouTube](https://www.youtube.com/@shuttle-dev).
+
+If you have any questions regarding _Launchpad_, join the `#launchpad` channel on Shuttle's [Discord](https://discord.gg/shuttle).
+
+## Bye!
+
+That's it for today. Get in touch with us and let us know what you want to see!
+
+-- [Stefan](https://oida.dev) and your friends from [Shuttle](https://shuttle.rs)

@@ -1,0 +1,385 @@
+---
+title: "Issue #11: Refactoring"
+date: "2023-10-21T16:00:00"
+---
+
+# Shuttle Launchpad #11: Refactoring
+
+Hello everybody and welcome to another issue of Shuttle Launchpad! The Shuttle Team and Stefan just came back from an exciting [Euro Rust](https://eurorust.eu) conference and our minds are still full of all the conversations we had. What a great chance to connect with the Rust community!
+
+Stefan was talking about *Designing for Ownership* and gave insights into the process of Refactoring in Rust. Once the talks are online we're going to link them here!
+
+In this issue, we also want to talk about refactoring, and how a few simple techniques can help you to improve your code.
+
+## Refactoring: A CRUD KV Store with Image Processing
+
+The project we're looking at is an extension of the image processing app we've written in [Shuttle Launchpad Issue #5](https://www.shuttle.rs/launchpad/issues/2023-28-07-issue-05-Traits-Image-Processing). It's an Axum app, and we have an in-memory key-value store that allows us to store any arbitrary data. We have a `/kv/:key` route, with `:key` being a path parameter that we replace with the actual key we want to store. This route listens to both `get` and `post` requests. If we `get` the route, we return the value for the given key. If we `post` to the route, we store the value in the key-value store.
+
+```rust
+pub async fn post_kv(
+    Path(key): Path<String>,
+    TypedHeader(content_type): TypedHeader<ContentType>,
+    State(state): State<SharedState>,
+    data: Bytes,
+) -> Result<String, KVError> {
+    state
+        .write()?
+        .db
+        .insert(key, (content_type.to_string(), data));
+    Ok("OK".to_string())
+}
+
+pub async fn get_kv(
+    Path(key): Path<String>,
+    State(state): State<SharedState>,
+) -> Result<impl IntoResponse, KVError> {
+    match state.read()?.db.get(&key) {
+        Some((content_type, data)) =>
+            Ok(([("content-type", content_type.clone())], data.clone())),
+        None =>
+            Err(KVError::new(StatusCode::NOT_FOUND, "Key not found")),
+    }
+}
+
+
+pub fn router(state: &SharedState) -> Router<SharedState> {
+    Router::with_state(Arc::clone(state))
+        .route("/kv/:key", get(get_kv).post(post_kv))
+}
+```
+
+We use a couple of Axum extractors:
+
+- `Path` to get the key from the path
+- `TypedHeader` to get the content type from the request header
+- `State` to get access to our shared state, which is a `RwLock` around a `HashMap`, shared through an `Arc`.
+
+
+```rust
+pub type SharedState = Arc<RwLock<AppState>>;
+
+#[derive(Default)]
+pub struct AppState {
+    db: HashMap<String, (String, Bytes)>,
+}
+```
+
+The `POST` route also has a `Bytes` parameter, which allows us to get the request body as a `Bytes` object. `Bytes` is a type around an `u8` slice which is optimized for networking applications. It can be anything we send over the request.
+
+In the `GET` route, we also use both the stored data as well as the `content-type` to send out the stored data again.
+
+`KVError` is a custom error type that we created just like in  [Shuttle Launchpad Issue #5](https://www.shuttle.rs/launchpad/issues/2023-28-07-issue-05-Traits-Image-Processing).
+
+So far, so good. Now we want to create a new feature based on this key-value store. For every image stored, we want to expose a route that allows a grayscale transformation. First, let's wire up a new route:
+
+```rust
+pub fn router(state: &SharedState) -> Router<SharedState> {
+    Router::with_state(Arc::clone(state))
+        .route("/kv/:key/grayscale", get(grayscale))
+}
+```
+
+Then, based on the [image crate](https://crates.io/crates/image), we want to create a transformation of the stored bytes.
+
+```rust
+pub async fn grayscale(
+    Path(key): Path<String>,
+    State(state): State<SharedState>,
+) -> Result<impl IntoResponse, KVError> {
+    let image = match state.read()?.db.get(&key) {
+        Some((content_type, data)) => {
+            if content_type == "image/png" {
+                image::load_from_memory(&data).unwrap()
+            } else {
+                return Err(KVError::new(
+                    StatusCode::FORBIDDEN,
+                    "Not possible to grayscale this type of image",
+                ));
+            }
+        }
+        None =>
+            return Err(KVError::new(StatusCode::NOT_FOUND, "Key not found")),
+    };
+
+    let mut vec: Vec<u8> = Vec::new();
+
+    let mut cursor = Cursor::new(&mut vec);
+    image
+        .grayscale()
+        .write_to(&mut cursor, ImageOutputFormat::Png)
+        .unwrap();
+    let bytes: Bytes = vec.into();
+
+    Ok(([("content-type", "image/png")], bytes).into_response())
+}
+```
+
+Oh wow, that's quite a mouthful. Let's go through it step by step.
+
+1. We load the data from the key-value store, if it exists. If it doesn't exist, we return a `NOT_FOUND` error.
+2. If the content type is not `image/png`, we return a `FORBIDDEN` error.
+3. Otherwise we create a `DynamicImage` from the stored bytes. The method `load_from_memory` allows us to pass a shared reference, as the image crate transforms the stored image (PNG, JPG, or whatever) into an array of pixels.
+4. If everything worked out, we create a new `Vec<u8>` and create a `Cursor` from it. A `Cursor` is a type that allows us to write to a buffer. We can then use the `write_to` method on the `DynamicImage` to write the grayscale image to the cursor. The `ImageOutputFormat` allows us to specify the format of the image we want to write.
+5. Last, but not least, we send a response with the newly created bytes and the content type `image/png`.
+
+This, works, but it's not very nice. It's a lot to read, we have to deal with a lot of potential errors, we also need to  work with some very basic types to make all the transformations work. Let's see if we can improve this.
+
+One thing that bugs me most is the fact that we have a tuple that creates our response.
+
+```rust
+Ok(([("content-type", "image/png")], bytes).into_response())
+```
+
+It's great that Axum works like this, allowing us to specify some arbitrary headers and a body to be transformed into a valid response. But it's not very nice to read and in fact error-prone. What if we need to create another route that works with images, and we have some typos in our strings?
+
+A much better solutions is to have our own type that can deal with images, and can be transformed into a response.
+
+So let's create a type `ImageResponse`:
+
+```rust
+pub struct ImageResponse(Bytes, String);
+
+impl ImageResponse {
+    pub fn new(bytes: impl Into<Bytes>) -> Self {
+        Self(bytes.into())
+    }
+}
+
+impl IntoResponse for ImageResponse {
+    fn into_response(self) -> axum::response::Response {
+        ([("content-type", "image/png")], self.0).into_response()
+    }
+}
+```
+
+It's a tuple type that stores the image in bytes and it implements the `IntoResponse` trait. The `IntoResponse` trait is a trait from Axum that allows us to transform a type into a response.
+
+Note that we don't care about any other image types, as the process to getting there requires us to transform it into a `PNG` image anyway.
+
+So, let's replace the tuple with our new type:
+
+```rust
+pub async fn grayscale(
+    Path(key): Path<String>,
+    State(state): State<SharedState>,
+) -> Result<impl IntoResponse, KVError> {
+    //...
+    Ok(ImageResponse::new(bytes))
+}
+```
+
+A little less cluttered, but we still have some big chunks of code left in our route.
+
+What our own type `ImageResponse` allows is to create conversions from other types to an Axum response type. `image` works with the `DynamicImage` type, so let's create a conversion from `DynamicImage` to `ImageResponse`:
+
+```rust
+impl TryFrom<DynamicImage> for ImageResponse {
+    type Error = KVError;
+
+    fn try_from(value: DynamicImage) -> Result<Self, Self::Error> {
+        ImageResponse::try_from(&value)
+    }
+}
+
+impl TryFrom<&DynamicImage> for ImageResponse {
+    type Error = KVError;
+
+    fn try_from(value: &DynamicImage) -> Result<Self, Self::Error> {
+        let mut vec: Vec<u8> = Vec::new();
+        let mut cursor = Cursor::new(&mut vec);
+        value.write_to(&mut cursor, ImageOutputFormat::Png)?;
+        Ok(ImageResponse::new(vec))
+    }
+}
+```
+
+We implement the `TryFrom` trait for both `DynamicImage` and `&DynamicImage`. The `TryFrom` trait is a trait from the standard library that allows us to create conversions from one type to another. The `TryFrom` trait is a little bit more strict than the `From` trait, as it allows us to return an error if the conversion fails. We use the same error as everywhere else in our application, `KVError`. For the error propagation to work, we also need to be able to convert an `ImageError` to `KVError`.
+
+```rust
+impl From<ImageError> for KVError {
+    fn from(value: ImageError) -> Self {
+        match value {
+            ImageError::IoError(err)
+                => Self::new(StatusCode::BAD_REQUEST, err),
+            ImageError::Unsupported(err)
+                => Self::new(StatusCode::BAD_REQUEST, err),
+            _ => Self::new(StatusCode::BAD_REQUEST, ":-("),
+        }
+    }
+}
+```
+
+The nice thing about this refactoring step is that we can convert any `DynamicImage` to an `ImageResponse`, and we have the necessary steps just in place. The conversion happens where we signal a conversion, in the `TryFrom` trait. The conversion from an `ImageResponse` to an actual `Response` happens where it's supposed to happen, in the `IntoResponse` trait.
+
+Our code becomes clear, easy to parse, and much easier to reason about. We signal intentions, and we don't have to deal with the nitty-gritty details of the conversion.
+
+The best thing is that our route now looks like this:
+
+```rust
+pub async fn grayscale(
+    Path(key): Path<String>,
+    State(state): State<SharedState>,
+) -> Result<impl IntoResponse, KVError> {
+    let image = match state.read()?.db.get(&key) {
+        Some((content_type, data)) => {
+            if content_type == "image/png" {
+                image::load_from_memory(&data).unwrap()
+            } else {
+                return Err(
+                    KVError::new(
+                        StatusCode::FORBIDDEN,
+                       "Not possible to grayscale this",
+                    )
+                );
+            }
+        }
+        None
+            => return Err(KVError::new(StatusCode::NOT_FOUND, "Key not found")),
+    };
+
+    Ok(ImageResponse::try_from(image.grayscale())?)
+}
+```
+
+Much better, right? Since all operations on `DynamicImage` also return a `DynamicImage`, we can chain the operations and make the conversion to an `ImageResponse` flexible for everything else. We can also easily add more operations, like resizing the image, or cropping it, or whatever we want to do. They become one-liners! What a great improvement!
+
+There's still some more to do. What I don't like is the way we extract images from the database. In fact, I think our database setup with tuples of content-types and bytes is not very nice. We can do better!
+
+If we think about it, all we want to store are images or, well, everything else. This is something we can express in Rust with an enum:
+
+```rust
+pub enum StoredType {
+    Image(DynamicImage),
+    Other(Bytes),
+}
+
+// Update
+#[derive(Default)]
+pub struct AppState {
+    pub db: HashMap<String, StoredType>,
+}
+```
+
+We can now store either an image or anything else. We can also get rid of the content-type, as we can just match on the enum to get the right type. This means we need to change the way we store the image. Let's update our `get` route:
+
+```rust
+fn get_stored_type(content_type: impl ToString, data: Bytes)
+    -> KVResult<StoredType> {
+    if content_type.to_string().starts_with("image") {
+        let image = image::load_from_memory(&data)?;
+        Ok(StoredType::Image(image))
+    } else {
+        Ok(StoredType::Other(data))
+    }
+}
+
+pub async fn post_kv(
+    Path(key): Path<String>,
+    TypedHeader(content_type): TypedHeader<ContentType>,
+    State(state): State<SharedState>,
+    data: Bytes,
+) -> Result<String, KVError> {
+    let stored_type = get_stored_type(content_type, data)?;
+    state.write()?.db.insert(key, stored_type);
+    Ok("OK".to_string())
+}
+```
+
+Cool! Now every image that we send will become something we can immediately transform. The trade-off is that we require more memory (something you need to be concerned about), but in our case that's ok! The good thing is that now that we explicitly state our content-type already when storing, we can get rid of the check in our `grayscale` route:
+
+```rust
+type KVResult<T> = Result<T, KVError>;
+
+pub async fn grayscale(
+    Path(key): Path<String>,
+    State(state): State<SharedState>,
+) -> KVResult<impl IntoResponse> {
+    match state.read()?.db.get(&key) {
+        Some(StoredType::Image(image)) =>
+            ImageResponse::try_from(image.grayscale()),
+        _ =>
+            Err(
+               KVError::new(StatusCode::NOT_FOUND, "Key not found")
+            ),
+    }
+}
+```
+
+Wait, what's that?  That's our `grayscale` route? All of it? Yes, it is! Since we take about storing the data right in the first place, and have all our intentions expressed clearly using enums, types, and conversion traits, all we need to do is chain them together! An operation that creates a thumbnail for example becomes as easy to create:
+
+```rust
+pub async fn thumbnail(
+    Path(key): Path<String>,
+    State(state): State<SharedState>,
+) -> KVResult<impl IntoResponse> {
+    match state.read()?.db.get(&key) {
+        Some(StoredType::Image(image)) =>
+            ImageResponse::try_from(
+                image.resize(100, 100, FilterType::Nearest)),
+        _ =>
+            Err(KVError::new(StatusCode::NOT_FOUND, "Key not found")),
+    }
+}
+```
+
+Even better, our original key-value store get route becomes much nicer:
+
+```rust
+pub async fn get_kv(
+    Path(key): Path<String>,
+    State(state): State<SharedState>,
+) -> impl IntoResponse {
+    match state.read()?.db.get(&key) {
+        Some(StoredType::Image(image)) =>
+            Ok(ImageResponse::try_from(image)?.into_response()),
+        Some(StoredType::Other(bytes)) =>
+            Ok(bytes.clone().into_response()),
+        None => 
+            Err(KVError::new(StatusCode::NOT_FOUND, "Key not found")),
+    }
+}
+```
+
+All that by just including a few types that abstract our application really well!
+
+Of course, there's much more to do:
+
+1. Analyze your application regarding performance and memory usage. Since we store data differently, what effect does it have on our app? And since we need to create a PNG image everytime we send data, does this have an effect? Is this justified for our app?
+2. We work with a HashMap! What if we want to add a real database, like what we offer at [Shuttle](https://docs.shuttle.rs/resources/shuttle-shared-db)? How would we change our code?
+
+Have fun refactoring, and try out your app using Shuttle:
+
+```bash
+$ cargo shuttle deploy
+```
+
+See you next time!
+
+## Conclusion
+
+What I wanted to show you today is how expressive Rust's type system can be if we introduce a few traits, structs, and enums. Our code becomes much clearer and much easier to use! We can also easily extend our application with new features, like adding a thumbnail route, or a route that crops the image. Rust is a very elegant, expressive language, and traits all make it work!
+
+## Time for your feedback!
+
+We want to tailor Shuttle Launchpad to your needs! [Give us feedback](https://btl1d1x5z23.typeform.com/to/dTU2F8jI) on the most recent issue and your wishes here.
+
+## Join us!
+
+Shuttle has a very active community. Join us on [Discord](https://discord.gg/shuttle), star us on [GitHub](https://github.com/shuttle-hq/shuttle), follow us on [Twitter](https://twitter.com/shuttle_dev), and watch out for video content on [YouTube](https://www.youtube.com/@shuttle-dev).
+
+If you have any questions regarding _Launchpad_, join the `#launchpad` channel on Shuttle's [Discord](https://discord.gg/shuttle).
+
+## Links, Videos, Tutorials
+
+[_Launchpad Examples_](https://github.com/ddprrt/shuttle-launchpad-examples): Check out all Launchpad Examples on GitHub.
+
+[_Rust vs Go: A comparison_](https://www.shuttle.rs/blog/2023/09/27/rust-vs-go-comparison): Matthias Endler creates the same app in Rust and Go. Let's see what he figures out.
+
+[_Using GraphQL in Rust_](https://www.shuttle.rs/blog/2023/10/16/graphql-in-rust): A tutorial on how to use GraphQL in Rust.
+
+## Bye!
+
+That's it for today. Get in touch with us and let us know what you want to see!
+
+-- [Stefan](https://oida.dev) and your friends from [Shuttle](https://shuttle.rs)
+
