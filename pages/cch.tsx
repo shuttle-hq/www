@@ -5,18 +5,18 @@ import Link from 'next/link'
 import { ReactNode, useState, useEffect } from 'react'
 
 interface ScoreboardEntry {
-	name: string;
-	completed: number;
-	points: number;
+	name: string
+	completed: number
+	points: number
 }
 
 export default function CCHPage() {
 	const [scoreboard, setScoreboard] = useState<ScoreboardEntry[]>([])
 
 	useEffect(() => {
-		fetch("https://cch23.shuttleapp.rs/leaderboard")
-			.then(r => r.json())
-			.then(j => {
+		fetch('https://cch23.shuttleapp.rs/leaderboard')
+			.then((r) => r.json())
+			.then((j) => {
 				setScoreboard(j)
 			})
 	}, [])
@@ -46,11 +46,11 @@ export default function CCHPage() {
 				</p>
 			</div>
 
-			<div className='flex flex-col text-base mb-8'>
+			<div className='mb-8 flex flex-col text-base'>
 				<Link
 					href='https://shuttlerust.typeform.com/to/hkPkbXab'
 					target='_blank'
-					className='text-[#F09050] text-center text-xl font-bold border rounded p-6'
+					className='rounded border p-6 text-center text-xl font-bold text-[#F09050]'
 					onClick={() => {
 						trackEvent('cch_sign_up')
 					}}
@@ -75,9 +75,9 @@ export default function CCHPage() {
 					<span className='text-[#F09050]'>&gt;</span> why
 				</p>
 				<p>
-					By participating, you get the chance to improve your Rust skills,
-					build new friendships with like minded Rustaceans and enjoy the run up to the holidays!
-					We also have an array of prizes in store for this years winners.
+					By participating, you get the chance to improve your Rust skills, build new friendships with
+					like minded Rustaceans and enjoy the run up to the holidays! We also have an array of prizes in
+					store for this years winners.
 				</p>
 
 				<p className='mt-8 font-bold'>
@@ -128,50 +128,90 @@ export default function CCHPage() {
 				<p className='mt-8 font-bold'>
 					<span className='text-[#F09050]'>&gt;</span> scoring system
 				</p>
-				<p>
-					The scoring is determined by gathering points:
-				</p>
-				<ul className="list-disc ml-8">
+				<p>The scoring is determined by gathering points:</p>
+				<ul className='ml-8 list-disc'>
 					<li>Complete the core tasks of a challenge: 1000 points</li>
 					<li>Complete bonus tasks on challenges: Up to 800 points per challenge</li>
 					<li>Time score based on when your solution was submitted: Up to 48 points</li>
 					<li>Tie breaker: TBA</li>
 				</ul>
-				<p>Time score is added based on the time between the challenge release and your submission time:</p>
-				<ul className="list-disc ml-8">
+				<p>
+					Time score is added based on the time between the challenge release and your submission time:
+				</p>
+				<ul className='ml-8 list-disc'>
 					<li>Under 24 hours: 48 time points</li>
 					<li>After 24 hours, lose 1 time point per hour that passes</li>
 					<li>After 72 hours, you’ll get 0 time points</li>
 				</ul>
 				<p>
-					Your highest scoring submission (sum of task points and time points) per challenge is the one that counts.
-					Challenge -1 is a warmup challenge and gives no score.
+					Your highest scoring submission (sum of task points and time points) per challenge is the one
+					that counts. Challenge -1 is a warmup challenge and gives no score.
 				</p>
 
 				<p className='mt-8 font-bold'>
 					<span className='text-[#F09050]'>&gt;</span> rules
 				</p>
-				<ul className="list-disc ml-8">
-					<li>The competition ends on December 31, 23:59 UTC. A snapshot of the scoreboard will be taken at that time.</li>
+				<ul className='ml-8 list-disc'>
+					<li>
+						The competition ends on December 31, 23:59 UTC. A snapshot of the scoreboard will be taken
+						at that time.
+					</li>
 					<li>Challenges are released at 12:00 UTC each weekday between Dec 1 and Dec 22.</li>
-					<li>In order to be eligible for prizes, the solutions need to be genuine. In other words, you can&apos;t return hard-coded or pre-computed answers to the tests. Additionally, your solutions should be your own work. (These conditions will be verified.)</li>
+					<li>
+						In order to be eligible for prizes, the solutions need to be genuine. In other words, you
+						can&apos;t return hard-coded or pre-computed answers to the tests. Additionally, your
+						solutions should be your own work. (These conditions will be verified.)
+					</li>
 					<li>Collaboration is allowed. A team of players can at most win one of the prizes.</li>
-					<li>Shuttle reserves the right to change, update, or amend: release times of challenges, challenge contents, the scoring system, the prizes, and these rules.</li>
-					<li>Sharing tips about how to solve tasks is allowed, but don&apos;t spoil any solution in the official Discord channel. Feel free to use the Discord to find collaborators</li>
-					<li>Follow the Shuttle <Link href='https://www.shuttle.rs/acceptable-use' target='_blank' className='text-[#F09050]'>Acceptable Use Policy</Link>. TL;DR It is not allowed to disrupt access to our services or other participants&apos; projects.</li>
+					<li>
+						Shuttle reserves the right to change, update, or amend: release times of challenges,
+						challenge contents, the scoring system, the prizes, and these rules.
+					</li>
+					<li>
+						Sharing tips about how to solve tasks is allowed, but don&apos;t spoil any solution in the
+						official Discord channel. Feel free to use the Discord to find collaborators
+					</li>
+					<li>
+						Follow the Shuttle{' '}
+						<Link
+							href='https://www.shuttle.rs/acceptable-use'
+							target='_blank'
+							className='text-[#F09050]'
+						>
+							Acceptable Use Policy
+						</Link>
+						. TL;DR It is not allowed to disrupt access to our services or other participants&apos;
+						projects.
+					</li>
 					<li>Shuttle employees are not eligible for scoreboard spots.</li>
 				</ul>
 
 				<p className='mt-8 font-bold'>
 					<span className='text-[#F09050]'>&gt;</span> tips and tricks
 				</p>
-				<ul className="list-disc ml-8">
-					<li>Solve Day -1 and keep adding endpoints as new challenges release. No need to create new projects.</li>
+				<ul className='ml-8 list-disc'>
+					<li>
+						Solve Day -1 and keep adding endpoints as new challenges release. No need to create new
+						projects.
+					</li>
 					<li>Unit tests can be useful.</li>
 					<li>The Shuttle docs can be helpful.</li>
 					<li>Keep your solutions private to avoid solution theft.</li>
-					<li>You can try our <Link href='https://github.com/shuttle-hq/deploy-action' target='_blank' className='text-[#F09050]'>deploy action</Link> if you want to automate deployments on git pushes.</li>
-					<li>The example tests don't cover all scenarios that our tests have in store, especially on bonus tasks.</li>
+					<li>
+						You can try our{' '}
+						<Link
+							href='https://github.com/shuttle-hq/deploy-action'
+							target='_blank'
+							className='text-[#F09050]'
+						>
+							deploy action
+						</Link>{' '}
+						if you want to automate deployments on git pushes.
+					</li>
+					<li>
+						The example tests don&apos;t cover all scenarios that our tests have in store, especially
+						on bonus tasks.
+					</li>
 				</ul>
 
 				<p className='mt-8 font-bold' id='scoreboard'>
@@ -179,22 +219,22 @@ export default function CCHPage() {
 				</p>
 
 				<div className='flex flex-row justify-center'>
-					<table className='border-spacing-x-10 gap-4 w-max'>
+					<table className='w-max border-spacing-x-10 gap-4'>
 						<thead>
 							<tr>
 								<th className='w-min'>Position</th>
 								<th className='w-min md:px-20'>Name</th>
 								<th className='w-min md:px-8'>Completed</th>
-								<th className='md:w-max w-min md:px-20'>Score</th>
+								<th className='w-min md:w-max md:px-20'>Score</th>
 							</tr>
 						</thead>
 						<tbody>
 							{scoreboard.map((score, position) => (
 								<tr key={position}>
-									<td className='w-min md:text-right md:px-8 px-4'>{position + 1}</td>
-									<td className='w-max text-left md:px-10 block'>{score.name}</td>
-									<td className='w-min text-right md:px-20 px-10'>{score.completed}</td>
-									<td className='w-min text-right md:px-24 px-6'>{score.points}</td>
+									<td className='w-min px-4 md:px-8 md:text-right'>{position + 1}</td>
+									<td className='block w-max text-left md:px-10'>{score.name}</td>
+									<td className='w-min px-10 text-right md:px-20'>{score.completed}</td>
+									<td className='w-min px-6 text-right md:px-24'>{score.points}</td>
 								</tr>
 							))}
 						</tbody>
