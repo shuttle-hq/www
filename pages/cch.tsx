@@ -17,7 +17,6 @@ export default function CCHPage() {
 		fetch("https://cch23.shuttleapp.rs/leaderboard")
 			.then(r => r.json())
 			.then(j => {
-				j.sort((a: ScoreboardEntry, b: ScoreboardEntry) => (b.points - a.points))
 				setScoreboard(j)
 			})
 	}, [])
@@ -163,12 +162,17 @@ export default function CCHPage() {
 					<li>Shuttle employees are not eligible for scoreboard spots.</li>
 				</ul>
 
-				{/* <p className='mt-8 font-bold'>
+				<p className='mt-8 font-bold'>
 					<span className='text-[#F09050]'>&gt;</span> tips and tricks
 				</p>
 				<ul className="list-disc ml-8">
-					<li></li>
-				</ul> */}
+					<li>Solve Day -1 and keep adding endpoints as new challenges release. No need to create new projects.</li>
+					<li>Unit tests can be useful.</li>
+					<li>The Shuttle docs can be helpful.</li>
+					<li>Keep your solutions private to avoid solution theft.</li>
+					<li>You can try our <Link href='https://github.com/shuttle-hq/deploy-action' target='_blank' className='text-[#F09050]'>deploy action</Link> if you want to automate deployments on git pushes.</li>
+					<li>The example tests don't cover all scenarios that our tests have in store, especially on bonus tasks.</li>
+				</ul>
 
 				<p className='mt-8 font-bold' id='scoreboard'>
 					<span className='text-[#F09050]'>&gt;</span> scoreboard
