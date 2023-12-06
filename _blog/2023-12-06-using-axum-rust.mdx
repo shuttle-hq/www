@@ -1,10 +1,10 @@
 ---
-title: "Using Axum - The Most Popular Framework This Year in Rust"
+title: "Getting Started with Axum - Rust's Most Popular Web Framework"
 description: This guide is a deep-dive on Axum, a Rust web backend framework. We look at using Axum to write a competent web service with middleware, routing, static files and more. 
 author: josh
 tags: [rust, axum, tutorial, guide]
-thumb:  
-cover: 
+thumb: axum-thumb.png 
+cover: axum-thumb.png 
 date: '2023-12-06T14:30:00'
 ---
 
@@ -119,7 +119,7 @@ async fn axum(
 ```
 Locally this is done through Docker, but in deployment there is an overarching process that does this for you! No extra work is required. We also have an AWS RDS database offering that requires zero AWS knowledge to set up - visit [here](https://shuttle.rs/pricing) to find out more.
 
-## App State
+## App State in Axum
 Now you might be wondering, "how do I store my database pool and other state-wide variables? I don't want to initialise my connection pool every time I want to do something!" - which is a perfectly valid question and is easily answered! You may have noticed that before we used `axum::Extension` to store it - this is perfectly fine for some use cases, but comes with the disadvantage of not being entirely typesafe. In most Rust web frameworks, Axum included, we use what is called "app state" - a struct dedicated to holding all of your variables that you want to share across your routes on the app. The only requirement to do this in Axum is that the struct needs to implement `Clone`, which we can do like so. For example:
 ```rust
 use sqlx::PgPool; // this is a Postgres connection pool
