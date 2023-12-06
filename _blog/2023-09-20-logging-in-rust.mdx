@@ -219,7 +219,7 @@ tracing::event!(Level::DEBUG, "something happened inside my_span");
 ```
 Spans can form a tree structure, and the entire subtree is represented by its children - therefore, a parent span will always last as long as its longest-lived child span if not longer.
 
-Because all of this can be a bit excessive, `tracing` has also included the regular macros that would be in other log facade libraries for logging - namely, `info!`, `error!`, `debug!`, `warn!` and `trace!`. There's also a span version of each of these crates - but if you're coming from `log` and want to try `tracing` out without getting lost in the complexity of trying to make sure everything is in a span, tracing's got your back.
+Because all of this can be a bit excessive, `tracing` has also included the regular macros that would be in other log facade libraries for logging - namely, `info!`, `error!`, `debug!`, `warn!` and `trace!`. There's also a span version of each of these macros - but if you're coming from `log` and want to try `tracing` out without getting lost in the complexity of trying to make sure everything is in a span, tracing's got your back.
 
 ```rust
 use tracing;
