@@ -1,5 +1,5 @@
 ---
-title: "Getting Started with Axum - Rust's Most Popular Framework"
+title: "Using Axum - The Most Popular Framework This Year in Rust"
 description: This guide is a deep-dive on Axum, a Rust web backend framework. We look at using Axum to write a competent web service with middleware, routing, static files and more. 
 author: josh
 tags: [rust, axum, tutorial, guide]
@@ -8,9 +8,9 @@ cover:
 date: '2023-12-06T14:30:00'
 ---
 
-With so many backend web frameworks in the Rust web ecosystem, it's difficult to know what to choose. Although much further in the past you might have seen Rocket In this article, we are looking at Axum, a web framework backed by the Tokio team that's simple to use and has hyper-compatibility with Tower, a robust library of reusable, modular components for building network applications. 
+With so many backend web frameworks in the Rust web ecosystem, it's difficult to know what to choose. Although much further in the past you might have seen Rocket shoot to the top of the leadeboard for popularity, nowadays it's typically Axum and actix-web battling it out with Axum slowly coming on top. In this article, we are going to do a deep dive into Axum, a web framework for making Rust REST APIs backed by the Tokio team that's simple to use and has hyper-compatibility with Tower, a robust library of reusable, modular components for building network applications. 
 
-In this article we'll take a comprehensive look at writing an Axum web service. This will also include the [0.7 changes.](https://github.com/tokio-rs/axum/releases/tag/axum-v0.7.0)
+In this article we'll take a comprehensive look at how to use Axum to write a web service. This will also include the [0.7 changes.](https://github.com/tokio-rs/axum/releases/tag/axum-v0.7.0)
 
 ## Routing in Axum
 Axum follows the style of REST-style APIs like Express where you can create handler functions and attach them to axum's `axum::Router` type. An example of a route might look like this:
@@ -162,7 +162,7 @@ async fn do_something(
     // .. your code
 }
 ```
-It should also be noted that instead of using `#[derive(Clone)]`, you can also wrap the app state struct in an Atomic Reference Counter (`std::sync::Arc` for reference). Arcs are a form of garbage collection that keep track of how many clones there are and will only drop when there are no more copies left - and are a good type to know in Rust. This would be done like so:
+It should also be noted that instead of using `#[derive(Clone)]`, you can also wrap the app state struct in an Atomic Reference Counter (`std::sync::Arc` for reference). Arcs are a form of garbage collection that keep track of how many clones there are and will only drop when there are no more copies left - and are a good type to know in Rust. This would be done like below:
 ```rust
 use std::sync::Arc;
 
@@ -347,7 +347,7 @@ where
 ```
 
 ## Middleware in Axum
-As mentioned before, one of Axum's great wins over other frameworks is that it is hyper-compatible with the `tower` crates, which means that we can effectively use any Tower middleware that we want with Axum! For example, we can add a Tower middleware to compress responses:
+As mentioned before, one of Axum's great wins over other frameworks is that it is hyper-compatible with the `tower` crates, which means that we can effectively use any Tower middleware that we want for our Rust API! For example, we can add a Tower middleware to compress responses:
 
 ```rust
 use tower_http::compression::CompressionLayer;
@@ -420,7 +420,7 @@ fn init_router() -> Router {
 
 
 ## Serving Static Files in Axum
-Let's say you want to serve some static files using Axum - or that you have an application made using a frontend JavaScript framework like React, and you want to combine it with your Axum backend to make one large application instead of having to host your frontend and backend separately. How would you do that?
+Let's say you want to serve some static files using Axum - or that you have an application made using a frontend JavaScript framework like React, and you want to combine it with your Rust Axum backend to make one large application instead of having to host your frontend and backend separately. How would you do that?
 
 Axum does not by itself have capabilities to be able to do this; however, what it does have is super-strong compatibility with `tower-http`, which offers utility for serving your own static files whether you're running a SPA, statically-generated files from a framework like Next.js or simply just raw HTML, CSS and JavaScript.
 
@@ -449,11 +449,14 @@ fn init_router() -> Router {
 }
 ```
 
+You can also use HTML templating with crates like [`askama`](https://github.com/djc/askama), [`tera`](https://github.com/Keats/tera) and [`maud`](https://maud.lambda.xyz/)! This can be combined with the power of lightweight JavaScript libraries like [`htmx`](https://htmx.org) to speed up time to production. You can read more about this on our other article about using HTMX with Rust which you can find [here.](https://www.shuttle.rs/blog/2023/10/25/htmx-with-rust). We also collaborated with [Stefan Baumgartner](https://fettblog.eu) on an article for [serving HTML with Askama!](https://www.shuttle.rs/launchpad/issues/2023-10-17-issue-10-Serving-HTML)
+
 ## How to Deploy Axum
 Deployment with Rust backend programs in general can be less than ideal due to having to use Dockerfiles, although if you are experienced with Docker already this may not be such an issue for you - particularly if you are using `cargo-chef`. However, if you're using Shuttle you can just use `cargo shuttle deploy` and you're done already. No setup is required.
 
 ## Finishing Up
-Thanks for reading! Axum is a great framework that has a strong team backing and is highly compatible with the Rust web ecosystem. 
+Thanks for reading! Axum is a great framework that has a strong team backing and is highly compatible with the Rust web ecosystem, and we believe now is a better time than ever to get started writing a REST API in Rust.
+ 
 Interested in more?
 - Check out how you can implement authentication in Axum [here!](https://www.shuttle.rs/blog/2022/08/11/authentication-tutorial)
 - Have a look at how you can get started with logging for your web application [here.](https://www.shuttle.rs/blog/2023/09/20/logging-in-rust)
