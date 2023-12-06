@@ -1,0 +1,463 @@
+---
+title: "Getting Started with Axum - Rust's Most Popular Web Framework"
+description: This guide is a deep-dive on Axum, a Rust web backend framework. We look at using Axum to write a competent web service with middleware, routing, static files and more. 
+author: josh
+tags: [rust, axum, tutorial, guide]
+thumb: axum-thumb.png 
+cover: axum-thumb.png 
+date: '2023-12-06T14:30:00'
+---
+
+With so many backend web frameworks in the Rust web ecosystem, it's difficult to know what to choose. Although much further in the past you might have seen Rocket shoot to the top of the leadeboard for popularity, nowadays it's typically Axum and actix-web battling it out with Axum slowly coming on top. In this article, we are going to do a deep dive into Axum, a web framework for making Rust REST APIs backed by the Tokio team that's simple to use and has hyper-compatibility with Tower, a robust library of reusable, modular components for building network applications. 
+
+In this article we'll take a comprehensive look at how to use Axum to write a web service. This will also include the [0.7 changes.](https://github.com/tokio-rs/axum/releases/tag/axum-v0.7.0)
+
+## Routing in Axum
+Axum follows the style of REST-style APIs like Express where you can create handler functions and attach them to axum's `axum::Router` type. An example of a route might look like this:
+```rust
+async fn hello_world() -> &'static str {
+    "Hello world!"
+}
+```
+
+Then we can add it to our Router like so:
+
+```rust
+use axum::{Router, routing::get};
+
+fn init_router() -> Router {
+    Router::new()
+        .route("/", get(hello_world))
+}
+```
+
+For a handler function to be valid, it needs to either be an `axum::response::Response` type or implement `axum::response::IntoResponse`. This is already implemented for most primitive types and all of Axum's own types - for example, if we wanted to send some JSON data back to a user, we can do that quite easily using Axum's JSON type by using it as a return type, with the `axum::Json` type wrapping whatever we want to send back. As you can see above, we can also return a String (slice) by itself.
+
+We can also use `impl IntoResponse` directly which at first glance immediately solves having to figure out what type we need to return; however, using it directly also means making sure all the return types are the same type! This means we can run into errors unnecessarily. We can instead implement `IntoResponse` for an enum or a struct that we can then use as the return type. See below:
+
+```rust
+use axum::{response::{Response, IntoResponse}, Json};
+
+// here we show a type that implements Serialize + Send
+#[derive(Serialize)]
+struct Message {
+    message: String
+}
+
+enum ApiResponse {
+    Ok,
+    Created,
+    JsonData(Vec<Message>),
+}
+
+impl IntoResponse for ApiResponse {
+    fn into_response(&self) -> Response {
+        match self {
+            Response::OK => (StatusCode::OK).into_response(),
+            Response::Created => (StatusCode::CREATED).into_response(),
+            Response::JsonData(data) => (StatusCode::OK, Json(data)).into_response()
+        }
+    }
+}
+```
+
+Then you would implement the enum in your handler function like this:
+
+```rust
+async fn my_function() -> ApiResponse {
+    // ... rest of your code
+}
+```
+
+Of course, we can also use a Result type for returns! Although the error type will also technically accept anything that can be turned into a HTTP response, we can also implement an error type that can illustrate several different ways a HTTP request can fail within our application just like we did with our successful HTTP request enum. See below:
+```rust
+enum ApiError {
+    BadRequest,
+    Forbidden,
+    Unauthorised,
+    InternalServerError
+}
+
+// ... your IntoResponse implementation goes here
+
+async fn my_function() -> Result<ApiResponse, ApiError> {
+    // ... your code
+}
+```
+
+This allows us to differentiate between errors and successful requests when writing our Axum routing. 
+
+## Adding a Database in Axum
+Normally when setting up a database, you might need to set up your database connection:
+```rust
+use axum::{Router, Extension};
+use sqlx::PgPoolOptions;
+
+#[tokio::main]
+async fn main() {
+    let dbconnection = PgPoolOptions::new()
+        .max_connections(5)
+        .connect(<db-connection-string-here>).await;
+        
+    let router = Router::new().route("/", get(hello_world)).layer(Extension::new(dbconnection));
+    
+    //... rest of your code
+}
+```
+
+You would then need to provision your own Postgres instance, whether installed locally on your computer, provisioned through Docker, or something else. However, with Shuttle we can eliminate this as the runtime provisions the database for you:
+
+```rust
+#[shuttle_runtime::main]
+async fn axum(
+    #[shuttle_shared_db::Postgres] pool: PgPool,
+) -> shuttle_axum::ShuttleAxum {
+    let state = AppState { pool };
+    
+    // .. the rest of your code
+}
+```
+Locally this is done through Docker, but in deployment there is an overarching process that does this for you! No extra work is required. We also have an AWS RDS database offering that requires zero AWS knowledge to set up - visit [here](https://shuttle.rs/pricing) to find out more.
+
+## App State in Axum
+Now you might be wondering, "how do I store my database pool and other state-wide variables? I don't want to initialise my connection pool every time I want to do something!" - which is a perfectly valid question and is easily answered! You may have noticed that before we used `axum::Extension` to store it - this is perfectly fine for some use cases, but comes with the disadvantage of not being entirely typesafe. In most Rust web frameworks, Axum included, we use what is called "app state" - a struct dedicated to holding all of your variables that you want to share across your routes on the app. The only requirement to do this in Axum is that the struct needs to implement `Clone`, which we can do like so. For example:
+```rust
+use sqlx::PgPool; // this is a Postgres connection pool
+
+#[derive(Clone)]
+struct AppState {
+    pool: PgPool,
+}
+
+#[shuttle_runtime::main]
+async fn axum(
+    #[shuttle_shared_db::Postgres] pool: PgPool,
+) -> shuttle_axum::ShuttleAxum {
+    let state = AppState { pool };
+    
+    // .. the rest of your code
+}
+
+```
+
+To use this, we will insert it into our router and add the state into our functions by passing it as an parameter:
+```rust
+use axum::{Router, routing::get, extract::State};
+
+fn init_router() -> Router {
+    Router::new()
+        .route("/", get(hello_world))
+        .route("/do_something", get(do_something))
+        .with_state(state)
+}
+
+// note that adding the app state is not mandatory - only if you want to use it
+async fn hello_world() -> &'static str {
+    "Hello world!"
+}
+
+async fn do_something(
+    State(state): State<AppState>
+) -> Result<ApiResponse, ApiError> {
+    // .. your code
+}
+```
+It should also be noted that instead of using `#[derive(Clone)]`, you can also wrap the app state struct in an Atomic Reference Counter (`std::sync::Arc` for reference). Arcs are a form of garbage collection that keep track of how many clones there are and will only drop when there are no more copies left - and are a good type to know in Rust. This would be done like below:
+```rust
+use std::sync::Arc;
+
+let state = Arc::new(AppState { db });
+```
+When you add the state to your application now, you would need to make sure to refer to the State extractor type as `State<Arc<AppState>>` rather than `State<AppState>`. 
+
+From personal observation, it does not seem to be clear which method is better. It is likely that `Arcs` are going to perform better in a micro-benchmark but whether this leads to real-world improvements will likely depend on your use case.
+
+You can also derive sub-state from an application state! This is great for when we need some variables from the main state but want to limit access control on what a given route has access to. See below:
+```rust
+
+// the application state
+#[derive(Clone)]
+struct AppState {
+    // that holds some api specific state
+    api_state: ApiState,
+}
+
+// the api specific state
+#[derive(Clone)]
+struct ApiState {}
+
+// support converting an `AppState` in an `ApiState`
+impl FromRef<AppState> for ApiState {
+    fn from_ref(app_state: &AppState) -> ApiState {
+        app_state.api_state.clone()
+    }
+}
+```
+
+## Extractors in Axum
+Extractors are exactly that: they extract things from the HTTP request, and work by allowing you to let them be passed as parameters into the handler function. Currently, this already has native support for a wide range of things like getting separate headers, paths and queries, forms and JSON, as well as there being community support for things like MsgPack, JWT extractors, and more! You can also create your own extractors, which we will get to in a bit.
+
+As an example, we can use the `axum::Json` type to consume the HTTP request by extracting a JSON request body from the HTTP request. See below for how this can be done:
+
+```rust
+use axum::Json;
+use serde_json::Value;
+
+async fn my_function(
+    Json(json): Json<Value>
+) -> Result<ApiResponse, ApiError> {
+    // ... your code
+}
+```
+
+However, this is probably not very ergonomic in the fact that we're using `serde_json::Value` which is unshaped and could contain anything! Let's try this again with a Rust struct that implements `serde::Deserialize` - which is required to be able to turn the raw data into the struct itself:
+```rust
+use axum::Json;
+use serde::Deserialize;
+
+#[derive(Deserialize)]
+pub struct Submission {
+    message: String
+}
+
+async fn my_function(
+    Json(json): Json<Submission>
+) -> Result<ApiResponse, ApiError> {
+    println!("{}", json.message);
+    
+    // ... your code
+}
+```
+Note that any fields that are not in the struct **will be ignored** - depending on your use case, this can be a good thing; for example, if you're receiving a webhook but only want to look at certain fields from the webhook request. 
+
+Forms and URL query parameters can be handled the same way by adding the appropriate type to your handler function - so for example, a form extractor might look like this:
+```rust
+async fn my_function(
+    Form(form): Form<Submission>
+) -> Result<ApiResponse, ApiError> {
+    println!("{}", json.message);
+    
+    // ... your code
+}
+```
+On the HTML side when you're sending a HTTP request to your API, you will also of course want to make sure you are sending the correct content type. 
+
+Headers can also be handled the same way except that headers don't consume the request body - which means you can use as many as you want! We can use the `TypedHeader` type to do this. For Axum 0.6 you will need to enable the `headers` feature, but in 0.7 this has been moved to the `axum-extra` crate which you will need to add the `typed-header` feature, like so:
+```bash
+cargo add axum-extra -F typed-header
+```
+
+Using typed headers can be as simple as adding it as a parameter to a handler function:
+```rust
+use headers::ContentType;
+use axum::{TypedHeader, headers::Origin}; // use this if on axum 0.6
+use axum_extra::TypedHeader; // use this if on axum 0.7
+
+async fn my_function(
+    TypedHeader(origin): TypedHeader<Origin>
+) -> Result<ApiResponse, ApiError> {
+    println!("{}", origin.hostname);
+    
+    // ... your code
+}
+```
+
+You can find the docs for the `TypedHeader` extractor/response [here.](https://docs.rs/axum-extra/latest/axum_extra/struct.TypedHeader.html)
+
+In addition to `TypedHeaders`, `axum-extra` also offers many other helpful types we can use. For example, it has a `CookieJar` extractor which helps with managing cookies and has additional features built into the cookie jar like having cryptographic security if you need it (although it should be noted that there are different cookie jar features depending on which one you need), and a `protobuf` extractor for working with gRPC. You can find the documentation for the library [here.](https://docs.rs/axum-extra/latest/axum_extra/index.html)
+
+## Custom Extractors in Axum
+Now that we know a bit more about extractors, you probably want to know how we can create our own extractors - for example, let's say that you need to create an extractor that parses based on whether the request body is either Json or a Form. Let's set up our structs and the handler function:
+```rust
+#[derive(Debug, Serialize, Deserialize)]
+struct Payload {
+    foo: String,
+}
+
+async fn handler(JsonOrForm(payload): JsonOrForm<Payload>) {
+    dbg!(payload);
+}
+
+struct JsonOrForm<T>(T);
+```
+Now we can implement `FromRequest<S, B>` for our `JsonOrForm` struct! 
+```rust
+#[async_trait]
+impl<S, B, T> FromRequest<S, B> for JsonOrForm<T>
+where
+    B: Send + 'static,
+    S: Send + Sync,
+    Json<T>: FromRequest<(), B>,
+    Form<T>: FromRequest<(), B>,
+    T: 'static,
+{
+    type Rejection = Response;
+
+    async fn from_request(req: Request<B>, _state: &S) -> Result<Self, Self::Rejection> {
+        let content_type_header = req.headers().get(CONTENT_TYPE);
+        let content_type = content_type_header.and_then(|value| value.to_str().ok());
+
+        if let Some(content_type) = content_type {
+            if content_type.starts_with("application/json") {
+                let Json(payload) = req.extract().await.map_err(IntoResponse::into_response)?;
+                return Ok(Self(payload));
+            }
+
+            if content_type.starts_with("application/x-www-form-urlencoded") {
+                let Form(payload) = req.extract().await.map_err(IntoResponse::into_response)?;
+                return Ok(Self(payload));
+            }
+        }
+
+        Err(StatusCode::UNSUPPORTED_MEDIA_TYPE.into_response())
+    }
+}
+```
+In Axum 0.7, this was modified slightly. `axum::body::Body` is now no longer a re-export of `hyper::body::Body` and is instead its own type - meaning that it is no longer generic and the `Request` type will always use `axum::body::Body`. What this translates to essentially is that we just remove the `B` generic - see below:
+```rust
+#[async_trait]
+impl<S, T> FromRequest<S> for JsonOrForm<T>
+where
+    S: Send + Sync,
+    Json<T>: FromRequest<()>,
+    Form<T>: FromRequest<()>,
+    T: 'static,
+{
+    type Rejection = Response;
+
+    async fn from_request(req: Request, _state: &S) -> Result<Self, Self::Rejection> {
+        let content_type_header = req.headers().get(CONTENT_TYPE);
+        let content_type = content_type_header.and_then(|value| value.to_str().ok());
+
+        if let Some(content_type) = content_type {
+            if content_type.starts_with("application/json") {
+                let Json(payload) = req.extract().await.map_err(IntoResponse::into_response)?;
+                return Ok(Self(payload));
+            }
+
+            if content_type.starts_with("application/x-www-form-urlencoded") {
+                let Form(payload) = req.extract().await.map_err(IntoResponse::into_response)?;
+                return Ok(Self(payload));
+            }
+        }
+
+        Err(StatusCode::UNSUPPORTED_MEDIA_TYPE.into_response())
+    }
+}
+```
+
+## Middleware in Axum
+As mentioned before, one of Axum's great wins over other frameworks is that it is hyper-compatible with the `tower` crates, which means that we can effectively use any Tower middleware that we want for our Rust API! For example, we can add a Tower middleware to compress responses:
+
+```rust
+use tower_http::compression::CompressionLayer;
+use axum::{routing::get, Router};
+
+fn init_router() -> Router {
+    Router::new().route("/", get(hello_world)).layer(CompressionLayer::new)
+}
+```
+
+There are a number of crates consisting of Tower middleware that are available to use without us even having to write any middleware ourselves! If you're already using Tower middleware in any of your applications, this is a great way to re-use your middleware without having to write yet more code as the compatibility ensures no issues.
+
+We can also create our own middleware by writing a function. The function requires a `<B>` generic bound over the `Request` and `Next` types, as Axum's body type is generic in 0.6. See below for an example:
+```rust
+use axum::{http::Request, middleware::Next};
+
+async fn check_hello_world<B>(
+    req: Request<B>,
+    next: Next<B>
+) -> Result<Response, StatusCode> {
+    // requires the http crate to get the header name
+    if req.headers().get(CONTENT_TYPE).unwrap() != "application/json" {
+        return Err(StatusCode::BAD_REQUEST);
+    }
+
+    Ok(next.run(req).await)
+}
+```
+
+In Axum 0.7, you'd remove the `<B>` constraint, as Axum's `axum::body::Body` type is no longer generic:
+```rust
+use axum::{http::Request, middleware::Next};
+
+async fn check_hello_world(
+    req: Request,
+    next: Next
+) -> Result<Response, StatusCode> {
+    // requires the http crate to get the header name
+    if req.headers().get(CONTENT_TYPE).unwrap() != "application/json" {
+        return Err(StatusCode::BAD_REQUEST);
+    }
+
+    Ok(next.run(req).await)
+}
+```
+
+To implement the new middleware we created in our application, we want to use axum's `axum::middleware::from_fn` function, which allows us to use a function as a handler. In practice it would look like this:
+
+```rust
+use axum::middleware::self;
+
+fn init_router() -> Router {
+    Router::new().route("/", get(hello_world)).layer(middleware::from_fn(check_hello_world))
+}
+```
+
+If you need to add app state to your middleware, you can add it to your handler function then use `middleware::from_fn_with_state`:
+
+
+```rust
+fn init_router() -> Router {
+    let state = setup_state(); // app state initialisation goes here
+    
+    Router::new()
+        .route("/", get(hello_world))
+        .layer(middleware::from_fn_with_state(state.clone(), check_hello_world))
+        .with_state(state)
+}
+```
+
+
+## Serving Static Files in Axum
+Let's say you want to serve some static files using Axum - or that you have an application made using a frontend JavaScript framework like React, and you want to combine it with your Rust Axum backend to make one large application instead of having to host your frontend and backend separately. How would you do that?
+
+Axum does not by itself have capabilities to be able to do this; however, what it does have is super-strong compatibility with `tower-http`, which offers utility for serving your own static files whether you're running a SPA, statically-generated files from a framework like Next.js or simply just raw HTML, CSS and JavaScript.
+
+If you're using static-generated files, you can easily slip this into your router (assuming your static files are in a `dist` folder at the root of your project):
+
+```rust
+use tower_http::services::ServeDir;
+
+fn init_router() -> Router {
+    Router::new()
+        .nest_service("/", ServeDir::new("dist"))
+}
+```
+
+If you're using a SPA like React, Vue or something similar, you can  build the assets into the relevant folder and then use the following:
+
+```rust
+use tower_http::services::{ServeDir, ServeFile};
+
+
+fn init_router() -> Router {
+    Router::new().nest_service(
+         "/", ServeDir::new("dist")
+        .not_found_service(ServeFile::new("dist/index.html")),
+    )
+}
+```
+
+You can also use HTML templating with crates like [`askama`](https://github.com/djc/askama), [`tera`](https://github.com/Keats/tera) and [`maud`](https://maud.lambda.xyz/)! This can be combined with the power of lightweight JavaScript libraries like [`htmx`](https://htmx.org) to speed up time to production. You can read more about this on our other article about using HTMX with Rust which you can find [here.](https://www.shuttle.rs/blog/2023/10/25/htmx-with-rust). We also collaborated with [Stefan Baumgartner](https://fettblog.eu) on an article for [serving HTML with Askama!](https://www.shuttle.rs/launchpad/issues/2023-10-17-issue-10-Serving-HTML)
+
+## How to Deploy Axum
+Deployment with Rust backend programs in general can be less than ideal due to having to use Dockerfiles, although if you are experienced with Docker already this may not be such an issue for you - particularly if you are using `cargo-chef`. However, if you're using Shuttle you can just use `cargo shuttle deploy` and you're done already. No setup is required.
+
+## Finishing Up
+Thanks for reading! Axum is a great framework that has a strong team backing and is highly compatible with the Rust web ecosystem, and we believe now is a better time than ever to get started writing a REST API in Rust.
+ 
+Interested in more?
+- Check out how you can implement authentication in Axum [here!](https://www.shuttle.rs/blog/2022/08/11/authentication-tutorial)
+- Have a look at how you can get started with logging for your web application [here.](https://www.shuttle.rs/blog/2023/09/20/logging-in-rust)
+
