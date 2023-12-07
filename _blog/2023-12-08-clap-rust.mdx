@@ -1,0 +1,275 @@
+---
+title: 
+description: 
+author: josh
+tags: [rust, clap, tutorial, guide]
+thumb: enums-in-rust-thumb.png 
+cover: enums-in-rust-thumb.png
+date: '2023-12-08T14:30:00'
+---
+When it comes to learning Rust, often the first real program you'll make might be a command-line interface (CLI) application. Although command-line tools are quite common, they are also a good way to practice learning the basics of a language, and this is no less true in Rust. Crates like [`clap`](https://github.com/clap-rs/clap) make it super easy to write your own CLI tool in Rust by making it as easy as possible using structs and macros via the Derive feature, as well as offering a more low-level option with the Builder API.
+
+In this article, we'll be looking at how you can get started with Clap and write a versatile application, crates that synergise well with it, and also [`clap`](https://github.com/clap-rs/clap) in real-world use cases.
+
+## Getting Started
+First of all, let's initialise our project by using `cargo init example-cli`. We can then add [`clap`](https://github.com/clap-rs/clap) to our program by running the following command:
+```rust
+cargo add clap -F derive
+```
+We'll primarily be going through using the [`derive`](https://docs.rs/clap/latest/clap/_derive/_tutorial/chapter_0/index.html) feature as it is generally much simpler to use to get what you want.
+
+## Baby's First Clap
+To get started, we'll want to use the following code in our `src/main.rs`:
+
+```rust
+use clap::{Parser, Subcommand};
+
+#[derive(Parser)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    name: String
+}
+
+fn main() {
+  let cli = Cli::parse();
+  
+  println!("Hello, {}!", cli.name);
+}
+```
+As you can see, we are using a struct that uses the [`clap::Parser`](https://docs.rs/clap/latest/clap/trait.Parser.html) derive macro, which automatically generates all of the functions that we need to be able to use the struct as a parser. Initially when we load the program up and use `Cli::parse()`, it will take the arguments from whatever is in `std::env::os` - our environment arguments that we have given it. 
+
+Our program takes one argument at the moment, which is `name`. If you try running `cargo run test`, it should print out "Hello, test!" - but if you try to run it without any extra values, it will print the help menu. Clap has a help feature included in the default features that automatically displays the help menu when no valid commands are entered, which saves us a lot of time!  Let's try adding a flag to it so that if you don't add anything, it will print a default value:
+```rust
+#[derive(Parser)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    #[arg(short, long, default_value = "shuttle")]
+    name: String
+}
+```
+Now if you try using `cargo run` without anything else, it should print "Hello, shuttle!".
+
+There are lots of different things you can add to augment your CLI, which you can find more about [here.](https://docs.rs/clap/latest/clap/_derive/index.html#command-attributes) 
+
+## Writing your First Command
+Now for your first command! With using the `derive` feature in `clap`, all we need to do is declare some structs that use `clap`'s macros:
+
+```rust
+use clap::{Parser, Subcommand};
+
+#[derive(Parser)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    #[command(subcommand)]
+    cmd: Commands
+}
+
+#[derive(Subcommand, Debug, Clone)]
+enum Commands {
+    Get,
+    Set
+}
+
+fn main() {
+  let cli = Cli::parse();
+  
+  println!("{:?}", cli);
+}
+```
+
+Currently, this program will take two different commands - which are "get" and "set". If we run `cargo run get` now, we should receive the debug printout of what was parsed from when we ran the program. The same would be the same if you run `cargo run set` - if you attempt to run the program without outputting any commands, or if you try to input an invalid command, clap should return the help menu as mentioned before.
+
+## Adding Command Flags
+We can also use tuple-like struct syntax and named-field struct syntax for enum variants within our enum; this is because unlike in other OOP languages, Rust enums are actually **sum types**. You can read more about how powerful Rust enums are in another article we wrote [here.](https://www.shuttle.rs/blog/2023/11/23/enums-in-rust) You can have optional arguments by simply wrapping the types in `Option`, but if you want to add a flag to a command you can use `bool`, since [`clap`](https://github.com/clap-rs/clap) recognises that flags are either there or not there. Let's have a look at what this might look like:
+```rust
+use clap::{Parser, Subcommand};
+
+#[derive(Parser)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    #[command(subcommand)]
+    cmd: Commands
+}
+
+#[derive(Subcommand, Debug, Clone)]
+enum Commands {
+    Get(String),
+    Set {
+        key: String,
+        value: String,
+        is_true: bool
+    }
+}
+```
+As you can see above, our `get` command now takes a non-optional argument of a String, and our `set` command now takes a key value and a string value - necessarily speaking though when we're running our program, we won't have to provide the keys themselves: we just need to provide the values that we want to use!
+
+Let's have a look at what this would look like for our main function:
+```rust
+fn main() {
+    let cli = Cli::parse();
+    
+    match cli.cmd {
+        Commands::Get(value) => get_something(value),
+        Commands::Set{key, value, is_true} => set_something(key, value, is_true)
+    }
+}
+```
+Now if we were to run this again by using for example `cargo run get foo`, it should work. For the `set` command, the `key` and `value` arguments are mandatory but for the `--is-true` flag, it will only be set to true if you add the flag - otherwise, it will be set to false.
+
+## Clap CLI Looping
+Most of the time you might only want to execute a command once, but there may be times where you want to create a CLI where the user may want to keep the process running in case they want to run extra commands. For example, a REPL (also known as a "language shell" or read-eval-print-loop)  will want to be able to store variables and execute statements. For this purpose, the [`clap::Parser`](https://docs.rs/clap/latest/clap/trait.Parser.html) trait also has the `try_parse_from` function where it will try to parse CLI commands from a variable that implements `Into<Iterator>` - for this case, we can use a vector as they can be iterated on. 
+
+Let's have a look at the Rust code below:
+```rust
+fn main() {
+    loop {
+        let mut buf = String::from(crate_name!());
+        
+        std::io::stdin().read_line(&mut buf).expect("Couldn't parse stdin");
+         let line = buf.trim();
+         let cli = shlex::split(line).ok_or("error: Invalid quoting").unwrap();
+
+         println!("{:?}" , cli);
+
+         match Args::try_parse_from(args.iter()).map_err(|e| e.to_string()) {
+            Ok(cli) => {
+                match cli.cmd {
+                    Commands::Get(value) => get_something(value),
+                    Commands::Set{key, value, is_true} => set_something(key, value, is_true)
+                }
+            }
+            Err(_) => println!("That's not a valid command!");
+         };
+    }
+}
+```
+As you can see above, we first initialise a loop that starts with a String from the crate name itself; without this, whenever you try to use a command, [`clap`](https://github.com/clap-rs/clap) will error out because using it this way requires you to input the crate name. Then we expect some kind of input from the user, and once the user passes in a command we try to parse our `Args` type from the input. If it's successful we can move on with matching the command, if not then it uses an error.
+
+There is a somewhat small issue with this in that you're trying to parse the arguments this way and you write an invalid command, it doesn't automatically show you the help menu - which means we will need to re-implement our own. You can do this by writing a function that prints out all of the commands:
+```rust
+fn show_commands() {
+    println!(r#"COMMANDS:
+get <KEY> - Gets the value of a given key and displays it. If no key given, retrieves all values and displays them.
+set <KEY> <VALUE> - Sets the value of a given key.
+    Flags: --is-true
+"#);
+}
+```
+Then you can add this to the error handling instead of only writing that the command is invalid and leaving a potential user confused! You can also, of course, add a help command that displays this instead of displaying it every time an incorrect command is entered and then refer the user to it. The full CLI program would look like this:
+```rust
+
+#[derive(Parser)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    #[command(subcommand)]
+    cmd: Commands
+}
+
+#[derive(Subcommand, Debug, Clone)]
+enum Commands {
+    Get(String),
+    Set {
+        key: String,
+        value: String,
+        is_true: bool
+    },
+    Help
+}
+
+fn main() {
+    loop {
+        let mut buf = String::from(crate_name!());
+        
+        std::io::stdin().read_line(&mut buf).expect("Couldn't parse stdin");
+         let line = buf.trim();
+         let cli = shlex::split(line).ok_or("error: Invalid quoting").unwrap();
+
+         println!("{:?}" , cli);
+
+         match Args::try_parse_from(args.iter()).map_err(|e| e.to_string()) {
+            Ok(cli) => {
+                match cli.cmd {
+                    Commands::Get(value) => get_something(value),
+                    Commands::Set{key, value, is_true} => set_something(key, value, is_true),
+                    Commands::Help => show_commands(),
+                }
+            }
+            Err(_) => println!("That's not a valid command - use the help command if you are stuck.");
+         };
+    }
+}
+
+```
+
+## Clap with Other Crates
+Although clap is a great tool by itself, using it by itself can be a bit barebones. Thankfully there are quite a lot of crates within the terminal/command-line crate ecosystem - you can add crates for making prompts, colouring your terminal, and much more. Here is a list of a few of our favourites that may prove quite helpful to you:
+
+### Crossterm
+[`crossterm`](https://docs.rs/crossterm/latest/crossterm/) is a library crate that aims to be a pure Rust terminal manipulation library. It comes with all kinds of cool stuff like being able to change background and text colors, manipulating the terminal itself and the cursor as well as capturing keyboard and other events. Crossterm is also the backbone of many, many popular other crates!
+
+### comfy-table
+[`comfy-table`](https://github.com/nukesor/comfy-table) is a crate designed to facilitate tables that look pretty in the terminal. You can get started in as little as this:
+```rust
+use comfy_table::Table;
+
+fn main() {
+    let mut table = Table::new();
+    table
+        .set_header(vec!["Header1", "Header2", "Header3"])
+        .add_row(vec![
+            "This is a text",
+            "This is another text",
+            "This is the third text",
+        ])
+        .add_row(vec![
+            "This is another text",
+            "Now\nadd some\nmulti line stuff",
+            "This is awesome",
+        ]);
+
+    println!("{table}");
+}
+```
+When you add the above code to a program and run it, the output would look like this:
+```bash
++----------------------+----------------------+------------------------+
+| Header1              | Header2              | Header3                |
++======================================================================+
+| This is a text       | This is another text | This is the third text |
+|----------------------+----------------------+------------------------|
+| This is another text | Now                  | This is awesome        |
+|                      | add some             |                        |
+|                      | multi line stuff     |                        |
++----------------------+----------------------+------------------------+
+```
+Pretty easy, right?
+
+Crates don't have to do everything: they just have to be great at one thing in particular, and `comfy-table` is designed to be just that.
+
+### inquire
+[`inquire`](https://github.com/mikaelmello/inquire) is a crate designed for building interactive prompts on the terminal. It supports single-select, multi-select, calendar picking, and more:
+```rust
+let name = Text::new("What is your name?").prompt();
+
+match name {
+    Ok(name) => println!("Hello {}", name),
+    Err(_) => println!("An error happened when asking for your name, try again later."),
+}
+```
+If you don't want a looping CLI but your program needs more than a couple of inputs, you may want to try this out!
+
+## Clap in Action
+If you're stuck with getting a high-level view of how clap can be used in production, here are a couple of repositories where you can look for inspiration!
+
+### cargo-shuttle
+[`cargo-shuttle`](https://github.com/shuttle-hq/shuttle/tree/main/cargo-shuttle) is Shuttle's own CLI for interacting with the Shuttle platform. Within the `src` folder, you will be able to get a better sense of how you can organise your folders/files for a larger CLI project for a live service. There is also use of async here with `tokio`, so if you're interested in learning how to get started with using clap with async services (for example setting up an async client for a database service), this would be a perfect opportunity to learn to do so!
+
+### git-cliff
+[`git-cliff`](https://github.com/orhun/git-cliff) is a terminal tool that can generate changelog from the Git history by using conventional commits, as well as by using regex-powered parsers and you can even change the changelog template itself by using a configuration file. This tool is a great example of text parsing on the terminal and also uses `clap_mangen` which generates man pages. Useful for anyone who is serious about looking into making a production-ready terminal tool! 
+
+## Finishing Up
+Thanks for reading! Writing a CLI tool can be a great first step into learning Rust - but that doesn't mean you can't also make great production-grade tools in the command line. Hopefully, this article has given you some insight into how you can improve any of the CLI tools you've made, or perhaps help you a new one.
+
+Interested in more?
+- Check out how you can use raw SQL in Rust with SQLx [here.](https://www.shuttle.rs/blog/2023/10/04/sql-in-rust)
+- If you'd like to know more about how macros work, [this article should help you out.](https://www.shuttle.rs/blog/2022/12/23/procedural-macros)
