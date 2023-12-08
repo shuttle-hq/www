@@ -31,9 +31,9 @@ struct Args {
 }
 
 fn main() {
-  let cli = Cli::parse();
+    let cli = Cli::parse();
   
-  println!("Hello, {}!", cli.name);
+    println!("Hello, {}!", cli.name);
 }
 ```
 As you can see, we are using a struct that uses the [`clap::Parser`](https://docs.rs/clap/latest/clap/trait.Parser.html) derive macro, which automatically generates all of the functions that we need to be able to use the struct as a parser. Initially when we load the program up and use `Cli::parse()`, it will take the arguments from whatever is in `std::env::os` - our environment arguments that we have given it. 
@@ -71,9 +71,9 @@ enum Commands {
 }
 
 fn main() {
-  let cli = Cli::parse();
+    let cli = Cli::parse();
   
-  println!("{:?}", cli);
+    println!("{:?}", cli);
 }
 ```
 
@@ -126,20 +126,20 @@ fn main() {
         let mut buf = String::from(crate_name!());
         
         std::io::stdin().read_line(&mut buf).expect("Couldn't parse stdin");
-         let line = buf.trim();
-         let cli = shlex::split(line).ok_or("error: Invalid quoting").unwrap();
+        let line = buf.trim();
+        let cli = shlex::split(line).ok_or("error: Invalid quoting").unwrap();
 
-         println!("{:?}" , cli);
+        println!("{:?}" , cli);
 
-         match Args::try_parse_from(args.iter()).map_err(|e| e.to_string()) {
+        match Args::try_parse_from(args.iter()).map_err(|e| e.to_string()) {
             Ok(cli) => {
                 match cli.cmd {
                     Commands::Get(value) => get_something(value),
                     Commands::Set{key, value, is_true} => set_something(key, value, is_true)
-                }
+               }
             }
             Err(_) => println!("That's not a valid command!");
-         };
+       };
     }
 }
 ```
@@ -181,12 +181,12 @@ fn main() {
         let mut buf = String::from(crate_name!());
         
         std::io::stdin().read_line(&mut buf).expect("Couldn't parse stdin");
-         let line = buf.trim();
-         let cli = shlex::split(line).ok_or("error: Invalid quoting").unwrap();
+        let line = buf.trim();
+        let cli = shlex::split(line).ok_or("error: Invalid quoting").unwrap();
 
-         println!("{:?}" , cli);
+        println!("{:?}" , cli);
 
-         match Args::try_parse_from(args.iter()).map_err(|e| e.to_string()) {
+        match Args::try_parse_from(args.iter()).map_err(|e| e.to_string()) {
             Ok(cli) => {
                 match cli.cmd {
                     Commands::Get(value) => get_something(value),
