@@ -1,15 +1,15 @@
 ---
-title: 
-description: 
+title: "Writing a CLI Tool in Rust with Clap" 
+description: Learn about how you can write a CLI tool with Clap by following this article. We also cover libraries that go well with Clap and example repositories.
 author: josh
 tags: [rust, clap, tutorial, guide]
-thumb: enums-in-rust-thumb.png 
-cover: enums-in-rust-thumb.png
+thumb: 
+cover: 
 date: '2023-12-08T14:30:00'
 ---
 When it comes to learning Rust, often the first real program you'll make might be a command-line interface (CLI) application. Although command-line tools are quite common, they are also a good way to practice learning the basics of a language, and this is no less true in Rust. Crates like [`clap`](https://github.com/clap-rs/clap) make it super easy to write your own CLI tool in Rust by making it as easy as possible using structs and macros via the Derive feature, as well as offering a more low-level option with the Builder API.
 
-In this article, we'll be looking at how you can get started with Clap and write a versatile application, crates that synergise well with it, and also [`clap`](https://github.com/clap-rs/clap) in real-world use cases.
+In this article, we'll be looking at how you can get started with the [`clap`](https://github.com/clap-rs/clap) Rust crate and write a versatile Rust CLI, crates that synergise well with [`clap`](https://github.com/clap-rs/clap) as well as real-world use cases.
 
 ## Getting Started
 First of all, let's initialise our project by using `cargo init example-cli`. We can then add [`clap`](https://github.com/clap-rs/clap) to our program by running the following command:
@@ -51,8 +51,8 @@ Now if you try using `cargo run` without anything else, it should print "Hello, 
 
 There are lots of different things you can add to augment your CLI, which you can find more about [here.](https://docs.rs/clap/latest/clap/_derive/index.html#command-attributes) 
 
-## Writing your First Command
-Now for your first command! With using the `derive` feature in `clap`, all we need to do is declare some structs that use `clap`'s macros:
+## Writing Clap Subcommands 
+Now for your first (sub)command! With using the `derive` feature in `clap`, all we need to do is declare some structs that use `clap`'s macros:
 
 ```rust
 use clap::{Parser, Subcommand};
@@ -79,7 +79,7 @@ fn main() {
 
 Currently, this program will take two different commands - which are "get" and "set". If we run `cargo run get` now, we should receive the debug printout of what was parsed from when we ran the program. The same would be the same if you run `cargo run set` - if you attempt to run the program without outputting any commands, or if you try to input an invalid command, clap should return the help menu as mentioned before.
 
-## Adding Command Flags
+## Adding Clap Command Flags
 We can also use tuple-like struct syntax and named-field struct syntax for enum variants within our enum; this is because unlike in other OOP languages, Rust enums are actually **sum types**. You can read more about how powerful Rust enums are in another article we wrote [here.](https://www.shuttle.rs/blog/2023/11/23/enums-in-rust) You can have optional arguments by simply wrapping the types in `Option`, but if you want to add a flag to a command you can use `bool`, since [`clap`](https://github.com/clap-rs/clap) recognises that flags are either there or not there. Let's have a look at what this might look like:
 ```rust
 use clap::{Parser, Subcommand};
@@ -143,7 +143,7 @@ fn main() {
     }
 }
 ```
-As you can see above, we first initialise a loop that starts with a String from the crate name itself; without this, whenever you try to use a command, [`clap`](https://github.com/clap-rs/clap) will error out because using it this way requires you to input the crate name. Then we expect some kind of input from the user, and once the user passes in a command we try to parse our `Args` type from the input. If it's successful we can move on with matching the command, if not then it uses an error.
+As you can see above, we first initialise a loop that starts with a String from the crate name itself and not a completely new string; without this, whenever you try to use a command, [`clap`](https://github.com/clap-rs/clap) will error out because using it this way requires you to input the crate name. Then we expect some kind of input from the user, and once the user passes in a command we try to parse our `Args` type from the input. If it's successful we can move on with matching the command, if not then it uses an error.
 
 There is a somewhat small issue with this in that you're trying to parse the arguments this way and you write an invalid command, it doesn't automatically show you the help menu - which means we will need to re-implement our own. You can do this by writing a function that prints out all of the commands:
 ```rust
@@ -201,8 +201,8 @@ fn main() {
 
 ```
 
-## Clap with Other Crates
-Although clap is a great tool by itself, using it by itself can be a bit barebones. Thankfully there are quite a lot of crates within the terminal/command-line crate ecosystem - you can add crates for making prompts, colouring your terminal, and much more. Here is a list of a few of our favourites that may prove quite helpful to you:
+## Extending Clap
+Although [`clap`](https://github.com/clap-rs/clap) is a great tool by itself, using it by itself can be a bit barebones. Thankfully there are quite a lot of crates within the terminal/command-line crate ecosystem - you can add crates for making prompts, colouring your terminal, and much more. Here is a list of a few of our favourites that may prove quite helpful to you for writing a command-line tool in Rust:
 
 ### Crossterm
 [`crossterm`](https://docs.rs/crossterm/latest/crossterm/) is a library crate that aims to be a pure Rust terminal manipulation library. It comes with all kinds of cool stuff like being able to change background and text colors, manipulating the terminal itself and the cursor as well as capturing keyboard and other events. Crossterm is also the backbone of many, many popular other crates!
@@ -268,7 +268,7 @@ If you're stuck with getting a high-level view of how clap can be used in produc
 [`git-cliff`](https://github.com/orhun/git-cliff) is a terminal tool that can generate changelog from the Git history by using conventional commits, as well as by using regex-powered parsers and you can even change the changelog template itself by using a configuration file. This tool is a great example of text parsing on the terminal and also uses `clap_mangen` which generates man pages. Useful for anyone who is serious about looking into making a production-ready terminal tool! 
 
 ## Finishing Up
-Thanks for reading! Writing a CLI tool can be a great first step into learning Rust - but that doesn't mean you can't also make great production-grade tools in the command line. Hopefully, this article has given you some insight into how you can improve any of the CLI tools you've made, or perhaps help you a new one.
+Thanks for reading! Writing a CLI tool in Rust can be a great first step into learning the language - but that doesn't mean you can't also make great production-grade tools in the command line. Hopefully, this article has given you some insight into how you can improve any of the CLI tools you've made, or perhaps help you write a new Rust [`clap`](https://github.com/clap-rs/clap) application.
 
 Interested in more?
 - Check out how you can use raw SQL in Rust with SQLx [here.](https://www.shuttle.rs/blog/2023/10/04/sql-in-rust)
