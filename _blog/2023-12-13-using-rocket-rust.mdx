@@ -73,6 +73,7 @@ fn new(task: Form<Task<'_>>) { /* .. */ }
 ```
 It should be noted that by default, **missing, duplicate or extra fields will be allowed by default** - missing fields simply get filled with defaults and duplicates/extras are ignored. To stop this behavior, you can use the `Strict` type:
 ```rust
+use rocket::form::Strict;
 #[derive(FromForm)]
 struct Task<'r> {
     complete: Strict<bool>,
@@ -140,7 +141,7 @@ fn admin_panel_redirect() -> Redirect {
 ```
 As you can see, we have an "Admin User" as a request guard for the admin route. If the AdminUser request guard cannot be satisfied, Rocket will then attempt to route the user to "/admin" as a user and return a string about not being able to access the page unless the user is an admin; if both of those fail, the user will then instead be redirected to the login page.
 
-To be able to implement your own request guards, your type must implement the `FromRequest` trait. Let's have a look at how to implement the `FromRequest` trait. Like in other frameworks, you need to implem:
+To be able to implement your own request guards, your type must implement the `FromRequest` trait. Let's have a look at how to implement the `FromRequest` trait. Like in other frameworks, you need to would need to implement the trait like so:
 ```rust
 use rocket::request::{self, Request, FromRequest};
 
@@ -148,11 +149,11 @@ pub struct MyError;
 pub struct MyType;
 
 #[rocket::async_trait]
-impl<'r> FromRequest<'r> for MyType {
+impl<'a> FromRequest<'a> for MyType {
     type Error = MyError;
 
-    fn from_request(req: &'r Request<'_>) -> request::Outcome<Self, Self::Error> {
-    async fn from_request(req: &'r Request<'_>) -> request::Outcome<Self, Self::Error> {
+    fn from_request(req: &'a Request<'_>) -> request::Outcome<Self, Self::Error> {
+    async fn from_request(req: &'a Request<'_>) -> request::Outcome<Self, Self::Error> {
         Outcome::Success(MyType)
     }
 }
@@ -161,12 +162,12 @@ impl<'r> FromRequest<'r> for MyType {
 It should be noted that if you need authentication or other processes that only need to be applied on certain routes through middleware, request guards are highly advised - middleware ("fairings") in Rocket are typically supposed to be used as global middleware.
 
 ### Error Handling
-Instead of implementing a trait for your errors, error handling is done a bit differently in Rocket. Instead of implementing an error handling trait, you handle errors by using an error handler which is called a "catcher". You can use a handler function for creating a catcher, like so:
+Instead of implementing a trait for your errors, error handling is done a bit differently in Rocket. Instead of traits, you handle errors by using an error handler which is called a "catcher" - the equivalent of this in other frameworks like Axum might be a fallback service, or a route that the HTTP client gets automatically redirected to if it can't find anything or a user isn't authenticated (for example). You can use a handler function for creating a catcher, like so:
 ```rust
 #[catch(default)]
 fn default_catcher(status: Status, request: &Request) -> String { 
     format!("ERROR: {} - {}", status.code, status.reason)
-    }
+}
 
 #[launch]
 fn rocket() -> _ {
@@ -189,8 +190,7 @@ cargo add rocket-db-pools -F sqlx_postgres
 ```
 Then you need to initialise your database connection and add it to a struct which you can then simply attach and use `DB::init()` - see below:
 ```rust
-use axum::{Router, Extension};
-use sqlx::PgPoolOptions;
+use rocket_db_pools::{sqlx, Database};
 
 #[derive(Database)]
 #[database("sqlx")]
@@ -276,7 +276,7 @@ fn get_data(state: &State<AppState>, id: i32) -> Vec<Thing> {
 ```
 Note that the state gets passed in by reference! Additionally, any state which is not originally added to the `.manage()` function while building the web service will automatically be denied at compile-time. This is quite helpful for avoiding accidental errors.
 
-State in Rocket is an example of a Request guard] which we talked about earlier - which means that using it in other request guards gets a little bit tricky! To remedy this, we can retrieve the guard itself from the `FromRequest` trait implementation for a struct by using `request.guard::<&State<AppState>>()`, as you can see below:
+State in Rocket is an example of a Request guard which we talked about earlier - which means that using it in other request guards gets a little bit tricky! To remedy this, we can retrieve the guard itself from the `FromRequest` trait implementation for a struct by using `request.guard::<&State<AppState>>()`, as you can see below:
 
 ```rust
 use rocket::State;
@@ -295,12 +295,12 @@ impl<'r> FromRequest<'r> for Item<'r> {
     type Error = ();
 
     async fn from_request(request: &'r Request<'_>) -> request::Outcome<Self, ()> {
-        // Using `State` as a request guard. Use `inner()` to get an `'r`.
+        // Using `State` as a request guard. Use `inner()` to get the inner value.
         let outcome = request.guard::<&State<AppState>>().await
             .map(|my_config| Item(&my_config.user_val));
 
         // Or alternatively, using `Rocket::state()`:
-        let outcome = request.rocket().state::<MyConfig>()
+        let outcome = request.rocket().state::<AppState>()
             .map(|my_config| Item(&my_config.user_val))
             .or_forward(Status::InternalServerError);
 
@@ -421,6 +421,7 @@ Unlike most other frameworks, Rocket comes with config files based on the [figme
 
 An example of this file would be like this:
 ```toml
+# Rocket.toml
 ## defaults for _all_ profiles
 [default]
 address = "0.0.0.0"
@@ -448,7 +449,7 @@ secret_key = "hPrYyЭRiMyµ5sBB1π+CMæ1køFsåqKvBiQJxBVHQk="
 ```
 
 ## Deployment
-Deployment with Rust backend programs in general can be less than ideal due to having to use Dockerfiles, although if you are experienced with Docker already this may not be such an issue for you - particularly if you are using cargo-chef. However, if you're using Shuttle you can just use cargo shuttle deploy and you're done already. No setup is required.
+Deployment with Rust backend programs in general can be less than ideal due to having to use Dockerfiles, although if you are experienced with Docker already this may not be such an issue for you - particularly if you are using cargo-chef. However, if you're using Shuttle you can just use `cargo shuttle deploy` and you're done already. No setup is required.
 
 ## Finishing Up
 Thanks for reading! Although Rocket has previously fell out of favor among people who wanted to use cutting-edge Rust frameworks, the 0.5 upgrade brings a lot of new changes - hopefully this  has helped you to create a competent Rust web API using Rocket! 
