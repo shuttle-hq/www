@@ -1,0 +1,467 @@
+---
+title: "Getting Started with Rocket in Rust" 
+description: This article talks about how you can use Rocket to write a web application, covering routing, middleware, static files and databases.
+author: josh
+tags: [rust, rocket, tutorial, guide]
+thumb: rocket-rust-thumb.png 
+cover: rocket-rust-thumb.png
+date: '2023-12-13T14:30:00'
+---
+Although Rust is often perceived as being an intimidating language to learn, there have been many advancements in terms of making Rust accessible to everybody - particularly in the Rust backend web framework space. With Rocket v0.5 being released, now is a better time than ever to try out the iconic Rust web framework that was previously somewhat in limbo because of organisational issues but is now running at full throttle, with Rocket now being managed by the [Rocket Web Foundation](https://rwf2.org/).
+
+We'll be talking primarily about how you can get started with Rocket 0.5, but we will include the major notes from the 0.4 to 0.5 migration guide if you need to upgrade.
+
+## Migrating to Rocket 0.5
+The main things you need to know:
+- `rocket_contrib` is deprecated - you need to enable features in Rocket itself (and use `rocket_dyn_templates` and `rocket_sync_db_pools`/`rocket_db_pools` as required)
+- Rocket is now primarily async and now re-exports `tokio` if you need anything Tokio-related
+- You need to use `#[rocket::async_trait]` for trait implementations now
+- Query parameters now use `FromForm`! 
+- Server Sent Events and Websockets are now officially supported.
+
+The above listed points are but a highlight - there have been an extremely significant number of changes in the upgrade to Rocket 0.5. If you're looking to migrate, you can check out the docs [here.](https://rocket.rs/v0.5/guide/upgrading/)
+
+## Getting Started
+You can get started by creating a new web service with `cargo init example-rocket-api`, then cd'ing into the newly generated folder and then using adding `rocket`:
+```bash
+cargo add rocket
+```
+
+Rocket 0.5 internally uses Tokio (as noted in the release changes). However, you don't need to add it to your project specifically to be able to write a Rust Rocket API and it is also re-exported through Rocket so you can use `rocket::tokio` if you need anything from the `tokio` crate (although if you need a specific feature that can't be found through Rocket's version, you may need to add the `tokio` crate to your web service separately).
+
+## Routing
+### Requests
+When it comes to routing in Rocket, you need to use macros for your routes. Like many other features in Rocket, the usage of macros has propagated out to most other frameworks and would otherwise require the use of trait bounds like Axum.  Check out the following code below:
+```rust
+#[get("/")]
+fn index() -> &'static str {
+    "Hello, world!"
+}
+```
+We can attach a route to a router like this by using `rocket::build()` and then `.mount()`:
+```rust
+let rocket = rocket::build().mount("/hello", routes![index]);
+```
+This essentially means that when you load up your web service and go to the `/hello` route in the browser, it should also print "Hello world!" - note that it is **based on the route where it is mounted**. You can also add additional routes to the `routes!` macro - so if you have multiple sub-routes that you want to host under main route, you can do that. 
+
+Deserializing JSON in Rocket, similarly to other web frameworks in Rust, involves using `serde` to make the data compatible with (de)serialization. You can add the serde functionality to your web service by adding it as a crate with the `derive` feature:
+```bash
+cargo add serde -F derive
+```
+Then adding it as an argument to the function:
+```rust
+use rocket::serde::json::Json;
+use serde::Deserialize;
+
+#[derive(Deserialize)]
+#[serde(crate = "rocket::serde")]
+struct Task<'r> {
+    description: &'r str,
+    complete: bool
+}
+
+#[post("/todo", data = "<task>")]
+fn new(task: Json<Task<'_>>) { /* .. */ }
+```
+You can find out more about using JSON data with Rocket [here.](https://rocket.rs/v0.5/guide/requests/#json)
+
+Are you using forms? You can also use those! Rocket has a [huge](https://rocket.rs/v0.5/guide/requests/#forms) section detailing everything you can do with forms, but we'll cover the highlights and essentials you need to become good at using forms in Rocket. 
+
+You can get started with forms by using the `FromForm` derive macro, then adding it as an argument to a handler function:
+```rust
+use rocket::form::Form;
+
+#[derive(FromForm)]
+struct Task<'r> {
+    complete: bool,
+    r#type: &'r str,
+}
+
+#[post("/todo", data = "<task>")]
+fn new(task: Form<Task<'_>>) { /* .. */ }
+```
+It should be noted that by default, **missing, duplicate or extra fields will be allowed by default** - missing fields simply get filled with defaults and duplicates/extras are ignored. To stop this behavior, you can use the `Strict` type:
+```rust
+use rocket::form::Strict;
+#[derive(FromForm)]
+struct Task<'r> {
+    complete: Strict<bool>,
+    r#type: &'r str,
+}
+```
+You can also just add `Strict` to the parameters when writing your handler function:
+```rust
+#[post("/todo", data = "<task>")]
+fn new(task: Form<Strict<Task<'_>>>) { /* .. */ }
+```
+Rocket is miles ahead of other web frameworks when it comes to forms, particularly because multipart forms are handled similarly to regular forms and do not require any extra work. For comparison: in Axum for example, you need to enable the `multipart` feature and iterate through every single multipart field manually in the function handler, which can be quite ugly. 
+
+You can also nest your form structs:
+```rust
+#[derive(FromForm)]
+struct MyForm<'r> {
+    owner: Person<'r>,
+    pet: Pet<'r>,
+}
+
+#[derive(FromForm)]
+struct Person<'r> {
+    name: &'r str
+}
+
+#[derive(FromForm)]
+struct Pet<'r> {
+    name: &'r str,
+    #[field(validate = eq(true))]
+    good_pet: bool,
+}
+```
+If you're looking to separate your form structs and then combine them together and separately for certain forms, this would be an ideal way to do it.
+
+You can also serve paths by simply changing what you put into the handler function macro:
+```rust
+#[get("/hello/<name>")]
+fn hello(name: &str) -> String {
+    format!("Hello, {}!", name)
+}
+```
+### Rocket Request Guards
+Request guards in Rocket are types that represent specific validation policies, which can be passed into a handler. They are one of the strongest tools in Rocket as they allow you to split your validation into several functions instead of having one large function which handles all of the validation . See the following code below:
+```rust
+use rocket::response::Redirect;
+
+#[get("/login")]
+fn login() -> Template { /* .. */ }
+
+#[get("/admin")]
+fn admin_panel(admin: AdminUser) -> &'static str {
+    "Hello, administrator. This is the admin panel!"
+}
+
+#[get("/admin", rank = 2)]
+fn admin_panel_user(user: User) -> &'static str {
+    "Sorry, you must be an administrator to access this page."
+}
+
+#[get("/admin", rank = 3)]
+fn admin_panel_redirect() -> Redirect {
+    Redirect::to(uri!(login))
+}
+```
+As you can see, we have an "Admin User" as a request guard for the admin route. If the AdminUser request guard cannot be satisfied, Rocket will then attempt to route the user to "/admin" as a user and return a string about not being able to access the page unless the user is an admin; if both of those fail, the user will then instead be redirected to the login page.
+
+To be able to implement your own request guards, your type must implement the `FromRequest` trait. Let's have a look at how to implement the `FromRequest` trait. Like in other frameworks, you need to would need to implement the trait like so:
+```rust
+use rocket::request::{self, Request, FromRequest};
+
+pub struct MyError;
+pub struct MyType;
+
+#[rocket::async_trait]
+impl<'a> FromRequest<'a> for MyType {
+    type Error = MyError;
+
+    async fn from_request(req: &'a Request<'_>) -> request::Outcome<Self, Self::Error> {
+        Outcome::Success(MyType)
+    }
+}
+```
+
+It should be noted that if you need authentication or other processes that only need to be applied on certain routes through middleware, request guards are highly advised - middleware ("fairings") in Rocket are typically supposed to be used as global middleware.
+
+### Error Handling
+Instead of implementing a trait for your errors, error handling is done a bit differently in Rocket. Instead of traits, you handle errors by using an error handler which is called a "catcher" - the equivalent of this in other frameworks like Axum might be a fallback service, or a route that the HTTP client gets automatically redirected to if it can't find anything or a user isn't authenticated (for example). You can use a handler function for creating a catcher, like so:
+```rust
+#[catch(default)]
+fn default_catcher(status: Status, request: &Request) -> String { 
+    format!("ERROR: {} - {}", status.code, status.reason)
+}
+
+#[launch]
+fn rocket() -> _ {
+    rocket::build().register("/", catchers![default_catcher])
+}
+```
+If you need a more specific catcher (for example, catching a 404 Not Found error), you can instead use the specific code:
+```rust
+#[catch(404)]
+fn foo_not_found() -> &'static str {
+    "Foo 404"
+}
+```
+Although it is quite easy to use macros for error handling functions in Rocket, you need to also make sure that you attach the handlers to your router! 
+
+## Adding a Database
+Normally when setting up a database in Rust, you might need to set up your own database connection. To get started with doing this in Rocket, you will need to add the `rocket-db-pools` crate with the `sqlx_postgres` feature:
+```bash
+cargo add rocket-db-pools -F sqlx_postgres
+```
+Then you need to initialise your database connection and add it to a struct which you can then simply attach and use `DB::init()` - see below:
+```rust
+use rocket_db_pools::{sqlx, Database};
+
+#[derive(Database)]
+#[database("sqlx")]
+struct DB(sqlx::PgPool);
+
+#[launch]
+fn rocket() -> _ {
+    rocket::build().attach(DB::init())
+}
+```
+You would then need to provision your own Postgres instance, whether installed locally on your computer, provisioned through Docker or something else, add it to your Rocket.toml file (this is covered in a later section) and then it works. Doing it this way means you can add it as a Request guard and it will also work:
+```rust
+#[get("/<id>")]
+async fn read(mut db: Connection<DB>, id: i64) -> Option<String> {
+   sqlx::query("SELECT content FROM logs WHERE id = ?").bind(id)
+       .fetch_one(&mut **db).await
+       .and_then(|r| Ok(r.try_get(0)?))
+       .ok()
+}
+```
+
+However, with Shuttle we can retrieve the connection pool from a main function annotation, add it to a state struct and then add it to what we're managing (you would then need to access it through `&State`):
+```rust
+#[shuttle_runtime::main]
+async fn rocket(
+    #[shuttle_shared_db::Postgres] pool: PgPool,
+) -> shuttle_rocket::ShuttleRocket {
+    let state = AppState { pool };
+    
+    pool.execute(include_str!("../schema.sql"))
+        .await
+        .map_err(CustomError::new)?;
+
+    let rocket = rocket::build()
+        .mount("/todo", routes![retrieve, add])
+        .manage(state);
+
+    Ok(rocket.into())
+}
+```
+Locally the database is provisioned through Docker, but in deployment there is an overarching process that does this for you! No extra work required. We also have an AWS RDS database offering that requires zero AWS knowledge to set up - visit [here](https://shuttle.rs/pricing) to find out more.
+
+
+## App State
+Rocket, like other Rust web frameworks, allows you to share variables between routes in your web application by holding it in a state struct in memory. Then in your handler functions, you can call the data as required (for example, if you need a database pool, you can attach it to your state struct and then use it as below). 
+
+To get started, you can add application state like so:
+```rust
+use sqlx::PgPool;
+
+struct AppState {
+    db: PgPool,
+}
+
+async fn main() {
+    let db = connect_to_db();
+    
+    rocket::build()
+        .manage(AppState { db }});
+}
+```
+As you can see, unlike in Axum where the application state struct requires it to implement Clone, there are no trait bounds besides `Send + Sync`. 
+
+Now you can use whatever's in your state struct this like:
+```rust
+use serde::{Deserialize, Serialize};
+
+#[derive(Deserialize, Serialize)]
+struct Thing {
+   message: String,
+}
+
+#[get("/count/<id>")]
+fn get_data(state: &State<AppState>, id: i32) -> Vec<Thing> {
+    let result = sqlx::query_as::<_, Thing>("SELECT * FROM TABLE WHERE id = 1")
+        .bind(id)
+        .fetch_all(&state.db)
+        .await
+        .unwrap();
+        
+    result
+}
+```
+Note that the state gets passed in by reference! Additionally, any state which is not originally added to the `.manage()` function while building the web service will automatically be denied at compile-time. This is quite helpful for avoiding accidental errors.
+
+State in Rocket is an example of a Request guard which we talked about earlier - which means that using it in other request guards gets a little bit tricky! To remedy this, we can retrieve the guard itself from the `FromRequest` trait implementation for a struct by using `request.guard::<&State<AppState>>()`, as you can see below:
+
+```rust
+use rocket::State;
+use rocket::request::{self, Request, FromRequest};
+use rocket::outcome::IntoOutcome;
+use rocket::http::Status;
+
+struct Item<'r>(&'r str);
+
+struct AppState {
+    db: PgPool,
+}
+
+#[rocket::async_trait]
+impl<'r> FromRequest<'r> for Item<'r> {
+    type Error = ();
+
+    async fn from_request(request: &'r Request<'_>) -> request::Outcome<Self, ()> {
+        // Using `State` as a request guard. Use `inner()` to get the inner value.
+        let outcome = request.guard::<&State<AppState>>().await
+            .map(|my_config| Item(&my_config.user_val));
+
+        // Or alternatively, using `Rocket::state()`:
+        let outcome = request.rocket().state::<AppState>()
+            .map(|my_config| Item(&my_config.user_val))
+            .or_forward(Status::InternalServerError);
+
+        outcome
+    }
+}
+```
+
+## Fairings (Middleware)
+Middleware in Rocket, or "fairings" as the crate itself calls them, are a way to add processes that take place before the request handler itself with the most common use cases being validation, authentication/authorization or rewriting request information before passing it onto another request. However, because fairings in Rocket affect the whole application rather than a set of routes, it is highly advised that you instead implement authentication and similar things that only need to be implemented over a certain number of routes as a Request guard rather than a fairing - this differs from most other Rust REST API frameworks where you can use middleware to achieve the same effect..
+
+To write a fairing, you need to declare a struct that implements the `Fairing` trait. In terms of trait bounds, the type itself is required to be `Send + Sync + 'static` - meaning that essentially it just needs to be thread-safe and have only static references if any exist. See the code below:
+```rust
+use std::io::Cursor;
+use std::sync::atomic::{AtomicUsize, Ordering};
+
+use rocket::{Request, Data, Response};
+use rocket::fairing::{Fairing, Info, Kind};
+use rocket::http::{Method, ContentType, Status};
+
+struct Counter {
+    get: AtomicUsize,
+    post: AtomicUsize,
+}
+
+#[rocket::async_trait]
+impl Fairing for Counter {
+    // This is a request and response fairing named "GET/POST Counter".
+    fn info(&self) -> Info {
+        Info {
+            name: "GET/POST Counter",
+            kind: Kind::Request | Kind::Response
+        }
+    }
+
+    // Increment the counter for `GET` and `POST` requests.
+    async fn on_request(&self, request: &mut Request<'_>, _: &mut Data<'_>) {
+        match request.method() {
+            Method::Get => self.get.fetch_add(1, Ordering::Relaxed),
+            Method::Post => self.post.fetch_add(1, Ordering::Relaxed),
+            _ => return
+        };
+    }
+
+    async fn on_response<'r>(&self, request: &'r Request<'_>, response: &mut Response<'r>) {
+        // Don't change a successful user's response, ever.
+        if response.status() != Status::NotFound {
+            return
+        }
+
+        // Rewrite the response to return the current counts.
+        if request.method() == Method::Get && request.uri().path() == "/counts" {
+            let get_count = self.get.load(Ordering::Relaxed);
+            let post_count = self.post.load(Ordering::Relaxed);
+            let body = format!("Get: {}\nPost: {}", get_count, post_count);
+
+            response.set_status(Status::Ok);
+            response.set_header(ContentType::Plain);
+            response.set_sized_body(body.len(), Cursor::new(body));
+        }
+    }
+}
+
+```
+
+However, as you can see there is quite a lot of boilerplate code involved in this! There will almost certainly be times when we don't want to bother with all of this. In cases like this, we can also use Rocket's `AdHoc` type, which creates a fairing from a function or closure. You can attach an `AdHoc` type like this:
+```rust
+rocket::ignite()
+    .attach(AdHoc::on_launch("Launch Printer", |_| {
+        println!("Rocket is about to launch! Exciting! Here we go...");
+    }))
+```
+
+## Static Files
+When it comes to serving static files in Rocket, there's multiple ways you can do it - each having their own pros and cons. To start with, we can serve a single file with the `NamedFile` struct:
+```rust
+use std::path::{Path, PathBuf};
+use rocket::fs::NamedFile;
+
+#[get("/<file..>")]
+async fn files(file: PathBuf) -> Option<NamedFile> {
+    NamedFile::open(Path::new("static/").join(file)).await.ok()
+}
+```
+This is great for serving a single file at a time, but of course this doesn't really work in larger numbers, especially when you need to serve a folder of files (for example a folder of images, or a folder of text files - anything similar to this). For this we can use the `FileServer` type and serve that instead by mounting it at the router level instead of trying to write a function for it:
+```rust
+rocket.mount("/public", FileServer::from("static/"))
+```
+
+The third way to do static file serving is to do HTML templating. Unlike other web frameworks, Rocket already has built-in support for templating via `rocket_dyn_templates` - to use it, you only need to use the following:
+```bash
+cargo add rocket-dyn-templates
+```
+Doing this allows you to use `Template` as a return type:
+```rust
+use rocket_dyn_templates::Template;
+
+#[get("/")]
+fn index() -> Template {
+    Template::render("index", context! {
+        foo: 123,
+    })
+}
+
+#[launch]
+fn rocket() -> _ {
+    rocket::build()
+        .mount("/", routes![/* .. */])
+        .attach(Template::fairing())
+}
+```
+The `rocket_dyn_template` library supports both Handlebars templating as well as Tera, with the files needing to be put in a configurable template directory (default is "templates") inside the project root. Note that for Tera you might normally need to build the list of templates in the Tera instance - in this case, you don't need to and it will automatically be done for you. Files ending in `.tera` will use Tera templating, while files ending in `.hbs` will use Handlebars templating.
+
+If you're looking to try out Tera, you can find the docs [here](https://keats.github.io/tera/docs/) - meanwhile if you're interested in Handlebars, you can get started [here.](https://handlebarsjs.com/guide/)
+
+## Configuration
+Unlike most other frameworks, Rocket comes with config files based on the [figment crate](https://docs.rs/figment/0.10.12/figment/) that allow you to set the config from a few files rather than having the configuration spread out over your application, where you're able to split your configuration into development, staging and production. From this file you can set things like address and port, keep_alive timer, request timeouts, secret keys as well as request body limiting! 
+
+An example of this file would be like this:
+```toml
+# Rocket.toml
+## defaults for _all_ profiles
+[default]
+address = "0.0.0.0"
+limits = { form = "64 kB", json = "1 MiB" }
+
+[default.tls]
+key = "path/to/key.pem"     # Path or bytes to DER-encoded ASN.1 PKCS#1/#8 or SEC1 key.
+certs = "path/to/certs.pem" # Path or bytes to DER-encoded X.509 TLS cert chain.
+
+## set only when compiled in debug mode, i.e, `cargo build`
+[debug]
+port = 8000
+## only the `json` key from `default` will be overridden; `form` will remain
+limits = { json = "10MiB" }
+
+## set only when the `nyc` profile is selected
+[nyc]
+port = 9001
+
+## set only when compiled in release mode, i.e, `cargo build --release`
+[release]
+port = 9999
+ip_header = false
+secret_key = "hPrYyЭRiMyµ5sBB1π+CMæ1køFsåqKvBiQJxBVHQk="
+```
+
+## Deployment
+Deployment with Rust backend programs in general can be less than ideal due to having to use Dockerfiles, although if you are experienced with Docker already this may not be such an issue for you - particularly if you are using cargo-chef. However, if you're using Shuttle you can just use `cargo shuttle deploy` and you're done already. No setup is required.
+
+## Finishing Up
+Thanks for reading! Although Rocket has previously fell out of favor among people who wanted to use cutting-edge Rust frameworks, the 0.5 upgrade brings a lot of new changes - hopefully this  has helped you to create a competent Rust web API using Rocket! 
+
+Interested in more?
+- We have a guide to getting started with Axum if you'd like to compare the two frameworks [here.](https://www.shuttle.rs/blog/2023/12/06/using-axum-rust)
+- We also have a web framework direct comparison article [here!](https://www.shuttle.rs/blog/2023/08/23/rust-web-framework-comparison)
