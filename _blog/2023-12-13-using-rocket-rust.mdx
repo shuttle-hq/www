@@ -1,14 +1,6 @@
-Rocket is awesome! (todo: fill this paragraph out)
+Although Rust is often perceived as being an intimidating language to learn, there have been many advancements in terms of making Rust accessible to everybody - particularly in the Rust backend web framework space. With Rocket v0.5 being released, now is a better time than ever to try out the iconic Rust web framework that was previously somewhat in limbo because of organisational issues but is now running at full throttle, with Rocket now being managed by the [Rocket Web Foundation](https://rwf2.org/).
 
-We'll be talking primarily about how you can get started with Rocket 0.5, as well as how you can migrate to it if you're on an earlier version.
-
-## Getting Started
-You can get started by creating a new web service with `cargo init example-rocket-api`, then cd'ing into the newly generated folder and then using adding `rocket`:
-```bash
-cargo add rocket
-```
-
-Rocket 0.5 internally uses Tokio (as noted in the release changes). However, you don't need to add it to your project specifically to be able to launch a Rocket app and it is also re-exported through Rocket so you can use `rocket::tokio` if you need anything from the `tokio` crate (although if you need a specific feature that can't be found through Rocket's version, you may need to add the `tokio` crate to your web service separately).
+We'll be talking primarily about how you can get started with Rocket 0.5, but we will include the major notes from the 0.4 to 0.5 migration guide if you need to upgrade.
 
 ## Migrating to Rocket 0.5
 The main things you need to know:
@@ -20,9 +12,17 @@ The main things you need to know:
 
 The above listed points are but a highlight - there have been an extremely significant number of changes in the upgrade to Rocket 0.5. If you're looking to migrate, you can check out the docs [here.](https://rocket.rs/v0.5/guide/upgrading/)
 
+## Getting Started
+You can get started by creating a new web service with `cargo init example-rocket-api`, then cd'ing into the newly generated folder and then using adding `rocket`:
+```bash
+cargo add rocket
+```
+
+Rocket 0.5 internally uses Tokio (as noted in the release changes). However, you don't need to add it to your project specifically to be able to write a Rust Rocket API and it is also re-exported through Rocket so you can use `rocket::tokio` if you need anything from the `tokio` crate (although if you need a specific feature that can't be found through Rocket's version, you may need to add the `tokio` crate to your web service separately).
+
 ## Routing
 ### Requests
-When it comes to routing in Rocket, you need to use macros for your routes. Like many other features in Rocket, the usage of macros has propagated out to most other frameworks and is not otherwise possible.  Check out the following code below:
+When it comes to routing in Rocket, you need to use macros for your routes. Like many other features in Rocket, the usage of macros has propagated out to most other frameworks and would otherwise require the use of trait bounds like Axum.  Check out the following code below:
 ```rust
 #[get("/")]
 fn index() -> &'static str {
@@ -161,8 +161,7 @@ impl<'r> FromRequest<'r> for MyType {
 It should be noted that if you need authentication or other processes that only need to be applied on certain routes through middleware, request guards are highly advised - middleware ("fairings") in Rocket are typically supposed to be used as global middleware.
 
 ### Error Handling
-
-Instead of implementing a trait for your errors, error handling is done a bit differently. Instead of implementing an error handling trait, you handle errors by using an error handler which is called a "catcher" in Rocket. You can use a handler function for creating a catcher, like so:
+Instead of implementing a trait for your errors, error handling is done a bit differently in Rocket. Instead of implementing an error handling trait, you handle errors by using an error handler which is called a "catcher". You can use a handler function for creating a catcher, like so:
 ```rust
 #[catch(default)]
 fn default_catcher(status: Status, request: &Request) -> String { 
@@ -184,7 +183,7 @@ fn foo_not_found() -> &'static str {
 Although it is quite easy to use macros for error handling functions in Rocket, you need to also make sure that you attach the handlers to your router! 
 
 ## Adding a Database
-Normally when setting up a database, you might need to set up your own database connection. To get started with doing this in Rocket, you will need to add the `rocket-db-pools` crate with the `sqlx_postgres` feature:
+Normally when setting up a database in Rust, you might need to set up your own database connection. To get started with doing this in Rocket, you will need to add the `rocket-db-pools` crate with the `sqlx_postgres` feature:
 ```bash
 cargo add rocket-db-pools -F sqlx_postgres
 ```
@@ -202,7 +201,7 @@ fn rocket() -> _ {
     rocket::build().attach(DB::init())
 }
 ```
-You would then need to provision your own Postgres instance, whether installed locally on your computer, provisioned through Docker or something else, add it to your Rocket.toml file and then it works. Doing it this way means you can add it as a Request guard and it will also work:
+You would then need to provision your own Postgres instance, whether installed locally on your computer, provisioned through Docker or something else, add it to your Rocket.toml file (this is covered in a later section) and then it works. Doing it this way means you can add it as a Request guard and it will also work:
 ```rust
 #[get("/<id>")]
 async fn read(mut db: Connection<DB>, id: i64) -> Option<String> {
@@ -236,7 +235,9 @@ Locally the database is provisioned through Docker, but in deployment there is a
 
 
 ## App State
-You can add application state like so:
+Rocket, like other Rust web frameworks, allows you to share variables between routes in your web application by holding it in a state struct in memory. Then in your handler functions, you can call the data as required (for example, if you need a database pool, you can attach it to your state struct and then use it as below). 
+
+To get started, you can add application state like so:
 ```rust
 use sqlx::PgPool;
 
@@ -309,7 +310,7 @@ impl<'r> FromRequest<'r> for Item<'r> {
 ```
 
 ## Fairings (Middleware)
-Middleware in Rocket, or "fairings" as the crate itself calls them, are a way to add processes that take place before the request handler itself with the most common use cases being validation, authentication/authorization or rewriting request information before passing it onto another request. However, because fairings in Rocket affect the whole application rather than a set of routes, it is highly advised that you instead implement authentication and similar things that only need to be implemented over a certain number of routes as a Request guard rather than a fairing.
+Middleware in Rocket, or "fairings" as the crate itself calls them, are a way to add processes that take place before the request handler itself with the most common use cases being validation, authentication/authorization or rewriting request information before passing it onto another request. However, because fairings in Rocket affect the whole application rather than a set of routes, it is highly advised that you instead implement authentication and similar things that only need to be implemented over a certain number of routes as a Request guard rather than a fairing - this differs from most other Rust REST API frameworks where you can use middleware to achieve the same effect..
 
 To write a fairing, you need to declare a struct that implements the `Fairing` trait. In terms of trait bounds, the type itself is required to be `Send + Sync + 'static` - meaning that essentially it just needs to be thread-safe and have only static references if any exist. See the code below:
 ```rust
@@ -450,4 +451,8 @@ secret_key = "hPrYyЭRiMyµ5sBB1π+CMæ1køFsåqKvBiQJxBVHQk="
 Deployment with Rust backend programs in general can be less than ideal due to having to use Dockerfiles, although if you are experienced with Docker already this may not be such an issue for you - particularly if you are using cargo-chef. However, if you're using Shuttle you can just use cargo shuttle deploy and you're done already. No setup is required.
 
 ## Finishing Up
-Thanks for reading! Although Rocket has previously fell out of favor among people who wanted to use cutting-edge Rust frameworks, the 0.5 upgrade brings a lot of new changes that will hopefully get it into the spotlight. 
+Thanks for reading! Although Rocket has previously fell out of favor among people who wanted to use cutting-edge Rust frameworks, the 0.5 upgrade brings a lot of new changes - hopefully this  has helped you to create a competent Rust web API using Rocket! 
+
+Interested in more?
+- We have a guide to getting started with Axum if you'd like to compare the two frameworks [here.](https://www.shuttle.rs/blog/2023/12/06/using-axum-rust)
+- We also have a web framework direct comparison article [here!](https://www.shuttle.rs/blog/2023/08/23/rust-web-framework-comparison)
