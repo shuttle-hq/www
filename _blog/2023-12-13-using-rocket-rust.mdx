@@ -161,7 +161,6 @@ pub struct MyType;
 impl<'a> FromRequest<'a> for MyType {
     type Error = MyError;
 
-    fn from_request(req: &'a Request<'_>) -> request::Outcome<Self, Self::Error> {
     async fn from_request(req: &'a Request<'_>) -> request::Outcome<Self, Self::Error> {
         Outcome::Success(MyType)
     }
