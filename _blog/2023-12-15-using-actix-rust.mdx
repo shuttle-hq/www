@@ -1,23 +1,27 @@
 ---
-title: "Getting Started with Actix Web in Rust" 
-description: This article talks about how you can use actix-web to write a web application, covering routing, middleware, static files and databases.
+title: Getting Started with Actix Web in Rust
+description: This article talks about how you can use Actix Web to write a web application, covering routing, middleware, static files and databases.
 author: josh
-tags: [rust, actix-web, tutorial, guide]
-thumb: actix-rust-thumb.png 
+tags: [rust, actix-web, actix, tutorial, guide]
+thumb: actix-rust-thumb.png
 cover: actix-rust-thumb.png
 date: '2023-12-15T14:30:00'
 ---
 
-To this day, [`actix-web`](https://actix.rs/) remains an extremely formidable competitor in the Rust web backend ecosystem. It's no wonder that it's lasted so long; despite any impact that previous events may have had on it, it's still going strong and is one of the most recommended web frameworks in Rust. Originally based on the actor framework of the same name (`actix`), it has since moved away, and `actix` is now only really used for websocket endpoints. 
+To this day, [Actix Web](https://actix.rs/) remains an extremely formidable competitor in the Rust web backend ecosystem. It's no wonder that it's lasted so long; despite any impact that previous events may have had on it, it's still going strong and is one of the most recommended web frameworks in Rust. Originally based on the actor framework of the same name (`actix`), it has since moved away, and `actix` is now only really used for websocket endpoints.
 
-This article will primarily be concerning v4.4.0.
+This article will primarily be concerning v4.4.
 
 ## Getting Started with Actix Web
-To get started, you want to use `cargo init example-api` to generate your project, `cd` into the folder, and then use the following to install [`actix-web`](https://actix.rs/):
+
+To get started, you want to use `cargo init example-api` to generate your project, `cd` into the folder, and then use the following to add the `actix-web` crate to your project:
+
 ```rust
 cargo add actix-web
 ```
+
 Now you're pretty much ready to start! If you'd like to copy the boilerplate for getting straight to writing your app, here it is:
+
 ```rust
 use actix_web::{web, App, HttpServer, Responder};
 
@@ -43,7 +47,9 @@ async fn main() -> std::io::Result<()> {
 ```
 
 ## Routing in Actix Web
-When using [`actix-web`](https://actix.rs/), mostly any function that returns the `actix_web::Responder` trait can be used as a route. See below for a basic Hello World example:
+
+When using [Actix Web](https://actix.rs/), mostly any function that returns the `actix_web::Responder` trait can be used as a route. See below for a basic Hello World example:
+
 ```rust
 #[get("/")]
 async fn index() -> impl Responder {
@@ -52,6 +58,7 @@ async fn index() -> impl Responder {
 ```
 
 This handler function can then be fed into an `actix_web::App` which then gets passed in as a parameter to a `HttpServer`:
+
 ```rust
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -69,7 +76,8 @@ async fn main() -> std::io::Result<()> {
 }
 ```
 
-Now whenever you go to `/index.html`, it should return "Hello world!". However, you may find this approach a little bit lacking if you want to create multiple mini-router types and then merge them all into the app at the end. In this case, you will want the `actix_web::ServiceCfg` struct, which you can also write like this:
+Now whenever you go to `/index.html`, it should return "Hello world!". However, you may find this approach a little bit lacking if you want to create multiple mini-router types and then merge them all into the app at the end. In this case, you will want the `ServiceConfig` type, which you can also write like this:
+
 ```rust
 use actix_web::{web, App, HttpResponse};
 
@@ -93,12 +101,15 @@ async fn main() -> std::io::Result<()> {
 ```
 
 Extractors in Actix Web are exactly that: type-safe request implementations that, when passed into a handler function, will attempt to extract the relevant data from the request for the handler function. For example, the `actix_web::web::Json` extractor will attempt to extract JSON from the request body. To successfully deserialize JSON successfully however, you need to use the `serde` crate - ideally with the `derive` function that adds automatic Deserialize and Serialize derive macros for your structs. You can install serde by executing the following command:
+
 ```rust
-cargo install serde -F derive
+cargo add serde -F derive
 ```
+
 Now you can use it as a derive macro like this:
+
 ```rust
-use actix_web::{web, Result};
+use actix_web::web;
 use serde::Deserialize;
 
 #[derive(Deserialize)]
@@ -109,10 +120,12 @@ struct Info {
 // deserialize `Info` from request's body
 #[post("/submit")]
 async fn submit(info: web::Json<Info>) -> String {
-    format!("Welcome {}!", info.username) 
+    format!("Welcome {}!", info.username)
 }
 ```
+
 Actix Web also has support for paths, queries and forms. You'll also need to use `serde` here as well - although with paths, you will additionally want to use the Actix Web routing macro to declare where exactly the path parameters are. We can find examples of all 3 of these in action below:
+
 ```rust
 #[derive(Deserialize)]
 struct Info {
@@ -134,14 +147,16 @@ async fn index(info: web::Query<Info>) -> String {
 
 // data is passed into the Form extractor through a HTML Form element
 #[post("/")]
-async fn index(form: web::Form<Info>) -> String {
+async fn index(form: web::Form<Info>) -> actix_web::Result<String> {
     Ok(format!("Welcome {}!", form.username))
 }
 ```
-Interested in writing your own extractor? You can do that! Writing your own extractor simply requires that you implement the `FromRequest` trait. You will also need to  Check out this code for a HTTP header extractor that shows you exactly how it's done:
+
+Interested in writing your own extractor? You can do that! Writing your own extractor simply requires that you implement the `FromRequest` trait. Check out this code for a [HTTP header extractor](https://docs.rs/actix-web/4/actix_web/web/struct.Header.html) that shows you exactly how it's done:
+
 ```rust
 use actix_web::dev::Payload;
-use actix_web::{FromRequest, 
+use actix_web::{FromRequest,
 	http::header::Header as ParseHeader,
 	HttpRequest, error::ParseError
 };
@@ -158,19 +173,22 @@ where
 
     #[inline]
     fn from_request(req: &HttpRequest, _: &mut Payload) -> Self::Future {
-        match ParseHeader::parse(req) {
+        match T::parse(req) {
             Ok(header) => ok(Header(header)),
             Err(e) => err(e),
         }
     }
 }
 ```
-Note that the `T: ParseHeader` trait bound is specific to this trait implementation because in order for a header to be a valid header, it needs to be able to be parsed successfully as a header, with the error implementing `actix_web::error::Error`. Although we also have `extract` as a provided method, `from_request` is the only required method to be implemented here, which returns `Self::Future`. That is to say, we need to return a result that's ready to be awaited - you can find more about the Ready struct [here.](https://cseweb.ucsd.edu/classes/sp22/cse223B-a/tribbler/actix_web/rt/net/struct.Ready.html)  Other extractors, like the JSON extractor, also allow you to change their configuration - you can find out more about it in [this docs page.](https://docs.rs/actix-web/4.4.0/actix_web/trait.FromRequest.html)
 
-Generally speaking, responses only need to implement the `actix_web::Responder` trait to be able to respond. Although there is a [broad range of implementations already](https://cseweb.ucsd.edu/classes/sp22/cse223B-a/tribbler/actix_web/trait.Responder.html) when it comes to actual response types so you should not generally need to implement your own types, there can be specific use cases where this is helpful; for example, being able to document all the types of responses that your application may have. 
+Note that the `T: ParseHeader` trait bound is specific to this trait implementation because in order for a header to be a valid header, it needs to be able to be parsed successfully as a header, with the error implementing `actix_web::error::Error`. Although we also have `extract` as a provided method, `from_request` is the only required method to be implemented here, which returns `Self::Future`. That is to say, we need to return a result that's ready to be awaited - you can find more about the Ready struct [here](https://doc.rust-lang.org/std/future/struct.Ready.html). Other extractors, like the JSON extractor, also allow you to change their configuration - you can find out more about it in [this docs page](https://docs.rs/actix-web/4/actix_web/trait.FromRequest.html).
+
+Generally speaking, responses only need to implement the `actix_web::Responder` trait to be able to respond. Although there is a [broad range of implementations already](https://docs.rs/actix-web/4/actix_web/trait.Responder.html#implementations-1) when it comes to actual response types so you should not generally need to implement your own types, there can be specific use cases where this is helpful; for example, being able to document all the types of responses that your application may have.
 
 ## Adding a Database
+
 Normally when setting up a database, you might need to set up your database connection:
+
 ```rust
 use sqlx::PgPoolOptions;
 
@@ -179,7 +197,7 @@ async fn main() -> std::io::Result<()> {
     let dbconnection = PgPoolOptions::new()
         .max_connections(5)
         .connect(r#"<db-connection-string-here>"#).await;
-    
+
     //... rest of your code
 }
 ```
@@ -195,14 +213,17 @@ async fn actixweb(
     #[shuttle_shared_db::Postgres] pool: PgPool,
 ) -> ShuttleActixWeb<impl FnOnce(&mut ServiceConfig) + Send + Clone + 'static> {
     let state = AppState { pool };
-    
+
     // .. the rest of your code
 }
 ```
+
 Locally this is done through Docker, but in deployment there is an overarching process that does this for you! No extra work required. We also have an AWS RDS database offering that requires zero AWS knowledge to set up - visit [here](https://shuttle.rs/pricing) to find out more.
 
 ## App State in Actix Web
+
 Routing is great and all (as well as adding databases being pretty easy!) but when you need to store variables, you may be wanting to look for something that lets you store and use them across your application. This is where shared mutable state comes in: you declare it while building your service across your whole application, then you can use it as an extractor in your handler functions. For example, you might need to share a database pool, a counter or a shared hashmap of websocket subscribers. You can declare and use state like this:
+
 ```rust
 use sqlx::PgPool;
 
@@ -215,13 +236,15 @@ struct AppState {
 async fn index(data: web::Data<AppState>) -> String {
     let res = sqlx::query("SELECT 'Hello World!'").fetch_all(&data.db).await.unwrap();
 
-    format!("{res}") 
+    format!("{res}")
 }
 ```
+
 You can then implement it like this:
+
 ```rust
 #[actix_web::main]
-async fn main() -> std::io::Result<()> { 
+async fn main() -> std::io::Result<()> {
     let db = connect_to_db();
     let state = web::Data::new(AppState { db });
 
@@ -238,41 +261,54 @@ async fn main() -> std::io::Result<()> {
 ```
 
 ## Middleware in Actix Web
-Within [`actix-web`](https://actix.rs/), middleware is used as a medium for being able to add general functionality to a (set of) route(s) by taking the request before the handler function runs, carrying out some operations, running the actual handler function itself and then the middleware does additional processing (if required). By default, actix-web has several default middlewares that we can use, including logging, path normalisation, access external services and modifying application state (through the `ServiceRequest` type). 
+
+Within [Actix Web](https://actix.rs/), middleware is used as a medium for being able to add general functionality to a (set of) route(s) by taking the request before the handler function runs, carrying out some operations, running the actual handler function itself and then the middleware does additional processing (if required). By default, Actix Web has several default middlewares that we can use, including logging, path normalisation, access external services and modifying application state (through the `ServiceRequest` type).
 
 See below for an example of how to implement a default Logger middleware:
+
 ```rust
 use actix_web::{middleware::Logger, App};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-// access logs are printed with the INFO level so ensure it is enabled by default
-env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
+    // access logs are printed with the INFO level so ensure it is enabled by default
+    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
 
-let app = App::new()
-    .wrap(Logger::default());
+    let app = App::new()
+        .wrap(Logger::default());
+
     // ... rest of your code
 }
 ```
 
-Additionally, you can also write your own middleware in Actix Web! For simple use cases, we can use an `FnOnce` closure to be able to write whatever we want (for example, printing a message like in this instance:
+Additionally, you can also write your own middleware in Actix Web! For many use cases, we can use the handy `middleware::from_fn` helper from the sister crate `actix-web-lab` (which will be promoted to `actix-web` itself in an upcoming release). For example, printing a messages at different parts of the request handling flow like this:
+
 ```rust
+use actix_web::{body::MessageBody, dev::{ServiceRequest, ServiceResponse}};
+use actix_web_lab::middleware::{from_fn, Next};
+
+async fn print_before_and_after_handler(
+    req: ServiceRequest,
+    next: Next<impl MessageBody>,
+) -> Result<ServiceResponse<impl MessageBody>, Error> {
+    println!("Hi from start. You requested: {}", req.path());
+    let res = next.call(req).await?;
+    println!("Hi from response");
+    Ok(res)
+}
+
 let app = App::new()
-    .wrap_fn(|req, srv| {
-        println!("Hi from start. You requested: {}", req.path());
-        srv.call(req).map(|res| {
-            println!("Hi from response");
-            res
-        })
-    })
+    .wrap(from_fn(print_before_and_after_handler))
     .route(
         "/",
-        web::get().to(|| async { "Hello, middleware!" }),
+        web::get().to(|| async { "Hello from handler!" }),
 );
 ```
+
 To be able to write more complex middleware, we actually need to implement two traits - `Service<Req>` which is for implementing the actual middleware itself as well as `Transform<S, Req>` which is the required for the builder for the actual Service that handles requests (in terms of when we're building our service, we will actually use the builder, not the middleware! The outer service will automatically call the middleware upon detecting a HTTP request).
 
 For an actual middleware implementation, let's have a look at writing a middleware that simply prints messages. We can create the builder for the middleware by implementing the `Transform` trait:
+
 ```rust
 use std::{future::{ready, Ready, Future}, pin::Pin};
 
@@ -304,7 +340,9 @@ where
     }
 }
 ```
+
 Now we can write the middleware itself! Internally the middleware must implement a generic type - which then gets declared in the `Service` trait. Note that we manually re-implement a type from `futures_util` called `LocalBoxFuture` - that is to say, a future that doesn't require the `Send` trait and is safe to use because it implements `Unpin` on dereferencing, which automatically cancels any previous thread-safety guarantees.
+
 ```rust
 pub struct SayHiMiddleware<S> {
     /// The next service to call
@@ -350,26 +388,29 @@ where
     }
 }
 ```
+
 Now that we've written our middleware, we can now add it to our App:
+
 ```rust
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-// access logs are printed with the INFO level so ensure it is enabled by default
-env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
+    let app = App::new()
+         .wrap(SayHi);
 
-let app = App::new()
-     .wrap(SayHi);
-     // ... rest of your code
+    // ... rest of your code
 }
 ```
 
 ## Static Files in Actix Web
-Plain, no-frills static file serving in [`actix-web`](https://actix.rs/) is done through the `actix_files` crate - to add it, you simply need to add it through Cargo like so:
+
+Plain, no-frills static file serving in [Actix Web](https://actix.rs/) is done through the `actix_files` crate - to add it, you simply need to add it through Cargo like so:
+
 ```bash
-cargo add actix-files 
+cargo add actix-files
 ```
 
 Setting up a route for static file serving would look like this:
+
 ```rust
 use actix_files::NamedFile;
 use actix_web::{HttpRequest, Result};
@@ -381,11 +422,13 @@ async fn index(req: HttpRequest) -> Result<NamedFile> {
     Ok(NamedFile::open(path)?)
 }
 ```
-This route allows us to serve any file that can be found and matches the filename - for example, if we have a base route that serves this route, if we then run our app and go to `/index.html`, the route will try to look for a file named `index.html` in the project root. 
 
-Note that you should *not* under any circumstances try and use a path tail with `.*` to return a `NamedFile` - this has serious security implications and will open your web service up to path traversal! This is documented in the `actix-web` docs [here,](https://actix.rs/docs/static-files) and you can find more about path traversal attacks [here.](https://owasp.org/www-community/attacks/Path_Traversal) As a guard against this, you can attempt to validate the path file is correct or is not attempting to traverse outside of the intended folder by using `std::fs::canoncalize`).
+This route allows us to serve any file that can be found and matches the filename - for example, if we have a base route that serves this route, if we then run our app and go to `/index.html`, the route will try to look for a file named `index.html` in the project root.
+
+Note that you should _not_ under any circumstances try and use a path tail with `.*` to return a `NamedFile` - this has serious security implications and will open your web service up to path traversal! This is documented in the Actix Web docs [here](https://actix.rs/docs/static-files), and you can find more about path traversal attacks [here](https://owasp.org/www-community/attacks/Path_Traversal). As a guard against this, you can attempt to validate the path file is correct or is not attempting to traverse outside of the intended folder by using `std::fs::canoncalize`).
 
 However, this is a bit clumsy when you need to serve multiple files - particularly if you need to serve a folder of HTML files, for instance. To be able to serve a folder of files from your web service, the best way to do this would be to use `actix_files::Files` and attach it to your `App`:
+
 ```rust
 use actix_files as fs;
 use actix_web::{App, HttpServer};
@@ -403,17 +446,23 @@ async fn main() -> std::io::Result<()> {
     .await
 }
 ```
-Note that you can also augment the `Files` struct with several options like showing the file directory itself at the base route (for the file service) and allowing hidden files, which you can find more about [here.](https://docs.rs/actix-files/latest/actix_files/struct.Files.html#method.show_files_listing) 
+
+Note that you can also augment the `Files` struct with several options like showing the file directory itself at the base route (for the file service) and allowing hidden files, which you can find more about [here.](https://docs.rs/actix-files/latest/actix_files/struct.Files.html#method.show_files_listing).
 
 Additionally, we can also use the power of HTML templating with [`askama`](https://github.com/djc/askama) to supercharge our HTML file serving! We can get started like so:
+
 ```rust
 cargo add askama askama-actix-web -F askama/with-actix-web
 ```
+
 This adds [`askama`](https://github.com/djc/askama) itself as well as the `Responder` trait implementation for the `askama::Template` type. [`askama`](https://github.com/djc/askama) expects your files to be in a subfolder of the project root called `templates` by default, so let's create the folder and then create an `index.html` file with the following HTML code in:
+
 ```html
 Hello, {{name}}!
 ```
+
 To use Askama in our app, we need to declare a struct that uses the `Template` derive macro and use askama's `template` macro to point the struct to the file that we want it to use:
+
 ```rust
 #[derive(Template)]
 #[template(path = "index.html")]
@@ -426,17 +475,20 @@ async fn index_route() -> impl Responder {
     IndexTemplate { name: "Shuttle" }
 }
 ```
-Then we can add it as a regular handler function in our `actix-web` service and we're good to go! When you go to a path that returns `index_route`, you should see "Hello, Shuttle!" as the HTML response.
 
-Interested in learning more about Askama? We have a Shuttle Launchpad newsletter issue that talks about this! You can find it [here.](https://www.shuttle.rs/launchpad/issues/2023-10-17-issue-10-Serving-HTML)
+Then we can add it as a regular handler function in our Actix Web service and we're good to go! When you go to a path that returns `index_route`, you should see "Hello, Shuttle!" as the HTML response.
+
+Interested in learning more about Askama? We have a Shuttle Launchpad newsletter issue that talks about this! You can find it [here](https://www.shuttle.rs/launchpad/issues/2023-10-17-issue-10-Serving-HTML).
 
 ## Deploying
+
 Deployment with Rust backend programs, in general, can be less than ideal due to having to use Dockerfiles, although if you are experienced with Docker already this may not be such an issue for you - particularly if you are using `cargo-chef`. However, if you're using Shuttle you can just use `cargo shuttle deploy` and you're done already. No setup is required.
 
 ## Finishing Up
-Thanks for reading! The actix-web Rust crate is a strong framework that you can use to boost your Rust portfolio and is a great framework to do a deep dive into Rust with if you're looking to build your first Rust API.
+
+Thanks for reading! Actix Web is a strong framework that you can use to boost your Rust portfolio and is a great framework to do a deep dive into Rust with if you're looking to build your first Rust API.
 
 Interested in more?
-- Check out this [comprehensive primer for Rust error handling!](https://www.shuttle.rs/blog/2022/06/30/error-handling)
-- Compare how actix-web measures up against other frameworks in our framework comparison article [here.](https://www.shuttle.rs/blog/2023/08/23/rust-web-framework-comparison)
 
+- Check out this [comprehensive primer for Rust error handling](https://www.shuttle.rs/blog/2022/06/30/error-handling).
+- Compare how Actix Web measures up against other frameworks in [our framework comparison article](https://www.shuttle.rs/blog/2023/08/23/rust-web-framework-comparison).
