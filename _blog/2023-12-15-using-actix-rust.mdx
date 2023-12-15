@@ -10,7 +10,7 @@ date: '2023-12-15T14:30:00'
 
 To this day, [`actix-web`](https://actix.rs/) remains an extremely formidable competitor in the Rust web backend ecosystem. It's no wonder that it's lasted so long; despite any impact that previous events may have had on it, it's still going strong and is one of the most recommended web frameworks in Rust. Originally based on the actor framework of the same name (`actix`), it has since moved away, and `actix` is now only really used for websocket endpoints. 
 
-This article will primarily be concerning v4.4.0, although this article will get updated from time to time to reflect any new changes.
+This article will primarily be concerning v4.4.0.
 
 ## Getting Started with Actix Web
 To get started, you want to use `cargo init example-api` to generate your project, `cd` into the folder, and then use the following to install [`actix-web`](https://actix.rs/):
@@ -30,9 +30,9 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new().service(
             // prefixes all resources and routes attached to it...
-            web::scope("/app")
+            web::scope("/")
                 // ...so this handles requests for `GET /app/index.html`
-                .route("/index.html", web::get().to(index)),
+                .route("/", web::get().to(index)),
         )
     })
     .bind(("127.0.0.1", 8080))?
@@ -79,7 +79,6 @@ fn config(cfg: &mut web::ServiceConfig) {
     );
 }
 
-
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
@@ -89,9 +88,6 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-
-// merge `/test` routes from config function to the App
-App::new().configure(config);
 ```
 
 Extractors in Actix Web are exactly that: type-safe request implementations that, when passed into a handler function, will attempt to extract the relevant data from the request for the handler function. For example, the `actix_web::web::Json` extractor will attempt to extract JSON from the request body. To successfully deserialize JSON successfully however, you need to use the `serde` crate - ideally with the `derive` function that adds automatic Deserialize and Serialize derive macros for your structs. You can install serde by executing the following command:
@@ -110,8 +106,8 @@ struct Info {
 
 // deserialize `Info` from request's body
 #[post("/submit")]
-async fn submit(info: web::Json<Info>) -> Result<String> {
-    Ok(format!("Welcome {}!", info.username))
+async fn submit(info: web::Json<Info>) -> String {
+    format!("Welcome {}!", info.username) 
 }
 ```
 Actix Web also has support for paths, queries and forms. You'll also need to use `serde` here as well - although with paths, you will additionally want to use the Actix Web routing macro to declare where exactly the path parameters are. We can find examples of all 3 of these in action below:
@@ -122,28 +118,32 @@ struct Info {
 }
 
 // extract path info using serde
-#[get("/users/{user_id}/{friend}")] // <- define path parameters
-async fn index(info: web::Path<Info>) -> Result<String> {
-    Ok(format!(
-        "Welcome {}, user_id {}!",
-        info.friend, info.user_id
-    ))
+#[get("/users/{username}")] // <- define path parameters
+async fn index(info: web::Path<Info>) -> String {
+	format!("Welcome {}!", info.username)
 }
 
-// this handler gets called if the query deserializes into `Info` successfully
-// otherwise a 400 Bad Request error response is returned
+// data is passed in here through query parameters in the URL
+// for example, google.com/?hello=world
 #[get("/")]
 async fn index(info: web::Query<Info>) -> String {
     format!("Welcome {}!", info.username)
 }
 
+// data is passed into the Form extractor through a HTML Form element
 #[post("/")]
-async fn index(form: web::Form<Info>) -> Result<String> {
+async fn index(form: web::Form<Info>) -> String {
     Ok(format!("Welcome {}!", form.username))
 }
 ```
 Interested in writing your own extractor? You can do that! Writing your own extractor simply requires that you implement the `FromRequest` trait. You will also need to  Check out this code for a HTTP header extractor that shows you exactly how it's done:
 ```rust
+use actix_web::dev::Payload;
+use actix_web::{FromRequest, 
+	http::header::Header as ParseHeader,
+	HttpRequest, error::ParseError
+};
+
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub struct Header<T>(pub T);
 
@@ -163,7 +163,7 @@ where
     }
 }
 ```
-Note that the `T: ParseHeader` trait bound is specific to this trait implementation because in order for a header to be a valid header, it needs to be able to be parsed successfully as an error. Although we also have `extract` as a provided method, `from_request` is the only required method to be implemented here, which returns `Self::Future`. That is to say, we need to return a result that's ready to be awaited - you can find more about the Ready struct [here.](https://cseweb.ucsd.edu/classes/sp22/cse223B-a/tribbler/actix_web/rt/net/struct.Ready.html)  Other extractors, like the JSON extractor, also allow you to change their configuration - you can find out more about it in [this docs page.](https://docs.rs/actix-web/4.4.0/actix_web/trait.FromRequest.html)
+Note that the `T: ParseHeader` trait bound is specific to this trait implementation because in order for a header to be a valid header, it needs to be able to be parsed successfully as a header, with the error implementing `actix_web::error::Error`. Although we also have `extract` as a provided method, `from_request` is the only required method to be implemented here, which returns `Self::Future`. That is to say, we need to return a result that's ready to be awaited - you can find more about the Ready struct [here.](https://cseweb.ucsd.edu/classes/sp22/cse223B-a/tribbler/actix_web/rt/net/struct.Ready.html)  Other extractors, like the JSON extractor, also allow you to change their configuration - you can find out more about it in [this docs page.](https://docs.rs/actix-web/4.4.0/actix_web/trait.FromRequest.html)
 
 Generally speaking, responses only need to implement the `actix_web::Responder` trait to be able to respond. Although there is a [broad range of implementations already](https://cseweb.ucsd.edu/classes/sp22/cse223B-a/tribbler/actix_web/trait.Responder.html) when it comes to actual response types so you should not generally need to implement your own types, there can be specific use cases where this is helpful; for example, being able to document all the types of responses that your application may have. 
 
@@ -176,7 +176,7 @@ use sqlx::PgPoolOptions;
 async fn main() -> std::io::Result<()> {
     let dbconnection = PgPoolOptions::new()
         .max_connections(5)
-        .connect(<db-connection-string-here>).await;
+        .connect(r#"<db-connection-string-here>"#).await;
     
     //... rest of your code
 }
@@ -209,6 +209,7 @@ struct AppState {
     db: PgPool
 }
 
+#[get("/")]
 async fn index(data: web::Data<AppState>) -> String {
     let res = sqlx::query("SELECT 'Hello World!'").fetch_all(&data.db).await.unwrap();
 
@@ -218,13 +219,12 @@ async fn index(data: web::Data<AppState>) -> String {
 You can then implement it like this:
 ```rust
 #[actix_web::main]
-async fn main() -> std::io::Result<()> {
-    
-    // let db = connect_to_db();
+async fn main() -> std::io::Result<()> { 
+    let db = connect_to_db();
     let state = web::Data::new(AppState { db });
 
     HttpServer::new(move || {
-        // move counter into the closure
+        // move app state into the closure
         App::new()
             .app_data(state.clone()) // <- register the created data
             .route("/", web::get().to(index))
@@ -248,8 +248,8 @@ async fn main() -> std::io::Result<()> {
 env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
 
 let app = App::new()
-     .wrap(Logger::default());
-     // ... rest of your code
+    .wrap(Logger::default());
+    // ... rest of your code
 }
 ```
 
@@ -268,7 +268,7 @@ let app = App::new()
         web::get().to(|| async { "Hello, middleware!" }),
 );
 ```
-To be able to write our own middleware, we actually need to implement two traits - `Service<Req>` which is for implementing the actual middleware itself as well as `Transform<S, Req>` which is the required for the builder for the actual Service that handles requests (in terms of when we're building our service, we will actually use the builder, not the middleware! The outer service will automatically call the middleware upon detecting a HTTP request).
+To be able to write more complex middleware, we actually need to implement two traits - `Service<Req>` which is for implementing the actual middleware itself as well as `Transform<S, Req>` which is the required for the builder for the actual Service that handles requests (in terms of when we're building our service, we will actually use the builder, not the middleware! The outer service will automatically call the middleware upon detecting a HTTP request).
 
 For an actual middleware implementation, let's have a look at writing a middleware that simply prints messages. We can create the builder for the middleware by implementing the `Transform` trait:
 ```rust
@@ -378,17 +378,11 @@ async fn index(req: HttpRequest) -> Result<NamedFile> {
     Ok(NamedFile::open(path)?)
 }
 ```
-This route allows us to serve any file that can be found and matches the filename - for example, if we have a base route that serves this route, if we then run our app and go to `/index.html`, the route will try to look for a file named `index.html` in the project root.
+This route allows us to serve any file that can be found and matches the filename - for example, if we have a base route that serves this route, if we then run our app and go to `/index.html`, the route will try to look for a file named `index.html` in the project root. 
 
-However, this is a bit clumsy: let's have a look at writing a route that can search for any HTML file in a directory where we may have stored some HTML files.
-```rust
-#[get("/{filename}")] // <- define path parameters
-async fn index(filename: String) -> Result<NamedFile> {
-    let filename = format!("dir_name/{filename}.html");
-    Ok(NamedFile::open(path)?)
-}
-```
-However, if you're fine with displaying the file extensions, you can also simply use `actix_files::Files` and attach it to your `App`:
+Note that you should *not* under any circumstances try and use a path tail with `.*` to return a `NamedFile` - this has serious security implications and will open your web service up to path traversal! This is documented in the `actix-web` docs [here,](https://actix.rs/docs/static-files) and you can find more about path traversal attacks [here.](https://owasp.org/www-community/attacks/Path_Traversal) As a guard against this, you can attempt to validate the path file is correct or is not attempting to traverse outside of the intended folder by using `std::fs::canoncalize`).
+
+However, this is a bit clumsy when you need to serve multiple files - particularly if you need to serve a folder of HTML files, for instance. To be able to serve a folder of files from your web service, the best way to do this would be to use `actix_files::Files` and attach it to your `App`:
 ```rust
 use actix_files as fs;
 use actix_web::{App, HttpServer};
