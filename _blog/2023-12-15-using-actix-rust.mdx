@@ -1,8 +1,8 @@
-To this day, [`actix-web`](https://actix.rs/) remains an extremely formidable competitor in the Rust web backend framework ecosystem. It's no wonder that it's lasted so long; despite any impact that previous events may have had on it, it's still going strong and is one of the most recommended web frameworks in Rust. Originally based on the actor framework of the same name (`actix`), it has since moved away, and `actix` is now only really used for websocket endpoints. 
+To this day, [`actix-web`](https://actix.rs/) remains an extremely formidable competitor in the Rust web backend ecosystem. It's no wonder that it's lasted so long; despite any impact that previous events may have had on it, it's still going strong and is one of the most recommended web frameworks in Rust. Originally based on the actor framework of the same name (`actix`), it has since moved away, and `actix` is now only really used for websocket endpoints. 
 
 This article will primarily be concerning v4.4.0, although this article will get updated from time to time to reflect any new changes.
 
-## Getting Started
+## Getting Started with Actix Web
 To get started, you want to use `cargo init example-api` to generate your project, `cd` into the folder, and then use the following to install [`actix-web`](https://actix.rs/):
 ```rust
 cargo add actix-web
@@ -31,7 +31,7 @@ async fn main() -> std::io::Result<()> {
 }
 ```
 
-## Routing
+## Routing in Actix Web
 When using [`actix-web`](https://actix.rs/), mostly any function that returns the `actix_web::Responder` trait can be used as a route. See below for a basic Hello World example:
 ```rust
 async fn index() -> impl Responder {
@@ -189,7 +189,7 @@ async fn actixweb(
 ```
 Locally this is done through Docker, but in deployment there is an overarching process that does this for you! No extra work required. We also have an AWS RDS database offering that requires zero AWS knowledge to set up - visit [here](https://shuttle.rs/pricing) to find out more.
 
-## App State
+## App State in Actix Web
 Routing is great and all (as well as adding databases being pretty easy!) but when you need to store variables, you may be wanting to look for something that lets you store and use them across your application. This is where shared mutable state comes in: you declare it while building your service across your whole application, then you can use it as an extractor in your handler functions. For example, you might need to share a database pool, a counter or a shared hashmap of websocket subscribers. You can declare and use state like this:
 ```rust
 use sqlx::PgPool;
@@ -225,7 +225,7 @@ async fn main() -> std::io::Result<()> {
 }
 ```
 
-## Middleware
+## Middleware in Actix Web
 Within [`actix-web`](https://actix.rs/), middleware is used as a medium for being able to add general functionality to a (set of) route(s) by taking the request before the handler function runs, carrying out some operations, running the actual handler function itself and then the middleware does additional processing (if required). By default, actix-web has several default middlewares that we can use, including logging, path normalisation, access external services and modifying application state (through the `ServiceRequest` type). 
 
 See below for an example of how to implement a default Logger middleware:
@@ -351,7 +351,7 @@ let app = App::new()
 }
 ```
 
-## Static Files
+## Static Files in Actix Web
 Plain, no-frills static file serving in [`actix-web`](https://actix.rs/) is done through the `actix_files` crate - to add it, you simply need to add it through Cargo like so:
 ```bash
 cargo add actix-files 
@@ -426,5 +426,9 @@ Interested in learning more about Askama? We have a Shuttle Launchpad newsletter
 Deployment with Rust backend programs, in general, can be less than ideal due to having to use Dockerfiles, although if you are experienced with Docker already this may not be such an issue for you - particularly if you are using `cargo-chef`. However, if you're using Shuttle you can just use `cargo shuttle deploy` and you're done already. No setup is required.
 
 ## Finishing Up
-Thanks for reading! `actix-web` is a strong framework that you can use to boost your Rust portfolio and is a great framework to do a deep dive into Rust on as it requires you to deal specifically with futures and async to utilise fully.
+Thanks for reading! The actix-web Rust crate is a strong framework that you can use to boost your Rust portfolio and is a great framework to do a deep dive into Rust with if you're looking to build your first Rust API.
+
+Interested in more?
+- Check out this [comprehensive primer for Rust error handling!](https://www.shuttle.rs/blog/2022/06/30/error-handling)
+- Compare how actix-web measures up against other frameworks in our framework comparison article [here.](https://www.shuttle.rs/blog/2023/08/23/rust-web-framework-comparison)
 
