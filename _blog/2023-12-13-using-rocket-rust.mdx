@@ -262,7 +262,7 @@ async fn main() {
 ```
 As you can see, unlike in Axum where the application state struct requires it to implement Clone, there are no trait bounds besides `Send + Sync`. 
 
-Now you can use whatever's in your state struct this like:
+Now you can use whatever's in your state struct like this:
 ```rust
 use serde::{Deserialize, Serialize};
 
@@ -320,7 +320,7 @@ impl<'r> FromRequest<'r> for Item<'r> {
 ## Fairings (Middleware)
 Middleware in Rocket, or "fairings" as the crate itself calls them, are a way to add processes that take place before the request handler itself with the most common use cases being validation, authentication/authorization or rewriting request information before passing it onto another request. However, because fairings in Rocket affect the whole application rather than a set of routes, it is highly advised that you instead implement authentication and similar things that only need to be implemented over a certain number of routes as a Request guard rather than a fairing - this differs from most other Rust REST API frameworks where you can use middleware to achieve the same effect..
 
-To write a fairing, you need to declare a struct that implements the `Fairing` trait. In terms of trait bounds, the type itself is required to be `Send + Sync + 'static` - meaning that essentially it just needs to be thread-safe and have only static references if any exist. See the code below:
+To write a fairing, you need to declare a struct that implements the `Fairing` trait. In terms of trait bounds, the type itself is required to be `Send + Sync + 'static` - meaning that essentially it just needs to be thread-safe and have only static references if any exist:
 ```rust
 use std::io::Cursor;
 use std::sync::atomic::{AtomicUsize, Ordering};
