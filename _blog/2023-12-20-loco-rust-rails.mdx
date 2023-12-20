@@ -1,3 +1,12 @@
+---
+title: Introducing Loco: The Rails of Rust
+description: This article talks about how you can deploy Loco.rs to Shuttle, as well as an in-depth review of what the framework offers.
+author: josh
+tags: [rust, loco, tutorial, guide]
+thumb: 
+cover: 
+date: '2023-12-15T14:30:00'
+---
 Although Ruby on Rails is not as popular as it used to be, in its prime, it was a force to be reckoned with. Many successful businesses were built from it - Airbnb and Shopify being two of many big names coming out of this, although more recently Shopify has started experimenting with other languages and late last year announced that they would be [officially supporting Rust.](https://shopify.engineering/shopify-rust-systems-programming) 
 
 This has led to many frameworks attempting to emulate the Rails philosophy - Loco.rs being no different. In this case, however, it aims to solve a long-standing issue within the Rust web backend framework in terms of there being no truly "batteries-included" framework. Let's talk about it.
@@ -185,8 +194,10 @@ cargo loco generate deployment
 ```
 This lets you choose between Docker and Shuttle. When choosing Docker it will generate a Dockerfile that you can use to deploy anywhere, but when you pick Shuttle it will automatically generate everything you need for a Shuttle deployment - no further work required! You can then use the Shuttle CLI to start a new project and deploy it:
 ```bash
+// note that if you want to avoid using the --name flag
+// you should use the name key in Shuttle.toml
 cargo shuttle start --name <name-of-project>
-cargo shuttle deploy
+cargo shuttle deploy --name <name-of-project>
 ```
 
 ## Finishing Up
