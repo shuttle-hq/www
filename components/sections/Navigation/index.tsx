@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useState } from 'react'
 import clsx from 'clsx'
-import { useUser } from '@auth0/nextjs-auth0/client'
 import { DISCORD_URL } from '../../../lib/constants'
 import { trackEvent } from 'lib/posthog'
 
@@ -12,8 +11,6 @@ const ThemeSwitcher = dynamic(() => import('./ThemeSwitcher'), { ssr: false })
 
 const Navigation = () => {
 	const [open, setOpen] = useState(false)
-
-	const { user } = useUser()
 
 	return (
 		<nav className='mx-auto flex h-[5.5rem] w-full max-w-[1344px] items-center px-5 sm:px-10'>
@@ -33,7 +30,7 @@ const Navigation = () => {
 			>
 				<div className='flex flex-col gap-4 xl:flex-row xl:gap-8'>
 					<Link
-						className='nav-link-shadow transition-all text-sky-300'
+						className='nav-link-shadow text-sky-300 transition-all'
 						href='/cch'
 						onClick={() => {
 							trackEvent('homepage_mainnav_cch')
@@ -131,14 +128,8 @@ const Navigation = () => {
 							}}
 						>
 							<LoginButton variant='primary' invertOnDark>
-								{user ? (
-									'Console'
-								) : (
-									<>
-										<GithubLogo />
-										Log in
-									</>
-								)}
+								<GithubLogo />
+								Log in
 							</LoginButton>
 						</div>
 					</div>

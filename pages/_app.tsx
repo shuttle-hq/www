@@ -8,7 +8,6 @@ import { ReactNode, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import '@splidejs/react-splide/css'
 import { Page } from 'components/templates'
-import { UserProvider } from '@auth0/nextjs-auth0/client'
 import { StarOnGithub } from 'components/sections'
 import { Analytics } from '@vercel/analytics/react'
 import posthog from 'posthog-js'
@@ -43,7 +42,7 @@ export default function App({ Component, pageProps }: AppProps) {
 	const getLayout = (Component as any).getLayout || ((page: ReactNode) => <Page>{page}</Page>)
 
 	return (
-		<UserProvider>
+		<>
 			<Head>
 				<title>{SITE_TITLE}</title>
 			</Head>
@@ -80,6 +79,6 @@ export default function App({ Component, pageProps }: AppProps) {
 				</CookieConsent>
 				<Analytics />
 			</div>
-		</UserProvider>
+		</>
 	)
 }
