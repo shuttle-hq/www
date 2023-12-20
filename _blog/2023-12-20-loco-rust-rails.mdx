@@ -9,7 +9,7 @@ date: '2023-12-15T14:30:00'
 ---
 Although Ruby on Rails is not as popular as it used to be, in its prime, it was a force to be reckoned with. Many successful businesses were built from it - Airbnb and Shopify being two of many big names coming out of this, although more recently Shopify has started experimenting with other languages and late last year announced that they would be [officially supporting Rust.](https://shopify.engineering/shopify-rust-systems-programming) 
 
-This has led to many frameworks attempting to emulate the Rails philosophy - Loco.rs being no different. In this case, however, it aims to solve a long-standing issue within the Rust web backend framework in terms of there being no truly "batteries-included" framework. Let's talk about it.
+This has led to many frameworks attempting to emulate the Rails philosophy - Loco.rs being no different. In this case, however, it aims to solve a long-standing issue within the Rust web backend framework in terms of there being no truly batteries-included Rust framework. Let's talk about it.
 
 ## Why was Ruby on Rails popular? A quick refresher
 Ruby on Rails was popular because it is a framework that does all the heavy lifting for you and abstracts away a lot of the heavy lifting - which means there is a very short gap between thinking of the business logic for an idea and time to full productivity. This is a great thing for a few reasons, especially in web development: you can ship faster without needing to do any of the boilerplate, you can rely on the framework to do all of the difficult low-level things for you and you don't need to be necessarily fluent in Ruby to use it (although it helps massively if you are!). This is something that a lot of web developers resonate with, as evidenced by the huge number of developers who use Laravel, a PHP framework that is very similar to Ruby on Rails.
@@ -18,16 +18,16 @@ It achieves these things by gating everything behind a command-line interface: y
 
 This is somewhat at odds when it comes to Rust which is why Loco.rs is interesting: Rust is a language that allows you to get into the meat of the matter when it comes to low-level details, which means that it tends to attract programmers who don't mind doing the extra work because they would rather things be either implemented to their standard or because they want to understand how everything works so that when something breaks, they know how to fix it. In addition, Loco is not itself a standalone framework - currently it uses `axum` under the hood, alongside `sidekiq-rs` for job processing and `sea-orm` for migrations. 
 
-## Getting Started
-To get started with Loco, you need to use their CLI which you can install by using the following:
+## Getting Started with Loco
+To get started with the Rust Loco crate, you need to use their CLI which you can install by using the following:
 ```bash
 cargo install loco-cli
 ```
 
-You can start a new project by using `loco new` - it'll ask you what the name of your app is and then what kind of app you want. For this article, we'll be talking about the full SaaS starter application.
+You can start a new project by using `loco new` - it'll ask you what the name of your app is and then what kind of app you want. For this article, we'll be talking about the full Rust SaaS starter application.
 
 ## Routing in Loco
-Although Loco uses axum under the hood, it abstracts some things away into config files that you can find in the `config` folder. 
+Although Loco uses `axum` under the hood, it abstracts some things away into config files that you can find in the `config` folder. 
 
 The Axum service that gets run by the application implements the `Hooks` trait from `loco_cli`, which requires several functions to use - going to `src/app.rs` shows that we have functions for registering routes, getting the app name, connecting workers and registering tasks, truncate tables and seed data into the database. We can also add extra functions to the router that get hooked into the CLI as well - `after_routes()` which is for adding things like middleware, and `before_run()` which allows you to carry out operations before your application itself starts. Note that any commands we use through the project CLI to generate things will automatically be appended to the `app.rs` file - no need to do it yourself!
 
@@ -58,7 +58,7 @@ The great thing about Loco's routing is that everything you know from using Axum
 
 Once you've finished adding all the controllers and routes you want, you can use `cargo loco routes` to display all of the routes your application currently has.
 
-## Models
+## Models in Loco
 Models in Loco represent the database models used by `sea_orm`. To get started, you'll want to run the following:
 ```bash
 cargo loco generate model <name-of-model>
@@ -169,7 +169,7 @@ impl From<&ActiveModel> for ModelValidator {
 }
 ```
 
-## Job Processing
+## Job Processing in Loco
 Like with everything else in Loco, you can also generate workers and tasks via the CLI. Running `cargo loco generate task` or `cargo loco generate worker` will let you generate a task or a worker at will.
 
 Under the hood, Loco uses `sidekiq-rs` to do job processing - which is a Rust re-implementation of its Ruby counterpart, `sidekiq.rb`. Once the worker is generated, you want to go to the `workers` folder and check out the file you made - it will have a struct for the worker itself, a struct that holds the arguments that the worker will take, an implementation of the `AppWorker` trait for the worker and then an async trait implementation that lets the worker do something. 
@@ -187,7 +187,7 @@ ReportWorkerWorker::perform
 
 As you can see, we don't need to initialise the struct to use it - we can call the method from the struct directly and it will work assuming the arguments are valid - as you can see here, no arguments are required since the args struct does not have any fields.
 
-## Deployment
+## Deploying Loco
 Currently, Loco.rs allows you to generate a deployment by using the following comamnd:
 ```bash
 cargo loco generate deployment
