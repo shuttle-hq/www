@@ -1,0 +1,183 @@
+In this article we're going to talk about encryption in Rust and how you can use it to make your (web) applications more secure. We will be covering hashing, encryption and storing your encrypted data. We wil also talk about some other best practices like zeroing data. Although application security is much more than encryption, it's a good start when it comes to being able to protect user data from data breaches.
+
+Note that although hashing and cipher-based encryption are similar, the way they work are very different. However, hashing is also a good basic precaution to take when dealing with protected data and as such has been added.
+
+## Hashing in Rust
+For the most part, hashing in Rust should feel pretty familiar if you have used it before in other languages. The most popular algorithms like pbkdf2 and argon2 are available and provide the same interface as you would in any other language. You input a password and hash it with additional optional salt, then store it. Whenever you need to get access to the thing the password is guarding, you can get the password hash and compare it against the new input. 
+
+As a code example, let's have a look at how you can hash a password using argon2:
+```rust
+use argon2::{
+    password_hash::{
+        rand_core::OsRng,
+        PasswordHash, PasswordHasher, PasswordVerifier, SaltString
+    },
+    Argon2
+};
+
+let password = b"hunter42"; // Bad password; don't actually use!
+let salt = SaltString::generate(&mut OsRng);
+
+// Argon2 with default params (Argon2id v19)
+let argon2 = Argon2::default();
+
+// Hash password to PHC string ($argon2id$v=19$...)
+let password_hash = argon2.hash_password(password, &salt)?.to_string();
+
+// Verify password against PHC string.
+//
+// NOTE: hash params from `parsed_hash` are used instead of what is configured in the
+// `Argon2` instance.
+let parsed_hash = PasswordHash::new(&password_hash)?;
+assert!(Argon2::default().verify_password(password, &parsed_hash).is_ok());
+```
+You might notice that the original password is actually the `[u8]` version of its text representation. Whenever we need to verify the password against the password hash next, we will need to turn our String into the byte form by using `into_bytes()` or `.as_bytes()` if using &str.
+
+The advantages of this are quite clear:
+- It's quite simple to use
+- The password hash itself is a String type (easy storage!)
+- Decryption is impossible
+
+It should be noted however that there are some disadvantages with hash encryption that are not immediately obvious. Passwords and other strings that have been hashed are typically hashed to a fixed length. Additionally, the one-way nature of hashing is a double-edged sword. Attackers can't (easily) get the raw data, but you also can't decrypt it yourself if you need it later on. This leads us to...
+
+## Encryption in Rust
+Cipher-based dncryption generally requires you to use a cipher key with an encryption algorithm to decrypt and encrypt text or data. You would also need to generate a random cryptographic token called a nonce. The purpose of the nonce is to prevent replay attacks. You then encrypt your input using the cipher and nonce. This generates unreadable ciphertext that you then store somewhere with the nonce. When you need to decrypt it, you can do so using the nonce and ciphertext with the cipher key. 
+
+In addition to encrypting, you can also add some additional authenticated data (AAD). Note that this does not *necessarily* make the key more secure just by it being there. However, you can add parameters to it and when you split the tag and convert the byte representation, you'll be able to validate the parameters. For example, you can add a version number or access level. You can then validate the request against the version number or access level. This is important, as attackers may try to change the AAD.
+
+In Rust there are quite a few libraries to allow you to do this, with `ring` and `rustcrypto` being two of the large libraries. Despite not having any official security audit results advertised on their GitHub repo, `ring` has been audited as part of the `rustls` audit, which you can find the results of [here](https://github.com/rustls/rustls/blob/master/audit/TLS-01-report.pdf) and the findings are generally quite positive, with a couple of minor issues. In terms of a crate that is officially audited with no findingsyou will probably want to use `aes_gcm` which has received an [official security audit by NCC Group](https://research.nccgroup.com/2020/02/26/public-report-rustcrypto-aes-gcm-and-chacha20poly1305-implementation-review/).
+
+A small Rust example of how to use `aes_gcm` would look like this:
+```rust
+use aes_gcm::{
+    aead::{Aead, AeadCore, KeyInit, OsRng},
+    Aes256Gcm, Nonce, Key // Or `Aes128Gcm`
+};
+
+// The encryption key can be generated randomly:
+let key = Aes256Gcm::generate_key(OsRng);
+
+// Transformed from a byte array:
+let key: &[u8; 32] = &[42; 32];
+let key: &Key<Aes256Gcm> = key.into();
+
+// Note that you can get byte array from slice using the `TryInto` trait:
+let key: &[u8] = &[42; 32];
+let key: [u8; 32] = key.try_into()?;
+
+// Alternatively, the key can be transformed directly from a byte slice
+// (panicks on length mismatch):
+let key = Key::<Aes256Gcm>::from_slice(key);
+
+let cipher = Aes256Gcm::new(&key);
+let nonce = Aes256Gcm::generate_nonce(&mut OsRng); // 96-bits; unique per message
+let ciphertext = cipher.encrypt(&nonce, b"plaintext message".as_ref())?;
+let plaintext = cipher.decrypt(&nonce, ciphertext.as_ref())?;
+assert_eq!(&plaintext, b"plaintext message");
+```
+
+Note that this does not allocate any associated data headers. If you want to add AAD, you will want to use the `aes_gcm::aead::Payload` struct. This allows you to create a payload that involves the data itself as well as the AAD like so:
+```rust
+use aes_gcm::aead::Payload;
+let payload = Payload {
+    msg: b"Hello world!",
+    aad: b"My AAD",
+};
+
+let cipher = Aes256Gcm::new(key);
+let nonce = Aes256Gcm::generate_nonce(&mut OsRng); // 96-bits; unique per message
+let ciphertext = cipher.encrypt(nonce, payload).unwrap();
+```
+When you need to decrypt the payload data, you can then do so like this:
+```rust
+// note that the ciphertext is in the same byte array as the AAD
+// hence we need to split the bytes here
+let (ciphertext, tag) = ciphertext.split_at(ciphertext.len() - 16);
+assert_eq!(b"Hello world!", ciphertext);
+assert_eq!(b"My AAD", tag);
+```
+While this is fine for simple data, you will likely want to convert the AAD into a struct for ease of use. You can use `serde_json` or any other crate that can deserialize from (and serialize to) byte arrays, like so:
+```rust
+#[derive(Deserialize, Serialize)]
+struct MyStruct {
+    Data: String
+}
+// for serializing the data
+let thing = MyStruct { Data: "Hello world!".to_string() };
+let my_bytes: Vec<u8> = serde_json::to_vec(&thing).unwrap();
+
+// for deserializing
+let my_struct: MyStruct = serde_json::from_slice(&tag).unwrap();
+```
+
+## Storing Encryption Data
+Now that we know how to encrypt and decrypt data, we should probably figure out how to store it. For this article we will be talking about Postgres since it is a widely available database storage solution that is supported by Shuttle and can be hardened to a reasonably secure level. We'll be using `sqlx` as our database library, but you can adapt the information here to any other database crate that has similar conventions.
+
+With regards to type conversions, although cipher texts from `aes_gcm` are typically `Vec<u8>` so you can store it quite easily in Postgres, the `Nonce` type is somewhat more tricky because it doesn't implement the `Decode` and `Encode` traits required to use the type with `sqlx`. The `Nonce` type itself is an alias for `GenericArray<u8, T>` from the `generic_array` crate which uses `typenum` constants. Normally, the type we'd use should be `Nonce<U12>` because we're using `Aes256Gcm` - this may differ depending on algorithm. 
+
+To fix this, you could use a struct specifically for grabbing data from Postgres as a `Vec<u8>` (storing the data in Postgres as a BYTEA type). Then you could use another struct that holds the `GenericArray` type and implement `From` to convert between the two. This might look something like this:
+```rust
+pub struct EncryptedSecret {
+    pub nonce: Nonce<U12>,
+    pub ciphertext: Vec<u8>,
+}
+
+impl From<EncryptedSecretPG> for EncryptedSecret {
+    fn from(secret: EncryptedSecretPG) -> Self {
+        let nonce: GenericArray<u8, U12> = *GenericArray::from_slice(&secret.nonce[..]);
+
+        Self {
+            nonce,
+            ciphertext: secret.ciphertext,
+        }
+    }
+}
+
+#[derive(sqlx::FromRow)]
+pub struct EncryptedSecretPG {
+    pub nonce: Vec<u8>,
+    pub ciphertext: Vec<u8>,
+}
+
+impl From<EncryptedSecret> for EncryptedSecretPG {
+    fn from(secret: EncryptedSecret) -> Self {
+        Self {
+            nonce: secret.nonce.to_vec(),
+            ciphertext: secret.ciphertext,
+        }
+    }
+```
+However, as you can see this is pretty clunky since it's an extra step. Instead, we can implement a newtype wrapper over the `GenericArray` type. That is to say, wrapping the `GenericArray` in a single-field tuple struct - then we can use the `try_from` parameter for the SQLx macro.
+
+```rust
+#[derive(sqlx::FromRow)]
+pub struct EncryptedSecret {
+    #[sqlx(try_from = "Vec<u8>")]
+    nonce: Nonce,
+    pub ciphertext: Vec<u8>,
+}
+
+impl EncryptedSecret {
+    pub fn nonce(&self) -> GenericArray<u8, U12> {
+        self.nonce.0
+    }
+
+    pub fn nonce_as_u8(&self) -> Vec<u8> {
+        self.nonce.0.to_vec()
+    }
+}
+
+impl From<Vec<u8>> for Nonce {
+    fn from(vec: Vec<u8>) -> Self {
+        let nonce: GenericArray<u8, U12> = *GenericArray::from_slice(&vec[..]);
+
+        Self(nonce)
+    }
+}
+
+struct Nonce(GenericArray<u8, U12>);
+```
+Now that we're done implementing the traits required to store `GenericArray` directly in Postgres, we can avoid the hassle of having to convert between two structs!
+
+## Finishing Up
+TODO
