@@ -11,29 +11,27 @@ cargo install loco-cli
 Loco also uses `sea-orm-cli` to carry out database migrations. You can install it using the following:
 
 ```bash
-
 cargo install sea-orm-cli
-
 ```
 
-Now we've installed all of the required packages, we can get initialise our project. We can get started by using `loco new` and then selecting the SaaS application which will give us an app with full functionality. Don't forget to `cd` into the project folder!
+Now we've installed all of the required packages, we can get initialise our project. We can get started by using `loco new` and then selecting the SaaS application which will give us an app with full functionality. The given name we will be using for the app will be `example-app`. Don't forget to `cd` into the project folder!
+
+When you're writing your API, you will probably want to spin up a local Docker database for database testing. In that case, you will wnat to use this docker command:
+```bash
+$ docker run -d -p 5432:5432 -e POSTGRES_USER=loco -e POSTGRES_DB=example-app_development -e POSTGRES_PASSWORD="loco" postgres:15.3-alpine
+```
 
 ## Routing in Loco
 
 To get started, we will generate a "scaffold". This generates a controller, model and migration all at the same time. We can also add pre-generated field names and types beforehand, which you can find more about [here.](https://loco.rs/docs/the-app/models/#migrations) We can create our own scaffold below:
 
 ```bash
-
 cargo loco generate scaffold item name:string! description:string quantity:int!
-
 ```
 
 This will generate a controller, model and migration for a table named `my-scaffold` with:
-
 - A non-nullable name field
-
 - A nullable description field
-
 - A non-nullable quantity field
 
 Once the scaffold is done, you will need to run `cargo loco db migrate`. This generates the migrations and entities required for your app. You will notice also that your controller and other relevant parts have been added in `app.rs`, so there is no need to do anything regarding this.
@@ -41,9 +39,7 @@ Once the scaffold is done, you will need to run `cargo loco db migrate`. This ge
 Now we can go to our new controller file which should be located under `src/controllers/item.rs`. When opened, we should be greeted with something that looks like this:
 
 ```rust
-
 #![allow(clippy::unused_async)]
-
 use loco_rs::prelude::*;
 
 pub async fn echo(req_body: String) -> String {
@@ -66,11 +62,8 @@ Now we can get to work on the routes for this!
 If you check the source code for what `AppContext` contains [here](https://github.com/loco-rs/loco/blob/68cb7598127893253478c4eddae0762e208aab6e/src/app.rs#L31), you should get this:
 
 ```rust
-
 #[derive(Clone)]
-
 #[allow(clippy::module_name_repetitions)]
-
 pub struct AppContext {
     /// The environment in which the application is running.
     pub environment: Environment,
@@ -155,9 +148,7 @@ pub async fn delete_item(
     let res: DeleteResult = item.delete(db).await?;
 
     format::text("Deleted")
-
 }
-
 ```
 
 Once you're done writing all of your routes, you need to make sure you attach them to your router in the `routes()` function for the controller file:
@@ -179,7 +170,7 @@ To build onto this, let's add some validation for when you need to save an item.
 ```rust
 #[derive(Debug, Validate, Deserialize)]
 pub struct ModelValidator {
-    #[validate(min = 1, message = "Item must have at least a quantity of 1."))]
+    #[validate(range(min = 0, message = "Item must have at least a quantity of 0."))]
     pub quantity: i32,
 }
 ```
@@ -190,11 +181,9 @@ Now that this is done, we just need to implement `From<Model>` for the validator
 impl From<&ActiveModel> for ModelValidator {
     fn from(value: &ActiveModel) -> Self {
         Self {
-            quantity: value.name.as_ref(),
+            quantity: *value.quantity.as_ref(),
         }
-
     }
-
 }
 
 #[async_trait::async_trait]
@@ -214,6 +203,7 @@ impl ActiveModelBehavior for super::_entities::items::ActiveModel {
 You can also write an `impl` for the `Model` itself to extend its behavior! Note that you will need to pass in the database connection as a function parameter. Check out this function for finding users by emails (can be found in the pre-generated `users::Model` model):
 
 ```rust
+// src/models/users.rs
 pub async fn find_by_email(db: &DatabaseConnection, email: &str) -> ModelResult<Self> {
         let user = users::Entity::find()
             .filter(users::Column::Email.eq(email))
@@ -311,6 +301,12 @@ Loco have provided their own commands for generating a deployment. You can run i
 ```toml
 assets = ["frontend/dist/*"]
 ```
+
+Then you can run the following to deploy your application (don't forget to install `cargo-shuttle`):
+```bash
+cargo shuttle run 
+
+We are planning to release a native database integration with Loco! Stay tuned 
 
 ## Finishing Up
 Thanks for reading! Loco is an awesome framework to get you started on the path to productivity.
