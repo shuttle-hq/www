@@ -204,13 +204,13 @@ You can also write an `impl` for the `Model` itself to extend its behavior! Note
 
 ```rust
 // src/models/users.rs
-pub async fn find_by_email(db: &DatabaseConnection, email: &str) -> ModelResult<Self> {
-        let user = users::Entity::find()
-            .filter(users::Column::Email.eq(email))
-            .one(db)
-            .await?;
+pub async fn find_by_email(db: &DatabaseConnection, email: &str) -> ModelResult<Self> 
+    let user = users::Entity::find()
+        .filter(users::Column::Email.eq(email))
+        .one(db)
+        .await?;
 
-        user.ok_or_else(|| ModelError::EntityNotFound)
+    user.ok_or_else(|| ModelError::EntityNotFound)
 }
 ```
 
@@ -264,7 +264,7 @@ As mentioned before, you can also use the `after_routes()` function in the `Hook
 
 ```rust
 async fn after_routes(router: AxumRouter, _ctx: &AppContext) -> Result<AxumRouter> {
-        Ok(router)
+    Ok(router)
 }
 
 ```
@@ -279,9 +279,9 @@ Then we just need to add the layer:
 
 ```rust
 async fn after_routes(router: AxumRouter, _ctx: &AppContext) -> Result<AxumRouter> {
-        let router = router.layer(TimeoutLayer::new(Duration::from_secs(10)));
+    let router = router.layer(TimeoutLayer::new(Duration::from_secs(10)));
 
-        Ok(router)
+    Ok(router)
 }
 ```
 
@@ -305,8 +305,8 @@ assets = ["frontend/dist/*"]
 Then you can run the following to deploy your application (don't forget to install `cargo-shuttle`):
 ```bash
 cargo shuttle run 
-
-We are planning to release a native database integration with Loco! Stay tuned 
+```
+We are planning to release a native database integration with Loco! Stay tuned for part 2 where we will go into further detail about how you can build out your dream web application. 
 
 ## Finishing Up
 Thanks for reading! Loco is an awesome framework to get you started on the path to productivity.
