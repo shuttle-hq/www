@@ -14,11 +14,11 @@ Loco also uses `sea-orm-cli` to carry out database migrations. You can install i
 cargo install sea-orm-cli
 ```
 
-Now we've installed all of the required packages, we can get initialise our project. We can get started by using `loco new` and then selecting the SaaS application which will give us an app with full functionality. The given name we will be using for the app will be `example-app`. Don't forget to `cd` into the project folder!
+Now we've installed all of the required packages, we can get initialise our project. We can get started by using `loco new` and then selecting the SaaS application which will give us an app with full functionality. The given name we will be using for the app will be `example_app`. Don't forget to `cd` into the project folder!
 
 When you're writing your API, you will probably want to spin up a local Docker database for database testing. In that case, you will wnat to use this docker command:
 ```bash
-$ docker run -d -p 5432:5432 -e POSTGRES_USER=loco -e POSTGRES_DB=example-app_development -e POSTGRES_PASSWORD="loco" postgres:15.3-alpine
+$ docker run -d -p 5432:5432 -e POSTGRES_USER=loco -e POSTGRES_DB=example_app_development -e POSTGRES_PASSWORD="loco" postgres:15.3-alpine
 ```
 
 ## Routing in Loco
@@ -29,12 +29,14 @@ To get started, we will generate a "scaffold". This generates a controller, mode
 cargo loco generate scaffold item name:string! description:string quantity:int!
 ```
 
-This will generate a controller, model and migration for a table named `my-scaffold` with:
+This will generate a controller, model and migration for a table named `items` with:
 - A non-nullable name field
 - A nullable description field
 - A non-nullable quantity field
 
-Once the scaffold is done, you will need to run `cargo loco db migrate`. This generates the migrations and entities required for your app. You will notice also that your controller and other relevant parts have been added in `app.rs`, so there is no need to do anything regarding this.
+The entities will also be generated so that you should not need to generate them yourself.
+
+Once the scaffold is done, you may notice that your controller and other relevant parts have been added in `app.rs`, so there is no need to add it manually.
 
 Now we can go to our new controller file which should be located under `src/controllers/item.rs`. When opened, we should be greeted with something that looks like this:
 
