@@ -1,15 +1,11 @@
 In this article we're going to talk about how you can get started with Loco - a new web framework that builds on Axum. We will cover getting started using controllers, migrations, middleware, static files and handling a database.
 
-TODO
-
 ## Getting Started
 
 To get started, you will need to make sure to have Loco's CLI installed by using the following:
 
 ```bash
-
-c-argo install loco-cli
-
+cargo install loco-cli
 ```
 
 Loco also uses `sea-orm-cli` to carry out database migrations. You can install it using the following:
@@ -51,27 +47,18 @@ Now we can go to our new controller file which should be located under `src/cont
 use loco_rs::prelude::*;
 
 pub async fn echo(req_body: String) -> String {
-
     req_body
-
 }
 
 pub async fn hello(State(_ctx): State<AppContext>) -> Result<String> {
-
     format::string("Hello world!")
-
 }
 
 pub fn routes() -> Routes {
-
     Routes::new()
-
         .prefix("item")
-
         .add("/", get(hello))
-
         .add("/echo", post(echo))
-
 ```
 
 Now we can get to work on the routes for this! 
@@ -85,51 +72,32 @@ If you check the source code for what `AppContext` contains [here](https://githu
 #[allow(clippy::module_name_repetitions)]
 
 pub struct AppContext {
-
     /// The environment in which the application is running.
-
     pub environment: Environment,
-
     #[cfg(feature = "with-db")]
-
     /// A database connection used by the application.    
-
     pub db: DatabaseConnection,
-
     /// An optional connection pool for Redis, for worker tasks
-
     pub redis: Option<Pool<RedisConnectionManager>>,
-
     /// Configuration settings for the application
-
     pub config: Config,
-
     /// An optional email sender component that can be used to send email.
-
     pub mailer: Option<EmailSender>,
-
 }
-
 ```
 
 This means we only need to use `ctx.db` to access the database connection. Let's have a look at what a simple request for getting all of the `item` records from the database would look like:
 
 ```rust
-
 #![allow(clippy::unused_async)]
-
 use loco_rs::prelude::*;
-
 use crate::models::_entities::items::Entity as Item;
-
 use crate::models::_entities::items::Model as ItemModel;
 
 pub async fn hello(State(ctx): State<AppContext>) -> Result<Json<Vec<ItemModel>>> {
-
     let items = Item::find().all(&ctx.db).await?;
-
     format::json(items)
-
+}
 ```
 
 Note that we need to import our models and entities from the `entities` folder. 
@@ -137,31 +105,21 @@ Note that we need to import our models and entities from the `entities` folder.
 We can extend this to create a full CRUD controller:
 
 ```rust
-
 use crate::models::_entities::items::ActiveModel;
 
 pub async fn view_item_by_id(Path<id>: Path<i32>, State(ctx): State<AppContext>) -> Result<Json<ItemModel>> {
-
     let item: Option<item::Model> = Item::find_by_id(id).one(db).await?;
-
     let item: item::Model = item.unwrap();
 
-    
-
     format::json(item)
-
 }
 
 pub async fn create_item(
-
     State(ctx): State<AppContext>,
-
     Json(item): Json<ItemModel>
-
 ) -> Result<String> {
 
     let item: ActiveModel = item.into();
-
     item.insert(&ctx.db).await?;
 
     format::text("Created")
@@ -169,39 +127,29 @@ pub async fn create_item(
 }
 
 #[derive(Deserialize)]
-
 struct ItemQty { qty: i32 };
 
 pub async fn update_item_quantity(
-
     State(ctx): State<AppContext>,
-
     Path(id): Path<i32>,
-
     Json(json): Json<ItemQty>
-
 ) -> Result<String> {
 
     let item: Option<item::Model> = Item::find_by_id(id).one(&ctx.db).await?;
-
     let mut item: item::ActiveModel = item.unwrap().into();
 
-    
-
     item.quantity = Set(json.qty);
-
     let updateditem = item.update(db).await?;
-
-    
 
     format::text("Updated")
 
 }
 
-pub async fn delete_item(Path<id>: Path<i32>, State(ctx): State<AppContext>) -> Result<String> {
-
+pub async fn delete_item(
+	Path<id>: Path<i32>, 
+	State(ctx): State<AppContext>
+) -> Result<String> {
     let item: Option<item::Model> = Item::find_by_id(id).one(db).await?;
-
     let item: item::Model = item.unwrap();
 
     let res: DeleteResult = item.delete(db).await?;
@@ -217,17 +165,11 @@ Once you're done writing all of your routes, you need to make sure you attach th
 ```rust
 
 pub fn routes() -> Routes {
-
     Routes::new()
-
         .prefix("items")
-
         .add("/", get(get_all_items).post(create_item))
-
         .add("/:id", get(get_item_by_id).put(update_item_qty).delete(delete_item))
-
 }
-
 ```
 
 Congrats! You just created your first full CRUD router.
@@ -235,33 +177,20 @@ Congrats! You just created your first full CRUD router.
 To build onto this, let's add some validation for when you need to save an item. Loco itself re-exports the `validator` crate which allows you to validate that a struct meets certain requirements. Loco ties this in with `sea_orm` to be able to validate a struct before saving it to the database. A validator struct might look like this:
 
 ```rust
-
 #[derive(Debug, Validate, Deserialize)]
-
 pub struct ModelValidator {
-
     #[validate(min = 1, message = "Item must have at least a quantity of 1."))]
-
     pub quantity: i32,
-
 }
-
 ```
 
 Now that this is done, we just need to implement `From<Model>` for the validator struct, and implement the `ActiveModelBehavior` trait for the ActiveModel. Note that because we have to always convert a `Model` to an `ActiveModel` before saving it, the `before_save` function will always kick in.
 
 ```rust
-
 impl From<&ActiveModel> for ModelValidator {
-
     fn from(value: &ActiveModel) -> Self {
-
         Self {
-
-            name: value.name.as_ref().to_string(),
-
-            email: value.email.as_ref().to_string(),
-
+            quantity: value.name.as_ref(),
         }
 
     }
@@ -269,49 +198,30 @@ impl From<&ActiveModel> for ModelValidator {
 }
 
 #[async_trait::async_trait]
-
 impl ActiveModelBehavior for super::_entities::items::ActiveModel {
-
     async fn before_save<C>(self, db: &C, insert: bool) -> Result<Self, DbErr>
-
     where
-
         C: ConnectionTrait,
-
     {
-
         {
-
             self.validate()?;
-
             Ok(self)
-
         }
-
     }
-
 }
-
 ```
 
 You can also write an `impl` for the `Model` itself to extend its behavior! Note that you will need to pass in the database connection as a function parameter. Check out this function for finding users by emails (can be found in the pre-generated `users::Model` model):
 
 ```rust
-
 pub async fn find_by_email(db: &DatabaseConnection, email: &str) -> ModelResult<Self> {
-
         let user = users::Entity::find()
-
             .filter(users::Column::Email.eq(email))
-
             .one(db)
-
             .await?;
 
         user.ok_or_else(|| ModelError::EntityNotFound)
-
 }
-
 ```
 
 ## Middleware
@@ -329,45 +239,29 @@ Implementing `FromRequest` is probably the easiest way to go about being able to
 Although `FromRequestParts` (and `FromRequest` respectively) look tricky to implement, you can make it substantially easier on yourself by remembering that the state itself just needs to implement `Send + Sync` - which means you can use `AppContext` with it! Check out the code snippet below for an overall implementation of how you would write something that implements `FromRequestParts`.
 
 ```rust
-
 #[derive(Deserialize)]
-
 pub struct MyMiddlewareState(String);
 
 #[async_trait::async_trait]
-
 impl<AppContext> FromRequestParts<AppContext> for MyMiddlewareState
-
 {
-
     type Rejection = ApiError;
 
     async fn from_request_parts(parts: &mut Parts, _state: &AppContext) -> Result<Self, Self::Rejection> {
-
         let string = "Hello world!".to_string();
 
-        
-
         if string != *"Hello world!" {
-
             return Err(ApiError::Unknown);
-
         }
 
-        
-
         Ok(MyMiddlewareState(string))
-
     }
-
 }
 
 enum ApiError { Unknown }
 
 impl IntoResponse for ApiError {
-
     // ... implement IntoResponse for ApiError for it to return a HTTP response
-
 }
 
 ```
@@ -379,11 +273,8 @@ Of course, in a real-world application this will be much more extensive than ass
 As mentioned before, you can also use the `after_routes()` function in the `Hooks` trait. The function itself looks like this:
 
 ```rust
-
 async fn after_routes(router: AxumRouter, _ctx: &AppContext) -> Result<AxumRouter> {
-
         Ok(router)
-
 }
 
 ```
@@ -391,25 +282,17 @@ async fn after_routes(router: AxumRouter, _ctx: &AppContext) -> Result<AxumRoute
 Because the Axum router gets passed in as a parameter, you can attach any kind of Axum middleware or layer you want. This also means you can add things like a `tower-http` service layer if you'd like! Let's have a look at adding a timeout layer, which will stop any slow loris attacks. To do this, we'll need to add `tower-http` with the `timeout` feature:
 
 ```bash
-
 cargo add tower-http -F timeout
-
 ```
 
 Then we just need to add the layer:
 
 ```rust
-
 async fn after_routes(router: AxumRouter, _ctx: &AppContext) -> Result<AxumRouter> {
-
         let router = router.layer(TimeoutLayer::new(Duration::from_secs(10)));
 
-        
-
         Ok(router)
-
 }
-
 ```
 
 Now any requests that last longer than 10 seconds will automatically be aborted with a `408 Request Timeout` response. Pretty nifty!
