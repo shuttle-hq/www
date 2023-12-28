@@ -307,10 +307,14 @@ Note that the main frontend approach uses React. You can switch this out for any
 
 ## Deploying Loco
 
-Loco have provided their own commands for generating a deployment. You can run it by using `cargo loco generate deployment`. It will then generate a Dockerfile or Shuttle deployment depending on what you select. 
-
-TODO
+Loco have provided their own commands for generating a deployment. You can run it by using `cargo loco generate deployment`. It will then generate a Dockerfile or Shuttle deployment depending on what you select. If you're deploying with Shuttle, don't forget you can add your frontend assets by going to your Shuttle.toml file and then adding `frontend/dist` to your assets key:
+```toml
+assets = ["frontend/dist/*"]
+```
 
 ## Finishing Up
+Thanks for reading! Loco is an awesome framework to get you started on the path to productivity.
 
-TODO
+Interested in more?
+- Read about our getting started with Axum article [here](https://www.shuttle.rs/blog/2023/12/06/using-axum-rust)
+- Learn about how you can implement OAuth for your application [here](https://www.shuttle.rs/blog/2023/08/30/using-oauth-with-axum)
