@@ -1,4 +1,4 @@
-In this article we're going to talk about how you can get started with Loco - a new web framework that builds on Axum. We will cover getting started using controllers, migrations, middleware, static files and handling a database.
+In this article we're going to talk about how you can get started with Loco - a new Rust web framework that builds on Axum and takes inspiration from Ruby on Rails. We will cover getting started using controllers, migrations, middleware and static files.
 
 ## Getting Started
 
@@ -23,7 +23,7 @@ $ docker run -d -p 5432:5432 -e POSTGRES_USER=loco -e POSTGRES_DB=example_app_de
 
 ## Routing in Loco
 
-To get started, we will generate a "scaffold". This generates a controller, model and migration all at the same time. We can also add pre-generated field names and types beforehand, which you can find more about [here.](https://loco.rs/docs/the-app/models/#migrations) We can create our own scaffold below:
+The first step that we need to take will be generating a "scaffold". This generates a controller, model and migration all at the same time. We can also add pre-generated field names and types beforehand, which you can find more about [here.](https://loco.rs/docs/the-app/models/#migrations) We can create our own scaffold below:
 
 ```bash
 cargo loco generate scaffold item name:string! description:string quantity:int!
@@ -36,7 +36,7 @@ This will generate a controller, model and migration for a table named `items` w
 
 The entities will also be generated so that you should not need to generate them yourself.
 
-Once the scaffold is done, you may notice that your controller and other relevant parts have been added in `app.rs`, so there is no need to add it manually.
+Once the scaffold is done, you may notice that your Loco controller and other relevant parts have been added in `app.rs`, so there is no need to add it manually.
 
 Now we can go to our new controller file which should be located under `src/controllers/item.rs`. When opened, we should be greeted with something that looks like this:
 
@@ -217,7 +217,6 @@ pub async fn find_by_email(db: &DatabaseConnection, email: &str) -> ModelResult<
 ```
 
 ## Middleware
-
 Middleware in Loco can be implemented in a few ways:
 
 1) Implementing `axum::FromRequestParts` (or `FromRequest`) for a given struct or enum
@@ -227,7 +226,6 @@ Middleware in Loco can be implemented in a few ways:
 Implementing `FromRequest` is probably the easiest way to go about being able to implement middleware for select routes, while `after_routes()` is likely much better for globally implementing a middleware (for example, a timeout).
 
 ### Implementing FromRequestParts in Loco
-
 Although `FromRequestParts` (and `FromRequest` respectively) look tricky to implement, you can make it substantially easier on yourself by remembering that the state itself just needs to implement `Send + Sync` - which means you can use `AppContext` with it! Check out the code snippet below for an overall implementation of how you would write something that implements `FromRequestParts`.
 
 ```rust
@@ -255,7 +253,6 @@ enum ApiError { Unknown }
 impl IntoResponse for ApiError {
     // ... implement IntoResponse for ApiError for it to return a HTTP response
 }
-
 ```
 
 Of course, in a real-world application this will be much more extensive than assigning "Hello world!" to a variable and then returning the struct.
@@ -268,7 +265,6 @@ As mentioned before, you can also use the `after_routes()` function in the `Hook
 async fn after_routes(router: AxumRouter, _ctx: &AppContext) -> Result<AxumRouter> {
     Ok(router)
 }
-
 ```
 
 Because the Axum router gets passed in as a parameter, you can attach any kind of Axum middleware or layer you want. This also means you can add things like a `tower-http` service layer if you'd like! Let's have a look at adding a timeout layer, which will stop any slow loris attacks. To do this, we'll need to add `tower-http` with the `timeout` feature:
@@ -291,27 +287,28 @@ Now any requests that last longer than 10 seconds will automatically be aborted 
 
 We can also implement our own Tower service, which you can find more about [here.](https://docs.rs/tower/latest/tower/trait.Service.html)
 
-## Serving a Frontend with Loco
+## Serving a Frontend in Loco
 
 Serving a frontend with Loco is as easy as going into the `frontend` folder, then running `npm i` to install the dependencies. Then you run `npm run build` to build your application. When you use `cargo loco start` and go to localhost:8000 you should see the main screen for the Loco.rs homepage but blank.
 
 Note that the main frontend approach uses React. You can switch this out for any other framework you like. The only thing you need to do is to make sure the frontend you are serving matches the config file under the `static` section (the `folder` key, with the default being `/frontend/dist`). If you're a Svelte or Vue user, or want to use Leptos or Dioxus you can freely switch around! If you are not experienced in any of the aforementioned frameworks, you can also use raw HTML/CSS/JS. This may be particularly more favourable if you either don't have a lot of HTML/CSS you need to serve.
 
 ## Deploying Loco
-
 Loco have provided their own commands for generating a deployment. You can run it by using `cargo loco generate deployment`. It will then generate a Dockerfile or Shuttle deployment depending on what you select. If you're deploying with Shuttle, don't forget you can add your frontend assets by going to your Shuttle.toml file and then adding `frontend/dist` to your assets key:
 ```toml
+name = "<name-of-your-project>"
 assets = ["frontend/dist/*"]
 ```
 
 Then you can run the following to deploy your application (don't forget to install `cargo-shuttle`):
 ```bash
-cargo shuttle run 
+cargo shuttle project start
+cargo shuttle deploy 
 ```
 We are planning to release a native database integration with Loco! Stay tuned for part 2 where we will go into further detail about how you can build out your dream web application. 
 
 ## Finishing Up
-Thanks for reading! Loco is an awesome framework to get you started on the path to productivity.
+Thanks for reading! We hope this Rust Loco guide has helped you. If you're looking to get started with Rust web development, now is a better time than ever to do so.
 
 Interested in more?
 - Read about our getting started with Axum article [here](https://www.shuttle.rs/blog/2023/12/06/using-axum-rust)
