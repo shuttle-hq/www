@@ -93,13 +93,20 @@ Normally when setting up a database, you might need to set up your database conn
 use axum::{Router, Extension};
 use sqlx::PgPoolOptions;
 
+#[derive(Clone)]
+struct AppState {
+	db: PgPool
+}
+
 #[tokio::main]
 async fn main() {
-    let dbconnection = PgPoolOptions::new()
+    let pool = PgPoolOptions::new()
         .max_connections(5)
         .connect(<db-connection-string-here>).await;
+
+	let state = AppState { pool };
         
-    let router = Router::new().route("/", get(hello_world)).layer(Extension::new(dbconnection));
+    let router = Router::new().route("/", get(hello_world)).with_state(state);
     
     //... rest of your code
 }
