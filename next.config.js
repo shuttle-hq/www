@@ -27,6 +27,11 @@ const nextConfig = {
 				destination: 'https://raw.githubusercontent.com/shuttle-hq/shuttle/main/install.sh',
 				permanent: false,
 			},
+			{
+				source: '/install-win',
+				destination: 'https://raw.githubusercontent.com/shuttle-hq/shuttle/main/install.ps1',
+				permanent: false,
+			},
 		]
 	},
 	async headers() {
