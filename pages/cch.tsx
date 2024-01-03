@@ -2,25 +2,9 @@ import { Page } from 'components/templates'
 import { trackEvent } from 'lib/posthog'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ReactNode, useState, useEffect } from 'react'
-
-interface ScoreboardEntry {
-	name: string
-	completed: number
-	points: number
-}
+import { ReactNode } from 'react'
 
 export default function CCHPage() {
-	const [scoreboard, setScoreboard] = useState<ScoreboardEntry[]>([])
-
-	useEffect(() => {
-		fetch('https://cch23.shuttleapp.rs/leaderboard')
-			.then((r) => r.json())
-			.then((j) => {
-				setScoreboard(j)
-			})
-	}, [])
-
 	return (
 		<section className='mx-auto mb-10 w-full max-w-5xl px-4 py-12 font-mono font-normal text-[#DEDEDE]'>
 			<div className='mx-auto mb-8 flex max-w-[686px] flex-col items-end'>
@@ -47,183 +31,32 @@ export default function CCHPage() {
 			</div>
 
 			<div className='mb-8 flex flex-col text-base'>
-				<Link
-					href='https://shuttlerust.typeform.com/to/hkPkbXab'
-					target='_blank'
-					className='rounded border p-6 text-center text-xl font-bold text-[#F09050]'
-					onClick={() => {
-						trackEvent('cch_sign_up')
-					}}
-				>
-					Click here to sign up!
-				</Link>
-
 				<p className='mt-8 font-bold'>
 					<span className='text-[#F09050]'>&gt;</span> what
 				</p>
 				<p>
-					Shuttle&apos;s Christmas Code Hunt, inspired by Advent of Code, invites you to solve daily
-					challenges using Rust in a relaxed environment. Each weekday, you will be implementing an HTTP
-					endpoint that returns the solution to the daily challenge, and deploy it on{' '}
-					<Link href='/' className='text-[#F09050]'>
-						Shuttle
-					</Link>
-					. Join the fun, solve puzzles, embrace the holiday spirit, and get rewarded! 🎄🚀
-				</p>
-
-				<p className='mt-8 font-bold'>
-					<span className='text-[#F09050]'>&gt;</span> why
-				</p>
-				<p>
-					By participating, you get the chance to improve your Rust skills, build new friendships with
-					like minded Rustaceans and enjoy the run up to the holidays!
-				</p>
-
-				<p className='mt-8 font-bold'>
-					<span className='text-[#F09050]'>&gt;</span> when
-				</p>
-				<p>
-					The first challenge will be released on December 1, 12:00 UTC (
-					<Link href='https://everytimezone.com/s/297d565e' target='_blank' className='text-[#F09050]'>
-						check your timezone
-					</Link>
-					). A total of 16 challenges will be released each weekday between December 1 and December 22.
+					Shuttle&apos;s Christmas Code Hunt, inspired by Advent of Code, invites you to solve
+					challenges using Rust in a relaxed environment. In each challenge, you implement HTTP
+					endpoints that return the solutions. It is a great way to get started with Rust and Shuttle!
 				</p>
 
 				<p className='mt-8 font-bold'>
 					<span className='text-[#F09050]'>&gt;</span> where
 				</p>
 				<p>
-					The Shuttle Discord will serve as the main point for getting announcements, discussing
-					challenges, and more. You can also sign up for announcements via email. Participating requires
-					logging in to the Shuttle Console with a GitHub account.{' '}
+					You can access the challenge by logging in to the{' '}
 					<Link
-						href='https://shuttlerust.typeform.com/to/hkPkbXab'
+						href='https://console.shuttle.rs/cch'
 						target='_blank'
 						className='text-[#F09050]'
 						onClick={() => {
 							trackEvent('cch_sign_up')
 						}}
 					>
-						Sign up now
+						Shuttle Console
 					</Link>
-					!
+					{' '}with a GitHub account!
 				</p>
-
-				<p className='mt-8 font-bold'>
-					<span className='text-[#F09050]'>&gt;</span> prizes
-				</p>
-				<p>Prizes is being reworked while we try to find ways to reward the most active CCH participants.</p>
-				{/* <p>
-					1st place: $200 Amazon voucher + Shuttle swag box + 6 months of Shuttle PRO Tier
-					<br />
-					2nd place: &nbsp;$50 Amazon voucher + Shuttle swag box + 3 months of Shuttle PRO Tier
-					<br />
-					3rd place: &nbsp;Shuttle swag box + 1 month of Shuttle PRO Tier
-					<br />
-					Completing all the challenges: &nbsp;TBA
-				</p> */}
-
-				<p className='mt-8 font-bold'>
-					<span className='text-[#F09050]'>&gt;</span> scoring system
-				</p>
-				<p>The validation/scoring system is being reworked to suit the new event format.</p>
-				{/* <p>The scoring is determined by gathering points:</p>
-				<ul className='ml-8 list-disc'>
-					<li>Complete the core tasks of a challenge: 1000 points</li>
-					<li>Complete bonus tasks on challenges: Up to 800 points per challenge</li>
-					<li>Time score based on when your solution was submitted: Up to 48 points</li>
-					<li>Tie breaker: TBA</li>
-				</ul>
-				<p>
-					Time score is added based on the time between the challenge release and your submission time:
-				</p>
-				<ul className='ml-8 list-disc'>
-					<li>Under 24 hours: 48 time points</li>
-					<li>After 24 hours, lose 1 time point per hour that passes</li>
-					<li>After 72 hours, you’ll get 0 time points</li>
-				</ul>
-				<p>
-					Your highest scoring submission (sum of task points and time points) per challenge is the one
-					that counts. Challenge -1 is a warmup challenge and gives no score.
-				</p> */}
-
-				<p className='mt-8 font-bold'>
-					<span className='text-[#F09050]'>&gt;</span> rules
-				</p>
-				<ul className='ml-8 list-disc'>
-					{/* <li>
-						The competition ends on December 31, 23:59 UTC. A snapshot of the scoreboard will be taken
-						at that time.
-					</li> */}
-					<li>Challenges are released at 12:00 UTC each weekday between Dec 1 and Dec 22.</li>
-					{/* <li>
-						In order to be eligible for prizes, the solutions need to be genuine. In other words, you
-						can&apos;t return hard-coded or pre-computed answers to the tests. Additionally, your
-						solutions should be your own work. (These conditions will be verified.)
-					</li> */}
-					<li>Collaboration is allowed and encouraged.</li>
-					<li>
-						Shuttle reserves the right to change, update, or amend: release times of challenges,
-						challenge contents, the scoring system, the prizes, and these rules.
-					</li>
-					<li>
-						Sharing tips about how to solve tasks is allowed, but don&apos;t spoil any solution in the
-						official Discord channel. Feel free to use the Discord to find collaborators.
-					</li>
-					{/* <li>
-						Follow the Shuttle{' '}
-						<Link
-							href='https://www.shuttle.rs/acceptable-use'
-							target='_blank'
-							className='text-[#F09050]'
-						>
-							Acceptable Use Policy
-						</Link>
-						. TL;DR It is not allowed to disrupt access to our services or other participants&apos;
-						projects.
-					</li> */}
-					{/* <li>Shuttle employees are not eligible for scoreboard spots.</li> */}
-				</ul>
-
-				<p className='mt-8 font-bold'>
-					<span className='text-[#F09050]'>&gt;</span> tips and tricks
-				</p>
-				<ul className='ml-8 list-disc'>
-					<li>
-						Solve Day -1 and keep adding endpoints as new challenges release. No need to create new
-						projects.
-					</li>
-					<li>Unit tests can be useful.</li>
-					<li>The Shuttle docs can be helpful.</li>
-				</ul>
-
-				<p className='mt-8 font-bold' id='scoreboard'>
-					<span className='text-[#F09050]'>&gt;</span> scoreboard
-				</p>
-
-				<div className='flex flex-row justify-center'>
-					<table className='w-max border-spacing-x-10 gap-4'>
-						<thead>
-							<tr>
-								<th className='w-min'>Position</th>
-								<th className='w-min md:px-20'>Name</th>
-								<th className='w-min md:px-8'>Completed</th>
-								<th className='w-min md:w-max md:px-20'>Score</th>
-							</tr>
-						</thead>
-						<tbody>
-							{scoreboard.map((score, position) => (
-								<tr key={position}>
-									<td className='w-min px-4 md:px-8 md:text-right'>{position + 1}</td>
-									<td className='block w-max text-left md:px-10'>{score.name}</td>
-									<td className='w-min px-10 text-right md:px-20'>{score.completed}</td>
-									<td className='w-min px-6 text-right md:px-24'>{score.points}</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
-				</div>
 			</div>
 		</section>
 	)

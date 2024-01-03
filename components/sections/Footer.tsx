@@ -10,34 +10,14 @@ interface FooterProps {
 }
 
 const SHUTTLE_LINKS = [
-	{
-		key: 'features',
-		name: 'Features',
-		href: '/#features',
-	},
-	{
-		key: 'starters',
-		name: 'Starters',
-		href: '/starters',
-	},
-	{
-		key: 'status',
-		name: 'Status',
-		href: 'https://status.shuttle.rs',
-	},
-	{
-		key: 'releases',
-		name: 'Releases',
-		href: '/releases',
-	},
+	{ key: 'features', name: 'Features', href: '/#features' },
+	{ key: 'starters', name: 'Starters', href: '/starters' },
+	{ key: 'status', name: 'Status', href: 'https://status.shuttle.rs' },
+	{ key: 'releases', name: 'Releases', href: '/releases' },
 ]
 
 const COMPANY_LINKS = [
-	{
-		key: 'about',
-		name: 'About',
-		href: '/about',
-	},
+	{ key: 'about', name: 'About', href: '/about' },
 	{ key: 'contact', name: 'Contact', href: '/contact' },
 	{ key: 'careers', name: 'Careers', href: '/about#careers' },
 	{ key: 'terms', name: 'Terms of Service', href: '/terms' },
@@ -53,6 +33,7 @@ const DEVELOPERS_LINKS = [
 	{ key: 'examples', href: 'https://docs.shuttle.rs/examples/axum', name: 'Examples' },
 	{ key: 'heroes', href: '/shuttle-heroes', name: 'Shuttle Heroes' },
 	{ key: 'launchpad', href: '/launchpad', name: 'Launchpad' },
+	{ key: 'codehunt', href: '/cch', name: 'Code Hunt' },
 	{ key: 'ai', href: '/ai', name: 'Shuttle AI' },
 ]
 
