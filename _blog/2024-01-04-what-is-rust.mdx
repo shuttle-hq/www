@@ -42,7 +42,7 @@ match result {
 ```
 This can be used to match a single error. Meanwhile, you could also use a question mark to propagate the error:
 ```rust
-thing.use_function_that_can_fail().await?;
+thing.use_function_that_can_fail()?;
 ```
 This attempts to turn the error into the error type returned by the function. meaning you can avoid unwraps and pattern matching! There are many packages to help you also improve your error handling like `eyre` and `anyhow`. You can find more about error handling [here.](https://www.shuttle.rs/blog/2022/06/30/error-handling)
 
@@ -52,13 +52,13 @@ Yes, the syntax is ugly. There, I said it. However, getting used to new types of
 In particular, pattern matching has led to things like `let-else` and `if-let`. These are two examples of syntax you wouldn't see in other mainstream programming languages. Let's have a quick look at these two in action:
 ```rust
 // using let-else
-let Ok(some_result) => function_that_can_fail() else {
+let Ok(some_result) = function_that_can_fail() else {
     return Err("The function failed!");
 }
 
 // using if-let
-if let Ok(result) => function_that_can_fail() {
-    println!("The function failed!");
+if let Ok(result) = function_that_can_fail() {
+    println!("The function succeeded!");
 }
 ```
 As you can see, fairly straightforward. It also avoids us having to directly use pattern matching and instead allows us to "match" against the arm because Rust is an expression-orientated language.
