@@ -1,0 +1,190 @@
+---
+title: "Why Enums in Rust feel so much better" 
+description: This article talks about what enums in Rust are, how they compare to other languages that use enums and what makes Rust enums better.
+author: josh
+tags: [rust, enums, tutorial, guide]
+thumb: enums-in-rust-thumb.png 
+cover: enums-in-rust-thumb.png
+date: '2023-11-23T14:30:00'
+---
+A commonly said piece of feedback from someone who's learning Rust as a second language tends to be that enums are far better supported in Rust than any other language. A cursory glance at Google for "enums in Rust" returns a result in the "People also searched for" that asks "why are enums in Rust so good". On initial inspection, this seems to be a good question; in isolation, enums are simply a conceptual container of values that represent potential value - for example: directions, or seasons. However, Rust runs with this and supercharges enums in ways that are simply not there in other languages.
+
+In this article we'll talk about what makes Rust enums significantly better than in other languages, as well as some use cases for them.
+
+## A quick recap about Enums
+First, a quick recap of what Rust enums actually are for the uninitiated: (or those who need a reminder!) Enums are types that are able to represent a defined number of variants. Consider the following enum:
+```rust
+enum Directions {
+  Up,
+  Down,
+  Left,
+  Right
+}
+```
+This represents some directions. The advantage of using an enum over just strings is that when we're pattern matching, we can simply match against the different variants instead of having to account for variations in strings.
+
+## Enums in Other Languages
+For some context, let's have a look at what enums look like in other languages. In TypeScript, a cursory Google search for Typescript enums will return a number of results that either tell you the following:
+- Don't use enums in TypeScript because they are bad
+- There is only one correct way to use enums
+- There are a number of wrong ways to use enums that are not immediately obvious because enums aren't a thing when compiled to JavaScript
+
+What this tells us that although they are a feature in TypeScript, they do not seem to be very popular - typically because of user error, or language quirks that make using enums awkward. 
+
+In Java and other languages, it should be noted that enums are significantly more sane because they don't have an underlying language that they compile to that doesn't support enums - however, the nature of having to use them in classes or using things like method overriding to do anything (in terms of extending or implementing functionality for them) means that enums as a whole don't really receive first class support. Other languages like Go do not necessarily have enums, but you can represent enums by using something like this (in Go):
+```go
+const (
+    A base = iota
+    C
+    T
+    G
+)
+```
+However, the lack of an official enum keyword means that it seems that it is somewhat frustrating to use.
+
+In Rust, enums receive first class support through struct-like types being valid as an enum - so you can have an enum that holds a struct-like structure where there are named values within the enum variant, or a tuple struct where you can just refer to the variables by number, or you can just have the enum variant itself. Although you can't (by default) declare an initial value without extra crates to do so unless you instantiate it, it is relatively easy to turn an enum variant into another type by implementing a method that matches against the enum variants then returning whatever you'd like. 
+
+Enums also see pretty heavy usage within the Rust type system by virtue of the `Result` and `Option` types, two types that form the basis of the error handling system in Rust. You can also supercharge enums by implementing traits for them, which we will see more of below.
+
+## Implementing Methods for Enums
+Enums in Rust receive the ability to implement methods specifically for the enum, no class required. Let's have a look at the following method:
+```rust
+enum Number {
+  Odd(i64),
+  Even(i64)
+}
+```
+This enum represents a Number as well as whether it's odd or even. We can implement a method for it that automatically instantiates the enum variant based on whether the number can be divided by 2, like so:
+```rust
+impl Number {
+  fn from_i64(num: i64) => Self {
+    match  num % 2 == 0 {
+     true => Number::Even(num),
+     false => Number::Odd(num)
+    }
+  }
+}
+```
+This eliminates a lot of boilerplate code and makes it much easier to use the method by using `Number::from_i64(number)`. In other languages you could of course write a separate method that returns the enum, but being able to namespace it under the enum itself makes the code much cleaner.
+
+Just ike structs, you can also use derive macros on enums; derive macros are a huge part of the Rust ecosystem and simplify boilerplate code generation by auto-generating the code for you at compile-time. 
+
+## Enums as Error Types
+Check out the following enum:
+```rust
+#[derive(Debug)]
+enum MyError {
+  SQLError(sqlx::Error),
+  RedisError(redis::RedisError),
+  Forbidden,
+  BadRequest,
+  Unauthorized
+}
+```
+This enum represents several different ways that a web app might fail: for example, a SQL query might result in an error because the syntax is incorrect, your Redis server might have an error connecting to it and users may also either try to access pages they shouldn't have access to or fill out a form wrong. 
+
+The Error trait requires our enum type to implement both `Debug` and `Display` - we already used a derive macro for the Debug trait so we don't have to manually implement it, but we do need to implement `Display`. We can do this by matching each enum variant in the function below:
+```rust
+impl fmt::Display for MyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+          MyError::SQLError(e) => write!(f, format!("Something went wrong while using an SQL query: {e}")),
+          MyError::RedisError(e) => write!(f, format!("Something went wrong while using Redis: {e}")),
+          MyError::Forbidden => write!(f, "User tried to access a page but was forbidden!"),
+          MyError::BadRequest => write!(f, "User tried to submit a HTTP request but it returned 400!"),
+          MyError::Unauthorized => write!(f, "User tried to access a page but wasn't authorised!"),
+        }
+    }
+}
+```
+
+Implementing this also gives us `.to_string()` for free and will return the above when done so according to the enum variant that it is - useful for us! 
+
+The `Error` trait type looks like this:
+```rust
+pub trait Error: Debug + Display {
+    fn description(&self) -> &str { /* ... */ }
+    fn cause(&self) -> Option<&Error> { /* ... */ }
+    fn source(&self) -> Option<&(Error + 'static)> { /* ... */ }
+}
+```
+However, all of these functions are optional and already have a default implementation - so you can simply implement `Error` for your type like this:
+```rust
+impl Error for MyError {}
+```
+
+Technically, this will give you the implementation - although of course, if you would like to include more customised behaviour (including usage of held variables by a particular enum variant, for example), you will probably want to do just that. 
+
+When you're using a web framework like Axum or Actix, typically speaking you won't have to implement `Error` yourself - you'll implement whatever type the framework uses that also implement `Error`. For example, in Axum the `IntoResponse` trait implements `Error` as well as also being a successful return type, so technically you can have `Result<impl IntoResponse, impl IntoResponse>` as a function return signature. Let's have a look at how you'd implement it.
+```rust
+impl IntoResponse for MyError {
+  fn into_response(&self) -> Response {
+    match self {
+        MyError::SQLError(e) => (StatusCode::INTERNAL_SERVER_ERROR, format!("Error while using SQL: {e}")).into_response(),
+        MyError::RedisError(e) => (StatusCode::INTERNAL_SERVER_ERROR, format!("Error while using Redis: {e}")).into_response(),
+        MyError::Forbidden => (StatusCode::FORBIDDEN, "Forbidden!".to_string()).into_response(),
+        MyError::BadRequest => (StatusCode::FORBIDDEN, "Bad request. Did you fill something out wrong?".to_string()).into_response(),
+        MyError::Unauthorized => (StatusCode::FORBIDDEN, "Unauthorised!".to_string()).into_response(),
+    }
+  }
+}
+```
+Enums can be extremely effective as error types: by setting an error type as an enum, you only ever need to match against each arm of the enum and you don't need to use a non-exhaustive patten marker (`_`) - although you may want to, if you only want to match against certain enum variants. To do this, you simply just replace the enum variants you don't want to match against with a single `_` then return something for it.
+
+## Enums as Newtypes ("Wrapper Types")
+We can also wrap a type in an enum that may also have several variants that contain types from a single crate, or multiple crates. The benefit of this versus just exposing another bit of said crates' API is that you can introduce new functionality for your own program while maintaining backwards compatibility by not needing to interact with the original type itself - you can also use it to create an abstraction over the original type. For example, the `poise` crate builds on top of the `serenity` crate by exposing new types as abstractions to provide a more high-level function instead of using low-level functions.
+
+As another example: using our previous knowledge of the `Display` trait, we can actually overwrite what the type displays when we use `.to_string()`! Consider a struct that holds a password and the time at which the struct was created:
+```rust
+struct Password {
+  password: String,
+  created_at: DateTime<Utc>
+}
+```
+We can wrap an enum over this:
+```rust
+enum PasswordEnum {
+  Secured(Password),
+  Unsecured(Password)
+}
+```
+
+Now we can do two things:
+- We can display the password as a load of stars (based on what the length is)
+- We can return whether the password is secure or not (according to some criteria)
+
+See below for what this might look like:
+```rust
+impl fmt::Display for PasswordEnum {
+      fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+          PasswordEnum::Secured(password) => {
+            password = password.chars().map(|_| "*".to_owned()).collect::<String>();
+            write!(f, password);
+          },
+          PasswordEnum::Unsecured(password) => {
+            password = password.chars().map(|_| "*".to_owned()).collect::<String>();
+            write!(f, password);
+          },
+        }
+    }
+}
+
+impl PasswordEnum {
+  fn is_secure(&self) -> bool {
+     match self {
+       PasswordEnum::Secured(_) => true,
+       PasswordEnum::Unsecured(_) => false
+     }
+  }
+}
+```
+
+As you can see, it's quite easy to use the new-type pattern to your advantage with enums! You can also do this with structs.
+
+## Finishing up
+Thank you for reading and I hope you learned something about how to use enums in Rust! Enums are extremely powerful and form part of a strong backbone for Rust development. 
+
+Interested in learning more about Rust? Here's some ideas:
+- Find out more about macros [here.](https://www.shuttle.rs/blog/2022/12/23/procedural-macros)
+- Find out more about [using design patterns in Rust.](https://www.shuttle.rs/blog/2022/07/28/patterns-with-rust-types)

@@ -6,17 +6,19 @@ interface PageProps {
 	children: ReactNode
 	disableFooterMargin?: boolean
 	background?: string
+	disableFooter?: boolean
+	disableHeader?: boolean
 }
 
-const Page: FC<PageProps> = ({ children, disableFooterMargin, background }) => {
+const Page: FC<PageProps> = ({ children, disableFooterMargin, background, disableFooter, disableHeader }) => {
 	return (
 		<div className='relative flex min-h-screen flex-col'>
 			{background && (
 				<Image src={background} alt='' width={1920} height={1080} className='absolute -z-10 w-full' />
 			)}
-			<Navigation />
+			{!disableHeader && <Navigation />}
 			<main className='flex flex-grow flex-col'>{children}</main>
-			<Footer disableMargin={disableFooterMargin} />
+			{!disableFooter && <Footer disableMargin={disableFooterMargin} />}
 		</div>
 	)
 }

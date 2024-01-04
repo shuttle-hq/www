@@ -122,7 +122,7 @@ type SharedState = Arc<Mutex<SmallRng>>;
 
 #[shuttle_runtime::main]
 async fn axum() -> shuttle_axum::ShuttleAxum {
-    let state = 
+    let state =
          Arc::new(Mutex::new(SmallRng::from_entropy()));
     let router = Router::new()
         .route("/lotto/:pot/:amount", get(handler_lotto))
@@ -189,7 +189,7 @@ async fn handler_lotto(
     Extension(state): Extension<SharedState>,
 ) -> impl IntoResponse {
     let mut rng = state.lock().await;
-    let mut lotto: Lotto<'_, SmallRng> = 
+    let mut lotto: Lotto<'_, SmallRng> =
         Lotto::new(pot_size, &mut rng);
     let results = lotto.take(amount);
     Json(results)
@@ -200,7 +200,7 @@ Now you can re-use `Lotto` for every possible random number generator from the `
 
 ## Time for your feedback!
 
-We want to tailor Shuttle Launchpad to your needs! [Give us feedback](https://btl1d1x5z23.typeform.com/to/dTU2F8jI) on the most recent issue and your wishes here.
+We want to tailor Shuttle Launchpad to your needs! [Give us feedback](https://shuttlerust.typeform.com/to/dTU2F8jI) on the most recent issue and your wishes here.
 
 ## Join us!
 

@@ -1,7 +1,6 @@
 import clsx from 'clsx'
 import Link from 'next/link'
 import { FC, ReactNode } from 'react'
-import { useUser } from '@auth0/nextjs-auth0/client'
 import { CONTACT_US_URI } from '../../lib/constants'
 
 interface CommonButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -30,7 +29,8 @@ const Button: FC<ButtonProps> = ({ variant = 'none', invertOnDark, className, ch
 				: 'button-shadow border-gradient shadow-gradient bg-black text-[#C2C2C2] hover:bg-none'
 			: '',
 		variant === 'tertiary' && 'button-shadow shadow-gradient text-black',
-		variant === 'blackwhite' && 'rounded-[14px] border-[1px] border-solid border-[#ffffff40] px-6 py-3 font-gradual text-base text-white transition-all hover:bg-gradient-1',
+		variant === 'blackwhite' &&
+			'rounded-[14px] border-[1px] border-solid border-[#ffffff40] px-6 py-3 font-gradual text-base text-white transition-all hover:bg-gradient-1',
 		className
 	)
 
@@ -58,10 +58,8 @@ const Button: FC<ButtonProps> = ({ variant = 'none', invertOnDark, className, ch
 }
 
 export const LoginButton: FC<CommonButtonProps> = ({ children, ...inner }) => {
-	const { user } = useUser()
-	const consoleBaseUrl = user ? 'https://console.shuttle.rs' : 'https://console.shuttle.rs/login'
 	return (
-		<Button href={consoleBaseUrl} {...inner}>
+		<Button href='https://console.shuttle.rs/login' {...inner}>
 			{children}
 		</Button>
 	)

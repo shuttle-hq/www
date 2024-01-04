@@ -4,26 +4,26 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 const CommunitySupportedNumbers = () => {
-	const [stars, setStars] = useState(null);
-	const githubToken = process.env.GITHUB_ACCESS_TOKEN;
+	const [stars, setStars] = useState(null)
+	const githubToken = process.env.GITHUB_ACCESS_TOKEN
 	useEffect(() => {
-		const apiUrl = `https://api.github.com/repos/${GITHUB_REPO}`;
+		const apiUrl = `https://api.github.com/repos/${GITHUB_REPO}`
 		const options = {
 			headers: {
 				Authorization: `token ${githubToken}`,
 			},
-		};
+		}
 		fetch(apiUrl, options)
 			.then((response) => response.json())
 			.then((data) => {
 				if (data.stargazers_count !== undefined) {
-					setStars(data.stargazers_count);
+					setStars(data.stargazers_count)
 				}
 			})
 			.catch((error) => {
-				console.error('Error fetching GitHub data:', error);
-			});
-	}, [githubToken]);
+				console.error('Error fetching GitHub data:', error)
+			})
+	}, [githubToken])
 
 	return (
 		<div className='mt-24 border-y border-black/10 py-12 dark:border-[#191919] lg:py-0'>
@@ -73,13 +73,13 @@ const CommunitySupportedNumbers = () => {
 				</div>
 				<div className='text-center lg:py-12'>
 					<p className='bg-gradient-to-r from-[#B59C53] to-[#A5A76B] bg-clip-text font-gradual text-[2.5rem] font-bold leading-none text-transparent sm:text-[3.5rem]'>
-						2.7k+
+						3k+
 					</p>
 					<h3 className='mt-1 text-sm text-[#525151] dark:text-[#C2C2C2] sm:text-base'>Discord Users</h3>
 				</div>
 				<div className='text-center lg:py-12'>
 					<p className='bg-gradient-to-r from-[#93B083] to-[#7BBB9F] bg-clip-text font-gradual text-[2.5rem] font-bold leading-none text-transparent sm:text-[3.5rem]'>
-						80+
+						85+
 					</p>
 					<h3 className='mt-1 text-sm text-[#525151] dark:text-[#C2C2C2] sm:text-base'>Contributors</h3>
 				</div>
@@ -90,13 +90,13 @@ const CommunitySupportedNumbers = () => {
 
 function formatNumberToK(number: number) {
 	if (number >= 1000) {
-		const suffixes = ["", "k", "M", "G", "T", "P"];
-		const magnitude = Math.floor(Math.log10(number) / 3);
-		const scaledNumber = number / Math.pow(1000, magnitude);
-		const formattedNumber = scaledNumber.toFixed(1);
-		return `${formattedNumber}${suffixes[magnitude]}`;
+		const suffixes = ['', 'k', 'M', 'G', 'T', 'P']
+		const magnitude = Math.floor(Math.log10(number) / 3)
+		const scaledNumber = number / Math.pow(1000, magnitude)
+		const formattedNumber = scaledNumber.toFixed(1)
+		return `${formattedNumber}${suffixes[magnitude]}`
 	}
-	return number.toString();
+	return number.toString()
 }
 
 export default CommunitySupportedNumbers

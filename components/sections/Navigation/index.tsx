@@ -2,9 +2,8 @@ import { Button, LoginButton } from 'components/elements'
 import { GithubLogo, Hamburger, Logo } from 'components/svgs'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import clsx from 'clsx'
-import { useUser } from '@auth0/nextjs-auth0/client'
 import { DISCORD_URL } from '../../../lib/constants'
 import { trackEvent } from 'lib/posthog'
 
@@ -13,7 +12,20 @@ const ThemeSwitcher = dynamic(() => import('./ThemeSwitcher'), { ssr: false })
 const Navigation = () => {
 	const [open, setOpen] = useState(false)
 
-	const { user } = useUser()
+	useLayoutEffect(() => {
+		function updateMenu() {
+			const isMobileAndOpen = window.innerWidth < 1280 && open
+			const isDesktopAndClosed = window.innerWidth >= 1280 && !open
+
+			if (isMobileAndOpen || isDesktopAndClosed) return
+
+			setOpen(false)
+		}
+
+		window.addEventListener('resize', updateMenu)
+
+		return () => window.removeEventListener('resize', updateMenu)
+	}, [open])
 
 	return (
 		<nav className='mx-auto flex h-[5.5rem] w-full max-w-[1344px] items-center px-5 sm:px-10'>
@@ -121,14 +133,8 @@ const Navigation = () => {
 							}}
 						>
 							<LoginButton variant='primary' invertOnDark>
-								{user ? (
-									'Console'
-								) : (
-									<>
-										<GithubLogo />
-										Log in
-									</>
-								)}
+								<GithubLogo />
+								Log in
 							</LoginButton>
 						</div>
 					</div>

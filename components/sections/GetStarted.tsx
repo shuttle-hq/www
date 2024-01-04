@@ -30,7 +30,7 @@ const GetStarted = () => {
 				</p>
 			</div>
 			<div className='mx-auto mt-10 w-full max-w-7xl gap-x-6 px-5 sm:px-10 lg:mt-16 lg:grid lg:grid-cols-[1fr_400px] lg:gap-5 xl:mt-20 xl:items-center xl:gap-12'>
-				<div className='group relative z-10 block h-full items-end overflow-hidden rounded-2xl bg-[#13292C] px-8 pt-16 dark:bg-black sm:mt-10 sm:items-center sm:px-12 sm:px-4 sm:py-24 lg:mt-0 lg:items-end lg:items-center lg:px-8 lg:py-12 xl:flex xl:p-[4.375rem] desktop:items-end desktop:pb-0 desktop:pt-[2.75rem]'>
+				<div className='group relative z-10 block h-full items-end overflow-hidden rounded-2xl bg-[#13292C] px-8 pt-16 dark:bg-black sm:mt-10 sm:h-[600px] sm:items-center sm:px-12 sm:px-4 sm:py-24 lg:mt-0 lg:items-end lg:items-center lg:px-8 lg:py-12 xl:flex xl:p-[4.375rem] desktop:items-end desktop:pb-0 desktop:pt-[2.75rem]'>
 					<CodeBlock
 						language={selectedSlide === 1 ? 'rust' : 'none'}
 						showLineNumbers={selectedSlide === 1}
@@ -42,7 +42,7 @@ const GetStarted = () => {
 								? SHUTTLE_INIT
 								: SHUTTLE_DEPLOY
 						}
-						className='absolute left-1/2 mx-auto h-full -translate-x-1/2 transform overflow-auto rounded-t-xl sm:rounded-xl lg:w-full lg:rounded-b-3xl lg:rounded-t-3xl xl:overflow-hidden desktop:relative desktop:-bottom-px desktop:rounded-b-none'
+						className='absolute left-1/2 mx-auto h-full -translate-x-1/2 transform overflow-auto rounded-t-xl sm:block sm:rounded-xl lg:w-full lg:rounded-b-3xl lg:rounded-t-3xl xl:overflow-hidden desktop:relative desktop:-bottom-px desktop:rounded-b-none'
 					/>
 					<Image
 						src='/images/sections/get-started/noise.png'
@@ -89,7 +89,7 @@ const GetStarted = () => {
 					/>
 				</div>
 
-				<div className='mt-12 flex h-full gap-3 overflow-y-hidden overflow-x-scroll p-1 lg:mt-0 lg:flex-col lg:overflow-visible'>
+				<div className='mt-12 flex gap-3 overflow-y-hidden overflow-x-scroll p-1 lg:mt-0 lg:flex-col lg:overflow-visible'>
 					<GetStartedSlide
 						number={0}
 						title='Install'
