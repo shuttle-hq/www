@@ -36,7 +36,8 @@ For a handler function to be valid, it needs to either be an `axum::response::Re
 We can also use `impl IntoResponse` directly which at first glance immediately solves having to figure out what type we need to return; however, using it directly also means making sure all the return types are the same type! This means we can run into errors unnecessarily. We can instead implement `IntoResponse` for an enum or a struct that we can then use as the return type. See below:
 
 ```rust
-use axum::{response::{Response, IntoResponse}, Json};
+use axum::{response::{Response, IntoResponse}, Json, http::StatusCode};
+use serde::Serialize;
 
 // here we show a type that implements Serialize + Send
 #[derive(Serialize)]
@@ -45,17 +46,17 @@ struct Message {
 }
 
 enum ApiResponse {
-    Ok,
+    OK,
     Created,
     JsonData(Vec<Message>),
 }
 
 impl IntoResponse for ApiResponse {
-    fn into_response(&self) -> Response {
+    fn into_response(self) -> Response {
         match self {
-            Response::OK => (StatusCode::OK).into_response(),
-            Response::Created => (StatusCode::CREATED).into_response(),
-            Response::JsonData(data) => (StatusCode::OK, Json(data)).into_response()
+            Self::OK => (StatusCode::OK).into_response(),
+            Self::Created => (StatusCode::CREATED).into_response(),
+            Self::JsonData(data) => (StatusCode::OK, Json(data)).into_response()
         }
     }
 }
@@ -90,7 +91,7 @@ This allows us to differentiate between errors and successful requests when writ
 ## Adding a Database in Axum
 Normally when setting up a database, you might need to set up your database connection:
 ```rust
-use axum::{Router, Extension};
+use axum::{Router, routing::get};
 use sqlx::PgPoolOptions;
 
 #[derive(Clone)]
@@ -181,7 +182,6 @@ From personal observation, it does not seem to be clear which method is better. 
 
 You can also derive sub-state from an application state! This is great for when we need some variables from the main state but want to limit access control on what a given route has access to. See below:
 ```rust
-
 // the application state
 #[derive(Clone)]
 struct AppState {
@@ -258,7 +258,7 @@ Using typed headers can be as simple as adding it as a parameter to a handler fu
 ```rust
 use headers::ContentType;
 use axum::{TypedHeader, headers::Origin}; // use this if on axum 0.6
-use axum_extra::TypedHeader; // use this if on axum 0.7
+use axum_extra::{TypedHeader, headers::Origin}; // use this if on axum 0.7
 
 async fn my_function(
     TypedHeader(origin): TypedHeader<Origin>
@@ -320,6 +320,7 @@ where
     }
 }
 ```
+
 In Axum 0.7, this was modified slightly. `axum::body::Body` is now no longer a re-export of `hyper::body::Body` and is instead its own type - meaning that it is no longer generic and the `Request` type will always use `axum::body::Body`. What this translates to essentially is that we just remove the `B` generic - see below:
 ```rust
 #[async_trait]
