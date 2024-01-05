@@ -36,7 +36,7 @@ For a handler function to be valid, it needs to either be an `axum::response::Re
 We can also use `impl IntoResponse` directly which at first glance immediately solves having to figure out what type we need to return; however, using it directly also means making sure all the return types are the same type! This means we can run into errors unnecessarily. We can instead implement `IntoResponse` for an enum or a struct that we can then use as the return type. See below:
 
 ```rust
-use axum::{response::{Response, IntoResponse}, Json};
+use axum::{response::{Response, IntoResponse}, Json, http::StatusCode};
 use serde::Serialize;
 
 // here we show a type that implements Serialize + Send
