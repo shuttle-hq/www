@@ -31,12 +31,12 @@ struct Args {
 }
 
 fn main() {
-    let cli = Cli::parse();
+    let args = Args::parse();
   
-    println!("Hello, {}!", cli.name);
+    println!("Hello, {}!", args.name);
 }
 ```
-As you can see, we are using a struct that uses the [`clap::Parser`](https://docs.rs/clap/latest/clap/trait.Parser.html) derive macro, which automatically generates all of the functions that we need to be able to use the struct as a parser. Initially when we load the program up and use `Cli::parse()`, it will take the arguments from whatever is in `std::env::os` - our environment arguments that we have given it. 
+As you can see, we are using a struct that uses the [`clap::Parser`](https://docs.rs/clap/latest/clap/trait.Parser.html) derive macro, which automatically generates all of the functions that we need to be able to use the struct as a parser. Initially when we load the program up and use `Args::parse()`, it will take the arguments from whatever is in `std::env::os` - our environment arguments that we have given it. 
 
 Our program takes one argument at the moment, which is `name`. If you try running `cargo run test`, it should print out "Hello, test!" - but if you try to run it without any extra values, it will print the help menu. Clap has a help feature included in the default features that automatically displays the help menu when no valid commands are entered, which saves us a lot of time!  Let's try adding a flag to it so that if you don't add anything, it will print a default value:
 ```rust
@@ -71,9 +71,9 @@ enum Commands {
 }
 
 fn main() {
-    let cli = Cli::parse();
+    let args = Args::parse();
   
-    println!("{:?}", cli);
+    println!("{:?}", args);
 }
 ```
 
@@ -106,9 +106,9 @@ As you can see above, our `get` command now takes a non-optional argument of a S
 Let's have a look at what this would look like for our main function:
 ```rust
 fn main() {
-    let cli = Cli::parse();
+    let args = Args::parse();
     
-    match cli.cmd {
+    match args.cmd {
         Commands::Get(value) => get_something(value),
         Commands::Set{key, value, is_true} => set_something(key, value, is_true)
     }
@@ -127,13 +127,13 @@ fn main() {
         
         std::io::stdin().read_line(&mut buf).expect("Couldn't parse stdin");
         let line = buf.trim();
-        let cli = shlex::split(line).ok_or("error: Invalid quoting").unwrap();
+        let args = shlex::split(line).ok_or("error: Invalid quoting").unwrap();
 
-        println!("{:?}" , cli);
+        println!("{:?}" , args);
 
         match Args::try_parse_from(args.iter()).map_err(|e| e.to_string()) {
-            Ok(cli) => {
-                match cli.cmd {
+            Ok(args) => {
+                match args.cmd {
                     Commands::Get(value) => get_something(value),
                     Commands::Set{key, value, is_true} => set_something(key, value, is_true)
                }
@@ -182,13 +182,13 @@ fn main() {
         
         std::io::stdin().read_line(&mut buf).expect("Couldn't parse stdin");
         let line = buf.trim();
-        let cli = shlex::split(line).ok_or("error: Invalid quoting").unwrap();
+        let args = shlex::split(line).ok_or("error: Invalid quoting").unwrap();
 
-        println!("{:?}" , cli);
+        println!("{:?}" , args);
 
         match Args::try_parse_from(args.iter()).map_err(|e| e.to_string()) {
-            Ok(cli) => {
-                match cli.cmd {
+            Ok(args) => {
+                match args.cmd {
                     Commands::Get(value) => get_something(value),
                     Commands::Set{key, value, is_true} => set_something(key, value, is_true),
                     Commands::Help => show_commands(),
