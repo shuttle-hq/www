@@ -23,7 +23,7 @@ export const getServerSideProps = async () => {
 export default function ReleasesPage({ releases }: { releases: Release[] }) {
 	return (
 		<section className='relative mx-auto w-full max-w-7xl px-5 py-24 sm:px-10 lg:py-28'>
-			<h1 className='mb-9 font-atkinson text-5xl font-bold text-[#EDEDED]'>Releases</h1>
+			<h1 className='mb-9 font-atkinson text-5xl font-bold text-head'>Releases</h1>
 
 			<div className='font-atkinson font-normal'>
 				{releases.map((release) => (

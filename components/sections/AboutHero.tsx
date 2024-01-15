@@ -3,7 +3,7 @@ import Image from 'next/image'
 const AboutHero = () => {
 	return (
 		<header className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
-			<h1 className='w-fit font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-6.5'>
+			<h1 className='w-fit font-gradual text-5xl font-bold text-black dark:text-head lg:text-6.5'>
 				We’re helping developers
 				<span className='text-gradient block bg-clip-text text-transparent'>do what they do best.</span>
 			</h1>

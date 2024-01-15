@@ -54,10 +54,10 @@ const FeaturedStarters = ({ starters }: { starters: StarterAttrs[] }) => {
 		<div className='mt-24 sm:mt-28 lg:mt-36 desktop:mt-40'>
 			<div className='mx-auto w-full max-w-5xl px-5 sm:px-10'>
 				<div className='max-w-[510px]'>
-					<h2 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-[3.5rem]'>
+					<h2 className='font-gradual text-5xl font-bold text-black dark:text-head lg:text-[3.5rem]'>
 						Starters
 					</h2>
-					<p className='mt-5 text-xl text-[#525151] dark:text-[#7A7A7A] lg:text-2xl'>
+					<p className='mt-5 text-xl text-body lg:text-2xl'>
 						Set up and deploy a quick starter, in minutes, with detailed instructions on how it works.
 					</p>
 				</div>

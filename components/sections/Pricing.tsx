@@ -147,7 +147,7 @@ const PRICING_ROWS: PricingTableRow[] = [
 const CROSS = (
 	<svg
 		width={15}
-		className='m-auto inline text-[#aaa]'
+		className='m-auto inline'
 		height={15}
 		viewBox='0 0 15 15'
 		fill='none'
@@ -160,7 +160,7 @@ const CROSS = (
 const CHECK = (
 	<svg
 		width={15}
-		className='m-auto inline text-[#aaa]'
+		className='m-auto inline'
 		height={15}
 		viewBox='0 0 15 15'
 		fill='none'
@@ -207,7 +207,7 @@ const Pricing = () => {
 							<SplideSlide
 								key={t.name}
 								className={clsx(
-									selectedMobilePlan === t.name ? 'text-[#D9D9D9] ' : 'text-[#7A7A7A]',
+									selectedMobilePlan === t.name ? 'text-head' : 'text-body',
 									'!mt-auto mb-[8px] text-xl font-bold leading-none transition-all'
 								)}
 							>
@@ -234,7 +234,7 @@ const Pricing = () => {
 							>
 								{PRICING_ROWS.map((r) => (
 									<div key={r.desc} className='flex justify-between gap-6 py-[0.625rem]'>
-										<div className='grow basis-3/5 text-[#7A7A7A]'>
+										<div className='grow basis-3/5 text-body'>
 											{r.desc}
 											{r.desc2 ? (
 												<>
@@ -243,7 +243,7 @@ const Pricing = () => {
 												</>
 											) : null}
 										</div>
-										<div className='text-right text-[#FFFFFFA3]'>
+										<div className='text-right text-head'>
 											{toCellContent(r.values[t.name])}
 										</div>
 									</div>
@@ -256,9 +256,9 @@ const Pricing = () => {
 						<div className='mb-8 grid grid-cols-[5fr_4fr_4fr_4fr] py-[0.875rem]'>
 							<div>{/* grid filler */}</div>
 							{TIERS.map((t) => (
-								<div key={t.name} className='text-center text-black dark:text-[#7A7A7A]'>
+								<div key={t.name} className='text-center text-black dark:text-body'>
 									<div className='mb-4 font-gradual text-2xl font-bold'>{t.displayName}</div>
-									<div className='mx-auto mb-4 w-4/5 text-base text-[#7A7A7A]'>{t.desc}</div>
+									<div className='mx-auto mb-4 w-4/5 text-base text-body'>{t.desc}</div>
 									<Button
 										variant={t.ctaPrimaryButton ? 'tertiary' : 'blackwhite'}
 										className='mx-auto scale-[0.95] hover:bg-gradient-2'
@@ -275,9 +275,9 @@ const Pricing = () => {
 						{PRICING_ROWS.map((r) => (
 							<div
 								key={r.desc}
-								className='grid grid-cols-[5fr_4fr_4fr_4fr] items-center py-2 text-center'
+								className='text-main grid grid-cols-[5fr_4fr_4fr_4fr] items-center py-2 text-center'
 							>
-								<div className='text-left text-[#7A7A7A]'>
+								<div className='text-left text-body'>
 									{r.desc}
 									{r.desc2 ? (
 										<>
@@ -286,9 +286,9 @@ const Pricing = () => {
 										</>
 									) : null}
 								</div>
-								<div className='text-[#aaa]'>{toCellContent(r.values['community'])}</div>
-								<div className='text-[#aaa]'>{toCellContent(r.values['pro'])}</div>
-								<div className='text-[#aaa]'>{toCellContent(r.values['team'])}</div>
+								<div>{toCellContent(r.values['community'])}</div>
+								<div>{toCellContent(r.values['pro'])}</div>
+								<div>{toCellContent(r.values['team'])}</div>
 							</div>
 						))}
 					</div>

@@ -68,17 +68,12 @@ const Starter: FC<StarterProps> = ({
 			<Image src={stars2} alt='stars 2' fill className={stars2ClassName} />
 			<div className='relative z-10 flex h-full flex-col'>
 				{icon && getStarterIcon(icon)}
-				<h3
-					className={clsx(
-						'font-gradual text-2xl font-bold text-[#C2C2C2]',
-						sourceLink ? 'mt-3' : 'my-auto'
-					)}
-				>
+				<h3 className={clsx('font-gradual text-2xl font-bold text-head', sourceLink ? 'mt-3' : 'my-auto')}>
 					{title}
 				</h3>
-				<p className='mt-1 text-[#C2C2C2] opacity-60'>{description}</p>
+				<p className='mt-1 text-head opacity-60'>{description}</p>
 				{sourceLink ? (
-					<div className='mt-auto flex items-center justify-between gap-5 pt-5 text-[#C2C2C2]'>
+					<div className='mt-auto flex items-center justify-between gap-5 pt-5 text-head'>
 						<span>
 							<Link
 								href={sourceLink}
@@ -111,11 +106,11 @@ const Starter: FC<StarterProps> = ({
 						</Button>
 					</div>
 				) : (
-					<Link href='/starters' className='group mt-3 inline-flex items-center text-[#C2C2C2]'>
+					<Link href='/starters' className='group mt-3 inline-flex items-center text-head'>
 						View all
 						{/* Right Arrow */}
 						<svg
-							className='relative left-2 my-4 text-[#D8D8D8] transition-all duration-300 ease-in-out group-hover:left-4'
+							className='relative left-2 my-4 text-head transition-all duration-300 ease-in-out group-hover:left-4'
 							width={17}
 							height={14}
 							viewBox='0 0 17 14'

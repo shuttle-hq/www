@@ -68,8 +68,8 @@ const Plan: FC<PlanProps> = ({
 				<div className='absolute left-0 top-0 z-[0] h-full w-full rounded-[32px] bg-gradient-to-t from-[#FC540C] to-[#38D4E9] opacity-30' />
 			)}
 			<div className='z-[5]'>
-				<h1 className='mb-2 font-gradual text-[32px] font-bold text-[#C2C2C2]'>{name}</h1>
-				<p className='mb-4 text-[#7A7A7A]'>{description}</p>
+				<h1 className='mb-2 font-gradual text-[32px] font-bold text-head'>{name}</h1>
+				<p className='mb-4 text-body'>{description}</p>
 
 				<div className='flex items-end'>
 					<h1
@@ -80,9 +80,9 @@ const Plan: FC<PlanProps> = ({
 					>
 						{price}
 					</h1>
-					<p className='ml-2 font-gradual text-[#7A7A7A]'>{term}</p>
+					<p className='ml-2 font-gradual text-body'>{term}</p>
 				</div>
-				{billsResources && <p className='font-gradual text-[#7A7A7A]'>+ RESOURCE USAGE</p>}
+				{billsResources && <p className='font-gradual text-body'>+ RESOURCE USAGE</p>}
 				<hr className={clsx('mb-5 border-[#7A7A7A]', billsResources ? ' mt-6 ' : ' mt-12')} />
 				{features.map((feature, i) => (
 					<div key={i} className='relative flex flex-row items-center gap-2'>
@@ -92,7 +92,7 @@ const Plan: FC<PlanProps> = ({
 						>
 							+
 						</p>
-						<p className='text-base text-[#C2C2C2]'>{feature.feature}</p>
+						<p className='text-base text-head'>{feature.feature}</p>
 
 						{feature.iText && (
 							<div

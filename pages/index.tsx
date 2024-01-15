@@ -51,7 +51,7 @@ interface Props {
 
 export default function Home({ posts, starters, questions, stargazersCount }: Props) {
 	return (
-		<>
+		<main className='text-body'>
 			<Hero />
 			<GetStarted />
 			<LogosReferences />
@@ -63,6 +63,6 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 			<CallToAction />
 			<FrequentlyAskedQuestions questions={questions} page='homepage' />
 			<FeaturedBlogPosts posts={posts} />
-		</>
+		</main>
 	)
 }

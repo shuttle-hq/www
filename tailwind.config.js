@@ -5,6 +5,11 @@ module.exports = {
 	important: true,
 	theme: {
 		extend: {
+			colors: {
+				head: '#DDD',
+				body: '#A2A2A2',
+				orange: '#F09050',
+			},
 			fontFamily: {
 				gradual: 'BwGradual, sans-serif',
 				mono: 'Fira Mono, sans-serif',

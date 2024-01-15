@@ -2,7 +2,7 @@ export default function Cookies() {
 	return (
 		<main className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
 			<div className='mb-[98px]'>
-				<h1 className='mb-[19px] text-[64px] font-bold text-[#D8D8D8]'>Cookies Policy</h1>
+				<h1 className='mb-[19px] text-[64px] font-bold text-head'>Cookies Policy</h1>
 				<p className='mb-6 text-xl'>
 					This Cookies Policy forms part of our general Privacy Policy
 					<a href='https://shuttle.rs/privacy' target='_blank'>
@@ -20,7 +20,7 @@ export default function Cookies() {
 			</div>
 
 			<div className='mb-10 mt-10'>
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>1. How we use cookies</h2>
+				<h2 className='mb-5 text-[32px] font-bold text-head'>1. How we use cookies</h2>
 				<p className='mb-5 text-xl'>
 					Our Website uses cookies to distinguish you from other users of our Website. This helps us to
 					provide you with a good experience when you browse the Website and allows us to improve both
@@ -33,7 +33,7 @@ export default function Cookies() {
 					disabling cookies may have a negative impact on your use of this Website.
 				</p>
 
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>2. Cookies</h2>
+				<h2 className='mb-5 text-[32px] font-bold text-head'>2. Cookies</h2>
 				<p className='mb-5 text-xl'>
 					A cookie is a small file of letters and numbers that we store on your browser or the hard drive
 					of your computer if you agree, which can be used to identify that you have previously visited a
@@ -47,13 +47,13 @@ export default function Cookies() {
 				</p>
 			</div>
 			<div className='mb-10 mt-10 text-xl'>
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>3. The cookies we use</h2>
+				<h2 className='mb-5 text-[32px] font-bold text-head'>3. The cookies we use</h2>
 
 				<p className='mb-5 text-xl'>We use the following types of cookies:</p>
 
 				<table className='mb-20 table-fixed text-xs lg:text-sm'>
 					<tr className='text-left children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-						<th className='text-[#C2C2C2]'>Strictly necessary cookies</th>
+						<th className='text-head'>Strictly necessary cookies</th>
 						<td>
 							We use these cookies for functionality of the Website’s platforms. These cookies are
 							essential in order to enable users to move around the Website and use its features,
@@ -61,7 +61,7 @@ export default function Cookies() {
 						</td>
 					</tr>
 					<tr className='text-left children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-						<th className='text-[#C2C2C2]'>Analytical or performance cookies</th>
+						<th className='text-head'>Analytical or performance cookies</th>
 						<td>
 							These allow us to recognise and count the number of visitors and to see how visitors
 							move around our Website when they are using it. This helps us improve the way our
@@ -70,14 +70,14 @@ export default function Cookies() {
 						</td>
 					</tr>
 					<tr className='text-left children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-						<th className='text-[#C2C2C2]'>Functionality cookies.</th>
+						<th className='text-head'>Functionality cookies.</th>
 						<td>
 							These are used to remember the session and keep the user logged in if they have checked
 							“Remember me” when logging in.
 						</td>
 					</tr>
 					<tr className='text-left children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-						<th className='text-[#C2C2C2]'>Targeting or advertising cookies. </th>
+						<th className='text-head'>Targeting or advertising cookies. </th>
 						<td>
 							These cookies record your visit to our website, the pages you have visited and the
 							links you have followed. We will use this information to make our website and the
@@ -88,15 +88,15 @@ export default function Cookies() {
 			</div>
 
 			<div className='mb-10 mt-10 text-xl'>
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>
+				<h2 className='mb-5 text-[32px] font-bold text-head'>
 					4. We use the following third party cookies
 				</h2>
 
 				<table className='mb-20 table-fixed text-xs lg:text-sm'>
 					<tr className='text-left children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
-						<th className='text-[#C2C2C2]'>Cookie </th>
-						<th className='text-[#C2C2C2]'>Name</th>
-						<th className='text-[#C2C2C2]'>Purpose</th>
+						<th className='text-head'>Cookie </th>
+						<th className='text-head'>Name</th>
+						<th className='text-head'>Purpose</th>
 					</tr>
 					<tr className='text-left children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
 						<td>Functionality Cookies</td>
@@ -113,7 +113,7 @@ export default function Cookies() {
 			</div>
 
 			<div className='mb-10 mt-10 text-xl'>
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>5. How can I manage my cookies?</h2>
+				<h2 className='mb-5 text-[32px] font-bold text-head'>5. How can I manage my cookies?</h2>
 				<p className='mb-5 text-xl'>
 					Please note that third parties (including, for example, advertising networks and providers of
 					external services like web traffic analysis services) may also use cookies, over which we have
@@ -170,7 +170,7 @@ export default function Cookies() {
 					all or parts of our Website.
 				</p>
 
-				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>6. Contact us</h3>
+				<h3 className='mb-2 text-2xl font-bold text-head'>6. Contact us</h3>
 
 				<p className='mb-5 text-xl'>You may contact us by email at: hello@shuttle.rs</p>
 			</div>

@@ -6,7 +6,7 @@ import { ReactNode } from 'react'
 
 export default function CCHPage() {
 	return (
-		<section className='mx-auto mb-10 w-full max-w-5xl px-4 py-12 font-mono font-normal text-[#DEDEDE]'>
+		<section className='mx-auto mb-10 w-full max-w-5xl px-4 py-12 font-mono font-normal text-head'>
 			<div className='mx-auto mb-8 flex max-w-[686px] flex-col items-end'>
 				<h1 className='text-center text-[60px]'>
 					<span className='relative'>
@@ -22,7 +22,7 @@ export default function CCHPage() {
 					hristmas Code Hunt
 				</h1>
 
-				<p className='flex items-center gap-2 self-end text-base text-[#AFAFAF]'>
+				<p className='flex items-center gap-2 self-end text-base text-body'>
 					powered by
 					<Link href='/'>
 						<Image src='/images/cch/logo.svg' alt='' width={115} height={37} />
@@ -32,30 +32,30 @@ export default function CCHPage() {
 
 			<div className='mb-8 flex flex-col text-base'>
 				<p className='mt-8 font-bold'>
-					<span className='text-[#F09050]'>&gt;</span> what
+					<span className='text-orange'>&gt;</span> what
 				</p>
 				<p>
-					Shuttle&apos;s Christmas Code Hunt, inspired by Advent of Code, invites you to solve
-					challenges using Rust in a relaxed environment. In each challenge, you implement HTTP
-					endpoints that return the solutions. It is a great way to get started with Rust and Shuttle!
+					Shuttle&apos;s Christmas Code Hunt, inspired by Advent of Code, invites you to solve challenges
+					using Rust in a relaxed environment. In each challenge, you implement HTTP endpoints that
+					return the solutions. It is a great way to get started with Rust and Shuttle!
 				</p>
 
 				<p className='mt-8 font-bold'>
-					<span className='text-[#F09050]'>&gt;</span> where
+					<span className='text-orange'>&gt;</span> where
 				</p>
 				<p>
 					You can access the challenge by logging in to the{' '}
 					<Link
 						href='https://console.shuttle.rs/cch'
 						target='_blank'
-						className='text-[#F09050]'
+						className='text-orange'
 						onClick={() => {
 							trackEvent('cch_sign_up')
 						}}
 					>
 						Shuttle Console
-					</Link>
-					{' '}with a GitHub account!
+					</Link>{' '}
+					with a GitHub account!
 				</p>
 			</div>
 		</section>
