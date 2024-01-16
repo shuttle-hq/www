@@ -35,7 +35,7 @@ const Navigation = () => {
 					setOpen(false)
 				}}
 			>
-				<Logo className='dark:text-[#C2C2C2]' />
+				<Logo className='dark:text-head' />
 			</Link>
 			<div
 				className={clsx(
@@ -142,7 +142,7 @@ const Navigation = () => {
 				</div>
 			</div>
 
-			<button className='ml-auto dark:text-[#D8D8D8] xl:hidden' onClick={() => setOpen((open) => !open)}>
+			<button className='ml-auto dark:text-head xl:hidden' onClick={() => setOpen((open) => !open)}>
 				<Hamburger />
 			</button>
 		</nav>

@@ -2,7 +2,7 @@ export default function Terms() {
 	return (
 		<main className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
 			<div className='mb-[98px]'>
-				<h1 className='mb-[19px] text-[64px] font-bold text-[#D8D8D8]'>Data Processing Addendum (DPA)</h1>
+				<h1 className='mb-[19px] text-[64px] font-bold text-head'>Data Processing Addendum (DPA)</h1>
 				<p className='mb-6 text-xl'>
 					This Data Processing Addendum (the <strong>DPA</strong>) is incorporated by reference into our
 					Terms and Conditions{' '}
@@ -31,7 +31,7 @@ export default function Terms() {
 					applicable data protection laws.{' '}
 				</p>
 
-				<h2 className='mb-6 text-[32px] text-[#D8D8D8]'>AGREED TERMS</h2>
+				<h2 className='mb-6 text-[32px] text-head'>AGREED TERMS</h2>
 
 				<ol className='mb-6 list-decimal space-y-6 pl-6 text-xl'>
 					<li>

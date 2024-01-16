@@ -54,12 +54,12 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 				<div className='divide-y divide-black/10 dark:divide-white/10 lg:grid lg:grid-cols-2 lg:divide-x lg:divide-y-0'>
 					<div className='grid grid-cols-2 divide-x divide-black/10 text-xl dark:divide-white/10'>
 						<div className='flex flex-col gap-3 px-8 pb-8 pt-16 lg:p-16'>
-							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Shuttle</h3>
+							<h3 className='font-gradual font-bold text-black text-head'>Shuttle</h3>
 							{SHUTTLE_LINKS.map(({ key, name, href }) => (
 								<Link
 									key={key}
 									href={href}
-									className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+									className='text-body transition duration-300 hover:text-black dark:hover:text-head'
 									onClick={() => {
 										trackEvent(`homepage_footer_site_${key}`)
 									}}
@@ -69,12 +69,12 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 							))}
 						</div>
 						<div className='flex flex-col gap-3 px-8 pb-8 pt-16 lg:p-16'>
-							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Company</h3>
+							<h3 className='font-gradual font-bold text-black text-head'>Company</h3>
 							{COMPANY_LINKS.map(({ key, name, href }) => (
 								<Link
 									key={key}
 									href={href}
-									className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+									className='text-body transition duration-300 hover:text-black dark:hover:text-head'
 									onClick={() => {
 										trackEvent(`homepage_footer_site_${key}`)
 									}}
@@ -86,12 +86,12 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 					</div>
 					<div className='grid grid-cols-2 divide-x divide-black/10 text-xl dark:divide-white/10'>
 						<div className='flex flex-col gap-3 px-8 pb-8 pt-16 lg:p-16'>
-							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Developers</h3>
+							<h3 className='font-gradual font-bold text-black text-head'>Developers</h3>
 							{DEVELOPERS_LINKS.map(({ key, name, href }) => (
 								<Link
 									key={key}
 									href={href}
-									className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+									className='text-body transition duration-300 hover:text-black dark:hover:text-head'
 									onClick={() => {
 										trackEvent(`homepage_footer_site_${key}`)
 									}}
@@ -101,13 +101,13 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 							))}
 						</div>
 						<div className='flex flex-col gap-3 px-8 pb-8 pt-16 lg:p-16'>
-							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Community</h3>
+							<h3 className='font-gradual font-bold text-black text-head'>Community</h3>
 							{COMMUNITY_LINKS.map(({ key, name, href }) => (
 								<Link
 									key={key}
 									href={href}
 									target='_blank'
-									className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
+									className='text-body transition duration-300 hover:text-black dark:hover:text-head'
 									onClick={() => {
 										trackEvent(`homepage_footer_site_${key}`)
 									}}

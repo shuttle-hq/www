@@ -2,36 +2,33 @@ export default function Terms() {
 	return (
 		<main className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
 			<div className='mb-[98px]'>
-				<h1 className='mb-[19px] text-[64px] font-bold text-[#D8D8D8]'>Terms and Conditions</h1>
+				<h1 className='mb-[19px] text-[64px] font-bold text-head'>Terms and Conditions</h1>
 				<p className='mb-6 text-xl'>Last updated: 05/10/23</p>
 
 				<p className='mb-6 text-xl'>
-					These terms and conditions (the <strong className='text-[#D8D8D8]'>Terms</strong>) govern your
+					These terms and conditions (the <strong className='text-head'>Terms</strong>) govern your
 					access to, and use of our website at{' '}
 					<a href='https://www.shuttle.rs/' className='underline'>
 						https://www.shuttle.rs/
 					</a>{' '}
-					(the <strong className='text-[#D8D8D8]'>Website</strong>), and the use of, and registration
-					with, our backend development tool offered through our Website (the{' '}
-					<strong className='text-[#D8D8D8]'>Services</strong>).
+					(the <strong className='text-head'>Website</strong>), and the use of, and registration with,
+					our backend development tool offered through our Website (the{' '}
+					<strong className='text-head'>Services</strong>).
 				</p>
 				<p className='mb-6 text-xl'>
-					The Website and Services are operated by{' '}
-					<strong className='text-[#D8D8D8]'>OpenQuery Ltd</strong>, a company registered in England
-					under number
-					<strong className='text-[#D8D8D8]'> 12268176</strong>, with its registered office at George
-					House, 39 Fitzroy Square, London, England, W1T 6EZ (
-					<strong className='text-[#D8D8D8]'>OpenQuery</strong>,{' '}
-					<strong className='text-[#D8D8D8]'>we</strong>, <strong className='text-[#D8D8D8]'>our</strong>{' '}
-					or <strong className='text-[#D8D8D8]'>us</strong>).
+					The Website and Services are operated by <strong className='text-head'>OpenQuery Ltd</strong>,
+					a company registered in England under number
+					<strong className='text-head'> 12268176</strong>, with its registered office at George House,
+					39 Fitzroy Square, London, England, W1T 6EZ (<strong className='text-head'>OpenQuery</strong>,{' '}
+					<strong className='text-head'>we</strong>, <strong className='text-head'>our</strong> or{' '}
+					<strong className='text-head'>us</strong>).
 				</p>
 				<p className='mb-6 text-xl'>
 					If you are an individual acting for purposes which are wholly or mainly outside of your trade,
-					business, craft or profession you are a <strong className='text-[#D8D8D8]'>Consumer</strong>.
-					If you are not a Consumer, then you are a{' '}
-					<strong className='text-[#D8D8D8]'>Business Customer</strong>. If you are a Consumer, nothing
-					in these Terms affects your statutory rights. Unless otherwise stated,{' '}
-					<strong className='text-[#D8D8D8]'>You</strong> means the user of the Website and/or the
+					business, craft or profession you are a <strong className='text-head'>Consumer</strong>. If you
+					are not a Consumer, then you are a <strong className='text-head'>Business Customer</strong>. If
+					you are a Consumer, nothing in these Terms affects your statutory rights. Unless otherwise
+					stated, <strong className='text-head'>You</strong> means the user of the Website and/or the
 					Services (whether as a Business Customer or a Consumer).
 				</p>
 				<p className='mb-6 text-xl'>
@@ -45,7 +42,7 @@ export default function Terms() {
 
 				<p className='mb-6 text-xl'>
 					Our{' '}
-					<strong className='text-[#D8D8D8]'>
+					<strong className='text-head'>
 						<a href='https://www.shuttle.rs/privacy' target='_blank'>
 							Privacy Policy
 						</a>
@@ -54,7 +51,7 @@ export default function Terms() {
 				</p>
 				<p className='mb-6 text-xl'>
 					Our{' '}
-					<strong className='text-[#D8D8D8]'>
+					<strong className='text-head'>
 						<a href='https://www.shuttle.rs/acceptable-use' target='_blank'>
 							Acceptable Use Policy
 						</a>
@@ -64,7 +61,7 @@ export default function Terms() {
 				</p>
 				<p className='mb-6 text-xl'>
 					Our{' '}
-					<strong className='text-[#D8D8D8]'>
+					<strong className='text-head'>
 						<a href='https://www.shuttle.rs/cookies' target='_blank'>
 							Cookie Policy
 						</a>
@@ -74,11 +71,11 @@ export default function Terms() {
 
 				<ol className='mb-6 list-decimal space-y-6 pl-6 text-xl'>
 					<li>
-						<strong className='mb-6 block text-[#D8D8D8]'>Your Status</strong>
+						<strong className='mb-6 block text-head'>Your Status</strong>
 
 						<ol className='mb-6 list-[lower-roman] space-y-6 pl-6 text-xl'>
 							<li>
-								<strong className='text-[#D8D8D8]'>
+								<strong className='text-head'>
 									You are using our services on behalf of another person.
 								</strong>{' '}
 								If you use the Services on behalf of another person, you are considered to be using
@@ -89,21 +86,21 @@ export default function Terms() {
 								that person.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>Minimum age.</strong> Our Website and Services
-								are not designed for children and you must be at least 13 years old or the minimum
+								<strong className='text-head'>Minimum age.</strong> Our Website and Services are
+								not designed for children and you must be at least 13 years old or the minimum
 								legal age in your country to use our Website or Services.
 							</li>
 						</ol>
 					</li>
 
 					<li>
-						<strong className='mb-6 block text-[#D8D8D8]'>Account Registration</strong>
+						<strong className='mb-6 block text-head'>Account Registration</strong>
 
 						<ol className='mb-6 list-[lower-roman] space-y-6 pl-6 text-xl'>
 							<li>
 								<span className='mb-6 block'>
-									<strong className='text-[#D8D8D8]'>Create an account.</strong> In order to use
-									our Services, you must create an account using your Github account credentials
+									<strong className='text-head'>Create an account.</strong> In order to use our
+									Services, you must create an account using your Github account credentials
 									(Account). If you don’t have a Github account you must create one at{' '}
 									<a href='http://https://github.com/' target='_blank' rel='noopener noreferrer'>
 										https://github.com/
@@ -116,7 +113,7 @@ export default function Terms() {
 
 							<li>
 								<span className='mb-6 block'>
-									<strong className='text-[#D8D8D8]'>No responsibility.</strong> You are solely
+									<strong className='text-head'>No responsibility.</strong> You are solely
 									responsible for keeping your Github account and Account secure, and ensuring
 									that you do not share any passwords or other account credentials with any other
 									person. We will never ask for your password. We will not be responsible for any
@@ -128,9 +125,9 @@ export default function Terms() {
 
 							<li>
 								<span className='mb-6 block'>
-									<strong className='text-[#D8D8D8]'>Use of your Account.</strong> you may use
-									your Account to use our Services’ features and functionalities in accordance
-									with the subscription plan you have purchased. You warrant and agree that:
+									<strong className='text-head'>Use of your Account.</strong> you may use your
+									Account to use our Services’ features and functionalities in accordance with
+									the subscription plan you have purchased. You warrant and agree that:
 								</span>
 
 								<ol className='mb-6 list-[lower-alpha] space-y-6 pl-6 text-xl'>
@@ -165,10 +162,10 @@ export default function Terms() {
 
 							<li>
 								<span className='mb-6 block'>
-									<strong className='text-[#D8D8D8]'>Customer Data.</strong> When using our
-									Services, you will input some data in the Website or the Services (your{' '}
-									<strong className='text-[#D8D8D8]'>Customer Data</strong>). When adding
-									Customer Data to the Services, you agree that you will comply with our{' '}
+									<strong className='text-head'>Customer Data.</strong> When using our Services,
+									you will input some data in the Website or the Services (your{' '}
+									<strong className='text-head'>Customer Data</strong>). When adding Customer
+									Data to the Services, you agree that you will comply with our{' '}
 									<a href='http://www.shuttle.rs/acceptable-use' target='_blank'>
 										Acceptable Use Policy
 									</a>{' '}
@@ -177,17 +174,17 @@ export default function Terms() {
 
 							<li>
 								<span className='mb-6 block'>
-									<strong className='text-[#D8D8D8]'>No obligation to monitor data.</strong> We
-									are under no obligation to monitor your activities of the Services. However, we
-									may systematically screen and/or monitor any Customer Data, content or
-									information uploaded and/or transmitted into our Service and Website, at any
-									time and for any reason, for compliance with the Terms, with or without notice.
+									<strong className='text-head'>No obligation to monitor data.</strong> We are
+									under no obligation to monitor your activities of the Services. However, we may
+									systematically screen and/or monitor any Customer Data, content or information
+									uploaded and/or transmitted into our Service and Website, at any time and for
+									any reason, for compliance with the Terms, with or without notice.
 								</span>
 							</li>
 
 							<li>
 								<span className='mb-6 block'>
-									<strong className='text-[#D8D8D8]'>
+									<strong className='text-head'>
 										Disable or terminate your Account, or remove Customer Data.
 									</strong>{' '}
 									We may review Accounts at any time and for any reason, and without affecting
@@ -214,15 +211,15 @@ export default function Terms() {
 					</li>
 
 					<li>
-						<strong className='mb-6 block text-[#D8D8D8]'>Data protection</strong>
+						<strong className='mb-6 block text-head'>Data protection</strong>
 
 						<ol className='mb-6 list-[lower-roman] space-y-6 pl-6 text-xl'>
 							<li>
-								<strong className='text-[#D8D8D8]'>How we process your information.</strong> Under
-								data protection legislation, we are required to provide certain information about
-								who we are, how we process personal data and for what purposes and the rights of
-								data subjects in relation to personal data and how to exercise them. This
-								information is provided in our{' '}
+								<strong className='text-head'>How we process your information.</strong> Under data
+								protection legislation, we are required to provide certain information about who we
+								are, how we process personal data and for what purposes and the rights of data
+								subjects in relation to personal data and how to exercise them. This information is
+								provided in our{' '}
 								<a href='http://www.shuttle.rs/privacy' target='_blank'>
 									Privacy Policy
 								</a>{' '}
@@ -239,9 +236,7 @@ export default function Terms() {
 								you will not be permitted to use our Services.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>
-									We may process Customer Data on your behalf.
-								</strong>{' '}
+								<strong className='text-head'>We may process Customer Data on your behalf.</strong>{' '}
 								By using the Services, you also accept our{' '}
 								<a href='http://www.shuttle.rs/dpa' target='_blank'>
 									Data Processing Addendum
@@ -250,9 +245,7 @@ export default function Terms() {
 								with in using the Services.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>
-									Internet transmissions are never secure.
-								</strong>{' '}
+								<strong className='text-head'>Internet transmissions are never secure.</strong>{' '}
 								Please be aware that internet transmissions are never completely private or secure
 								and that any message or information you send us may be read or intercepted by
 								others, even if there is a special notice that a particular transmission is
@@ -262,18 +255,18 @@ export default function Terms() {
 					</li>
 
 					<li>
-						<strong className='mb-6 block text-[#D8D8D8]'>Subscription and Fees</strong>
+						<strong className='mb-6 block text-head'>Subscription and Fees</strong>
 
 						<ol className='mb-6 list-[lower-roman] space-y-6 pl-6 text-xl'>
 							<li>
-								<strong className='text-[#D8D8D8]'>Choosing a Plan.</strong> In order to use our
+								<strong className='text-head'>Choosing a Plan.</strong> In order to use our
 								Services, you must select the appropriate plan for you, which will set out the type
 								of subscription you selected, including the term of the subscription and the
 								subscription fees that apply to the subscription plan you selected.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>Fees.</strong> Where you chose the “pro” plan on
-								the Website, you will pay us the fees set out on our Website at{' '}
+								<strong className='text-head'>Fees.</strong> Where you chose the “pro” plan on the
+								Website, you will pay us the fees set out on our Website at{' '}
 								<a href='https://www.shuttle.rs/pricing' target='_blank'>
 									https://www.shuttle.rs/pricing
 								</a>
@@ -281,7 +274,7 @@ export default function Terms() {
 								applicable tax.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>Payments.</strong> We use a third party service
+								<strong className='text-head'>Payments.</strong> We use a third party service
 								provider (Stripe Inc.) to collect the fees on our behalf. You authorise us (and our
 								service provider) to charge you the fees referred to in clause 4.2 above. If
 								we&apos;re unable to collect any payment you owe us we charge interest on the
@@ -291,25 +284,25 @@ export default function Terms() {
 								pay us the interest together with any overdue amount.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>Upgrades.</strong> You can upgrade your
-								subscription plan at any time, in which case you will need to agree to pay the
-								applicable fees for the relevant plan.
+								<strong className='text-head'>Upgrades.</strong> You can upgrade your subscription
+								plan at any time, in which case you will need to agree to pay the applicable fees
+								for the relevant plan.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>Late payments.</strong> If you do not pay the
-								fees on time, we may suspend your account until the outstanding fees have been
-								paid. We reserve the right to terminate your Account if you do not make payment due
-								to us within 15 days of our remainder to you that payment is due.
+								<strong className='text-head'>Late payments.</strong> If you do not pay the fees on
+								time, we may suspend your account until the outstanding fees have been paid. We
+								reserve the right to terminate your Account if you do not make payment due to us
+								within 15 days of our remainder to you that payment is due.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>Changes to the fees.</strong> We reserve the
-								right to change the fees at any time, on notice to you if such change affects your
-								existing subscription on renewal. This means that if you have purchased a monthly
+								<strong className='text-head'>Changes to the fees.</strong> We reserve the right to
+								change the fees at any time, on notice to you if such change affects your existing
+								subscription on renewal. This means that if you have purchased a monthly
 								subscription, the fees will be increased the following month.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>If you are a Consumer.</strong> You have 14 days
-								from your subscription to our “pro” plan to change your mind under the Consumer
+								<strong className='text-head'>If you are a Consumer.</strong> You have 14 days from
+								your subscription to our “pro” plan to change your mind under the Consumer
 								Contracts Regulations 2013 and to cancel your subscription for Services. However,
 								you will be deemed to have expressly requested the Services to be provided to you
 								during this cancellation period if you access or start using the “pro” version of
@@ -323,34 +316,34 @@ export default function Terms() {
 						</ol>
 					</li>
 					<li>
-						<strong className='mb-6 block text-[#D8D8D8]'>Renewals</strong>
+						<strong className='mb-6 block text-head'>Renewals</strong>
 
 						<ol className='mb-6 list-[lower-roman] space-y-6 pl-6 text-xl'>
 							<li>
-								<strong className='text-[#D8D8D8]'>Automatic renewals.</strong> We have set up
-								automatic renewals in your Account to avoid interruptions. This means that your
-								subscription will automatically be renewed at the then-applicable rates, and for
-								the same term. If you have a monthly subscription, your subscription will be
-								automatically renewed monthly; if you have a yearly subscription, your subscription
-								will automatically renew on a yearly basis.
+								<strong className='text-head'>Automatic renewals.</strong> We have set up automatic
+								renewals in your Account to avoid interruptions. This means that your subscription
+								will automatically be renewed at the then-applicable rates, and for the same term.
+								If you have a monthly subscription, your subscription will be automatically renewed
+								monthly; if you have a yearly subscription, your subscription will automatically
+								renew on a yearly basis.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>Disabling auto-renewals.</strong> You may choose
-								to disable the auto-renewal option at any time in your Account settings or may
-								cancel your subscription prior to the end of the term set out in your Purchase
-								Order. If you do not cancel your subscription before the end of the term or disable
-								the auto-renewal option, you will be automatically charged for the renewal, and any
+								<strong className='text-head'>Disabling auto-renewals.</strong> You may choose to
+								disable the auto-renewal option at any time in your Account settings or may cancel
+								your subscription prior to the end of the term set out in your Purchase Order. If
+								you do not cancel your subscription before the end of the term or disable the
+								auto-renewal option, you will be automatically charged for the renewal, and any
 								such payment will not be refunded
 							</li>
 						</ol>
 					</li>
 
 					<li>
-						<strong className='mb-6 block text-[#D8D8D8]'>Third party links and integrations</strong>
+						<strong className='mb-6 block text-head'>Third party links and integrations</strong>
 
 						<ol className='mb-6 list-[lower-roman] space-y-6 pl-6 text-xl'>
 							<li>
-								<strong className='text-[#D8D8D8]'>Third party integrations.</strong> We offer
+								<strong className='text-head'>Third party integrations.</strong> We offer
 								integrations with third party services, such as Microsoft 365, Github, Discord etc.
 								(Third Party Services). For instance, you will need to login to your Account using
 								your Github login. We are not affiliated with these Third Party Services, and we do
@@ -373,13 +366,13 @@ export default function Terms() {
 								.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>Discontinuing third party integrations.</strong>{' '}
-								We reserve the right to discontinue the use or suspend the availability of any
-								Third Party Services for any reason and at any time without notice, which may
-								result in your inability to use certain functions of the Services.
+								<strong className='text-head'>Discontinuing third party integrations.</strong> We
+								reserve the right to discontinue the use or suspend the availability of any Third
+								Party Services for any reason and at any time without notice, which may result in
+								your inability to use certain functions of the Services.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>Third party links.</strong> Our Website and/or
+								<strong className='text-head'>Third party links.</strong> Our Website and/or
 								Services may contain links or functionality to access or use third party websites,
 								platforms, or display materials of third parties. When you leave our Website or
 								Services by clicking on any link, you do so at your own risk and you must comply
@@ -391,18 +384,18 @@ export default function Terms() {
 					</li>
 
 					<li>
-						<strong className='mb-6 block text-[#D8D8D8]'>Intellectual Property Rights</strong>
+						<strong className='mb-6 block text-head'>Intellectual Property Rights</strong>
 
 						<ol className='mb-6 list-[lower-roman] space-y-6 pl-6 text-xl'>
 							<li>
-								<strong className='text-[#D8D8D8]'>Licence to the Customer Data.</strong>
+								<strong className='text-head'>Licence to the Customer Data.</strong>
 								In order for us to be able to provide our Services to you, you grant us (and our
 								affiliates) a non-exclusive, worldwide, royalty-free, perpetual, irrevocable,
 								sub-licensable right to exercise all intellectual property rights over your
 								Customer Data that you provide us with under these Terms.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>
+								<strong className='text-head'>
 									We retain all intellectual property rights to our Website and Services.
 								</strong>{' '}
 								Our Website, Services, and all content or materials in them, including the “look
@@ -414,16 +407,16 @@ export default function Terms() {
 								prior written approval.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>Feedback.</strong> You may provide us with
-								feedback, comments and suggestions for improvements of our Services or Website (the
-								Feedback) by sending us emails, or interacting with us through social media. In
-								order for us to be able to freely use this Feedback and improve our Services and
-								Website, you assign to us any rights, titles and interests you may have in any such
-								Feedback, and waive any moral rights in relation thereto. You agree that we will
-								not compensate you for any such Feedback.
+								<strong className='text-head'>Feedback.</strong> You may provide us with feedback,
+								comments and suggestions for improvements of our Services or Website (the Feedback)
+								by sending us emails, or interacting with us through social media. In order for us
+								to be able to freely use this Feedback and improve our Services and Website, you
+								assign to us any rights, titles and interests you may have in any such Feedback,
+								and waive any moral rights in relation thereto. You agree that we will not
+								compensate you for any such Feedback.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>
+								<strong className='text-head'>
 									We grant you a licence so you can use our Website and Services.
 								</strong>{' '}
 								We grant you a limited, non-exclusive, non-transferable, non-sublicensable and
@@ -431,21 +424,21 @@ export default function Terms() {
 								complying with these Terms.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>What you cannot do with the licence.</strong>{' '}
-								The licence we give you does not allow you to (a) resale or commercialise our
-								Website and/or Services; (b) modify, distribute, copy, republish or make
-								derivatives of our Websites or Services; or (c) collect or use our or other users’
-								information, or carry out any data extraction or data mining whatsoever.
+								<strong className='text-head'>What you cannot do with the licence.</strong> The
+								licence we give you does not allow you to (a) resale or commercialise our Website
+								and/or Services; (b) modify, distribute, copy, republish or make derivatives of our
+								Websites or Services; or (c) collect or use our or other users’ information, or
+								carry out any data extraction or data mining whatsoever.
 							</li>
 						</ol>
 					</li>
 
 					<li>
-						<strong className='mb-6 block text-[#D8D8D8]'>Confidentiality</strong>
+						<strong className='mb-6 block text-head'>Confidentiality</strong>
 
 						<ol className='mb-6 list-[lower-roman] space-y-6 pl-6 text-xl'>
 							<li>
-								<strong className='text-[#D8D8D8]'>Confidential Information.</strong>
+								<strong className='text-head'>Confidential Information.</strong>
 								Any information that we and you provide each other (directly or through a third
 								party) which is expressly marked as confidential or which a reasonable person would
 								reasonably consider to be confidential whether disclosed or obtained before, on or
@@ -458,7 +451,7 @@ export default function Terms() {
 								the other party.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>
+								<strong className='text-head'>
 									Information which is not considered confidential
 								</strong>{' '}
 								Confidential Information does not include information which the other party can
@@ -468,14 +461,14 @@ export default function Terms() {
 								the party, or (d) was independently and legally disclosed by a third party.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>
+								<strong className='text-head'>
 									Security measures to protect the Confidential Information.
 								</strong>{' '}
 								Both parties will ensure it keeps any Confidential Information of the other party
 								secure to prevent inadvertent or unauthorised disclosure.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>
+								<strong className='text-head'>
 									Other authorised disclosures of Confidential Information.
 								</strong>{' '}
 								Either party can disclose Confidential Information of the other to the extent
@@ -486,9 +479,7 @@ export default function Terms() {
 								that other party in opposing such disclosure.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>
-									Survival of the confidentiality obligations.
-								</strong>{' '}
+								<strong className='text-head'>Survival of the confidentiality obligations.</strong>{' '}
 								The obligations set out in this clause 9 will survive termination of these Terms
 								for whatever reason.
 							</li>
@@ -496,11 +487,11 @@ export default function Terms() {
 					</li>
 
 					<li>
-						<strong className='mb-6 block text-[#D8D8D8]'>Warranties and Indemnities</strong>
+						<strong className='mb-6 block text-head'>Warranties and Indemnities</strong>
 
 						<ol className='mb-6 list-[lower-roman] space-y-6 pl-6 text-xl'>
 							<li>
-								<strong className='text-[#D8D8D8]'>
+								<strong className='text-head'>
 									Our warranty over the Website and the Services.
 								</strong>{' '}
 								Except where otherwise expressly provided herein, to the maximum extent permitted
@@ -513,7 +504,7 @@ export default function Terms() {
 								cannot fix it.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>
+								<strong className='text-head'>
 									We endeavour to make the Website and Services available to you.
 								</strong>{' '}
 								Whilst we try to make the Website and the Services available 24 hours a day, we
@@ -526,62 +517,60 @@ export default function Terms() {
 								reasons. We will try to give you reasonable notice of any suspension or withdrawal.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>Maintenance and repairs.</strong> We may
-								occasionally need to carry out repairs, maintenance, or introduce new facilities
-								and functions, to the Services.
+								<strong className='text-head'>Maintenance and repairs.</strong> We may occasionally
+								need to carry out repairs, maintenance, or introduce new facilities and functions,
+								to the Services.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>You will indemnify us.</strong> If you are a
-								Business Customer, you shall indemnify and keep us indemnified against any costs,
-								claims or liabilities incurred directly or indirectly by us (along with any fees or
-								charges associated with the said liabilities) arising out of or in connection with
-								your use of the Website or Services or arising out of your non-compliance with or
-								breach of these Terms.
+								<strong className='text-head'>You will indemnify us.</strong> If you are a Business
+								Customer, you shall indemnify and keep us indemnified against any costs, claims or
+								liabilities incurred directly or indirectly by us (along with any fees or charges
+								associated with the said liabilities) arising out of or in connection with your use
+								of the Website or Services or arising out of your non-compliance with or breach of
+								these Terms.
 							</li>
 						</ol>
 					</li>
 
 					<li>
-						<strong className='mb-6 block text-[#D8D8D8]'>Limitation of Liability</strong>
+						<strong className='mb-6 block text-head'>Limitation of Liability</strong>
 
 						<ol className='mb-6 list-[lower-roman] space-y-6 pl-6 text-xl'>
 							<li>
-								<strong className='text-[#D8D8D8]'>Liability exclusion.</strong> Nothing in these
-								Terms shall exclude or limit our liability for death or personal injury caused by
-								our negligence, fraud or fraudulent misrepresentation, and/or any other liability
-								which may not be limited or excluded by applicable law.
+								<strong className='text-head'>Liability exclusion.</strong> Nothing in these Terms
+								shall exclude or limit our liability for death or personal injury caused by our
+								negligence, fraud or fraudulent misrepresentation, and/or any other liability which
+								may not be limited or excluded by applicable law.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>If you are a Business Customer.</strong> We
-								exclude all implied conditions, warranties, representations or other terms that may
-								apply to the Website or any content on it. We will not be liable to you for any
-								loss or damage, whether in contract, tort (including negligence), breach of
-								statutory duty, or otherwise, even if foreseeable, arising under or in connection
-								with: (i) use of, or inability to use, the Website; or (ii) use of or reliance on
-								any content displayed on the Website. In particular, we will not be liable for: (i)
-								loss of profits, sales, business, or revenue; (ii) business interruption; (iii)
-								loss of anticipated savings; (iv) loss of business opportunity, goodwill or
-								reputation; or (v) any indirect or consequential loss or damage.
+								<strong className='text-head'>If you are a Business Customer.</strong> We exclude
+								all implied conditions, warranties, representations or other terms that may apply
+								to the Website or any content on it. We will not be liable to you for any loss or
+								damage, whether in contract, tort (including negligence), breach of statutory duty,
+								or otherwise, even if foreseeable, arising under or in connection with: (i) use of,
+								or inability to use, the Website; or (ii) use of or reliance on any content
+								displayed on the Website. In particular, we will not be liable for: (i) loss of
+								profits, sales, business, or revenue; (ii) business interruption; (iii) loss of
+								anticipated savings; (iv) loss of business opportunity, goodwill or reputation; or
+								(v) any indirect or consequential loss or damage.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>Liability cap for Business Customer.</strong>{' '}
-								Subject to clause 11.1 and 11.2 our total liability in connection with our Website
-								or Services whether arising from contract, negligence or otherwise shall be limited
-								to the total amount of fees paid in the 6 months immediately preceding the event
+								<strong className='text-head'>Liability cap for Business Customer.</strong> Subject
+								to clause 11.1 and 11.2 our total liability in connection with our Website or
+								Services whether arising from contract, negligence or otherwise shall be limited to
+								the total amount of fees paid in the 6 months immediately preceding the event
 								giving rise to a claim.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>If you are a Consumer.</strong> Please note that
-								we only provide the Website for domestic and private use. You agree not to use the
+								<strong className='text-head'>If you are a Consumer.</strong> Please note that we
+								only provide the Website for domestic and private use. You agree not to use the
 								Website for any commercial or business purposes, and we have no liability to you
 								for any loss of profit, loss of business, business interruption, or loss of
 								business opportunity, nor are we liable to you if the loss was not foreseeable or
 								outside of our control.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>
-									Duty to exercise reasonable care and skill.
-								</strong>{' '}
+								<strong className='text-head'>Duty to exercise reasonable care and skill.</strong>{' '}
 								In performing any obligation under these Terms, our only duty is to exercise
 								reasonable care and skill.
 							</li>
@@ -589,51 +578,51 @@ export default function Terms() {
 					</li>
 
 					<li>
-						<strong className='mb-6 block text-[#D8D8D8]'>Modification of the Services</strong>
+						<strong className='mb-6 block text-head'>Modification of the Services</strong>
 
 						<ol className='mb-6 list-[lower-roman] space-y-6 pl-6 text-xl'>
 							<li>
-								<strong className='text-[#D8D8D8]'>We may change our Website or Services.</strong>{' '}
-								We may change or update our Website or Services and any content therein without
+								<strong className='text-head'>We may change our Website or Services.</strong> We
+								may change or update our Website or Services and any content therein without
 								warning to you.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>We may add new Services or features.</strong> As
-								we grow and develop our Services, we might sometimes need to provide additional
-								terms for a specific service, and such services will be deemed part of the Services
-								and subject of to the Terms. In the event of a conflict between these Terms and the
+								<strong className='text-head'>We may add new Services or features.</strong> As we
+								grow and develop our Services, we might sometimes need to provide additional terms
+								for a specific service, and such services will be deemed part of the Services and
+								subject of to the Terms. In the event of a conflict between these Terms and the
 								specific terms, the specific terms will prevail for the specific services.
 							</li>
 						</ol>
 					</li>
 
 					<li>
-						<strong className='mb-6 block text-[#D8D8D8]'>General</strong>
+						<strong className='mb-6 block text-head'>General</strong>
 
 						<ol className='mb-6 list-[lower-roman] space-y-6 pl-6 text-xl'>
 							<li>
-								<strong className='text-[#D8D8D8]'>Non-Assignment</strong> You can only transfer
-								your contract with us to someone else if we agree to this. We can transfer our
-								contract with you to a different organisation. We will tell you in writing in this
-								happens and, if you are a Consumer, we will ensure that the transfer won’t affect
-								your rights under the contract.
+								<strong className='text-head'>Non-Assignment</strong> You can only transfer your
+								contract with us to someone else if we agree to this. We can transfer our contract
+								with you to a different organisation. We will tell you in writing in this happens
+								and, if you are a Consumer, we will ensure that the transfer won’t affect your
+								rights under the contract.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>
+								<strong className='text-head'>
 									If a court invalidates some of this contract, the rest of it will still apply.
 								</strong>{' '}
 								If a court or other authority decides that some of these Terms are unlawful, the
 								rest will continue to apply.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>Amendments to these Terms.</strong> We reserve
-								the right to amend these Terms at any time. All amendments to these Terms will be
+								<strong className='text-head'>Amendments to these Terms.</strong> We reserve the
+								right to amend these Terms at any time. All amendments to these Terms will be
 								posted online. Continued use of the Services will be deemed to constitute
 								acceptance of the new Terms. If you do not agree with any amendments to our Terms,
 								you must immediately stop using our Services.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>
+								<strong className='text-head'>
 									Even if we delay in enforcing this contract, we can still enforce it later.
 								</strong>{' '}
 								We might not immediately chase you for not doing something (like paying) or for
@@ -641,7 +630,7 @@ export default function Terms() {
 								it later.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>Notices.</strong> Notices under these terms and
+								<strong className='text-head'>Notices.</strong> Notices under these terms and
 								conditions shall be in writing and delivered by hand or sent by recorded delivery
 								post to the relevant party at its address as set out in these terms and conditions
 								or to the email or a director provided by the relevant party. Without evidence of
@@ -653,14 +642,14 @@ export default function Terms() {
 								delivery receipt message).
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>
+								<strong className='text-head'>
 									Nobody else has any rights under this contract.
 								</strong>{' '}
 								This contract is between you and us. Nobody else can enforce it and neither of us
 								will need to ask anybody else to sign-off on ending or changing it.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>Disputes.</strong> If you have a potential claim
+								<strong className='text-head'>Disputes.</strong> If you have a potential claim
 								against us, you shall first, prior to initiating any proceedings, contact us by
 								sending an email to hello@shuttle.rs (Claim Notice) describing the nature of your
 								claim and provide us with as much information, documentation and evidence we
@@ -670,25 +659,25 @@ export default function Terms() {
 								your Claim Notice.
 							</li>
 							<li>
-								<strong className='text-[#D8D8D8]'>Governing Law.</strong> These Terms and any
+								<strong className='text-head'>Governing Law.</strong> These Terms and any
 								non-contractual obligations arising in connection with it are governed by and
 								construed in accordance with English law.
 							</li>
 							<li>
-								<strong className='mb-6 block text-[#D8D8D8]'>Jurisdiction.</strong>{' '}
+								<strong className='mb-6 block text-head'>Jurisdiction.</strong>{' '}
 								<ol className='mb-6 list-[lower-alpha] space-y-6 pl-6 text-xl'>
 									<li>
-										<strong className='text-[#D8D8D8]'>If you are a Business Customer.</strong>{' '}
-										You submit to the exclusive jurisdiction of the English courts to settle
-										any dispute or claim arising out of or in connection with these Terms or
-										its subject matter or formation.
+										<strong className='text-head'>If you are a Business Customer.</strong> You
+										submit to the exclusive jurisdiction of the English courts to settle any
+										dispute or claim arising out of or in connection with these Terms or its
+										subject matter or formation.
 									</li>
 									<li>
-										<strong className='text-[#D8D8D8]'>If you are a Consumer.</strong> You can
-										bring a claim or a dispute arising out of or in connection with these Terms
-										or its subject matter or formation in the English courts except where, by
-										law, such dispute or claim must be brought in the jurisdiction in which you
-										are domiciled, or where the relevant law contains mandatory provisions that
+										<strong className='text-head'>If you are a Consumer.</strong> You can bring
+										a claim or a dispute arising out of or in connection with these Terms or
+										its subject matter or formation in the English courts except where, by law,
+										such dispute or claim must be brought in the jurisdiction in which you are
+										domiciled, or where the relevant law contains mandatory provisions that
 										override such exclusive jurisdiction. We can also bring a claim against you
 										in the jurisdiction in which you are domiciled.
 									</li>

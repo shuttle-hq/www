@@ -72,7 +72,7 @@ const Testimonials = () => {
 				/>
 			</span>
 			<div className='mx-auto w-full max-w-[1280px] px-5 sm:px-10'>
-				<h2 className='font-gradual text-4.5 font-bold leading-none text-[#C2C2C2] lg:text-[3.5rem]'>
+				<h2 className='font-gradual text-4.5 font-bold leading-none text-head lg:text-[3.5rem]'>
 					What the community says
 				</h2>
 				<p className='mt-3 text-xl text-white/40 sm:mt-5 lg:text-2xl'>
@@ -97,11 +97,11 @@ const Testimonials = () => {
 								</div>
 								<div>
 									<h3 className='font-gradual font-bold text-white'>Dominykas</h3>
-									<p className='text-[#C2C2C2]'>@chaosteil</p>
-									<p className='text-[#C2C2C2]'> Staff Software Engineer @ Uber</p>
+									<p className='text-head'>@chaosteil</p>
+									<p className='text-head'> Staff Software Engineer @ Uber</p>
 								</div>
 							</div>
-							<p className='mt-5 text-[#C2C2C2]'>Game changer, what a great project.</p>
+							<p className='mt-5 text-head'>Game changer, what a great project.</p>
 						</div>
 						<div className='rounded-[1.25rem] border border-white border-opacity-10 p-6 backdrop-blur-2xl'>
 							<div className='flex items-start gap-4'>
@@ -116,11 +116,11 @@ const Testimonials = () => {
 								</div>
 								<div>
 									<h3 className='font-gradual font-bold text-white'>Matthias Endler</h3>
-									<p className='text-[#C2C2C2]'>@mathiasendler</p>
-									<p className='text-[#C2C2C2]'>Rust Consultant @ Corrode</p>
+									<p className='text-head'>@mathiasendler</p>
+									<p className='text-head'>Rust Consultant @ Corrode</p>
 								</div>
 							</div>
-							<p className='mt-5 text-[#C2C2C2]'>
+							<p className='mt-5 text-head'>
 								Deployed my second service with Shuttle and I really like it! It's fast and
 								integrates well with cargo, so I can focus on the Rust code instead of the
 								deployment. Well done!
@@ -141,11 +141,11 @@ const Testimonials = () => {
 								</div>
 								<div>
 									<h3 className='font-gradual font-bold text-white'>Peter Mertz</h3>
-									<p className='text-[#C2C2C2]'>@mertzalertz</p>
-									<p className='text-[#C2C2C2]'>Lead Engineer @ Zed Financial</p>
+									<p className='text-head'>@mertzalertz</p>
+									<p className='text-head'>Lead Engineer @ Zed Financial</p>
 								</div>
 							</div>
-							<p className='mt-5 text-[#C2C2C2]'>
+							<p className='mt-5 text-head'>
 								Shuttle is hands down the best way to deploy a rust app quickly, safely, with the
 								ability to scale. It has a variety of frameworks supported, and the community
 								surrounding it is incredible. Heroku for Rust but better!
@@ -164,13 +164,11 @@ const Testimonials = () => {
 								</div>
 								<div>
 									<h3 className='font-gradual font-bold text-white'>Stefan Baumgartner</h3>
-									<p className='text-[#C2C2C2]'>@ddprrt</p>
-									<p className='text-[#C2C2C2]'>
-										Owner oida.dev | Architect @ Dynatrace | Rust Linz
-									</p>
+									<p className='text-head'>@ddprrt</p>
+									<p className='text-head'>Owner oida.dev | Architect @ Dynatrace | Rust Linz</p>
 								</div>
 							</div>
-							<p className='mt-5 text-[#C2C2C2]'>
+							<p className='mt-5 text-head'>
 								You soon realize Shuttle is much more than just a host for your app. It's your Rust
 								framework for the cloud; Infrastructure as Crates! This puts Shuttle in front of
 								everything else I've tried. I couldn't be more happy!
@@ -191,11 +189,11 @@ const Testimonials = () => {
 								</div>
 								<div>
 									<h3 className='font-gradual font-bold text-white'>Roberto Huertas</h3>
-									<p className='text-[#C2C2C2]'>@robertohuertasm</p>
-									<p className='text-[#C2C2C2]'>Software Engineer @ Datadog</p>
+									<p className='text-head'>@robertohuertasm</p>
+									<p className='text-head'>Software Engineer @ Datadog</p>
 								</div>
 							</div>
-							<p className='mt-5 text-[#C2C2C2]'>
+							<p className='mt-5 text-head'>
 								Mind-blowing! What a huge addition to the Rust ecosystem! I'm sure this will be a
 								driveway to get more people into Rust.
 							</p>
@@ -213,14 +211,14 @@ const Testimonials = () => {
 								</div>
 								<div>
 									<h3 className='font-gradual font-bold text-white'>Glen De Cauwsemaecker</h3>
-									<p className='text-[#C2C2C2]'>@glendc</p>
-									<p className='text-[#C2C2C2]'>Founder @ Plabayo</p>
+									<p className='text-head'>@glendc</p>
+									<p className='text-head'>Founder @ Plabayo</p>
 								</div>
 							</div>
-							<p className='mt-5 text-[#C2C2C2]'>
-								Shuttle turns shipping web services into child play.
-								The full power of the Rust ecosystem together with zero effort deployments and
-								no infrastructure work allows us to hit market as quickly as we can develop the product. Magic!
+							<p className='mt-5 text-head'>
+								Shuttle turns shipping web services into child play. The full power of the Rust
+								ecosystem together with zero effort deployments and no infrastructure work allows
+								us to hit market as quickly as we can develop the product. Magic!
 							</p>
 						</div>
 					</div>
@@ -228,7 +226,7 @@ const Testimonials = () => {
 				<div className='mt-12 flex justify-center md:hidden'>
 					<Link
 						href='#'
-						className='border-gradient shadow-gradient rounded-button bg-black px-6 py-3 font-gradual font-bold text-[#C2C2C2]'
+						className='border-gradient shadow-gradient rounded-button bg-black px-6 py-3 font-gradual font-bold text-head'
 					>
 						View more
 					</Link>

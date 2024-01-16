@@ -12,43 +12,41 @@ const JobOpenings = () => {
 						src='/images/sections/job-openings/bg.png'
 						alt=''
 						fill
-						className='absolute top-0 left-0 -z-10 h-full w-full bg-[#13292C] object-cover dark:bg-black'
+						className='absolute left-0 top-0 -z-10 h-full w-full bg-[#13292C] object-cover dark:bg-black'
 					/>
 					<Image
 						src='/images/sections/job-openings/stars.png'
 						alt=''
 						fill
-						className='absolute top-0 left-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:translate-x-12 group-hover:translate-y-3 md:block'
+						className='absolute left-0 top-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:translate-x-12 group-hover:translate-y-3 md:block'
 					/>
 					<Image
 						src='/images/sections/job-openings/stars-2.png'
 						alt=''
 						fill
-						className='absolute top-0 left-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-5 md:block'
+						className='absolute left-0 top-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-5 md:block'
 					/>
 					<Image
 						src='/images/sections/job-openings/comets.png'
 						alt=''
 						fill
-						className='absolute top-0 left-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-24 group-hover:translate-y-24 md:block'
+						className='absolute left-0 top-0 -z-10 hidden h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-24 group-hover:translate-y-24 md:block'
 					/>
 				</span>
 				<div className='px-5 py-10 md:px-8 desktop:px-20 desktop:pb-40'>
-					<h2 className='text-gradient bg-clip-text font-gradual text-4.5 font-bold leading-none text-[#C2C2C2] lg:text-[3.5rem] desktop:text-[4rem]'>
+					<h2 className='text-gradient bg-clip-text font-gradual text-4.5 font-bold leading-none text-head lg:text-[3.5rem] desktop:text-[4rem]'>
 						Let&apos;s build <span className='text-transparent'>the future of development&nbsp;</span>
 						together
 					</h2>
 					<div className='mt-8 grid gap-6 lg:mt-16 lg:grid-cols-2 lg:items-start lg:gap-8'>
-						<div className='space-y-6 text-xl text-[#FFFFFF8F] dark:text-[#C2C2C2] lg:space-y-8'>
+						<div className='space-y-6 text-xl text-head lg:space-y-8'>
 							<p>
-								Joining us, you&apos;ll become part of an exceptionally strong team
-								that has a big bias for action and a love for quick experimentation and hacking.
+								Joining us, you&apos;ll become part of an exceptionally strong team that has a big
+								bias for action and a love for quick experimentation and hacking.
 							</p>
-							<p>
-								Let&apos;s build something people want, together!
-							</p>
+							<p>Let&apos;s build something people want, together!</p>
 						</div>
-						<div className='flex flex-col divide-y divide-white/10 border-b border-white/10 text-xl text-[#C2C2C2]'>
+						<div className='flex flex-col divide-y divide-white/10 border-b border-white/10 text-xl text-head'>
 							<p className='pb-4 font-gradual font-bold'>Open positions</p>
 							{Jobs.map((job) => (
 								<Position key={job.name} name={job.name} link={job.link} />

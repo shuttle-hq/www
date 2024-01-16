@@ -27,7 +27,7 @@ export default function Launchpad(props: Props) {
 			<Form />
 			<Description />
 			<section className='relative mx-auto max-w-[600px] px-5 pb-28 pt-28 sm:px-10'>
-				<h1 className='mb-4 text-[32px] font-bold text-[#C2C2C2]'>Past issues</h1>
+				<h1 className='mb-4 text-[32px] font-bold text-head'>Past issues</h1>
 				<p className='mb-[40px]'>
 					For our upcoming issues, we have some exciting project ideas lined up for you, such as an
 					e-commerce application that performs safe transactions with a payment provider and an Activity
@@ -44,7 +44,7 @@ export default function Launchpad(props: Props) {
 						trackEvent('launchpad_seemore')
 					}}
 				>
-					<p className='mt-4 text-right text-[#7A7A7A]'>
+					<p className='mt-4 text-right text-body'>
 						See More <span className='ml-4'>→</span>
 					</p>
 				</Link>

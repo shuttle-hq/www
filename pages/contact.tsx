@@ -26,7 +26,7 @@ export default function About() {
 	return (
 		<main>
 			<section className='mx-auto mt-24 w-full max-w-2xl items-center px-5 sm:px-10 lg:mt-28'>
-				<h2 className='text-gradient my-12 bg-clip-text text-center font-gradual text-[56px] font-bold leading-[150%] text-[#C2C2C2]'>
+				<h2 className='text-gradient my-12 bg-clip-text text-center font-gradual text-[56px] font-bold leading-[150%] text-head'>
 					Contact
 				</h2>
 				<form onSubmit={handleSubmit} className=' flex w-full flex-col gap-4 text-center'>
@@ -44,7 +44,7 @@ export default function About() {
 							/>
 						</svg>
 						<div
-							className='relative h-[56px] w-full appearance-none rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-left text-xl font-normal text-[#D8D8D8] placeholder:text-[#D8D8D8]'
+							className='relative h-[56px] w-full appearance-none rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-left text-xl font-normal text-head placeholder:text-head'
 							onClick={() => setIsOpen(!isOpen)}
 						>
 							<div>
@@ -56,7 +56,7 @@ export default function About() {
 									{options.map((option, index) => (
 										<div
 											key={index}
-											className='flex h-[56px] cursor-pointer items-center px-[12px] text-xl font-normal text-[#D8D8D8] hover:bg-slate-900 hover:text-white'
+											className='flex h-[56px] cursor-pointer items-center px-[12px] text-xl font-normal text-head hover:bg-slate-900 hover:text-white'
 											onClick={() => {
 												setTarget(option.value as FormTargetOption)
 												setIsOpen(false)
@@ -75,7 +75,7 @@ export default function About() {
 						type='text'
 						name='name'
 						placeholder='Full Name'
-						className='h-[56px] w-full rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-xl font-normal text-[#D8D8D8] outline-none placeholder:text-[#D8D8D8]'
+						className='h-[56px] w-full rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-xl font-normal text-head outline-none placeholder:text-head'
 						required
 					/>
 					<input
@@ -84,7 +84,7 @@ export default function About() {
 						type='text'
 						name='subject'
 						placeholder='Subject'
-						className='h-[56px] w-full rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-xl font-normal text-[#D8D8D8] outline-none placeholder:text-[#D8D8D8]'
+						className='h-[56px] w-full rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-xl font-normal text-head outline-none placeholder:text-head'
 						required
 					/>
 					<textarea
@@ -92,7 +92,7 @@ export default function About() {
 						onChange={(e) => setBody(e.target.value)}
 						name='body'
 						placeholder='Message'
-						className='w-full rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-xl font-normal text-[#D8D8D8] outline-none placeholder:text-[#D8D8D8]'
+						className='w-full rounded-xl border border-slate-700 bg-transparent px-[12px] py-[15px] text-xl font-normal text-head outline-none placeholder:text-head'
 						required
 					/>
 					<Button

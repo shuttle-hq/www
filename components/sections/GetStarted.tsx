@@ -21,9 +21,7 @@ const GetStarted = () => {
 	return (
 		<>
 			<div className='mx-auto mt-24 w-full max-w-[800px] px-5 sm:mt-28 sm:px-10 lg:mt-32 xl:mt-36 desktop:mt-52'>
-				<h2 className='font-gradual text-4.5 font-bold leading-none dark:text-[#C2C2C2]'>
-					Get started in seconds
-				</h2>
+				<h2 className='font-gradual text-4.5 font-bold leading-none text-head'>Get started in seconds</h2>
 				<p className='mt-5 lg:text-xl'>
 					Build an app with your favourite Rust framework and deploy it immediately. We’ll take care of
 					all the infrastructure.
@@ -160,7 +158,7 @@ const GetStartedSlide: FC<GetStartedSlideProps> = ({
 			)}
 		>
 			<div className={clsx('rounded-2xl bg-[#E9E9E9] p-6 after:rounded-2xl dark:bg-black')}>
-				<h3 className='font-gradual text-2xl font-bold dark:text-[#C2C2C2]'>
+				<h3 className='font-gradual text-2xl font-bold dark:text-head'>
 					<span className={clsx('bg-gradient-to-r bg-clip-text text-transparent', gradient)}>
 						0{adjustedNumber}
 					</span>
@@ -171,7 +169,7 @@ const GetStartedSlide: FC<GetStartedSlideProps> = ({
 				<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
 					$ {command}
 					<button
-						className='absolute right-3 rounded-lg border border-transparent p-1 hover:border-[#484848] hover:bg-[#343434] dark:text-[#C2C2C2]'
+						className='absolute right-3 rounded-lg border border-transparent p-1 hover:border-[#484848] hover:bg-[#343434] dark:text-head'
 						onClick={() => {
 							trackEvent(step)
 							copyToClipboard(command)

@@ -8,7 +8,7 @@ const Contact = () => (
 			<h1 className='mb-2.5 text-center font-gradual text-2xl font-bold text-white sm:text-[40px]'>
 				Still not sure which plan is right for you?
 			</h1>
-			<h3 className='mb-8 text-base text-[#7A7A7A] sm:text-2xl'>Let us help you choose.</h3>
+			<h3 className='mb-8 text-base text-body sm:text-2xl'>Let us help you choose.</h3>
 			<Button
 				variant='tertiary'
 				invertOnDark

@@ -2,7 +2,7 @@ export default function AcceptableUse() {
 	return (
 		<main className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
 			<div className='mb-[98px]'>
-				<h1 className='mb-[19px] text-[64px] font-bold text-[#D8D8D8]'>Acceptable Use Policy</h1>
+				<h1 className='mb-[19px] text-[64px] font-bold text-head'>Acceptable Use Policy</h1>
 				<p className='mb-6 text-xl'>
 					<strong>Last updated:</strong> 05/10/23
 				</p>

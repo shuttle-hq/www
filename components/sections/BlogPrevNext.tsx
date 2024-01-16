@@ -36,7 +36,7 @@ const DirectionCard: FC<DirectionCardProps> = ({ post, className, hoverDirection
 		>
 			<div
 				className={clsx(
-					'relative w-full text-sm text-[#C2C2C2] transition-all duration-500',
+					'relative w-full text-sm text-head transition-all duration-500',
 					hoverDirection === 'left' ? 'left-0 group-hover:-left-2' : 'right-0 group-hover:-right-2'
 				)}
 			>
@@ -64,7 +64,7 @@ const DirectionCard: FC<DirectionCardProps> = ({ post, className, hoverDirection
 
 			<div
 				className={clsx(
-					'relative mt-4 text-lg text-[#C2C2C2] transition-all duration-500',
+					'relative mt-4 text-lg text-head transition-all duration-500',
 					hoverDirection === 'left' ? 'left-0 group-hover:left-2' : 'right-0 group-hover:right-2'
 				)}
 			>
@@ -72,7 +72,7 @@ const DirectionCard: FC<DirectionCardProps> = ({ post, className, hoverDirection
 			</div>
 			<div
 				className={clsx(
-					'relative mt-5 text-xs text-[#FFFFFF8F] transition-all duration-500 dark:text-[#C2C2C2]',
+					'relative mt-5 text-xs text-head transition-all duration-500',
 					hoverDirection === 'left' ? 'left-0 group-hover:left-2' : 'right-0 group-hover:right-2'
 				)}
 			>

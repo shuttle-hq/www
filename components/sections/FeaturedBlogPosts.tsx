@@ -16,10 +16,10 @@ const FeaturedBlogPosts: FC<FeaturedBlogPostsProps> = ({ posts = [] }) => {
 	return (
 		<div className='mt-24 overflow-hidden lg:mt-32 desktop:mt-40'>
 			<div className='mx-auto w-full max-w-[1000px] px-5 sm:px-10'>
-				<h2 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-[3.5rem]'>
+				<h2 className='font-gradual text-5xl font-bold text-black dark:text-head lg:text-[3.5rem]'>
 					What’s new
 				</h2>
-				<p className='mt-5 text-xl text-[#525151] dark:text-white/40 lg:text-2xl'>
+				<p className='text-main mt-5 text-xl lg:text-2xl'>
 					Read about Rust, Shuttle and development in general
 				</p>
 			</div>
@@ -114,7 +114,7 @@ const Article: FC<ArticleProps> = ({ post, className }) => {
 							className={authorImage !== '/images/logo.png' ? 'rounded-full' : ''}
 						/>
 						<div>
-							<h3 className='font-gradual font-bold text-[#C2C2C2]'>
+							<h3 className='font-gradual font-bold text-head'>
 								{firstAuthor?.author || 'Shuttle'}
 								{firstAuthor?.position ? ` - ${firstAuthor.position}` : ''}
 							</h3>
