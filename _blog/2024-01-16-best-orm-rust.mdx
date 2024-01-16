@@ -22,8 +22,8 @@ This may be written as this:
 
 ```rust
 let name = "Test Cake";
-let user: cake::Model = User::find()
-    .filter(user::Column::Name.contains(name))
+let cake: cake::Model = User::find()
+    .filter(cake::Column::Name.contains(name))
     .all(db_connection)
     .await?;
 
@@ -208,7 +208,7 @@ This table illustrates the main differences between SeaORM and Diesel for those 
 | Lazy loading | Yes | No |
 | Compile time checks | Yes | Yes |
 | Raw SQL support | Yes | Yes |
-| Extendable? | Yes - you can extend ActiveModel and have the models interact with other crates | Yes - you can extend Diesel as well as the CLI |
+| Extendable? | Not particularly although you can extend the ActiveModels | Yes - you can extend Diesel as well as the CLI |
 | Async friendly? | Yes | You need to add diesel-async |
 | Extra dependencies | None, just enable features | Native drivers need to be installed |
 
