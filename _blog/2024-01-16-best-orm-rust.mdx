@@ -1,0 +1,232 @@
+---
+title: "A Guide to Rust ORMs in 2024"
+description: This article talks about Rust ORMs, what they are and which ORM is best for your use case.
+author: josh
+tags: [rust, sql, orm, comparison]
+thumb: orm-rust-thumb.png
+cover: orm-rust-thumb.png
+date: '2024-01-16T14:30:00'
+---
+In this article, we’re going to talk about Rust ORMs and compare the most popular Rust ORMs that you can use today in your applications.
+
+## What is an ORM?
+
+A Relational Object Mapper (ORM for short) is a piece of software that aims to solve the issue of using SQL directly by letting you map objects in your code to SQL. For example, you may have an SQL query that looks like this:
+
+```sql
+SELECT FROM CAKES WHERE NAME = 'Test Cake';
+
+```
+
+This may be written as this:
+
+```rust
+let name = "Test Cake";
+let user: cake::Model = User::find()
+    .filter(user::Column::Name.contains(name))
+    .all(db_connection)
+    .await?;
+
+```
+
+Although initially there is more boilerplate setup than using a raw SQL library might use, in the long run it can save a lot of developer headaches when getting SQL queries to work - it also makes onboarding developers who are new to a codebase much easier. Additionally, you get the benefits of any IDE plugins you wish to use - for example, LSP (Language Server Protocol) plugins and Intellisense.
+
+## SeaORM
+
+### What is SeaORM?
+
+SeaORM is a fully async-friendly Rust ORM that aims to “help you build web services in Rust with the familiarity of dynamic languages”. This library builds on SQLx and abstracts the raw SQL away to provide a clean interface that allows you to use structs as models, using derive macros and traits to allow you to build the experience that you want. It also comes with a CLI for generating migrations, entities, and models.
+
+SeaORM also implements a system called `ActiveModel` through traits to be able to extend the behavior of models that an application might use. Additionally, you can add traits for extending behavior before or after saving a record, and the ActiveModel itself. This is quite helpful for us as it allows us to slim down the application code while abstracting it away to other areas. A new framework called [Loco](https://loco.rs/) aims to reproduce the “Ruby on Rails” experience in Rust by including heavy use of SeaORM to slim down application code by allowing you to instead use traits to implement the behavior that you want - you can explore this with our article [here.](https://www.shuttle.rs/blog/2023/12/28/using-loco-rust-rails)
+
+SeaORM has quite a lot of helpful documentation which you can find [here.](https://www.sea-ql.org/SeaORM/docs/index/) There’s a page for mostly everything you can do with SeaORM. Some parts like `ActiveModel` that are quite useful to know about are mainly tucked away into parts of other pages, so it could be inferred there’s an assumption that you’re going to read every page or use the search bar. If you plan to use SeaORM regularly it would be a good idea to do so already, but this can make casual browsing somewhat more awkward.
+
+If you have a lot of different models or tables that you need to use, SeaORM is very helpful. If you have a lot of different things you need to keep track of and have a Rust LSP plugin or intellisense installed, it’s easy to ensure that all of the SQL database interactions “just work” without needing to debug anything! This solves a particularly large issue for teams with members who may need to interact with the database but are not skilled in SQL.
+
+One thing that you might find to be a hindrance is knowing where to import your dependencies from. Particularly if you’re using multiple models in one file, it can be annoying to rename everything! It can also be somewhat complicated to implement your own `ActiveModel` behavior. If you’re a less experienced developer, this can lead to some headaches. The set-up time may also be a turn-off particularly if you have a lot of tables to set up due to how much method chaining there is.
+
+Additionally, there are a couple of initial bumps that a newer developer may come across while using it - particularly, the need for a CLI and looking at what the migrations do exactly. Additionally,  although you can migrate SQL files directly to SeaORM migrations, the generated migration files themselves are extremely long. This is a migration that adds one table with one column:
+
+```rust
+// src/migrator/m20220602_000001_create_bakery_table.rs (create new file)
+
+use sea_orm_migration::prelude::*;
+
+pub struct Migration;
+
+impl MigrationName for Migration {
+    fn name(&self) -> &str {
+        "m_20220602_000001_create_bakery_table"
+    }
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for Migration {
+    // Define how to apply this migration: Create the Bakery table.
+    async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
+        manager
+            .create_table(
+                Table::create()
+                    .table(Bakery::Table)
+                    .col(
+                        ColumnDef::new(Bakery::Id)
+                            .integer()
+                            .not_null()
+                            .auto_increment()
+                            .primary_key(),
+                    )
+                    .col(ColumnDef::new(Bakery::Name).string().not_null())
+                    .col(ColumnDef::new(Bakery::ProfitMargin).double().not_null())
+                    .to_owned(),
+            )
+            .await
+    }
+
+    // Define how to rollback this migration: Drop the Bakery table.
+    async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
+        manager
+            .drop_table(Table::drop().table(Bakery::Table).to_owned())
+            .await
+    }
+}
+
+#[derive(Iden)]
+pub enum Bakery {
+    Table,
+    Id,
+    Name,
+    ProfitMargin,
+}
+
+```
+
+As you can see, it’s pretty long. Additionally, the `Iden` derive macro is not clearly explained to the user in the documentation. Despite this, it is crucial to be able to implement the definitions for the migration itself.
+
+Additionally, you may find its performance somewhat lacking while using SQLite; this is because SQLite does not have a non-blocking API. You can find more about [https://github.com/launchbadge/sqlx/issues/1481](https://github.com/launchbadge/sqlx/issues/1481) This means that you may want to use another library if you plan on using SQLite - particularly `rusqlite`, `diesel` or another similar library.
+
+### Using SeaORM with Shuttle
+
+By default, Shuttle provides a SQLx connection from our `shared_db` crate which you can turn into a SeaORM connection:
+
+```rust
+#[shuttle_runtime::main]
+async fn axum(
+    #[shuttle_shared_db::Postgres] pool: PgPool,
+) -> shuttle_axum::ShuttleAxum {
+    let conn = SqlxPostgresConnector::from_sqlx_postgres_pool(pool);  // pg conn
+...
+    let app = Router::new()
+        .route("/", get(some_route))
+        .with_state(Arc::new(conn));
+
+		Ok(app.into())
+}
+
+```
+
+In production, the macro will automatically allow the Shuttle servers to provision a Postgres instance to you with no setup required!
+
+## Diesel
+
+### What is Diesel?
+
+Diesel is the “other big choice” that you might consider when wanting to use an ORM in Rust. It can be more accurately described as a data mapper and query builder. However, because it offers many features that an ORM normally might (compile-time checking, migrations, mapping structs to database objects) it is considered functionally the same as an ORM.
+
+Compared to SQLx, the table setup is much cleaner:
+
+```rust
+diesel::table! {
+    users {
+        id -> Integer,
+        name -> VarChar,
+        favorite_color -> Nullable<VarChar>,
+    }
+}
+
+```
+
+Instead of mapping directly to Rust types, Diesel maps SQL types as Rust unit structs. However, when you’re writing a struct that you may want to use for querying the database, the documentation says you shouldn’t directly use these types in your structs. This can be somewhat awkward if you want to write idiomatic Rust, because
+
+Instead of being required to use models or entities directly, you can use Diesel’s methods to do simple inserts, updates, or selects instead:
+
+```rust
+let new_user = (id.eq(1), name.eq("Sean"));
+let rows_inserted = diesel::insert_into(users)
+    .values(&new_user)
+    .execute(connection);
+
+```
+
+The combination of both of these makes for a much more simple interface to work with than SeaORM. There is no specific interface for extending your models, but you can also add a manual implementation.
+
+One of Diesel’s main strengths is that it enforces compile-time safety by checking the queries from the `table!` macros. This is a huge advantage for developers who want to make sure that their queries work and it means you won’t get runtime errors trying to run SQL queries. It is also particularly relevant if you’re running a lot of large queries where you have a lot of things going on.
+
+It should be noted that Diesel uses native drivers (the primary reason behind native async incompatibility) - if you want to use a pure Rust stack, Diesel may not be for you. There has been some discussion internally on this, which you can check out [here.](https://github.com/diesel-rs/diesel/issues/2084) Many other Rust crates that are async-friendly either use a worker pool internally for libpq or implement their own protocol layer. Whether this is a deal breaker or not depends on your use case, but if you’d like to use Diesel in an async context idiomatically you can always use `async-diesel`. Overall it doesn’t seem to have affected much if anything at all, however, judging by Diesel’s number of GitHub stars.
+
+Diesel has very extensive documentation that goes beyond the crate itself and has sections on composing applications with Diesel and best practices, extending Diesel with whatever functionality you’d like as well as how to configure the CLI. Compared to SeaORM, the [docs.rs](http://docs.rs/) documentation has quite a lot on there! There is explicit documentation on writing queries, using the library traits, and more. In comparison, however, SeaORM has much more documentation on its own docs page which isn’t based on [docs.rs](http://docs.rs/). Neither particularly loses in this category, although it can be slightly more difficult to find documentation about certain topics in SeaORM like ActiveModel.
+
+Due to the way that Diesel is built, it makes very heavy use of generics. Using generics can help write crates because it can make your structs much more flexible while maintaining good performance. However, it can also result in extremely unhelpful errors when writing your application. Other libraries (Axum, for example) have gotten around this by adding a macros flag that also allows you to add a `debug_handler` macro that lets you add a macro to any function that doesn’t use generics to avoid the wall-of-errors issue. Diesel has a section of documentation dedicated to helping you tackle the various trait-related errors, which you can find [here.](https://docs.diesel.rs/2.1.x/diesel/index.html#how-to-read-diesels-compile-time-error-messages) However if the issue is not listed, you will likely need to visit their GitHub Discussions page or their Gitter chat to debug it.
+
+### Using Diesel with Shuttle
+
+At the moment Diesel isn’t supported out of the box, but a community plugin has been created to allow you to use Diesel (via `diesel_aysnc`) with Shuttle natively - you can find more about it [here.](https://github.com/aumetra/shuttle-diesel-async)
+
+To use it, you need to run the following command:
+
+```rust
+cargo add shuttle-diesel-async --git <https://github.com/aumetra/shuttle-diesel-async>
+cargo add diesel-async
+
+```
+
+Then you can add it to your code like so:
+
+```rust
+use diesel_async::{
+    pooled_connection::deadpool::Pool,
+    AsyncPgConnection,
+};
+
+#[shuttle_runtime::main]
+async fn axum(
+    #[shuttle_diesel_async::Postgres] pg: Pool<AsyncPgConnection>
+) -> shuttle_axum::ShuttleAxum {
+	// .. your code
+}
+
+```
+
+## What ORM is better?
+
+This table illustrates the main differences between SeaORM and Diesel for those who just want a comparison:
+
+| Library | SeaORM | Diesel |
+| --- | --- | --- |
+| Migrations | Yes | Yes |
+| Query building | Yes | Yes |
+| Models | Yes | Yes |
+| Lazy loading | Yes | No |
+| Compile time checks | Yes | Yes |
+| Raw SQL support | Yes | Yes |
+| Extendable? | Yes - you can extend ActiveModel and have the models interact with other crates | Yes - you can extend Diesel as well as the CLI |
+| Async friendly? | Yes | You need to add diesel-async |
+| Extra dependencies | None, just enable features | Native drivers need to be installed |
+
+Below, we’ll also go through some of the other major changes that differentiate SeaORM and Diesel from each other.
+
+SeaORM is a more complete ORM experience compared to Diesel. However, it also requires more setup and boilerplate writing. Depending on how you feel about writing boilerplate, this can be a turnoff. In exchange for this, however, it allows you to slim down the application code by using the crate instead of having to implement things yourself.
+
+Compared to SeaORM, Diesel has a larger community, with more GitHub stars. Diesel’s main communities are on Gitter and GitHub Discussions. However, this may be somewhat less accessible for some users depending on if you use Gitter. SeaORM uses Discord in comparison which is more popular generally (and therefore easier to access), but there aren’t as many people.
+
+Because Diesel is a smaller library and is primarily intended to be used as a query builder and data mapper, some types have intentionally been left out for the community to implement. Notably, types like the JSON Postgres type have been [awaiting implementation](https://github.com/diesel-rs/diesel/issues/44) for quite a while and will continue to do so until it gets added. Some extensions have been added as community crates - which while great, is not particularly helpful if you are working within an environment that requires vetting of crates before usage. On the other hand, SeaORM doesn’t allow any extension at all.
+
+Ultimately, what you should use depends on your use case. If you want an ORM that can take care of a lot of different responsibilities in your application, you should use SeaORM. If you want to use a smaller crate with better performance over SQLite, Diesel is more likely better.
+
+## Finishing Up
+
+Thanks for reading! I hope you have gained a better understanding of what Rust ORM you’d like to use for your application.
+
+Further reading:
+
+- Want to use raw SQL instead? Check out our article about SQLx [here.](https://www.shuttle.rs/blog/2023/10/04/sql-in-rust)
+- Interested in finding the best web framework for you? Check out our comparison article [here.](https://www.shuttle.rs/blog/2023/08/23/rust-web-framework-comparison)
