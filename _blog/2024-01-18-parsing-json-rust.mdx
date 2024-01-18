@@ -1,15 +1,17 @@
 ---
 title: "Parsing JSON in Rust"
 description: This article talks about parsing JSON in Rust and compares JSON parsing libraries. 
+author: josh
+tags: [rust, json, guide, comparison]
 thumb: bypass-aws-complexity-thumb.png 
 cover: bypass-aws-complexity-thumb.png 
-date: '2024-01-11T14:30:00'
+date: '2024-01-18T14:30:00'
 ---
 In this article we’re going to talk about how to use JSON parsing libraries in Rust, as well as a comparison of the most popular libraries and how they perform.
 
-## Using JSON Parsing Libraries in Rust
+## JSON Parsing Basics
 
-### Generating JSON manually in Rust
+### Parsing JSON manually
 
 To get started with working with JSON in Rust, you’ll want to install a library that lets you manipulate JSON easily. One of the popular crates currently available to use is `serde-json`. You can install it by running the following:
 
@@ -44,11 +46,11 @@ fn untyped_example() -> Result<()> {
 }
 ```
 
-However, what you *probably* want to do is be able to serialize data to a struct (creating a struct from JSON), as well as deserialize data from a struct (creating JSON from a struct). Let’s have a look at this in the next section.
+However, we can do much better than this. For example, we can serialize JSON to and from structs, which has many applications. We can use it in JSON templating, web services, CLI arguments and more. Let’s have a look at this in the next section.
 
-### Generating JSON with Serde
+### Parsing JSON with Serde
 
-Serde (pronounced “ser-day”) is a crate that helps you serialize and deserialize data to and from various formats, with one popular use of this being for JSON. If you write web services in Rust, Serde is your friend as you’ll be dealing quite often with JSON data that you may need to either send or receive. Serde provides two main traits to help you with this: `Serialize` and `Deserialize` . For convenience, a derive macro implementation has been added to help with this. See below for how you can carry this out:
+Serde is a crate that helps you serialize and deserialize data to and from various formats, with one popular use of this being for JSON. If you write web services in Rust, Serde is your friend as you’ll be dealing quite often with JSON data that you may need to either send or receive. Serde provides two main traits to help you with this: `Serialize` and `Deserialize` . For convenience, a derive macro implementation has been added to help with this. See below for how you can carry this out:
 
 ```rust
 use serde::{Deserialize, Serialize};
@@ -86,7 +88,7 @@ pub struct PostMetadata {
 }
 ```
 
-The most common use case for this would be nested JSON in a web service. For example, when you are receiving a POST request to your API that has a JSON body, you would normally pass the relevant `Json` type in as a handler function parameter. See below:
+One use case for this would be nested JSON in a web service. For example, when you are receiving a POST request to your API that has a JSON body, you would normally pass the relevant `Json` type in as a handler function parameter. See below:
 
 ```rust
 use axum::Json;
@@ -162,26 +164,32 @@ Doing it this way allows you to deserialize from the stream directly instead of 
 
 ## Comparing Rust JSON crates
 
-Although `serde-json` may be the most popular crate, it is by no means the fastest. A few other crates have popped up in the meantime to improve general JSON parsing performance. In exchange for performance, however, there are certain caveats regarding CPU architecture requirements. There is also increased use of unsafe code, though generally speaking best efforts have been upheld to make sure the code is safe to use. 
+Although `serde-json` may be the most popular crate, it is by no means the fastest. A few other crates have popped up in the meantime to improve general JSON parsing performance. In exchange for performance, however, there are certain caveats regarding CPU SIMD extension requirements. There is also increased use of unsafe code, though generally speaking best efforts have been upheld to make sure the code is safe to use. 
 
 All of these crates for the most part have the same API. Unless stated otherwise, you can safely go between these libraries and expect roughly the same interfaces for working with JSON in each library. 
 
 ### serde-json
 
-`serde-json` is the easiest to use of the Rust JSON libraries. You can install it like so:
-
-```bash
-cargo add serde-json
-```
-
-It requires no extra dependencies to use and is often recommended alongside `serde` when you need access to idiomatic manipulation of raw JSON values. `serde-json` also has support for `no_std` by allowing you to turn off the default `std` feature and enabling `alloc` instead. 
+`serde-json` is the easiest to use of the Rust JSON libraries. It requires no extra dependencies to use and is often recommended alongside `serde` when you need access to idiomatic manipulation of raw JSON values. `serde-json` also has support for `no_std` by allowing you to turn off the default `std` feature and enabling `alloc` instead. 
 
 In terms of performance, `serde-json` itself is not slow by any means. However, it is slower than some of the other JSON libraries on this list. This is primarily due to being optimised for non-parallelized CPU usage. Particularly if you are able to access a modern x86 CPU, you may want to read on to find out more about some of the better-performing options. However, this crate is also the most well used and supported within the Rust community, so if you are having issues with it then it is easy to find assistance!
 
 ### simd-json
 
-`simd-json` is a Rust port of the `simdjson` C++ JSON parser, with `serde` compatibility built in. As the name states, this library uses SIMD - short for Single Instruction Multiple Data. This is a technique used to be able to process multiple data points with parallel processing, making it significantly faster! As a caveat however, it requires that your system is x86 capable and during runtime it will select the best SIMD feature set for performance. If no feature sets are available there is also an unoptimised Rust implementation, but in the documentation it mentions that it should not be relied on. 
+[`simd-json`](https://github.com/simd-lite/simd-json) is a Rust port of the `simdjson` C++ JSON parser, with `serde` compatibility built in. As the name states, this library uses SIMD - short for Single Instruction Multiple Data. This is a technique used to be able to process multiple data points with parallel processing, making it significantly faster! As a caveat however, it requires that your system is x86 capable and during runtime it will select the best SIMD feature set for performance. If no feature sets are available there is also an unoptimised Rust implementation, but in the documentation it mentions that it should not be relied on. 
 
+It is mentioned in the documentation that `simd-json` can be used at full capacity on native target compilation. You can do this by enabling the following compiler option in rustc when running your program, like so:
+
+```rust
+rustc -C target-cpu=native
+```
+
+However, if you’re like most people using Cargo you probably want to use `cargo run`. As in the example, you can create a config at `.cargo/config` and then add the following:
+
+```rust
+[build]
+rustflags = ["-C", "target-cpu=native"]
+```
 Generally speaking, although this library is quite fast, it should be noted that there is quite a lot of **unsafe** code in this crate due to it being a port of a C++ crate. This is not to say that you shouldn’t use it, but rather to use it with caution (as the crate says). In spite of this, there’s a section on safety that details how best practices (like unit testing) are upheld to make sure the crate is as safe to use as possible.
 
 It should also be mentioned that for best performance, it’s typically best to enable the `jemalloc` or `mimalloc` features to be able to make the most of the library. 
@@ -190,15 +198,15 @@ Generally, the API for `simd-json` is the same as `serde-json`, so if you want t
 
 ### sonic-rs
 
-`sonic-rs` is a Rust implementation of JSON manipulation with SIMD functionality. This library also has a counterpart library in C++ and Go! Although it used to require the Rust nightly toolchain, it supports stable Rust. Similarly to `simd-json`, it also requires x86 CPU architecture to function at full capacity. 
+[`sonic-rs`](https://github.com/cloudwego/sonic-rs) is a Rust implementation of JSON manipulation with SIMD functionality. This library also has a counterpart library in C++ and Go! Although it used to require the Rust nightly toolchain, it supports stable Rust. Similarly to `simd-json`, it also requires x86 CPU architecture to function at full capacity. 
 
-To use `sonic-rs`, you need to enable the following compiler option in rustc when running your program, like so:
+Like `simd-json`, to use `sonic-rs` you need to enable the following compiler option in rustc when running your program:
 
 ```rust
 rustc -C target-cpu=native
 ```
 
-However, if you’re like most people using Cargo you probably want to use `cargo run`. As in the example, you can create a config at `.cargo/config` and then add the following:
+You can create a config at `.cargo/config` and then add the following to enable it while using `cargo run`:
 
 ```rust
 [build]
