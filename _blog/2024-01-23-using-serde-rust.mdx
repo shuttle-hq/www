@@ -68,12 +68,12 @@ We can also deserialize and serialize to/from many sources including from a file
 
 ### Implementing Deserialize and Serialize manually
 
-In order to better understand how `serde` works under the hood, we can also implement `Deserialize` and `Serialize` manually. This is quite complicated, but for now we will stick with a simple implementation. Here is a simple implementation for serializing of the `i32` primitive type. 
+In order to better understand how `serde` works under the hood, we can also implement `Deserialize` and `Serialize` manually. This is quite complicated, but for now we will stick with a simple implementation. Here is a simple implementation for serializing an `i32` primitive type: 
 
 ```rust
 use serde::{Serializer, Serialize};
 
-impl Serialize for MyStruct {
+impl Serialize for i32 {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
@@ -114,71 +114,59 @@ The `Deserialize` trait is a little bit different and is a fair bit more complic
 
 The `Visitor` trait uses the Visitor design pattern in Rust. This means that it encapsulates an algorithm that operates over a collection of same-sized objects. It allows you to write multiple different algorithms for operating over the data, without needing to change any original functionality. You can find out more about this [here.](https://rust-unofficial.github.io/patterns/patterns/behavioural/visitor.html)
 
-The `serde` documentation provides the below example for an `I32Visitor` type that attempts to deserialize multiple types to `i32`:
+Below is an example for a `MessageVisitor` type that attempts to deserialize multiple types to String:
 
 ```rust
 use std::fmt;
 
 use serde::de::{self, Visitor};
 
-struct I32Visitor;
+struct MessageVisitor;
 
-impl<'de> Visitor<'de> for I32Visitor {
-    type Value = i32;
+impl<'de> Visitor<'de> for MessageVisitor {
+    type Value = String;
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.write_str("an integer between -2^31 and 2^31")
+        formatter.write_str("A message that can either be deserialized from an i32 or String")
     }
 
-    fn visit_i8<E>(self, value: i8) -> Result<Self::Value, E>
-    where
-        E: de::Error,
-    {
-        Ok(i32::from(value))
-    }
-
-    fn visit_i32<E>(self, value: i32) -> Result<Self::Value, E>
+    fn visit_string<E>(self, value: String) -> Result<Self::Value, E>
     where
         E: de::Error,
     {
         Ok(value)
     }
 
-    fn visit_i64<E>(self, value: i64) -> Result<Self::Value, E>
+    fn visit_str<E>(self, value: &str) -> Result<Self::Value, E>
     where
         E: de::Error,
     {
-        use std::i32;
-        if value >= i64::from(i32::MIN) && value <= i64::from(i32::MAX) {
-            Ok(value as i32)
-        } else {
-            Err(E::custom(format!("i32 out of range: {}", value)))
-        }
+        Ok(value.to_owned())
     }
 
-    // Similar for other methods:
-    //   - visit_i16
-    //   - visit_u8
-    //   - visit_u16
-    //   - visit_u32
-    //   - visit_u64
+    fn visit_i32<E>(self, value: i32) -> Result<Self::Value, E>
+    where
+        E: de::Error,
+    {
+        Ok(value.to_string())
+    }
 }
 ```
 
-As you can see, the implementation is quite large! However, it also allows us to make the implementation much simpler. By implementing the `Visitor` trait, we can pass the type that implements it to our `Deserialize` method:
+
+As you can see, the implementation is quite large! However, it also allows us to make the implementation much simpler. By implementing the `Visitor` trait, we can pass the type that implements it to our `Deserialize` method and then deserialize JSON into our struct:
 
 ```rust
 use serde::{Deserialize, Deserializer};
 
-// note that this example is mainly for illustration
-// and should be implemented already for i32 
-
-impl<'de> Deserialize<'de> for i32 {
-    fn deserialize<D>(deserializer: D) -> Result<i32, D::Error>
+impl<'de> Deserialize<'de> for MyStruct {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
     {
-        deserializer.deserialize_i32(I32Visitor)
+		// note: don't use unwrap in production!
+        let message = deserializer.deserialize_string(MessageVisitor).unwrap();
+        Ok(Self { message })
     }
 }
 ```
@@ -299,7 +287,7 @@ Interested in reading more? The `serde` documentation has a page on tagging whic
 #[derive(Deserialize, Serialize)]
 pub struct MyStruct {
     #[serde(with = "my_module")]
-	my_message: String
+    my_message: String
 }
 ```
 When using `serde_with`, it works by replacing the `with` annotation with a new one called `serde_as`. With this new attribute macro you can do quite a few things:
@@ -321,10 +309,10 @@ Then you need to add `serde_as` to the type you want to use it for, like so:
 use serde_with::{serde_as, DisplayFromStr};
 #[serde_as]
 #[derive(Deserialize, Serialize)]
-struct Foo {
+struct MyStruct {
     // Serialize with Display, deserialize with FromStr
     #[serde_as(as = "DisplayFromStr")]
-    bar: u8,
+    my_number: u8,
 }
 ```
 
