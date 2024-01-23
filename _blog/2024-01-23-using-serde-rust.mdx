@@ -108,6 +108,7 @@ impl Serialize for Color {
     }
 }
 ```
+Note that to serialize a field, the field type also needs to implement `Serialize`. If you have a custom type that doesn't implement `Serialize`, you will either need to implement `Serialize` or use a `Serialize` derive macro (if the struct/enum type holds types that all implement `Serialize`).
 
 The `Deserialize` trait is a little bit different and is a fair bit more complicated to implement. To be able to deserialize to a type, the type itself needs to implement `Sized` which means that there are a number of types which can’t use this trait (for example `&str`) because they are unsized types. To deserialize a type, you also need to use a type that implements the `Visitor` trait. The `serde` documentation provides the below example for an `I32Visitor` type that attempts to deserialize multiple types to `i32`:
 
@@ -252,9 +253,7 @@ When the first enum variant is written in JSON, you can see that it should corre
 {
     "Data": {
         "id": "your_id_here",
-        "data": {
-          // ... your data here
-        }
+        "data": { .. }
     }
 }
 ```
@@ -278,9 +277,7 @@ Now the JSON representation looks like this:
 {
     "type": "Data",
     "id": "your_id_here",
-    "data": {
-      // ... your data here
-    }
+    "data": { .. }
 }
 ```
 
