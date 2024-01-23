@@ -3,8 +3,8 @@ title: "Using Serde in Rust"
 description: This article talks about serde, a Rust serialization library and how you can use it in applications.
 author: josh
 tags: [rust, serde, serialization, guide]
-thumb: 
-cover: 
+thumb: serde-rust-thumb.png 
+cover: serde-rust-thumb.png
 date: '2024-01-23T14:30:00'
 ---
 In this article we’ll be talking about Serde, how you can use it in your Rust application as well as some more advanced tips and tricks.
@@ -36,7 +36,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
 struct MyStruct {
-	message: String,
+    message: String,
     // ... the rest of your fields
 }
 ```
@@ -68,12 +68,12 @@ We can also deserialize and serialize to/from many sources including from a file
 
 ### Implementing Deserialize and Serialize manually
 
-As a side note, you can also implement `Deserialize` and `Serialize` manually! This is quite complicated, but for now we will stick with a simple implementation. Here is a simple implementation for serializing of the `i32` primitive type. 
+In order to better understand how `serde` works under the hood, we can also implement `Deserialize` and `Serialize` manually. This is quite complicated, but for now we will stick with a simple implementation. Here is a simple implementation for serializing of the `i32` primitive type. 
 
 ```rust
 use serde::{Serializer, Serialize};
 
-impl Serialize for i32 {
+impl Serialize for MyStruct {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
@@ -110,7 +110,11 @@ impl Serialize for Color {
 ```
 Note that to serialize a field, the field type also needs to implement `Serialize`. If you have a custom type that doesn't implement `Serialize`, you will either need to implement `Serialize` or use a `Serialize` derive macro (if the struct/enum type holds types that all implement `Serialize`).
 
-The `Deserialize` trait is a little bit different and is a fair bit more complicated to implement. To be able to deserialize to a type, the type itself needs to implement `Sized` which means that there are a number of types which can’t use this trait (for example `&str`) because they are unsized types. To deserialize a type, you also need to use a type that implements the `Visitor` trait. The `serde` documentation provides the below example for an `I32Visitor` type that attempts to deserialize multiple types to `i32`:
+The `Deserialize` trait is a little bit different and is a fair bit more complicated to implement. To be able to deserialize to a type, the type itself needs to implement `Sized` which means that there are a number of types which can’t use this trait (for example `&str`) because they are unsized types. To deserialize a type, you also need to use a type that implements the `Visitor` trait. 
+
+The `Visitor` trait uses the Visitor design pattern in Rust. This means that it encapsulates an algorithm that operates over a collection of same-sized objects. It allows you to write multiple different algorithms for operating over the data, without needing to change any original functionality. You can find out more about this [here.](https://rust-unofficial.github.io/patterns/patterns/behavioural/visitor.html)
+
+The `serde` documentation provides the below example for an `I32Visitor` type that attempts to deserialize multiple types to `i32`:
 
 ```rust
 use std::fmt;
@@ -161,10 +165,13 @@ impl<'de> Visitor<'de> for I32Visitor {
 }
 ```
 
-As you can see, the implementation is quite large! However, it also allows us to make the implementation much simpler. By implementing the `Visitor` trait, we can pass the Visitor type to our `Deserialize` method:
+As you can see, the implementation is quite large! However, it also allows us to make the implementation much simpler. By implementing the `Visitor` trait, we can pass the type that implements it to our `Deserialize` method:
 
 ```rust
 use serde::{Deserialize, Deserializer};
+
+// note that this example is mainly for illustration
+// and should be implemented already for i32 
 
 impl<'de> Deserialize<'de> for i32 {
     fn deserialize<D>(deserializer: D) -> Result<i32, D::Error>
@@ -215,7 +222,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
 pub struct MyStruct {
-	#[serde(path = "my_function")]
+    #[serde(path = "my_function")]
     my_message: String,
 }
 
@@ -235,15 +242,15 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
 enum MyEnum {
-	Data { id: String, data: Value },
+    Data { id: String, data: Value },
     SomeOtherData { id: i32, name: String }
 }
 ```
 
-Note that when converting to and from this enumstruct, it can take two options:
+Note that when converting to and from this enum, it can take two options:
 
-- A String field named “id” and a JSON value with the key “data” (this can be a map, a value or anything that the `Json` value can hold)
-- An `i32` field named “id” and a `String` field named “name”
+- A String field named `id` and a JSON value with the key `data` (this can be a map, a value or anything that the `Json` value can hold)
+- An `i32` field named `id` and a `String` field named `name`
 
 You can then match the enum variant for further processing. 
 
@@ -266,7 +273,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Deserialize, Serialize)]
 #[serde(tag = "type")]
 enum MyEnum {
-	Data { id: String, data: Value },
+    Data { id: String, data: Value },
     SomeOtherData { id: i32, name: String }
 }
 ```
@@ -287,12 +294,20 @@ Interested in reading more? The `serde` documentation has a page on tagging whic
 
 ### serde_with
 
-`serde_with` is a crate that provides custom de/serialization helpers to use with `serde`'s `with` annotation. It works by replacing the `with` annotation with a new one called `serde_as`. With this new attribute macro you can do quite a few things:
+`serde_with` is a crate that provides custom de/serialization helpers to use with `serde`'s `with` annotation. Normally, you can define a module for the (de)serializer to use that follows a custom module for custom (de)serialization:
+```rust
+#[derive(Deserialize, Serialize)]
+pub struct MyStruct {
+    #[serde(with = "my_module")]
+	my_message: String
+}
+```
+When using `serde_with`, it works by replacing the `with` annotation with a new one called `serde_as`. With this new attribute macro you can do quite a few things:
 
 - De/serializing a type using `Display` and `FromStr` traits.
 - Support arrays larger than 32 elements.
-- Skip serializing empty Option types
-- Deserialize a comma separated list into a `Vec<String>`
+- Skip serializing empty Option types.
+- Deserialize a comma separated list into a `Vec<String>`.
 
 To use `serde_with`, you need to add it to your Cargo.toml either manually or by using the following command:
 
@@ -303,6 +318,7 @@ cargo add serde_with
 Then you need to add `serde_as` to the type you want to use it for, like so:
 
 ```rust
+use serde_with::{serde_as, DisplayFromStr};
 #[serde_as]
 #[derive(Deserialize, Serialize)]
 struct Foo {
@@ -334,8 +350,8 @@ Overall, an easy to use and simple crate that improves performance without much 
 
 ## Finishing up
 
-Thanks for reading! 
+I hope you enjoyed reading about Serde! It's a pretty powerful Rust crate and forms the backbone of most Rust applications. 
 
 Read more:
-
--
+- Read more about how you can get started with the Rocket web framework [here.](https://www.shuttle.rs/blog/2023/12/13/using-rocket-rust)
+- Read more about using JSON parsers [here.](https://www.shuttle.rs/blog/2024/01/18/parsing-json-rust)
