@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import StepsDesktop from './StepsDesktop'
 import StepsMobile from './StepsMobile'
+import Link from 'next/link'
 
 const Steps = () => {
 	return (
@@ -30,6 +31,15 @@ const Steps = () => {
 				provisioning, while our compilation agents sit in the background and fix any potential errors or
 				mistakes that might appear. What you get in the end, is a real, live Rust-based backend deployed on
 				Shuttle’s cloud.
+				<Link href='https://www.theinsaneapp.com/tools/shuttle/' target='_blank'>
+					<Image
+						src='/images/pages/shuttle-ai/insane-app.png'
+						alt='Insane App Feature'
+						width={200}
+						height={120}
+						className='mt-6'
+					/>
+				</Link>
 			</p>
 		</div>
 	)
