@@ -152,7 +152,7 @@ async fn say_hello_world(job: Reminder, ctx: JobContext) {
 
 Now we’re going to hook the structs we made previously into our main app!
 
-To start with, we need to set up the `PostgresStorage` type so that we can use Postgres for durable job queues. We can convert this directly from the `PgPool` type stored in our main struct and run the migrations for it like so:
+To start with, we need to set up the `PostgresStorage` type so that we can use Postgres for durable job queues. Without durable job queues, our jobs would disappear if our web service has any outages! We can convert this directly from the `PgPool` type stored in our main struct and run the migrations for it like so:
 
 ```rust
 #[shuttle_runtime::async_trait]
@@ -161,7 +161,7 @@ impl shuttle_runtime::Service for MyService {
         self, 
         _addr: std::net::SocketAddr
     ) -> Result<(), shuttle_runtime::Error> {
-        // we clone here as we are using the db pool in later snippets
+        // set up Postgres-backed storage
         let storage = PostgresStorage::new(self.db);
         // set up storage
         storage.setup().await.expect("Unable to run migrations :(");
@@ -170,7 +170,7 @@ impl shuttle_runtime::Service for MyService {
 }
 ```
 
-Now we can create a `tower` service that holds our job that we want to run. We can use the `DefaultRetryPolicy` provided to us by `apalis` to be able to add automatic re-tries, as well as layering the shared data as an `Extension` :
+Now we can create a `tower` service that holds our job that we want to run. We can use the `DefaultRetryPolicy` provided to us by `apalis` to be able to add automatic re-tries, as well as layering the shared data as an `Extension`:
 
 ```rust
 use tower::ServiceBuilder;
