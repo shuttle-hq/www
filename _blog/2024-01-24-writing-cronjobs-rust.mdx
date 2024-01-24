@@ -3,8 +3,8 @@ title: "Writing Cronjobs in Rust"
 description: This article talks about how you can write cron jobs as a web service on Shuttle using the apalis cron job framework.
 author: josh
 tags: [cronjob, rust, tutorial, guide]
-thumb: 
-cover: 
+thumb: cronjobs-rust-thumb.png 
+cover: cronjobs-rust-thumb.png
 date: '2024-01-23T14:30:00'
 ---
 
@@ -16,7 +16,7 @@ Cron jobs (or “scheduled tasks”) are useful for many things. They allow you 
 - Adding daily reminders (for example to customers who are signed up to a service you own but haven’t started using it yet).
 - Creating/writing reports.
 
-If you’re interested in the final code and want to deploy quickly, you can find the repo [here.](https://github.com/joshua-mo-143/shuttle-cron-template) You can deploy it with two simple steps:
+If you’re interested in the final code and want to deploy quickly, you can find the repo [here.](https://github.com/shuttle-hq/shuttle-examples/tree/main/shuttle-cron) You can deploy it with two simple steps:
 
 1) Run `cargo shuttle init --from shuttle-hq/shuttle-examples --subfolder shuttle-cron` and follow the prompt (requires `cargo-shuttle` installed)
 
