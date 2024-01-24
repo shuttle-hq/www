@@ -1,5 +1,5 @@
 ---
-title: "Using Cronjobs in Rust"
+title: "Writing Cronjobs in Rust"
 description: This article talks about how you can write cron jobs as a web service on Shuttle using the apalis cron job framework.
 author: josh
 tags: [cronjob, rust, tutorial, guide]
@@ -12,13 +12,13 @@ In this article we’re going to talk about how you can write your own cron jobs
 
 Cron jobs (or “scheduled tasks”) are useful for many things. They allow you to automatically do things like:
 
-- Automate data back-ups
-- Adding daily reminders (for example to customers who are signed up to a service you own but haven’t started using it yet)
-- Creating/writing reports
+- Automate data back-ups.
+- Adding daily reminders (for example to customers who are signed up to a service you own but haven’t started using it yet).
+- Creating/writing reports.
 
 If you’re interested in the final code and want to deploy quickly, you can find the repo [here.](https://github.com/joshua-mo-143/shuttle-cron-template) You can deploy it with two simple steps:
 
-1) Run `cargo shuttle init --from joshua-mo-143/shuttle-cron-template` and follow the prompt (requires `cargo-shuttle` installed)
+1) Run `cargo shuttle init --from shuttle-hq/shuttle-examples --subfolder shuttle-cron` and follow the prompt (requires `cargo-shuttle` installed)
 
 2) Run `cargo shuttle deploy`. That’s it!
 
@@ -64,10 +64,10 @@ Now that everything is installed, it’s time to get coding!
 
 ### Adding a database
 
-Before we do anything else, let’s provision a database using the Shuttle runtime. You’ll want to add the `shuttle-shared-db` annotation to your main function like so:
+Before we do anything else, let’s provision a database using the Shuttle runtime. You’ll want to add the `shuttle-shared-db` annotation to your main function like so and set up our Postgres connection pool:
 
 ```rust
-use sqlx::PgPool;
+use sqlx::{PgPool, postgres::PgPoolOptions};
 
 pub struct MyService {
     db: PgPool,
@@ -75,13 +75,20 @@ pub struct MyService {
 
 #[shuttle_runtime::main]
 async fn shuttle_main(
-    #[shuttle_shared_db::Postgres] db: PgPool,
+    #[shuttle_shared_db::Postgres] conn_string: String,
     ) -> Result<MyService, shuttle_runtime::Error> {
+    let db = PgPoolOptions::new()
+        .min_connections(5)
+        .max_connections(5)
+        .connect(&conn_string)
+        .await
+        .unwrap();
+
     Ok(MyService { db })
 }
 ```
 
-As you can see, pretty simple! You would otherwise need to run a Docker command to spin this up and in deployment you would also need to manually create your Postgres instance or use Terraform (or some other kind of platform that utilises infrastructure files).
+As you can see, pretty simple! You would otherwise need to run a Docker command to spin this up. In production, you would also need to manually instantiate and manage your Postgres instance or rely on an IaC (infrastructure as code) tool like Terraform.
 
 Then we need to implement a few new things:
 
@@ -125,13 +132,13 @@ However, if you want to add extra variables (for example, a database connection 
 
 ```rust
 #[derive(Clone)]
-struct CronService { 
+struct CronjobData { 
     message: String 
 }
 
-impl CronService {
+impl CronjobData {
     fn execute(&self, item: Reminder) {
-        println!("{} from CronService::execute()!", &self.message);
+        println!("{} from CronjobData::execute()!", &self.message);
     }
 }
 ```
@@ -141,12 +148,13 @@ You can then feed this struct back into the `say_hello_world` function, which us
 ```rust
 async fn say_hello_world(job: Reminder, ctx: JobContext) {
     println!("Hello world from send_reminder()!");
-    // this lets you use variables stored in the CronService struct
-    let svc = ctx.data_opt::<CronService>().unwrap();
-    // this executes CronService::execute()
+    // this lets you use variables stored in the CronjobData struct
+    let svc = ctx.data_opt::<CronjobData>().unwrap();
+    // this executes CronjobData::execute()
     svc.execute(job);
 }
 ```
+The variables for the `CronjobData` struct come from instantiating the struct and then adding it as a shared data extension to the Tower service that we use. This allows `apalis` to be able to use the data by using `.data_opt()` from the `JobContext` struct.
 
 ### Hooking it all up
 
@@ -169,6 +177,7 @@ impl shuttle_runtime::Service for MyService {
    }
 }
 ```
+The `shuttle_runtime::Service` trait is what allows your custom service to be packaged into a project that the Shuttle runtime can use. It also provides a HTTP address that you can optionally bind a HTTP-bound service to (for example, a web server).
 
 Now we can create a `tower` service that holds our job that we want to run. We can use the `DefaultRetryPolicy` provided to us by `apalis` to be able to add automatic re-tries, as well as layering the shared data as an `Extension`:
 
@@ -177,15 +186,9 @@ use tower::ServiceBuilder;
 use apalis::layers::{DefaultRetryLayer, Extension, RetryLayer};
 use apalis::prelude::job_fn;
 
-#[shuttle_runtime::async_trait]
-impl shuttle_runtime::Service for MyService {
-    async fn bind(
-        self, 
-        _addr: std::net::SocketAddr
-    ) -> Result<(), shuttle_runtime::Error> {
-    // .. your previous code
+// .. your previous code
 
-    let cron_service_ext = CronService {
+let cron_service_ext = CronjobData {
     message: "Hello world".to_string(),
 };
 
@@ -193,9 +196,7 @@ impl shuttle_runtime::Service for MyService {
 let service = ServiceBuilder::new()
     .layer(RetryLayer::new(DefaultRetryPolicy))
     .layer(Extension(cron_service_ext))
-    .service(job_fn(say_hello_world));
-    }
-}
+    .service(job_fn(say_hello_world)); 
 ```
 
 Now that we’ve built the service, we need to build the worker and then finally create an `apalis::Monitor` process that will carry the work out:
@@ -205,13 +206,7 @@ use apalis::prelude::timer::TokioTimer;
 use apalis::cron::{Schedule, CronStream};
 use apalis::prelude::{WorkerBuilder, Monitor};
 
-#[shuttle_runtime::async_trait]
-impl shuttle_runtime::Service for MyService {
-    async fn bind(
-        self, 
-        _addr: std::net::SocketAddr
-    ) -> Result<(), shuttle_runtime::Error> {
-    // .. your previous code
+// .. your previous code
 let schedule = Schedule::from_str("* * * * * *").expect("Couldn't start the scheduler!");
 
 // create a worker that uses the service created from the cronjob
@@ -226,8 +221,8 @@ let worker = WorkerBuilder::new("morning-cereal")
 
 // start your worker up
 Monitor::new().register(worker).run().await.expect("Unable to start worker");
-    }
-}
+
+
 ```
 
 Here is the full code for our main application:
@@ -239,37 +234,37 @@ impl shuttle_runtime::Service for MyService {
         self, 
         _addr: std::net::SocketAddr
     ) -> Result<(), shuttle_runtime::Error> {
-    let storage = PostgresStorage::new(self.db.clone());
-    // set up storage
-    storage.setup().await.expect("Unable to run migrations :(");
-
-    let cron_service_ext = CronService { 
-        message: "Hello world".to_string() 
-    };
-
-    // create a servicebuilder for the cronjob
-    let service = ServiceBuilder::new()
-        .layer(RetryLayer::new(DefaultRetryPolicy))
-        .layer(Extension(cron_service_ext))
-        .service(job_fn(say_hello_world));
-
-    let schedule = Schedule::from_str("* * * * * *")
-        .expect("Couldn't start the scheduler!");
-
-    // create a worker that uses the service created from the cronjob
-    let worker = WorkerBuilder::new("morning-cereal")
-        .with_storage(storage.clone())
-        .stream(CronStream::new(schedule).timer(apalis::prelude::timer::TokioTimer).to_stream())
-        .build(service);
-
-    // start your worker up
-    Monitor::new()
-        .register(worker)
-        .run()
-        .await
-        .expect("Unable to start worker");
-
-        Ok(())
+        let storage = PostgresStorage::new(self.db.clone());
+        // set up storage
+        storage.setup().await.expect("Unable to run migrations :(");
+    
+        let cron_service_ext = CronjobData { 
+            message: "Hello world".to_string() 
+        };
+    
+        // create a servicebuilder for the cronjob
+        let service = ServiceBuilder::new()
+            .layer(RetryLayer::new(DefaultRetryPolicy))
+            .layer(Extension(cron_service_ext))
+            .service(job_fn(say_hello_world));
+ 
+        let schedule = Schedule::from_str("* * * * * *")
+            .expect("Couldn't start the scheduler!");
+    
+        // create a worker that uses the service created from the cronjob
+        let worker = WorkerBuilder::new("morning-cereal")
+            .with_storage(storage.clone())
+            .stream(CronStream::new(schedule).timer(TokioTimer).to_stream())
+            .build(service);
+    
+        // start your worker up
+        Monitor::new()
+            .register(worker)
+            .run()
+            .await
+            .expect("Unable to start worker");
+    
+            Ok(())
     }
 }
 ```
