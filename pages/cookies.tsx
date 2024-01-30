@@ -109,6 +109,17 @@ export default function Cookies() {
 							</a>
 						</td>
 					</tr>
+					<tr className='text-left children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
+						<td>Analytical Cookies</td>
+						<td>PostHog</td>
+						<td>
+							We use PostHog to help us get more insight about website usage and user interactions.
+							More information on PostHog processing of personal data can be found at&nbsp;
+							<a href='https://www.okta.com/privacy-policy/' target='_blank'>
+								https://posthog.com/privacy
+							</a>
+						</td>
+					</tr>
 				</table>
 			</div>
 
