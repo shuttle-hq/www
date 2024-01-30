@@ -1,5 +1,5 @@
 ---
-title: Writing a REST API in Rust
+title: Writing a Rust REST API with Axum, SQLx & Postgres
 description: This article talks about how you can write a Rust REST API using Axum, SQLx and Postgres. 
 author: josh
 tags: [rust, axum, guide]
@@ -17,6 +17,12 @@ Interested in checking out what the final code should look like? You can find it
 ### Project initialisation
 
 If you haven’t already, make sure you have Rust and Cargo installed! You can find install instructions [here.](https://www.rust-lang.org/tools/install)
+
+We'll be initialising our project with `cargo-shuttle`, Shuttle's CLI. You can install it by running the following:
+```bash
+cargo install cargo-shuttle
+```
+Installation via `cargo-binstall` is also supported, along with our other install scripts which you can find [here.](https://docs.shuttle.rs/getting-started/installation)  
 
 First of all we’ll want to initialise our project with `cargo shuttle init` (required `cargo-shuttle` to be installed). For the project name we’ll be using `shuttle-example-axum`. 
 
@@ -41,15 +47,15 @@ async fn main(
 }
 ```
 
-Interested in just getting the connection string? You can disable the `sqlx` feature of `shuttle-shared-db` and instead change the type to `String`, then connect to your PgPool. You can find more information about this 
+Interested in just getting the connection string? You can disable the `sqlx` feature of `shuttle-shared-db` and instead change the type to `String`, then connect to your PgPool. You can find more information about connecting to a PgPool [here.](https://docs.rs/sqlx/latest/sqlx/type.PgPool.html#method.connect) 
 
-When writing our migrations, since we’re using only a single migrations file we can use `include_str!()` to include the whole file’s text content as a string then execute it with the database pool.
+Since we’re using only a single migrations file, we can use `include_str!()` to include the whole file’s text content as a string. We can then execute the query with the database pool.
 
 For the migrations, we can make a `migrations.sql` file in the project root:
 
 ```sql
 -- migrations.sql
-CREATE TABLE IF NOT EXISTS Users (
+CREATE TABLE IF NOT EXISTS users (
     id serial primary key,
     name varchar not null,
     age int not null
@@ -94,7 +100,7 @@ let router = Router::new().route("/", get(hello_world)).with_state(state);
 
 When writing your routes, Axum will accept anything that implements the `IntoResponse` trait (which means the type can be turned into a HTTP response). Many primitives already have `IntoResponse` implemented so you can return things like `i32` or a `String` (or a `'static &str`) without being required to implement the trait. 
 
-By using Axum’s `extractors`, we can extract information from the HTTP request and declare them as handler parameters: for example, adding a `State` extractor means we want to include the state that we added to our `axum::Router`. We can g
+By using Axum’s `extractors`, we can extract information from the HTTP request and declare them as handler parameters: for example, adding a `State` extractor means we want to include the state that we added to our `axum::Router`. Then we want to implement `sqlx::FromRow` using a derive macro for our struct - doing this allows it to automatically be converted from a query:
 
 ```rust
 #[derive(sqlx::FromRow)]
@@ -143,7 +149,7 @@ async fn retrieve_record_by_id(
 
 Note that for the SQL query, we also bind a parameter to the query itself. By using `bind` variables exclusively when we need to add data from the JSON body, SQL injection can be easily prevented!
 
-Likewise below, we can also create a `UserSubmission` struct to represent a JSON request body for a user submission. We need to implement `serde::Deserialize` to be able to successfully extract it from the request body. We can also can add a handler function for deleting records by ID in this snippet below:
+Likewise, below we can also create a `UserSubmission` struct to represent a JSON request body for a user submission. We need to implement `serde::Deserialize` to be able to successfully extract it from the request body. We can also add a handler function for deleting records by ID in this snippet below:
 
 ```rust
 
@@ -249,7 +255,7 @@ Now that we’ve finished, the only thing left to do is deploying the Rust appli
 
 Looking to extend the project from this article? Here’s a couple of ways you can extend it:
 
-- Add your own Error enum type and implement `axum::response::IntoResponse` for it! This allows you to propagate errors by implementing `From<T>` for your error type. Error handling is a huge part of Rust and propagating errors can help you .
+- Add your own Error enum type and implement `axum::response::IntoResponse` for it! This allows you to propagate errors by implementing `From<T>` for your error type. Error handling is a huge part of Rust and propagating errors can help you clean up your application nicely.
 - Add tests! You can use `testcontainers` to spin up Docker containers for Postgres and other infrastructure which makes testing your database extremely easy. You can find more about this [here.](https://github.com/testcontainers/testcontainers-rs)
 
 ## Finishing Up
