@@ -168,6 +168,8 @@ async fn create_record(
     Json(json): Json<UserSubmission>
     ) -> Result<impl IntoResponse, impl IntoResponse> {
         if let Err(e) = sqlx::query("INSERT INTO USERS (name, age) VALUES ($1, $2)")
+            .bind(json.name)
+            .bind(json.age)
             .execute(&state.db)
             .await {
                 return Err(
