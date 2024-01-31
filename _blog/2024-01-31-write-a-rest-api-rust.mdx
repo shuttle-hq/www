@@ -115,10 +115,13 @@ struct User {
 async fn retrieve_all_records(
      State(state): State<AppState>
 ) -> Result<impl IntoResponse, impl IntoResponse> {
-    let res = match sqlx::query_as::<_, User>("SELECT * FROM USERS").fetch_all(&state.db).await {
-        Ok(res) => res,
-        Err(e) => {
-            return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string()));
+    let res = match sqlx::query_as::<_, User>(
+        "SELECT * FROM USERS"
+        )
+        .fetch_all(&state.db).await {
+            Ok(res) => res,
+            Err(e) => {
+                return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string()));
         }
     };
 
@@ -133,17 +136,16 @@ async fn retrieve_record_by_id(
     State(state): State<AppState>,
     Path(id): Path<i32>
 ) -> Result<impl IntoResponse, impl IntoResponse> {
-    let res = match
-        sqlx
-            ::query_as::<_, User>("SELECT * FROM USERS WHERE id = $1")
-            .bind(id)
-            .fetch_one(&state.db).await
-    {
-        Ok(res) => res,
-        Err(e) => {
-            return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string()));
-        }
-    };
+    let res = match sqlx::query_as::<_, User>(
+        "SELECT * FROM USERS WHERE id = $1"
+        )
+        .bind(id)
+        .fetch_one(&state.db).await {
+            Ok(res) => res,
+            Err(e) => {
+                return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string()));
+            }
+        };
 
     Ok(Json(res))
 }
@@ -191,8 +193,10 @@ async fn delete_record_by_id(
             .await {
                 return Err((
                     StatusCode::INTERNAL_SERVER_ERROR, 
-                    e.to_string()));
-                }
+                    format!("Error while deleting a record: {e}"))
+                );
+            }
+
     Ok(StatusCode::OK)
 }
 ```
@@ -200,7 +204,6 @@ async fn delete_record_by_id(
 If you’re looking to implement an update function, there are a couple of ways you could do it. Here, we use an `UpdateRecord` struct that holds option placeholder versions of the fields we want the user to be able to update. Then we write an SQL query that only changes the field if the bound value isn’t null:
 
 ```rust
-
 #[derive(Deserialize)]
 pub struct UpdateRecord {
     name: Option<String>,
