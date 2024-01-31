@@ -204,7 +204,6 @@ async fn delete_record_by_id(
 If you’re looking to implement an update function, there are a couple of ways you could do it. Here, we use an `UpdateRecord` struct that holds option placeholder versions of the fields we want the user to be able to update. Then we write an SQL query that only changes the field if the bound value isn’t null:
 
 ```rust
-
 #[derive(Deserialize)]
 pub struct UpdateRecord {
     name: Option<String>,
