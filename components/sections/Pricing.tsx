@@ -82,15 +82,6 @@ const PRICING_ROWS: PricingTableRow[] = [
 		},
 	},
 	{
-		desc: 'Add-on: Dedicated Database',
-		desc2: '(AWS RDS)',
-		values: {
-			community: false,
-			pro: 'Custom',
-			team: 'Custom',
-		},
-	},
-	{
 		desc: 'Log Retention',
 		values: {
 			community: '1 day',
