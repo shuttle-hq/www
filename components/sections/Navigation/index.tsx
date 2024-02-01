@@ -1,11 +1,11 @@
+import clsx from 'clsx'
 import { Button, LoginButton } from 'components/elements'
 import { GithubLogo, Hamburger, Logo } from 'components/svgs'
+import { trackEvent } from 'lib/posthog'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useLayoutEffect, useState } from 'react'
-import clsx from 'clsx'
 import { DISCORD_URL } from '../../../lib/constants'
-import { trackEvent } from 'lib/posthog'
 
 const ThemeSwitcher = dynamic(() => import('./ThemeSwitcher'), { ssr: false })
 
