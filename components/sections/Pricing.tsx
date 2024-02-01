@@ -82,12 +82,12 @@ const PRICING_ROWS: PricingTableRow[] = [
 		},
 	},
 	{
-		desc: 'Add-on: Dedicated Database',
+		desc: 'Dedicated Database',
 		desc2: '(AWS RDS)',
 		values: {
-			community: false,
-			pro: 'Custom',
-			team: 'Custom',
+			community: "Add-on",
+			pro: 'Add-on',
+			team: 'Add-on',
 		},
 	},
 	{

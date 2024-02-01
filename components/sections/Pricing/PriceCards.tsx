@@ -164,7 +164,7 @@ const PriceCards = () => (
 								'linear-gradient(72deg, #FC540C -20%, rgba(255, 215, 111, 0.72) 45%, #38D4E9 150%)',
 						}}
 					>
-						Custom
+						$20
 					</h1>
 					<h4>
 						per instance{' '}

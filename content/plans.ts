@@ -65,9 +65,6 @@ export const Plans: PlanProps[] = [
 				feature: 'More storage',
 			},
 			{
-				feature: 'Add-on: AWS RDS',
-			},
-			{
 				feature: 'Configurable instances',
 			},
 			{
