@@ -3,7 +3,7 @@ export const APP_NAME = 'Shuttle'
 export const SITE_TITLE = 'Build Backends. Fast.'
 
 export const SITE_DESCRIPTION =
-	'Stop worrying about the infrastructure. Focus on writing code, shuttle will do the rest.'
+	'Stop worrying about infrastructure. Focus on writing code, shuttle will do the rest.'
 
 export const SITE_URL = 'https://www.shuttle.rs/'
 
