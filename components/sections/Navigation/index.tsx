@@ -1,11 +1,11 @@
+import clsx from 'clsx'
 import { Button, LoginButton } from 'components/elements'
 import { GithubLogo, Hamburger, Logo } from 'components/svgs'
+import { trackEvent } from 'lib/posthog'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useLayoutEffect, useState } from 'react'
-import clsx from 'clsx'
 import { DISCORD_URL } from '../../../lib/constants'
-import { trackEvent } from 'lib/posthog'
 
 const ThemeSwitcher = dynamic(() => import('./ThemeSwitcher'), { ssr: false })
 
@@ -47,9 +47,9 @@ const Navigation = () => {
 					<Link
 						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='/blog/tags/all'
-						onClick={() => {
+						onClick={({ ctrlKey, metaKey }) => {
 							trackEvent('homepage_mainnav_blog')
-							setOpen(false)
+							setOpen(ctrlKey || metaKey)
 						}}
 					>
 						Blog
@@ -57,9 +57,9 @@ const Navigation = () => {
 					<Link
 						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='/pricing'
-						onClick={() => {
+						onClick={({ ctrlKey, metaKey }) => {
 							trackEvent('homepage_mainnav_pricing')
-							setOpen(false)
+							setOpen(ctrlKey || metaKey)
 						}}
 					>
 						Pricing
@@ -67,9 +67,9 @@ const Navigation = () => {
 					<Link
 						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='https://docs.shuttle.rs'
-						onClick={() => {
+						onClick={({ ctrlKey, metaKey }) => {
 							trackEvent('homepage_mainnav_docs')
-							setOpen(false)
+							setOpen(ctrlKey || metaKey)
 						}}
 					>
 						Docs
@@ -77,9 +77,9 @@ const Navigation = () => {
 					<Link
 						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='/beta'
-						onClick={() => {
+						onClick={({ ctrlKey, metaKey }) => {
 							trackEvent('homepage_mainnav_beta')
-							setOpen(false)
+							setOpen(ctrlKey || metaKey)
 						}}
 					>
 						Beta
@@ -87,9 +87,9 @@ const Navigation = () => {
 					<Link
 						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='/shuttle-heroes'
-						onClick={() => {
+						onClick={({ ctrlKey, metaKey }) => {
 							trackEvent('homepage_mainnav_heroes')
-							setOpen(false)
+							setOpen(ctrlKey || metaKey)
 						}}
 					>
 						Shuttle Heroes
@@ -97,9 +97,9 @@ const Navigation = () => {
 					<Link
 						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='/ai'
-						onClick={() => {
+						onClick={({ ctrlKey, metaKey }) => {
 							trackEvent('homepage_mainnav_ai')
-							setOpen(false)
+							setOpen(ctrlKey || metaKey)
 						}}
 					>
 						Shuttle AI
@@ -107,9 +107,9 @@ const Navigation = () => {
 					<Link
 						className='nav-link-shadow transition-all dark:hover:text-white'
 						href='/launchpad'
-						onClick={() => {
+						onClick={({ ctrlKey, metaKey }) => {
 							trackEvent('homepage_mainnav_launchpad')
-							setOpen(false)
+							setOpen(ctrlKey || metaKey)
 						}}
 					>
 						Launchpad
