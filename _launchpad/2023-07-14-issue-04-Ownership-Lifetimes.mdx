@@ -141,8 +141,6 @@ async fn axum() -> shuttle_axum::ShuttleAxum {
 
 To wire our shared state up, we add an `Extension` extractor to our handler function.
 
-**NOTE**: _You can also use the `with_state` call in Axum and use a `State` extractor. Shuttle currently doesn't support that, but it will in the future. `Extension` just works as well._
-
 ```rust
 async fn handler_lotto(
     Path((pot_size, amount)): Path<(u32, usize)>,
