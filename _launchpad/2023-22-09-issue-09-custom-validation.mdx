@@ -37,6 +37,8 @@ In our example, we create a CRUD application, but for the contents of this issue
 In the project that has been created for you, open `main.rs` and change the main function to the following.
 
 ```rust
+use axum::{Router, routing::post};
+
 #[shuttle_runtime::main]
 async fn axum() -> shuttle_axum::ShuttleAxum {
     let router = Router::new().route("/user", post(create_user));
@@ -52,6 +54,8 @@ The struct also contains information on the activation status of the user, which
 > 💡Enums are great if you want to represent a state like `UserStatus`. Sure, you could use a boolean `is_active`, but with an enum, you are prepared for more user states in the future. Also, the names are more expressive.
 
 ```rust
+use serde::{Deserialize, Serialize};
+
 #[derive(Debug, Deserialize, Serialize)]
 struct User {
     name: String,
@@ -85,6 +89,8 @@ We have the user's name, sure, but also a mail address and an age. Both are repr
 Thankfully, the `validator` crate takes care of that. All you need to do is derive the `Validate` trait and add some macro attributes. We want to make sure that `email` is a valid e-mail address and that `age` is in the range of 18 to 100. We can do that by adding the `#[validate(email)]` and `#[validate(range(min = 18, max = 100))]` attributes to the fields.
 
 ```rust
+use validator::Validate;
+
 #[derive(Debug, Deserialize, Serialize, Validate)]
 struct User {
     name: String,
@@ -103,6 +109,8 @@ So we know that the structure is alright, but we still need to check if the data
 
 
 ```rust
+use axum::Json;
+
 async fn create_user(Json(user): Json<User>) -> String {
     if user.validate().is_ok() {
         format!("User valid, status: {:?}", user.status)
@@ -138,6 +146,8 @@ impl Error for ValidationError {}
 We also need to implement `IntoResponse` for `ValidationError`. This is the trait that allows us to return a custom response in Axum when something goes wrong. We want to return a `BAD_REQUEST` status code and a message that tells the user that the input is wrong.
 
 ```rust
+use axum::response::IntoResponse;
+
 impl IntoResponse for ValidationError {
     fn into_response(self) -> axum::response::Response {
         (StatusCode::BAD_REQUEST, "Error with format").into_response()
@@ -168,13 +178,13 @@ The third generic parameter is `B`. This is the body of the request. We need to 
 Since we set a trait bound to `HttpBody`, every associated type of `HttpBody` also needs to implement `Send`, and sometimes `Sync` or `Error`. Those trait bounds are required for some of our code to work.
 
 ```rust
+use axum::FromRequest;
+use serde::de::DeserializeOwned;
+
 #[async_trait]
-impl<T, S, B> FromRequest<S, B> for ValidatedJson<T>
+impl<T, S> FromRequest<S> for ValidatedJson<T>
 where
     T: DeserializeOwned + Validate,
-    B: Send + HttpBody + 'static,
-    <B as HttpBody>::Data: Send,
-    <B as HttpBody>::Error: Send + Sync + Error,
     S: Send + Sync,
 {
 
@@ -192,13 +202,13 @@ Next, we call the `validate` method. Since we made sure in the trait bounds that
 In the end, we return the validated JSON as a `ValidatedJson` struct.
 
 ```rust
-impl<T, S, B> FromRequest<S, B> for ValidatedJson<T>
+impl<T, S> FromRequest<S> for ValidatedJson<T>
 where
     // See above
 {
     type Rejection = ValidationError;
 
-    async fn from_request(req: Request<B>, state: &S) -> Result<Self, Self::Rejection> {
+    async fn from_request(req: Request, state: &S) -> Result<Self, Self::Rejection> {
         let Json(json) = Json::<T>::from_request(req, state)
             .await
             .map_err(|_| ValidationError)?;
@@ -246,7 +256,6 @@ $ cargo shuttle deploy
 ```
 
 From here on you can do a lot more. Now that you have a validated JSON input, you can use it to create a user in a database, write the activation route, and so many more things. Check out the [earlier issues](https://www.shuttle.rs/launchpad) where we create a CRUD app with SQLX and PostgreSQL.
-
 
 ## Time for your feedback!
 
