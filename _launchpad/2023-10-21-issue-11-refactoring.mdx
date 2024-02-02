@@ -16,6 +16,11 @@ In this issue, we also want to talk about refactoring, and how a few simple tech
 The project we're looking at is an extension of the image processing app we've written in [Shuttle Launchpad Issue #5](https://www.shuttle.rs/launchpad/issues/2023-28-07-issue-05-Traits-Image-Processing). It's an Axum app, and we have an in-memory key-value store that allows us to store any arbitrary data. We have a `/kv/:key` route, with `:key` being a path parameter that we replace with the actual key we want to store. This route listens to both `get` and `post` requests. If we `get` the route, we return the value for the given key. If we `post` to the route, we store the value in the key-value store.
 
 ```rust
+use axum::{extract::{Path, State}, response::IntoResponse, Rotuer, routing::get};
+use std::sync::Arc;
+use bytes::Bytes;
+use axum_extra::{TypedHeader, headers::ContentType};
+
 pub async fn post_kv(
     Path(key): Path<String>,
     TypedHeader(content_type): TypedHeader<ContentType>,
@@ -56,6 +61,10 @@ We use a couple of Axum extractors:
 
 
 ```rust
+use std::sync::Arc;
+use tokio::sync::RwLock;
+use std::collections::HashMap;
+
 pub type SharedState = Arc<RwLock<AppState>>;
 
 #[derive(Default)]
@@ -82,6 +91,10 @@ pub fn router(state: &SharedState) -> Router<SharedState> {
 Then, based on the [image crate](https://crates.io/crates/image), we want to create a transformation of the stored bytes.
 
 ```rust
+use axum::http::StatusCode;
+use image::ImageOutputFormat;
+use std::io::Cursor;
+
 pub async fn grayscale(
     Path(key): Path<String>,
     State(state): State<SharedState>,
@@ -137,6 +150,8 @@ A much better solutions is to have our own type that can deal with images, and c
 So let's create a type `ImageResponse`:
 
 ```rust
+use axum::response::IntoResponse;
+
 pub struct ImageResponse(Bytes, String);
 
 impl ImageResponse {
@@ -173,6 +188,8 @@ A little less cluttered, but we still have some big chunks of code left in our r
 What our own type `ImageResponse` allows is to create conversions from other types to an Axum response type. `image` works with the `DynamicImage` type, so let's create a conversion from `DynamicImage` to `ImageResponse`:
 
 ```rust
+use image::DynamicImage;
+
 impl TryFrom<DynamicImage> for ImageResponse {
     type Error = KVError;
 

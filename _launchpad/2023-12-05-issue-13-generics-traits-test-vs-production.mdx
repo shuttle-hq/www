@@ -21,20 +21,17 @@ $ cargo shuttle new
 
 Then, install some dependencies. We will make use of Shuttle's `shuttle-shared-db` crate, which provides us with a database connection pool and spins up a database for us when deploying.
 
-
-
 ```toml
 async-trait = "0.1.74"
-axum = "0.6.2"
-axum-macros = "0.4.0"
+axum = { version = "0.7.2", features = ["macros"] }
 hyper = "0.14"
 mime = "0.3"
 serde = { version = "1.0.193", features = ["derive"] }
 serde_json = "1.0.108"
-shuttle-axum = "0.34.0"
-shuttle-runtime = "0.34.0"
-shuttle-shared-db = { version = "0.34.1", features = ["postgres", "sqlx"] }
-sqlx = { version = "0.7.3", features = ["postgres", "macros", "uuid"] }
+shuttle-axum = "0.38.0"
+shuttle-runtime = "0.38.0"
+shuttle-shared-db = { version = "0.38.0", features = ["postgres", "sqlx"] }
+sqlx = { version = "0.7.3", features = ["runtime-tokio-rustls", "postgres", "macros", "uuid"] }
 tokio = "1.28.2"
 tower = "0.4.13"
 tracing = "0.1.40"
@@ -60,6 +57,10 @@ CREATE TABLE IF NOT EXISTS articles (
 In our `main.rs` file, we remove everything we don't need and add the following code.
 
 ```rust
+use sqlx::PgPool;
+use axum::Router;
+use std::sync::Arc;
+
 #[shuttle_runtime::main]
 async fn main(
     #[shuttle_shared_db::Postgres] pool: PgPool
@@ -146,6 +147,8 @@ The `#[async_trait]` macro is provided by the `async-trait` crate and allows us 
 With the trait in place, we also want to implement the first version of the repository. Our application will deal with a Postgres database, so we will implement the trait for that database using the type `PgPool` from the `sqlx` crate.
 
 ```rust
+use uuid::Uuid;
+
 #[async_trait]
 impl ArticleRepository for PgPool {
     async fn get_article(&self, id: Uuid)
@@ -222,6 +225,7 @@ But why are we doing the separation of `ArticleRepositoryError` and `AppError` a
 To make `AppError` compatible, we need to implement the `IntoResponse` trait.
 
 ```rust
+use axum::{response::{Response, IntoResponse}, http::StatusCode};
 impl IntoResponse for AppError {
     fn into_response(self) -> Response {
         match self {
@@ -252,6 +256,9 @@ Alright! All the setup is done. Now we can finally start with the handlers.
 After all that setup, the handlers are the most boring part. Here you go, that's it:
 
 ```rust
+use axum::extract::{Path, State};
+use axum::Json;
+
 async fn get_article<T: ArticleRepository>(
     Path(id): Path<Uuid>,
     State(repository): State<Arc<T>>,
