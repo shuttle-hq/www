@@ -75,7 +75,7 @@ use std::net::SocketAddr; /* 1 */
 async fn main() {
     let app = Router::new(); /* 3 */
 
-    let addr = SocketAddr::new([0, 0, 0, 0].into(), 3000); /* 4 */
+    let addr = SocketAddr::new([0, 0, 0, 0].into(), 3000);
     let listener = TcpListener::bind(addr).await.unwrap();; /* 4 */
 
     axum::serve(listener, app)
