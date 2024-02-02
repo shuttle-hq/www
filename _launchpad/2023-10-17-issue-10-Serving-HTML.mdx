@@ -72,6 +72,8 @@ Once everything is set up, we can start writing our server. We want to pass a pa
 
 
 ```rust
+use axum::{extract::Path, response::IntoResponse, http::StatusCode, Router, routing::get};
+
 async fn hello(Path(name): Path<String>) -> impl IntoResponse {
     let template = HelloTemplate { name };
     match template.render() {
@@ -110,6 +112,8 @@ There's a possibility, but it comes with a limitation. A thing that would come i
 
 ```rust
 // DOES NOT COMPILE!!
+use axum::response::{Html, Response};
+
 impl<T> IntoResponse for T
 where
     T: Template,
@@ -134,6 +138,8 @@ Rust's orphan rule requires that either the trait or the type for which you are 
 There is a way to work around this limitation. If you need to own a type, then well, let's create a type. Make a tuple type called `HtmlTemplate<T>` and implement `IntoResponse` for it.
 
 ```rust
+use axum::response::IntoResponse;
+
 struct HtmlTemplate<T>(T);
 
 impl<T> IntoResponse for HtmlTemplate<T>
@@ -152,6 +158,7 @@ where
     }
 }
 ```
+This is called the "Newtype" pattern, and is quite a well-used pattern in Rust.
 
 Since `HtmlTemplate` is generic over `T` and we implement `IntoResponse` for all `HtmlTemplate<T>` where `T` implements `Template`, we only need to wrap our struct in `HtmlTemplate` and be done with it!
 
@@ -196,6 +203,8 @@ $ cargo add tower_http --features fs
 All you need to do is nest a service with `ServeDir` into your router.
 
 ```rust
+use tower_http::services::ServeDir;
+
 #[shuttle_runtime::main]
 async fn axum() -> shuttle_axum::ShuttleAxum {
     let router = Router::new()
