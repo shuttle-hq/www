@@ -1,0 +1,89 @@
+---
+title: Deploying a Rust web app
+description: This article explores the different ways to deploy Rust web services and the (dis)advantages of each. 
+author: josh
+tags: [rust, deployment, guide]
+thumb: write-rest-api-rust-thumb.png 
+cover: write-rest-api-rust-thumb.png 
+date: '2024-01-31T14:30:00'
+---
+
+This article will talk about the best way to deploy Rust. We’ll be covering all the ways that you can deploy Rust, including to VM/VPS, Serverless and options that are more in the middle.
+
+## How do you deploy Rust?
+
+When you compile Rust, it gets compiled to an executable. You can then run the binary from anywhere - including your own self-hosted server! 
+
+The compiled nature of Rust programs means that typically, the way to deploy them is through containerization or hosting them on a VPS. You compile the program into a Docker container (and add it to the machine if you're using a VPS), set up your proxy and SSL certifications if required, host it somewhere and it’s good to go. You can also use a web service that containerizes your application for you and then deploys it to their own network, setting up SSL/proxying automatically for you.
+
+## Different types of hosting
+
+### VPS
+
+VPS (Virtual Private Servers) are a way to be able to deploy to a machine that you have full control over and can  Typically when hosting via VPS, you have full control over everything in the VPS. You are able to SSH into the machine itself and set everything that you need up - for example, if you need some custom dependencies for your machine, you can do that. 
+
+The basic process involves mostly setting up Nginx or Apache (or a similar proxy), then grabbing the files you need from GitHub or GitLab and compiling the program itself. You can then set the web service up as a systemd service and it will automatically start up whenever the machine starts!
+
+Unfortunately, there are a couple of issues that come along with this: you need to handle all issues yourself (unless the VPS itself has an outage), and typically it’s less scalable than other deployment options. VPS machines typically have a given hard maximum for resource usage and you pay for a set amount - so if you’re not making full usage of the given resources, you may be overpaying. This is especially relevant to Rust, as Rust web applications are typically quite low memory footprint. 
+
+Here’s a list of advantages and disadvantages:
+
+| Advantage | Disadvantage |
+| --- | --- |
+| Total control over all aspects of the machine | If anything goes wrong you need to fix it yourself |
+| You know what you’re getting | Less scalable than serverless - machines typically have a hard limit |
+| Once you learn how to do it, it’s not too hard to do it again | You need to set everything up (Nginx, HTTPS, etc…) |
+| You can run whatever you want (NixOS, Ubuntu, Red Hat Enterprise Linux, etc…) | More expensive than other forms of deployment |
+|  |  |
+
+### Serverless
+
+Serverless nowadays is quite popular and is a great way to host functions that see usage but aren’t run all the time. Typically when developers talk about “serverless”, it is normally referring to serverless functions - code that gets run on servers when a given endpoint is hit and otherwise isn’t run.
+
+Serverless over the years has become quite popular among software developers that want to solve the “scale-to-zero” problem. Services like Cloudflare and AWS both have their own version of “serverless functions” (Cloudflare workers and AWS Lambda, respectively) that simply get run when a HTTP request gets made to a given endpoint. This allows companies to save money by only running the code when required to do so, and is reflected in their pricing - AWS lambda gives you up to 1 million serverless function invocations per month for free!
+
+However, there are some caveats. You often need to adapt your code to the platform so that it can serve your serverless functions. When it comes to Rust, this can typically mean you need to write multiple binaries. You will also be unable to use regular Rust backend frameworks most of the time - though given that one serverless function equates to an endpoint, it’s not too much of a loss. Additionally, cold starts can cause your functions to initially function a little slower.
+
+On top of this, although it is not *directly* related to any one platform, if your platform credentials are somehow compromised, the attacker will likely try to start a bitcoin mine on your credentials. Although you can get this resolved with customer support, it is a substantial amount of hassle to solve.
+
+Here’s a list of advantages and disadvantages:
+
+| Advantage | Disadvantage |
+| --- | --- |
+| Much cheaper than hosting a VPS (you only pay for what you use!) | Cold starts |
+| You don’t need to worry about any of the hosting | Vendor lock-in due to needing to adapt your code to fit the platform |
+| Very economically friendly | Can become expensive very quickly without a price cap if you get a traffic spike |
+| Often has integrations to other parts of the platform ecosystem that you can leverage | Unpredictable billing |
+
+### Managed serverless
+
+While VPS has a maximum hard limit on resources and serverless forces you to adapt your code to fit the platform, managed serverless allows you to pay only for what you use while being able to still allow whatever you want to run. This is done by putting your web application into a Docker container, which then gets added to a Kubernetes cluster (for example) or a similar orchestrator.
+
+This has the huge advantage of being able to deploy whatever will fit in a Docker container - which allows you to ship software quickly and efficiently without delay. Additionally, a lot of managed serverless platforms have database integrations as well as other kinds of infrastructure which saves time in needing to find other services that you can use with your code. 
+
+On the other hand, there are certain caveats. The web host itself typically uses AWS, GCP or one of the larger cloud computing platforms and service outages can cause a domino effect of outages. Some companies have found ways around this, but otherwise you’re still typically at the mercy of their provider. However, this also comes with an advantage in that said services can also leverage their provider’s infrastructure. 
+
+See this short list of advantages of disadvantages below:
+
+| Advantage | Disadvantage |
+| --- | --- |
+| You can deploy whatever fits in a Docker container  | Unpredictable pricing |
+| Only pay for what you need | Service is dependent on a larger service |
+| Often has convenience integrations (like databases) |  |
+
+### Shuttle
+
+So, where does Shuttle fit into this? 
+
+Shuttle is a Rust-native company for managed serverless that lets you provision your infrastructure directly from code using our runtime, by adding one line of code to your main function. This lets us provide the magic “it just works” experience that you might find from companies like Vercel or Netlify, who allow you to one-click deploy from your repo and the web host does all the work for you. This allows us a couple of advantages:
+
+- No context switching required
+- No configuration files for resource provisioning
+
+Additionally, by caching your project dependencies, although your application does get containerised, the build time is typically non-existent. Once you’ve deployed the first time, after that you only need to compile any new dependencies (which also get cached) and your application, and it’s ready to go!
+
+Of course, we *are* talking about our own product here - we’re biased. However, if you’re looking to deploy quickly in Rust (for example, an MVP or POC), we believe Shuttle is a great fit for you!
+
+## Finishing up
+
+Thanks for reading! Rust is easier to use and deploy than ever, and with so many options it’s difficult to figure out what the best one is.
