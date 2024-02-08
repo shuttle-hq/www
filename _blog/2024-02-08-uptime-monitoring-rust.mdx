@@ -246,6 +246,7 @@ async fn create_website(
         .unwrap();
 
     Ok(Redirect::to("/"))
+}
 ```
 
 Now let’s write a route to grab all the websites we’re monitoring, as well as get a quick report on what the uptime was like in the last recorded 24 hours (filling in any gaps where required) for each website. 
@@ -285,6 +286,7 @@ async fn get_websites(State(state): State<AppState>) -> Result<impl AskamaIntoRe
     }
 
     Ok(WebsiteLogs { logs })
+}
 ```
 
 Once this is done, we’ll then need to make a new Vector. This will hold all the website URLs (and respective aliases) as well as a list of timestamps with the uptime percentage over the last 24 hours, calculated per hour from how many HTTP requests returned with `200 OK`. We then need to check if there’s any gaps and fill them in with a `None`. This lets the person viewing the data know that no data was recorded at the time (for example if we’re either developing locally, or if the service itself had an outage and was unable to record data). 
@@ -433,6 +435,7 @@ async fn get_website_by_alias(
         incidents,
         monthly_data,
     })
+}
 ```
 
 Finally, we need to create a route for deleting a website. This will be a two-step process where we need to delete all of the website logs and then the URL itself, then return `200 OK` if everything went well. We can use a transaction to rollback if there’s an error anywhere in this process and manually return `ApiError`:
