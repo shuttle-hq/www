@@ -17,5 +17,5 @@ module.exports = {
 	trailingComma: 'es5',
 	useTabs: true,
 	vueIndentScriptAndStyle: false,
-	endOfLine: 'lf'
-};
+	endOfLine: 'lf',
+}
