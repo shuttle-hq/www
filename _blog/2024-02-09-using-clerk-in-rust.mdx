@@ -14,7 +14,7 @@ Here is the [source code](https://github.com/sourabpramanik/issue-tracker) of th
 
 To start this project I have used the template from Shuttle’s [example repository](https://github.com/shuttle-hq/shuttle-examples) that has a barebone setup of Vite, Shuttle, Actix web, and Clerk. 
 
-The back-end uses [clerk-rs](https://github.com/DarrenBaldwin07/clerk-rs) crate to create a connection between the back-end application and Clerk project. This crate has many different APIs for different use cases, in the template there is back-end API to fetch all users record using `clerk-rs` user API. We can easily verify user's identity trying to access protected routes before hand using the `ClerkMiddleware` from the crate.
+The back-end uses the [clerk-rs](https://github.com/DarrenBaldwin07/clerk-rs) community crate to create a connection between the back-end application and Clerk project. This crate has many different APIs for different use cases, in the template there is back-end API to fetch all users record using the `clerk-rs` user API. We can easily verify a user's identity when trying to access protected routes using the `ClerkMiddleware` from the crate.
 
 I have additionally used Postgres for the database which will run in a docker container so make sure you also have docker [installed](https://docs.docker.com/engine/install/).
 
