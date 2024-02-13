@@ -92,6 +92,14 @@ const authors: readonly Author[] = [
 		author_image_url:
 			'https://cdn.discordapp.com/attachments/1084800035872587838/1143859769392779295/1660048323231.jpg',
 	},
+	{
+		author_id: 'sourabpramanik',
+		author: 'Sourab Pramanik',
+		position: '',
+		author_url: 'https://twitter.com/_sourabpramanik',
+		author_image_url:
+			'https://github.com/sourabpramanik.png',
+	},
 ]
 
 export default authors
