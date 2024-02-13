@@ -7,12 +7,11 @@ thumb:
 cover: 
 date: '2024-02-14T14:30:00'
 ---
-
-Hey there! In this article, we’re going to do a deep dive into working with Rust async when it comes to using and writing Rust traits. We will initially start by talking about how async works in Rust, using and implementing the `std::future::Future` trait and then talk about async traits.
+Hey there! In this article, we’re going to do a deep dive into working with Rust async when it comes to using and writing Rust traits. We will initially start by talking about how async works in Rust, using and implementing the `std::future::Future` trait, and then talk about async traits.
 
 ## What is async in Rust?
 
-Async in Rust enables concurrent execution of tasks by using `futures` - an async primitive provided from the standard Rust library. We also have things like `channels`, `TcpStreams`, `TcpListener`, `Mutex`es and other types that enable concurrency. From there, it’s left up to the user to implement their own async runtime. From this, popular crates like `tokio` have been created which form the backbone of async Rust. Additionally, features like greenthreading as well as native CPU threading can be used for concurrency!
+Async in Rust enables concurrent execution of tasks by using `futures` - an async primitive provided by the standard Rust library. We also have things like `channels`, `TcpStreams`, `TcpListener`, `Mutex`es, and other types that enable concurrency. From there, it’s left up to the user to implement their own async functions. From this, popular crates like `tokio` have been created which form the backbone of async Rust. Additionally, features like greenthreading (virtual threading), as well as native CPU threading, can be used for concurrency!
 
 Below, we will talk about working with Futures. 
 
@@ -71,21 +70,21 @@ As you can see from the call chart, there are quite a few pink/red blocks. These
 
 ### Implementing futures
 
-When it comes to implementing futures, we can write our own enum or struct type that implements `Future`. As an example, let’s have a look at an example that uses an enum, implements `std::future::Future` for it and then uses it in the main function (color-coded to show what parts correlate to what):
+When it comes to implementing futures, we can write our own enum or struct type that implements `Future`. As an example, let’s have a look at an example that uses an enum, implements `std::future::Future` for it, and then uses it in the main function (color-coded to show what parts correlate to what):
 
 ![Untitled](/images/blog/async-rust-traits-article/futures-impl.png)
 
-So far, so good. We can see here that an `std::instant::Instant` gets generated and a `Delay` is created. We then instantiate a `MainFuture` that is then polled. 
-
-When you’re using 
+So far, so good. We can see here that a `std::instant::Instant` gets generated and a `Delay` is created. We then instantiate a `MainFuture` that is then polled. 
 
 ## Async traits in Rust
+
+Now it's time to move onto the big boy toys: async Rust traits! There's a few ways to do them, which we will talk about below. But first, we'll look at an example that showcases how you can write an async Rust trait manually.
 
 ### Looking at the tower Service trait
 
 So far, everything we’ve talked about works outside of traits. However, the code is concrete and not abstract. When it comes to traits, you need to be prepared for lots of different types of potential implementation; particularly if you have a published crate on [Crates.io](http://Crates.io) that becomes popular! Let’s go through a few examples.
 
-First let’s have a look at the `Service` trait from the `tower` crate - a well known crate in the Rust async web ecosystem and is used under the hood with Axum:
+First, let’s have a look at the `Service` trait from the `tower` crate - a well-known crate in the Rust async web ecosystem:
 
 ```rust
 pub trait Service<Request> {
@@ -150,7 +149,7 @@ fn call(&mut self, req: Request) -> Self::Future {
 
 This code technically compiles but will lead to an incorrect result as we haven’t awaited the future yet!
 
-We can fix this by awaiting the call in an async block, boxing the future and adding more trait bounds:
+We can fix this by awaiting the call in an async block, boxing the future, and adding more trait bounds:
 
 ```rust
 impl S, B> Service<Request<B>> for Logger<S>
@@ -174,7 +173,7 @@ fn call(&mut self, req: Request) -> Self::Future {
 
 Now it works! 
 
-While this is quite powerful and allows you to skip using the heap, you need to know the exact Future you want to return. If you can’t access it, you box the `Future` on the heap and return a pointer to a trait object. Additionally, the above implementation is actually still quite simple compared to other more advanced implementations. Unless you’re writing advanced, high-performance applications however, this is about as difficult as it gets for most (simple) CRUD web services.
+While this is quite powerful and allows you to skip using the heap, you need to know the exact Future you want to return. If you can’t access it, you box the `Future` on the heap and return a pointer to a trait object. Additionally, the above implementation is still quite simple compared to other more advanced implementations. Unless you’re writing advanced, high-performance applications, however, this is about as difficult as it gets for most (simple) CRUD web services.
 
 ### Using async_trait
 
@@ -224,7 +223,7 @@ As you can see, we get rid of most of the complexity by using `async_trait`! A v
 
 ### Returning “impl Future” in a trait
 
-What about if we don’t know what the future looks like or want to allow the user to decide on the final function signature? For example, if they want to retur/ned a box-pinned future? Or just a regular future? We can’t use `async fn` here. In this case, we use `impl Future` as the return type:
+What about if we don’t know what the future looks like or want to allow the user to decide on the final function signature? For example, if they want to return a box-pinned future? Or just a regular future? We can’t use `async fn` here. In this case, we use `impl Future` as the return type:
 
 ```rust
 trait HttpService {
@@ -300,7 +299,7 @@ As you can see here, we add some trait bounds to ensure that the type being impl
 
 ## Limitations
 
-As you’ve seen, there’s a lot of cool different ways you can write async Rust traits! You can do it either the low-level or high-level way, or mix them.
+As you’ve seen, there are a lot of cool different ways you can write async Rust traits! You can do it either the low-level or high-level way, or mix them.
 
 However, `impl Trait` doesn’t allow additional user-defined trait bounds. If you attempt to use RPITIT and then add a second `impl` into the return signature, it won’t compile. This is somewhat of an annoyance that you can fix this by creating a supertrait, by creating a trait that requires two or more traits that you additionally own like so:
 
@@ -311,8 +310,9 @@ trait MySecondTrait {}
 trait MySuperTrait: MyFirstTrait + MySecondTrait {}
 ```
 
-Additionally, because it’s not object safe there is currently no dynamic dispatch - this means that code can become considerably more complex and confusing. 
+Additionally because it’s not object-safe, there is currently no dynamic dispatch - this means that code can become considerably more complex and confusing. 
 
 ## Finishing up
 
 Thanks for reading! I hope you have learned a little something about using async in Rust, as well as using it with Rust traits.
+
