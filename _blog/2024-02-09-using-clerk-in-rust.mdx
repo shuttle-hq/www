@@ -1,6 +1,6 @@
 ---
 title: "Using Clerk authentication in Rust"
-description: This article is on how to use Clerk authentication in Rust based back-end applications and little bit of an extension on integration of shared database using Shuttle. 
+description: This article covers how to use Clerk authentication in Rust backends along with integrating a shared database using Shuttle. To demonstrate the extensive usage we will be building REST APIs that can be used on React frontends protected by Clerk frontend APIs. 
 author: sourabpramanik
 tags: [rust, clerk, vite, guide]
 thumb: 
@@ -8,15 +8,15 @@ cover:
 date: 
 ---
 
-This article covers how I built an Issue tracking application using React for the front-end, and [Shuttle](https://www.shuttle.rs/) and [Actix web](https://actix.rs/) for the back-end. It also uses [Clerk](https://clerk.com/) for authentication in the front-end and protecting the endpoints in the back-end.
+This article covers how we can build an Issue tracking application using React for the frontend, and [Shuttle](https://www.shuttle.rs/) and [Actix web](https://actix.rs/) for the backend. It also uses [Clerk](https://clerk.com/) for authentication in the frontend and protecting the Rest APIs in the backend.
 
-Here is the [source code](https://github.com/sourabpramanik/issue-tracker) of the complete project if you want to follow along.
+Here is the [source code](https://github.com/sourabpramanik/issue-tracker) of the complete project if you want to follow along. And link to the [demo](https://issue-tracker.shuttleapp.rs/).
 
-To start this project I have used the template from Shuttle’s [example repository](https://github.com/shuttle-hq/shuttle-examples) that has a barebone setup of Vite, Shuttle, Actix web, and Clerk. 
+To start this project we will the template from Shuttle’s [example repository](https://github.com/shuttle-hq/shuttle-examples) that has a barebone setup of Vite, Shuttle, Actix web, and Clerk. 
 
-The back-end uses the [clerk-rs](https://github.com/DarrenBaldwin07/clerk-rs) community crate to create a connection between the back-end application and Clerk project. This crate has many different APIs for different use cases, in the template there is back-end API to fetch all users record using the `clerk-rs` user API. We can easily verify a user's identity when trying to access protected routes using the `ClerkMiddleware` from the crate.
+The backend uses the [clerk-rs](https://github.com/DarrenBaldwin07/clerk-rs) community crate to create a connection between the backend application and Clerk project. This crate has many different APIs for different use cases, in the template there is backend API to fetch all users record using the `clerk-rs` user API. We can easily verify a user's identity when trying to access protected routes using the `ClerkMiddleware` from the crate.
 
-I have additionally used Postgres for the database which will run in a docker container so make sure you also have docker [installed](https://docs.docker.com/engine/install/).
+We will use Postgres for the database which will run in a docker container so make sure you also have docker [installed](https://docs.docker.com/engine/install/) in your local machine.
 
 
 # Let's get started
@@ -28,62 +28,39 @@ cargo shuttle init --from shuttle-hq/shuttle-examples --subfolder actix-web/cler
 
 ```
 
-You will get a few prompts to create a new project using this template. Make sure you provide a unique name because when you deploy this project on Shuttle this project name will become the sub-domain. And once a name is taken it cannot be used for other project as well:
+You will get a few prompts to create a new project using this template. Make sure you provide a unique name because when you deploy this project on Shuttle this project name will become the sub-domain. And once a name is taken it cannot be used for any other projects
 
-```bash
-What do you want to name your project?
-It will be hosted at ${project_name}.shuttleapp.rs, so choose something unique!
-✔ Project name · <ENTER_PROJECT_NAME>
-Where should we create this project?
-✔ Directory · <ENTER_THE_DIRECTORY_NAME>
-✔ Claim the project name <PROJECT_NAME> by starting a project container on Shuttle? <Y/N>
-
-```
-
-After that, `cd` into the project directory:
-
-```bash
-cd {project_name}
-
-```
+After that, `cd` into the project directory.
 
 ## Setup a new application in Clerk
 
-Head on to Clerk’s official website, sign in or sign up if don’t have an account, and create a new application in the dashboard.
-
-Give a name to your project and select the providers using which users can sign-in or sign-up in your application.
+Head on to Clerk’s official website, sign in or sign up if you don’t have an account, and create a new project in the dashboard. Give a name to your project and select the providers using which users can sign-in or sign-up in your application.
 
 After that, you will get a **Publishable Key** and a **Secret key** which we will use later in our application.
 
-[https://gist.github.com/assets/61370770/7fb52565-605c-42e9-9a6a-3fc7e4855696](https://gist.github.com/assets/61370770/7fb52565-605c-42e9-9a6a-3fc7e4855696)
+![image using clerk](https://gist.github.com/assets/61370770/7fb52565-605c-42e9-9a6a-3fc7e4855696)
 
-## Build the back-end
+## Build the backend
 
-Now we can start updating the existing back-end code to write and build our own endpoints for our application.
+Now we can start updating the existing backend code to write and build the Rest APIs for our application.
 
-`cd` into the backend:
+`cd` into the backend, and copy the contents of `Secrets.example.toml` into a new `Secrets.toml` file:
 
 ```bash
 cd backend
-
-```
-
-Copy the contents of `Secrets.example.toml` into a new `Secrets.toml` file:
-
-```bash
 touch Secrets.toml
 cp Secrets.example.toml Secrets.toml
 
 ```
 
-Copy the **Secret key** from the Clerk dashboard and add it to `Secrets.toml` :
+Copy the **Secret key** from the Clerk's dashboard and add it to the `Secrets.toml` file:
 
 ```bash
 CLERK_SECRET_KEY = "sk_test_vsWrxxxxxxxxxxxxxxxxxxxxxxxxxtfTr"
 
 ```
 
-> ⚠️ Do not commit this file
+> ⚠️ Do not commit this file, so make sure you have added this file in the `.gitignore`.
 > 
 
 Now, we need to write a new migration in a `schema.sql` file which will create a new `issues` table in our Postgres database.
@@ -122,7 +99,7 @@ cargo add shuttle-shared-db -F shuttle-shared-db/postgres -F shuttle-shared-db/s
 
 ### Connect to the shared Postgres DB
 
-Let’s migrate this schema, `cd` into the `src` directory, and write some code in the `main.rs` file.
+Let’s edit the `main.rs` file.
 
 First, we need to bring SQLX into the scope:
 
@@ -193,7 +170,7 @@ cargo shuttle run --port 8000
 > 🗨️ Make sure docker is running in your local machine because after you run the above command Shuttle will pull the Postgres docker image and start a docker container.
 > 
 
-The back-end application can now query the Postgres database using SQLX. Let's create some **CRUD** endpoints for our application.
+The backend application can now query the Postgres database using SQLX. Let's create some **CRUD** endpoints for our application.
 
 ### Create Issue struct
 
@@ -202,13 +179,13 @@ To define the fields of an issue we will create a new struct that is used to def
 ```rust
 #[derive(Serialize, Deserialize, FromRow)]
 struct Issue {
+    id: i32,
     title: String,
     description: String,
     status: String,
     label: String,
     author: String,
 }
-
 ```
 
 ### Create NewIssue struct
@@ -224,7 +201,21 @@ struct NewIssue {
     label: String,
     author: String,
 }
+```
 
+### Create a function to extract the Clerk JWT claim from the request
+
+In some of the APIs we need to check for the user's authorization, for that we will require user `id` which can be found in the JWT claim **sub** property:
+
+```rust
+async fn get_jwt_claim(service_request: &ServiceRequest, clerk_client: &Clerk) -> Option<ClerkJwt> {
+    let claim = clerk_authorize(service_request, clerk_client, true).await;
+
+    match claim {
+        Ok(value) => Some(value.1),
+        Err(_) => None,
+    }
+}
 ```
 
 ### Create issue endpoint
@@ -332,36 +323,28 @@ async fn update_issue(
 ) -> impl Responder {
     let issue_id = path.into_inner();
 
-    let srv_req = ServiceRequest::from_request(req);
+    let service_req = ServiceRequest::from_request(req);
 
-    let claim = match clerk_authorize(&srv_req, &state.client, true).await {
-        Ok(value) => value.1,
-        Err(_) => {
-            return HttpResponse::Unauthorized().json(serde_json::json!({
-                "status":"Failed",
-                "message":"Unauthorized"
-            }));
-        }
-    };
+    let claim = get_jwt_claim(&service_req, &state.client).await;
+
+    if claim.is_none() {
+        return HttpResponse::Forbidden().json(serde_json::json!({
+            "status":"FAILED",
+            "message":"Not authorized to update the issue."
+        }));
+    }
 
     let query: Result<Issue, sqlx::Error> = sqlx::query_as("SELECT * FROM issues WHERE id=$1")
         .bind(issue_id)
         .fetch_one(&state.pool)
         .await;
 
-    if query.is_err() {
-        return HttpResponse::InternalServerError().json(serde_json::json!({
-            "status":"FAILED",
-            "message":"Issue does not exist."
-        }));
-    }
-
     match query {
         Ok(issue) => {
-            if issue.author != claim.sub {
+            if issue.author != claim.unwrap().sub {
                 return HttpResponse::Unauthorized().json(serde_json::json!({
                     "status":"FAILED",
-                    "message":"No authorized to update the issue."
+                    "message":"Not authorized to update the issue."
                 }));
             }
         }
@@ -396,7 +379,6 @@ async fn update_issue(
         "message":"Updated successfully"
     }))
 }
-
 ```
 
 ### Delete issue by `id` endpoint
@@ -410,17 +392,16 @@ async fn delete_issue(
     path: web::Path<i32>,
     req: HttpRequest,
 ) -> impl Responder {
-    let srv_req = ServiceRequest::from_request(req);
+    let service_req = ServiceRequest::from_request(req);
 
-    let claim = match clerk_authorize(&srv_req, &state.client, true).await {
-        Ok(value) => value.1,
-        Err(_) => {
-            return HttpResponse::Unauthorized().json(serde_json::json!({
-                "status":"Failed",
-                "message":"Unauthorized"
-            }));
-        }
-    };
+    let claim = get_jwt_claim(&service_req, &state.client).await;
+
+    if claim.is_none() {
+        return HttpResponse::Forbidden().json(serde_json::json!({
+            "status":"FAILED",
+            "message":"Not authorized to update the issue."
+        }));
+    }
 
     let issue_id = path.into_inner();
 
@@ -431,7 +412,7 @@ async fn delete_issue(
 
     match query {
         Ok(issue) => {
-            if issue.author != claim.sub {
+            if issue.author != claim.unwrap().sub {
                 return HttpResponse::Unauthorized().json(serde_json::json!({
                     "status":"FAILED",
                     "message":"No authorized to delete the issue."
@@ -463,11 +444,36 @@ async fn delete_issue(
         "message":"Deleted successfully"
     }))
 }
+```
 
+### Get your own user record
+We get the `UserModel` struct and `get_user` API handler function from the template. Now we will edit the handler function to use the `get_jwt_claim` function:
+
+```rust
+#[get("/user/me")]
+async fn get_user(state: web::Data<AppState>, req: HttpRequest) -> impl Responder {
+    let service_req = ServiceRequest::from_request(req);
+
+    let claim = get_jwt_claim(&service_req, &state.client).await;
+
+    if claim.is_none() {
+        return HttpResponse::Forbidden().json(serde_json::json!({
+            "status":"FAILED",
+            "message":"Not authorized to update the issue."
+        }));
+    }
+
+    let Ok(user) = User::get_user(&state.client, &claim.unwrap().sub).await else {
+        return HttpResponse::InternalServerError().json(serde_json::json!({
+            "message": "Unable to retrieve user",
+        }));
+    };
+
+    HttpResponse::Ok().json(Into::<UserModel>::into(user))
+}
 ```
 
 ### Get user by `id`
-
 We need on last endpoint which can fetch the user details by their `user_id`, this API will be used to fetch issue author metadata from Clerk:
 
 ```rust
@@ -483,7 +489,6 @@ async fn get_user_by_id(state: web::Data<AppState>, path: web::Path<String>) -> 
 
     HttpResponse::Ok().json(Into::<UserModel>::into(user))
 }
-
 ```
 
 Now, let’s add all these endpoints to our `main` function under the `/api` scope which is wrapped by Clerk middleware for protecting our endpoint routes and only allowing authenticated users to access these routes. After adding all the endpoints the `main` function should look like this [main.rs](https://github.com/sourabpramanik/issue-tracker/blob/130170b638ff10771d9dc75eb7479d7178c94d73/backend/src/main.rs#L301C1-L338C2).
@@ -495,9 +500,9 @@ One important thing to notice is that this piece of code:
 
 ```
 
-is going the serve the static pages of the front-end application which we will be creating next from the `./frontend/dist` directory which is generated whenever we build our **Vite** application, this final output is optimized for production. So let’s build the front-end now.
+is going the serve the static pages of the frontend application located in the `./frontend/dist` directory whenever we build our **Vite** application, and this final output is optimized for production. So let’s build the frontend now.
 
-## Build the front-end
+## Build the frontend
 
 `cd` to the `frontend` directory and let’s explore what all we have got.
 
@@ -507,7 +512,7 @@ Shadcn UI is a collection of reusable components that uses **Tailwind CSS** to b
 
 **[SWR](https://swr.vercel.app/)**
 
-SWR is used to create hooks for data fetching and mutations by consuming the APIs we have created in the back-end.
+SWR is used to create hooks for data fetching and mutations by consuming the APIs we have created in the backend.
 
 **[Lucide React](https://lucide.dev/)**
 
@@ -533,7 +538,7 @@ npx shadcn-ui@latest add badge button card dialog form input label select sonner
 
 ### Schema
 
-We need to represent the structure of the data we are going receive in response from the back-end to keep our front-end application type safe and more predictable.
+We need to represent the structure of the data we are going receive in response from the backend to keep our frontend application type safe and more predictable.
 
 Create `/frontend/lib/schema.ts` and add `IssueSchema` and `UserSchema` interfaces:
 
@@ -604,7 +609,7 @@ export const useIssueModalStore = create<IssueModalStore>((set) => ({
 
 We will create the custom hooks using `useSWR` and `userSWRMutation` so that we can revalidate the data after any mutation happens and cache the stale data.
 
-Create `/frontend/lib/hooks.ts` and let's start integrating all the APIs we have created in the back-end. First let's bring all the required schema, hooks, and components into the scope:
+Create `/frontend/lib/hooks.ts` and let's start integrating all the APIs we have created in the backend. First let's bring all the required schema, hooks, and components into the scope:
 
 ```tsx
 import useSWR, { Fetcher, useSWRConfig } from "swr"
@@ -702,7 +707,7 @@ export const useCreateIssue = () => {
 
 ```
 
-> 🗨️ We need to specify the content type header as `application/json` in the fetch calls because by default fetch API sets the content type header to `text/plain` which causes an incorrect content error as the back-end we have created expects a JSON payload.
+> 🗨️ We need to specify the content type header as `application/json` in the fetch calls because by default fetch API sets the content type header to `text/plain` which causes an incorrect content error as the backend we have created expects a JSON payload.
 > 
 
 **Update/Edit issue hook**
@@ -919,7 +924,7 @@ Please find the complete code here [row.tsx](https://github.com/sourabpramanik/i
 
 Here you can find the complete code for the issue table **[index.tsx](https://github.com/sourabpramanik/issue-tracker/blob/130170b638ff10771d9dc75eb7479d7178c94d73/frontend/src/components/issue-table/index.tsx#L1C1-L64C2)**.
 
-I have added the create new issue button on top of the table component which on click event sets the `edit_issue_id` store to an empty string to ensure we do not use the update logic in the issue modal and then set the modal to open up.
+Create a new issue button on top of the table component which on click event sets the `edit_issue_id` store to an empty string to ensure we do not use the update logic in the issue modal and then set the modal to open up.
 
 ### Update `App.tsx` file
 
@@ -985,7 +990,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
 ## Run the application
 
-First, build your frontend application using this command:
+First, build the frontend application using this command:
 
 ```bash
 npm run build
@@ -1001,13 +1006,13 @@ cargo shuttle run
 
 Open the highlighted URL in the browser window:
 
-<img width="960" alt="Screenshot 2024-02-06 082641" src="[https://gist.github.com/assets/61370770/8a22b566-a930-494a-8ba6-cd92481a0113](https://gist.github.com/assets/61370770/8a22b566-a930-494a-8ba6-cd92481a0113)">
+![image screenshot](https://gist.github.com/assets/61370770/8a22b566-a930-494a-8ba6-cd92481a0113)
 
 # **Deployment**
 
 Now you can deploy your app in the Shuttle’s managed platform by running `cargo shuttle deploy` (with the `--allow-dirty` flag if you have uncommitted changes).
 
-One important note is that the deployment using the **development** keys from Clerk will work just fine. But if you happen to use the **Production Instance** of Clerk then you will need to update the **PUBLISHABLE_KEY** on the front-end and **CLERK_SECRET_KEY** on the back-end with **Live** keys. Now since you have moved to production you will also need to set up the domain or subdomain of your application in Clerk and add the CNAME records that you will get from the Clerk dashboard to your DNS record for managing sessions, loading portal using your domain, sending verification emails, and using custom callback URL. Since this process can be different based on your domain provider and management system, I will leave a link to the Clerks documentation on [**Deploy to production**](https://clerk.com/docs/deployments/overview).
+One important note is that the deployment using the **development** keys from Clerk will work just fine. But if you happen to use the **Production Instance** of Clerk then you will need to update the **PUBLISHABLE_KEY** on the frontend and **CLERK_SECRET_KEY** on the backend with **Live** keys. Now since you have moved to production you will also need to set up the domain or subdomain of your application in Clerk and add the CNAME records that you will get from the Clerk dashboard to your DNS record for managing sessions, loading portal using your domain, sending verification emails, and using custom callback URL. Since this process can be different based on your domain provider and management system, I will leave a link to the Clerks documentation on [**Deploy to production**](https://clerk.com/docs/deployments/overview).
 
 # Closing in
 
