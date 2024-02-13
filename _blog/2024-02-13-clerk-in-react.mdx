@@ -1,0 +1,510 @@
+---
+title: "Using Clerk authentication in React"
+description: This article shows how to build a React frontend with Clerk authentication.
+author: sourabpramanik
+tags: [javascript, react, auth, clerk, guide]
+thumb: clerk-react-thumb.png
+cover: clerk-react-thumb.png
+date: '2024-02-13T17:00:00'
+---
+
+This two-part article covers how we can build an Issue tracking application using React for the frontend, and [Shuttle](https://www.shuttle.rs/) and [Actix web](https://actix.rs/) for the backend. It also uses [Clerk](https://clerk.com/) for authentication in the frontend and protecting the Rest APIs in the backend.
+
+This article covers the React frontend, and the [first part](https://www.shuttle.rs/blog/2024/02/13/clerk-in-rust) covers the Rust backend.
+
+Here is the [source code](https://github.com/sourabpramanik/issue-tracker) of the complete project if you want to follow along, and a link to the [demo](https://issue-tracker.shuttleapp.rs/).
+
+## Overview
+
+In the `frontend` directory of the template we've been building from in [Part 1](https://www.shuttle.rs/blog/2024/02/13/clerk-in-rust), let’s explore some of the React libraries that the template has provided us.
+
+**[Shadcn UI](https://ui.shadcn.com/docs)**
+
+Shadcn UI is a collection of reusable components that uses **Tailwind CSS** to build its components with great accessibility.
+
+**[SWR](https://swr.vercel.app/)**
+
+SWR is used to create hooks for data fetching and mutations by consuming the APIs we have created in the backend.
+
+**[Lucide React](https://lucide.dev/)**
+
+Lucide React has a wide range of icons that sits just right with Shadcn UI.
+
+## Build the frontend
+
+### Setting Environment Variable
+
+You can find a `.env.example` file copy the content, create a new file `.env` in the same path, and paste the content in it. From your Clerk dashboard get the `PUBLISHABLE_KEY` and assign it to the variable `VITE_CLERK_PUBLISHABLE_KEY` in the `.env` file:
+
+```bash
+VITE_CLERK_PUBLISHABLE_KEY=pk_test_YW1xxxxxxxxxxxxxxxxxxxxxxxxxxxcy5kZXYk
+```
+
+### Adding components from Shadcn UI
+
+We already have table and avatar components in the `/frontend/components/ui` directory but we need a few more components to build this application. Run this command to add the [components](https://ui.shadcn.com/docs/components):
+
+```bash
+npx shadcn-ui@latest add badge button card dialog form input label select sonner
+```
+
+### Schema
+
+We need to represent the structure of the data we are going receive in response from the backend to keep our frontend application type safe and more predictable.
+
+Create `/frontend/lib/schema.ts` and add `IssueSchema` and `UserSchema` interfaces:
+
+```tsx
+export interface IssueSchema {
+    id: string | undefined,
+    title: string;
+    description: string;
+    status: "todo" | "inprogress" | "done" | "backlog";
+    label: "bug" | "feature" | "documentation";
+    author: string;
+}
+
+export interface UserSchema {
+    id: string,
+    first_name: string,
+    last_name: string,
+    username: string,
+    profile_image_url: string,
+}
+```
+
+In the `IssueSchema`, we have predefined the label and status field value because this helps keep different parts of our application well aware of the incoming data and restricts invalid data input or output.
+
+### Store
+
+We will need to create two stores using **[Zustand](https://docs.pmnd.rs/zustand/migrations/migrating-to-v4#create)**. First, install Zustand:
+
+```bash
+npm install zustand
+```
+
+- Store for issue `id` that has to be updated/edited
+
+```tsx
+import { create } from 'zustand'
+
+type IssueStore = {
+    edit_issue_id: string,
+    setEditIssueId: (id: string) => void
+}
+export const useIssueStore = create<IssueStore>((set) => ({
+    edit_issue_id: "",
+    setEditIssueId: (id: string) => set(() => ({ edit_issue_id: id })),
+}))
+```
+
+- Store for closing and opening the issue modal
+
+```tsx
+type IssueModalStore = {
+    isOpen: boolean,
+    setOpen: () => void
+    setClose: () => void
+}
+export const useIssueModalStore = create<IssueModalStore>((set) => ({
+    isOpen: false,
+    setOpen: () => set({ isOpen: true }),
+    setClose: () => set({ isOpen: false }),
+}))
+```
+
+### Custom hooks
+
+We will create the custom hooks using `useSWR` and `userSWRMutation` so that we can revalidate the data after any mutation happens and cache the stale data.
+
+Create `/frontend/lib/hooks.ts` and let's start integrating all the APIs we have created in the backend. First let's bring all the required schema, hooks, and components into the scope:
+
+```tsx
+import useSWR, { Fetcher, useSWRConfig } from "swr"
+import useSWRMutation from 'swr/mutation'
+import { IssueSchema, UserSchema } from "./schema";
+import { toast } from "sonner";
+import { useIssueModalStore } from "./store";
+```
+
+**Get user hook**
+
+This hook will consume the get user by `id` API we have created before. The first parameter of `useSWR` is the key which is used as an identifier to cache the data and revalidate the data using that key, this key can be a subset of the URL path which can be passed to the fetcher function to fetch or mutate data as well. To know more about the arguments follow this [documentation](https://swr.vercel.app/docs/arguments).
+
+The hook returns an object where the `isLoading` property is a boolean property that sets to true while data is being fetched and a data property that is the returned value of the hook.
+
+```tsx
+export const useGetUser = (user_id: string | undefined) => {
+    const fetcher: Fetcher<UserSchema, string> = (url) => fetch(url).then(res => res.json())
+    const { isLoading, data } = useSWR(`/api/user/${user_id}`, fetcher);
+    return { isLoading, data };
+}
+```
+
+**Get issues hook**
+
+Fetches all the issues for the issues table, consuming get issues API, the response of this API on success will be an array of issues, that’s why we have passed `IssuesSchema[]` to the `Fetcher` type:
+
+```tsx
+export const useGetIssues = () => {
+    const fetcher: Fetcher<IssueSchema[], string> = (url) =>
+        fetch(url).then((res) => res.json())
+    const { isLoading, data } = useSWR('/api/issues', (url) => fetcher(url));
+    return { isLoading, data };
+}
+
+```
+
+**Get issue by `id` hook**
+
+This hook uses the get issue by `id` API and returns the one single record that matches that `id` additionally, we have added a condition to call the `fetcher` function only when `id` is not empty:
+
+```tsx
+export const useGetIssue = (id: string) => {
+    const fetcher: Fetcher<{ data: IssueSchema }, string> = (url) =>
+        fetch(url).then((res) => res.json())
+    const { data } = useSWR(() => id !== "" ? `/api/issue/${id}` : null, fetcher);
+
+    return { data: data?.data }
+}
+
+```
+
+**Create issue hook**
+
+This hook returns a `trigger` method from `useSWRMutation` hook which takes the data to be sent in the request body of the create issue API and an `isMutating` boolean property which we can use to show a loading animation and disable any mutation process while this property is true.
+
+We use the `setClose` method from the `useIssueModalStore` to close the issue modal once the issue has been created successfully.
+
+The data of the payload should match the `IssueSchema` but it should not have the `id` field as it is a new record, so to remove `id` field we use `Omit<IssueSchema, "id">` which creates a new type with the `id` field omitted.
+
+```tsx
+export const useCreateIssue = () => {
+    const { setClose } = useIssueModalStore();
+
+    const create = (url: string, { arg }: { arg: Omit<IssueSchema, "id"> }) => fetch(url, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(arg),
+    }).then(res => res.json())
+
+    const { mutate: revalidateIssuesList } = useSWRConfig();
+
+    const { isMutating, trigger } = useSWRMutation("/api/issue", create, {
+        onSuccess() {
+            toast.success("Issue has been created.");
+            setClose();
+            revalidateIssuesList("/api/issues")
+        },
+        onError(err) {
+            if (err.message) {
+                toast.error(err.message);
+            } else {
+                toast.error("Failed to create issue");
+            }
+        },
+    })
+
+    return { isMutating, trigger }
+}
+```
+
+*🗨️ We need to specify the content type header as `application/json` in the fetch calls because by default fetch API sets the content type header to `text/plain` which causes an incorrect content error as the backend we have created expects a JSON payload.*
+
+**Update/Edit issue hook**
+
+This hook consumes the update issue by `id` API and similar to the create issue hook it also returns `isMutating` property and `trigger` method.
+
+We use the `setClose` method from the `useIssueModalStore` to close the issue modal once the issue has been updated successfully.
+
+```tsx
+export const useEditIssue = () => {
+    const { setClose } = useIssueModalStore();
+
+    const edit = (url: string, { arg }: { arg: IssueSchema }) => fetch(`${url}/${arg.id}`, {
+        method: "PATCH",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(arg),
+    }).then(res => res.json())
+
+    const { mutate: revalidateIssuesList } = useSWRConfig();
+
+    const { isMutating, trigger } = useSWRMutation("/api/issue", edit, {
+        onSuccess() {
+            toast.success("Issue has been updated.");
+            setClose();
+            revalidateIssuesList("/api/issues")
+        },
+        onError(err) {
+            if (err.message) {
+                toast.error(err.message);
+            } else {
+                toast.error("Failed to update issue");
+            }
+        },
+    })
+
+    return { isMutating, trigger }
+}
+```
+
+**Delete issue hook**
+
+One final API integration, the delete API takes the `id` and also returns an object with `isMutating` field and `trigger` method:
+
+```tsx
+export const useDeleteIssue = () => {
+    const { setClose } = useIssueModalStore();
+
+    const remove = (url: string, { arg }: { arg: { id: string } }) => fetch(`${url}/${arg.id}`, {
+        method: "DELETE",
+    }).then(res => res.json())
+
+    const { mutate: revalidateIssuesList } = useSWRConfig();
+
+    const { isMutating, trigger } = useSWRMutation("/api/issue", remove, {
+        onSuccess() {
+            toast.success("Issue has been deleted.");
+            setClose();
+            revalidateIssuesList("/api/issues")
+        },
+        onError(err) {
+            if (err.message) {
+                toast.error(err.message);
+            } else {
+                toast.error("Failed to delete issue");
+            }
+        },
+    })
+
+    return { isMutating, trigger }
+}
+```
+
+### Issue modal
+
+Create an issue modal in `/frontend/components/issue-modal.tsx`.
+
+The issue modal will have a form with title, description, status select, and label select input fields.
+
+**Using Zod**
+
+First, we need to install Zod to define the schema for the form and add rules with helper messages to validate the user input:
+
+```bash
+npm install zod
+```
+
+Next, define the form schema:
+
+```tsx
+import { z } from "zod";
+//...rest of the imports
+
+const status = ["todo", "inprogress", "done", "backlog"] as const;
+const label = ["bug", "feature", "documentation"] as const;
+const formSchema = z.object({
+  title: z.string().min(3, {
+    message: "title must be at least 3 characters.",
+  }),
+  description: z.string().min(5, {
+    message: "title must be at least 5 characters.",
+  }),
+  status: z.enum(status, {
+    required_error: "You need to select a status.",
+  }),
+  label: z.enum(label, {
+    required_error: "You need to select a label.",
+  }),
+  author: z.string({ required_error: "Author is required" }),
+});
+```
+
+In the above code, we have created a label and a status enum for the select input field option. It should be the same as the expected label and status field value of the `IssueSchema`.
+
+**Using React Hook Form**
+
+Now, we need to install [**React Hook Form**](https://react-hook-form.com/) for field validation and field state management:
+
+```bash
+npm install react-hook-form
+```
+
+React Hook Form has a `useForm` hook which is used to handle the `onChange` event and validate the form on the fly. It needs a `type` parameter which will be the form definition consisting of the details of each field the form is having. We can infer the type by using the `formSchema` we have defined using Zod.
+
+`useForm` hook accepts two options a `resolver` and `defaultValues`. For the resolver, we need to integrate preferred schema validation. We will use Zod resolver for validation which will take the `formSchema` as a parameter to apply the validation rules.
+
+For the `defaultValues` for the form, but for the author we will not create a form element rather we will provide the user `id` which we can get from `useUser` hook from Clerk because we only want the user who is creating the issue to be the author of.
+
+```tsx
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useUser } from "@clerk/clerk-react";
+//...rest of the imports
+
+function IssueCard() {
+  const { user } = useUser();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      status: "todo",
+      label: "bug",
+      author: user?.id,
+    },
+  });
+
+  //...rest of the code
+}
+```
+
+**Conditional mutation and rendering for creation and update**
+
+So far we have added all the required hooks and components that can be used to create and update an issue. Now, we need to render the modal differently for the update than how it is for the creation.
+
+For the update, we need the issue `id` from `useIssueStore` hook and fetch the issue first using `useGetIssue` once we have retrieved the issue successfully we can update the state of the form using `useEffect` hook and only allow the author to update their own created issues:
+
+After that, we will define the `onSubmit` handler function to conditionally create an issue using `useCreateIssue` hook or update an issue using `useEditIssue` hook:
+
+```tsx
+import { useIssueStore } from "@/lib/store";
+import { useCreateIssue, useEditIssue, useGetIssue } from "@/lib/hooks";
+//...rest of the imports
+
+function IssueCard() {
+  const { edit_issue_id } = useIssueStore();
+  const { data: issue } = useGetIssue(edit_issue_id);
+
+  const { isMutating: createMutating, trigger: createTrigger } =
+    useCreateIssue();
+  const { isMutating: editMutating, trigger: editTrigger } = useEditIssue();
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    edit_issue_id === ""
+      ? createTrigger(values)
+      : editTrigger({ id: edit_issue_id, ...values });
+  }
+
+  //Check for the author is editing or not
+  const noAuth = edit_issue_id !== "" && user?.id !== issue?.author;
+}
+```
+
+Finally, your issue modal will look like [this](https://github.com/sourabpramanik/issue-tracker/blob/main/frontend/src/components/issue-modal.tsx).
+
+### Issues table
+
+Create a new directory inside the components directory `issues-table`, inside this directory create two files `index.tsx`, and `row.tsx`.
+
+**Edit the `row.tsx` file**
+
+We will define `Row` component which will take `props` having the type set to `IssueSchema`.
+
+Each row will have 6 cells for the author, title, description (truncated), status, label,  and last cell for edit and delete buttons.
+
+The edit button will set the issue `id` to be edited using `setEditIssueId` from `useIssueStore` hook and open up the modal. The delete button will trigger the delete API in the `useDeleteIssue` hook.
+
+Both of these buttons is conditionally rendered based on the condition that if the signed-in user is an author of the issue then they can mutate the issue or else they can just view the issue.
+
+Please find the complete code [here](https://github.com/sourabpramanik/issue-tracker/blob/main/frontend/src/components/issue-table/row.tsx).
+
+**Edit the `index.tsx` file of the `issue-table` component**
+
+Here you can find the complete code for the [issue table](https://github.com/sourabpramanik/issue-tracker/blob/main/frontend/src/components/issue-table/index.tsx)**.
+
+### Update `App.tsx` file
+
+Now we can import our `IssuesTable` component and render it:
+
+```tsx
+import { SignIn, SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
+import IssuesTable from "@/components/issue-table";
+
+function App() {
+  return (
+    <main>
+      <SignedOut>
+        <SignIn />
+      </SignedOut>
+      <SignedIn>
+        <div className="p-20 flex flex-col items-center space-y-7">
+          <div className="fixed top-6 right-6">
+            <UserButton afterSignOutUrl="/" />
+          </div>
+          <IssuesTable />
+        </div>
+      </SignedIn>
+    </main>
+  );
+}
+
+export default App;
+```
+
+### Update `main.tsx` file
+
+Add the `Toaster` component from `sonner` and `IssueModal`:
+
+```tsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.tsx";
+import "./index.css";
+import { ClerkProvider } from "@clerk/clerk-react";
+import { Toaster } from "@/components/ui/sonner";
+import IssueModal from "@/components/issue-modal";
+
+// Import your publishable key
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
+if (!PUBLISHABLE_KEY) {
+  throw new Error("Missing Publishable Key");
+}
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+      <App />
+      <Toaster />
+      <IssueModal />
+    </ClerkProvider>
+  </React.StrictMode>
+);
+```
+
+## Run the application
+
+First, build the frontend application using this command:
+
+```bash
+npm run build
+```
+
+This will generate an optimized build in the `/frontend/dist` directory.
+
+Finally run the backend using:
+
+```bash
+cargo shuttle run
+```
+
+Open the highlighted URL in the browser window:
+
+![image screenshot](https://gist.github.com/assets/61370770/8a22b566-a930-494a-8ba6-cd92481a0113)
+
+## Deployment
+
+Now you can deploy your app on the Shuttle platform by running `cargo shuttle start` and `cargo shuttle deploy` (with the `--allow-dirty` flag if you have uncommitted changes).
+
+One important note is that the deployment using the **development** keys from Clerk will work just fine, but if you change to use the **Production Instance** of Clerk then you will need to update the keys with **Live** keys. Now since you have moved to production you will also need to set up the domain or subdomain of your application in Clerk and add the CNAME records that you will get from the Clerk dashboard to your DNS record for managing sessions, loading portal using your domain, sending verification emails, and using custom callback URL. Since this process can be different based on your domain provider and management system, I will leave a link to the Clerks documentation on [**Deploy to production**](https://clerk.com/docs/deployments/overview).
+
+## Closing in
+
+Thanks for reading!! That's a lot but I hope you have managed to deploy your application and had a good learning experience.
