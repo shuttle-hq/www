@@ -16,7 +16,7 @@ Cargo has an extensive list of plugins that you can use to be able to speed up c
 
 ### cargo-machete
 
-`[cargo-machete](https://github.com/bnjbvr/cargo-machete)` is a Cargo plugin for cutting out unused dependencies from your project. To install it, you can use `cargo install cargo-machete` then use `cargo machete` in a Rust project directory.
+[`cargo-machete`](https://github.com/bnjbvr/cargo-machete) is a Cargo plugin for cutting out unused dependencies from your project. To install it, you can use `cargo install cargo-machete` then use `cargo machete` in a Rust project directory.
 
 The **return code** indicates whether unused dependencies have been found:
 
@@ -28,7 +28,7 @@ That’s it! That’s the crate.
 
 ### cargo-nextest
 
-`[cargo-nextest](https://nexte.st/)` describes itself as a “next-generation Rust test runner”. To install, you need to run `cargo install cargo-nextest`. 
+[`cargo-nextest`](https://nexte.st/) describes itself as a “next-generation Rust test runner”. To install, you need to run `cargo install cargo-nextest`. 
 
 After `cd`ing into a Rust project (or workspace), you can run all tests with `cargo nextest run`; or list all of them using `cargo nextest list`. Running tests will produce an output that looks like this (taken from the docs page):
 
@@ -40,7 +40,7 @@ This is quite an extensive tool; if you’d like to learn more about `cargo-next
 
 ### cargo-make
 
-`[cargo-make](https://github.com/sagiegurari/cargo-make)` aims to be an extensive Rust-written task runner that additionally lets you define workflows to execute your tasks. You can install it using `cargo install cargo-make`.
+[`cargo-make`](https://github.com/sagiegurari/cargo-make) aims to be an extensive Rust-written task runner that additionally lets you define workflows to execute your tasks. You can install it using `cargo install cargo-make`.
 
 To get started with, we’ll create a `Makefile.toml` file that formats and runs the `clippy` linter:
 
@@ -84,7 +84,7 @@ If we run `VALUE=HELLO_WORLD cargo make expand`, it should print out `VALUE: HEL
 
 ### cargo-audit
 
-`[cargo-audit](https://github.com/RustSec/rustsec/tree/main/cargo-audit)` is a simple Cargo tool for detecting vulnerable Rust crates. You can install it with `cargo install cargo-audit`, use `cargo audit` and you’re done! Any vulnerable crates will appear below, like so:
+[`cargo-audit`](https://github.com/RustSec/rustsec/tree/main/cargo-audit) is a simple Cargo tool for detecting vulnerable Rust crates. You can install it with `cargo install cargo-audit`, use `cargo audit` and you’re done! Any vulnerable crates will appear below, like so:
 
 ![cargo-audit discovering a vulnerable Rust crate](/images/blog/rust-tooling-article/audit.png)
 
@@ -92,7 +92,7 @@ While not an “all-in-one” crate, `cargo-audit` fulfills a simple yet importa
 
 ## Testcontainers
 
-Testing with added infrastructure can be quite tricky. `[testcontainers](https://testcontainers.com/)` aims to solve this by providing an open-source framework for providing local, lightweight containers for your application that can be immediately thrown away after use. It also has a [Rust SDK](https://github.com/testcontainers/testcontainers-rs)!
+Testing with added infrastructure can be quite tricky. [`testcontainers`](https://testcontainers.com/) aims to solve this by providing an open-source framework for providing local, lightweight containers for your application that can be immediately thrown away after use. It also has a [Rust SDK](https://github.com/testcontainers/testcontainers-rs)!
 
 We can add it to a project to get started:
 
@@ -100,7 +100,7 @@ We can add it to a project to get started:
 cargo add testcontainers
 ```
 
-Then we will need to add another dependency called `[testcontainers-modules](https://github.com/testcontainers/testcontainers-rs-modules-community)` alongside the feature we want (for the container we want to use). For this example, let’s use a Postgres database:
+Then we will need to add another dependency called [`testcontainers-modules`](https://github.com/testcontainers/testcontainers-rs-modules-community) alongside the feature we want (for the container we want to use). For this example, let’s use a Postgres database:
 
 ```bash
 cargo add testcontainers-modules -F postgres
@@ -134,7 +134,7 @@ When you run this test, it will create a Postgres container for you (through Doc
 
 ## tokio-console
 
-`[tokio-console](https://github.com/tokio-rs/console)` is a debugger for Rust async programs that use Tokio. To get started, add the `console-subscriber` crate to your project and add the following line which will initialise the subscriber and allow `tokio-console` to connect to it:
+[`tokio-console`](https://github.com/tokio-rs/console) is a debugger for Rust async programs that use Tokio. To get started, add the `console-subscriber` crate to your project and add the following line which will initialise the subscriber and allow `tokio-console` to connect to it:
 
 ```bash
 console_subscriber::init();
@@ -161,7 +161,7 @@ On a successful connection, it should display something like this:
 
 ## cargo-flamegraph
 
-`[cargo-flamegraph](https://github.com/flamegraph-rs/flamegraph)` is a program for generating flamegraphs, written in Rust! Flamegraphs are a visualisation of distributed request traces and were originally written in Perl but have now been ported to Rust. 
+[`cargo-flamegraph`](https://github.com/flamegraph-rs/flamegraph) is a program for generating flamegraphs, written in Rust! Flamegraphs are a visualisation of distributed request traces and were originally written in Perl but have now been ported to Rust. 
 
 By using a flamegraph, it’s much easier to see where a bug (for example, race conditions) may be originating from or where you might have a memory leak. Issues like unusually high latency or errors that are difficult to debug through regular logging can be solved much more easily this way as you can see a visual representation of the call stack. 
 
