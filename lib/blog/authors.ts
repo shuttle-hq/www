@@ -65,8 +65,7 @@ const authors: readonly Author[] = [
 		author: 'Matthias Endler',
 		position: 'Consultant at Corrode.dev',
 		author_url: 'https://corrode.dev/',
-		author_image_url:
-			'https://endler.dev/about/matthias-endler.jpg'
+		author_image_url: 'https://endler.dev/about/matthias-endler.jpg',
 	},
 	{
 		author_id: 'stefan',
