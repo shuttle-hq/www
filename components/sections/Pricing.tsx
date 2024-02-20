@@ -34,7 +34,7 @@ const TIERS: PricingTier[] = [
 		name: 'pro',
 		displayName: 'Pro',
 		desc: 'Raise limits and get access to custom domains, team features, and more.',
-		cta: 'Get Started',
+		cta: 'Start 30-Day Trial',
 		ctaPrimaryButton: true,
 		ctaLink: GET_STARTED_URI,
 	},
@@ -85,7 +85,7 @@ const PRICING_ROWS: PricingTableRow[] = [
 		desc: 'Dedicated Database',
 		desc2: '(AWS RDS)',
 		values: {
-			community: "Add-on",
+			community: 'Add-on',
 			pro: 'Add-on',
 			team: 'Add-on',
 		},
