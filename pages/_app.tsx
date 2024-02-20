@@ -16,7 +16,7 @@ import { PostHogProvider } from 'posthog-js/react'
 // Check that PostHog is client-side (used to handle Next.js SSR)
 if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_POSTHOG_KEY) {
 	posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
-		api_host: 'https://webhook.site/886e33a7-25ba-4979-b479-79250693b176',
+		api_host: 'https://shuttle.rs/ingest',
 		ui_host: 'https://eu.posthog.com',
 		// Enable debug mode in development
 		loaded: (posthog) => {
