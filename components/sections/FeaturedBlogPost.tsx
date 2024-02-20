@@ -16,7 +16,7 @@ const FeaturedBlogPost: FC<Post> = (post) => {
 			<div className='group grid gap-4 rounded-[2rem] border border-black/10 p-5 transition-all duration-300 hover:shadow-[0px_4px_88px_0px_rgba(252,84,12,0.25)] dark:border-white/10 md:grid-cols-2 md:items-center md:gap-5 md:p-8'>
 				<div className='grid gap-4 lg:gap-6'>
 					<div className='flex flex-wrap items-center gap-x-4 gap-y-1'>
-						<div className='mr-1 flex items-center gap-2 font-gradual font-bold text-black dark:text-[#C2C2C2]'>
+						<div className='mr-1 flex items-center gap-2 font-gradual font-bold text-black dark:text-head'>
 							<Image
 								src={authorImage}
 								onError={() => setAuthorImage('/images/logo.png')}
@@ -28,7 +28,7 @@ const FeaturedBlogPost: FC<Post> = (post) => {
 							{firstAuthor?.author || 'Shuttle'}
 							{firstAuthor?.position ? ` - ${firstAuthor.position}` : ''}
 						</div>
-						<li className='list-disc text-[#7A7A7A]'>{post.date}</li>
+						<li className='list-disc text-body'>{post.date}</li>
 					</div>
 					<Link
 						href={`/blog/${post.url}`}
@@ -36,12 +36,12 @@ const FeaturedBlogPost: FC<Post> = (post) => {
 							trackEvent(`homepage_footer_site_${post.title}`)
 						}}
 					>
-						<h2 className='font-gradual text-2xl font-bold text-black dark:text-[#C2C2C2] lg:text-[2.5rem] lg:leading-9'>
+						<h2 className='font-gradual text-2xl font-bold text-black dark:text-head lg:text-[2.5rem] lg:leading-9'>
 							{post.title}
 						</h2>
-						<p className='mt-3 text-[#525151] dark:text-[#7A7A7A] lg:text-xl'>{post.description}</p>
+						<p className='mt-3 text-body lg:text-xl'>{post.description}</p>
 					</Link>
-					<div className='flex flex-wrap items-center gap-[0.625rem] text-sm text-black dark:text-[#C2C2C2]'>
+					<div className='flex flex-wrap items-center gap-[0.625rem] text-sm text-black dark:text-head'>
 						{post.tags?.map((tag) => (
 							<Link
 								key={tag}
@@ -51,7 +51,7 @@ const FeaturedBlogPost: FC<Post> = (post) => {
 								{tag}
 							</Link>
 						))}
-						<div className='text-[#7A7A7A]'>{post.readingTime}</div>
+						<div className='text-body'>{post.readingTime}</div>
 					</div>
 				</div>
 				<Link href={`/blog/${post.url}`} className='relative h-full overflow-hidden rounded-[2rem]'>

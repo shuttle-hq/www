@@ -29,9 +29,7 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 
 	return (
 		<div className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-32 desktop:mt-48'>
-			<h2 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-[3.5rem]'>
-				FAQ
-			</h2>
+			<h2 className='font-gradual text-5xl font-bold text-black dark:text-head lg:text-[3.5rem]'>FAQ</h2>
 			<div
 				className={clsx(
 					'mt-10  gap-8 sm:mt-14 lg:gap-16',
@@ -49,20 +47,18 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 									}}
 									className='w-full text-left'
 								>
-									<h3 className='cursor-pointer py-5 pr-5 text-[#525151] dark:text-[#C2C2C2] md:text-xl'>
-										{question}
-									</h3>
+									<h3 className='cursor-pointer py-5 pr-5 text-head md:text-xl'>{question}</h3>
 								</button>
 								<div
 									className={clsx(
-										'text-[#525151] transition-all duration-500 dark:text-[#C2C2C2]',
+										'text-head transition-all duration-500',
 										activeQuestion === index
 											? 'pb-5 pr-5 opacity-100'
 											: 'max-h-0 overflow-hidden pb-0 pr-0 opacity-0'
 									)}
 								>
 									<p
-										className='text-[#525151] dark:text-[#C2C2C2]'
+										className='text-head'
 										dangerouslySetInnerHTML={{
 											__html: answer,
 										}}
@@ -110,8 +106,8 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({ questions
 							fill
 							className='pointer-events-none absolute left-0 top-0 z-[-1] h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
 						/>
-						<h3 className='text-2xl text-[#C2C2C2]'>Want to know more?</h3>
-						<p className='mt-2 text-[#C2C2C2]'>
+						<h3 className='text-2xl text-head'>Want to know more?</h3>
+						<p className='mt-2 text-head'>
 							Join our Discord, we&apos;re happy to answer any questions!
 						</p>
 						<Button

@@ -32,7 +32,7 @@ const PriceCards = () => (
 					className='absolute left-0 top-0 z-[1] h-full w-full transform duration-1000 group-hover:-translate-x-5 group-hover:translate-y-3 '
 				/>
 				<div className='absolute left-0 top-0 z-[10] flex h-full w-full flex-col items-center gap-4 rounded-[20px] p-6'>
-					<h3 className='text-xl text-[#C2C2C2]'>Network egress</h3>
+					<h3 className='text-xl text-head'>Network egress</h3>
 					<h1
 						className='bg-clip-text font-gradual text-5xl font-bold text-transparent'
 						style={{
@@ -102,7 +102,7 @@ const PriceCards = () => (
 					className='absolute left-0 top-0 z-[1] h-full w-full transform duration-1000 group-hover:-translate-x-5 group-hover:translate-y-3 '
 				/>
 				<div className='absolute left-0 top-0 z-[10] flex h-full w-full flex-col items-center gap-4 rounded-[20px] p-6'>
-					<h3 className='text-xl text-[#C2C2C2]'>Compute</h3>
+					<h3 className='text-xl text-head'>Compute</h3>
 					<h1
 						className='bg-clip-text font-gradual text-5xl font-bold text-transparent'
 						style={{
@@ -156,7 +156,7 @@ const PriceCards = () => (
 					className='absolute left-0 top-0 z-[1] h-full w-full transform duration-1000 group-hover:-translate-x-5 group-hover:translate-y-3 '
 				/>
 				<div className='absolute left-0 top-0 z-[10] flex h-full w-full flex-col items-center gap-4 rounded-[20px] p-6'>
-					<h3 className='text-xl text-[#C2C2C2]'>RDS</h3>
+					<h3 className='text-xl text-head'>RDS</h3>
 					<h1
 						className='bg-clip-text font-gradual text-5xl font-bold text-transparent'
 						style={{
@@ -164,7 +164,7 @@ const PriceCards = () => (
 								'linear-gradient(72deg, #FC540C -20%, rgba(255, 215, 111, 0.72) 45%, #38D4E9 150%)',
 						}}
 					>
-						Custom
+						$20
 					</h1>
 					<h4>
 						per instance{' '}
@@ -198,7 +198,7 @@ const PriceCards = () => (
 					className='absolute left-0 top-0 z-[1] h-full w-full transform duration-1000 group-hover:-translate-x-5 group-hover:translate-y-3 '
 				/>
 				<div className='absolute left-0 top-0 z-[10] flex h-full w-full flex-col items-center gap-4 rounded-[20px] p-6'>
-					<h3 className='text-xl text-[#C2C2C2]'>Object storage</h3>
+					<h3 className='text-xl text-head'>Object storage</h3>
 					<h1
 						className='bg-clip-text font-gradual text-5xl font-bold text-transparent'
 						style={{
@@ -231,7 +231,7 @@ const PriceCards = () => (
 					className='absolute left-0 top-0 z-[1] h-full w-full transform duration-1000 group-hover:-translate-x-5 group-hover:translate-y-3 '
 				/>
 				<div className='absolute left-0 top-0 z-[10] flex h-full w-full flex-col items-center gap-4 rounded-[20px] p-6'>
-					<h3 className='text-xl text-[#C2C2C2]'>Premium Support</h3>
+					<h3 className='text-xl text-head'>Premium Support</h3>
 					<h1
 						className='bg-clip-text font-gradual text-5xl font-bold text-transparent'
 						style={{

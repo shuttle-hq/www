@@ -26,6 +26,8 @@ Hyper is a create for HTTP processing, Bytes is a utility crate for, well, bytes
 Create a new Router that will handle post requests to a `process_image` endpoint.
 
 ```rust
+use axum::{routing::post, Router};
+
 #[shuttle_runtime::main]
 async fn axum() -> shuttle_axum::ShuttleAxum {
     let router = Router::new()
@@ -39,6 +41,9 @@ The `process_image` function will take `Bytes` and return `Bytes`. We will use t
 
 
 ```rust
+use axum::response::IntoResponse;
+use bytes::Bytes;
+
 async fn process_image(bytes: Bytes) -> impl IntoResponse {
     let image = image::load_from_memory(&bytes).unwrap();
     // tbd...
@@ -50,6 +55,8 @@ Since `Bytes` could be no image but anything, this method could return an error.
 Next, we prepare a buffer to write the image to.
 
 ```rust
+use std::io::Cursor;
+
 let mut vec: Vec<u8> = Vec::new();
 let mut cursor = Cursor::new(&mut vec);
 ```
@@ -70,6 +77,8 @@ This is also an operation that can fail, but we call `unwrap` here for simplicit
 Finally, we return the buffer as `Bytes` and give it a content type of `image/png`. See the complete function below.
 
 ```rust
+use image::ImageOutputFormat;
+
 async fn process_image(bytes: Bytes) -> impl IntoResponse {
     let image = image::load_from_memory(&bytes).unwrap();
     let mut vec: Vec<u8> = Vec::new();
@@ -93,10 +102,12 @@ compatible with `IntoResponse`. We can create a new type instead that works with
 To create a Rust error type, define a struct and implement the `std::error::Error` trait. Since errors need to be printable, they also need to implement `Display` and `Debug`.
 
 ```rust
+use std::fmt;
+
 #[derive(Debug)]
 struct ProcessImageError(String);
 
-impl Display for ProcessImageError {
+impl fmt::Display for ProcessImageError {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         write!(f, "ProcessImageError: {}", self.0)
     }

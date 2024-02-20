@@ -65,9 +65,6 @@ export const Plans: PlanProps[] = [
 				feature: 'More storage',
 			},
 			{
-				feature: 'Add-on: AWS RDS',
-			},
-			{
 				feature: 'Configurable instances',
 			},
 			{
@@ -83,7 +80,7 @@ export const Plans: PlanProps[] = [
 		url: GET_STARTED_URI,
 		textGradient:
 			'linear-gradient(70deg, #FC540C -115.42%, rgba(255, 215, 111, 0.72) 61.13%, #38D4E9 291.19%)',
-		cta: 'Get started',
+		cta: 'Start 30-Day Trial',
 	},
 	{
 		key: 'team',

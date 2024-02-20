@@ -64,18 +64,18 @@ const Calculator = () => {
 				/>
 				<div className='z-10 mx-auto mt-14 flex w-full max-w-7xl flex-col gap-[210px] px-5 sm:flex-row sm:px-10 lg:mt-14'>
 					<div className=' flex max-w-[400px] flex-col items-start justify-center'>
-						<h1 className='mb-5 font-gradual text-4xl font-bold text-[#E0E0E0] sm:text-5xl sm:text-[#C2C2C2]'>
+						<h1 className='mb-5 font-gradual text-4xl font-bold text-head sm:text-5xl sm:text-head'>
 							Estimate Your
 							<br />
 							Compute Costs
 						</h1>
-						<p className='mb-10 text-[#7A7A7A] sm:text-xl'>
+						<p className='mb-10 text-body sm:text-xl'>
 							Use our interactive pricing estimator to calculate your usage-based compute cost.
 						</p>
-						<p className='mb-10 text-[#7A7A7A] sm:text-xl'>
+						<p className='mb-10 text-body sm:text-xl'>
 							The monthly cost is based on the product of vCPU cores and active hours.
 						</p>
-						<p className='text-[#7A7A7A] sm:text-xl'>Need a more precise estimate?</p>
+						<p className='text-body sm:text-xl'>Need a more precise estimate?</p>
 						<Link
 							href={CONTACT_US_URI}
 							target='_blank'
@@ -83,7 +83,7 @@ const Calculator = () => {
 								trackEvent('pricing_setupcall')
 							}}
 						>
-							<p className='cursor-pointer text-[#C2C2C2] underline sm:text-xl'>
+							<p className='cursor-pointer text-head underline sm:text-xl'>
 								Set up a call with our team
 							</p>
 						</Link>
@@ -164,10 +164,8 @@ const Calculator = () => {
 								}}
 							>
 								<div className='flex h-full w-[250px] items-center justify-center rounded-[24px] bg-[#171C1A] p-5 opacity-100'>
-									<h1 className='mr-2 font-gradual text-[32px] font-bold text-[#D8D8D8]'>
-										{price}$
-									</h1>
-									<p className='mt-4 text-[#D8D8D8]'> / month</p>
+									<h1 className='mr-2 font-gradual text-[32px] font-bold text-head'>{price}$</h1>
+									<p className='mt-4 text-head'> / month</p>
 								</div>
 							</div>
 						</div>

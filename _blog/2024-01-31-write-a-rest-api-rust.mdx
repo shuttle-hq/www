@@ -1,0 +1,275 @@
+---
+title: Writing a REST API in Rust
+description: This article talks about how you can write a Rust REST API using Axum, SQLx and Postgres. 
+author: josh
+tags: [rust, axum, guide]
+thumb: write-rest-api-rust-thumb.png 
+cover: write-rest-api-rust-thumb.png 
+date: '2024-01-31T14:30:00'
+---
+
+In this article, we’re going to talk about writing a REST API in Rust! Following on from our first [Shuttle Bytes](https://www.shuttle.rs/blog/2024/01/22/introducing-shuttlebytes) stream where we live-streamed a tutorial on this, we’ve created a text write-up to allow you to follow along in text.
+
+Interested in checking out what the final code should look like? You can find it [here.](https://github.com/joshua-mo-143/shuttle-axum-example/tree/main)
+
+## Getting started
+
+### Project initialisation
+
+If you haven’t already, make sure you have Rust and Cargo installed! You can find install instructions [here.](https://www.rust-lang.org/tools/install)
+
+We'll be initialising our project with `cargo-shuttle`, Shuttle's CLI. You can install it by running the following:
+```bash
+cargo install cargo-shuttle
+```
+
+Installation via `cargo-binstall` is also supported, along with our other install scripts which you can find [here.](https://docs.shuttle.rs/getting-started/installation)  
+
+First of all we’ll want to initialise our project with `cargo shuttle init` (required `cargo-shuttle` to be installed). For the project name we’ll be using `shuttle-example-axum`. 
+
+Then we’ll want to set up our dependencies with the following shell snippet:
+
+```rust
+cargo add sqlx -F postgres,runtime-tokio-rustls
+cargo add shuttle-shared-db -F sqlx,postgres
+cargo add serde -F derive
+```
+
+### Adding a Database & Migrations in Rust
+
+To add a database to our project, all we need to do is to add the annotation to our main function - which allows us to automatically grab a SQLx Postgres pool:
+
+```rust
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_shared_db::Postgres] db: PgPool,
+) -> shuttle_axum::ShuttleAxum {
+    // .. your code here
+}
+```
+During deployment, Shuttle will automatically provision a database to our project without any input required from us! Locally, it will use Docker to spin up the Postgres container - you can also use Podman and similar programs that allow Docker usage through them. You can find the installation for Docker [here.](https://www.docker.com/)
+ 
+Interested in just getting the connection string? You can disable the `sqlx` feature of `shuttle-shared-db` and instead change the type to `String`, then connect to your PgPool. You can find more information about connecting to a PgPool [here.](https://docs.rs/sqlx/latest/sqlx/type.PgPool.html#method.connect) 
+
+Since we’re using only a single migrations file, we can use `include_str!()` to include the whole file’s text content as a string. We can then execute the query with the database pool.
+
+For the migrations, we can make a `migrations.sql` file in the project root:
+
+```sql
+-- migrations.sql
+CREATE TABLE IF NOT EXISTS users (
+    id serial primary key,
+    name varchar not null,
+    age int not null
+);
+```
+
+Then when you’re finished and ready to run your migrations, you can add this snippet to your code:
+
+```rust
+// this trait is required
+use sqlx::Executor;
+
+db.execute(include_str!("../migrations.sql")).await.unwrap();
+```
+
+Note that here, we will want to open a `Shuttle.toml` file in our project root and add the migrations file so that when we deploy, it will automatically include the migrations file:
+
+```toml
+assets = ["migrations.sql"]
+```
+
+We can add the database to our application by wrapping it in a struct and adding it to the application as shared state. The only requirement to add shared state is that the state must implement the `Clone` trait - which we can do here:
+
+```rust
+#[derive(Clone)]
+pub struct AppState {
+    db: PgPool,
+}
+```
+
+Note that if you’re using a struct that is unable to use Clone (for example because of generic trait bounds), you can wrap the type in a `std::sync::Arc`.
+
+Then we need to add it to our API:
+
+```rust
+let state = AppState { db };
+
+let router = Router::new().route("/", get(hello_world)).with_state(state);
+```
+
+### Writing routes
+
+When writing your routes, Axum will accept anything that implements the `IntoResponse` trait (which means the type can be turned into a HTTP response). Many primitives already have `IntoResponse` implemented so you can return things like `i32` or a `String` (or a `'static &str`) without being required to implement the trait. 
+
+By using Axum’s `extractors`, we can extract information from the HTTP request and declare them as handler parameters: for example, adding a `State` extractor means we want to include the state that we added to our `axum::Router`. Then we want to implement `sqlx::FromRow` using a derive macro for our struct - doing this allows it to automatically be converted from a query:
+
+```rust
+#[derive(sqlx::FromRow)]
+struct User {
+    id: i32,
+    name: String,
+    age: i32,
+}
+
+async fn retrieve_all_records(
+     State(state): State<AppState>
+) -> Result<impl IntoResponse, impl IntoResponse> {
+    let res = match sqlx::query_as::<_, User>(
+        "SELECT * FROM USERS"
+        )
+        .fetch_all(&state.db).await {
+            Ok(res) => res,
+            Err(e) => {
+                return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string()));
+        }
+    };
+
+    Ok(Json(res))
+}
+```
+
+After this, now that we’ve written our initial route for fetching all records, we can also write our other routes. For retrieving record by ID, we can use the `Path` extractor which extracts a dynamic URL slug (this will be shown later on):
+
+```rust
+async fn retrieve_record_by_id(
+    State(state): State<AppState>,
+    Path(id): Path<i32>
+) -> Result<impl IntoResponse, impl IntoResponse> {
+    let res = match sqlx::query_as::<_, User>(
+        "SELECT * FROM USERS WHERE id = $1"
+        )
+        .bind(id)
+        .fetch_one(&state.db).await {
+            Ok(res) => res,
+            Err(e) => {
+                return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string()));
+            }
+        };
+
+    Ok(Json(res))
+}
+```
+
+Note that for the SQL query, we also bind a parameter to the query itself. By using `bind` variables exclusively when we need to add data from the JSON body, SQL injection can be easily prevented!
+
+Likewise, below we can also create a `UserSubmission` struct to represent a JSON request body for a user submission. We need to implement `serde::Deserialize` to be able to successfully extract it from the request body. We can also add a handler function for deleting records by ID in this snippet below:
+
+```rust
+
+use serde::Deserialize;
+
+#[derive(Deserialize)]
+pub struct UserSubmission {
+    name: String,
+    age: i32
+}
+
+async fn create_record(
+    State(state): State<AppState>,
+    Json(json): Json<UserSubmission>
+    ) -> Result<impl IntoResponse, impl IntoResponse> {
+        if let Err(e) = sqlx::query("INSERT INTO USERS (name, age) VALUES ($1, $2)")
+            .bind(json.name)
+            .bind(json.age)
+            .execute(&state.db)
+            .await {
+                return Err(
+                    (StatusCode::INTERNAL_SERVER_ERROR, 
+                    format!("Error while inserting a record: {e}"))
+                );
+            }
+
+        Ok(StatusCode::OK)
+}
+
+async fn delete_record_by_id(
+    State(state): State<AppState>,
+    Path(id): Path<i32>
+    ) -> Result<impl IntoResponse, impl IntoResponse> {
+    if let Err(e) = sqlx::query_as::<_, User>("DELETE FROM USERS WHERE ID = $1")
+            .bind(id)
+            .fetch_all(&state.db)
+            .await {
+                return Err((
+                    StatusCode::INTERNAL_SERVER_ERROR, 
+                    format!("Error while deleting a record: {e}"))
+                );
+            }
+
+    Ok(StatusCode::OK)
+}
+```
+
+If you’re looking to implement an update function, there are a couple of ways you could do it. Here, we use an `UpdateRecord` struct that holds option placeholder versions of the fields we want the user to be able to update. Then we write an SQL query that only changes the field if the bound value isn’t null:
+
+```rust
+#[derive(Deserialize)]
+pub struct UpdateRecord {
+    name: Option<String>,
+    age: Option<i32>
+}
+
+async fn update_record_by_id(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+    Json(json): Json<UserSubmission>
+) -> Result<impl IntoResponse, impl IntoResponse> {
+        if let Err(e) = sqlx::query("UPDATE USERS (name, age) 
+            SET name = (case when $1 is not null then $1 else name end),
+            age = (case when $2 is not null then $2 else age end)
+            WHERE 
+            id = $3")
+            .bind(json.name)
+            .bind(json.age)
+            .bind(id)
+            .execute(&state.db)
+            .await {
+                return Err(
+                    (StatusCode::INTERNAL_SERVER_ERROR, 
+                    format!("Error while inserting a record: {e}"))
+                );
+            }
+
+        Ok(StatusCode::OK)
+}
+```
+
+Now that we’ve written all of our routes, we can append them to the router like so. Note that the `:id` marks a dynamic route which will be used by the `Path` extractor:
+
+```rust
+let router = Router::new()
+    .route("/", get(hello_world))
+    .route("/users", 
+        get(retrieve_all_records)
+        .post(create_record)
+     )
+    .route("/users/:id", 
+        get(retrieve_record_by_id)
+        .put(update_record_by_id)
+        .delete(delete_record_by_id)
+    )
+    .with_state(state);
+```
+
+Need to double check what the deployment code looks like? You can find it in [this file](https://github.com/joshua-mo-143/shuttle-axum-example/blob/main/src/main.rs) on GitHub!
+
+## Deployment
+
+Now that we’ve finished, the only thing left to do is deploying the Rust application. You can run `cargo shuttle deploy` (with the `--allow-dirty` flag if working on a dirty Git branch) and deploy with one line!
+
+## Extending this example
+
+Looking to extend the project from this article? Here’s a couple of ways you can extend it:
+
+- Add your own Error enum type and implement `axum::response::IntoResponse` for it! This allows you to propagate errors by implementing `From<T>` for your error type. Error handling is a huge part of Rust and propagating errors can help you clean up your application nicely.
+- Add tests! You can use `testcontainers` to spin up Docker containers for Postgres and other infrastructure which makes testing your database extremely easy. You can find more about this [here.](https://github.com/testcontainers/testcontainers-rs)
+
+## Finishing Up
+
+Thanks for reading! Hopefully this article has helped you deploy your first API in Rust. With the backend framework ecosystem already being in a relatively mature state, it's becoming easier than ever to write powerful and performant but low-memory footprint web services in Rust. 
+
+Further reading:
+
+- Learn more about Axum [here.](https://www.shuttle.rs/blog/2023/12/06/using-axum-rust)
+- Learn more about using SQL with SQLx [here.](https://www.shuttle.rs/blog/2023/10/04/sql-in-rust)

@@ -5,13 +5,13 @@ const Info = () => {
 			<div className='relative left-1/2 h-60 w-[1px] -translate-x-1/2 transform bg-white/20' />
 			<div className='lg:left:16 relative flex items-center px-4 sm:left-8 2xl:left-32'>
 				<div className='max-w-xl rounded-3xl border border-white/20 p-8 lg:max-w-2xl lg:p-12 xl:max-w-4xl 2xl:p-16'>
-					<h2 className='font-gradual text-2xl font-bold text-[#C2C2C2] xl:text-6xl'>
+					<h2 className='font-gradual text-2xl font-bold text-head xl:text-6xl'>
 						You just need an idea
 					</h2>
-					<p className='mt-7 leading-8 text-[#7A7A7A] lg:text-xl'>
+					<p className='mt-7 leading-8 text-body lg:text-xl'>
 						Want to build a revolutionary new blogging service?
 						<br className='hidden sm:block' /> Just write&nbsp;
-						<code className='inline-block rounded-lg border border-white/10 px-2 py-1 text-base text-sm text-[#D8D8D8] lg:text-base'>
+						<code className='inline-block rounded-lg border border-white/10 px-2 py-1 text-base text-sm text-head lg:text-base'>
 							shuttle-ai build &quot;Build me a blog service&quot;
 						</code>{' '}
 						and while you go and grab a cup of coffee, Shuttle&apos;s AI agents will breakdown the
@@ -135,12 +135,10 @@ const Info = () => {
 					</defs>
 				</svg>
 				<div className='max-w-xl rounded-3xl border border-white/20 p-8 lg:max-w-2xl lg:p-12 xl:max-w-4xl 2xl:p-16'>
-					<h2 className='font-gradual text-2xl font-bold text-[#C2C2C2] xl:text-6xl'>
-						Missing a feature?
-					</h2>
-					<p className='mt-7 leading-8 text-[#7A7A7A] lg:text-xl'>
+					<h2 className='font-gradual text-2xl font-bold text-head xl:text-6xl'>Missing a feature?</h2>
+					<p className='mt-7 leading-8 text-body lg:text-xl'>
 						Just write&nbsp;
-						<code className='inline-block rounded-lg border border-white/10 px-2 py-1 text-base text-sm text-[#D8D8D8] lg:text-base'>
+						<code className='inline-block rounded-lg border border-white/10 px-2 py-1 text-base text-sm text-head lg:text-base'>
 							shuttle-ai add-feature &quot;Add comment support&quot;
 						</code>
 						<span className='hidden sm:inline-block'>,</span> sit back and watch as our AI agents
@@ -162,8 +160,8 @@ const Info = () => {
 					d='M299 0v39.166c0 17.673-14.327 32-32 32H33c-17.673 0-32 14.327-32 32V129'
 				/>
 			</svg>
-			<div className='relative left-1/2 -ml-8 w-max -translate-x-1/2 transform rounded-2xl border border-white/20 px-8 py-5 text-xl text-[#C2C2C2] sm:-ml-16 md:-ml-48'>
-				Don&apos;t believe us? <span className='text-[#7A7A7A]'>Here is a demo</span>
+			<div className='relative left-1/2 -ml-8 w-max -translate-x-1/2 transform rounded-2xl border border-white/20 px-8 py-5 text-xl text-head sm:-ml-16 md:-ml-48'>
+				Don&apos;t believe us? <span className='text-body'>Here is a demo</span>
 			</div>
 			{/* Squiggly Line 3 */}
 			<svg

@@ -1,13 +1,35 @@
+import clsx from 'clsx'
 import { Button, LoginButton } from 'components/elements'
 import { GithubLogo, Hamburger, Logo } from 'components/svgs'
+import { trackEvent } from 'lib/posthog'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useLayoutEffect, useState } from 'react'
-import clsx from 'clsx'
 import { DISCORD_URL } from '../../../lib/constants'
-import { trackEvent } from 'lib/posthog'
 
 const ThemeSwitcher = dynamic(() => import('./ThemeSwitcher'), { ssr: false })
+const LinkItem = ({
+	event,
+	href,
+	text,
+	setOpen,
+}: {
+	event: string
+	href: string
+	text: string
+	setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}) => (
+	<Link
+		className='nav-link-shadow transition-all dark:hover:text-white'
+		href={href}
+		onClick={({ ctrlKey, metaKey }) => {
+			trackEvent(event)
+			setOpen(ctrlKey || metaKey)
+		}}
+	>
+		{text}
+	</Link>
+)
 
 const Navigation = () => {
 	const [open, setOpen] = useState(false)
@@ -35,7 +57,7 @@ const Navigation = () => {
 					setOpen(false)
 				}}
 			>
-				<Logo className='dark:text-[#C2C2C2]' />
+				<Logo className='dark:text-head' />
 			</Link>
 			<div
 				className={clsx(
@@ -44,76 +66,45 @@ const Navigation = () => {
 				)}
 			>
 				<div className='flex flex-col gap-4 xl:flex-row xl:gap-8'>
-					<Link
-						className='nav-link-shadow transition-all dark:hover:text-white'
-						href='/blog/tags/all'
-						onClick={() => {
-							trackEvent('homepage_mainnav_blog')
-							setOpen(false)
-						}}
-					>
-						Blog
-					</Link>
-					<Link
-						className='nav-link-shadow transition-all dark:hover:text-white'
-						href='/pricing'
-						onClick={() => {
-							trackEvent('homepage_mainnav_pricing')
-							setOpen(false)
-						}}
-					>
-						Pricing
-					</Link>
-					<Link
-						className='nav-link-shadow transition-all dark:hover:text-white'
-						href='https://docs.shuttle.rs'
-						onClick={() => {
-							trackEvent('homepage_mainnav_docs')
-							setOpen(false)
-						}}
-					>
-						Docs
-					</Link>
-					<Link
-						className='nav-link-shadow transition-all dark:hover:text-white'
-						href='/beta'
-						onClick={() => {
-							trackEvent('homepage_mainnav_beta')
-							setOpen(false)
-						}}
-					>
-						Beta
-					</Link>
-					<Link
-						className='nav-link-shadow transition-all dark:hover:text-white'
-						href='/shuttle-heroes'
-						onClick={() => {
-							trackEvent('homepage_mainnav_heroes')
-							setOpen(false)
-						}}
-					>
-						Shuttle Heroes
-					</Link>
-					<Link
-						className='nav-link-shadow transition-all dark:hover:text-white'
-						href='/ai'
-						onClick={() => {
-							trackEvent('homepage_mainnav_ai')
-							setOpen(false)
-						}}
-					>
-						Shuttle AI
-					</Link>
-					<Link
-						className='nav-link-shadow transition-all dark:hover:text-white'
-						href='/launchpad'
-						onClick={() => {
-							trackEvent('homepage_mainnav_launchpad')
-							setOpen(false)
-						}}
-					>
-						Launchpad
-					</Link>
+					{[
+						{
+							href: '/blog/tags/all',
+							event: 'homepage_mainnav_blog',
+							text: 'Blog',
+						},
+						{
+							href: '/pricing',
+							event: 'homepage_mainnav_pricing',
+							text: 'Pricing',
+						},
+						{
+							href: 'https://docs.shuttle.rs',
+							event: 'homepage_mainnav_docs',
+							text: 'Docs',
+						},
+						{
+							href: '/beta',
+							event: 'homepage_mainnav_beta',
+							text: 'Beta',
+						},
+						{
+							href: '/shuttle-heroes',
+							event: 'homepage_mainnav_heroes',
+							text: 'Shuttle Heroes',
+						},
+						{
+							href: '/ai',
+							event: 'homepage_mainnav_ai',
+							text: 'Shuttle AI',
+						},
+						{
+							href: '/launchpad',
+							event: 'homepage_mainnav_launchpad',
+							text: 'Launchpad',
+						},
+					].map(({ event, href, text }) => (
+						<LinkItem key={href} event={event} href={href} text={text} setOpen={setOpen} />
+					))}
 				</div>
 				<div className='mt-10 xl:ml-auto xl:mt-0 xl:flex xl:items-center xl:gap-5'>
 					<div className='mt-10 flex flex-wrap items-center gap-5 xl:mt-0'>
@@ -142,7 +133,7 @@ const Navigation = () => {
 				</div>
 			</div>
 
-			<button className='ml-auto dark:text-[#D8D8D8] xl:hidden' onClick={() => setOpen((open) => !open)}>
+			<button className='ml-auto dark:text-head xl:hidden' onClick={() => setOpen((open) => !open)}>
 				<Hamburger />
 			</button>
 		</nav>

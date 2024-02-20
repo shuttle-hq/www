@@ -46,19 +46,19 @@ export const Description = () => {
 						className='absolute left-0 top-0 -z-10 hidden h-full w-full rounded-4xl md:block'
 					/>
 					<Quote className='absolute left-32 top-32 hidden md:block' />
-					<p className='text-2xl text-[#C2C2C2]'>
+					<p className='text-2xl text-head'>
 						“I came into the first Batch with very little Rust expereience, having read most of the
 						Rust book I was looking to get involved in Open Source to better my knowledge.
 					</p>
-					<p className='text-2xl text-[#C2C2C2]'>
+					<p className='text-2xl text-head'>
 						The relaxed but supportive vibe in Batch was the perfect way for me to get to know the
 						language better, to mix with people at a similar skill level, and to get quality guidence
 						from the more experienced guys at Shuttle.”
 					</p>
 
 					<div>
-						<p className='text-xl text-[#C2C2C2]'>- John Williams</p>
-						<span className='text-base text-[#7A7A7A]'>Shuttle Batch 1.0</span>
+						<p className='text-xl text-head'>- John Williams</p>
+						<span className='text-base text-body'>Shuttle Batch 1.0</span>
 					</div>
 				</div>
 			</section>
@@ -70,8 +70,8 @@ export const Description = () => {
 					className='absolute left-0 top-0 -z-10 hidden h-full w-full md:block'
 				/>
 				<div className='relative mx-auto mt-32 w-full max-w-7xl items-center px-5 sm:px-10 lg:mt-52'>
-					<h1 className='text-6xl text-[#C2C2C2]'>What’s Shuttle Batch</h1>
-					<p className='mt-4 text-2xl text-[#7A7A7A]'>
+					<h1 className='text-6xl text-head'>What’s Shuttle Batch</h1>
+					<p className='mt-4 text-2xl text-body'>
 						Batch is an immersive online program where Rust developers unite to learn, collaborate, and
 						contribute to an exciting open-source project, while receiving mentorship and forming
 						lasting connections within the community.
@@ -80,9 +80,9 @@ export const Description = () => {
 					<div className='mt-36 flex flex-col gap-16 lg:ml-72'>
 						{VALUES.map((value, idx) => (
 							<div key={value.title} className='flex gap-16'>
-								<span className='text-3xl text-[#414141]'>0{idx + 1}</span>
+								<span className='text-3xl text-body'>0{idx + 1}</span>
 								<div>
-									<h3 className='text-3xl text-[#D8D8D8]'>{value.title}</h3>
+									<h3 className='text-3xl text-head'>{value.title}</h3>
 									<p className='mt-[10px] text-xl'>{value.description}</p>
 								</div>
 							</div>

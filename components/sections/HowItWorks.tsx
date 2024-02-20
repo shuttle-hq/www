@@ -12,16 +12,16 @@ const HowItWorks = () => {
 	return (
 		<div className='mx-auto mt-24 w-full max-w-7xl overflow-hidden px-5 sm:mt-28 sm:overflow-visible sm:px-10 lg:mt-36 lg:grid lg:grid-cols-[1fr_minmax(566px,_1fr)] lg:gap-7 xl:grid-cols-2 desktop:mt-40'>
 			<div className='col-span-2'>
-				<h2 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-[3.5rem]'>
+				<h2 className='font-gradual text-5xl font-bold text-black dark:text-head lg:text-[3.5rem]'>
 					How it works
 				</h2>
 			</div>
 			<div>
-				<div className='mt-4 space-y-7 text-[#525151] dark:text-[#7A7A7A] sm:mt-8 lg:text-xl'>
+				<div className='mt-4 space-y-7 text-body sm:mt-8 lg:text-xl'>
 					<p
 						className={clsx(
-							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
-							selectedItem === 'hello-world' && '!text-black dark:text-[#C2C2C2]'
+							'text-body transition duration-200',
+							selectedItem === 'hello-world' && 'text-head'
 						)}
 						onMouseOver={() => setSelectedItem('hello-world')}
 					>
@@ -30,8 +30,8 @@ const HowItWorks = () => {
 					</p>
 					<p
 						className={clsx(
-							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
-							selectedItem === 'deploy1' && '!text-black dark:text-[#C2C2C2]'
+							'text-body transition duration-200',
+							selectedItem === 'deploy1' && 'text-head'
 						)}
 						onMouseOver={() => setSelectedItem('deploy1')}
 					>
@@ -40,8 +40,8 @@ const HowItWorks = () => {
 					</p>
 					<p
 						className={clsx(
-							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
-							selectedItem === 'postgres' && '!text-black dark:text-[#C2C2C2]'
+							'text-body transition duration-200',
+							selectedItem === 'postgres' && 'text-head'
 						)}
 						onMouseOver={() => setSelectedItem('postgres')}
 					>
@@ -50,8 +50,8 @@ const HowItWorks = () => {
 					</p>
 					<p
 						className={clsx(
-							'text-[#525151] transition duration-200 dark:text-[#7A7A7A]',
-							selectedItem === 'deploy2' && '!text-black dark:text-[#C2C2C2]'
+							'text-body transition duration-200',
+							selectedItem === 'deploy2' && 'text-head'
 						)}
 						onMouseOver={() => setSelectedItem('deploy2')}
 					>
@@ -85,8 +85,8 @@ const HowItWorks = () => {
 								className={clsx(
 									'whitespace-nowrap rounded-[1.75rem] p-2 px-6 font-gradual font-bold leading-none md:rounded-b-none md:border-b-0 md:py-3',
 									selectedItem === 'hello-world'
-										? 'border border-[#191919] bg-[#13292C] text-[#D8D8D8] dark:bg-black'
-										: 'tab-shadow dark:text-[#C2C2C2]'
+										? 'border border-[#191919] bg-[#13292C] text-head dark:bg-black'
+										: 'tab-shadow dark:text-head'
 								)}
 								onClick={() => {
 									trackEvent('homepage_howitworks_getstarted')
@@ -101,8 +101,8 @@ const HowItWorks = () => {
 								className={clsx(
 									'whitespace-nowrap rounded-[1.75rem] p-2 px-6 font-gradual font-bold leading-none md:rounded-b-none md:border-b-0 md:py-3',
 									selectedItem === 'deploy1'
-										? 'border border-[#191919] bg-[#13292C] text-[#D8D8D8] dark:bg-black'
-										: 'tab-shadow dark:text-[#C2C2C2]'
+										? 'border border-[#191919] bg-[#13292C] text-head dark:bg-black'
+										: 'tab-shadow dark:text-head'
 								)}
 								onClick={() => {
 									trackEvent('homepage_howitworks_deploy')
@@ -117,8 +117,8 @@ const HowItWorks = () => {
 								className={clsx(
 									'whitespace-nowrap rounded-[1.75rem] p-2 px-6 font-gradual font-bold leading-none md:rounded-b-none md:border-b-0 md:py-3',
 									selectedItem === 'postgres'
-										? 'border border-[#191919] bg-[#13292C] text-[#D8D8D8] dark:bg-black'
-										: 'tab-shadow dark:text-[#C2C2C2]'
+										? 'border border-[#191919] bg-[#13292C] text-head dark:bg-black'
+										: 'tab-shadow dark:text-head'
 								)}
 								onClick={() => {
 									trackEvent('homepage_howitworks_addadatabase')
@@ -133,8 +133,8 @@ const HowItWorks = () => {
 								className={clsx(
 									'whitespace-nowrap rounded-[1.75rem] p-2 px-6 font-gradual font-bold leading-none md:rounded-b-none md:border-b-0 md:py-3',
 									selectedItem === 'deploy2'
-										? 'border border-[#191919] bg-[#13292C] text-[#D8D8D8] dark:bg-black'
-										: 'tab-shadow dark:text-[#C2C2C2]'
+										? 'border border-[#191919] bg-[#13292C] text-head dark:bg-black'
+										: 'tab-shadow dark:text-head'
 								)}
 								onClick={() => {
 									trackEvent('homepage_howitworks_deployagain')

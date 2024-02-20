@@ -2,7 +2,7 @@ export default function Privacy() {
 	return (
 		<main className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
 			<div className='mb-[98px]'>
-				<h1 className='mb-[19px] text-[64px] font-bold text-[#D8D8D8]'>Privacy policy</h1>
+				<h1 className='mb-[19px] text-[64px] font-bold text-head'>Privacy policy</h1>
 				<p className='mb-6 text-xl'>
 					At Openquery Ltd we respect your privacy and are committed to protecting your Personal Data and
 					respecting your privacy. This policy sets out how we look after your Personal Data we collect
@@ -31,14 +31,14 @@ export default function Privacy() {
 			</div>
 
 			<div className='mb-10 mt-10'>
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>1. Who we are</h2>
-				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Company</h3>
+				<h2 className='mb-5 text-[32px] font-bold text-head'>1. Who we are</h2>
+				<h3 className='mb-2 text-2xl font-bold text-head'>Company</h3>
 				<p className='mb-5 text-xl'>
 					Openquery Ltd, a company registered in England under number 12268176, with its registered
 					office at George House, 39 Fitzroy Square, London, England, W1T 6EZ (we or us).
 				</p>
 
-				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Controller of User Data</h3>
+				<h3 className='mb-2 text-2xl font-bold text-head'>Controller of User Data</h3>
 				<p className='mb-5 text-xl'>
 					We are a data controller of the Personal Data you provide to us when you surf on our Website,
 					directly engage with us, set up an account with us, as set out in this Privacy Notice, and/or
@@ -46,7 +46,7 @@ export default function Privacy() {
 					Data in your interaction with our Website and Services.
 				</p>
 
-				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Processor of Customer Data</h3>
+				<h3 className='mb-2 text-2xl font-bold text-head'>Processor of Customer Data</h3>
 				<p className='mb-5 text-xl'>
 					You are a data controller of the/your customer’s Personal Data (Customer Data) you submit to us
 					to host your behalf (Hosting Services). We process such Customer Data on your behalf, in our
@@ -54,7 +54,7 @@ export default function Privacy() {
 					https://www.shuttle.rs/dpa
 				</p>
 
-				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>
+				<h3 className='mb-2 text-2xl font-bold text-head'>
 					Changes to this Privacy Policy and your duty to inform us of changes
 				</h3>
 				<p className='mb-5 text-xl'>
@@ -66,7 +66,7 @@ export default function Privacy() {
 					us.
 				</p>
 
-				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Third-party links</h3>
+				<h3 className='mb-2 text-2xl font-bold text-head'>Third-party links</h3>
 				<p className='mb-5 text-xl'>
 					Our Website and/or Services may include links to third-party websites, plug-ins and
 					applications. Clicking on those links or enabling those connections may allow third parties to
@@ -75,7 +75,7 @@ export default function Privacy() {
 					encourage you to read the privacy policy of every website you visit.
 				</p>
 
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>2. The data we collect about you</h2>
+				<h2 className='mb-5 text-[32px] font-bold text-head'>2. The data we collect about you</h2>
 
 				<p className='mb-5 text-xl'>
 					Personal data, or personal information, means any information about an individual from which
@@ -133,7 +133,7 @@ export default function Privacy() {
 					biometric data). Nor do we collect any information about criminal convictions and offences.
 				</p>
 
-				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>If you fail to provide Personal Data</h3>
+				<h3 className='mb-2 text-2xl font-bold text-head'>If you fail to provide Personal Data</h3>
 
 				<p className='mb-5 text-xl'>
 					Where we need to collect Personal Data by law, or under the terms of a contract we have with
@@ -150,9 +150,7 @@ export default function Privacy() {
 					Services.
 				</p>
 
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>
-					3. How is your Personal Data collected?
-				</h2>
+				<h2 className='mb-5 text-[32px] font-bold text-head'>3. How is your Personal Data collected?</h2>
 
 				<p className='mb-5 text-xl'>
 					We use different methods to collect data from and about you including through:
@@ -194,7 +192,7 @@ export default function Privacy() {
 					</li>
 				</ol>
 
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>4. How we use your Personal Data</h2>
+				<h2 className='mb-5 text-[32px] font-bold text-head'>4. How we use your Personal Data</h2>
 
 				<p className='mb-5 text-xl'>
 					We will only use your Personal Data when the law allows us to. Most commonly, we will use your
@@ -217,7 +215,7 @@ export default function Privacy() {
 					</li>
 				</ol>
 
-				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>
+				<h3 className='mb-2 text-2xl font-bold text-head'>
 					Purposes for which we will use your Personal Data
 				</h3>
 
@@ -237,7 +235,7 @@ export default function Privacy() {
 			<div className='mb-10 mt-10 text-xl'>
 				<table className='mb-20 table-fixed text-xs lg:text-sm'>
 					<thead>
-						<tr className='text-left text-[#C2C2C2] children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
+						<tr className='text-left text-head children:border children:border-gray-900 children:px-1 children:py-1 lg:children:px-4 lg:children:py-3'>
 							<th>Purpose/Activity</th>
 							<th>Type of data</th>
 							<th>Lawful basis for processing including basis of legitimate interest</th>
@@ -412,7 +410,7 @@ export default function Privacy() {
 					hello@shuttle.rs. However, if you revoke consent, you may not be able to use our Services.
 				</p>
 
-				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Promotional offers from us</h3>
+				<h3 className='mb-2 text-2xl font-bold text-head'>Promotional offers from us</h3>
 
 				<p className='mb-5 text-xl'>
 					We may use your Identity, Contact, Technical, Usage and Profile Data to form a view on what we
@@ -420,21 +418,21 @@ export default function Privacy() {
 					products, services and offers may be relevant for you (we call this marketing).
 				</p>
 
-				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Third-party marketing</h3>
+				<h3 className='mb-2 text-2xl font-bold text-head'>Third-party marketing</h3>
 
 				<p className='mb-5 text-xl'>
 					We will get your express opt-in consent before we share your Personal Data with any third party
 					for marketing purposes.
 				</p>
 
-				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Opting out</h3>
+				<h3 className='mb-2 text-2xl font-bold text-head'>Opting out</h3>
 
 				<p className='mb-5 text-xl'>
 					You can ask us or third parties to stop sending you marketing messages at any time by
 					contacting us at any time.
 				</p>
 
-				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Cookies</h3>
+				<h3 className='mb-2 text-2xl font-bold text-head'>Cookies</h3>
 
 				<p className='mb-5 text-xl'>
 					You can set your browser to refuse all or some browser cookies, or to alert you when websites
@@ -443,7 +441,7 @@ export default function Privacy() {
 					cookies we use, please see our Cookies Policy https://www.shuttle.rs/cookies .
 				</p>
 
-				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Change of purpose</h3>
+				<h3 className='mb-2 text-2xl font-bold text-head'>Change of purpose</h3>
 
 				<p className='mb-5 text-xl'>
 					We will only use your Personal Data for the purposes for which we collected it, unless we
@@ -460,7 +458,7 @@ export default function Privacy() {
 					compliance with the above rules, where this is required or permitted by law.
 				</p>
 
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>5. Disclosures of your Personal Data</h2>
+				<h2 className='mb-5 text-[32px] font-bold text-head'>5. Disclosures of your Personal Data</h2>
 
 				<p className='mb-5 text-xl'>
 					We may share your Personal Data with the parties set out below for the purposes set out in the
@@ -505,7 +503,7 @@ export default function Privacy() {
 					</li>
 				</ol>
 
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>6. International transfers</h2>
+				<h2 className='mb-5 text-[32px] font-bold text-head'>6. International transfers</h2>
 
 				<p className='mb-5 text-xl'>
 					Our legal advisors are located in Israel, a country which offers adequate level of protection
@@ -513,7 +511,7 @@ export default function Privacy() {
 					data from the UK or EEA to Israel on this basis.
 				</p>
 
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>7. Data security</h2>
+				<h2 className='mb-5 text-[32px] font-bold text-head'>7. Data security</h2>
 
 				<p className='mb-5 text-xl'>
 					We have put in place appropriate security measures to prevent your Personal Data from being
@@ -528,11 +526,9 @@ export default function Privacy() {
 					you and any applicable regulator of a breach where we are legally required to do so.
 				</p>
 
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>8. Data retention</h2>
+				<h2 className='mb-5 text-[32px] font-bold text-head'>8. Data retention</h2>
 
-				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>
-					How long will you use my Personal Data for?
-				</h3>
+				<h3 className='mb-2 text-2xl font-bold text-head'>How long will you use my Personal Data for?</h3>
 
 				<p className='mb-5 text-xl'>
 					We will only retain your Personal Data for as long as reasonably necessary to fulfil the
@@ -554,7 +550,7 @@ export default function Privacy() {
 					information indefinitely without further notice to you.
 				</p>
 
-				<h2 className='mb-5 text-[32px] font-bold text-[#D8D8D8]'>9. Your legal rights</h2>
+				<h2 className='mb-5 text-[32px] font-bold text-head'>9. Your legal rights</h2>
 
 				<p className='mb-5 text-xl'>Under certain circumstances, by law you have the right to:</p>
 
@@ -605,7 +601,7 @@ export default function Privacy() {
 					If you wish to exercise any of the rights set out above, please contact us at hello@shuttle.rs
 				</p>
 
-				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>No fee usually required</h3>
+				<h3 className='mb-2 text-2xl font-bold text-head'>No fee usually required</h3>
 
 				<p className='mb-5 text-xl'>
 					You will not have to pay a fee to access your Personal Data (or to exercise any of the other
@@ -614,7 +610,7 @@ export default function Privacy() {
 					circumstances.
 				</p>
 
-				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>What we may need from you</h3>
+				<h3 className='mb-2 text-2xl font-bold text-head'>What we may need from you</h3>
 
 				<p className='mb-5 text-xl'>
 					We may need to request specific information from you to help us confirm your identity and
@@ -624,7 +620,7 @@ export default function Privacy() {
 					your request to speed up our response.
 				</p>
 
-				<h3 className='mb-2 text-2xl font-bold text-[#D8D8D8]'>Time limit to respond</h3>
+				<h3 className='mb-2 text-2xl font-bold text-head'>Time limit to respond</h3>
 
 				<p className='mb-5 text-xl'>
 					We try to respond to all legitimate requests within one month. Occasionally it could take us
