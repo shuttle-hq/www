@@ -1,4 +1,4 @@
-e{
+{
 	"rewrites": [
 		{
 			"source": "/ingest/:path*",
