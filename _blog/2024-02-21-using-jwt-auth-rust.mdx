@@ -35,7 +35,7 @@ cargo add serde-json@1.0.113
 
 ### Setting up keys
 
-To start with, we’ll need to create a decoding and encoding key that can take a `&[u8]` (u8 slice):
+To start with, we’ll need to declare a struct that holds decoding and encoding key, with a method that can take a `&[u8]` (u8 slice) to generate the struct:
 
 ```rust
 use jsonwebtoken::{DecodingKey, EncodingKey};
