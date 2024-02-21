@@ -233,7 +233,7 @@ curl localhost:8000/login -H 'Content-Type: application/json/' \
  -d '{"client_id":"foo","client_secret":"bar"}'
 ```
 
-When we run this, it should output some JSON containing the JWT and type of token - which should be the `Bearer` type. You can prove that this should be a Bearer token because in `FromRequestParts` we extract from the `Authorization: Bearer ..` header.
+When we run this, it should output some JSON containing the JWT and type of token - which should be the `Bearer` type. This should be a Bearer token because in `FromRequestParts` we extract from the `Authorization: Bearer ...` header.
 
 To now test the protected route, we need to use the JWT token that was sent to us in the `Authorization` header:
 
@@ -243,7 +243,7 @@ curl localhost:8000/protected -H 'Authorization: Bearer <your-jwt-here>'
 
 You should receive a text response that looks like this:
 
-```bash
+```text
 Welcome to the protected area, foo!
 ```
 
