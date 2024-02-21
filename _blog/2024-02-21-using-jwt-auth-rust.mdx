@@ -1,0 +1,251 @@
+---
+title: "Implementing JWT Authentication in Rust"
+description: "This article explores implementing authentication in a Rust API using JSON Web Tokens (JWTs)."
+author: josh
+tags: [rust, auth, jwt, guide]
+thumb: jwt-auth-rust-thumb.png 
+cover: jwt-auth-rust-thumb.png
+date: '2024-02-21T15:00:00'
+---
+
+Hey there! Following on from our ShuttleBytes talk which we held on Tuesday, we’re going to talk about how you can implement authentication using JSON Web Tokens (JWTs) in Rust.
+
+## What is a JWT?
+
+A JSON Web Token (JWT) is a compact, URL-safe way to transfer data (”claims”) between two parties over the Web. The data is typically encoded using a JSON Web Signature or as part of a JSON Web Encryption (JWE) structure, and can be encrypted (and signed!).
+
+JWTs are a popular option when deciding on an auth strategy. The client stores all the information via the JWT, allowing for a stateless API. This can make user authentication much easier in some cases. While unencrypted and unsigned JWTs can be manipulated, it is simple for the server to be able to disregard manipulated JWTs as long as the secret key used to create them remains secret.
+
+## Getting started
+
+To get started, let’s initialise a project using `cargo shuttle init`, making sure to pick Axum as the framework. 
+
+Then we’ll add our dependencies:
+
+```bash
+cargo add axum-extra@0.9.2 -F typed-header
+cargo add chrono@0.4.34 -F serde,clock
+cargo add jsonwebtoken@9.2.0
+cargo add once_cell@1.19.0
+cargo add serde@1.0.196 -F derive
+cargo add serde-json@1.0.113
+```
+
+## Writing our web service
+
+### Setting up keys
+
+To start with, we’ll need to create a decoding and encoding key that can take a `&[u8]` (u8 slice):
+
+```rust
+use jsonwebtoken::{DecodingKey, EncodingKey};
+
+struct Keys {
+    encoding: EncodingKey,
+    decoding: DecodingKey,
+}
+
+impl Keys {
+    fn new(secret: &[u8]) -> Self {
+        Self {
+            encoding: EncodingKey::from_secret(secret),
+            decoding: DecodingKey::from_secret(secret),
+        }
+    }
+}
+```
+
+This struct needs to be generated from a secret key as it’s what we will use to generate the JWTs from. For this example, we’ll be randomly generating our bytes from a String and then turning it into bytes. It will then be stored in a `once_cell::LazyCell` that can be accessed globally in our application:
+
+```rust
+use once_cell::sync::Lazy;
+
+static KEYS: Lazy<Keys> = Lazy::new(|| {
+    let secret = Alphanumeric.sample_string(&mut rand::thread_rng(), 60);
+    Keys::new(secret.as_bytes())
+});
+```
+
+Note that there’s many different sources you can use to generate the byte array from for this - generating a random string and turning it into bytes is just one of them. For production usage, you may also want to use a cryptographically safe algorithm. 
+
+### Writing our JWT Claim
+
+The next step is to implement our claim. A claim (in JWT context) is the data transmitted by a JWT and gets encoded or decoded by the server. We can write our own Claim implementation by creating a struct that holds a username and expiry date, then implementing the `FromRequestParts` trait (from Axum) for the struct. This allows us to use it as an Axum extractor and saves us from having to implement any middleware!
+
+However before we write the actual implementation itself, `FromRequestParts` requires that we have a custom error type. We can write one that represents JWT failures and implement `IntoResponse` for it - which will then allow us to use it in the implementation.
+
+```rust
+use axum::response::{ IntoResponse, Response };
+use axum::http::StatusCode;
+use serde_json::json;
+
+pub enum AuthError {
+    InvalidToken,
+    WrongCredentials,
+    TokenCreation,
+    MissingCredentials,
+}
+
+impl IntoResponse for AuthError {
+    fn into_response(self) -> Response {
+        let (status, error_message) = match self {
+            AuthError::WrongCredentials => (StatusCode::UNAUTHORIZED, "Wrong credentials"),
+            AuthError::MissingCredentials => (StatusCode::BAD_REQUEST, "Missing credentials"),
+            AuthError::TokenCreation => (StatusCode::INTERNAL_SERVER_ERROR, "Token creation error"),
+            AuthError::InvalidToken => (StatusCode::BAD_REQUEST, "Invalid token"),
+        };
+        let body = Json(json!({
+            "error": error_message,
+        }));
+        (status, body).into_response()
+    }
+}
+```
+
+Implementing `IntoResponse` for `AuthError` allows it to be used as the `Rejection` type in the `FromRequestParts` trait. Note that to be able to return `AuthError` in the `FromPartsRequest` trait, we use `map_err` to turn the error type into `AuthError` so that it can be propagated. We also use de-structuring here to extract the bearer struct from the `TypedHeader<Authorization<Bearer>>` type as it’s much easier to access.
+
+```rust
+use serde::{ Serialize, Deserialize };
+use axum::{ http::{ request::Parts }, extract::FromRequestParts, RequestPartsExt };
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Claims {
+    username: String,
+    exp: usize,
+}
+
+#[async_trait]
+impl<S> FromRequestParts<S> for Claims where S: Send + Sync {
+    type Rejection = AuthError;
+
+    async fn from_request_parts(parts: &mut Parts, _state: &S) -> Result<Self, Self::Rejection> {
+        // Extract the token from the authorization header
+        let TypedHeader(Authorization(bearer)) = parts
+            .extract::<TypedHeader<Authorization<Bearer>>>().await
+            .map_err(|_| AuthError::InvalidToken)?;
+        // Decode the user data
+        let token_data = decode::<Claims>(
+            bearer.token(),
+            &KEYS.decoding,
+            &Validation::default()
+        ).map_err(|_| AuthError::InvalidToken)?;
+
+        Ok(token_data.claims)
+    }
+}
+```
+
+Now that we’re done setting up our boilerplate for how the JWT should work, we can move onto creating our routes!
+
+### Creating routes
+
+The next step is to write our endpoint when authorizing a user - when returning the token, we’ll create a new `AuthBody` with the token in it and the type of token it is. We’ll be using this later on:
+
+```rust
+#[derive(Debug, Serialize)]
+struct AuthBody {
+    access_token: String,
+    token_type: String,
+}
+
+impl AuthBody {
+    fn new(access_token: String) -> Self {
+        Self {
+            access_token,
+            token_type: "Bearer".to_string(),
+        }
+    }
+}
+```
+
+Now that we’ve created our `AuthBody`, we can create an endpoint that will take a client ID and secret and verify it. Then it will create a claim, encode it and return it as JSON.
+
+```rust
+use axum::Json;
+use chrono::Utc;
+
+#[derive(Debug, Deserialize)]
+struct AuthPayload {
+    client_id: String,
+    client_secret: String,
+}
+
+async fn authorize(Json(payload): Json<AuthPayload>) -> Result<Json<AuthBody>, AuthError> {
+    // Check if the user sent the credentials
+    if payload.client_id.is_empty() || payload.client_secret.is_empty() {
+        return Err(AuthError::MissingCredentials);
+    }
+    // Here, basic verification is used but normally you would use a database
+    if &payload.client_id != "foo" || &payload.client_secret != "bar" {
+        return Err(AuthError::WrongCredentials);
+    }
+
+    // create the timestamp for the expiry time - here the expiry time is 1 day
+    // in production you may not want to have such a long JWT life
+    let exp = (Utc::now().naive_utc() + chrono::naive::Days::new(1)).timestamp() as usize;
+    let claims = Claims {
+        username: payload.client_id,
+        exp,
+    };
+    // Create the authorization token
+    let token = encode(&Header::default(), &claims, &KEYS.encoding).map_err(
+        |_| AuthError::TokenCreation
+    )?;
+
+    // Send the authorized token
+    Ok(Json(AuthBody::new(token)))
+}
+```
+
+Now that we have a route to generate the JWT, we can create a route to try our token out!
+
+```rust
+async fn protected(claims: Claims) -> String {
+    // Send the protected data to the user
+    format!("Welcome to the protected area, {}!", claims.username)
+}
+```
+
+### Testing
+
+To test that the API works, we can use `cargo shuttle run` to serve the API locally. 
+
+To test our `/login` endpoint, we’ll send a cURL request to it with the data:
+
+```bash
+curl localhost:8000/login -H 'Content-Type: application/json/' \
+ -d '{"client_id":"foo","client_secret":"bar"}'
+```
+
+When we run this, it should output some JSON containing the JWT and type of token - which should be the `Bearer` type. You can prove that this should be a Bearer token because in `FromRequestParts` we extract from the `Authorization: Bearer ..` header.
+
+To now test the protected route, we need to use the JWT token that was sent to us in the `Authorization` header:
+
+```bash
+curl localhost:8000/protected -H 'Authorization: Bearer <your-jwt-here>'
+```
+
+You should receive a text response that looks like this:
+
+```bash
+Welcome to the protected area, foo!
+```
+
+## Deploying
+
+Now that we’ve written our whole project, we can deploy! Type in `cargo shuttle deploy` and press enter (add `--ad` flag if on a dirty Git branch to allow dirty deploys). When finished, our terminal should print out all of the data about our deployment and project and a link to the live project!
+
+## Extending this project
+
+Interested in extending this project? Here’s a couple ideas:
+
+- Use Postgres to store user logins.
+- Try using encryption and signing to strengthen your JWTs, as well as storing them in a cookie.
+- Try adding integration tests so you don’t need manual testing!
+
+## Finishing up
+
+Thanks for reading! I hope you enjoyed this guide to implementing JWT authentication in Rust. Interested in more?
+
+- Read more about using SQL with SQLx [here](https://www.shuttle.rs/blog/2023/10/04/sql-in-rust).
+- Read more about session token based authentication [here](https://www.shuttle.rs/blog/2022/08/11/authentication-tutorial).
