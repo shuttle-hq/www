@@ -1,6 +1,6 @@
 ---
 title: "Implementing JWT Authentication in Rust"
-description: "This article explores implementing authentication in a Rust API using JSON Web Tokens (JWTs)."
+description: "Using JSON Web Tokens (JWTs) when implementing authentication in a Rust API"
 author: josh
 tags: [rust, auth, jwt, guide]
 thumb: jwt-auth-rust-thumb.png 
@@ -203,6 +203,22 @@ Now that we have a route to generate the JWT, we can create a route to try our t
 async fn protected(claims: Claims) -> String {
     // Send the protected data to the user
     format!("Welcome to the protected area, {}!", claims.username)
+}
+```
+
+Now that all of the routes have been written we can hook this all back up to our main function:
+
+```rust
+use axum::{Router, routing::{get, post}};
+
+#[shuttle_runtime::main]
+async fn main() -> shuttle_axum::ShuttleAxum {
+    let router = Router::new()
+        .route("/", get(hello_world))
+        .route("/protected", get(protected))
+        .route("/login", post(authorize));
+
+    Ok(router.into())
 }
 ```
 
