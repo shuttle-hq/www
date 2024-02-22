@@ -12,9 +12,11 @@ Hello world! We’re going to talk about implementing rate limiting for your API
 
 For this tutorial we will be implementing the “sliding window” algorithm by having a dynamic period to check request histories over as well, using a basic in-memory hashmap to store users and their request times. We will also look at using `tower-governor` to configure rate limiting for you.
 
-## Getting started
+## Implementing a naive sliding window rate limiter
 
-To get started, we’re going to initialise a Shuttle project using `cargo shuttle init` and follow the prompt, picking Axum as our framework of choice. 
+To figure out how we can do this from the ground up, let’s write a naive sliding window IP based rate limiter from scratch.
+
+To get started, we’re going to initialise a regular project using `cargo init` and follow the prompt, picking Axum as our framework of choice. 
 
 We’re going to need some extra dependencies, so let’s install them with this shell snippet:
 
@@ -22,12 +24,6 @@ We’re going to need some extra dependencies, so let’s install them with this
 cargo add serde@1.0.196 -F derive
 cargo add chrono@0.4.34 -F serde,clock
 ```
-
-Once done, we can get started!
-
-## Implementing a naive sliding window rate limiter
-
-To figure out how we can do this from the ground up, let’s write a naive sliding window IP based rate limiter from scratch.
 
 We’ll declare a new struct that holds a `HashMap` of `IpAddr` keys with the values being `Vec<DateTime<Utc>>` (a Vector of UTC-timezone timestamps). 
 
@@ -119,7 +115,10 @@ For external-facing websites without a login, IP addresses are the only thing yo
 
 Working with user-based rate limiting allows us to solve these issues. While users can have more than one IP address, we can assign it all to the same user. 
 
-To get started, we’re going to create a custom header key! This will be used in routes where We’ll want to start by adding `axum-extra` with the `typed-header` feature:
+## Getting started
+To initialise our web service we'll use `cargo shuttle init` (requires `cargo-shuttle` installed) to create our project, making sure to pick Axum as the framework.
+
+Before adding the rate limiter itself, we’re going to create a custom header key! This will be used in routes where we require user authentication. We can also use the header when implementing our custom key extractor for the rate limiter later on. We’ll want to start by adding `axum-extra` with the `typed-header` feature:
 
 ```rust
 cargo add axum-extra -F typed-header
