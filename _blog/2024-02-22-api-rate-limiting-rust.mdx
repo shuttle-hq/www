@@ -52,25 +52,21 @@ pub struct RateLimiter {
 ```rust
 impl RateLimiter {
     fn check_if_rate_limited(&self, ip_addr: IpAddr) -> Result<(), String> {
-        // we only want timestamps from up to 60 seconds ago
+        // we only want to keep timestamps from up to 60 seconds ago
         let throttle_time_limit = Utc::now() - std::time::Duration::from_secs(60);
 
         let mut requests_hashmap = self.requests.lock().unwrap();
 
-        let requests_for_ip = requests_hashmap
+        let mut requests_for_ip = requests_hashmap
             // grab the entry here and allow us to modify it in place
             .entry(ip_addr)
-            // modify the entry in place here
-            .and_modify(|x| {
-                if x.len() < REQUEST_LIMIT {
-                    x.retain(|x| x.to_utc() > throttle_time_limit);
-                    x.push(Utc::now());
-                }
-            })
             // if the entry is empty, insert a vec with the current timestamp
-            .or_insert(vec![Utc::now()]);
+            .or_insert(Vec::new());
 
-        if requests_for_ip.len() >= REQUEST_LIMIT {
+        requests_for_ip.retain(|x| x.to_utc() > throttle_time_limit);
+        requests_for_ip.push(Utc::now());
+
+        if requests_for_ip.len() > REQUEST_LIMIT {
             return Err("IP is rate limited :(".to_string());
         }
 
@@ -85,10 +81,30 @@ Here is a basic example of how you might use this:
 use std::net::Ipv4Addr;
 
 fn main() {
-    let rate_limiter = RateLimiter::default();
-    
+let rate_limiter = RateLimiter::default();
+
     let localhost_v4 = IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1));
+
+    // here we request 120 times - our request limit
+    for _ in 1..80 {
     assert!(rate_limiter.check_if_rate_limited(localhost_v4).is_ok())
+    }
+
+    // wait 30 seconds
+    std::thread::sleep(std::time::Duration::from_secs(30));
+
+    // make another 40 requests here to satisfy request quota
+    for _ in 1..40 {
+    assert!(rate_limiter.check_if_rate_limited(localhost_v4).is_ok())
+    }
+
+    // wait another 30 seconds
+    std::thread::sleep(std::time::Duration::from_secs(30));
+
+    // now we can make another 80 requests
+    for _ in 1..80 {
+    assert!(rate_limiter.check_if_rate_limited(localhost_v4).is_ok())
+    }
 }
 ```
 
@@ -221,7 +237,7 @@ impl KeyExtractor for CustomHeaderExtractor {
     fn extract<T>(&self, req: &Request<T>) -> Result<Self::Key, GovernorError> {
         let headers = req.headers();
 
-        match headers.get("x-custom-key") {
+        match headers.get(CUSTOM_HEADER) {
             Some(res) => {
                 let res = res.to_str()
                     .map_err(|_| GovernorError::UnableToExtractKey)?;
