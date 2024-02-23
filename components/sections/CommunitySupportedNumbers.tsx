@@ -51,13 +51,13 @@ const CommunitySupportedNumbers = ({ stargazersCount }: { stargazersCount: numbe
 				</div>
 				<div className='text-center lg:py-12'>
 					<p className='bg-gradient-to-r from-[#B59C53] to-[#A5A76B] bg-clip-text font-gradual text-[2.5rem] font-bold leading-none text-transparent sm:text-[3.5rem]'>
-						3k+
+						4k+
 					</p>
 					<h3 className='mt-1 text-sm text-body dark:text-head sm:text-base'>Discord Users</h3>
 				</div>
 				<div className='text-center lg:py-12'>
 					<p className='bg-gradient-to-r from-[#93B083] to-[#7BBB9F] bg-clip-text font-gradual text-[2.5rem] font-bold leading-none text-transparent sm:text-[3.5rem]'>
-						85+
+						95+
 					</p>
 					<h3 className='mt-1 text-sm text-body dark:text-head sm:text-base'>Contributors</h3>
 				</div>
