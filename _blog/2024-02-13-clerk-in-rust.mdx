@@ -1,6 +1,6 @@
 ---
 title: "Using Clerk authentication in Rust"
-description: "Part 1: Building a Rust Actix web backend with Clerk authentication."
+description: "Part 1: Building a Rust Actix Web backend with Clerk authentication."
 author: sourabpramanik
 tags: [rust, actix, auth, clerk, guide]
 thumb: clerk-rust-thumb.png
@@ -8,13 +8,13 @@ cover: clerk-rust-thumb.png
 date: '2024-02-13T17:00:01'
 ---
 
-This two-part article covers how we can build an Issue tracking application using React for the frontend, and [Shuttle](https://www.shuttle.rs/) and [Actix web](https://actix.rs/) for the backend. It also uses [Clerk](https://clerk.com/) for authentication in the frontend and protecting the Rest APIs in the backend.
+This two-part article covers how we can build an Issue tracking application using React for the frontend, and [Shuttle](https://www.shuttle.rs/) and [Actix Web](https://actix.rs/) for the backend. It also uses [Clerk](https://clerk.com/) for authentication in the frontend and protecting the Rest APIs in the backend.
 
 This article covers the Rust backend, and the [second part](https://www.shuttle.rs/blog/2024/02/13/clerk-in-react) covers the React frontend.
 
 Here is the [source code](https://github.com/sourabpramanik/issue-tracker) of the complete project if you want to follow along, and a link to the [demo](https://issue-tracker.shuttleapp.rs/).
 
-To start this project we will use the Clerk template from Shuttle’s [example repository](https://github.com/shuttle-hq/shuttle-examples) that has a barebone setup of Shuttle, Actix web, Vite (React), and Clerk.
+To start this project we will use the Clerk template from Shuttle’s [example repository](https://github.com/shuttle-hq/shuttle-examples) that has a barebone setup of Shuttle, Actix Web, Vite (React), and Clerk.
 
 The backend uses the [clerk-rs](https://github.com/DarrenBaldwin07/clerk-rs) community crate to create a connection between the backend application and Clerk project. This crate has many different APIs for different use cases. In the template there is an endpoint to fetch all user records using the `clerk-rs` user API. We can easily verify a user's identity when trying to access protected routes using the `ClerkMiddleware` from the crate.
 
@@ -252,7 +252,7 @@ async fn get_issues(state: web::Data<AppState>) -> impl Responder {
 }
 ```
 
-This endpoint function will extract the `issue_id` slug from the path using the [Path extractor](https://actix.rs/docs/extractors) from Actix web and query our database where the issue `id` is equal to the `issue_id` slug of the path.
+This endpoint function will extract the `issue_id` slug from the path using the [Path extractor](https://actix.rs/docs/extractors) from Actix Web and query our database where the issue `id` is equal to the `issue_id` slug of the path.
 
 ```rust
 #[get("/issue/{issue_id}")]
