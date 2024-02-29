@@ -1,0 +1,636 @@
+---
+title: "A Full Stack SaaS Template with Loco"
+description: "Exploring how to use the Loco.rs framework to write a SaaS, complete with payments."
+author: josh
+tags: [rust, fullstack, loco, guide]
+thumb: fullstack-loco-rust-thumb.png
+cover: fullstack-loco-rust-thumb.png
+date: '2024-02-29T15:30:00'
+---
+Loco is a Rust framework that aims to do it all - authentication, tasks, migrations and more. While initially being more complex to use than using pure Axum, it can save a lot of time setting up boilerplate and provides a great platform to build on.
+
+In this guide, we’ll deploying Loco on Shuttle via a fullstack template that also additionally includes SaaS subscription payments. By using their SaaS starter, we can leverage their pre-built authentication features to build payments out quickly and easily.  Interested in deploying or trying out the final repo? You can check it out [here.](https://github.com/joshua-mo-143/shuttle-stripe-ex)
+
+Steps to deploy from cloning:
+- Run `cargo shuttle init --from joshua-mo-143/shuttle-stripe-ex` and follow the prompt (requires `cargo-shuttle` installed)
+- Set up API keys (see below)
+- Use `cargo shuttle deploy --allow-dirty` and watch the magic happen!
+
+## Prerequisites
+
+Before we get started, you will need a Stripe API key. It’s free to sign up with Stripe and you can turn on Test Mode before you do anything in production. Stripe also has docs on this if you need assistance [here.](https://support.stripe.com/questions/locate-api-keys-in-the-dashboard)
+
+Once you’ve created your project, make sure you create a `Secrets.toml` file in the root of your project and add it like so:
+
+```rust
+STRIPE_API_KEY = "<YOUR-STRIPE-KEY-HERE>"
+```
+
+### Getting started
+
+We’re going to use the following command to initialise our project (requires `cargo-shuttle` installed), following the prompt to initialise a project with our name. The `--from` flag allows us to take the starter from 
+
+```bash
+cargo shuttle init --from loco-rs/loco --subfolder starters/saas
+```
+
+We will then use `cargo loco generate deployment` to generate a Shuttle deployment for our Loco project!
+
+While we’re here, make sure you’re using the latest version of `cargo-shuttle` and Shuttle dependencies in your project. We released v0.40.0 today! 
+
+We’ll also add the following dependencies with a shell snippet:
+
+```bash
+cargo add async-stripe@0.34.1 -F runtime-tokio-hyper-rustls
+cargo add shuttle-shared-db -F postgres
+cargo add shuttle-secrets
+```
+
+Note that you will get a blank Shuttle deployment with no database installed. To remedy this, we’ll adjust the main function to provide our database annotation and make sure that the `Migrator` (from the migrations folder) is added:
+
+```rust
+use migrations::Migrator;
+
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_shared_db::Postgres] conn_str: String,
+    #[shuttle_metadata::ShuttleMetadata] meta: shuttle_metadata::Metadata,
+    #[shuttle_secrets::Secrets] secrets: shuttle_secrets::SecretStore
+) -> shuttle_axum::ShuttleAxum {
+    std::env::set_var("DATABASE_URL", conn_str);
+
+    let stripe_api_key = secrets
+        .get("STRIPE_API_KEY")
+        .expect("STRIPE_API_KEY not found in secrets");
+    std::env::set_var("STRIPE_API_KEY", stripe_api_key);
+
+    let environment = match meta.env {
+        shuttle_metadata::Environment::Local => Environment::Development,
+        shuttle_metadata::Environment::Deployment => Environment::Production,
+    };
+    let boot_result = create_app::<App, Migrator>(StartMode::ServerOnly, &environment)
+        .await
+        .unwrap();
+
+    let router = boot_result.router.unwrap();
+    Ok(router.into())
+}
+```
+
+In the regular `src/bin/main.rs`, you may also need to adjust the app so that `Migrator` is also included.
+
+Once done, you can use `cargo shuttle run` and it should just automatically work! You’ll get a database connection URL (save this for later!).
+
+### Migrations
+
+To get started, we’ll make some migrations that we can then reference later on in the program. You can do this like so:
+
+```bash
+cargo loco generate model --migration-only subscription_tiers tier:string! stripe_item_id:string! stripe_price_id:string!
+cargo loco generate model --migration-only user_subscriptions user:references stripe_customer_id:string! stripe_subscription_id:string! user_tier:string!
+```
+
+Then we’ll use the following to migrate your database and generate entities:
+
+```bash
+DATABASE_URL=<DB_URL_HERE> cargo loco db migrate
+DATABASE_URL=<DB_URL_HERE> cargo loco db entities
+```
+
+ Note that you will need a database URL for this. If you don’t have one yet, you can use `cargo shuttle run` to automatically spin up a Postgres container with a provided connection string or spin up your own Docker container.
+
+These two commands will generate some files in the `migrations` folder as well as in `src/models`, which we’ll be making heavy use of as they are the main way to interface with the database when using Loco.
+
+## Frontend
+
+We won’t be covering the frontend in this tutorial as there’s a lot of different ways you can do it - however, if you’d like to look at the way that we’ve done it, feel free to check out the repo here! We use React as provided by Loco with `react-router-dom` for routing and `zustand` for state management, with vanilla CSS. 
+
+The following pages in the repo have been provided:
+
+- A home page
+- Login and register pages
+- A dashboard page that allows users to downgrade/upgrade their subscription tier, cancel it and check what tier they are.
+- Pricing and payment checkout pages
+- A payment success/fail page
+
+## Error handling
+
+Loco by default uses `anyhow` to be able to provide easy error handling. However, for our purposes, let’s create our own error type. This will allow us a couple of things:
+
+- We know exactly what error is happening and where
+- We can customise the behavior of our error handling
+
+Let’s start by using the `thiserror` crate we added earlier to add macros for automatically implementing `std::fmt::DIsplay` and `std::error::Error`. The `thiserror::Error` derive macro also allows us to add attribute macros to our struct for automatic `From<T>` implementations, which saves a lot of time! That being said, you can also implement `From<T>` manually if you want to create more than one enum variant for an error based on what the reason of the error is.
+
+```rust
+use thiserror::Error;
+
+#[derive(Error, Debug)]
+pub enum ApiError {
+    #[error("Stripe error: {0}")]
+    Stripe(#[from] stripe::StripeError),
+    #[error("User already has this subscription tier!")]
+    UserTierAlreadyExists,
+    #[error("SQL error: {0}")]
+    SQL(#[from] sea_orm::DbErr),
+    #[error("Model error: {0}")]
+    Model(#[from] loco_rs::model::ModelError),
+}
+```
+
+To be able to use this in our API, we will need to implement `axum::response::IntoResponse`. We can do this by simply matching each enum variant like below:
+
+```rust
+use axum::{http::StatusCode, response::{Response, IntoResponse}};
+
+impl IntoResponse for ApiError {
+    fn into_response(self) -> Response {
+        let res = match self {
+            Self::Stripe(err) => (StatusCode::INTERNAL_SERVER_ERROR, err.to_string()),
+            Self::SQL(err) => (StatusCode::INTERNAL_SERVER_ERROR, err.to_string()),
+            Self::UserTierAlreadyExists => (
+                StatusCode::BAD_REQUEST,
+                "User already has this tier!".to_string(),
+            ),
+            Self::Model(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()),
+        };
+        res.into_response()
+    }
+}
+```
+
+## Using Stripe
+
+To get started with using Stripe, we’ll want to create a new loco controller file that will hold all of our routes. We can do this with `cargo loco generate controller stripe`, which will generate a new controller route at `src/controllers/stripe.rs` and inject some code into `src/app.rs` to make sure the controller gets automatically included. 
+
+Looking inside `src/controllers/stripe.rs` should give you a function that returns `Routes` (a struct that builds on `axum::Router`) and a couple of routes for returning “Hello, world!” and the contents of a given request.
+
+Let’s start first by defining what our user tiers are. Let’s say we have the Pro tier, and the Team tier. We can write an enum with relevant impls like so:
+
+```rust
+use std::fmt;
+use serde::{Deserialize, Serialize};
+use sea_orm::{EnumIter, DeriveActiveEnum};
+
+#[derive(EnumIter, DeriveActiveEnum, Clone, Deserialize, Debug, Serialize, PartialEq, Eq)]
+#[sea_orm(rs_type = "String", db_type = "String(StringLen::N(1))")]
+pub enum UserTier {
+    #[sea_orm(string_value = "P")]
+    Pro,
+    #[sea_orm(string_value = "T")]
+    Team,
+}
+
+impl UserTier {
+    fn get_price(&self) -> Option<i64> {
+        match self {
+            Self::Pro => Some(1000),
+            Self::Team => Some(2500),
+        }
+    }
+
+    fn from_str(str: &str) -> Self {
+        match str {
+            "Pro" => Self::Pro,
+            "Team" => Self::Team,
+            _ => panic!("There should only be the Pro and Team tier!")
+        }
+    }
+}
+
+impl fmt::Display for UserTier {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Pro => write!(f, "Pro"),
+            Self::Team => write!(f, "Team"),
+        }
+    }
+}
+```
+
+Note that the macros we are importing from `sea_orm` will let the enum be stored as a `varchar` type in Postgres. 
+
+### Creating Stripe products and prices
+
+Before we do anything else, we will want to create a Stripe product that has some prices attached to it. To do that, we can create two functions; one for creating the Product item, and then one for adding a price (as products on Stripe can have multiple prices). Creating a price requires a product. To keep it simple, we’ll keep one price attached to one item. Both functions will be used as part of other functions.
+
+```rust
+use stripe::{Client, Product, Price, CreatePrice, CreateProduct, IdOrCreate, 
+CreatePriceRecurring, CreatePriceRecurringInterval, Currency};
+
+async fn create_product_item(client: &Client, user_tier: &UserTier) -> Result<Product, ApiError> {
+    let product = {
+        let mut create_product = match user_tier {
+            UserTier::Pro => CreateProduct::new("Pro User Subscription"),
+            UserTier::Team => CreateProduct::new("Team Subscription"),
+        };
+
+        create_product.metadata = Some(std::collections::HashMap::from([(
+            String::from("async-stripe"),
+            String::from("true"),
+        )]));
+
+        Product::create(client, create_product).await?
+    };
+
+    Ok(product)
+}
+
+async fn create_product_price(
+    client: &Client,
+    user_tier: &UserTier,
+    product: &Product,
+) -> Result<Price, ApiError> {
+    let price = {
+        let mut create_price = CreatePrice::new(Currency::USD);
+        create_price.product = Some(IdOrCreate::Id(&product.id));
+        create_price.metadata = Some(std::collections::HashMap::from([(
+            String::from("async-stripe"),
+            String::from("true"),
+        )]));
+        create_price.unit_amount = user_tier.get_price();
+
+        create_price.recurring = Some(CreatePriceRecurring {
+            interval: CreatePriceRecurringInterval::Month,
+            ..Default::default()
+        });
+        create_price.expand = &["product"];
+        Price::create(client, create_price).await?
+    };
+
+    Ok(price)
+}
+```
+
+This then allows us to build a more higher-level function that can either simply retrieve the Stripe product ID if it already exists in the database, or create a product with price then save the details in the database. For simplicity (and not wanting to deal with securing financial information in the database), we will only be storing the IDs and relevant information, such as what product tier a user is.
+
+```rust
+use sea_orm::DatabaseConnection;
+
+async fn retrieve_product(
+    client: &Client,
+    user_tier: &UserTier,
+    db: &DatabaseConnection,
+) -> Result<Price, ApiError> {
+    use crate::models::_entities::subscription_tiers;
+
+    let product = subscription_tiers::Entity::find()
+        .filter(subscription_tiers::Column::Tier.contains(user_tier.to_string()))
+        .one(db)
+        .await?;
+
+    let price = match product {
+        Some(product) => {
+            Price::retrieve(
+                client,
+                &PriceId::from_str(&product.stripe_price_id.to_string()).unwrap(),
+                &["product"],
+            )
+            .await?
+        }
+        None => {
+            let product = create_product_item(client, &user_tier).await?;
+            let price = create_product_price(client, &user_tier, &product).await?;
+
+            let tier_model = subscription_tiers::ActiveModel {
+                tier: ActiveValue::Set(user_tier.to_string()),
+                stripe_item_id: ActiveValue::Set(product.id.to_string()),
+                stripe_price_id: ActiveValue::Set(price.id.to_string()),
+                ..Default::default()
+            };
+
+            subscription_tiers::Entity::insert(tier_model)
+                .exec(db)
+                .await?;
+
+            price
+        }
+    };
+
+    Ok(price)
+}
+```
+
+Later on, when we run the web service, the API should automatically be able to know if it is required to remake the Stripe product or not. 
+
+Let’s write a function for creating a subscription. To get started, we will define what the JSON input should look like when the API receives a request:
+
+```rust
+#[derive(Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct UserSubscription {
+    name: String,
+    email: String,
+    card_num: String,
+    exp_year: i32,
+    exp_month: i32,
+    cvc: String,
+    user_tier: UserTier,
+}
+```
+
+Note that when sending the request, the variables must be in camel case and not snake case. 
+
+To make things a little bit easier for ourselves later, we will add an `impl` for `UserSubscription` which will allow us to automatically turn it into some structs that we’ll be using later on to create the customer and `CardDetailsParams`. 
+
+```rust
+impl UserSubscription {
+    fn as_create_customer(&self) -> CreateCustomer {
+        CreateCustomer {
+            name: Some(&self.name),
+            email: Some(&self.email),
+            description: Some(
+                "A paying user.",
+            ),
+            metadata: Some(std::collections::HashMap::from([(
+                String::from("async-stripe"),
+                String::from("true"),
+            )])),
+
+            ..Default::default()
+        }
+    }
+
+    fn as_card_details_params(&self) -> CardDetailsParams {
+        CardDetailsParams {
+            number: self.card_num.to_string(),
+            exp_year: self.exp_year,
+            exp_month: self.exp_month,
+            cvc: Some(self.cvc.clone()),
+            ..Default::default()
+        }
+    }
+}
+```
+
+### Creating subscriptions
+
+Next, we’ll want to get started on writing an endpoint for creating user subscriptions! We’ll create a `stripe::Client` here from the API key that we stored earlier.
+
+```rust
+use crate::models::_entities::user_subscriptions;
+use crate::models::_entities::users;
+use loco_rs::controller::middleware::auth::JWTWithUser;
+
+pub async fn create_subscription(
+    State(ctx): State<AppContext>,
+    auth: middleware::auth::JWTWithUser<users::Model>,
+    Json(json): Json<UserSubscription>,
+) -> Result<StatusCode, ApiError> {
+    let secret_key = std::env::var("STRIPE_API_KEY").expect("Missing STRIPE_API_KEY in env");
+    let client = Client::new(secret_key);
+    
+    // .. rest of your code
+}
+```
+
+Here, note that we specifically use the `JWTWithUser` middleware to extract a Bearer JWT from the Authorization header and return a user model. 
+
+Next, we want to create a customer and add it to our Stripe account. We will also create the payment method and attach it to the customer. Note here that while we’re using card payments as it’s a very common form of payment, Stripe also has quite a few other types of payments you can try.
+
+```rust
+use stripe::{Customer, PaymentMethod, PaymentMethodTypeFilter, 
+CreatePaymentMethodCardUnion, AttachPaymentMethod};
+
+let customer = Customer::create(&client, json.as_create_customer()).await?;
+
+let payment_method = {
+    let pm = PaymentMethod::create(&client, CreatePaymentMethod {
+        type_: Some(PaymentMethodTypeFilter::Card),
+        card: Some(CreatePaymentMethodCardUnion::CardDetailsParams(json.as_card_details_params())),
+        ..Default::default()
+    }).await?;
+
+    PaymentMethod::attach(&client, &pm.id, AttachPaymentMethod {
+        customer: customer.id.clone(),
+    }).await?;
+
+    pm
+};
+```
+
+Next, we’ll want to add the part that creates the subscription. This part is relatively simple as there’s only one item in our subscription list we want - which is the base price for our SaaS subscription (although if you want to extend it, there are options for adding more too!):
+
+```rust
+use stripe::{CreateSubscription, CreateSubscriptionItems, Subscription,
+
+let mut params = CreateSubscription::new(customer.id.clone());
+params.items = Some(
+    vec![CreateSubscriptionItems {
+        price: Some(price.id.to_string()),
+        ..Default::default()
+    }]
+);
+
+params.default_payment_method = Some(&payment_method.id);
+params.expand = &["items", "items.data.price.product", "schedule"];
+
+let subscription = Subscription::create(&client, params).await?;
+
+let subscription_activemodel = user_subscriptions::ActiveModel {
+    user_id: ActiveValue::Set(auth.user.id),
+    stripe_customer_id: ActiveValue::Set(customer.id.to_string()),
+    stripe_subscription_id: ActiveValue::Set(subscription.id.to_string()),
+    user_tier: ActiveValue::Set(json.user_tier),
+    ..Default::default()
+};
+
+user_subscriptions::Entity::insert(subscription_activemodel).exec(&ctx.db).await?;
+
+Ok(StatusCode::OK);
+```
+
+If you get stuck on errors while writing this function, you can find the function in the repo [here.](https://github.com/joshua-mo-143/shuttle-stripe-ex/blob/main/src/controllers/stripe.rs#L34)
+
+### Cancelling Stripe Subscriptions
+
+Okay, now let’s say you want your users to be able to use self-service to cancel the SaaS subscription. This primarily involves canceling the subscription and then making sure to update the database. In this case, we are choosing to outright delete the record from the database on successful cancellation.
+
+Firstly, we’ll create the Stripe client again by grabbing our API key:
+
+```rust
+pub async fn cancel_subscription(
+    State(ctx): State<AppContext>,
+    auth: middleware::auth::JWTWithUser<UsersModel>,
+) -> Result<StatusCode, ApiError> {
+    let user = users::Model::find_by_pid(&ctx.db, &auth.claims.pid).await?;
+
+    let secret_key = std::env::var("STRIPE_API_KEY").expect("Missing STRIPE_API_KEY in env");
+    let client = Client::new(secret_key);
+
+    // .. rest of your code
+}
+```
+
+Next, we’ll find our user subscription from the `user_subscriptions` table based on the user ID foreign key. We will then use the Stripe subscription ID to cancel the subscription.
+
+```rust
+let subscription = user_subscriptions::Entity
+    ::find()
+    .filter(user_subscriptions::Column::UserId.eq(user.id))
+    .one(&ctx.db).await?
+    .unwrap();
+
+let _ = Subscription::cancel(
+    &client,
+    &SubscriptionId::from_str(&subscription.stripe_subscription_id).unwrap(),
+    CancelSubscription {
+        cancellation_details: None,
+        invoice_now: Some(true),
+        prorate: Some(true),
+    }
+).await?;
+```
+
+Once the subscription has been successfully canceled and there’s nothing else we need to do with Stripe, we can go back and update our database to delete the record:
+
+```rust
+let subscription_to_delete = user_subscriptions::Entity
+    ::find()
+    .filter(user_subscriptions::Column::UserId.eq(user.id))
+    .one(&ctx.db).await?
+    .unwrap();
+
+subscription_to_delete.delete(&ctx.db).await?;
+
+Ok(StatusCode::OK);
+```
+
+Note that there are quite a few different ways to handle this. You may find that you want to explicitly mark a customer’s subscription as “expired” rather than outright deleting it from the database if you want users to be able to check their subscription history and other such details.
+
+### Upgrading/Downgrading Subscription Tiers
+
+Finally, we will add the ability to upgrade and downgrade subscription tiers. In Stripe terms, we’re grabbing information about a user’s subscription and updating the price ID of an existing item on the subscription.
+
+As before, we’ll start with creating the `stripe::Client`:
+
+```rust
+pub async fn update_subscription_tier(
+    State(ctx): State<AppContext>,
+    auth: middleware::auth::ApiToken<UsersModel>,
+    Json(new_user_tier): Json<UpdateUserTier>,
+) -> Result<StatusCode, ApiError> {
+    use crate::models::_entities::subscription_tiers;
+    use crate::models::_entities::user_subscriptions;
+
+    let secret_key = std::env::var("STRIPE_API_KEY").expect("Missing STRIPE_API_KEY in env");
+    let client = Client::new(secret_key);
+    // .. rest of your code
+}
+```
+
+After that, we will find the `user_subscription` based on the user ID. We will then retrieve the subscription data from Stripe and get the first item on the subscription list. Note that while we are using a vector index which can technically panic, there should always be at least one item so it is safe to use index 0. We will also return an error if the user’s current tier is the same as the requested tier.
+
+```rust
+let user_subscription = user_subscriptions::Entity
+    ::find()
+    .filter(user_subscriptions::Column::UserId.eq(auth.user.id))
+    .one(&ctx.db).await?
+    .unwrap();
+
+let subscription_item = Subscription::retrieve(
+    &client,
+    &SubscriptionId::from_str(&user_subscription.stripe_subscription_id).unwrap(),
+    &["items"]
+).await?.items;
+
+let subscription_item = &subscription_item.data[0];
+
+if new_user_tier.user_tier == user_subscription.user_tier {
+    return Err(ApiError::UserTierAlreadyExists);
+}
+```
+
+Once done, we can then find the subscription tier data from our database according to the requested tier change and update the subscription using the new tier’s Stripe price object ID. 
+
+```rust
+let new_subscription = subscription_tiers::Entity
+    ::find()
+    .filter(subscription_tiers::Column::Tier.contains(new_user_tier.user_tier.to_string()))
+    .all(&ctx.db).await?;
+
+let new_sub_tier: String = new_subscription
+    .iter()
+    .find(|x| x.tier == new_user_tier.user_tier.to_string())
+    .map(|x| x.stripe_price_id.to_string())
+    .unwrap();
+
+let updated_subscription = Subscription::update(
+    &client,
+    &SubscriptionId::from_str(&user_subscription.stripe_subscription_id).unwrap(),
+    UpdateSubscription {
+        items: Some(
+            vec![UpdateSubscriptionItems {
+                id: Some(subscription_item.id.to_string()),
+                price: Some(new_sub_tier),
+                ..Default::default()
+            }]
+        ),
+        ..Default::default()
+    }
+).await?;
+```
+
+Before we finish this function up, we will need to update the user tier in the `user_subscriptions` table. 
+
+```rust
+use sea_orm::IntoActiveModel;
+
+let mut updated_user_subscription = user_subscription.into_active_model();
+updated_user_subscription.user_tier = ActiveValue::Set(new_user_tier.user_tier);
+
+let _ = updated_user_subscription.update(&ctx.db).await?;
+
+Ok(StatusCode::OK);
+```
+
+### Grabbing a user’s product tier
+
+Of course, for the frontend you’ll probably want a quick way to be able to grab the user’s product tier. You can do this like so:
+
+```rust
+pub async fn get_current_tier(
+    State(ctx): State<AppContext>,
+    auth: middleware::auth::JWTWithUser<UsersModel>,
+) -> Result<Json<UpdateUserTier>, ApiError> {
+    let user = users::Model::find_by_pid(&ctx.db, &auth.claims.pid).await?;
+
+    let subscription = user_subscriptions::Entity::find()
+        .filter(user_subscriptions::Column::UserId.eq(user.id))
+        .one(&ctx.db)
+        .await?
+        .unwrap();
+
+    Ok(Json(UpdateUserTier { user_tier: subscription.user_tier  }))
+
+}
+```
+
+### Hooking it all up
+
+Now that we’re done, we can add it back to our router file for the controller. We can add it back in, like so:
+
+```rust
+pub fn routes() -> Routes {
+    Routes::new()
+        .prefix("stripe")
+        .add("/get_current_tier", get(get_current_tier))
+        .add("/create", post(create_subscription))
+        .add("/update", post(update_subscription_tier))
+        .add("/cancel", delete(cancel_subscription))
+}
+```
+
+## Deployment
+
+To deploy, you just need to run `cargo shuttle deploy --allow-dirty` and let Shuttle make the magic happen! Once done, you’ll see information about your service.
+
+## Finishing up
+
+Loco is a really strong framework to get started with, and by implementing subscription payments we’ve managed to slot in the final piece of the puzzle for a potential SaaS in the making.
+
+Interested in reading more?
+
+- Try using Qdrant and OpenAI to add a RAG-based LLM to your SaaS [here.](https://www.shuttle.rs/blog/2024/02/28/rag-llm-rust)
+- Add tracing to your project for better logging [here.](https://www.shuttle.rs/blog/2024/01/09/getting-started-tracing-rust)
+- Try implementing Oauth2-based authentication [here.](https://www.shuttle.rs/blog/2023/08/30/using-oauth-with-axum)
