@@ -1,0 +1,168 @@
+---
+title: "Async Rust in a Nutshell"
+description: "Exploring how async Rust works, async primitives and using async in Rust traits"
+author: stefan
+tags: [rust, async, guide]
+thumb: async-rust-thumb.png
+cover: async-rust-thumb.png
+date: '2024-02-29T15:00:00'
+---
+Computers are just as fast as they can be. One way to speed up our programs is to do things in parallel, or concurrently. There is a fine distinction between those two terms. Parallel execution means that we execute two different tasks at the same time, on two different CPUs. Concurrent execution means that a single CPU makes progress on more than one task at the same time, by interleaving the execution of those tasks.
+
+The Rust standard library gives bindings and abstractions for the underlying operating system. This includes threads, a way to run code in parallel. The parallelism is managed by the operating system, you can have as many threads as CPU cores, but there can also be more, and the operating system decides when to execute what. This can be potentially very heavy and has lots of overhead.
+
+So we are stuck with two ways: Either run everything sequentially or use OS threads to execute in parallel, which can cause overhead. None of them might be the best solution for some domains, like web or networking applications.
+
+Async tries to fix those problems. Async is a way to write code sequentially, but execute it concurrently without you managing any threads or execution. The idea is to split up existing code into tasks then execute a portion of code, and have an async runtime pick the next task which needs to be executed. The runtime then decides when to execute what, and can do so in a very efficient way.
+
+It also takes advantage of the fact that most of the time, the CPU is waiting for something to happen, like a network request or a file to be read. Look at the following line of code.
+
+```rust
+let mut socket = net::TcpStream::connect((host, port)).unwrap();
+```
+
+All we do is establish a TCP connection. But this takes time. Not necessarily noticeable for you, but for computers, this means doing nothing, just waiting for the connection to be established. This is a time that we can use better.
+
+## Async Primitives
+
+Concurrent execution is nothing new in the world of programming. Also, async programming has been around for a while, and you might have seen similar things in JavaScript or C#. But in Rust, things might look similar at first but are different if we take a closer look.
+
+One big difference is that Rust does not have an async runtime. We need an async runtime that manages the correct execution of tasks, but the involved Rust teams argue that there is no "one size fits all" async runtime, and developers should have the power to choose the runtime that fits their needs. Conceptually, this is different to e.g. Go, which comes with only one concurrency model: goroutines. And developers are stuck with that.
+
+In Rust, we can decide which one we use. Still, Rust gives us a way to prep our tasks for the async executor. This is done by an abstraction using the `Future` trait. The `Future` trait is the core of async programming in Rust. It is a trait that represents a value that is not yet available but will be available at some point in the _future_. This is very similar to `Promise` in JavaScript.
+
+Everything that implements a `Future` can be executed in an async runtime. The `Future` trait is defined as follows:
+
+```rust
+pub trait Future {
+    type Output;
+
+    // Required method
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output>;
+}
+```
+
+It's pretty simple. It has one associated type `Output`, which, well, represents the future value. And it has one method called `poll`, which comes with a `Context` and returns a `Poll`.
+
+`Poll` is an enum with two states. Either `Pending`, which means that we wait for a value. Or `Ready`, meaning that the value is available. The `Ready` variant holds the output of type `Output`.
+
+```rust
+pub enum Poll<T> {
+    Ready(T),
+    Pending,
+}
+```
+
+`Context` currently only serves to provide access to a `Waker` object. The `Waker` is necessary to tell the runtime to poll this task again.
+
+Okay, okay, what's that? Polling, waking? Let's dig deeper.
+
+## Execution
+
+As said before, the `Future` trait is used to abstract tasks that can be executed in an async runtime. But how does this work?
+
+To be fair, in detail, it depends on the async runtime in use, but a few basic concepts are the same for all of them.
+
+[Nick Cameron](https://www.ncameron.org/blog/what-is-an-async-runtime/) has written an overview on this topic, to sum it up:
+
+An asynchronous runtime has an executor. An executor typically has two key APIs: `spawn` and `block_on`. `block_on` is used to wait for a task to complete on the current thread. `spawn` is used to start a new task on the executor, but non-blocking. It returns immediately. The return value depends on the `Future`. Is there something asynchronous happening? Then polling the `Future` will return `Poll::Pending` immediately, but also sets up the rules for the executor to wake the task up when it's ready. This can be some IO event on the operating system, like a TCP connection that has been established. If there's nothing asynchronous happening, the `Future` will return `Poll::Ready` with the return value.
+
+Once an event has happened, the waker indicates to the executor to poll the same future again, there might already be a result.
+
+## Sugar: `async` and `await`
+
+Okay, so all you need to have is functions or structs that implement `Future`, and you're done with it. Right? Right? Well, it's not that easy, literally. Implementing the `Future` trait can be very daunting, and it's not very ergonomic.
+
+That's why Rust has introduced the `async` and `await` keywords. To make something async, it needs to return a `Future`. So if you want to have a method  `read_to_string`, and this is the synchronous version:
+
+```rust
+fn read_to_string(&mut self, buf: &mut String) -> Result<usize>;
+```
+
+The async version would look like this:
+
+```rust
+fn read_to_string(&mut self, buf: &mut String) -> impl Future<Output = Result<usize>>;
+```
+
+There is syntactic sugar for writing this. Instead of returning a `Future`, you can declare it as `async`.
+
+```rust
+async fn read_to_string(&mut self, buf: &mut String) -> Result<usize>;
+```
+
+You also don't need to poll by yourself. You can use the `await` keyword to wait for the result of a `Future`.
+
+```rust
+let result = fileread_to_string(&mut buf).await;
+```
+
+Under the hood, the Rust compiler creates the futures for you. It does so by splitting up your code into several tasks, with every `await` being a break-point separating the tasks. The compiler then creates a state machine for you, and the `Future` trait is implemented for you. With every `await`, the state machine is polled and potentially moves to the next state. The Tokio team shows wonderfully [how those Futures can be implemented or created by the compiler in this tutorial](https://tokio.rs/tokio/tutorial/async).
+
+Speaking of Tokio. Tokio is one of the most popular runtimes out there and has been designed for asynchronous execution of network applications. It has also been the playground for the early days of async and is stable, used in production, and most likely also the base of any web framework that you're using. It not only comes with the necessary abstractions for OS events, but a feature-rich runtime with different modes, and async representations of standard library IO and networking features. If you want to start out with Async in Rust, Tokio is a good choice.
+
+## Async methods in Traits
+
+All that jazz leads up to one of the most wanted, yet most awaited features in async Rust: Defining async methods in traits. This feature has landed [recently in Rust](https://blog.rust-lang.org/2023/12/21/async-fn-rpit-in-traits.html) and still has some limitations. The problem underneath is that we as developers want to write in the beautiful `async` / `await` syntax, yet the compiler needs to prepare `Future` trait implementations for an automatically generated state machine, and this can get really complex.
+
+Let's look at an example that wants to define a writing interface for a chat application, called `ChatSink`. This is how I want to write it.
+
+```rust
+pub trait ChatSink {
+  type Item: Clone;
+  async fn send_msg(&mut self, msg: Self::Item) -> Result<(), ChatCommErr>;
+}
+```
+
+Once we want to transfer this into something that uses `Future` implementations, things get a bit hairy. Instead of the `async` method, we need to define a `Future` return type, but we don't know which `Future` it's going to be! This will be defined by the implementor of the trait at some later stage. So all we can do is to say that whatever comes, it will implement the `Future` trait. This is done by using the `impl` keyword.
+
+```rust
+pub trait ChatSink {
+  type Item: Clone;
+  fn send_msg(&mut self, msg: Self::Item) -> impl Future<Output = Result<(), ChatCommErr>>;
+}
+```
+
+The interesting thing though is that `impl Trait` is also just syntactic sugar for an associated type. In reality, something like this would be generated.
+
+```rust
+pub trait ChatSink {
+  type Item: Clone;
+  type $: Future<Output = Result<(), ChatCommErr>>;
+  fn send_msg(&mut self, msg: Self::Item) -> Self::$;
+}
+```
+
+But that's not all, we left out a very important detail. Compared to other `impl Trait` resolutions, a `Future` needs to add a lifetime parameter. This is related to how futures are handled internally: They don't execute code, they only pass the opportunity to execute code to another runtime environment, the executor we mentioned before! Async functions create futures like this, and they need to keep all references to the input parameters. Based on the ownership rules of Rust, all those references need to live as long as the future itself. To make sure that this information is available, we need to add a lifetime parameter to the `Future` trait.
+
+Which leads to a feature called _generic associated types_. An equivalent version of the `ChatSink` trait would look like this:
+
+```rust
+pub trait ChatSink {
+  type Item: Clone;
+  type $<'m>: Future<Output = Result<(), ChatCommErr>> + 'm;
+  fn send_msg(&mut self, msg: Self::Item) -> Self::$<'_>;
+}
+```
+
+But until Rust 1.75, all of that was not possible. This has changed, but it still comes with a few limitations. `impl Trait` currently does not allow to add user-defined trait bounds, a feature that is necessary if you as a developer want to implement a trait from a library. Let alone if you want to decide that your async code only should work on a single thread or on a multi-threaded runtime, adding the `Send` and `Sync` marker traits is something you want to define on your own (more on those marker traits [here](https://doc.rust-lang.org/nomicon/send-and-sync.html)).
+
+## Why do I need to know all of that?
+
+To be fair, this is a lot of information and goes into the nitty gritty details of what async Rust is all about. But there's a reason to that. Like everything in Rust, things appear easy and straightforward at first, but once you dig deeper, you'll find that there's a lot of complexity and a lot of things to consider.
+
+The same happens with async programming in Rust. Defining async methods is something that you definitely have done. You are reading the Shuttle blog after all, and async powers web development in Rust. At first, they are easy, but suddenly you might end up seeing error messages that you can't get a hold of.
+
+You define a resource in your async function, wrap it in a `std::sync::Mutex` and get it's `MutexGuard` once you lock it. Suddenly you decide to make a call to async API and pass an `.await` point. The compiler will scream at you, because a `MutexGuard` does not implement the `Send` trait, and you can't pass it to another thread. But why do you need to pass it to another thread? All you did was calling an async function? And this is where the runtime stuff comes in. Your runtime configuration might work multi-threaded, and you never know which one of the worker threads executes the current task. Since you need to keep all resources ready for the automatic `Future` implementation, all those references and resources need to be thread-safe. There are more pitfalls, but this is something for another time.
+
+## Further Reading
+
+If you've gotten this far, you might be interested in the following resources:
+
+- [Nick Cameron writes a lot about Async Rust](https://www.ncameron.org/blog/), you might want to check it out.
+- So does [Without Boats](https://without.boats/), who gives a lot of insights into the design and development of async Rust.
+- The [Tokio Tutorial on Async in Depth](https://tokio.rs/tokio/tutorial/async) is nothing but excellent.
+- So is the Async chapter in ["Programming Rust"](https://www.oreilly.com/library/view/programming-rust-2nd/9781492052586/) by Jim Blandy, Jason Orendorff, and Leonora Tindall.
+- Also check out my talk at the first [Shuttle Labs](https://www.youtube.com/watch?v=PS-RywZP2_U).
+
+And of course, everything you read on this very blog.
