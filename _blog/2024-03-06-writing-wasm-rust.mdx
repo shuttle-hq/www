@@ -1,0 +1,280 @@
+---
+title: "Writing & Compiling WASM in Rust"
+description: "Exploring how to write and compile WASM from Rust"
+author: josh
+tags: [rust, wasm, guide]
+thumb: wasm-rust-thumb.png
+cover: wasm-rust-thumb.png
+date: '2024-02-29T15:30:00'
+---
+
+Hello world! In today’s post we’re going to talk about how you can write a WebAssembly module in Rust. WebAssembly is a portable compilation target for programming languages to be able to conveniently inter-op with JavaScript on the web. Rust being able to take advantage of this has made it extremely useful for many use cases, such as:
+
+- CPU intensive workloads (encryption)
+- GPU intensive workloads (image/video processing, image recognition)
+
+This article will focus on writing a WASM module for image processing that can be used on the backend, as well as exploring common ways to deploy WASM and its targets.
+
+## Getting started
+
+To get started, you’ll need Rust installed. If you don’t, you can install it [here](https://www.rust-lang.org/install).
+
+We’ll be focusing on trying out writing a WASM module in three different ways:
+
+- Using the `wasm-bindgen` CLI
+- Using `wasm-pack`
+- Using `napi-rs`
+
+We will initially use `wasm-bindgen-cli` to create our application, then look at using `wasm-pack`. The focus of this article will be creating a simple module for image processing. Byte array manipulation and data processing is an area where Rust can significantly speed up your application.
+
+Before we start, make sure you have the `wasm32-unknown-unknown` target installed. If you don’t, you can add it like so:
+
+```bash
+rustup target add wasm32-unknown-unknown
+```
+
+Note that for trying out our module, you’ll also additionally want `npm` (or any alternatives) installed.
+
+## Writing a WASM module
+
+### The basics
+
+To set up our project, we’ll get started with using `cargo init --lib wasm-example` to create a new library project named `wasm-example`. We will then install our dependencies with a small shell snippet:
+
+```bash
+cargo add wasm-bindgen@0.2.91
+cargo add js-sys@0.3.68
+cargo add image@0.24.9
+```
+
+We will also want to add the dynamic library flag to our `Cargo.toml` file. Normally, it lets Cargo know that we want to make a dynamic system library - but when using it with the WebAssembly target, it simply means “make a `*.wasm` file without a `start` function”. To do this, we can add this small snippet below:
+
+```toml
+[lib]
+crate-type = ["cdylib"]
+```
+
+### JavaScript types in Rust
+
+To be able to use JavaScript types in Rust, we need to use `extern C` in addition to using the `wasm-bindgen` macros. This allows us to import functions straight out of JavaScript and into Rust! 
+
+The Hello World application in WASM looks like this (from the book):
+
+```toml
+use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen]
+extern "C" {
+    fn alert(s: &str);
+}
+
+#[wasm_bindgen]
+pub fn greet(name: &str) {
+    alert(&format!("Hello, {}!", name));
+}
+```
+
+Note that the `alert` function in the extern C is taken directly from JavaScript, and is what allows us to call it in our Rust function. If we were to compile this and execute it in a JavaScript file, it would be the same as if you had called `alert()` from regular JavaScript.
+
+We can apply the same logic to be able to work with other types and functions - namely, buffers. `Vec<u8>` in JavaScript can either be represented in one of two ways:
+
+- The `Uint8Array` type (the direct JavaScript equivalent of `Vec<u8>`)
+- A `Buffer` type
+
+`Buffer` is a subclass of `Uint8Array`. This is because when Node.js first released, there was no Uint8Array type - which is what led to the creation of the `Buffer` type. Later down the line when Uint8Arrays were introduced with ES6, both were eventually merged as it made sense to do so. Many JavaScript libraries still use `Buffer`. By using `js-sys`, we can get interoperability between JavaScript and Rust - which we can see below by defining the `Buffer` type and providing a method with the `buffer()` method:
+
+```rust
+use js_sys::ArrayBuffer;
+// This defines the Node.js Buffer type
+#[wasm_bindgen]
+extern "C" {
+    pub type Buffer;
+
+    #[wasm_bindgen(method, getter)]
+    fn buffer(this: &Buffer) -> ArrayBuffer;
+
+    #[wasm_bindgen(method, getter, js_name = byteOffset)]
+    fn byte_offset(this: &Buffer) -> u32;
+
+    #[wasm_bindgen(method, getter)]
+    fn length(this: &Buffer) -> u32;
+}
+```
+
+Now when we write our WASM function, we can refer to the `Buffer` type directly!
+
+Let’s write our Rust function for converting our image file format. We’ll make it require our `Buffer` and then have it return `Vec<u8>` - when we compile it through `wasm-pack` or another compiler, it will automatically get converted to a `Uint8Array`.
+
+```rust
+use js_sys::{ArrayBuffer, Uint8Array};
+use wasm_bindgen::prelude::wasm_bindgen;
+use image::ImageFormat;
+use image::io::Reader;
+use std::io::Cursor;
+
+// .. extern C stuff goes here
+
+#[wasm_bindgen]
+pub fn convert_image(buffer: &Buffer) -> Vec<u8> {
+    // This converts from a Node.js Buffer into a Vec<u8>
+    let bytes: Vec<u8> = Uint8Array::new_with_byte_offset_and_length(
+        &buffer.buffer(),
+        buffer.byte_offset(),
+        buffer.length()
+    ).to_vec();
+
+    let img2 = Reader::new(Cursor::new(bytes)).with_guessed_format().unwrap().decode().unwrap();
+
+    let mut new_vec: Vec<u8> = Vec::new();
+    img2.write_to(&mut Cursor::new(&mut new_vec), ImageFormat::Jpeg).unwrap();
+
+    Ok(new_vec)
+}
+```
+
+### Building via wasm-bindgen-cli
+
+Here, we need to compile from Rust to WASM by building our package for the `wasm32-unknown-unknown` target, which we can do like so:
+
+```bash
+cargo build --target=wasm32-unknown-unknown
+```
+
+Next, we need to use `wasm-bindgen` to generate the JS glue code to make it all work. We’ll use the `nodejs` target which will generate a CommonJS module and put it in the `./pkg` folder which we can then implant anywhere we want.
+
+```bash
+wasm-bindgen --target nodejs --out-dir ./pkg \
+./target/wasm32-unknown-unknown/release/wasm_example.wasm
+```
+
+Now we can either publish our WASM code as a package or implant it anywhere we want to use it!
+
+### I don’t want to use CommonJS!
+
+If you don’t want to use CommonJS because you’re using ESM (EcmaScript modules, or ES6 modules), that’s cool! The CLI currently allows several targets:
+
+- `bundler` (produces code for usage with bundlers like Webpack)
+- `web` (directly loadable in a web browser)
+- `nodejs` (loadable via `require` as a CommonJS Node.js module)
+- `deno` (usable as a Deno module)
+- `no-modules` (like the `web` target but doesn’t use ES Modules).
+
+There are specific docs for usage with ES which you can check out [here.](https://rustwasm.github.io/wasm-bindgen/examples/hello-world.html?highlight=webpack#webpack-specific-files) The easiest way to do it in terms of what compiler to use is typically with Webpack as it’s the most compatible. There is also an additional guide you can use for compiling to ES6 modules without a bundler [here](https://rustwasm.github.io/wasm-bindgen/examples/without-a-bundler.html) - though it involves initializing the WASM module manually before running which adds some overhead.
+
+## Test driving our new module
+
+Now that we’ve written our code, let’s try it out! We will spin up a JavaScript backend server using Express.js. We will assume you’re running the following in the same folder as your Rust project (for convenience purposes). We’ll get started with the following shell snippet:
+
+```bash
+npm init -y
+npm i express express-fileupload
+```
+
+Next, we’ll create a `server.js` file in our root directory and insert the following code:
+
+```jsx
+const fileUpload = require('express-fileupload');
+const express = require('express');
+const { convert_image } = require('./pkg/wasmmeme.js');
+
+const app = express();
+const port = 3030;
+
+app.get('/', (req, res) => {
+  res.send(`
+    <h2>With <code>"express"</code> npm package</h2>
+    <form action="/api/upload" enctype="multipart/form-data" method="post">
+      <div>Text field title: <input type="text" name="title" /></div>
+      <div>File: <input type="file" name="file"/></div>
+      <input type="submit" value="Upload" />
+    </form>
+  `);
+});
+
+app.post('/api/upload', (req, res, next) => {
+        const image = convertImage(req.files.file.data)
+
+  res.setHeader('Content-disposition', 'attachment; filename="meme.jpeg"');
+  res.setHeader('Content-type', 'image/jpg');
+    res.send(image);
+  });
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
+```
+
+This snippet does the following:
+
+- We set up an Express server at port 3030
+- We have a route at `/` that will give us a HTML form when we visit it in the browser
+- We have an API route that will grab the data from our file upload, convert it to a new format, set the correct headers and return the new image.
+
+If we use `node server.js`, head to `[http://localhost:3030](http://localhost:3030)` in our browser then fill the form out and attach an image, we should get an image download response back!
+
+Note that depending on the settings you are using for your image file format conversion, your file size may increase post-conversion; this is because you may be using lossless conversion. If you want to use lossy conversion to decrease your file size, you want the `new_with_quality` method while instantiating the image encoder in your Rust code. 
+
+## Building our app with alternative CLIs
+
+While `wasm-bindgen-cli` is useful, it’s also the most low level CLI out of our options and you can run into spurious issues while using it such as `wasm-bindgen` version incompatibility issues. There are some additional quality of life changes that we could benefit from, such as automatic versioning and `wasm-opt` usage. Let’s take a quick look at some of these other options and see how they compare.
+
+### Wasm-pack
+
+`wasm-pack` is a tool that aims to be a one-stop-shop for compiling Rust to WASM. It includes a CLI that you can use by installing it [here](https://rustwasm.github.io/wasm-pack/installer/). In comparison to using `wasm-bindgen-cli`, it has a number of quality of life upgrades:
+
+- Comes with `wee_alloc`, a WebAssembly allocator with a (pre-compression) 1kB code footprint.
+- Comes with a panic hook that allows you to debug Rust panic messages in the browser
+
+To initialise our project, we can use `wasm-pack new wasm-example` which will do everything for us. Code-wise, our main function (and C/JS bindings) will remain the same as `wasm-pack` provides primarily tooling additions to make compilation easier and does not have any library code we can use.
+
+### napi-rs
+
+`napi-rs` is a framework for building pre-compiled Node.js addons in Rust. If you find using `wasm-bindgen` too complicated to use and just want to write Node.js stuff, this is a good alternative. To use it, Node v0.10.0 or later is required. You can install it with the following shell snippet (requires npm or its alternatives):
+
+```bash
+npm install -g @napi-rs/cli
+```
+
+Once done, you can then use `napi new wasm-example` to build your new NAPI project!
+
+`napi-rs` does come with some code changes, which you’ll be able to see below: we can finally get rid of the `extern C` block and instead use napi’s `bindgen_prelude` to include whatever we need.
+
+```rust
+use napi::bindgen_prelude::*;
+use image::io::Reader;
+use image::ImageFormat;
+use image::ImageOutputFormat;
+use std::io::Cursor
+
+#[macro_use]
+extern crate napi_derive;
+
+#[napi]
+pub fn convert_image(buffer: Buffer) -> Result<Buffer> {
+    let bytes: Vec<u8> = buffer.into();
+
+    let img2 = Reader::new(Cursor::new(bytes)).with_guessed_format().unwrap().decode().unwrap();
+
+    let mut new_vec: Vec<u8> = Vec::new();
+    img2.write_to(&mut Cursor::new(&mut new_vec), ImageFormat::Jpeg).unwrap();
+
+    Ok(new_vec.into())
+}
+```
+
+The advantages of this are clear:
+
+- We don’t need to manually import anything using `extern C`
+- We can easily use Node.js internals without trouble
+
+Of course for all its advantages, `napi-rs` is only compatible with Node.js. If you want to write some WASM code for the browser, you would need to default to `wasm-pack` or `wasm-bindgen`. You additionally also need to use the Node ecosystem to keep your CLI updated, which from a Rust-first standpoint is a bit of a strange decision. Needless to say, `napi-rs` is a pretty easy way to start writing Node.js with Rust.
+
+## Finishing up
+
+Thanks for reading! Rust has great inter-op with WASM, and there's no reason why we shouldn't be able to take advantage of this to help us when using other lanaugages.
+
+Read more:
+
+- We wrote a list of [our top 8 Rust tools to speed up your productivity](https://www.shuttle.rs/blog/2024/02/15/best-rust-tooling)
+- Here’s our guide to [getting started with Axum, Rust's most popular framework](https://www.shuttle.rs/blog/2023/12/06/using-axum-rust)
+- We wrote about our [top 8 tools to help you be more productive in Rust](https://www.shuttle.rs/blog/2024/02/15/best-rust-tooling)
