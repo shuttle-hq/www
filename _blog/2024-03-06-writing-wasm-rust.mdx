@@ -161,33 +161,6 @@ If you don’t want to use CommonJS because you’re using ESM (EcmaScript modul
 
 There are specific docs for usage with ES which you can check out [here.](https://rustwasm.github.io/wasm-bindgen/examples/hello-world.html?highlight=webpack#webpack-specific-files) The easiest way to do it in terms of what compiler to use is typically with Webpack as it’s the most compatible. There is also an additional guide you can use for compiling to ES6 modules without a bundler [here](https://rustwasm.github.io/wasm-bindgen/examples/without-a-bundler.html) - though it involves initializing the WASM module manually before running which adds some overhead.
 
-With our current example, you would want to do something like this:
-
-```html
-<html>
-  <head>
-    <meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>
-  </head>
-  <body>
-    <!-- Note the usage of `type=module` here as this is an ES6 module -->
-    <script type="module">
-      import init, { add } from './pkg/without_a_bundler.js';
-
-      async function run() {
-        await init();
-
-        
-        console.log(`1 + 2 = ${result}`);
-        if (result !== 3)
-          throw new Error("wasm addition doesn't work!");
-      }
-
-      run();
-    </script>
-  </body>
-</html>
-```
-
 ## Test driving our new module
 
 Now that we’ve written our code, let’s try it out! We will spin up a JavaScript backend server using Express.js. We will assume you’re running the following in the same folder as your Rust project (for convenience purposes). We’ll get started with the following shell snippet:
