@@ -1,0 +1,258 @@
+---
+title: "Building a Simple Web Server in Rust"
+description: "Building and deploying a simple web server in Rust with the Axum framework"
+author: josh
+tags: [rust, axum, web server, guide]
+thumb: simple-web-server-rust-thumb.png
+cover: simple-web-server-rust-thumb.png
+date: '2024-03-13T15:30:00'
+---
+Building a web server with Rust doesn’t need to be complex. With frameworks like Axum, you can write a web server without hassle. Leveraging Rust allows you to easily take on the job of web services written in other languages and more. In this post we’re going to talk about how you can build and deploy a simple web server using Axum.
+
+## What Rust framework should I use?
+
+While there’s a lot of options we can use, our personal choice is Axum for a few reasons:
+
+- Axum uses generics and traits. This allows you to leverage Rust language tooling in ways that other frameworks may not.
+- Axum has familiar syntax (using handler functions for routing).
+- It has an extremely high level of compatibility with `tower` crates. This allows you to go very low-level if required.
+
+Additionally, we also have an article about what framework you should use [here.](https://www.shuttle.rs/blog/2023/08/23/rust-web-framework-comparison)
+
+## Getting started
+
+To get started, you’ll want Rust installed on your system. Don’t have it installed? You can get it from [this install page.](https://www.rust-lang.org/tools/install)
+
+Next, you’ll want to use `cargo shuttle init` (requires `cargo-shuttle` installed). and then pick `Axum` for our framework. 
+
+## Hello world!
+
+When creating a project with `cargo init`, you will need to manually create (or copy!) the initial boilerplate. This may look something like this:
+
+```rust
+use axum::{Router, routing::get};
+use std::net::SocketAddr;
+use tokio::net::TcpListener;
+
+async fn hello_world() -> &'static str {
+    "Hello world!"
+}
+
+#[tokio::main]
+async fn main() {
+    let router = Router::new().route("/", get(hello_world));
+
+    let addr = SocketAddr::from(([127,0,0,1], 8000));
+    let tcp = TcpListener::bind(&addr).await.unwrap();
+
+    axum::serve(tcp, router).await.unwrap();
+}
+```
+
+As you can see from the above, we do a few things:
+
+- We set up a router with given routes and the functions that need to be called.
+- We define an address for our web server to receive requests at, bind it to a TCP listener.
+- The TCP listener then responds to requests and responds accordingly.
+
+If you used `cargo run` to load this program up then go to `[localhost:8000](http://localhost:8000)` in the browser, it would return “Hello world!” as a raw text response.
+
+When initialising a project with Shuttle, all of this gets set up for you. The basic project comes with a native integration so that you don’t need to set up the socket binding manually. The integration code is quite short and revolves around the usage of the `shuttle_runtime::Service` trait. If you have a non-standard service you want to run, you can run the service in a struct that implements the `Service` trait and you’ll be ready to go!
+
+See below for an example of how a Shuttle “Hello World” project looks like: 
+
+```rust
+use axum::{Router, routing::get};
+
+async fn hello_world() -> &'static str {
+    "Hello world!"
+}
+
+#[shuttle_runtime::main]
+async fn main() -> shuttle_axum::ShuttleAxum {
+    let router = Router::new().route("/", get(hello_world));
+
+    Ok(router.into())
+}
+```
+
+## Routing
+
+HTTP responses from routing within Rust frameworks can be done by anything that implements a trait that represents a HTTP response. In Axum, this would be the `IntoResponse` trait (or `IntoResponseParts` for headers and other non-response body parts). Web servers can only return things that are valid HTTP responses. Implementing `IntoResponse` (and `IntoResponseParts` respectively) ensures this!
+
+It is possible to use `impl IntoResponse` as the return type for a function (for convenience). However, we would need to make sure all of the responses are of the same type. This can lead to confusion later down the line, particularly if you’re working in a team.
+
+For JSON responses, Axum provides the handy `Json<T>` struct we can use as a response type by wrapping a type with it. For example, this snippet below shows how you can return some raw JSON:
+
+```rust
+use serde_json::{json, Value};
+use axum::Json;
+
+async fn return_some_json() -> Json<Value> {
+    let json = json!({"hello":"world"})
+
+    Json(json)
+}
+```
+
+However, a more likely situation is that you’ll want to return data that follows a schema. We can use the `Deserialize` and `Serialize` traits from the `serde` crate to do this.  We can easily apply these traits by adding the `derive` feature and then adding it as a derive macro to a struct:
+
+```rust
+use serde::{Deserialize, Serialize};
+
+#[derive(Deserialize, Serialize)]
+struct MyStruct {
+    my_field: String
+}
+```
+
+Now we can wrap it in `axum::Json` and return the struct in our HTTP response.
+
+```rust
+async fn return_a_struct_as_json() -> Json<MyStruct> {
+     let my_struct = MyStruct { my_field: "Hello world!".to_string() };
+     
+     Json(my_struct)
+}
+```
+
+## Extractors
+
+Extractors are handler function arguments. They extract parts of the HTTP request and turn it into simple variables that we can use with our application. We can use extractors for a lot of things:
+
+- Accessing shared mutable state (by adding state to our application then accessing it in the function)
+- Extracting a typed header for authorization purposes
+- Consuming the request body to extract a JSON or Form body, depending on what you want.
+- If there’s nothing readily available for our use case, we can just implement it ourselves!
+
+Here is an example of how you can use extractors. Note here that we use de-structuring to automatically get the inner variable in `Json<MyStruct>` as it looks cleaner.
+
+```rust
+
+async fn function_with_extractors(
+    Json(json): Json<MyStruct>,
+) -> impl IntoResponse {
+    format!("The contents of my_field is: {}", json.my_field)
+}
+```
+
+## Databases
+
+Using databases generally isn’t much different in Rust than any other language. The main difference is Rust web frameworks generally use shared mutable state to pass around data. This means that you’ll want to first initialise your database connection (pool) and pass it around using state. In Axum, state is required to implement `Clone`. If your type cannot implement `Clone` because one or more types don’t implement Clone, you can wrap the state struct in a `std::sync::Arc` which does implement `Clone`.
+
+Here’s an example of how you can do exactly that, using SQLx with Postgres as example. We initialise the `PgPool`, initialise our state struct and attach it to the router. 
+
+```rust
+use sqlx::PgPool;
+use axum::{extract::State, Router, routing::get, http::StatusCode};
+
+#[derive(Clone)]
+struct MyState {
+    db: PgPool
+}
+
+#[tokio::main]
+async fn main() {
+    let db: PgPool = PgPool::connect("<your-db-connection-url-here>").await.unwrap();
+    let state = MyState { db };
+    let router = Router::new().route("/", get(hello_world)).with_state(state);
+
+    // the rest of your code...
+}
+```
+
+With Shuttle, we can provision a database by simply adding a database macro. This saves time both locally and in production! To get started, we’ll need to add the `shuttle_shared_db` dependency.
+
+```bash
+cargo add shuttle-shared-db -F postgres,sqlx
+```
+
+Then we simply add it to our main function and initialise the state struct again like before.
+
+```rust
+use sqlx::PgPool;
+use axum::{Router, routing::get};
+
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_shared_db::Postgres] db: PgPool,
+) -> shuttle_axum::ShuttleAxum {
+    let state = MyState { db };
+    let router = Router::new().route("/", get(hello_world)).with_state(state);
+
+    Ok(router.into())
+}
+```
+
+To use our state struct, we can use the `axum::extract::State` extractor:
+
+```rust
+use axum::{extract::State, http::StatusCode};
+
+async fn hello_world(
+    State(state): State<MyState>
+) -> StatusCode {
+    sqlx::query("SELECT 'Hello world!")
+         .execute(&state.db)
+         .await
+         .unwrap();
+
+    StatusCode::OK
+}
+```
+
+## Static files
+
+To get started with static files on Axum, we’ll create a folder in the root of our project called `static`. We’ll then define it in a file named `Shuttle.toml` in the project root:
+
+```toml
+assets = ["static/*"]
+```
+
+Using the wildcard tag allows us to serve any file contained within the folder by using the file path. 
+
+We can write a HTML file in the static folder called `index.html`:
+
+```html
+<h1>Hello world</h1>
+```
+
+To serve this static folder on Axum, we’ll need to import some things from `tower-http`. We will run the following shell snippet:
+
+```bash
+cargo add tower-http -F fs
+```
+
+Then we can add it like below:
+
+```rust
+use tower_http::services::{ServeDir};
+
+let router = Router::new()
+    .route_service("/", ServeDir::new("static"));
+```
+
+If you are using a SPA framework like React or Vue for your static files, you will want to additionally set up a `.not_found_service()` to be able to serve `index.html`:
+
+```rust
+let router = Router::new()
+    .route_service("/", ServeDir::new("static")
+        .not_found_service(ServeFile::new("static/index.html") 
+     )
+);
+```
+
+## Deployment
+
+To deploy Rust to Shuttle, you can use `cargo shuttle deploy` and watch the magic happen! Don’t forget to add the `--allow-dirty` flag if on a Git branch with uncommitted changes. Besides web server development, Shuttle is a lifesaver when it comes to easily deploying and making your web service public.
+
+Interested? You can find our docs [here.](https://docs.shuttle.rs/introduction/welcome)
+
+## Finishing up
+
+Web development doesn’t have to be complicated. With Rust, we can achieve our goal of building a simple web server quickly and easily.
+
+Read more:
+
+- Get more in-depth with Axum [here.](https://www.shuttle.rs/blog/2023/12/06/using-axum-rust)
+- Learn more about tracing libraries and improve application logging [here.](https://www.shuttle.rs/blog/2024/01/09/getting-started-tracing-rust)
