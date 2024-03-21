@@ -9,7 +9,6 @@ import { useRouter } from 'next/router'
 import '@splidejs/react-splide/css'
 import { Page } from 'components/templates'
 import { StarOnGithub } from 'components/sections'
-import { Analytics } from '@vercel/analytics/react'
 import posthog from 'posthog-js'
 import { PostHogProvider } from 'posthog-js/react'
 
@@ -77,7 +76,6 @@ export default function App({ Component, pageProps }: AppProps) {
 				>
 					We use cookies to enhance the user experience and measure engagement.
 				</CookieConsent>
-				<Analytics />
 			</div>
 		</>
 	)
