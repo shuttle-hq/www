@@ -171,38 +171,36 @@ use pretty_assertions::assert_eq;
 
 Assertion fails will now look something like this:
 
-![Untitled](Everything%20you%20need%20to%20know%20about%20testing%20in%20Rust%207fc59b69f24742daa6ae08b43a029794/Untitled.png)
+![Pretty assertions diff](/images/blog/pretty-assertions-testing-rust.png)
 
 All in all, a simple crate that does one thing to make your life much easier. Particularly if you need to parse large objects or strings!
 
-### tempdir
+### tempfile
 
-While `[tempdir](https://docs.rs/tempdir/latest/tempdir/)` is not strictly a testing dependency library, it does make testing much easier! It allows setup and teardown of temporary file directories via `tempdir::TempDir`. You can then extract the `PathBuf` and use it wherever you want (for example, in functions that
+While [tempfile](https://docs.rs/tempfile/latest/tempfile/) is not strictly a testing dependency library, it does make testing much easier! It allows setup and teardown of temporary file directories and files via `tempfile::TempDir` and `tempfile::tempfile()` respectively. You can then extract the `PathBuf` and use it wherever you want (for example, in functions that
 
 See below for a small example taken from the docs:
 
 ```rust
-
+use tempfile::tempdir;
 use std::fs::File;
 use std::io::{self, Write};
-use tempdir::TempDir;
 
-fn run() -> Result<(), io::Error> {
-    // Create a directory inside of `std::env::temp_dir()`, named with
-    // the prefix "example".
-    let tmp_dir = TempDir::new("example")?;
-    let file_path = tmp_dir.path().join("my-temporary-note.txt");
-    let mut tmp_file = File::create(file_path)?;
-    writeln!(tmp_file, "Brian was here. Briefly.")?;
+fn run() {
+    // Create a directory inside of `std::env::temp_dir()`.
+    let dir = tempdir()?;
+
+    let file_path = dir.path().join("my-temporary-note.txt");
+    let mut file = File::create(file_path)?;
+    writeln!(file, "Brian was here. Briefly.")?;
 
     // By closing the `TempDir` explicitly, we can check that it has
     // been deleted successfully. If we don't close it explicitly,
-    // the directory will still be deleted when `tmp_dir` goes out
+    // the directory will still be deleted when `dir` goes out
     // of scope, but we won't know whether deleting the directory
     // succeeded.
-    drop(tmp_file);
-    tmp_dir.close()?;
-    Ok(())
+    drop(file);
+    dir.close()?;
 }
 ```
 
@@ -210,7 +208,7 @@ This is quite useful for situations that require filesystem handling (for exampl
 
 ### rstest
 
-`[rstest](https://github.com/la10736/rstest)` is a Rust library aimed at making testing easier by allowing fixtures to be passed in as function arguments. Here is a short snippet showing how you can easily use it to create fixtures, then use the names of the fixture functions in your `#[rstest]` tests:
+[rstest](https://github.com/la10736/rstest) is a Rust library aimed at making testing easier by allowing fixtures to be passed in as function arguments. Here is a short snippet showing how you can easily use it to create fixtures, then use the names of the fixture functions in your `#[rstest]` tests:
 
 ```rust
 #[fixture]
@@ -241,13 +239,11 @@ async fn my_async_test(#[case] a: u32, #[case] #[future] result: u32) {
 
 As you can see here, the second variable is an async function that requires a future. We can simply add the `#[future]` attribute to make it async-friendly.
 
-Compared to `test-context`
-
 ### proptest
 
 Property testing is as important a facet in Rust as any other. Simply put: it’s testing against the properties of an object or function until it crashes (or the input finishes). For example, consider an enum with a non-standard `to_string()` implementation (granted from the `std::fmt::Display` trait), the property testing library may try to use non-UTF8 strings. This can fail the test depending on whether or not you’ve accounted for non-UTF8 strings.
 
-`[proptest](https://docs.rs/proptest/latest/proptest/)` allows us to carry out property testing by matching random inputs against a test function. Check out the snippet below:
+[proptest](https://docs.rs/proptest/latest/proptest/) allows us to carry out property testing by matching random inputs against a test function. Check out the snippet below:
 
 ```rust
 use proptest::prelude::*;
@@ -287,7 +283,7 @@ The Rust base testing tools are sufficient for most basic use cases. However, th
 cargo add cargo-nextest
 ```
 
-For regular usage, you can get started by using `cargo nextest run` to run all of the tests in a given workspace. You can also use `cargo nextest list` to list
+For regular usage, you can get started by using `cargo nextest run` to run all of the tests in a given workspace. You can also use `cargo nextest list` to list all of the tests that you need to run!
 
 Detection for tests that are slow or leaky is supported by default by `cargo-nextest`. Retries are also supported via the `--retries` flag.
 
@@ -295,7 +291,7 @@ Interested in checking out all of the things you can do with `cargo-nextest`? Yo
 
 ### testcontainers
 
-`[testcontainers](https://github.com/testcontainers/testcontainers-rs)` is a tool that automatically spins up localised infratructure for you to test on. The project is completely open source and free to use, as well as having a Rust SDK. You can install with this snippet:
+[`testcontainers`](https://github.com/testcontainers/testcontainers-rs) is a tool that automatically spins up localised infrastructure for you to test on. The project is completely open source and free to use, as well as having a Rust SDK. You can install with this snippet:
 
 ```rust
 cargo add testcontainers
@@ -377,7 +373,7 @@ All in all, a pretty useful crate. You can also combine this with `proptest` for
 
 Interested in more? You can find a tutorial for using `cargo-fuzz` and `afl` (another fuzzing crate) [here.](https://rust-fuzz.github.io/book/introduction.html)
 
-## cargo-mutants
+### cargo-mutants
 
 Finally: mutation testing! Mutation testing allows you to test your code coverage by scanning your code, then changing some variables and expecting some tests to fail or succeed depending on what has been changed. With `[cargo-mutants](https://mutants.rs/)`, this can be done easily.
 
@@ -415,8 +411,28 @@ Interested? You can find their docs [here](https://mutants.rs/welcome.html) - th
 
 The main thing to take into account here is that mutation testing in Rust can be somewhat expensive. If you change one line of code, you need to scan and re-compile your program again which can be very expensive in terms of time. If you need to use `cargo-mutants` with CI, this can result in a very expensive CI bill.
 
-## Finishing up
+### insta-rs
+Snapshot testing (also called approval testing) is also another form of testing you can do to help build up tests for a legacy system. It generally works as follows:
+- You bring your code into a test
+- Throw a variety of inputs at the tested function
+- Capture the output
 
+This builds up a "net" of snapshots that you can use to check for any regressions.
+
+With `insta`, you can capture inputs and insta will automatically manage the snapshotting for you. A snapshot capture can be as simple as this (taken from the docs):
+```rust
+#[test]
+fn test_simple() {
+    insta::assert_yaml_snapshot!(calculate_value());
+}
+```
+
+When actually running your tests, you can use `cargo test` to run tests normally. However, if you have multiple snapshot assertions in one test, you may want to use `cargo insta test` instead which takes care of this for you.
+
+Once you've done the captures, you can use `cargo insta review` to review your snapshots! Snapshots can either be stored in `.snap` files, or inside of inline string literals in your Rust files.
+
+If you're interested in learning more, you can find the crate docs [here.](https://insta.rs/docs/)
+## Finishing up
 Thanks for reading! Hopefully you’ve gotten a better understanding of how to test within a Rust context. With so many types of testing being available to us, it’s never been easier to ensure our Rust applications are working as intended.
 
 Read more:
