@@ -373,7 +373,7 @@ All in all, a pretty useful crate. You can also combine this with `proptest` for
 
 Interested in more? You can find a tutorial for using `cargo-fuzz` and `afl` (another fuzzing crate) [here.](https://rust-fuzz.github.io/book/introduction.html)
 
-## cargo-mutants
+### cargo-mutants
 
 Finally: mutation testing! Mutation testing allows you to test your code coverage by scanning your code, then changing some variables and expecting some tests to fail or succeed depending on what has been changed. With `[cargo-mutants](https://mutants.rs/)`, this can be done easily.
 
@@ -411,8 +411,28 @@ Interested? You can find their docs [here](https://mutants.rs/welcome.html) - th
 
 The main thing to take into account here is that mutation testing in Rust can be somewhat expensive. If you change one line of code, you need to scan and re-compile your program again which can be very expensive in terms of time. If you need to use `cargo-mutants` with CI, this can result in a very expensive CI bill.
 
-## Finishing up
+### insta-rs
+Snapshot testing (also called approval testing) is also another form of testing you can do to help build up tests for a legacy system. It generally works as follows:
+- You bring your code into a test
+- Throw a variety of inputs at the tested function
+- Capture the output
 
+This builds up a "net" of snapshots that you can use to check for any regressions.
+
+With `insta`, you can capture inputs and insta will automatically manage the snapshotting for you. A snapshot capture can be as simple as this (taken from the docs):
+```rust
+#[test]
+fn test_simple() {
+    insta::assert_yaml_snapshot!(calculate_value());
+}
+```
+
+When actually running your tests, you can use `cargo test` to run tests normally. However, if you have multiple snapshot assertions in one test, you may want to use `cargo insta test` instead which takes care of this for you.
+
+Once you've done the captures, you can use `cargo insta review` to review your snapshots! Snapshots can either be stored in `.snap` files, or inside of inline string literals in your Rust files.
+
+If you're interested in learning more, you can find the crate docs [here.](https://insta.rs/docs/)
+## Finishing up
 Thanks for reading! Hopefully you’ve gotten a better understanding of how to test within a Rust context. With so many types of testing being available to us, it’s never been easier to ensure our Rust applications are working as intended.
 
 Read more:
