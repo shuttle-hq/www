@@ -110,6 +110,8 @@ module.exports = {
 					'linear-gradient(73deg, #FC540C -7.95%, rgba(255, 215, 111, 0.72) 45.94%, #38D4E9 116.73%)',
 				'gradient-2':
 					'linear-gradient(70deg, #FC540C 34.41%, rgba(255, 215, 111, 0.72) 93.53%, #38D4E9 118.82%)',
+				gradient: 'linear-gradient(214.86deg, #F42929 -28.11%, #FF8A3F 21.17%, #E5E938 105.7%)',
+				card: 'linear-gradient(214.86deg, rgba(244, 41, 41, 0.1) -28.11%, rgba(255, 138, 63, 0.1) 21.17%, rgba(229, 233, 56, 0.1) 105.7%)',
 			},
 		},
 	},

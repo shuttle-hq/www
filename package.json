@@ -10,6 +10,7 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
+		"@iarna/toml": "^2.2.5",
 		"@mapbox/rehype-prism": "^0.8.0",
 		"@splidejs/react-splide": "^0.7.12",
 		"@splidejs/splide-extension-auto-scroll": "^0.5.3",
