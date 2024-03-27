@@ -1,0 +1,293 @@
+---
+title: "Sending Logs to Datadog with Rust"
+description: "Sending logs to Datadog with Rust, without Datadog Agent"
+author: roberto
+tags: [rust, datadog, apm, guide]
+thumb: datadog-rust-thumb.png
+cover: datadog-rust-thumb.png
+date: '2024-03-27T15:30:00'
+---
+## Some words about observability
+
+As we all know, being able to '*see*' what's going on in our services can be critical in many ways. We can easily find bugs or identify undesired behaviors, and it's certainly an invaluable tool at our disposal.
+
+Observability, in software, refers to the **ability to understand the state of a system and its behavior** by collecting, analyzing, and presenting data about its various components and interactions. This enables engineers to diagnose and resolve issues and make informed decisions about system health and performance.
+
+Observability is **critical for ensuring the reliability, scalability, and performance** of modern systems, and is becoming increasingly important as software continues to play a larger role in our daily lives.
+
+Fortunately, in the Rust ecosystem, we have [Tokio Tracing](https://docs.rs/tracing/latest/tracing/) which is a powerful framework for **instrumenting** Rust programs to collect structured, event-based diagnostic information. It provides a convenient and flexible API for collecting and viewing traces of events in your application and you can easily **add context and structure to your traces**, making it easier to identify bottlenecks and debug issues.
+
+## Shuttle logs
+
+A while ago, I wrote a [post](https://robertohuertas.com/2023/01/09/shuttle-rust-backend-deployment/) about [Shuttle](https://www.shuttle.rs/), where I explained how ridiculously easy it is to deploy a Rust backend to the cloud by using their [CLI tool](https://docs.shuttle.rs/introduction/quick-start).
+
+[Shuttle](https://www.shuttle.rs/) is still in beta, and although its observability features are not really polished yet, they offer [support](https://docs.shuttle.rs/introduction/telemetry) for [Tokio Tracing](https://docs.rs/tracing/latest/tracing/) and a way to [view logs](https://docs.shuttle.rs/introduction/telemetry#viewing-logs) by using their CLI tool.
+
+By simply running `cargo shuttle logs --follow`, you will be able to see something like this:
+
+![shuttle logs](https://robertohuertas.com/assets/images/shuttle-datadog/shuttle-cli-logs.png)
+
+This is great for simple applications, but what if you want to send your logs to a **more powerful tool** like [Datadog](https://datadoghq.com)? Well, in this post, **I'll show you how to do it**.
+
+## Datadog
+
+[Datadog](https://datadoghq.com) is a **monitoring and observability platform** that provides a **single pane of glass** for your infrastructure and applications. It is a **cloud-based** service that allows you to **collect, aggregate and analyze** your data, and it is **extremely powerful**.
+
+> As a disclaimer, I must say that I'm currently working at [Datadog](https://datadoghq.com), so I'm a bit biased, but I'm also a huge fan of the product and I think it's a great tool for developers 😅.
+
+Most of the time, the easiest way to send anything to the [Datadog platform](https://www.datadoghq.com/observability-platform/) is by using the [Datadog Agent](https://docs.datadoghq.com/agent/), but in this case, as **we cannot install it** in any way, we will use a **small library I created for the occasion** called [dd-tracing-layer](https://crates.io/crates/dd-tracing-layer), which happens to be using the [Datadog HTTP API](https://docs.datadoghq.com/api/latest/logs/) under the hood to send logs to the  [Datadog platform](https://www.datadoghq.com/observability-platform/).
+
+## How to use tracing with Shuttle
+
+If we check the [Shuttle documentation](https://docs.shuttle.rs/configuration/logs), we can read this:
+
+> Shuttle will record anything your application writes to stdout, e.g. a tracing or log crate configured to write to stdout, or simply println!. By default, Shuttle will set up a global tracing subscriber behind the scenes.
+
+```rust
+// [...]
+use tracing::info;
+
+#[shuttle_runtime::main]
+async fn axum(#[shuttle_shared_db::Postgres] pool: PgPool) -> ShuttleAxum {
+    info!("Running database migration");
+    pool.execute(include_str!("../schema.sql"))
+        .await
+        .map_err(CustomError::new)?;
+
+    // [...]
+}
+```
+
+So, as you can see, it seems that the Shuttle macro is already instantiating and initializing a [tracing subscriber](https://docs.rs/tracing/latest/tracing/trait.Subscriber.html) for us.
+
+This is pretty **convenient for most of the simple cases**, but unfortunately, it's not enough for our purposes.
+
+Ideally, if we had access to the underlying infrastructure, we could probably install the [Datadog Agent](https://docs.datadoghq.com/agent/) and configure it to send our logs directly to [Datadog](https://datadoghq.com), or even use [AWS Lambda functions](https://docs.datadoghq.com/logs/guide/send-aws-services-logs-with-the-datadog-lambda-function/?tab=awsconsole) or [Azure Event Hub + Azure Functions](https://docs.datadoghq.com/integrations/azure/?tab=azurecliv20#log-collection) in case we were facing some specific cloud scenarios.
+
+> You can check the [Datadog docs for log collection and integrations](https://docs.datadoghq.com/logs/log_collection/) if you want to learn more.
+
+Those solutions are generally great because they allow us to remove the burden of sending our logs to [Datadog](https://datadoghq.com) from our application, thus becoming the **responsibility of the platform** itself.
+
+If we could do something like that with [Shuttle](https://www.shuttle.rs/), it would be great. But, as we just mentioned, in the case of [Shuttle](https://www.shuttle.rs/), we **don't have access to the underlying infrastructure**, so we need to find a way to send our logs to [Datadog](https://datadoghq.com) from our application.
+
+And that's what we are going to try to do in this post.
+
+## Getting access to the subscriber
+
+So, the basic idea is to add a new [tracing layer](https://docs.rs/tracing-subscriber/latest/tracing_subscriber/layer/) to the subscriber which will be responsible for sending our logs to [Datadog](https://datadoghq.com).
+
+But for that, we'll need to get **access to the subscriber instance prior to its initialization**, and it turns out that [Shuttle](https://www.shuttle.rs/) provides a way to do that just by disabling the default features on `shuttle-runtime` crate.
+
+```toml
+shuttle-runtime = { version = "*" default-features = false }
+```
+
+## Creating our project
+
+As a walkthrough, we are going to create a new [Shuttle](https://www.shuttle.rs/) project from scratch.
+
+The idea is to build a simple REST API using [Axum](https://docs.rs/axum/latest/axum/) and send our logs to [Datadog](https://datadoghq.com) using the [dd-tracing-layer](https://crates.io/crates/dd-tracing-layer) crate.
+
+Although I'm going to describe all the steps you need to take to make this work, you can see the **final state of the project** in this [GitHub repository](https://github.com/robertohuertasm/shuttle-datadog-logs).
+
+Feel free to use it as a reference.
+
+### Initializing the project
+
+First of all, we need to create a new [Shuttle](https://www.shuttle.rs/) project. You can do that by using the [Shuttle CLI](https://docs.shuttle.rs/getting-started/cli):
+
+```bash
+cargo shuttle init --template axum
+```
+
+Follow the instructions and you should have a new project ready to go. I called mine `shuttle-datadog-logs`, but use the name you want.
+
+### Adding some dependencies
+
+In our example, we are going to be using [Shuttle Secrets](https://docs.shuttle.rs/resources/shuttle-secrets), [Tokio Tracing](https://docs.rs/tracing/latest/tracing/) and [dd-tracing-layer](https://crates.io/crates/dd-tracing-layer).
+
+Make sure you have the following dependencies in your `Cargo.toml` file:
+
+```toml
+[dependencies]
+axum = "0.7.4"
+shuttle-axum = "0.42.0"
+shuttle-runtime = { version = "0.42.0", default-features = false }
+tokio = "1"
+# tracing
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json", "time"] }
+dd-tracing-layer = "0.1"
+```
+
+### Instrumenting a little bit the default project
+
+Now that we have our dependencies ready, we can **start instrumenting** our project a little bit.
+
+Note that we have added the `#[instrument]` macro to the `hello_world` function and added a `tracing::info!` and a `tracing::debug!` log to it. We have also added an info log to the `axum` function.
+
+```rust
+// [...]
+use tracing::instrument;
+
+#[instrument]
+async fn hello_world() -> &'static str {
+    tracing::info!("Saying hello");
+    tracing::debug!("Saying hello for debug level only");
+    "Hello, world!"
+}
+
+#[shuttle_runtime::main]
+async fn axum() -> shuttle_axum::ShuttleAxum {
+    let router = Router::new().route("/", get(hello_world));
+    tracing::info!("Starting axum service");
+    Ok(router.into())
+}
+```
+
+At this point, if you try to run the project locally by using the `shuttle run` command, you should see none of our logs.
+
+That's ok, as we haven't initialized a [tracing subscriber](https://docs.rs/tracing/latest/tracing/trait.Subscriber.html) yet.
+
+
+### Adding our tracing subscriber
+
+The first thing we're going to do is to add a [tracing subscriber](https://docs.rs/tracing/latest/tracing/trait.Subscriber.html) to our application.
+
+Then we will add several [layers](https://docs.rs/tracing-subscriber/latest/tracing_subscriber/layer/index.html) to it:
+
+- [EnvFilter layer](https://docs.rs/tracing-subscriber/latest/tracing_subscriber/filter/struct.EnvFilter.html) to set the tracing level according to a variable's value.
+- [Format layer](https://docs.rs/tracing-subscriber/latest/tracing_subscriber/fmt/format/index.html) to format the logs. We will be using JSON format.
+- [Datadog Tracing layer](https://docs.rs/dd-tracing-layer/) to send our logs to [Datadog](https://datadoghq.com).
+
+Apart from that, we're also going to add support for [Shuttle Secrets](https://docs.shuttle.rs/resources/shuttle-secrets).
+
+Let's do it! Make sure your `axum` function looks like this:
+
+```rust
+use axum::{routing::get, Router};
+use dd_tracing_layer::{DatadogOptions, Region};
+use shuttle_runtime::SecretStore;
+use tracing::instrument;
+use tracing_subscriber::prelude::*;
+
+// version of our app to be sent to Datadog
+const VERSION: &'static str = "version:0.1.0";
+
+// [...]
+
+#[shuttle_runtime::main]
+async fn axum(#[shuttle_runtime::Secrets] secret_store: SecretStore) -> shuttle_axum::ShuttleAxum {
+    // getting the Datadog Key from the secrets
+    let dd_api_key = secret_store
+        .get("DD_API_KEY")
+        .expect("DD_API_KEY not found");
+
+    // getting the Datadog tags from the secrets
+    let tags = secret_store
+        .get("DD_TAGS")
+        .map(|tags| format!("{},{}", tags, VERSION))
+        .unwrap_or(VERSION.to_string());
+
+    // getting the log level from the secrets and defaulting to info
+    let log_level = secret_store.get("LOG_LEVEL").unwrap_or("INFO".to_string());
+
+    // datadog tracing layer
+    let dd_layer = dd_tracing_layer::create(
+        DatadogOptions::new(
+            // first parameter is the name of the service
+            "shuttle-datadog-logs",
+            // this is the Datadog API Key
+            dd_api_key,
+        )
+        // this is the default, so it can be omitted
+        .with_region(Region::US1)
+        // adding some optional tags
+        .with_tags(tags),
+    );
+
+    // filter layer
+    let filter_layer =
+        tracing_subscriber::EnvFilter::try_new(log_level).expect("failed to set log level");
+
+    // format layer
+    let fmt_layer = tracing_subscriber::fmt::layer()
+        .with_ansi(true)
+        .with_timer(tracing_subscriber::fmt::time::UtcTime::rfc_3339())
+        .json()
+        .flatten_event(true)
+        .with_target(true)
+        .with_span_list(true);
+
+    // starting the tracing subscriber
+    tracing_subscriber::registry()
+        .with(filter_layer)
+        .with(fmt_layer)
+        .with(dd_layer)
+        .init();
+
+    // starting the server
+    let router = Router::new().route("/", get(hello_world));
+    tracing::info!("Starting axum service");
+    Ok(router.into())
+}
+```
+
+There are many things going on in this code, so take your time to go through it.
+
+### Secrets
+
+Before running our project, there's still a thing we have to deal with: **secrets**.
+
+As you can see in the code above, we are using the `#[shuttle_runtime::Secrets]` macro to get the [Datadog](https://datadoghq.com) API key, the tags and the log level.
+
+[Shuttle Secrets](https://docs.shuttle.rs/resources/shuttle-secrets) relies on having a `Secrets.toml` file in the root of our project containing all the secrets, and it also supports having a `Secrets.dev.toml` file for local development. You can learn more about this convention in the [Shuttle Secrets documentation](https://docs.shuttle.rs/resources/shuttle-secrets#local-secrets).
+
+So, let's create two files in the root of our project:
+
+`Secrets.dev.toml`
+
+```toml
+DD_API_KEY = "your-datadog-api-key"
+DD_TAGS = "env:dev,service:shuttle-datadog-logs"
+# setting info as the default log level, but debug for our project
+LOG_LEVEL = "INFO,shuttle_datadog_logs=DEBUG"
+```
+
+and `Secrets.toml`
+
+```toml
+DD_API_KEY = "your-datadog-api-key"
+DD_TAGS = "env:prod,service:shuttle-datadog-logs"
+LOG_LEVEL = "INFO"
+```
+
+> Remember to add these files to your `.gitignore` file!
+
+### Running the project
+
+Now, run `cargo shuttle run` and go to `http://localhost:8000` in your browser to see our "Hello, world!" message.
+
+Alternatively, you can also use `curl` to test the endpoint:
+
+```bash
+curl -i http://localhost:8000
+```
+
+You should be able to see the logs in your terminal now.
+
+But remember... this endpoint was instrumented! So, if everything went well, we should be able to see the logs in [Datadog](https://app.datadoghq.com/logs).
+
+Let's check it out! 👀
+
+![Datadog logs](https://robertohuertas.com/assets/images/shuttle-datadog/datadog-logs-local.png)
+
+It works! 🎉
+
+## Conclusion
+
+As you can see, it's pretty easy to send your logs to [Datadog](https://datadoghq.com) from your [Shuttle](https://www.shuttle.rs/) powered backend.
+
+Again, you can see the full code in [this GitHub repository](https://github.com/robertohuertasm/shuttle-datadog-logs).
+
+I hope you've enjoyed it! 😁
