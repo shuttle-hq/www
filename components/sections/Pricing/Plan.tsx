@@ -148,6 +148,29 @@ const Plan: FC<PlanProps> = ({
 					{cta}
 				</Link>
 			</button>
+
+			{name === 'Pro' && (
+				<button
+					className={
+						'z-[5] w-full rounded-[14px] font-gradual font-bold text-black transition-all duration-1000 hover:border-black hover:text-white'
+					}
+					style={{
+						background:
+							'linear-gradient(73deg, #FC540C -7.95%, rgba(255, 215, 111, 0.72) 45.94%, #38D4E9 116.73%)',
+					}}
+				>
+					<Link
+						href='https://shuttlerust.typeform.com/featureideas'
+						target='_blank'
+						className='inline-block h-full w-full py-3'
+						onClick={() => {
+							trackEvent(`pricing_tiers_suggest_feature`)
+						}}
+					>
+						Interested in Pro but missing a feature?
+					</Link>
+				</button>
+			)}
 		</div>
 	)
 }
