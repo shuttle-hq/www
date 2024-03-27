@@ -152,7 +152,7 @@ const Plan: FC<PlanProps> = ({
 			{name === 'Pro' && (
 				<button
 					className={
-						'z-[5] w-full rounded-[14px] font-gradual font-bold text-black transition-all duration-1000 hover:border-black hover:text-white'
+						'z-[5] mt-4 w-full rounded-[14px] font-gradual font-bold text-black transition-all duration-1000 hover:border-black hover:text-white lg:mt-0'
 					}
 					style={{
 						background:
