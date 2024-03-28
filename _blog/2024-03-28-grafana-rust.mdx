@@ -1,0 +1,172 @@
+---
+title: "Send logs to Grafana Loki with Rust"
+description: "Exploring how to send logs to a Grafana Loki instance using Rust, without Promtail"
+author: josh
+tags: [rust, grafana, guide]
+thumb: grafana-rust-thumb.png
+cover: grafana-rust-thumb.png
+date: '2024-03-28T15:30:00'
+---
+
+Hello world! We will look at how you can leverage Grafana Loki for log storage and analysis. Application monitoring tools are a crucial part of monitoring and observability. They allow you to examine exactly how your application works, what is going in/out, and what is going wrong. Using application monitoring tools saves time and money by being able to fix production issues faster and retaining users.
+
+At the end of this article, you’ll have a Rust web service deployed freely to Shuttle that logs traces to Grafana. Interested in checking out the final repository? You can find that [here.](https://github.com/joshua-mo-143/shuttle-grafana-example)
+
+## Why should I use Grafana Loki?
+
+Loki is a logging service for Grafana designed with scalability and cost-effectiveness in mind. Rather than indexing the contents of your logs, it only stores the metadata and labels. A set of labels for each log stream is also used. Every unique set of labels represents each new stream - so if you add or remove any labels from a stream for example, you create an entirely new stream. With Grafana, you can also additionally visualize all of your data quite easily using either pre-created dashboards or making your own.
+
+## Getting started
+
+### Pre-requisites
+
+To get the most out of this article, you need to either self-host Grafana services or sign up to Grafana Cloud. For this article we’ll mostly be referencing Grafana Cloud as this is the easiest way to use their services (without manual setup).
+
+To get started, you will want an API token that has the `write:logs` permissions. This can be done from Grafana Cloud user management. Make sure you save your Grafana user and API token variables, as you’ll need them in just a little bit.
+
+For initializing our service, we’ll use `cargo shuttle init --template axum`  (requires `cargo-shuttle` installed) to create a new Shuttle project with the Axum template. We will then add the following dependencies with this shell snippet:
+
+```bash
+cargo add url
+cargo add tracing-subscriber -F fmt,env-filter
+cargo add tracing-loki
+cargo add tracing
+cargo add base64
+cargo add shuttle-runtime --no-default-features
+```
+
+We’ll also additionally need to add the `#[shuttle_runtime::Secrets]` annotation macro to our main function. This allows us to automatically grab secrets from our Secrets.toml file when we use `cargo shuttle run` to run our Shuttle service. It should look like this:
+
+```rust
+[..]
+use shuttle_runtime::SecretStore;
+
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_runtime::Secrets] secrets: SecretStore
+) -> shuttle_axum::ShuttleAxum {
+    let router = Router::new().route("/", get(hello_world));
+
+    Ok(router.into())
+}
+```
+
+The Secrets.toml file will be located at the project folder root and takes a key-value format.
+
+```rust
+GRAFANA_USER = "<your-grafana-user-here>"
+GRAFANA_API_KEY = "<your-grafana-api-token-here>"
+```
+
+## Building
+
+To get started, we will be using the `tracing_loki` crate to build the base of our tracing subscriber. `tracing_loki` allows us to create a `tracing_subscriber` layer that collects and exports logs to a Grafana Loki instance. On creation of a Grafana Cloud account we are given a free data source by default for Loki, which `tracing_loki` is compatible with.
+
+The default Grafana data source uses the basic authentication scheme, which you can find more about [here.](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#basic_authentication_scheme)  Later on when we create the `tracing_loki` tracing layer, we will add this as a HTTP header.
+
+We’ll start by grabbing our secrets and making a Base64 string out of them:
+
+```rust
+fn init_grafana_subscriber(store: SecretStore) {
+    let grafana_user = store.get("GRAFANA_USER").unwrap();
+    let grafana_password = store.get("GRAFANA_API_KEY").unwrap();
+
+    let basic_auth = format!("{grafana_user}:{grafana_password}");
+    let encoded_basic_auth = BASE64_STANDARD.encode(basic_auth.as_bytes());
+
+    // .. rest of code
+}
+```
+
+Next, we’ll need to create the `tracing_loki` layer which sends the logs to a Grafana instance. A few things are going on in the below snippet:
+
+- We add a label (with a key and a value)
+- We add an extra field for the Process ID (PID). This also takes a key-value format, so if you wanted to add anything else, you would do it here.
+- We set the HTTP header using the `.http_header()` function, setting the `Authorization` header as required.
+
+```rust
+use url::Url;
+
+let url = Url::parse("https://logs-prod-012.grafana.net").expect("Failed to parse Grafana URL");
+
+let (layer, task) = tracing_loki
+    ::builder()
+    .label("application", "shuttle-grafana")
+    .unwrap()
+    .extra_field("pid", format!("{}", process::id()))
+    .unwrap()
+    .http_header("Authorization", format!("Basic {encoded_basic_auth}"))
+    .unwrap()
+    .build_url(url)
+    .unwrap();
+```
+
+Additionally, we will want to create an `EnvFilter`. Having the tracing subscriber set at the default `trace` logging level can be useful. However, due to parsing headers and other similar actions that all use `trace!` spans, there are quite a lot of them. This can lead you to go over the free tier limits unintentionally. Here, we will set the default directive so that we only get errors where the logging level is `DEBUG` or above (i.e. warning or an error).
+
+```rust
+use tracing_subscriber::filter{EnvFilter, LevelFilter};
+
+let filter = EnvFilter::builder()
+    .with_default_directive(LevelFilter::DEBUG.into())
+    .parse("").unwrap();
+```
+
+The last thing to do is to create a tracing subscriber with the layers that we’ve created, and then initialise it! You may have noticed earlier that the `tracing_loki::builder()` method also generates a task that deals with log aggregation. We will need to spawn a Tokio task to handle this.
+
+```rust
+// We need to register our layer with `tracing`.
+tracing_subscriber::registry()
+    .with(filter)
+    .with(tracing_subscriber::fmt::Layer::new())
+    .with(layer)
+    // One could add more layers here, for example logging to stdout:
+    // .with(tracing_subscriber::fmt::Layer::new())
+    .init();
+
+// The background task needs to be spawned so the logs actually get
+// delivered.
+tokio::spawn(task);
+```
+
+Now the function is done! We can add it to our `fn main` at the start of the function.
+
+```rust
+#[tracing::instrument]
+async fn hello_world() -> &'static str {
+    tracing::debug!("An event happened!");
+    "Hello, world!"
+}
+
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_runtime::Secrets] secrets: SecretStore
+) -> shuttle_axum::ShuttleAxum {
+    setup_tracing(&secrets);
+
+    let router = Router::new().route("/", get(hello_world));
+
+    Ok(router.into())
+}
+```
+
+When using `cargo shuttle run` now, your terminal will become populated with traces. If you visit `localhost:8000` in the browser, you should see a debug tracing event with the description `An event happened!` in your traces. Note that it may take Grafana 5-10 minutes to receive your traces.
+
+## Reading your logs
+
+To read your logs, you need to create a dashboard for your data source. Head over to your Grafana Cloud instance, find the Grafana Cloud data source and create a dashboard for it. Then once you’re on the dashboard, you can query your logs! A best practices guide for building Grafana dashboards can be found [here](https://grafana.com/docs/grafana/latest/dashboards/build-dashboards/best-practices/).
+
+The label we added to our logs should show up under the `Labels` column. It will contain the extra label we put in (the `application` label), as well as the logging level of the trace. The trace will also contain exactly what was in the trace message. If you need to add fields in the `#[tracing::instrument]` macro, you can do so and it will show up in Grafana. You can also find a guide for understanding labels [here.](https://grafana.com/docs/loki/latest/get-started/labels/)
+
+## Deploying
+
+To deploy, simply use `cargo shuttle deploy` and watch the magic happen!
+
+## Finishing up
+
+Thanks for reading! Application monitoring is just one step to ensuring our Rust web services are performing better than ever. By using instrumentation, we can reduce the need for manual debugging.
+
+Read more:
+
+- [Read our guide to the tracing libraries](https://www.shuttle.rs/blog/2024/01/09/getting-started-tracing-rust)
+- [Send logs to Datadog with Rust](https://www.shuttle.rs/blog/2024/03/27/datadog-rust)
+- [8 tools to help you be more productive with Rust](https://www.shuttle.rs/blog/2024/02/15/best-rust-tooling)
