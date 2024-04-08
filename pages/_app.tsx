@@ -12,6 +12,7 @@ import { StarOnGithub } from 'components/sections'
 import { Analytics } from '@vercel/analytics/react'
 import posthog from 'posthog-js'
 import { PostHogProvider } from 'posthog-js/react'
+import { GoogleTagManager } from '@next/third-parties/google'
 
 // Check that PostHog is client-side (used to handle Next.js SSR)
 if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_POSTHOG_KEY) {
@@ -63,6 +64,7 @@ export default function App({ Component, pageProps }: AppProps) {
 			<div className='min-h-screen bg-transparent text-black dark:text-body'>
 				<StarOnGithub />
 				<PostHogProvider client={posthog}>{getLayout(<Component {...pageProps} />)}</PostHogProvider>
+				<GoogleTagManager gtmId='GTM-5QF3M9CR' />
 				<CookieConsent
 					containerClasses='max-w-xl left-1/2 transform bottom-4 -translate-x-1/2 flex items-end flex-col bg-black/10 border border-white/10 backdrop-filter backdrop-blur-lg backdrop-saturate-150 rounded-2xl p-6'
 					contentClasses='text-base text-body !m-0 !flex-none tracking-tight self-start'
