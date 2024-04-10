@@ -1,0 +1,151 @@
+---
+title: "Working with OpenTelemetry using Rust"
+description: "Adding OpenTelemetry to a Rust application and using the OpenTelemetry collector"
+author: josh
+tags: [rust, opentelemetry, guide]
+thumb: opentelemetry-rust-thumb.png
+cover: opentelemetry-rust-thumb.png
+date: '2024-04-10T15:30:00'
+---
+## What is OpenTelemetry?
+
+From OpenTelemetry.io:
+
+> High-quality, ubiquitous, and portable telemetry to enable effective observability
+
+OpenTelemetry is a framework for effective observability based on creating and managing metrics, traces and logs. It is open source and tool-agnostic, meaning that you can use it with a huge amount of tools. When using OpenTelemetry, you also completely own your data and you are only required to conform to one set of APIs.
+
+OpenTelemetry itself is focused on the creation and management of aforementioned metrics, traces and logs. This means you will typically need to provide an appropriate observability  backend yourself. In contrast to an observability framework, an observability backend can be more accurately described as a platform for storing and analysing metrics, traces and logs. The most prominent examples would be open-source observability backends like Jaeger and Prometheus, as well as paid services like Datadog and Grafana.
+
+## A quick introduction to observability
+
+Observability is the ability to understand the events of a program through its outputs. A simple example of this is logging: something happens, then we log to `stdout` or a log file what happened. This is observability at its most basic form (if you can call it that!).
+
+However, we can do much better. By “instrumenting” our application (augmenting it to emit metrics, traces and logs) and sending traces to a platform that we can then use to store and analyse them, we can provide a high level of observability into our application.
+
+Why is this important?
+
+- In production, observability saves time and money on solving bugs because events can be easily traced back
+- It allows us to validate that a program is working as intended
+
+## How OpenTelemetry works
+
+OpenTelemetry relies upon the idea of combining logs, spans and traces all together to create a cohesive system. Let’s explore these concepts as they are vital to being able to understand how OpenTelemetry works.
+
+### Logs
+
+Logs are typically timestamped messages emitted by services or other components. A quick example of this may be logging something to stdout for debugging purposes with the `println!()` macro. A more sophisticated example of this might be using the `log` crate with an initialised logger to log messages to stdout.
+
+While logs can provide important context, by themselves they also typically miss metadata that can be extremely helpful for observability purposes.
+
+### Spans
+
+Spans can be described as a period of time over which operations or actions are recorded in a given context. If you’ve used the `tracing` libraries at all, you may be familiar with this concept. Spans typically have a given name, time-related data, structured logging messages as well as other related metadata (”attributes”). Spans typically wrap around logs so that the logs can be given context.
+
+You can check out more about how spans work in relation to OpenTelemetry [here.](https://opentelemetry.io/docs/concepts/signals/traces/#spans)
+
+### Traces
+
+Traces typically record the path of a request, and can span across multiple services with propagation. A huge advantage of traces is that they can be used with microservice or serverless architecture. This is a big deal as there is a lot to keep track of within these kinds of architectures! Tracing is also additionally essential in distributed systems, where problems can be locally difficult to reproduce.
+
+Traces can consist of one or more spans, under which more child spans are typically created to illustrate different units of work being completed within a trace.
+
+### OpenTelemetry collector
+
+To be able to aid in collecting metrics and traces, OpenTelemetry has a collector that we can send our traces to. The collector offers a vendor-neutral web service for receiving, processing, and exporting telemetry data. In addition, it removes the need to run, operate, and maintain multiple agents/collectors in order to support open-source telemetry data formats.
+
+The collector behavior can be modified by using a YAML file and then executed using the `--config` flag when running it. This makes it exceptionally easy to use, as there is [a GitHub repository full of examples.](https://github.com/open-telemetry/opentelemetry-collector-contrib)
+
+## Using OpenTelemetry with Rust
+
+### Setting up OpenTelemetry in an application
+
+A basic pipeline with OpenTelemetry can be set up via `opentelemetry_otlp`. A `tracing_opentelemetry` layer that uses the pipeline is then created, then added to a tracing subscriber that gets initialised.
+
+```rust
+// note that here, localhost:4318 is the default HTTP address
+// for a local OpenTelemetry collector
+let tracer = opentelemetry_otlp
+    ::new_pipeline()
+    .tracing()
+    .with_exporter(opentelemetry_otlp::new_exporter().http().with_endpoint("localhost:4318"))
+    .install_batch(Tokio)
+    .unwrap();
+
+// log level filtering here
+let filter_layer = EnvFilter::try_from_default_env()
+    .or_else(|_| EnvFilter::try_new("info"))
+    .unwrap();
+
+// fmt layer - printing out logs
+let fmt_layer = fmt::layer().compact();
+
+// turn our OTLP pipeline into a tracing layer
+let otel_layer = tracing_opentelemetry::layer().with_tracer(tracer);
+
+// initialise our subscriber
+subscriber
+    .with(filter_layer)
+    .with(fmt_layer)
+    .with(otel_layer)
+    // The error layer needs to go after the otel_layer, because it needs access to the
+    // otel_data extension that is set on the span in the otel_layer.
+    .with(ErrorTracingLayer::new())
+    .init();
+```
+
+Once we start our app, we can start instrumenting our application! Because we’re using the `tracing` library, we can instrument our functions through the `#[tracing::instrument]` macro, which saves a lot of work setting up spans manually (though for more complex use cases, you may want to go more in-depth into customising your spans). A basic instrumented function may look something like this:
+
+```rust
+#[tracing::instrument]
+async fn hello_world() -> &'static str {
+     info!("Received a request!");
+     "Hello world!"
+}
+```
+
+### Set up the OpenTelemetry collector
+
+So you’ve written your application - next you’ll want to start the collector.
+
+If you just want to get something going, you can use the shell snippet below that runs the collector in an attached terminal and outputs the collector
+
+```bash
+docker run \
+  -p 127.0.0.1:4318:4318 \
+  -p 127.0.0.1:55679:55679 \
+  otel/opentelemetry-collector-contrib:0.97.0 \
+  2>&1 | tee collector-output.txt # Optionally tee output for easier search later
+```
+
+Note that the OpenTelemetry collector YAML file can be found at `/etc/<otel-directory>/config.yaml`.  This means we can create a Dockerfile that copies in an external YAML file into the config! Let’s have a look at what this would look like:
+
+```docker
+ARG OTEL_TAG=
+
+FROM docker.io/otel/opentelemetry-collector-contrib:${OTEL_TAG}
+
+# copy an existing .yaml file from the directory where the dockerfile is
+COPY otel-collector-config.yaml /etc/otel-collector-config.yaml
+
+# Reset the user to allow reading from the docker.sock
+USER 0
+
+CMD ["--config=/etc/otel-collector-config.yaml"]
+```
+
+When we start the docker container, we add the `--config` flag to enable usage of the new collector config file.
+
+The `opentelemetry-collector-contrib` repo contains a lot of different exports you can use, each with a YAML file you can examine. You can find this [here.](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/exporter)
+
+Note that OpenTelemetry collector utilities are not currently available on Shuttle.
+
+## Finishing up
+
+Thanks for reading! With OpenTelemetry, making your Rust applications observable has never been easier.
+
+Read more:
+
+- [Get started with the tracing libraries](https://www.shuttle.rs/blog/2024/01/09/getting-started-tracing-rust)
+- [Deploying Rust to the web](https://www.shuttle.rs/blog/2024/02/07/deploy-rust-web)
+- [Building an uptime monitor with Rust, askama, axum and htmx](https://www.shuttle.rs/blog/2024/02/08/uptime-monitoring-rust)
