@@ -74,7 +74,7 @@ export const Plans: PlanProps[] = [
 				feature: 'Longer logs retention',
 			},
 			{
-				feature: 'Enhanced support',
+				feature: 'Book 1:1 support sessions',
 			},
 		],
 		url: GET_STARTED_URI,
