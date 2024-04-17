@@ -27,7 +27,7 @@ export const getStaticPaths = (async () => {
 	const paths = starterArr.map((starter) => ({
 		params: {
 			framework: starter.template,
-			templateKey: starter.path?.replace(`${starter.template}/`, '') ?? '',
+			templateKey: starter?.path?.replace(`${starter.template}/`, '') ?? '',
 		},
 	}))
 
@@ -115,9 +115,9 @@ export default function TemplateDetails({ starter }: InferGetStaticPropsType<typ
 						/>
 
 						<div className='mb-3 flex w-full items-center justify-between rounded-xl bg-[#121212] text-xs text-head'>
-							<pre className='overflow-x-scroll p-4'>{`cargo shuttle init --from ${starter.path}`}</pre>
+							<pre className='overflow-x-scroll p-4'>{`cargo shuttle init --from ${starter?.path}`}</pre>
 							<CopyButton
-								code={`cargo shuttle init --from ${starter.path}`}
+								code={`cargo shuttle init --from ${starter?.path}`}
 								width={20}
 								height={20}
 							/>
@@ -125,7 +125,7 @@ export default function TemplateDetails({ starter }: InferGetStaticPropsType<typ
 
 						<div className='mb-5 w-full rounded-xl bg-[linear-gradient(85.52deg,_#FC540C_-7.27%,_rgba(255,215,111,0.72)_108.87%)] p-[1px]'>
 							<button className='flex w-full items-baseline justify-center gap-1 rounded-xl bg-[#0F0F0F] px-6 py-2'>
-								<Link href={`/templates/${starter.path}`}>
+								<Link href={`/templates/${starter?.path}`}>
 									<span className='text-sm text-white'>Launch</span>{' '}
 								</Link>
 								<Image src='/images/templates/arrow.svg' width={10} height={10} alt='arrow' />
@@ -182,7 +182,7 @@ export default function TemplateDetails({ starter }: InferGetStaticPropsType<typ
 					<div className='mb-3 w-full rounded-xl bg-[linear-gradient(46.52deg,_rgba(244,41,41,0.2)_-19.65%,_rgba(255,138,63,0.2)_27.61%,_rgba(229,233,56,0.2)_101.96%)] p-[1px]'>
 						<button className='flex w-full items-baseline justify-center gap-1 rounded-xl bg-[#0F0F0F] px-6 py-2'>
 							<Link
-								href={`https://github.com/shuttle-hq/shuttle-examples/blob/main/${starter.path}`}
+								href={`https://github.com/shuttle-hq/shuttle-examples/blob/main/${starter?.path}`}
 								target='_blank'
 							>
 								<span className='text-sm text-white'>Article</span>
@@ -193,7 +193,7 @@ export default function TemplateDetails({ starter }: InferGetStaticPropsType<typ
 					<div className='mb-5 w-full rounded-xl bg-[linear-gradient(46.52deg,_rgba(244,41,41,0.2)_-19.65%,_rgba(255,138,63,0.2)_27.61%,_rgba(229,233,56,0.2)_101.96%)] p-[1px]'>
 						<button className='flex w-full items-baseline justify-center gap-1 rounded-xl bg-[#0F0F0F] px-6 py-2'>
 							<Link
-								href={`https://github.com/shuttle-hq/shuttle-examples/blob/main/${starter.path}`}
+								href={`https://github.com/shuttle-hq/shuttle-examples/blob/main/${starter?.path}`}
 								target='_blank'
 							>
 								<span className='text-sm text-white'>Github Repo</span>
