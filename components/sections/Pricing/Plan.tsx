@@ -42,7 +42,7 @@ const Plan: FC<PlanProps> = ({
 	return (
 		<div
 			className={clsx(
-				'group flex flex-col justify-between rounded-[32px] bg-black p-8 ',
+				'group relative flex flex-col justify-between rounded-[32px] bg-black p-8 ',
 				name === 'Pro'
 					? 'button-shadow border-[1px] border-solid border-[#ffffff33] bg-[#00000080]  lg:-mt-[17%] lg:h-[110%]'
 					: 'border-gradient-card relative'
@@ -150,15 +150,7 @@ const Plan: FC<PlanProps> = ({
 			</button>
 
 			{name === 'Pro' && (
-				<button
-					className={
-						'z-[5] mt-4 w-full rounded-[14px] font-gradual text-black transition-all duration-1000 hover:border-black hover:text-white lg:mt-0'
-					}
-					style={{
-						background:
-							'linear-gradient(73deg, #FC540C -7.95%, rgba(255, 215, 111, 0.72) 45.94%, #38D4E9 116.73%)',
-					}}
-				>
+				<button className={'absolute -bottom-12 left-0 z-[5] w-full text-white'}>
 					<Link
 						href='https://shuttlerust.typeform.com/featureideas'
 						target='_blank'
