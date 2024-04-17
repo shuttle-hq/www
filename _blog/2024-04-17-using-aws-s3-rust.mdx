@@ -1,0 +1,515 @@
+---
+title: "Building with AWS S3 using Rust"
+description: "Using AWS S3 in a Rust web service application"
+author: josh
+tags: [rust, AWS S3, guide]
+thumb: aws-s3-rust-thumb.png
+cover: aws-s3-rust-thumb.png
+date: '2024-04-17T15:30:00'
+---
+Hello world! This time, we’re going to go a little more in-depth when it comes to writing web services. We’re going to create a web service that uses AWS S3 to store and retrieve images. We will also add telemetry via tracing, look at tests and other common things for productionising a Rust web application.
+
+Interested in deploying or just want to see what the final code looks like? Check it out [here.](https://github.com/joshua-mo-143/shuttle-s3-example)
+
+## Pre-requisites
+
+### Setting up your S3 bucket
+
+Before we get started, you’ll need to set up an S3 Bucket and an IAM user. We’ll go through this below.
+
+To create a bucket, do the following:
+
+- Log into AWS Console and go to the S3 section (it can also be found using the search bar)
+- Click “Create Bucket” and follow the prompt.
+
+If this is your first time (and you aren’t handling sensitive data), it is safe to leave the defaults as they are. Public bucket access is turned off by default.
+
+When using S3, your bucket endpoint will look like the following:
+
+```bash
+http://[bucket_name].s3.amazonaws.com/
+```
+
+You’ll want to make sure this is kept somewhere safe as we’ll be using this later on.
+
+### Setting up an IAM user
+
+You’ll also need two variables which will be found in S3 or any S3-compatible API:
+
+- `AWS_ACCESS_KEY_ID` (your Access Key)
+- `AWS_SECRET_ACCESS_KEY` (your Secret Access Key)
+
+The first two can be found in your IAM user credentials if you’ve already set a user up. If you don’t have an appropriate user with policies, you can get started quickly by doing the following:
+
+- Go to the Users menu
+- Start creating a user and go to the “Attach policies” section (then search “S3”)
+- Here you can either use the “AmazonS3FullAccess” policy which gives you full access to S3 on that user, or you can create a custom policy. Select one and finish creating your user. **Access to S3 is required**, as otherwise you won’t be able to use it!
+- Go back to the Users menu and click on your newly created user
+- Go to “Access keys” and follow the prompt (clicking “Application outside of AWS”). Don’t forget to store your Access Key and Secret Access Key!
+
+In production, you may want to go a step further and create a Group that you can then attach policies and users to!
+
+When using S3-compatible APIs, this may look different depending on the service you’re using. However, the documentation should provide enough information for you to create an S3 client for their service.
+
+## Getting started
+
+To get started, we’ll create a Shuttle service via `cargo shuttle init`, making sure to pick the Axum framework. Make sure you have `cargo-shuttle` installed!
+
+Next, you’ll want to install the following Rust dependencies using the following shell snippet:
+
+```bash
+cargo add aws-config@1.1.8 -F behavior-version-latest
+cargo add aws-credential-types@1.1.8 -F hardcoded-credentials
+cargo add aws-sdk-s3@1.23.0 -F behavior-version-latest
+cargo add axum -F multipart
+cargo add image@0.25.1
+cargo add serde@1.0.197 -F derive
+cargo add thiserror@1.0.58
+cargo add tower-http@0.5.2 -F timeout
+```
+
+We’ll want to add our secrets to a `Secrets.toml` file located in the project root folder:
+
+```toml
+AWS_ACCESS_KEY_ID = "<aws_access_key_id>"
+AWS_SECRET_ACCESS_KEY = "<aws_secret_access_key>"
+AWS_URL = "<bucket-endpoint>"
+```
+
+## Error handling
+
+Before we get started, we’ll want to create an error type that can represent all the kinds of errors we can encounter while using the service. There’s several reasons to do this:
+
+- It allows error propagation instead of having to manually handle an error every time
+- We can use the `From<T>` trait to convert error types from our libraries to our API’s error type
+- It saves time debugging!
+
+In this snippet we use the `thiserror::Error` derive macro to be able to quickly derive `Display`, `Error` and `From<T>` all in one by using attribute macros in conjunction with the derive macro.
+
+```rust
+use aws_sdk_s3::error::SdkError;
+use aws_sdk_s3::operation::delete_object::DeleteObjectError;
+use aws_sdk_s3::operation::get_object::GetObjectError;
+use aws_sdk_s3::operation::put_object::PutObjectError;
+use axum::extract::multipart::MultipartError;
+use axum::http::StatusCode;
+use axum::response::{IntoResponse, Response};
+use image::ImageError;
+use std::io::Error as IoError;
+use thiserror::Error;
+
+#[derive(Debug, Error)]
+pub enum ApiError {
+    #[error("Error while deleting object: {0}")]
+    DeleteObjectError(#[from] SdkError<DeleteObjectError>),
+    #[error("Error while getting image: {0}")]
+    GetObjectError(#[from] SdkError<GetObjectError>),
+    #[error("Error while inserting image: {0}")]
+    PutObjectError(#[from] SdkError<PutObjectError>),
+    #[error("Error while manipulating image bytes: {0}")]
+    ImageError(#[from] ImageError),
+    #[error("Error while getting data from multipart: {0}")]
+    Multipart(#[from] MultipartError),
+    #[error("IO error: {0}")]
+    IO(#[from] IoError),
+    #[error("Body is empty")]
+    EmptyBody, // the user tried to send an empty body while uploading
+}
+```
+
+Next, we implement `axum::response::IntoResponse` for our error type. This allows it to be turned into a HTTP response:
+
+```rust
+impl IntoResponse for ApiError {
+    fn into_response(self) -> Response {
+        let response = match self {
+            Self::DeleteObjectError(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()),
+            Self::GetObjectError(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()),
+            Self::PutObjectError(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()),
+            Self::ImageError(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()),
+            Self::Multipart(e) => (StatusCode::BAD_REQUEST, e.to_string()),
+            Self::IO(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()),
+            Self::EmptyBody => (StatusCode::BAD_REQUEST, self.to_string()),
+        };
+
+        response.into_response()
+    }
+}
+
+```
+
+## Building the base of our S3 microservice
+
+### Setting up AWS SDK
+
+To get started, we’ll set up some code in our main function that allows us to create an AWS client.
+
+```rust
+use shuttle_runtime::SecretStore;
+use aws_config::Region;
+use aws_credential_types::Credentials;
+use aws_sdk_s3::Client;
+
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_runtime::Secrets] secrets: SecretStore
+) -> shuttle_axum::ShuttleAxum {
+    let access_key_id = secrets
+        .get("AWS_ACCESS_KEY_ID")
+        .expect("AWS_ACCESS_KEY_ID not set in Secrets.toml");
+    let secret_access_key = secrets
+        .get("AWS_SECRET_ACCESS_KEY")
+        .expect("AWS_ACCESS_KEY_ID not set in Secrets.toml");
+    let aws_url = secrets
+        .get("AWS_URL")
+        .expect("AWS_ACCESS_KEY_ID not set in Secrets.toml");
+
+    // note here that the "None" is in place of a session token
+    let creds = Credentials::from_keys(access_key_id, secret_access_key, None);
+
+    let cfg = aws_config::from_env()
+        .endpoint_url(aws_url)
+        .region(Region::new("eu-west-2"))
+        .credentials_provider(creds)
+        .load().await;
+
+    let s3 = Client::new(&cfg);
+
+    // rest of your code goes down here
+}
+```
+
+For our region we’ve used `eu-west-2` as the Shuttle servers are in `eu-west-2`, which reduces latency. However, feel free to use whichever region you’d like!
+
+We’ll also additionally create a shared state struct which will hold the client. When we need to access the client, we can simply add the `State` extractor to our functions and it will work.
+
+```rust
+#[derive(Clone, Debug)]
+pub struct AppState {
+    s3: Client,
+}
+```
+
+### Creating a custom response type
+
+To make it easier for ourselves when writing our code, we’ll create our own enum return type that will implement `axum::response::IntoResponse`. While you *can* use `impl IntoResponse` itself as the return type, it is often better to declare a specific type for a couple of reasons:
+
+- While using `impl IntoResponse`, every response type is required to be the same
+- Using an enum allows you to be more flexible in your response type
+
+As a short illustration, we’ll create an enum with two variants and implement `IntoResponse`:
+
+```rust
+pub enum Image {
+    Filename(String),
+    File(String, Vec<u8>),
+}
+
+impl IntoResponse for Image {
+    fn into_response(self) -> Response {
+        match self {
+            Self::Filename(name) => (StatusCode::OK, name).into_response(),
+            Self::File(filename, data) => {
+                let filename_header_value = format!("attachment; filename=\"{filename}\"");
+
+                Response::builder()
+                    .header("Content-Disposition", filename_header_value)
+                    .header("Content-Type", "image/jpeg")
+                    .body(Body::from(data))
+                    .unwrap()
+            }
+        }
+    }
+}
+
+```
+
+Now we can avoid writing our types directly out into the functions! However, we can also take this a step further by implementing `Into<Image>` for our types as well as creating helper functions to create our `Image` enum easily. Let’s implement `Into<Image>` for `String` and a function to convert a filename with a `Vec<u8>` to an image:
+
+```rust
+impl Into<Image> for (String, Vec<u8>) {
+    fn into(self) -> Image {
+        Image::File(self.0, self.1)
+    }
+}
+
+impl Into<Image> for String {
+    fn into(self) -> Image {
+        Image::Filename(self)
+    }
+}
+
+impl Into<Image> for &str {
+    fn into(self) -> Image {
+        Image::Filename(self.to_owned())
+    }
+}
+```
+
+### Routing
+
+We will get started with a handler function for uploading an image. We will need to deal with multipart form upload data, and as such we’ll want to use `axum::extract::Multipart` here.
+
+There is a small footnote here: if you’re operating with variables that need to function outside of the multipart loop, you need to declare them beforehand as a `None` option and re-assign them. This is primarily due to scoping - if you declare it inside the loop, you can’t suddenly use it outside the loop again. Whether you need to do this however depends on your use case.
+
+```rust
+// src/routing.rs
+use axum::extract::Multipart;
+use crate::AppState;
+use axum::response::IntoResponse;
+use crate::errors::ApiError;
+
+pub async fn upload_image(
+    State(state): State<AppState>,
+    mut multipart: Multipart,
+) -> Result<Image, ApiError> {
+    let mut field: Option<Vec<u8>> = None;
+    while let Some(formitem) = multipart.next_field().await.unwrap() {
+        field = Some(formitem.bytes().await?.to_vec());
+    }
+
+    let Some(data) = field else {
+        tracing::error!("User tried to upload an empty body");
+        return Err(ApiError::EmptyBody);
+    };
+
+    let filename = "my_file.jpeg";
+
+    // rest of function code goes here
+
+    Ok(filename.into())
+}
+
+```
+
+Next, we’ll add the code for inserting an object into your S3 object into the comment area:
+
+```rust
+let _res = state.s3
+    .put_object()
+    .bucket("my-bucket")
+    .key(&filename)
+    .body(new_vec.into())
+    .send().await?;
+```
+
+It is important to note here that we’ve generated our own filename. It is always more secure to generate your own file names rather than taking the user’s filenames, as you may accidentally end up overwriting your own files. Users may also maliciously try to upload files with known names!
+
+Strictly speaking, we don’t *need* the file extension at the end of our file key. However, when you’re using said files outside of image storage, it’s best to preserve them for future usage.
+
+To retrieve an image, we can write the following route:
+
+```rust
+pub async fn retrieve_image(
+    State(state): State<AppState>,
+    Path(filename): Path<String>,
+) -> Result<Image, ApiError> {
+    let res = state
+        .s3
+        .get_object()
+        .bucket("my-bucket")
+        .key(&filename)
+        .send()
+        .await?;
+
+    let body: Vec<u8> = res.body.collect().await?.to_vec();
+
+    Ok((filename, body).into())
+}
+```
+
+Note here that we’re setting the filename dynamically. You can also set your `Content-Type` header according to the kind of image you’re trying to serve from S3.
+
+The handler function for deleting the image is by far the simplest to write: we just need to delete the image from S3.
+
+```rust
+pub async fn delete_image(
+    State(state): State<AppState>,
+    Path(filename): Path<String>,
+) -> Result<Image, ApiError> {
+    state
+        .s3
+        .delete_object()
+        .bucket("my-bucket")
+        .key(&filename)
+        .send()
+        .await?;
+
+    tracing::info!("Image deleted with filename: {filename}");
+
+    Ok(filename.into())
+}
+```
+
+To wrap it all up, let’s add it to our main function:
+
+```rust
+let state = AppState { s3 };
+
+fn init_router(state: AppState) -> Router {
+    Router::new()
+        .route("/", get(hello_world))
+        .route("/images/upload", post(routing::upload_image))
+        .route("/images/:filename", get(routing::retrieve_image).delete(routing::delete_image))
+        .with_state(state)
+}
+```
+
+## Extending our web service
+
+While what we’ve currently got works well, we can much do better. In its current state, it’s not super production ready. Let’s have a look at what we can do to assist with ensuring production readiness.
+
+### Timeout layer
+
+Although we’ve written our base service and now it works perfectly fine, there are a couple of issues that we’d need to deal with in production:
+
+- We need to stop slow loris attacks (flooding a server with opened connections)
+- We need to stop people who want to upload unexpectedly large files, which saves on egress costs
+
+The first point is a rather big deal, as most Rust web frameworks do not deny long-running requests by themselves.
+
+It just needs to be added like below, specifying a timeout duration.
+
+```rust
+use std::time::Duration;
+use tower_http::timeout::TimeoutLayer;
+
+let router = Router::new()
+    .route("/", get(hello_world))
+    .route("/images/upload", post(routing::upload_image))
+    .route("/images/:filename", get(routing::retrieve_image).delete(routing::delete_image))
+    .with_state(state)
+    .layer(TimeoutLayer::new(Duration::from_secs(20)));
+```
+
+Simple and easy! Our service will now automatically return a timeout error to any request taking longer than 20 seconds (returning the 408 Timeout error).
+
+### Tracing
+
+To add tracing to our service, we only need to add the `#[tracing::instrument]` macro to our handler functions.
+
+```rust
+#[tracing::instrument]
+pub async fn upload_image(
+    State(state): State<AppState>,
+    mut multipart: Multipart,
+) -> Result<impl IntoResponse, ApiError> {
+    // function code
+}
+
+```
+
+Now whenever anything gets printed out from this endpoint, the whole function will get printed out - application state included!
+
+If you’re holding any sensitive data in your application state, you can use the `skip` attribute to skip printing it out in logs:
+
+```rust
+#[tracing::instrument(skip(state))]
+pub async fn upload_image(
+    State(state): State<AppState>,
+    mut multipart: Multipart,
+) -> Result<impl IntoResponse, ApiError> {
+    // function code
+}
+```
+
+Adding events to our handler functions that then get triggered will automatically send the output to our logs:
+
+```rust
+#[tracing::instrument]
+pub async fn delete_image(
+    State(state): State<AppState>,
+    Path(filename): Path<String>,
+) -> Result<Image, ApiError> {
+    // .. your other code
+
+    tracing::info!("Image deleted with filename: {filename}");
+
+    // .. your other code
+}
+
+```
+
+Note that Shuttle automatically starts the subscriber from `tracing_subscriber` for you. If you want to create your own custom subscriber, you can do that by turning off all default features:
+
+```bash
+cargo add shuttle-runtime --no-default-features
+```
+
+### Testing
+
+We can test S3 by using the `s3-server` crate. To get started, you only need to install it:
+
+```rust
+cargo install s3-server --features binary
+```
+
+This crate will additionally require the `http` crate. Since we’re only using it in tests, we can add it as a dev dependency like so:
+
+```rust
+cargo add http --dev
+```
+
+We can then set up a common function in our project to be able to create an S3 server:
+
+```rust
+fn setup_s3_testing() -> Client {
+    let conf = aws_config::load_from_env().await;
+    let ep = Endpoint::immutable(Uri::from_static("http://localhost:8543"));
+    let s3_conf = aws_sdk_s3::config::Builder::from(&conf).endpoint_resolver(ep).build();
+
+    Client::from_conf(s3_conf);
+}
+```
+
+Of course, you’ll want to make sure `s3-server` is running in the background.
+
+Because Axum itself integrates with most things in the Tower ecosystem, you can either send oneshot requests to your server to test it (requires `hyper` installed as dev dependency) or you can start a `TcpListener` and start your Axum server up in the usual manner. You would then use `reqwest` or a similar library to send HTTP requests to your server:
+
+```rust
+#[tokio::test]
+async fn my_test() {
+let state = AppState { s3: setup_s3_testing() };
+let router = init_router(state);
+
+let tcp_listener = TcpListener::bind("127.0.0.1:8000").await.unwrap();
+tokio::spawn(async {
+    axum::serve(tcp_listener, router).await.unwrap();
+    });
+
+// whatever requests you want to make down here, using hyper or reqwest
+}
+```
+
+If you want to do a oneshot request however, you can do so like this (test assumes you have a “Hello, World!” route at `/`):
+
+```rust
+#[tokio::test]
+async fn my_test() {
+    let state = AppState { s3: setup_s3_testing() };
+    let router = init_router(state);
+
+    let response = router
+        .oneshot(Request::builder().uri("/").body(Body::empty()).unwrap()).await
+        .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let body = response.into_body().collect().await.unwrap().to_bytes();
+    assert_eq!(&body[..], b"Hello, world!");
+}
+```
+
+## Deploying
+
+To deploy our web service, all we need to do now is `cargo shuttle deploy`! Make sure to add the `--allow-dirty` flag if on a Git branch with uncommitted changes. If you’ve added tests, make sure to add the `--no-test` flag, as they may not work while deploying. One quick workaround for this is to add a test workflow before deployment.
+
+## Finishing up
+
+Thanks for reading! Using the AWS SDK can be difficult. However, hopefully this tutorial on using S3 with Rust can shed some light on writing a fully functioning service that uses S3!
+
+Read more:
+
+- [Building a notification service with Rust & AWS SNS](https://www.shuttle.rs/blog/2024/03/20/notification-service-rust)
+- [Learn more about Axum](https://www.shuttle.rs/blog/2023/12/06/using-axum-rust)
+- [Using OpenTelemetry with Rust](https://www.shuttle.rs/blog/2024/04/10/using-opentelemetry-rust)
