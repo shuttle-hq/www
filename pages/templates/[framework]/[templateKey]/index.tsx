@@ -25,7 +25,10 @@ export const getStaticPaths = (async () => {
 		.filter((starter) => !!starter.template && starter.template !== 'none')
 
 	const paths = starterArr.map((starter) => ({
-		params: { framework: starter.template, templateKey: starter.path.replace(`${starter.template}/`, '') },
+		params: {
+			framework: starter.template,
+			templateKey: starter.path?.replace(`${starter.template}/`, '') ?? '',
+		},
 	}))
 
 	return {
