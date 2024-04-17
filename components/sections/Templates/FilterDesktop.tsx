@@ -39,7 +39,7 @@ export default function FilterDesktop({
 			<input
 				type='text'
 				placeholder='Search'
-				className='mb-5 w-full rounded-[14px] border border-[#FFFFFF1A] bg-[#FFFFFF0D] px-5 py-3 text-[#C2C2C266]'
+				className='mb-5 w-full rounded-[14px] border border-[#FFFFFF1A] bg-[#FFFFFF0D] px-5 py-3 text-[#C2C2C266] outline-none'
 				value={search}
 				onChange={(e) => setSearch(e.target.value)}
 			/>
