@@ -99,7 +99,7 @@ export default function Templates({ tags, useCases, starters }: InferGetStaticPr
 	})
 
 	return (
-		<section className='mx-auto my-[140px] h-screen w-full max-w-screen-2xl'>
+		<section className='mx-auto my-[140px] w-full max-w-screen-2xl'>
 			<div className='mx-auto my-0 w-full text-center'>
 				<h1>
 					<span className='text-gradient bg-clip-text text-[64px] text-transparent'>Templates</span>
