@@ -2,10 +2,8 @@ import { ReactNode, useState } from 'react'
 import { Page } from 'components/templates'
 import toml from '@iarna/toml'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
-import Image from 'next/image'
-import Link from 'next/link'
-import AnimateHeight from 'react-animate-height'
 import TemplateCard from 'components/sections/Templates/TemplateCard'
+import TemplateFilterGroup from 'components/sections/Templates/TemplateFilterGroup'
 
 export const TEMPLATES_URL = 'https://raw.githubusercontent.com/shuttle-hq/shuttle-examples/main/templates.toml'
 
@@ -86,17 +84,14 @@ export const getStaticProps = (async () => {
 }>
 
 export default function Templates({ tags, useCases, starters }: InferGetStaticPropsType<typeof getStaticProps>) {
-	console.log('starters:', starters)
 	const [search, setSearch] = useState('')
 	const [selectedTags, setSelectedTags] = useState<string[]>([])
 	const [selectedUseCases, setSelectedUseCases] = useState<string[]>([])
-	// const [selectedType, setSelectedType] = useState<string[]>([])
 
 	const filteredStarters = starters.filter((starter) => {
 		const searchMatch = starter.title.toLowerCase().includes(search.toLowerCase())
 		const tagMatch = selectedTags.every((tag) => starter.tags.includes(tag))
 		const useCaseMatch = selectedUseCases.every((useCase) => starter.use_cases.includes(useCase))
-		// const typeMatch = selectedType.every((type) => starter.type.includes(type))
 
 		return searchMatch && tagMatch && useCaseMatch
 	})
@@ -140,92 +135,22 @@ export default function Templates({ tags, useCases, starters }: InferGetStaticPr
 							Contribute
 						</button>
 					</div>
+
 					<hr className='mb-6 border-[#FFFFFF1A]' />
 
-					{/* <div className='mb-9 flex flex-col text-[#7A7A7A]'>
-						<span className='uppercase'>Type</span>
-						{['starter', 'template', 'tutorial'].map((type) => (
-							<fieldset key={type}>
-								<input
-									className='mr-[10px] accent-[#FC540C]'
-									type='checkbox'
-									name={type}
-									id={type}
-									onChange={(e) =>
-										setSelectedType(
-											e.target.checked
-												? [...selectedType, type]
-												: selectedType.filter((t) => t !== type)
-										)
-									}
-								/>
-								<label className='capitalize text-[#C8C8C8]' htmlFor={type}>
-									{type}
-								</label>
-							</fieldset>
-						))}
-					</div> */}
+					<TemplateFilterGroup
+						items={useCases}
+						selectedItems={selectedUseCases}
+						setSelectedItems={setSelectedUseCases}
+						title='Use Case'
+					/>
 
-					<div className='mb-9 text-[#7A7A7A]'>
-						<span className='uppercase'>Use Case</span>
-						<fieldset>
-							{useCases.map((useCase) => (
-								<div key={useCase} className='checkbox-container'>
-									<input
-										type='checkbox'
-										name={useCase}
-										id={useCase}
-										className='absolute h-0 w-0 opacity-0'
-										// className='mr-[10px] bg-red-500 accent-[#FC540C]'
-										checked={selectedUseCases.includes(useCase)}
-										onChange={(e) => {
-											setSelectedUseCases(
-												e.target.checked
-													? [...selectedUseCases, useCase]
-													: selectedUseCases.filter((t) => t !== useCase)
-											)
-										}}
-									/>
-									<span
-										className={`checkbox-span relative inline-block h-6 w-6 rounded-md bg-black transition-colors duration-300`}
-										style={{
-											boxShadow: 'inset 0 0 0 2px white',
-										}}
-									></span>
-									<label className='capitalize text-[#C8C8C8]' htmlFor={useCase}>
-										{useCase}
-									</label>
-								</div>
-							))}
-						</fieldset>
-					</div>
-
-					<div className='mb-9 text-[#7A7A7A]'>
-						<span className='uppercase'>Tags</span>
-						<fieldset>
-							{tags.map((tag) => (
-								<div key={tag}>
-									<input
-										type='checkbox'
-										name={tag}
-										id={tag}
-										className='mr-[10px] accent-[#FC540C]'
-										checked={selectedTags.includes(tag)}
-										onChange={(e) => {
-											setSelectedTags(
-												e.target.checked
-													? [...selectedTags, tag]
-													: selectedTags.filter((t) => t !== tag)
-											)
-										}}
-									/>
-									<label className='capitalize text-[#C8C8C8]' htmlFor={tag}>
-										{tag}
-									</label>
-								</div>
-							))}
-						</fieldset>
-					</div>
+					<TemplateFilterGroup
+						items={tags}
+						selectedItems={selectedTags}
+						setSelectedItems={setSelectedTags}
+						title='Tags'
+					/>
 				</div>
 
 				<div className='col-span-3 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
