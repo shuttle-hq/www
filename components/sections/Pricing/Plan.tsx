@@ -150,7 +150,7 @@ const Plan: FC<PlanProps> = ({
 			</button>
 
 			{name === 'Pro' && (
-				<button className={'absolute -bottom-12 left-0 z-[5] w-full text-white underline'}>
+				<button className={'absolute -bottom-12 left-0 z-[5] w-full text-white'}>
 					<Link
 						href='https://shuttlerust.typeform.com/featureideas'
 						target='_blank'
