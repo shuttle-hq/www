@@ -6,9 +6,11 @@ import { useCopyToClipboard } from 'react-use'
 interface CopyButtonProps {
 	code: string
 	className?: string
+	width?: number
+	height?: number
 }
 
-const CopyButton: FC<CopyButtonProps> = ({ code, className }) => {
+const CopyButton: FC<CopyButtonProps> = ({ code, className, width = 32, height = 32 }) => {
 	const [_, copyToClipboard] = useCopyToClipboard()
 	return (
 		<button
@@ -20,7 +22,7 @@ const CopyButton: FC<CopyButtonProps> = ({ code, className }) => {
 				copyToClipboard(code)
 			}}
 		>
-			<Copy width={32} height={32} />
+			<Copy width={width} height={height} />
 		</button>
 	)
 }

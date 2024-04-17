@@ -1,10 +1,13 @@
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 import { Page } from 'components/templates'
 import toml from '@iarna/toml'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import Image from 'next/image'
+import Link from 'next/link'
+import AnimateHeight from 'react-animate-height'
+import TemplateCard from 'components/sections/Templates/TemplateCard'
 
-const TEMPLATES_URL = 'https://raw.githubusercontent.com/shuttle-hq/shuttle-examples/main/templates.toml'
+export const TEMPLATES_URL = 'https://raw.githubusercontent.com/shuttle-hq/shuttle-examples/main/templates.toml'
 
 export interface Starter {
 	title: string
@@ -83,8 +86,23 @@ export const getStaticProps = (async () => {
 }>
 
 export default function Templates({ tags, useCases, starters }: InferGetStaticPropsType<typeof getStaticProps>) {
+	console.log('starters:', starters)
+	const [search, setSearch] = useState('')
+	const [selectedTags, setSelectedTags] = useState<string[]>([])
+	const [selectedUseCases, setSelectedUseCases] = useState<string[]>([])
+	// const [selectedType, setSelectedType] = useState<string[]>([])
+
+	const filteredStarters = starters.filter((starter) => {
+		const searchMatch = starter.title.toLowerCase().includes(search.toLowerCase())
+		const tagMatch = selectedTags.every((tag) => starter.tags.includes(tag))
+		const useCaseMatch = selectedUseCases.every((useCase) => starter.use_cases.includes(useCase))
+		// const typeMatch = selectedType.every((type) => starter.type.includes(type))
+
+		return searchMatch && tagMatch && useCaseMatch
+	})
+
 	return (
-		<section className='my-[140px] w-full'>
+		<section className='mx-auto my-[140px] w-full max-w-screen-2xl'>
 			<div className='mx-auto my-0 w-full text-center'>
 				<h1>
 					<span className='text-gradient bg-clip-text text-[64px] text-transparent'>Templates</span>
@@ -92,12 +110,19 @@ export default function Templates({ tags, useCases, starters }: InferGetStaticPr
 				<p className='text-2xl'>Optional description of something.</p>
 			</div>
 
-			<section className='mt-32 flex justify-between px-[128px]'>
-				<div className='w-[200px]'>
+			<section className='mt-32 grid grid-cols-1 justify-between gap-[30px] px-[128px] md:grid-cols-4'>
+				<div className='col-span-1'>
 					<div className='mb-7 flex w-full justify-between'>
 						<span className='text-md'>Filter</span>
 
-						<button className='rounded-[23px] bg-[#FFFFFF1A] px-3 py-[2px] text-[#7A7A7A]'>
+						<button
+							className='rounded-[23px] bg-[#FFFFFF1A] px-3 py-[2px] text-[#7A7A7A]'
+							onClick={() => {
+								setSelectedTags([])
+								setSelectedUseCases([])
+								setSearch('')
+							}}
+						>
 							Clear
 						</button>
 					</div>
@@ -106,92 +131,106 @@ export default function Templates({ tags, useCases, starters }: InferGetStaticPr
 						type='text'
 						placeholder='Search'
 						className='mb-5 w-full rounded-[14px] border border-[#FFFFFF1A] bg-[#FFFFFF0D] px-5 py-3 text-[#C2C2C266]'
+						value={search}
+						onChange={(e) => setSearch(e.target.value)}
 					/>
 
-					<button className='mb-6 w-full rounded-[14px] border border-[#FFFFFF1A] bg-black px-6 py-3 text-center'>
-						Contribute
-					</button>
-
+					<div className='mb-6 rounded-[14px] bg-[linear-gradient(84.16deg,_#F4292933_-7.25%,_#FFD76F0B_35.45%,_#38D4E933_97%)] p-[1px]'>
+						<button className='w-full rounded-[14px] border border-[#FFFFFF1A] bg-black px-6 py-3 text-center'>
+							Contribute
+						</button>
+					</div>
 					<hr className='mb-6 border-[#FFFFFF1A]' />
 
-					<div className='flex flex-col'>
+					{/* <div className='mb-9 flex flex-col text-[#7A7A7A]'>
 						<span className='uppercase'>Type</span>
-						<fieldset>
-							<input className='mr-[10px]' type='checkbox' name='starter' id='' />
-							<label className='text-[#7A7A7A]' htmlFor='starter'>
-								Starter
-							</label>
-						</fieldset>
-						<fieldset>
-							<input className='mr-[10px]' type='checkbox' name='template' id='' />
-							<label className='text-[#7A7A7A]' htmlFor='starter'>
-								Template
-							</label>
-						</fieldset>
-						<fieldset>
-							<input className='mr-[10px]' type='checkbox' name='tutorial' id='' />
-							<label className='text-[#7A7A7A]' htmlFor='starter'>
-								Tutorial
-							</label>
-						</fieldset>
-					</div>
+						{['starter', 'template', 'tutorial'].map((type) => (
+							<fieldset key={type}>
+								<input
+									className='mr-[10px] accent-[#FC540C]'
+									type='checkbox'
+									name={type}
+									id={type}
+									onChange={(e) =>
+										setSelectedType(
+											e.target.checked
+												? [...selectedType, type]
+												: selectedType.filter((t) => t !== type)
+										)
+									}
+								/>
+								<label className='capitalize text-[#C8C8C8]' htmlFor={type}>
+									{type}
+								</label>
+							</fieldset>
+						))}
+					</div> */}
 
-					<div>
-						<span>Use Case</span>
+					<div className='mb-9 text-[#7A7A7A]'>
+						<span className='uppercase'>Use Case</span>
 						<fieldset>
 							{useCases.map((useCase) => (
-								<div key={useCase}>
-									<input type='checkbox' name={useCase} id='' />
-									<label htmlFor={useCase}>{useCase}</label>
+								<div key={useCase} className='checkbox-container'>
+									<input
+										type='checkbox'
+										name={useCase}
+										id={useCase}
+										className='absolute h-0 w-0 opacity-0'
+										// className='mr-[10px] bg-red-500 accent-[#FC540C]'
+										checked={selectedUseCases.includes(useCase)}
+										onChange={(e) => {
+											setSelectedUseCases(
+												e.target.checked
+													? [...selectedUseCases, useCase]
+													: selectedUseCases.filter((t) => t !== useCase)
+											)
+										}}
+									/>
+									<span
+										className={`checkbox-span relative inline-block h-6 w-6 rounded-md bg-black transition-colors duration-300`}
+										style={{
+											boxShadow: 'inset 0 0 0 2px white',
+										}}
+									></span>
+									<label className='capitalize text-[#C8C8C8]' htmlFor={useCase}>
+										{useCase}
+									</label>
 								</div>
 							))}
 						</fieldset>
 					</div>
 
-					<div>
-						<span>Tags</span>
+					<div className='mb-9 text-[#7A7A7A]'>
+						<span className='uppercase'>Tags</span>
 						<fieldset>
 							{tags.map((tag) => (
 								<div key={tag}>
-									<input type='checkbox' name={tag} id='' />
-									<label htmlFor={tag}>{tag}</label>
+									<input
+										type='checkbox'
+										name={tag}
+										id={tag}
+										className='mr-[10px] accent-[#FC540C]'
+										checked={selectedTags.includes(tag)}
+										onChange={(e) => {
+											setSelectedTags(
+												e.target.checked
+													? [...selectedTags, tag]
+													: selectedTags.filter((t) => t !== tag)
+											)
+										}}
+									/>
+									<label className='capitalize text-[#C8C8C8]' htmlFor={tag}>
+										{tag}
+									</label>
 								</div>
 							))}
 						</fieldset>
 					</div>
 				</div>
 
-				<div className='grid grid-cols-3 gap-6'>
-					{starters.map((starter) => (
-						<div
-							key={starter.key}
-							className='flex h-[320px] w-[300px] flex-col items-start justify-between rounded-3xl border border-orange bg-card p-6'
-						>
-							<div>
-								<Image
-									src='/images/templates/logo.png'
-									alt='Template logo'
-									width={55}
-									height={37}
-								/>
-								<h2 className='mb-1 mt-2 text-xl font-bold text-white'>{starter.title}</h2>
-								<p className='mb-4'>{starter.description}</p>
-								<div className='flex gap-2'>
-									{starter.tags.map((tag) => (
-										<span
-											key={tag}
-											className='rounded-xl border border-orange px-3 py-1 text-sm text-white'
-										>
-											{tag}
-										</span>
-									))}
-								</div>
-							</div>
-							<button className='flex gap-1 rounded-lg bg-gradient px-6 py-2 '>
-								<span className='text-sm text-black'>Launch</span>{' '}
-								<Image src='/images/templates/arrow.svg' width={12} height={12} alt='arrow' />
-							</button>
-						</div>
+				<div className='col-span-3 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
+					{filteredStarters.slice(0, 9).map((starter) => (
+						<TemplateCard key={starter.key} starter={starter} />
 					))}
 				</div>
 			</section>
