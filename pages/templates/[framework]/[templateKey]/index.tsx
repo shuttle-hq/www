@@ -22,12 +22,12 @@ export const getStaticPaths = (async () => {
 				key,
 			}
 		})
-		.filter((starter) => !!starter.template && starter.template !== 'none')
+		.filter((starter) => !!starter?.template && starter?.template !== 'none')
 
 	const paths = starterArr.map((starter) => ({
 		params: {
-			framework: starter.template,
-			templateKey: starter?.path?.replace(`${starter.template}/`, '') ?? '',
+			framework: starter?.template,
+			templateKey: starter?.path?.replace(`${starter?.template}/`, '') ?? '',
 		},
 	}))
 
@@ -146,7 +146,7 @@ export default function TemplateDetails({ starter }: InferGetStaticPropsType<typ
 
 							<div>
 								<p>
-									{starter.use_cases.map((useCase) => (
+									{starter?.use_cases.map((useCase) => (
 										<span key={useCase}>{useCase} </span>
 									))}
 								</p>
@@ -167,7 +167,7 @@ export default function TemplateDetails({ starter }: InferGetStaticPropsType<typ
 						<div className='mb-5 flex w-full justify-between'>
 							<span className='text-[#7A7A7A]'>Tags</span>
 							<div>
-								{starter.tags.map((tag) => (
+								{starter?.tags.map((tag) => (
 									<span
 										key={tag}
 										className='rounded-xl border border-[#434343] px-3 py-1 text-sm text-white'
@@ -203,10 +203,10 @@ export default function TemplateDetails({ starter }: InferGetStaticPropsType<typ
 				</div>
 
 				<div className='col-span-2 rounded-3xl border border-[#434343] p-8'>
-					<h1 className='mb-5 text-[36px] font-bold leading-10 text-[#D8D8D8]'>{starter.title}</h1>
+					<h1 className='mb-5 text-[36px] font-bold leading-10 text-[#D8D8D8]'>{starter?.title}</h1>
 
 					<p className='mb-8'>{'//README'}</p>
-					<Markdown body={starter.readme} />
+					<Markdown body={starter?.readme} />
 					<p>{'//README'}</p>
 				</div>
 			</div>
