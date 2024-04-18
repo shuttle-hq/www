@@ -5,6 +5,7 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import TemplateCard from 'components/sections/Templates/TemplateCard'
 import FilterDesktop from 'components/sections/Templates/FilterDesktop'
 import FilterMobile from 'components/sections/Templates/FilterMobile'
+import Image from 'next/image'
 
 export const TEMPLATES_URL = 'https://raw.githubusercontent.com/shuttle-hq/shuttle-examples/main/templates.toml'
 
@@ -117,10 +118,13 @@ export const getStaticProps = (async () => {
 	useCases: string[]
 }>
 
+const ITEMS_PER_PAGE = 9
+
 export default function Templates({ tags, useCases, templates }: InferGetStaticPropsType<typeof getStaticProps>) {
 	const [search, setSearch] = useState('')
 	const [selectedTags, setSelectedTags] = useState<string[]>([])
 	const [selectedUseCases, setSelectedUseCases] = useState<string[]>([])
+	const [currentPage, setCurrentPage] = useState(1)
 
 	const filteredTemplates = templates.filter((template) => {
 		const searchMatch = template.title.toLowerCase().includes(search.toLowerCase())
@@ -134,6 +138,20 @@ export default function Templates({ tags, useCases, templates }: InferGetStaticP
 		return searchMatch && tagMatch && useCaseMatch
 	})
 
+	const totalPages = Math.ceil(filteredTemplates.length / ITEMS_PER_PAGE)
+
+	const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+	const currentPageTemplates = filteredTemplates.slice(startIndex, startIndex + ITEMS_PER_PAGE)
+
+	// Pagination controls
+	const goToNextPage = () => {
+		setCurrentPage((current) => (current < totalPages ? current + 1 : current))
+	}
+
+	const goToPreviousPage = () => {
+		setCurrentPage((current) => (current > 1 ? current - 1 : current))
+	}
+
 	return (
 		<section className='mx-auto my-[140px] w-full max-w-screen-2xl'>
 			<div className='mx-auto my-0 w-full text-center'>
@@ -143,7 +161,7 @@ export default function Templates({ tags, useCases, templates }: InferGetStaticP
 				<p className='text-2xl'>Optional description of something.</p>
 			</div>
 
-			<section className='mt-32 grid grid-cols-1 justify-between gap-[30px] px-0 md:grid-cols-4 md:px-[128px]'>
+			<section className='mt-32 grid grid-cols-1 items-start justify-between gap-[30px] px-0 md:grid-cols-4 md:px-[128px]'>
 				<FilterDesktop
 					search={search}
 					setSearch={setSearch}
@@ -166,10 +184,31 @@ export default function Templates({ tags, useCases, templates }: InferGetStaticP
 					selectedTags={selectedTags}
 				/>
 
-				<div className='col-span-3 grid grid-cols-1 items-center gap-6 px-[28px] md:grid-cols-2 md:px-0 lg:grid-cols-3'>
-					{filteredTemplates.map((template) => (
+				<div className='col-span-3 grid grid-cols-1 gap-6 px-[28px] md:grid-cols-2 md:px-0 lg:grid-cols-3'>
+					{currentPageTemplates.map((template) => (
 						<TemplateCard key={template.key} template={template} />
 					))}
+					{totalPages > 1 && (
+						<div className='col-span-2 hidden w-full justify-between sm:col-span-2 md:flex lg:col-span-3'>
+							<button
+								className='cursor-pointer text-orange'
+								onClick={goToPreviousPage}
+								disabled={currentPage === 1}
+							>
+								◀
+							</button>
+							<span>
+								Page {currentPage} of {totalPages}
+							</span>
+							<button
+								className='cursor-pointer text-orange'
+								onClick={goToNextPage}
+								disabled={currentPage === totalPages}
+							>
+								▶
+							</button>
+						</div>
+					)}
 				</div>
 			</section>
 		</section>

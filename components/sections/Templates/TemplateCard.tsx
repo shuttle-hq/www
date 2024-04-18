@@ -6,16 +6,16 @@ import LaunchBG from './LaunchBG'
 export default function TemplateCard({ template: template }: { template: TemplateWithKeyAndType }) {
 	return (
 		<Link href={`/templates/${template.key}`}>
-			<div className='overdlow-y-scroll flex min-h-[320px] flex-col items-start justify-between gap-2 rounded-3xl border border-[#434343] bg-[#0F0F0F] p-6'>
+			<div className='flex h-[320px] flex-col items-start justify-between gap-2 rounded-3xl border border-[#434343] bg-[#0F0F0F] p-6'>
 				<div>
 					<Image src='/images/templates/logo.png' alt='Template logo' width={55} height={37} />
 					<h2 className='mb-1 mt-2 text-xl font-bold text-white'>{template.title}</h2>
-					<p className='mb-4'>{template.description}</p>
+					<p className='mb-4 text-sm'>{template.description}</p>
 					<div className='flex flex-wrap gap-2'>
-						{template.tags?.map((tag) => (
+						{template.tags?.slice(0, 4).map((tag) => (
 							<span
 								key={tag}
-								className='rounded-xl border border-[#434343] px-3 py-1 text-sm text-white'
+								className='rounded-xl border border-[#434343] px-3 py-1 text-xs text-white'
 							>
 								{tag}
 							</span>
