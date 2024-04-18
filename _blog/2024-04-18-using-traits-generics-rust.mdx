@@ -132,9 +132,9 @@ In addition to this, marker traits are also (generally speaking) auto traits. If
 
 ## Why do marker traits matter in Rust?
 
-Marker traits in Rust form the core of the ecosystem and allows us to provide garuantees that may not be possible in other languages. For example, Java has marker interfaces which are analogous to Rust’s marker traits. However, marker traits in Rust are not just for behavior like `Cloneable` or `Serializable`; they also ensure that types can be sent across threads, for example. This is a subtle but far-reaching difference within the Rust ecosystem. By being able to declare a type as `!Send` for example, we can ensure that the user never attempts to try to send the type across a thread. This makes the problem of concurrency much easier to handle, as well as a few other things:
+Marker traits in Rust form the core of the ecosystem and allows us to provide garuantees that may not be possible in other languages. For example, Java has marker interfaces which are analogous to Rust’s marker traits. However, marker traits in Rust are not just for behavior like `Cloneable` or `Serializable`; they also ensure that types can be sent across threads, for example. This is a subtle but far-reaching difference within the Rust ecosystem. By being able to declare a type as `!Send` for example, we can ensure that the user never attempts to try to send the type across a thread. This makes the problem of concurrency much easier to handle. Marker traits can also affect other things:
 
-- The `Clone` trait being required to clone things, but `Clone` also requires `Copy` (bitwise copying of a variable).
+- The `Copy` trait is required to duplicate things by performing a bitwise copy (although this requires Clone). Attempting to copy a pointer bitwise only returns the address! This is also the same reason why String is unable to be copied and must be cloned: Strings in Rust are smart pointers.
 - `?Sized` - Generics initially are given a `static` lifetime. You can allow them to be unsized (ie, use references) by adding `?Sized` as a trait bound. Essentially what this means is when we implement `?Sized` for a type, we are allowing it to be dynamically sized - so the compiler won't be able to allocate space for it at compile-time because it's not constant-size.
 
 ## Object traits and dynamic dispatch
