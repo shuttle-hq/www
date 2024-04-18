@@ -41,7 +41,7 @@ impl Into<String> for MyStruct {
     }
 }
 
-// implementing MyStruct for a type we don't own
+// implementing MyTrait for a type we don't own
 impl MyTrait for String {
     fn some_method(&self) -> String {
         self.to_owned()
