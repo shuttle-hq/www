@@ -14,7 +14,15 @@ export function Markdown({ body }: { body: string }) {
 					<code className='text-code mx-[.15em] mb-1 text-sm text-head'>{children}</code>
 				),
 				pre: ({ children }) => (
-					<pre className='mb-8 rounded-xl bg-[#121212] p-4 text-head'>{children}</pre>
+					<pre
+						style={{
+							scrollbarColor: 'black transparent',
+							scrollbarWidth: 'thin',
+						}}
+						className='mb-8 overflow-x-scroll rounded-xl bg-[#121212] p-4 text-head'
+					>
+						{children}
+					</pre>
 				),
 				ul: ({ children }) => <ul className='mb-8'>{children}</ul>,
 				a: ({ children, href, target }) => (
