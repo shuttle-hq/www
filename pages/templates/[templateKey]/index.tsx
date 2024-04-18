@@ -1,13 +1,14 @@
-import ReactMarkdown from 'react-markdown'
 import toml from '@iarna/toml'
-import { StarterWithKey, TEMPLATES_URL, TemplatesResponse } from 'pages/templates'
+import {
+	StarterWithKey,
+	TEMPLATES_URL,
+	TemplateType,
+	TemplateWithKeyAndType,
+	TemplatesResponse,
+} from 'pages/templates'
 import { GoBack } from 'components/sections/Templates/GoBack'
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
 import Link from 'next/link'
-import Image from 'next/image'
-import { CopyButton } from 'components/elements'
-import BgGlow from 'components/sections/Templates/BgGlow'
-import LaunchBG from 'components/sections/Templates/LaunchBG'
 import TemplateReadme from 'components/sections/Templates/TemplateReadme'
 import TemplateButton from 'components/sections/Templates/TemplateButton'
 import TemplateMetadata from 'components/sections/Templates/TemplateMetadata'
@@ -47,22 +48,30 @@ export const getStaticPaths = (async () => {
 }>
 
 export const getStaticProps = (async (context) => {
-	const { framework, templateKey } = context.params as { framework: string; templateKey: string }
+	const { templateKey } = context.params as { templateKey: string }
 
 	const response = await fetch(TEMPLATES_URL)
 	const tomlString = await response.text()
 
-	const { starters: starterMap } = toml.parse(tomlString) as unknown as TemplatesResponse
+	const { starters, examples, templates } = toml.parse(tomlString) as unknown as TemplatesResponse
 
-	const starter = starterMap[`${framework}-${templateKey}`] as StarterWithKey
+	const template = (starters[templateKey] ||
+		examples[templateKey] ||
+		templates[templateKey]) as TemplateWithKeyAndType
 
-	if (!starter) {
+	console.log('examples[`${framework}-${templateKey}`]:', examples[templateKey])
+	console.log('templates[templateKey]:', templates[templateKey])
+	console.log('starters[templateKey]:', starters[templateKey])
+
+	console.log('template', template)
+
+	if (!template) {
 		return {
 			redirect: {
 				destination: '/templates',
 			},
 			props: {
-				starter: {
+				template: {
 					key: '',
 					name: '',
 					path: '',
@@ -72,6 +81,7 @@ export const getStaticProps = (async (context) => {
 					title: '',
 					use_cases: [],
 					readme: '',
+					type: TemplateType.Starter,
 				},
 			},
 		}
@@ -80,7 +90,7 @@ export const getStaticProps = (async (context) => {
 	let readmeText = ''
 
 	const readmeResponse = await fetch(
-		`https://raw.githubusercontent.com/shuttle-hq/shuttle-examples/main/${framework}/${templateKey}/README.md`
+		`https://raw.githubusercontent.com/shuttle-hq/shuttle-examples/main/${template.path}/README.md`
 	)
 
 	if (readmeResponse.status === 404) {
@@ -91,17 +101,17 @@ export const getStaticProps = (async (context) => {
 
 	return {
 		props: {
-			starter: {
-				...starter,
+			template: {
+				...template,
 				readme: readmeText,
 			},
 		},
 	}
 }) satisfies GetStaticProps<{
-	starter: StarterWithKey & { readme: string }
+	template: TemplateWithKeyAndType & { readme: string }
 }>
 
-export default function TemplateDetails({ starter }: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function TemplateDetails({ template }: InferGetStaticPropsType<typeof getStaticProps>) {
 	return (
 		<section className='mx-auto my-[65px] w-full max-w-screen-xl px-10 sm:px-32'>
 			<Link className='mb-14 flex items-center gap-1' href='/templates'>
@@ -114,25 +124,27 @@ export default function TemplateDetails({ starter }: InferGetStaticPropsType<typ
 					<div className=' flex w-full flex-col items-center'>
 						<TemplateLogo />
 
-						<TemplateInit path={starter.path} />
+						<TemplateInit path={template?.path} />
 
-						<TemplateLaunch path={starter.path} />
+						<TemplateLaunch path={template?.path} />
 
-						<TemplateMetadata tags={starter.tags} use_cases={starter.use_cases} />
+						<TemplateMetadata tags={template?.tags ?? []} use_cases={template?.use_cases ?? []} />
 					</div>
 
-					<TemplateButton
-						href={`https://github.com/shuttle-hq/shuttle-examples/blob/main/${starter.path}`}
-						title='Article'
-					/>
+					<div className='w-full'>
+						<TemplateButton
+							href={`https://github.com/shuttle-hq/shuttle-examples/blob/main/${template?.path}`}
+							title='Article'
+						/>
 
-					<TemplateButton
-						href={`https://github.com/shuttle-hq/shuttle-examples/blob/main/${starter.path}`}
-						title='Github Repo'
-					/>
+						<TemplateButton
+							href={`https://github.com/shuttle-hq/shuttle-examples/blob/main/${template?.path}`}
+							title='Github Repo'
+						/>
+					</div>
 				</div>
 
-				<TemplateReadme title={starter.title} readme={starter.readme} />
+				<TemplateReadme title={template?.title} readme={template?.readme} />
 			</div>
 		</section>
 	)

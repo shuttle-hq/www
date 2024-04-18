@@ -35,9 +35,9 @@ export default function TemplateMetadata({ use_cases, tags }: { use_cases: strin
 			</div>
 			<hr className='mb-5 w-full border-[#434343] border-[0.5]' />
 
-			<div className='mb-5 flex w-full justify-between'>
+			<div className='mb-5 flex w-full justify-between gap-4'>
 				<span className='text-[#7A7A7A]'>Tags</span>
-				<div>
+				<div className='flex flex-wrap gap-1'>
 					{tags.map((tag) => (
 						<span
 							key={tag}

@@ -1,18 +1,18 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { StarterWithKey } from 'pages/templates'
+import { TemplateWithKeyAndType } from 'pages/templates'
 import LaunchBG from './LaunchBG'
 
-export default function TemplateCard({ starter }: { starter: StarterWithKey }) {
+export default function TemplateCard({ template: template }: { template: TemplateWithKeyAndType }) {
 	return (
-		<Link href={`/templates/${starter.path}`}>
-			<div className='overdlow-y-scroll flex h-[320px] flex-col items-start justify-between rounded-3xl border border-[#434343] bg-[#0F0F0F] p-6'>
+		<Link href={`/templates/${template.key}`}>
+			<div className='overdlow-y-scroll flex min-h-[320px] flex-col items-start justify-between gap-2 rounded-3xl border border-[#434343] bg-[#0F0F0F] p-6'>
 				<div>
 					<Image src='/images/templates/logo.png' alt='Template logo' width={55} height={37} />
-					<h2 className='mb-1 mt-2 text-xl font-bold text-white'>{starter.title}</h2>
-					<p className='mb-4'>{starter.description}</p>
-					<div className='flex gap-2'>
-						{starter.tags.map((tag) => (
+					<h2 className='mb-1 mt-2 text-xl font-bold text-white'>{template.title}</h2>
+					<p className='mb-4'>{template.description}</p>
+					<div className='flex flex-wrap gap-2'>
+						{template.tags?.map((tag) => (
 							<span
 								key={tag}
 								className='rounded-xl border border-[#434343] px-3 py-1 text-sm text-white'
