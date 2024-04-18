@@ -8,6 +8,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { CopyButton } from 'components/elements'
 import { Logo } from 'components/svgs'
+import BgGlow from 'components/sections/Templates/BgGlow'
 
 export const getStaticPaths = (async () => {
 	const response = await fetch(TEMPLATES_URL)
@@ -179,7 +180,7 @@ export default function TemplateDetails({ starter }: InferGetStaticPropsType<typ
 						</div>
 					</div>
 
-					<div className='mb-3 w-full rounded-xl bg-[linear-gradient(46.52deg,_rgba(244,41,41,0.2)_-19.65%,_rgba(255,138,63,0.2)_27.61%,_rgba(229,233,56,0.2)_101.96%)] p-[1px]'>
+					<div className='relative mb-3 w-full rounded-xl bg-[linear-gradient(46.52deg,_rgba(244,41,41,0.2)_-19.65%,_rgba(255,138,63,0.2)_27.61%,_rgba(229,233,56,0.2)_101.96%)] p-[1px]'>
 						<button className='flex w-full items-baseline justify-center gap-1 rounded-xl bg-[#0F0F0F] px-6 py-2'>
 							<Link
 								href={`https://github.com/shuttle-hq/shuttle-examples/blob/main/${starter?.path}`}
@@ -188,9 +189,10 @@ export default function TemplateDetails({ starter }: InferGetStaticPropsType<typ
 								<span className='text-sm text-white'>Article</span>
 							</Link>
 						</button>
+						<BgGlow className='absolute -top-8 left-1 -z-10 w-full' />
 					</div>
 
-					<div className='mb-5 w-full rounded-xl bg-[linear-gradient(46.52deg,_rgba(244,41,41,0.2)_-19.65%,_rgba(255,138,63,0.2)_27.61%,_rgba(229,233,56,0.2)_101.96%)] p-[1px]'>
+					<div className='relative mb-5 w-full rounded-xl bg-[linear-gradient(46.52deg,_rgba(244,41,41,0.2)_-19.65%,_rgba(255,138,63,0.2)_27.61%,_rgba(229,233,56,0.2)_101.96%)] p-[1px]'>
 						<button className='flex w-full items-baseline justify-center gap-1 rounded-xl bg-[#0F0F0F] px-6 py-2'>
 							<Link
 								href={`https://github.com/shuttle-hq/shuttle-examples/blob/main/${starter?.path}`}
@@ -199,6 +201,7 @@ export default function TemplateDetails({ starter }: InferGetStaticPropsType<typ
 								<span className='text-sm text-white'>Github Repo</span>
 							</Link>
 						</button>
+						<BgGlow className='absolute -top-8 left-1 -z-10 w-full' />
 					</div>
 				</div>
 

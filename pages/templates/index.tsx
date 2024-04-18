@@ -3,7 +3,6 @@ import { Page } from 'components/templates'
 import toml from '@iarna/toml'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import TemplateCard from 'components/sections/Templates/TemplateCard'
-import TemplateFilterGroup from 'components/sections/Templates/TemplateFilterGroup'
 import FilterDesktop from 'components/sections/Templates/FilterDesktop'
 import FilterMobile from 'components/sections/Templates/FilterMobile'
 

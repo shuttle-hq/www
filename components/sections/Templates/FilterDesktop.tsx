@@ -1,3 +1,4 @@
+import BgGlow from './BgGlow'
 import TemplateFilterGroup from './TemplateFilterGroup'
 
 export default function FilterDesktop({
@@ -44,10 +45,11 @@ export default function FilterDesktop({
 				onChange={(e) => setSearch(e.target.value)}
 			/>
 
-			<div className='mb-6 rounded-[14px] bg-[linear-gradient(84.16deg,_#F4292933_-7.25%,_#FFD76F0B_35.45%,_#38D4E933_97%)] p-[1px]'>
+			<div className='relative mb-6 rounded-[14px] bg-[linear-gradient(84.16deg,_#F4292933_-7.25%,_#FFD76F0B_35.45%,_#38D4E933_97%)] p-[1px]'>
 				<button className='w-full rounded-[14px] border border-[#FFFFFF1A] bg-black px-6 py-3 text-center'>
 					Contribute
 				</button>
+				<BgGlow className='absolute -top-8 left-1 -z-10 w-full' />
 			</div>
 
 			<hr className='mb-6 border-[#FFFFFF1A]' />
