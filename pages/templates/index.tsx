@@ -118,7 +118,7 @@ export const getStaticProps = (async () => {
 	useCases: string[]
 }>
 
-const ITEMS_PER_PAGE = 9
+const ITEMS_PER_PAGE = 12
 
 export default function Templates({ tags, useCases, templates }: InferGetStaticPropsType<typeof getStaticProps>) {
 	const [search, setSearch] = useState('')
