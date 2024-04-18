@@ -15,7 +15,7 @@ const CopyButton: FC<CopyButtonProps> = ({ code, className, width = 32, height =
 	return (
 		<button
 			className={clsx(
-				'rounded-xl border border-[#191919] border-transparent p-2 px-3 py-2 text-sm font-medium leading-4 shadow-sm transition hover:border-[#484848] dark:text-head dark:text-white dark:hover:bg-[#343434]',
+				'rounded-xl border border-[#191919] border-transparent px-3 py-2 text-sm font-medium leading-4 shadow-sm transition hover:border-[#484848] dark:text-head dark:text-white dark:hover:bg-[#343434]',
 				className
 			)}
 			onClick={() => {
