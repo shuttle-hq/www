@@ -1,11 +1,13 @@
 import toml from '@iarna/toml'
 import {
 	Example,
+	ExampleWithKey,
 	Starter,
 	StarterWithKey,
 	TEMPLATES_URL,
 	Template,
 	TemplateType,
+	TemplateWithKey,
 	TemplateWithKeyAndType,
 	TemplatesResponse,
 } from 'pages/templates'
@@ -23,21 +25,35 @@ export const getStaticPaths = (async () => {
 	const response = await fetch(TEMPLATES_URL)
 	const tomlString = await response.text()
 
-	const { starters: starterMap } = toml.parse(tomlString) as unknown as TemplatesResponse
+	const { starters, examples, templates } = toml.parse(tomlString) as unknown as TemplatesResponse
 
-	const starterArr = Object.keys(starterMap)
-		.map<StarterWithKey>((key) => {
-			return {
-				...starterMap[key],
-				key,
-			}
-		})
-		.filter((starter) => !!starter?.template && starter?.template !== 'none')
+	const starterArr = Object.keys(starters).map<StarterWithKey>((key) => {
+		return {
+			...starters[key],
+			key,
+			type: TemplateType.Starter,
+		}
+	})
 
-	const paths = starterArr.map((starter) => ({
+	const templateArr = Object.keys(templates).map<TemplateWithKey>((key) => {
+		return {
+			...templates[key],
+			key,
+			type: TemplateType.Template,
+		}
+	})
+
+	const exampleArr = Object.keys(examples).map<ExampleWithKey>((key) => {
+		return {
+			...examples[key],
+			key,
+			type: TemplateType.Example,
+		}
+	})
+
+	const paths = [...starterArr, ...templateArr, ...exampleArr].map((template) => ({
 		params: {
-			framework: starter?.template,
-			templateKey: starter?.path?.replace(`${starter?.template}/`, '') ?? '',
+			templateKey: template.key,
 		},
 	}))
 
@@ -46,7 +62,6 @@ export const getStaticPaths = (async () => {
 		fallback: true, // false or "blocking"
 	}
 }) satisfies GetStaticPaths<{
-	framework: string
 	templateKey: string
 }>
 
