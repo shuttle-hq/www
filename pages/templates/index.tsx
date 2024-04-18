@@ -91,8 +91,12 @@ export default function Templates({ tags, useCases, starters }: InferGetStaticPr
 
 	const filteredStarters = starters.filter((starter) => {
 		const searchMatch = starter.title.toLowerCase().includes(search.toLowerCase())
-		const tagMatch = selectedTags.every((tag) => starter.tags.includes(tag))
-		const useCaseMatch = selectedUseCases.every((useCase) => starter.use_cases.includes(useCase))
+		const tagMatch =
+			selectedTags.length === 0 ||
+			selectedTags.reduce((acc, curr) => acc || starter.tags.includes(curr), false)
+		const useCaseMatch =
+			selectedUseCases.length === 0 ||
+			selectedUseCases.reduce((acc, curr) => acc || starter.use_cases.includes(curr), false)
 
 		return searchMatch && tagMatch && useCaseMatch
 	})
