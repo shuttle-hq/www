@@ -1,13 +1,21 @@
 import Image from 'next/image'
 
-export default function TemplateMetadata({ use_cases, tags }: { use_cases: string[]; tags: string[] }) {
+export default function TemplateMetadata({
+	use_cases,
+	tags,
+	type,
+}: {
+	use_cases: string[]
+	tags: string[]
+	type: string
+}) {
 	return (
 		<>
 			<div className='mb-5 flex w-full justify-between'>
 				<p className='text-[#7A7A7A]'>Type</p>
 
-				<div className='flex gap-2'>
-					<p>Starter</p>
+				<div className='flex gap-2 capitalize'>
+					<p>{type}</p>
 				</div>
 			</div>
 			<hr className='mb-5 w-full border-[#434343] border-[0.5]' />

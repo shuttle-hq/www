@@ -1,7 +1,10 @@
 import toml from '@iarna/toml'
 import {
+	Example,
+	Starter,
 	StarterWithKey,
 	TEMPLATES_URL,
+	Template,
 	TemplateType,
 	TemplateWithKeyAndType,
 	TemplatesResponse,
@@ -55,15 +58,16 @@ export const getStaticProps = (async (context) => {
 
 	const { starters, examples, templates } = toml.parse(tomlString) as unknown as TemplatesResponse
 
-	const template = (starters[templateKey] ||
-		examples[templateKey] ||
-		templates[templateKey]) as TemplateWithKeyAndType
+	const template = (starters[templateKey] || examples[templateKey] || templates[templateKey]) as
+		| Template
+		| Starter
+		| Example
 
-	console.log('examples[`${framework}-${templateKey}`]:', examples[templateKey])
-	console.log('templates[templateKey]:', templates[templateKey])
-	console.log('starters[templateKey]:', starters[templateKey])
-
-	console.log('template', template)
+	const type = starters[templateKey]
+		? TemplateType.Starter
+		: examples[templateKey]
+		? TemplateType.Example
+		: TemplateType.Template
 
 	if (!template) {
 		return {
@@ -81,7 +85,7 @@ export const getStaticProps = (async (context) => {
 					title: '',
 					use_cases: [],
 					readme: '',
-					type: TemplateType.Starter,
+					type: TemplateType.Template,
 				},
 			},
 		}
@@ -99,12 +103,16 @@ export const getStaticProps = (async (context) => {
 		readmeText = await readmeResponse.text()
 	}
 
+	const templateMetadata = {
+		...template,
+		readme: readmeText,
+		type,
+		key: templateKey,
+	} as TemplateWithKeyAndType & { readme: string }
+
 	return {
 		props: {
-			template: {
-				...template,
-				readme: readmeText,
-			},
+			template: templateMetadata,
 		},
 	}
 }) satisfies GetStaticProps<{
@@ -112,6 +120,7 @@ export const getStaticProps = (async (context) => {
 }>
 
 export default function TemplateDetails({ template }: InferGetStaticPropsType<typeof getStaticProps>) {
+	console.log('template:', template)
 	return (
 		<section className='mx-auto my-[65px] w-full max-w-screen-xl px-10 sm:px-32'>
 			<Link className='mb-14 flex items-center gap-1' href='/templates'>
@@ -128,7 +137,11 @@ export default function TemplateDetails({ template }: InferGetStaticPropsType<ty
 
 						<TemplateLaunch path={template?.path} />
 
-						<TemplateMetadata tags={template?.tags ?? []} use_cases={template?.use_cases ?? []} />
+						<TemplateMetadata
+							tags={template?.tags ?? []}
+							use_cases={template?.use_cases ?? []}
+							type={template?.type}
+						/>
 					</div>
 
 					<div className='w-full'>
