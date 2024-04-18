@@ -15,7 +15,7 @@ export default function BgGlow({ className }: { className?: string }) {
 					rx='64'
 					ry='24'
 					fill='url(#paint0_linear_4147_25789)'
-					fill-opacity='0.4'
+					fillOpacity='0.4'
 				/>
 			</g>
 			<defs>
@@ -26,9 +26,9 @@ export default function BgGlow({ className }: { className?: string }) {
 					width='188'
 					height='108'
 					filterUnits='userSpaceOnUse'
-					color-interpolation-filters='sRGB'
+					colorInterpolationFilters='sRGB'
 				>
-					<feFlood flood-opacity='0' result='BackgroundImageFix' />
+					<feFlood floodOpacity='0' result='BackgroundImageFix' />
 					<feBlend mode='normal' in='SourceGraphic' in2='BackgroundImageFix' result='shape' />
 					<feGaussianBlur stdDeviation='15' result='effect1_foregroundBlur_4147_25789' />
 				</filter>
@@ -40,8 +40,8 @@ export default function BgGlow({ className }: { className?: string }) {
 					y2='45.3445'
 					gradientUnits='userSpaceOnUse'
 				>
-					<stop offset='0.22108' stop-color='#FF5C00' />
-					<stop offset='1' stop-color='#00F0FF' />
+					<stop offset='0.22108' stopColor='#FF5C00' />
+					<stop offset='1' stopColor='#00F0FF' />
 				</linearGradient>
 			</defs>
 		</svg>

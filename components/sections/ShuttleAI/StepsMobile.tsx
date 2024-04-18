@@ -93,9 +93,9 @@ export default function StepsMobile() {
 					y2='587.221'
 					gradientUnits='userSpaceOnUse'
 				>
-					<stop stop-color='#FC540C' />
-					<stop offset='0.355703' stop-color='#FFD76F' stop-opacity='0.72' />
-					<stop offset='0.859375' stop-color='#38D4E9' />
+					<stop stopColor='#FC540C' />
+					<stop offset='0.355703' stopColor='#FFD76F' stopOpacity='0.72' />
+					<stop offset='0.859375' stopColor='#38D4E9' />
 				</linearGradient>
 				<linearGradient
 					id='paint1_linear_2170_40933'
@@ -105,9 +105,9 @@ export default function StepsMobile() {
 					y2='186.375'
 					gradientUnits='userSpaceOnUse'
 				>
-					<stop stop-color='#FC540C' />
-					<stop offset='0.0117617' stop-color='#FFD76F' stop-opacity='0.72' />
-					<stop offset='0.532208' stop-color='#38D4E9' />
+					<stop stopColor='#FC540C' />
+					<stop offset='0.0117617' stopColor='#FFD76F' stopOpacity='0.72' />
+					<stop offset='0.532208' stopColor='#38D4E9' />
 				</linearGradient>
 				<linearGradient
 					id='paint2_linear_2170_40933'
@@ -117,9 +117,9 @@ export default function StepsMobile() {
 					y2='349.383'
 					gradientUnits='userSpaceOnUse'
 				>
-					<stop offset='0.246534' stop-color='#FC540C' />
-					<stop offset='0.619356' stop-color='#FFD76F' stop-opacity='0.72' />
-					<stop offset='0.859375' stop-color='#38D4E9' />
+					<stop offset='0.246534' stopColor='#FC540C' />
+					<stop offset='0.619356' stopColor='#FFD76F' stopOpacity='0.72' />
+					<stop offset='0.859375' stopColor='#38D4E9' />
 				</linearGradient>
 				<linearGradient
 					id='paint3_linear_2170_40933'
@@ -129,9 +129,9 @@ export default function StepsMobile() {
 					y2='710.534'
 					gradientUnits='userSpaceOnUse'
 				>
-					<stop stop-color='#FC540C' />
-					<stop offset='0.355703' stop-color='#FFD76F' stop-opacity='0.72' />
-					<stop offset='0.859375' stop-color='#38D4E9' />
+					<stop stopColor='#FC540C' />
+					<stop offset='0.355703' stopColor='#FFD76F' stopOpacity='0.72' />
+					<stop offset='0.859375' stopColor='#38D4E9' />
 				</linearGradient>
 				<linearGradient
 					id='paint4_linear_2170_40933'
@@ -141,9 +141,9 @@ export default function StepsMobile() {
 					y2='38.4933'
 					gradientUnits='userSpaceOnUse'
 				>
-					<stop stop-color='#FC540C' />
-					<stop offset='0.355703' stop-color='#FFD76F' stop-opacity='0.72' />
-					<stop offset='0.859375' stop-color='#38D4E9' />
+					<stop stopColor='#FC540C' />
+					<stop offset='0.355703' stopColor='#FFD76F' stopOpacity='0.72' />
+					<stop offset='0.859375' stopColor='#38D4E9' />
 				</linearGradient>
 				<linearGradient
 					id='paint5_linear_2170_40933'
@@ -153,9 +153,9 @@ export default function StepsMobile() {
 					y2='777.534'
 					gradientUnits='userSpaceOnUse'
 				>
-					<stop stop-color='#FC540C' />
-					<stop offset='0.355703' stop-color='#FFD76F' stop-opacity='0.72' />
-					<stop offset='0.859375' stop-color='#38D4E9' />
+					<stop stopColor='#FC540C' />
+					<stop offset='0.355703' stopColor='#FFD76F' stopOpacity='0.72' />
+					<stop offset='0.859375' stopColor='#38D4E9' />
 				</linearGradient>
 				<linearGradient
 					id='paint6_linear_2170_40933'
@@ -165,9 +165,9 @@ export default function StepsMobile() {
 					y2='789.447'
 					gradientUnits='userSpaceOnUse'
 				>
-					<stop offset='0.246534' stop-color='#FC540C' />
-					<stop offset='0.619356' stop-color='#FFD76F' stop-opacity='0.72' />
-					<stop offset='0.859375' stop-color='#38D4E9' />
+					<stop offset='0.246534' stopColor='#FC540C' />
+					<stop offset='0.619356' stopColor='#FFD76F' stopOpacity='0.72' />
+					<stop offset='0.859375' stopColor='#38D4E9' />
 				</linearGradient>
 				<linearGradient
 					id='paint7_linear_2170_40933'
@@ -177,9 +177,9 @@ export default function StepsMobile() {
 					y2='457.039'
 					gradientUnits='userSpaceOnUse'
 				>
-					<stop offset='0.246534' stop-color='#FC540C' />
-					<stop offset='0.619356' stop-color='#FFD76F' stop-opacity='0.72' />
-					<stop offset='0.859375' stop-color='#38D4E9' />
+					<stop offset='0.246534' stopColor='#FC540C' />
+					<stop offset='0.619356' stopColor='#FFD76F' stopOpacity='0.72' />
+					<stop offset='0.859375' stopColor='#38D4E9' />
 				</linearGradient>
 				<linearGradient
 					id='paint8_linear_2170_40933'
@@ -189,9 +189,9 @@ export default function StepsMobile() {
 					y2='540.825'
 					gradientUnits='userSpaceOnUse'
 				>
-					<stop offset='0.246534' stop-color='#FC540C' />
-					<stop offset='0.619356' stop-color='#FFD76F' stop-opacity='0.72' />
-					<stop offset='0.859375' stop-color='#38D4E9' />
+					<stop offset='0.246534' stopColor='#FC540C' />
+					<stop offset='0.619356' stopColor='#FFD76F' stopOpacity='0.72' />
+					<stop offset='0.859375' stopColor='#38D4E9' />
 				</linearGradient>
 			</defs>
 		</svg>

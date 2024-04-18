@@ -31,9 +31,9 @@ export default function LaunchBG({
 					width='345.6'
 					height='91.6'
 					filterUnits='userSpaceOnUse'
-					color-interpolation-filters='sRGB'
+					colorInterpolationFilters='sRGB'
 				>
-					<feFlood flood-opacity='0' result='BackgroundImageFix' />
+					<feFlood floodOpacity='0' result='BackgroundImageFix' />
 					<feBlend mode='normal' in='SourceGraphic' in2='BackgroundImageFix' result='shape' />
 					<feGaussianBlur stdDeviation='16.4' result='effect1_foregroundBlur_4147_26418' />
 				</filter>
@@ -45,8 +45,8 @@ export default function LaunchBG({
 					y2='-123.565'
 					gradientUnits='userSpaceOnUse'
 				>
-					<stop stop-color='#FC540C' />
-					<stop offset='0.979319' stop-color='#FFD76F' stop-opacity='0.72' />
+					<stop stopColor='#FC540C' />
+					<stop offset='0.979319' stopColor='#FFD76F' stopOpacity='0.72' />
 				</linearGradient>
 			</defs>
 		</svg>
