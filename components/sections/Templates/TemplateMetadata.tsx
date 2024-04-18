@@ -12,6 +12,12 @@ export default function TemplateMetadata({
 	return (
 		<>
 			<div className='mb-5 flex w-full justify-between'>
+				<p className='text-[#7A7A7A]'>Official Template</p>
+			</div>
+
+			<hr className='mb-5 w-full border-[#434343] border-[0.5]' />
+
+			<div className='mb-5 flex w-full justify-between'>
 				<p className='text-[#7A7A7A]'>Type</p>
 
 				<div className='flex gap-2 capitalize'>
