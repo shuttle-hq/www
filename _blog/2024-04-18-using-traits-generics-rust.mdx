@@ -132,10 +132,19 @@ In addition to this, marker traits are also (generally speaking) auto traits. If
 
 ## Why do marker traits matter in Rust?
 
-Marker traits in Rust form the core of the ecosystem and allows us to provide garuantees that may not be possible in other languages. For example, Java has marker interfaces which are analogous to Rust’s marker traits. However, marker traits in Rust are not just for behavior like `Cloneable` or `Serializable`; they also ensure that types can be sent across threads, for example. This is a subtle but far-reaching difference within the Rust ecosystem. By being able to declare a type as `!Send` for example, we can ensure that the user never attempts to try to send the type across a thread. This makes the problem of concurrency much easier to handle. Marker traits can also affect other things:
+Marker traits in Rust form the core of the ecosystem and allows us to provide garuantees that may not be possible in other languages. For example, Java has marker interfaces which are analogous to Rust’s marker traits. However, marker traits in Rust are not just for behavior like `Cloneable` or `Serializable`; they also ensure that types can be sent across threads, for example. This is a subtle but far-reaching difference within the Rust ecosystem. With `Send` types for example, we can ensure that it's always safe to send the type across a thread. This makes the problem of concurrency much easier to handle. Marker traits can also affect other things:
 
 - The `Copy` trait is required to duplicate things by performing a bitwise copy (although this requires Clone). Attempting to copy a pointer bitwise only returns the address! This is also the same reason why String is unable to be copied and must be cloned: Strings in Rust are smart pointers.
-- `?Sized` - Generics initially are given a `static` lifetime. You can allow them to be unsized (ie, use references) by adding `?Sized` as a trait bound. Essentially what this means is when we implement `?Sized` for a type, we are allowing it to be dynamically sized - so the compiler won't be able to allocate space for it at compile-time because it's not constant-size.
+- The `Pin` trait which allows us to "pin" a value to a static place in memory
+- The `Sized` trait allows us to define a type as having a constant size at compile-time.
+
+There are also marker traits like `?Sized`, `!Send` and `!Sync`. In comparison to `Sized`, `Send` and `Sync` they are negative trait bounds and do the absolute opposite:
+
+- `?Sized` allows a type to be unsized (or in other words, dynamically sized)
+- `!Send` tells the compiler that an object absolutely cannot be sent to other thread
+- `!Sync` tells the compiler that an object's references absolutely cannot be shared between threads
+
+Marker traits can also improve the ergonomics of library crates. For example, let's say you have a type that implements `Pin` because your application or library requires it (Futures being a huge example of this). This is great because you can use the type safely now, but it's much more difficult to use your `Pin` type with things that don't care about pinning. Implementing `Unpin` allows you to use the type with things that don't care about pinning, making your developer experience that much better.
 
 ## Object traits and dynamic dispatch
 
@@ -149,11 +158,6 @@ struct MyStruct {
      my_field: Box<dyn MyTrait>
 }
 
-// an illegal struct that won't compile because of the Sized bound
-struct MyStruct: Sized {
-    my_field: Box<dyn MyTrait>
-}
-
 // this works!
 fn my_function(my_item: Box<dyn MyTrait>) {
      // .. some code here
@@ -163,22 +167,44 @@ fn my_function(my_item: Box<dyn MyTrait>) {
 fn my_function(my_item: dyn MyTrait) {
      // .. some code here
 }
+
+// an example of a trait with a Sized bound
+trait MySizedTrait: Sized {
+    fn some_method(&self) -> String {
+        "Boo!".to_string()
+    }
+}
+
+// an illegal struct that won't compile because of the Sized bound
+struct MyStruct {
+    my_field: Box<dyn MySizedTrait>
+}
+
 ```
 
 The object type will then be computed during runtime, as opposed to generics which use compile-time.
 
-The main advantages of dynamic dispatch are that your function doesn’t need to know the concrete type; as long as the type implements the trait, you can use it as a trait object (as long as it’s trait object safe). This is similar to the concept of duck-typing in other languages, where the functions and properties available to an object determine the typing. You also save some code bloat, which depending on your use can be a good thing.
+The main advantages of dynamic dispatch are that your function doesn’t need to know the concrete type; as long as the type implements the trait, you can use it as a trait object (as long as it’s trait object safe). This is similar to the concept of duck-typing in other languages, where the functions and properties available to an object determine the typing. However, make no mistake: this isn't the same thing! Typically from a user standpoint, the compiler doesn't care what the underlying concrete type is - just that it implements the trait. There are cases however where it *does* matter - in which case Rust offers ways to determine concrete type, although tricky to use. You also save some code bloat, which depending on your use can be a good thing.
 
 Errors are also easier to understand from a library user perspective. From a library developer’s point of view this is not such an issue, but if you need to use a generics-heavy library, you can get some very confusing errors! Axum and Diesel are two libraries that can sometimes be guilty of this and have workarounds for this (Axum’s `#[debug_handler]` macro and Diesel’s documentation, respectively). Because you’re moving the dispatch process to runtime, you also save compilation time.
 
-The downsides are that you need to ensure object trait safety. This basically means ensuring that your type doesn’t require `Self: Sized`. As mentioned earlier, this stems from the fact that by moving dispatch to runtime, the compiler can’t guess the size of your type - object traits don’t have a constant size at compile-time. This is also why we need to box dynamically dispatched objects and put them on the heap as mentioned earlier. Because of this, your application also takes a performance hit - although of course this depends on how many dynamically dispatched objects you’re using and how large they are!
+The downsides are that you need to ensure object trait safety. The conditions you need to satisfy for object safety include:
+- your type doesn’t require `Self: Sized`
+- your type must use some type of "self" in function arguments (whether it's `&self`, `self`, `mut self` etc...)
+- your type must not return Self
+
+Find out more [here.](https://doc.rust-lang.org/reference/items/traits.html#object-safety)
+
+Note that if you have a trait that doesn't require `Self: Sized` but the trait has a method that requires it, you can't call that method on a `dyn` object.
+
+This stems from the fact that by moving dispatch to runtime, the compiler can’t guess the size of your type - object traits don’t have a constant size at compile-time. This is also why we need to box dynamically dispatched objects and put them on the heap as mentioned earlier. Because of this, your application also takes a performance hit - although of course this depends on how many dynamically dispatched objects you’re using and how large they are!
 
 To illustrate these points further, there are two HTML templating libraries that come to mind:
 
 - Askama, which uses macros and generics for compile-time checking
-- Tera, which uses dynamic dispatch for hot-reloading
+- Tera, which uses dynamic dispatch for getting filters and testers at runtime
 
-Both of these libraries, while they can be used somewhat interchangeably for most use cases, have different trade-offs. Askama takes longer to compile and any errors will show in compile-time, but Tera only throws compilation errors at runtime and takes a performance hit due to dynamic dispatch. Zola, the Static Site Generator, uses Tera specifically because of certain design conditions that are unable to be satisfied by Askama.
+Both of these libraries, while they can be used somewhat interchangeably for most use cases, have different trade-offs. Askama takes longer to compile and any errors will show in compile-time, but Tera only throws compilation errors at runtime and takes a performance hit due to dynamic dispatch. Zola, the Static Site Generator, uses Tera specifically because of certain design conditions that are unable to be satisfied by Askama. You can see [here](https://github.com/Keats/tera/blob/3b2e96f624bd898cc96e964cd63194d58701ca4a/src/tera.rs#L61) that the Tera framework uses `Arc<dyn T>`.
 
 ## Combining traits and generics
 
