@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { StarterWithKey } from 'pages/templates'
+import LaunchBG from './LaunchBG'
 
 export default function TemplateCard({ starter }: { starter: StarterWithKey }) {
 	return (
@@ -21,11 +22,18 @@ export default function TemplateCard({ starter }: { starter: StarterWithKey }) {
 						))}
 					</div>
 				</div>
-				<div className='rounded-xl bg-[linear-gradient(85.52deg,_#FC540C_-7.27%,_rgba(255,215,111,0.72)_108.87%)] p-[1px]'>
-					<button className='flex items-baseline gap-1 rounded-xl bg-[#0F0F0F] px-6 py-2'>
+				<div className='relative rounded-xl bg-[linear-gradient(85.52deg,_#FC540C_-7.27%,_rgba(255,215,111,0.72)_108.87%)] p-[1px]'>
+					<button className='relative z-10 flex items-baseline gap-1 rounded-xl bg-[#0F0F0F] px-6 py-2'>
 						<span className='text-sm text-white'>Launch</span>{' '}
 						<Image src='/images/templates/arrow.svg' width={10} height={10} alt='arrow' />
 					</button>
+					<LaunchBG
+						className='absolute -left-[10px] -top-7'
+						width={180}
+						height={80}
+						rectWidth={180}
+						rectHeight={80}
+					/>
 				</div>
 			</div>
 		</Link>

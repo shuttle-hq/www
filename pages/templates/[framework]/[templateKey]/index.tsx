@@ -7,8 +7,8 @@ import { Markdown } from 'components/elements/Markdown'
 import Link from 'next/link'
 import Image from 'next/image'
 import { CopyButton } from 'components/elements'
-import { Logo } from 'components/svgs'
 import BgGlow from 'components/sections/Templates/BgGlow'
+import LaunchBG from 'components/sections/Templates/LaunchBG'
 
 export const getStaticPaths = (async () => {
 	const response = await fetch(TEMPLATES_URL)
@@ -124,13 +124,14 @@ export default function TemplateDetails({ starter }: InferGetStaticPropsType<typ
 							/>
 						</div>
 
-						<div className='mb-5 w-full rounded-xl bg-[linear-gradient(85.52deg,_#FC540C_-7.27%,_rgba(255,215,111,0.72)_108.87%)] p-[1px]'>
+						<div className='relative mb-5 w-full rounded-xl bg-[linear-gradient(85.52deg,_#FC540C_-7.27%,_rgba(255,215,111,0.72)_108.87%)] p-[1px]'>
 							<button className='flex w-full items-baseline justify-center gap-1 rounded-xl bg-[#0F0F0F] px-6 py-2'>
 								<Link href={`/templates/${starter?.path}`}>
 									<span className='text-sm text-white'>Launch</span>{' '}
 								</Link>
 								<Image src='/images/templates/arrow.svg' width={10} height={10} alt='arrow' />
 							</button>
+							<LaunchBG className='absolute -top-7 left-0 -z-10 w-full' />
 						</div>
 
 						<div className='mb-5 flex w-full justify-between'>
