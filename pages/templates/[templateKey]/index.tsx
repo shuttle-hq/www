@@ -135,9 +135,8 @@ export const getStaticProps = (async (context) => {
 }>
 
 export default function TemplateDetails({ template }: InferGetStaticPropsType<typeof getStaticProps>) {
-	console.log('template:', template)
 	return (
-		<section className='mx-auto my-[65px] w-full max-w-screen-xl px-10 sm:px-32'>
+		<section className='mx-auto my-[65px] w-full max-w-screen-xl px-10'>
 			<Link className='mb-14 flex items-center gap-1' href='/templates'>
 				<GoBack />
 				<span>All templates</span>
