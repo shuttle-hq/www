@@ -1,3 +1,6 @@
+import Checkbox from 'react-custom-checkbox'
+import CheckIcon from './CheckIcon'
+
 export default function TemplateFilterGroup({
 	title,
 	items,
@@ -9,29 +12,34 @@ export default function TemplateFilterGroup({
 	selectedItems: string[]
 	setSelectedItems: (items: string[]) => void
 }) {
+	const isChecked = (item: string) => selectedItems.includes(item)
+
 	return (
 		<div className='mb-9 text-[#7A7A7A]'>
 			<span className='uppercase'>{title}</span>
 			<fieldset>
 				{items.map((item) => (
 					<div key={item}>
-						<input
-							type='checkbox'
-							name={item}
-							id={item}
-							className='mr-[10px] accent-[#FC540C]'
+						<Checkbox
 							checked={selectedItems.includes(item)}
-							onChange={(e) => {
+							icon={<CheckIcon />}
+							className={`${
+								isChecked(item) ? 'border-[#FC540C]' : 'border-[#1A1A1A]'
+							} transition-all hover:border-[#FC540C]`}
+							style={{
+								overflow: 'hidden',
+								backgroundColor: isChecked(item) ? '#FC540C' : 'transparent',
+							}}
+							size={20}
+							labelClassName=' ml-[10px] transition-all'
+							labelStyle={{ color: isChecked(item) ? '#fff' : '#C8C8C8' }}
+							label={item}
+							onChange={(value: boolean) => {
 								setSelectedItems(
-									e.target.checked
-										? [...selectedItems, item]
-										: selectedItems.filter((t) => t !== item)
+									value ? [...selectedItems, item] : selectedItems.filter((t) => t !== item)
 								)
 							}}
 						/>
-						<label className='capitalize text-[#C8C8C8]' htmlFor={item}>
-							{item}
-						</label>
 					</div>
 				))}
 			</fieldset>

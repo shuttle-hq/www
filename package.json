@@ -37,6 +37,7 @@
 		"react-animate-height": "^3.2.3",
 		"react-cookie-consent": "^8.0.1",
 		"react-countdown": "^2.3.5",
+		"react-custom-checkbox": "^3.1.5",
 		"react-dom": "18.2.0",
 		"react-markdown": "^9.0.1",
 		"react-scrollchor": "^7.0.2",

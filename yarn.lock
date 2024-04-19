@@ -5296,6 +5296,11 @@ react-countdown@^2.3.5:
   dependencies:
     prop-types "^15.7.2"
 
+react-custom-checkbox@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/react-custom-checkbox/-/react-custom-checkbox-3.1.5.tgz#cf096f772fdebb874c8c99c10706e38ff0d8e6dc"
+  integrity sha512-MTGyAkebTsMjDnsJ/HpkRT49yy4ODhmy/CUAFlCnsejQAjyn6Lgmg2ihB0CNf+R1cu5ytJ/ORdovFlB88madaQ==
+
 react-dom@18.2.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react-dom/-/react-dom-18.2.0.tgz"
