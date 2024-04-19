@@ -61,9 +61,10 @@ A common workaround for this is to create a newtype pattern - that is, a one-fie
 ```rust
 struct MyStr<'a>(&'a str);
 
-impl<'a> Into<String> for MyStr<'a> {
-    fn into(self) -> String {
-        self.0.to_owned()
+// note here that implementing From<T> also implements Into<T> - so we can use .into() as well as String::from()
+impl<'a> From<MyStr<'a>> for String {
+    fn from(string: MyStr<'a>) -> String {
+        string.0.to_owned()
     }
 }
 
@@ -136,7 +137,7 @@ Marker traits in Rust form the core of the ecosystem and allows us to provide ga
 
 - The `Copy` trait is required to duplicate things by performing a bitwise copy (although this requires Clone). Attempting to copy a pointer bitwise only returns the address! This is also the same reason why String is unable to be copied and must be cloned: Strings in Rust are smart pointers.
 - The `Pin` trait which allows us to "pin" a value to a static place in memory
-- The `Sized` trait allows us to define a type as having a constant size at compile-time.
+- The `Sized` trait allows us to define a type as having a constant size at compile-time - however, this is already implemented for most types automatically
 
 There are also marker traits like `?Sized`, `!Send` and `!Sync`. In comparison to `Sized`, `Send` and `Sync` they are negative trait bounds and do the absolute opposite:
 
@@ -231,10 +232,13 @@ Now we can use any value we want for `T` as long as that type implements the `Se
 As a more complex example of using traits with generics that you may occasionally need to re-implement for your own types, take the `FromRequest` trait from Axum for example (the below code snippet is a simplification of the original trait to illustrate the point):
 
 ```rust
+use axum::extract::State;
+use axum::response::IntoResponse;
+
 trait FromRequest<S>
    where S: State
     {
-    type Rejection: impl IntoResponse;
+    type Rejection: IntoResponse;
 
     fn from_request(r: Request, _state: S) -> Result<Self, Self::Rejection>;
 }
