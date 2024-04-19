@@ -5,7 +5,14 @@ const nextConfig = {
 		defaultLocale: 'en',
 	},
 	images: {
-		domains: ['github.com', 'cdn.discordapp.com', 'endler.dev'],
+		domains: [
+			'github.com',
+			'cdn.discordapp.com',
+			'endler.dev',
+			'avatars.githubusercontent.com',
+			'raw.githubusercontent.com',
+			'assets.vercel.com',
+		],
 	},
 	async rewrites() {
 		return [

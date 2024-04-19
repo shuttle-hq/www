@@ -7,7 +7,9 @@ import FilterDesktop from 'components/sections/Templates/FilterDesktop'
 import FilterMobile from 'components/sections/Templates/FilterMobile'
 import Image from 'next/image'
 
-export const TEMPLATES_URL = 'https://raw.githubusercontent.com/shuttle-hq/shuttle-examples/main/templates.toml'
+// export const TEMPLATES_URL = 'https://raw.githubusercontent.com/shuttle-hq/shuttle-examples/main/templates.toml'
+export const TEMPLATES_URL =
+	'https://raw.githubusercontent.com/shuttle-hq/shuttle-examples/635406e96d4265ef7705ef50d39baa527ff293f5/templates.toml'
 
 export enum TemplateType {
 	Starter = 'starter',
@@ -72,7 +74,7 @@ export const getStaticProps = (async () => {
 	const response = await fetch(TEMPLATES_URL)
 	const tomlString = await response.text()
 
-	const { starters, templates, examples } = toml.parse(tomlString) as unknown as TemplatesResponse
+	const { starters, templates, examples, logos } = toml.parse(tomlString) as unknown as TemplatesResponse
 
 	const starterArr = Object.keys(starters).map<StarterWithKey>((key) => {
 		return {
@@ -110,17 +112,24 @@ export const getStaticProps = (async () => {
 			templates: [...starterArr, ...templateArr, ...exampleArr],
 			tags,
 			useCases,
+			logos,
 		},
 	}
 }) satisfies GetStaticProps<{
 	templates: TemplateWithKeyAndType[]
 	tags: string[]
 	useCases: string[]
+	logos: Record<string, string>
 }>
 
 const ITEMS_PER_PAGE = 12
 
-export default function Templates({ tags, useCases, templates }: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function Templates({
+	tags,
+	useCases,
+	templates,
+	logos,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
 	const [search, setSearch] = useState('')
 	const [selectedTags, setSelectedTags] = useState<string[]>([])
 	const [selectedUseCases, setSelectedUseCases] = useState<string[]>([])
@@ -186,7 +195,11 @@ export default function Templates({ tags, useCases, templates }: InferGetStaticP
 
 				<div className='col-span-3 grid grid-cols-1 gap-6 px-[28px] md:grid-cols-2 md:px-0 lg:grid-cols-3'>
 					{currentPageTemplates.map((template) => (
-						<TemplateCard key={template.key} template={template} />
+						<TemplateCard
+							key={template.key}
+							template={template}
+							logo={logos[template.tags[0]] ?? logos.shuttle}
+						/>
 					))}
 					{totalPages > 1 && (
 						<div className='col-span-2 hidden w-full justify-between sm:col-span-2 md:flex lg:col-span-3'>

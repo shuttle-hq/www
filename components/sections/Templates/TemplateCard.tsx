@@ -3,12 +3,12 @@ import Link from 'next/link'
 import { TemplateWithKeyAndType } from 'pages/templates'
 import LaunchBG from './LaunchBG'
 
-export default function TemplateCard({ template: template }: { template: TemplateWithKeyAndType }) {
+export default function TemplateCard({ template, logo }: { template: TemplateWithKeyAndType; logo: string }) {
 	return (
 		<Link href={`/templates/${template.key}`}>
 			<div className='flex h-[320px] flex-col items-start justify-between gap-2 rounded-3xl border border-[#434343] bg-[#0F0F0F] p-6'>
 				<div>
-					<Image src='/images/templates/logo.png' alt='Template logo' width={55} height={37} />
+					<Image src={logo} alt='Template logo' width={55} height={37} className='rounded-full' />
 					<h2 className='mb-1 mt-2 text-xl font-bold text-white'>{template.title}</h2>
 					<p className='mb-4 text-sm'>{template.description}</p>
 					<div className='flex flex-wrap gap-2'>
