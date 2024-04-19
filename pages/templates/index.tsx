@@ -67,6 +67,7 @@ export interface TemplatesResponse {
 	starters: Record<string, Starter>
 	templates: Record<string, Template>
 	examples: Record<string, Example>
+	logos: Record<string, string>
 	// community_templates: Record<string, CommunityTemplate>
 }
 
