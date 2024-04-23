@@ -161,11 +161,6 @@ export default function TemplateDetails({ template }: InferGetStaticPropsType<ty
 					<div className='w-full'>
 						<TemplateButton
 							href={`https://github.com/shuttle-hq/shuttle-examples/blob/main/${template?.path}`}
-							title='Article'
-						/>
-
-						<TemplateButton
-							href={`https://github.com/shuttle-hq/shuttle-examples/blob/main/${template?.path}`}
 							title='Github Repo'
 						/>
 					</div>
