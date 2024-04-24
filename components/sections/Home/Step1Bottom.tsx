@@ -1,6 +1,7 @@
-export default function Step1Bottom() {
+export default function Step1Bottom({ id }: { id: string }) {
 	return (
 		<svg
+			id={id}
 			width='509'
 			height='360'
 			viewBox='0 0 509 360'

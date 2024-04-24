@@ -1,8 +1,9 @@
 import React from 'react'
 
-export default function Step3Right() {
+export default function Step3Right({ className, id }: { className?: string; id?: string }) {
 	return (
 		<svg
+			id={id}
 			width='447'
 			height='402'
 			viewBox='0 0 447 402'

@@ -1,8 +1,8 @@
 import Code from './Code'
 
-export default function Step1Top({ className }: { className: string }) {
+export default function Step1Top({ className, id }: { className: string; id: string }) {
 	return (
-		<div className={`z-40 rounded-[24px] border border-[#525150] bg-black p-4 ${className}`}>
+		<div className={`z-40 rounded-[24px] border border-[#525150] bg-black p-4 ${className}`} id={id}>
 			<div className='mb-3 flex items-baseline gap-[6px] text-[24px] text-[#F0F0F0]'>
 				<svg width='23' height='19' viewBox='0 0 23 19' fill='none' xmlns='http://www.w3.org/2000/svg'>
 					<path

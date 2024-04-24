@@ -1,8 +1,9 @@
 import React from 'react'
 
-export default function Step2Bottom() {
+export default function Step2Bottom({ className, id }: { className?: string; id?: string }) {
 	return (
 		<svg
+			id={id}
 			width='509'
 			height='360'
 			viewBox='0 0 509 360'

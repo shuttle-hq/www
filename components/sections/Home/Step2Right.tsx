@@ -1,8 +1,7 @@
-import React from 'react'
-
-export default function Step2Right() {
+export default function Step2Right({ className, id }: { className?: string; id?: string }) {
 	return (
 		<svg
+			id={id}
 			width='409'
 			height='208'
 			viewBox='0 0 409 208'

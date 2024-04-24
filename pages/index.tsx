@@ -31,6 +31,7 @@ import Step3Left from 'components/sections/Home/Step3Left'
 import Step3Left2 from 'components/sections/Home/Step3Left2'
 import Step3Vectors from 'components/sections/Home/Step3Vectors'
 import Step3Right from 'components/sections/Home/Step3Right'
+import Xarrow from 'react-xarrows'
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
@@ -69,7 +70,7 @@ interface Props {
 export default function Home({ posts, starters, questions, stargazersCount }: Props) {
 	const [activeStep, setActiveStep] = useState(0)
 	const container = useRef<HTMLDivElement | null>(null)
-	const tl = useRef<any>()
+	const box1Ref = useRef(null)
 
 	useGSAP(() => {
 		const bodyScrollBar = Scrollbar.init(document.body, {
@@ -192,30 +193,135 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 			<section className='black flex flex-col'>
 				<div className='p-wrap relative'>
 					<div className='panel flex justify-center bg-black'>
-						<Step1Top className='step-top absolute' />
-						<Step1Left />
-						<Step1Right />
-						<Step1Bottom />
-						<Vectors1 />
+						<Xarrow
+							start='top-1'
+							end='left-1'
+							startAnchor='left'
+							endAnchor='top'
+							color='#525150'
+							strokeWidth={1}
+							dashness={{ strokeLen: 2, nonStrokeLen: 5 }}
+							showHead={false}
+							curveness={1}
+						/>
+						<Xarrow
+							start='top-1'
+							end='right-1'
+							startAnchor='right'
+							endAnchor='top'
+							color='#525150'
+							strokeWidth={1}
+							dashness={{ strokeLen: 2, nonStrokeLen: 5 }}
+							showHead={false}
+							curveness={1}
+						/>
+
+						<Xarrow
+							start='left-1'
+							end='bottom-1'
+							startAnchor='bottom'
+							endAnchor='left'
+							color='#525150'
+							showHead={false}
+							strokeWidth={1}
+							curveness={1}
+						/>
+						<Xarrow
+							start='right-1'
+							end='bottom-1'
+							startAnchor='bottom'
+							endAnchor='right'
+							color='#525150'
+							strokeWidth={1}
+							showHead={false}
+							curveness={1}
+						/>
+						<Step1Top id='top-1' className='step-top absolute' />
+						<Step1Left id='left-1' />
+						<Step1Right id='right-1' />
+						<Step1Bottom id='bottom-1' />
 						<RocketColor1 />
 					</div>
 
 					<div className='panel flex justify-center bg-black'>
-						<Step2Top className='step-top absolute' />
-						<Step2Left />
-						<Step2Right />
-						<Vectors1 />
+						<Xarrow
+							start='top-1'
+							end='left-1'
+							startAnchor='left'
+							endAnchor='top'
+							color='#525150'
+							strokeWidth={1}
+							dashness={{ strokeLen: 2, nonStrokeLen: 5 }}
+							showHead={false}
+							curveness={1}
+						/>
+						<Xarrow
+							start='top-2'
+							end='right-2'
+							startAnchor='right'
+							endAnchor='top'
+							color='#525150'
+							strokeWidth={1}
+							dashness={{ strokeLen: 2, nonStrokeLen: 5 }}
+							showHead={false}
+							curveness={1}
+						/>
+
+						<Xarrow
+							start='left-2'
+							end='bottom-2'
+							startAnchor='bottom'
+							endAnchor='left'
+							color='#525150'
+							showHead={false}
+							strokeWidth={1}
+							curveness={1}
+						/>
+						<Xarrow
+							start='right-2'
+							end='bottom-2'
+							startAnchor='bottom'
+							endAnchor='right'
+							color='#525150'
+							strokeWidth={1}
+							showHead={false}
+							curveness={1}
+						/>
 						<RocketColor2 />
-						<Step2Bottom />
+						<Step2Top id='top-2' className='step-top absolute' />
+						<Step2Left id='left-2' />
+						<Step2Right id='right-2' />
+						<Step2Bottom id='bottom-2' />
 					</div>
 
 					<div className='panel flex justify-center bg-black'>
-						<Step3Top className='step-top absolute' />
-						<Step3Vectors />
 						<RocketColor3 />
-						<Step3Left />
+						<Xarrow
+							start='top-3'
+							end='left-3'
+							startAnchor='left'
+							endAnchor='top'
+							color='#525150'
+							strokeWidth={1}
+							dashness={{ strokeLen: 2, nonStrokeLen: 5 }}
+							showHead={false}
+							curveness={1}
+						/>
+						<Xarrow
+							start='top-3'
+							end='right-3'
+							startAnchor='right'
+							endAnchor='top'
+							color='#525150'
+							strokeWidth={1}
+							dashness={{ strokeLen: 2, nonStrokeLen: 5 }}
+							showHead={false}
+							curveness={1}
+						/>
+						<Step3Top id='top-3' className='step-top absolute' />
+						<Step3Left id='left-3' />
 						<Step3Left2 />
-						<Step3Right />
+						<Step3Right id='right-3' />
 					</div>
 
 					<div className='panel flex justify-center bg-black'>
