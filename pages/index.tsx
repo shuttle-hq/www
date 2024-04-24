@@ -104,7 +104,7 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 				trigger: 'section.black',
 				scroller: '.scroller',
 				start: 'top top',
-				end: () => '+=' + (window.innerHeight - 1000),
+				end: () => '+=' + window.innerHeight,
 				scrub: true,
 				toggleActions: 'play none reverse none',
 				invalidateOnRefresh: true,
@@ -115,8 +115,8 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 			scrollTrigger: {
 				trigger: 'section.black',
 				scroller: '.scroller',
-				start: () => 'top -' + (window.innerHeight - 1000) * 1.5,
-				end: () => '+=' + (window.innerHeight - 1000),
+				start: () => 'top -' + window.innerHeight * 1.5,
+				end: () => '+=' + window.innerHeight,
 				scrub: true,
 				toggleActions: 'play none reverse none',
 				invalidateOnRefresh: true,
@@ -127,8 +127,8 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 			scrollTrigger: {
 				trigger: 'section.black',
 				scroller: '.scroller',
-				start: () => 'top -' + (window.innerHeight - 1000) * 2.5,
-				end: () => '+=' + (window.innerHeight - 1000),
+				start: () => 'top -' + window.innerHeight * 2.5,
+				end: () => '+=' + window.innerHeight,
 				scrub: true,
 				toggleActions: 'play none reverse none',
 				invalidateOnRefresh: true,
@@ -139,8 +139,8 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 			scrollTrigger: {
 				trigger: 'section.black',
 				scroller: '.scroller',
-				start: () => 'top -' + (window.innerHeight - 1000) * 3.5,
-				end: () => '+=' + (window.innerHeight - 1000),
+				start: () => 'top -' + window.innerHeight * 3.5,
+				end: () => '+=' + window.innerHeight,
 				scrub: true,
 				toggleActions: 'play none reverse none',
 				invalidateOnRefresh: true,
@@ -176,7 +176,7 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 			// markers: true,
 			pin: true,
 			start: () => 'top top',
-			end: () => '+=' + (images.length + 1) * (window.innerHeight - 1000),
+			end: () => '+=' + (images.length + 1) * window.innerHeight,
 			invalidateOnRefresh: true,
 		})
 	})
