@@ -9,7 +9,7 @@ export default function Step3Right() {
 			fill='none'
 			xmlns='http://www.w3.org/2000/svg'
 			xmlnsXlink='http://www.w3.org/1999/xlink'
-			className='absolute right-[22%] top-[8.5%]'
+			className='absolute right-[250px] top-[200px]'
 		>
 			<g filter='url(#filter0_b_4133_5288)'>
 				<rect width='447' height='402' rx='24' fill='black' fill-opacity='0.9' />

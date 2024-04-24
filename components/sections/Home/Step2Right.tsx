@@ -2,7 +2,14 @@ import React from 'react'
 
 export default function Step2Right() {
 	return (
-		<svg width='409' height='208' viewBox='0 0 409 208' fill='none' xmlns='http://www.w3.org/2000/svg'>
+		<svg
+			width='409'
+			height='208'
+			viewBox='0 0 409 208'
+			fill='none'
+			xmlns='http://www.w3.org/2000/svg'
+			className='absolute right-[227px] top-[260px] z-50 bg-black'
+		>
 			<g filter='url(#filter0_b_4147_5752)'>
 				<g clip-path='url(#clip0_4147_5752)'>
 					<rect width='409' height='208' rx='24' fill='black' fill-opacity='0.1' />

@@ -1,44 +1,36 @@
-import {
-	CallToAction,
-	CommunitySupportedNumbers,
-	FeaturedBlogPosts,
-	FeaturedStarters,
-	Features,
-	FrequentlyAskedQuestions,
-	GetStarted,
-	Hero,
-	HowItWorks,
-	LogosReferences,
-	Testimonials,
-} from 'components/sections'
+import { CallToAction, Footer } from 'components/sections'
 import { getSortedPosts, Post } from 'lib/blog/posts'
 import { GetStaticPropsResult } from 'next'
 import { StarterAttrs } from '../components/elements/Starter'
 import { QuestionAttrs } from '../components/sections/FrequentlyAskedQuestions'
 import { landingQuestions, FeaturedStartersContent } from '../content'
-import { useScroll, motion, useMotionValueEvent, useSpring, useAnimation, useAnimate } from 'framer-motion'
 import GreyRocket from 'components/sections/Home/GreyRocket'
 import RocketColor1 from 'components/sections/Home/RocketColor1'
 import RocketColor3 from 'components/sections/Home/RocketColor3'
 import RocketColor2 from 'components/sections/Home/RocketColor2'
-import RocketColorFull from 'components/sections/Home/RocketColorFull'
-import { useCallback, useEffect, useRef, useState } from 'react'
-import Step1 from 'components/sections/Home/Step1'
-import Step2 from 'components/sections/Home/Step2'
-import Step3 from 'components/sections/Home/Step3'
-import Step1Left from 'components/sections/Home/Step1Left'
-import Step1Bottom from 'components/sections/Home/Step1Bottom'
-import Step1Right from 'components/sections/Home/Step1Right'
-import Vectors1 from 'components/sections/Home/Vectors1'
-import Step3Vectors from 'components/sections/Home/Step3Vectors'
-import Step3Right from 'components/sections/Home/Step3Right'
-import Step3Left from 'components/sections/Home/Step3Left'
-import Step3Left2 from 'components/sections/Home/Step3Left2'
-import Step4 from 'components/sections/Home/Step4'
+import { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import Step1Top from 'components/sections/Home/Step1Top'
+import Step2Top from 'components/sections/Home/Step2Top'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
+import Scrollbar from 'smooth-scrollbar'
+import { Page } from 'components/templates'
+import Step3Top from 'components/sections/Home/Step3Top'
 import RocketColor4 from 'components/sections/Home/RocketColorFull'
+import Link from 'next/link'
+import TemplateCard from 'components/sections/Home/TemplateCard'
+import Step1Left from 'components/sections/Home/Step1Left'
+import Step1Right from 'components/sections/Home/Step1Right'
+import Step1Bottom from 'components/sections/Home/Step1Bottom'
+import Vectors1 from 'components/sections/Home/Vectors1'
+import Step2Left from 'components/sections/Home/Step2Left'
+import Step2Right from 'components/sections/Home/Step2Right'
+import Step2Bottom from 'components/sections/Home/Step2Bottom'
+import Step3Left from 'components/sections/Home/Step3Left'
+import Step3Left2 from 'components/sections/Home/Step3Left2'
+import Step3Vectors from 'components/sections/Home/Step3Vectors'
+import Step3Right from 'components/sections/Home/Step3Right'
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
@@ -79,45 +71,228 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 	const container = useRef<HTMLDivElement | null>(null)
 	const tl = useRef<any>()
 
-	useGSAP(
-		() => {
-			const rockets = gsap.utils.toArray('.rocket')
+	useGSAP(() => {
+		const bodyScrollBar = Scrollbar.init(document.body, {
+			damping: 0.1,
+			delegateTo: document,
+		})
 
-			rockets.forEach((rocket: any, index) => {
-				gsap.fromTo(
-					rocket,
-					{ autoAlpha: 0, y: 100 }, // from state
-					{
-						autoAlpha: 1,
-						y: 0, // to state
-						scrollTrigger: {
-							trigger: container.current,
-							start: 'top top+=100',
-							end: '+=100', // Adjust end value based on how long you want the pin effect
-							scrub: true,
-							markers: true, // Remove in production, used for debugging
-							pin: true, // Pin the container when in view
-							pinSpacing: false,
-							onEnter: () => console.log('Animation start for', rocket),
-							onLeaveBack: () => console.log('Reversing animation for', rocket),
-						},
-					}
-				)
-			})
-		},
-		{ scope: container }
-	) // <-- scope for selector text (optional)
+		ScrollTrigger.scrollerProxy('.scroller', {
+			scrollTop(value) {
+				if (arguments.length) {
+					bodyScrollBar.scrollTop = value ?? 0
+				}
+				return bodyScrollBar.scrollTop
+			},
+		})
+		bodyScrollBar.addListener(ScrollTrigger.update)
+
+		gsap.set('.panel', {
+			zIndex: (i, target, targets) => targets.length - i,
+			// opacity: (i, target, targets) => 0,
+		})
+
+		const images = gsap.utils.toArray<GSAPTweenTarget>('.panel')
+		const [first, second, third, fourth] = images
+
+		const steps = gsap.utils.toArray<GSAPTweenTarget>('.step-top')
+		const [firstStep, secondStep, thirdStep] = steps
+
+		const tl1 = gsap.timeline({
+			scrollTrigger: {
+				trigger: 'section.black',
+				scroller: '.scroller',
+				start: 'top top',
+				end: () => '+=' + (window.innerHeight - 1000),
+				scrub: true,
+				toggleActions: 'play none reverse none',
+				invalidateOnRefresh: true,
+			},
+		})
+
+		const tl2 = gsap.timeline({
+			scrollTrigger: {
+				trigger: 'section.black',
+				scroller: '.scroller',
+				start: () => 'top -' + (window.innerHeight - 1000) * 1.5,
+				end: () => '+=' + (window.innerHeight - 1000),
+				scrub: true,
+				toggleActions: 'play none reverse none',
+				invalidateOnRefresh: true,
+			},
+		})
+
+		const tl3 = gsap.timeline({
+			scrollTrigger: {
+				trigger: 'section.black',
+				scroller: '.scroller',
+				start: () => 'top -' + (window.innerHeight - 1000) * 2.5,
+				end: () => '+=' + (window.innerHeight - 1000),
+				scrub: true,
+				toggleActions: 'play none reverse none',
+				invalidateOnRefresh: true,
+			},
+		})
+
+		const tl4 = gsap.timeline({
+			scrollTrigger: {
+				trigger: 'section.black',
+				scroller: '.scroller',
+				start: () => 'top -' + (window.innerHeight - 1000) * 3.5,
+				end: () => '+=' + (window.innerHeight - 1000),
+				scrub: true,
+				toggleActions: 'play none reverse none',
+				invalidateOnRefresh: true,
+			},
+		})
+
+		tl1
+			// .fromTo(
+			// 	firstStep,
+			// 	{ left: 0, right: 0, scale: 1, opacity: 1 },
+			// 	{ left: 0, scale: 0.7, opacity: 0.3 }
+			// )
+			.fromTo(first, { opacity: 1 }, { opacity: 0 })
+
+		tl2
+			// .to(firstStep, { left: 0, scale: 0.7, opacity: 0 })
+			// 	.fromTo(secondStep, { left: '30%', scale: 1, opacity: 1 }, { left: 0, scale: 0.7, opacity: 0.3 })
+			.fromTo(second, { opacity: 1 }, { opacity: 0 })
+
+		tl3
+			// .to(secondStep, { left: 0, scale: 0.7, opacity: 0 })
+			// .fromTo(thirdStep, { left: '30%', scale: 1, opacity: 1 }, { left: 0, scale: 0.7, opacity: 0.3 })
+			.fromTo(third, { opacity: 1 }, { opacity: 0 })
+
+		tl4
+			// .to(thirdStep, { left: 0, scale: 0.7, opacity: 0 })
+			.fromTo(fourth, { left: 0 }, { left: window.innerWidth < 640 ? 0 : -(window.innerWidth / 4) })
+
+		ScrollTrigger.create({
+			trigger: 'section.black',
+			scroller: '.scroller',
+			scrub: true,
+			// markers: true,
+			pin: true,
+			start: () => 'top top',
+			end: () => '+=' + (images.length + 1) * (window.innerHeight - 1000),
+			invalidateOnRefresh: true,
+		})
+	})
 
 	return (
-		<main className='text-body'>
-			{/* <Hero /> */}
+		<div className='scroller' ref={container}>
+			<CallToAction />
 
-			<div className='rockets relative h-[3000px]' ref={container}>
-				<RocketColor1 className='rocket-1 rocket absolute left-0 top-0' />
-				<RocketColor2 className='rocket-2 rocket absolute left-0 top-0' />
-				<RocketColor3 className='rocket-3 rocket absolute left-0 top-0' />
-				<RocketColor4 className='rocket-4 rocket absolute left-0 top-0' />
+			<div className='z-50 mx-auto mb-0 flex max-w-7xl flex-col items-center sm:mx-auto sm:mt-16 sm:px-10 lg:mt-32 desktop:mt-64'>
+				<h1 className='text-[48px] text-[#F0F0F0]'>Launch System</h1>
+
+				<p className='text-[20px] text-[#C8C8C8]'>Blast off in t-minus 3, 2, 1...</p>
 			</div>
-		</main>
+			<section className='black flex flex-col'>
+				<div className='p-wrap relative'>
+					<div className='panel flex justify-center bg-black'>
+						<Step1Top className='step-top absolute' />
+						<Step1Left />
+						<Step1Right />
+						<Step1Bottom />
+						<Vectors1 />
+						<RocketColor1 />
+					</div>
+
+					<div className='panel flex justify-center bg-black'>
+						<Step2Top className='step-top absolute' />
+						<Step2Left />
+						<Step2Right />
+						<Vectors1 />
+						<RocketColor2 />
+						<Step2Bottom />
+					</div>
+
+					<div className='panel flex justify-center bg-black'>
+						<Step3Top className='step-top absolute' />
+						<Step3Vectors />
+						<RocketColor3 />
+						<Step3Left />
+						<Step3Left2 />
+						<Step3Right />
+					</div>
+
+					<div className='panel flex justify-center bg-black'>
+						<RocketColor4 />
+						<div className='overall-steps absolute right-[100px] top-1/2 flex -translate-y-1/2 flex-col gap-5'>
+							<Step1Top className='' />
+							<Step2Top className='' />
+							<Step3Top className='' />
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<div className='mx-auto mt-8 max-w-7xl sm:mx-auto sm:mt-16 sm:px-10 lg:mt-32 desktop:mt-64'>
+				<h1 className='text-[56px] text-[#F0F0F0]'>Start Building</h1>
+				<p>Use one of our starter templates to get your project off the ground in minutes.</p>
+
+				<Link href='/starters'>
+					<p className='my-5 flex items-center gap-1 text-[#F0F0F0]'>
+						See all
+						<svg
+							width='20'
+							height='20'
+							viewBox='0 0 20 20'
+							fill='none'
+							xmlns='http://www.w3.org/2000/svg'
+						>
+							<path
+								d='M3.82918 9.13587L12.8496 9.13587L8.77168 5.05797L9.99857 3.83105L16.168 10.0005L9.99857 16.1698L8.77168 14.9429L12.8496 10.865L3.82918 10.865L3.82918 9.13587Z'
+								fill='white'
+							/>
+						</svg>{' '}
+					</p>{' '}
+				</Link>
+
+				<div className='col-span-3 grid grid-cols-1 gap-6 px-[28px] md:grid-cols-2 md:px-0 lg:grid-cols-3'>
+					<TemplateCard
+						logo='https://avatars.githubusercontent.com/u/54710151?v=4'
+						template={{
+							key: 'actix-web/hello-world',
+							title: 'Actix Web',
+							description: 'Powerful and fast web framework',
+							path: 'actix-web/hello-world',
+							use_cases: ['Web app'],
+							tags: ['actix-web'],
+							template: 'actix-web',
+						}}
+					/>
+					<TemplateCard
+						logo='https://avatars.githubusercontent.com/u/54710151?v=4'
+						template={{
+							key: 'actix-web/hello-world',
+							title: 'Actix Web',
+							description: 'Powerful and fast web framework',
+							path: 'actix-web/hello-world',
+							use_cases: ['Web app'],
+							tags: ['actix-web'],
+							template: 'actix-web',
+						}}
+					/>
+					<TemplateCard
+						logo='https://avatars.githubusercontent.com/u/54710151?v=4'
+						template={{
+							key: 'actix-web/hello-world',
+							title: 'Actix Web',
+							description: 'Powerful and fast web framework',
+							path: 'actix-web/hello-world',
+							use_cases: ['Web app'],
+							tags: ['actix-web'],
+							template: 'actix-web',
+						}}
+					/>
+				</div>
+			</div>
+			<Footer />
+		</div>
 	)
 }
+
+Home.getLayout = (children: ReactNode) => <Page disableFooter>{children}</Page>

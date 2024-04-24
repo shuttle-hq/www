@@ -9,6 +9,7 @@ export default function Step2Bottom() {
 			fill='none'
 			xmlns='http://www.w3.org/2000/svg'
 			xmlnsXlink='http://www.w3.org/1999/xlink'
+			className='absolute bottom-[150px] bg-black'
 		>
 			<g filter='url(#filter0_b_4133_4582)'>
 				<rect width='509' height='360' rx='24' fill='black' fill-opacity='0.1' />
@@ -31,7 +32,7 @@ export default function Step2Bottom() {
 					fill='#434343'
 					mask='url(#path-3-inside-1_4133_4582)'
 				/>
-				<g style='mix-blend-mode:screen'>
+				<g>
 					<rect x='28' y='81' width='397' height='250' rx='20' fill='url(#pattern0_4133_4582)' />
 				</g>
 				<path

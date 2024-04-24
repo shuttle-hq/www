@@ -7,7 +7,7 @@ export default function Step1Bottom() {
 			fill='none'
 			xmlns='http://www.w3.org/2000/svg'
 			xmlnsXlink='http://www.w3.org/1999/xlink'
-			className='absolute bottom-[62%] left-[38.4%]'
+			className='absolute bottom-[150px]'
 		>
 			<g filter='url(#filter0_b_4133_4647)'>
 				<rect width='509' height='360' rx='24' fill='black' fill-opacity='0.9' />

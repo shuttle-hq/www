@@ -6,7 +6,7 @@ export default function Vectors1() {
 			viewBox='0 0 791 648'
 			fill='none'
 			xmlns='http://www.w3.org/2000/svg'
-			className='absolute top-[2.7%]'
+			className='absolute top-[62px]'
 		>
 			<path
 				d='M785 189L785 48.9999C785 22.4903 763.509 0.999999 737 0.999998L648 0.999994'

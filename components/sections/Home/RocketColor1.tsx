@@ -1,7 +1,11 @@
+import Step1Bottom from './Step1Bottom'
+import Step1Left from './Step1Left'
+import Step1Right from './Step1Right'
+
 export default function RocketColor1({ className }: { className?: string }) {
 	return (
 		<svg
-			className={className}
+			className={className + 'relative'}
 			width='1088'
 			height='1078'
 			viewBox='0 0 1088 1078'
