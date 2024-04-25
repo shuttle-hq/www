@@ -10,7 +10,7 @@ export default function Step3Left({ className, id }: { className?: string; id?: 
 				<h1 className='text-2xl leading-none'>AWS under the hood </h1>
 			</div>
 
-			<p className='mb-5'>
+			<p className='xl:text-md mb-5 text-sm'>
 				In minutes you can build complex and scalable apps on industry-standard AWS products and never have
 				to touch the AWS console.
 			</p>

@@ -10,7 +10,8 @@ export default function Step2Bottom({ className, id }: { className?: string; id?
 			fill='none'
 			xmlns='http://www.w3.org/2000/svg'
 			xmlnsXlink='http://www.w3.org/1999/xlink'
-			className={`${className} z-10 bg-black lg:bottom-[10%] lg:top-auto`}
+			className={`${className} z-10 hidden bg-black lg:bottom-[10%] lg:top-auto lg:block
+lg:w-[350px]`}
 		>
 			<g filter='url(#filter0_b_4133_4582)'>
 				<rect width='509' height='360' rx='24' fill='black' fill-opacity='0.1' />

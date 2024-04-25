@@ -9,12 +9,12 @@ export default function Step3Left2({ className }: { className?: string }) {
 				<h1 className='text-2xl leading-none'>Build fast, redeploy instantly</h1>
 			</div>
 
-			<p>
+			<p className='xl:text-md text-sm'>
 				During deployment your code is packaged and sent to Shuttle where it is compiled and deployed.
 				After a few seconds, your app is already running in the cloud.
 			</p>
 			<br />
-			<p>
+			<p className='xl:text-md text-sm'>
 				When iterating, Shuttle always uses the cache from previous builds to give you lightning-speed
 				redeploys.
 			</p>
