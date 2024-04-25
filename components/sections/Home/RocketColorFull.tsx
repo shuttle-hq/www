@@ -1,7 +1,7 @@
 export default function RocketColor4({ className }: { className?: string }) {
 	return (
 		<svg
-			className={className}
+			className={`${className} h-full`}
 			width='1088'
 			height='1078'
 			viewBox='0 0 1088 1078'

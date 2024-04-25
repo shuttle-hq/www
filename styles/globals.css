@@ -404,7 +404,7 @@ body.dark {
 		position: relative;
 		overflow: hidden;
 		width: 450px;
-		height: 80vh;
+		height: 100vh;
 	}
 
 	.panel-text {
@@ -446,7 +446,7 @@ body.dark {
 		position: relative;
 		overflow: hidden;
 		width: 100%;
-		height: 80vh;
+		height: 100vh;
 	}
 
 	.panel {

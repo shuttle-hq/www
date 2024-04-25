@@ -1,8 +1,11 @@
 import Code from './Code'
 
-export default function Step1Top({ className, id }: { className: string; id: string }) {
+export default function Step1Top({ className, id }: { className?: string; id?: string }) {
 	return (
-		<div className={`z-40 rounded-[24px] border border-[#525150] bg-black p-4 ${className}`} id={id}>
+		<div
+			className={`z-40 rounded-[24px] border border-[#525150] bg-black p-4 ${className} top-0 w-full sm:w-[500px]`}
+			id={id}
+		>
 			<div className='mb-3 flex items-baseline gap-[6px] text-[24px] text-[#F0F0F0]'>
 				<svg width='23' height='19' viewBox='0 0 23 19' fill='none' xmlns='http://www.w3.org/2000/svg'>
 					<path
@@ -29,7 +32,7 @@ export default function Step1Top({ className, id }: { className: string; id: str
 			</div>
 			<div className='rounded-xl bg-[linear-gradient(88.21deg,_#FC540C_-5.91%,_rgba(255,215,111,0.72)_301.47%,_#38D4E9_420.59%)] p-[1px]'>
 				<Code
-					className='flex w-full cursor-pointer items-center gap-2 rounded-xl bg-black p-4 text-[13px] sm:w-[480px]'
+					className='flex cursor-pointer items-center gap-2 rounded-xl bg-black p-4 text-[13px]'
 					text='curl -sSfL https://www.shuttle.rs/install | bash'
 				/>
 			</div>

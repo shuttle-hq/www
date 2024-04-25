@@ -3,7 +3,7 @@ import React from 'react'
 export default function Step3Left2({ className }: { className?: string }) {
 	return (
 		<div
-			className={`z-40 rounded-[24px] border border-[#525150] bg-black p-7 ${className} absolute bottom-[250px] left-[170px] w-full sm:w-[500px]`}
+			className={`z-40 rounded-[24px] border border-[#525150] bg-black p-7 ${className} bottom-[25%] left-[3%] w-full sm:w-[500px]`}
 		>
 			<div className='mb-3 flex items-baseline gap-[6px] text-[24px] text-[#F0F0F0]'>
 				<h1 className='text-2xl leading-none'>Build fast, redeploy instantly</h1>

@@ -1,4 +1,4 @@
-export default function Step1Bottom({ id }: { id: string }) {
+export default function Step1Bottom({ className, id }: { className?: string; id: string }) {
 	return (
 		<svg
 			id={id}
@@ -8,7 +8,7 @@ export default function Step1Bottom({ id }: { id: string }) {
 			fill='none'
 			xmlns='http://www.w3.org/2000/svg'
 			xmlnsXlink='http://www.w3.org/1999/xlink'
-			className='absolute bottom-[150px]'
+			className={`lg:bottom-[10%] lg:top-auto ${className} z-10`}
 		>
 			<g filter='url(#filter0_b_4133_4647)'>
 				<rect width='509' height='360' rx='24' fill='black' fill-opacity='0.9' />

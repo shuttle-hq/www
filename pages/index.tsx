@@ -167,7 +167,7 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 
 		tl4
 			// .to(thirdStep, { left: 0, scale: 0.7, opacity: 0 })
-			.fromTo(fourth, { left: 0 }, { left: window.innerWidth < 640 ? 0 : -(window.innerWidth / 4) })
+			.fromTo(fourth, { left: 0 }, { left: window.innerWidth < 1024 ? 0 : -(window.innerWidth / 4) })
 
 		ScrollTrigger.create({
 			trigger: 'section.black',
@@ -182,17 +182,17 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 	})
 
 	return (
-		<div className='scroller' ref={container}>
+		<div className='scroller px-5' ref={container}>
 			<CallToAction />
 
 			<div className='z-50 mx-auto mb-0 flex max-w-7xl flex-col items-center sm:mx-auto sm:mt-16 sm:px-10 lg:mt-32 desktop:mt-64'>
-				<h1 className='text-[48px] text-[#F0F0F0]'>Launch System</h1>
+				{/* <h1 className='text-[48px] text-[#F0F0F0]'>Launch System</h1>
 
-				<p className='text-[20px] text-[#C8C8C8]'>Blast off in t-minus 3, 2, 1...</p>
+				<p className='text-[20px] text-[#C8C8C8]'>Blast off in t-minus 3, 2, 1...</p> */}
 			</div>
 			<section className='black flex flex-col'>
 				<div className='p-wrap relative'>
-					<div className='panel flex justify-center bg-black'>
+					<div className='panel flex flex-col items-center gap-8 bg-black lg:justify-center'>
 						<Xarrow
 							start='top-1'
 							end='left-1'
@@ -203,6 +203,7 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 							dashness={{ strokeLen: 2, nonStrokeLen: 5 }}
 							showHead={false}
 							curveness={1}
+							divContainerProps={{ className: 'hidden lg:block' }}
 						/>
 						<Xarrow
 							start='top-1'
@@ -214,6 +215,7 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 							dashness={{ strokeLen: 2, nonStrokeLen: 5 }}
 							showHead={false}
 							curveness={1}
+							divContainerProps={{ className: 'hidden lg:block' }}
 						/>
 
 						<Xarrow
@@ -225,6 +227,7 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 							showHead={false}
 							strokeWidth={1}
 							curveness={1}
+							divContainerProps={{ className: 'hidden lg:block' }}
 						/>
 						<Xarrow
 							start='right-1'
@@ -235,15 +238,16 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 							strokeWidth={1}
 							showHead={false}
 							curveness={1}
+							divContainerProps={{ className: 'hidden lg:block' }}
 						/>
-						<Step1Top id='top-1' className='step-top absolute' />
-						<Step1Left id='left-1' />
-						<Step1Right id='right-1' />
-						<Step1Bottom id='bottom-1' />
-						<RocketColor1 />
+						<Step1Top id='top-1' className='step-top static lg:absolute' />
+						<Step1Left id='left-1' className='static lg:absolute' />
+						<Step1Right id='right-1' className='static lg:absolute' />
+						<Step1Bottom id='bottom-1' className='static lg:absolute' />
+						<RocketColor1 className='absolute lg:static' />
 					</div>
 
-					<div className='panel flex justify-center bg-black'>
+					<div className='panel flex flex-col items-center gap-8 bg-black lg:justify-center'>
 						<Xarrow
 							start='top-1'
 							end='left-1'
@@ -254,6 +258,7 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 							dashness={{ strokeLen: 2, nonStrokeLen: 5 }}
 							showHead={false}
 							curveness={1}
+							divContainerProps={{ className: 'hidden lg:block' }}
 						/>
 						<Xarrow
 							start='top-2'
@@ -265,6 +270,7 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 							dashness={{ strokeLen: 2, nonStrokeLen: 5 }}
 							showHead={false}
 							curveness={1}
+							divContainerProps={{ className: 'hidden lg:block' }}
 						/>
 
 						<Xarrow
@@ -276,6 +282,7 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 							showHead={false}
 							strokeWidth={1}
 							curveness={1}
+							divContainerProps={{ className: 'hidden lg:block' }}
 						/>
 						<Xarrow
 							start='right-2'
@@ -286,16 +293,16 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 							strokeWidth={1}
 							showHead={false}
 							curveness={1}
+							divContainerProps={{ className: 'hidden lg:block' }}
 						/>
-						<RocketColor2 />
-						<Step2Top id='top-2' className='step-top absolute' />
-						<Step2Left id='left-2' />
-						<Step2Right id='right-2' />
-						<Step2Bottom id='bottom-2' />
+						<RocketColor2 className='absolute lg:static' />
+						<Step2Top id='top-2' className='step-top static lg:absolute' />
+						<Step2Left id='left-2' className='static lg:absolute' />
+						<Step2Right id='right-2' className='static lg:absolute' />
+						<Step2Bottom id='bottom-2' className='static lg:absolute' />
 					</div>
 
-					<div className='panel flex justify-center bg-black'>
-						<RocketColor3 />
+					<div className='panel flex flex-col items-center gap-8 bg-black lg:justify-center'>
 						<Xarrow
 							start='top-3'
 							end='left-3'
@@ -306,6 +313,7 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 							dashness={{ strokeLen: 2, nonStrokeLen: 5 }}
 							showHead={false}
 							curveness={1}
+							divContainerProps={{ className: 'hidden lg:block' }}
 						/>
 						<Xarrow
 							start='top-3'
@@ -317,20 +325,22 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 							dashness={{ strokeLen: 2, nonStrokeLen: 5 }}
 							showHead={false}
 							curveness={1}
+							divContainerProps={{ className: 'hidden lg:block' }}
 						/>
-						<Step3Top id='top-3' className='step-top absolute' />
-						<Step3Left id='left-3' />
-						<Step3Left2 />
-						<Step3Right id='right-3' />
+						<RocketColor3 className='absolute lg:static' />
+						<Step3Top id='top-3' className='step-top static lg:absolute' />
+						<Step3Left className='static lg:absolute' id='left-3' />
+						<Step3Left2 className='static lg:absolute' />
+						<Step3Right className='static lg:absolute' id='right-3' />
 					</div>
 
-					<div className='panel flex justify-center bg-black'>
-						<RocketColor4 />
-						<div className='overall-steps absolute right-[100px] top-1/2 flex -translate-y-1/2 flex-col gap-5'>
-							<Step1Top className='' />
-							<Step2Top className='' />
-							<Step3Top className='' />
+					<div className='panel flex flex-col items-center gap-8 bg-black lg:justify-center'>
+						<div className='overall-steps static right-[3%] top-1/2 flex flex-col gap-5 lg:absolute lg:-translate-y-1/2'>
+							<Step1Top />
+							<Step2Top />
+							<Step3Top />
 						</div>
+						<RocketColor4 />
 					</div>
 				</div>
 			</section>

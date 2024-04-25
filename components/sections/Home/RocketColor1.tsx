@@ -5,7 +5,7 @@ import Step1Right from './Step1Right'
 export default function RocketColor1({ className }: { className?: string }) {
 	return (
 		<svg
-			className={className + 'relative'}
+			className={`${className} h-full`}
 			width='1088'
 			height='1078'
 			viewBox='0 0 1088 1078'
