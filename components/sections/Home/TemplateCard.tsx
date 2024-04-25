@@ -11,7 +11,7 @@ export default function TemplateCard({ template, logo }: { template: any; logo: 
 					<h2 className='mb-1 mt-2 text-xl font-bold text-white'>{template.title}</h2>
 					<p className='mb-4 text-sm'>{template.description}</p>
 					<div className='flex flex-wrap gap-2'>
-						{template.tags?.slice(0, 4).map((tag) => (
+						{template.tags?.slice(0, 4).map((tag: any) => (
 							<span
 								key={tag}
 								className='rounded-xl border border-[#434343] px-3 py-1 text-xs text-white'
