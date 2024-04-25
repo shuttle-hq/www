@@ -534,7 +534,7 @@ CDC is useful because it allows us to track changes across a database reliably: 
 
 How you can do this typically depends on the database that you’re using. Since we’re using Postgres in our application, we’ll look at a great way you can carry out Change Data Capture using Postgres using triggers.
 
-### Trigger-based Change Data Capture
+### Postgres Trigger-based Change Data Capture
 
 Given our current Postgres migrations, we can also create a table for CDC logs that holds a generic row ID, the message ID, operation type, timestamp, pre-operation values and post-operation values:
 
