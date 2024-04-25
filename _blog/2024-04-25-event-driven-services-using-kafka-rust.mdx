@@ -35,29 +35,7 @@ We’ll be diving into all this and more in this article!
 
 If you want to connect locally to a Kafka instance, you’ll either need Apache Kafka and Zookeeper with both running, or Docker installed so that you can spin up Kafka and Zookeeper instances..
 
-If you want to deploy this service to the web somewhere, you’ll also want to make use of a service that provides Kafka. Shuttle currently doesn’t provide it, but you can make use of services like Upstash to be able to provide it.
-
-Because we’re deploying via Shuttle, we will be using Secrets rather than raw environment variables. When storing our environment variables later, you’ll want to keWhen it comes to real-time data handling, there are certain challenges that are imposed upon regular HTTP-based services. Resiliency, consistency and reliability are all qualities that a production-grade system handling real-time data processing should have. Event driven architecture and microservices is one way to become more resilient against this kind of issue. By the end of this article, you’ll have an understanding of:
-
-- What an “event-driven” web service is
-- How to set up Kafka locally
-- How to implement Kafka in your Rust web service
-- How to migrate from a monolith to microservice functionality using Change Data Capture
-
-Interested in deploying or got stuck somewhere in the article? You can find the final repository [here.](https://github.com/joshua-mo-143/kafka-shuttle)
-
-## What does “event-driven” mean?
-
-The term “event-driven” simply means that the web service is not driven by HTTP requests, but consumes events from event sources and executes logic based on the event type. This is in contrast to HTTP request based interactions. In practicality, events may be driven by a message queue (like AMQP) or event store like Kafka where messages are sent and received by one or more services.
-
-Event-driven microservices are often used as part of an event-driven architecture, where the whole system is based on passing of published messages and using them as a source of truth. The advantages of event-driven architecture are clear:
-
-- Ideal for handling real time data in large quantities
-- Because event driven services don’t rely on synchronous HTTP calls, instead using events, there is less chance of a cascading failure across your architecture if something ep your credentials in the `Secrets.toml` file. Should you need to turn them into runtime environment variables later, you can use the following short Rust snippet to iterate and generate raw environment variables:
-
-```rust
-secret_store.into_iter().for_each(|x| std::env::set_var(x.0, x.1));
-```
+If you want to deploy this service to the web somewhere, you’ll also want to make use of a service that provides Kafka. Shuttle currently doesn’t provide it, but you can make use of services like Upstash to be able to provide it. You'll need to store your environment variables in the `Secrets.toml` file as described later on.
 
 ### Project setup
 
@@ -129,6 +107,12 @@ You’ll want to make sure to keep your Kafka endpoint URL somewhere, as we’ll
 
 ```rust
 KAFKA_URL = "<your-kafka-endpoint-url>"
+```
+
+Because we’re deploying via Shuttle, we will be using Secrets rather than raw environment variables. When storing our environment variables later, you’ll want to iterate through the `SecretStore` type like in the snippet below:
+
+```rust
+secret_store.into_iter().for_each(|x| std::env::set_var(x.0, x.1));
 ```
 
 When you deploy or run locally, the secrets will get taken from this file.
@@ -305,6 +289,8 @@ You may note that above, we’ve enabled auto commit while only enabling storing
 
 Note that the producer has permissions to automatically create topics. In production, you may want to remove this and create topics manually. Allowing a producer to create topics freely may result in some unexpected behaviour!
 
+Additionally, some hosted Kafka services will require SASL or SSL authentication. You can find more about the dependencies in the `rdkafka-rust` repo [here.](https://github.com/fede1024/rust-rdkafka?tab=readme-ov-file#installation) Note that if you are unable to install dependencies, `rdkafka` also has feature flags for vendored versions of the required dependencies.
+
 Next, we’ll want to create our `AppState` which will hold the `FutureProducer` created by the `create_kafka_producer` function:
 
 ```rust
@@ -352,7 +338,7 @@ async fn main(
 }
 ```
 
-### Using our producer
+### Using a Kafka producer
 
 To use our producer, we’ll first need something to send. Let’s create a simple struct that will have an action, as well as a message ID, name and the message itself:
 
