@@ -32,6 +32,7 @@ import Step3Left2 from 'components/sections/Home/Step3Left2'
 import Step3Vectors from 'components/sections/Home/Step3Vectors'
 import Step3Right from 'components/sections/Home/Step3Right'
 import Xarrow from 'react-xarrows'
+import CTA from 'components/sections/CTA'
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
@@ -182,7 +183,7 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 	})
 
 	return (
-		<div className='scroller px-5' ref={container}>
+		<div className='scroller' ref={container}>
 			<CallToAction />
 
 			<div className='z-50 mx-auto mb-0 flex max-w-7xl flex-col items-center sm:mx-auto sm:mt-16 sm:px-10 lg:mt-32 desktop:mt-64'>
@@ -190,7 +191,7 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 
 				<p className='text-[20px] text-[#C8C8C8]'>Blast off in t-minus 3, 2, 1...</p> */}
 			</div>
-			<section className='black flex flex-col'>
+			<section className='black flex flex-col px-5'>
 				<div className='p-wrap relative'>
 					<div className='panel flex flex-col items-center gap-8 bg-black lg:justify-center'>
 						<Xarrow
@@ -407,6 +408,7 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 				</div>
 			</div>
 			<Testimonials />
+			<CTA />
 			<Footer />
 		</div>
 	)
