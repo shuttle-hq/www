@@ -1,4 +1,4 @@
-import { CallToAction, Footer } from 'components/sections'
+import { CallToAction, Footer, Testimonials } from 'components/sections'
 import { getSortedPosts, Post } from 'lib/blog/posts'
 import { GetStaticPropsResult } from 'next'
 import { StarterAttrs } from '../components/elements/Starter'
@@ -406,6 +406,7 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 					/>
 				</div>
 			</div>
+			<Testimonials />
 			<Footer />
 		</div>
 	)
