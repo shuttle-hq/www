@@ -1,0 +1,279 @@
+---
+title: "Building your first AI tool in Rust"
+description: "Writing a simple AI helper with Rust using llm-chain"
+author: ivan
+tags: [rust, AI, guide]
+thumb: building-your-first-ai-tool-rust-thumb.png
+cover: building-your-first-ai-tool-rust-thumb.png
+date: '2024-04-29T14:30:00'
+---
+In this tutorial, we'll build a command-line application in Rust that can analyze data from a CSV file. The app will prompt the user to enter a question, and it will provide an answer based on the data in the CSV file.
+
+At the end, we'll be able to ask our helper various questions, and get various answers! Here's a short video that shows its powers:
+
+![Video demo GIF](/images/blog/your-first-ai-tool-demo.gif)
+
+The full code of the Rust AI helper can be found here.
+
+## Prerequisites
+
+Before we get started, make sure you have the following installed:
+
+* Rust (you can install it from [rustup.rs](https://rustup.rs))
+* The `csv` and `llm_chain` crates (we'll install these later)
+
+You'll also need an OpenAI API key which you can [get here](https://platform.openai.com/api-keys).
+
+## Setting up the Project
+First, create a new Rust project:
+
+```bash
+cargo new data-analysis-app
+cd data-analysis-app
+```
+
+Next, open the `Cargo.toml` file and add the required dependencies:
+
+```toml
+[dependencies]
+csv = "1.1"
+dotenvy = "0.15.7"
+llm-chain = "0.13.0"
+llm-chain-openai - "0.13.0"
+tokio = { version = "1.25.0", features = ["macros", "rt-multi-thread"] }
+```
+
+These lines add the required dependencies for our project: `csv` for reading CSV files, [`llm_chain`](https://github.com/sobelio/llm-chain) for natural language processing, and [`tokio`](https://tokio.rs) for async runtime functionality. We use `dotenvy` for `.env` file handling as well as `llm-chain-openai` (for integration with the OpenAI API).
+
+## What is llm-chain?
+
+Here is the description from their [official GitHub repository](https://github.com/sobelio/llm-chain):
+> llm-chain is a collection of Rust crates designed to help you create advanced LLM applications such as chatbots, agents, and more.
+
+`llm-chain` is effectively an LLM orchestration library that allows you to "chain" prompts together, executing one after the other - with extra features:
+- Templates are supported, allowing you to not need to manually chain steps
+- We can carry out complex tasks that LLMs cannot handle in a single step
+- `llm-chain` also supports vector storage, allowing long term memory and subject matter knowledge.
+
+This benefits us in several ways:
+- Being able to chain steps allows us to get much closer to a useful output, rather than only being able to use one step. For example, you may want several pre-instruction prompts to set up a context for your application.
+- By operating on data in steps, we can get much better insight from our data.
+
+LLM orchestration is a crucial tool for enterprise AI, as business use cases often require advanced contexts.
+
+## Diving into it
+
+Let's update our `main.rs` file by importing all the neccessary crates we will need. I've added comments to the snippet below that describe what each crate/module is used for.
+
+```rust
+use std::env;
+use std::error::Error;
+use std::fs::File;
+use std::io::{self, Write};
+
+use csv::Reader;
+use llm_chain::{executor, parameters, prompt, step::Step};
+```
+
+Next, we will mark our `main` function with the `async` keyword and add the `#[tokio::main]` macro right on-top of it. This allows us to use the Tokio asynchronous runtime for async functionality and automatic polling of futures (values that have may or may not finished work).
+
+P.S. If you'd like to learn more about Async in Rust, you can check out our [Async Rust in a Nutshell](https://www.shuttle.rs/blog/2024/02/29/async-rust) article!
+
+```rust
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error>> {
+    // ...
+}
+```
+
+The return type is set to `Result<(), Box<dyn Error>>` to enable error propagation with `?` and overall error handling across different error types.
+
+
+### Adding our API Key
+
+Instead of hardcoding the API key in our code, we'll store it in a `.env` file, which is a more secure and convenient approach.
+
+Quickly create a new file called `.env` in the root directory of your project, open it and add the following line to it:
+
+`OPENAI_API_KEY=your_api_key_here`
+
+Make sure to replace `your_api_key_here` with your actual API key which you can [get here](https://platform.openai.com/api-keys).
+
+Next, we'll add one more crate and that is the `dotenv` crate which will allow us to load the environment variables from the `.env` file. Simply run the `cargo install dotenv` command and you should be good to go.
+
+In your `main.rs` file, import the `dotenvy` crate at the top of the file:
+
+```rust
+use dotenvy::dotenv;
+```
+
+And finally, in your `main.rs` file, before any other code in the main function, call the `dotenv` function to load the environment variables from the `.env` file, like so:
+
+```rust
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error>> {
+    dotenv().ok();
+    // ... (rest of your code)
+}
+```
+
+By following this approach, we can keep the API key separate from our code, making it easier to manage and share our project without exposing any sensitive information.
+
+### Creating an Executor
+
+We create an executor instance using the `executor!` macro from the `llm_chain` crate. The macro makes it easy for us to create a new executor for a specific model without having to directly call the constructor functions of the respective executor structs. In short; it allows you to call an LLM with a pre-defined input and output, using multiple steps to refine the output.
+
+```rust
+let exec = executor!()?;
+```
+
+### Reading the CSV file
+
+For this example, we'll be reading data from a CSV file because we are building a data-helper tool which will allows us to ask it various questions regarding the data at-hand.
+
+The snippet below opens a CSV file named "data.csv" in the root folder and reads its contents into a string variable `csv_data`, where each row is represented as a comma-separated string with a newline character at the end. It also uses the `csv` crate to handle the CSV parsing. In short, it makes sure that we can the `csv` data for further actions.
+
+```rust
+let file = File::open("data.csv")?;
+let mut reader = Reader::from_reader(file);
+
+let mut csv_data = String::new();
+for result in reader.records() {
+    let record = result?;
+    csv_data.push_str(&record.iter().collect::<Vec<_>>().join(","));
+    csv_data.push('\n');
+}
+```
+
+The contents of the CSV file (make sure to create a `data.csv` file in your root directory and copy-paste the contents below):
+```csv
+Name,Age,Occupation,City,FavoriteSport,AnnualIncome
+Samantha,28,Entrepreneur,New York,Skydiving,$120000
+Michael,35,Software Engineer,San Francisco,Rock Climbing,$95000
+Emily,42,Chef,Chicago,Surfing,$65000
+David,25,Artist,Los Angeles,Parkour,$30000
+Sophia,31,Pilot,Miami,Bungee Jumping,$85000
+Daniel,47,Doctor,Boston,Snowboarding,$180000
+Olivia,22,Student,Seattle,Skateboarding,$12000
+William,39,Marketing Manager,Austin,Mountain Biking,$110000
+Ava,27,Photographer,Portland,Kayaking,$45000
+Jacob,33,Teacher,Denver,Hiking,$55000
+Isabella,40,Lawyer,Washington D.C.,Scuba Diving,$200000
+Ethan,29,Musician,Nashville,Bouldering,$25000
+Mia,36,Graphic Designer,Atlanta,Skiing,$75000
+Benjamin,44,Engineer,Houston,Surfing,$125000
+Abigail,23,Writer,Minneapolis,Rock Climbing,$18000
+```
+
+Example of what it looks like as a table:
+
+|Name    |Age|Occupation       |City           |FavoriteSport  |AnnualIncome|
+|--------|---|-----------------|---------------|---------------|------------|
+|Samantha|28 |Entrepreneur     |New York       |Skydiving      |$120000     |
+|Michael |35 |Software Engineer|San Francisco  |Rock Climbing  |$95000      |
+|Emily   |42 |Chef             |Chicago        |Surfing        |$65000      |
+|David   |25 |Artist           |Los Angeles    |Parkour        |$30000      |
+
+
+### Creating the user input loop
+
+The user input loop is the loop which the user uses to continuosly ask questions to our helper. The next couple of sections are all happening within this loop -- prompting, executing, outputting the result, etcetera.
+
+To start thing off; we'll be asking the user to enter their question and when the user is done with asking questions, they can type in `quit` to exit the helper.
+
+```rust
+loop {
+    println!("Enter your prompt (or 'quit' to exit):");
+    io::stdout().flush()?;
+
+    let mut user_prompt = String::new();
+    io::stdin().read_line(&mut user_prompt)?;
+    user_prompt = user_prompt.trim().to_string();
+
+    if user_prompt.to_lowercase() == "quit" {
+        break;
+    }
+
+    // ...
+}
+```
+
+### Setting the prompt
+
+Now, we'll create a prompt string that includes the user's question and the CSV data. This prompt will be used by the `llm_chain` crate to generate a response.
+
+> 💡 **TIP**: When defining prompts, be clear and concise about the task you want the language model to perform. Provide any necessary context or input data (like the CSV example) and be specific about the desired output (eg, a summary, analysis, code, or text generation).
+
+
+```rust
+let prompt_string = format!(
+            "You are a data analyst tasked with analyzing a CSV file containing information about individuals, including their name, age, occupation, city, favorite sport, and annual income. Your goal is to provide clear and concise answers to the given questions based on the data provided.
+
+        Question: {}\n\nCSV Data:\n{}",
+            user_prompt, csv_data
+        );
+```
+
+### Creating a Step instance
+
+We create a Step instance from the `llm_chain` crate, passing in the prompt string we created earlier.
+
+Steps are individual LLM invocations in a chain. They are a combination of a prompt and a configuration and we use them to set the per-invocation setting for a prompt. This comes in very handy when we want to change the settings for a specific prompt in a chain.
+
+```rust
+let step = Step::for_prompt_template(prompt!("{}", &prompt_string));
+```
+
+### Connecting everything together
+
+We run the analysis by calling the `run` method on the `Step` instance, passing in the parameters and the executor we created earlier.
+
+```rust
+let res = step.run(&parameters!(), &exec).await?;
+```
+
+### Outputting the result
+
+This one is as simple as it gets; we invoke the `println!()` macro print the result of the analysis to the console.
+
+```rust
+println!("{}", res.to_immediate().await?.as_content());
+```
+
+That's the end of our loop and now we need to wrap it all up by adding `Ok(())` at the end of the main function to indicate that the function executed successfully without any errors.
+
+### Running our App
+
+To run the app, navigate to the project directory and execute the following command:
+
+`cargo run`
+
+You should see the prompt `Enter your prompt (or 'quit'` to exit):. Enter your question related to the data in the data2.csv file, and the app will provide a concise answer based on the analysis.
+
+Here are some CSV-specific questions you can ask your helper:
+1. "Who has the highest annual income, and what is their occupation?"
+2. "What is the most popular extreme sport among the individuals in the data?"
+3. "Which city has the most individuals represented in the data?"
+4. "What is the average age of the individuals whose favorite sport is rock climbing?"
+5. "Which occupation has the highest average annual income?"
+
+### Challenge
+
+Sharing a CLI app with your friends or team mates might not be too straight-forward.
+
+As a challenge, try building an API around your helper with endpoints that'll allow users to interact with it.
+
+Next, build a simple frontend with a small prompt box that users can use to ask your helper various questions, it should communicate with your API.
+
+And finally, hook it all up together and try deploying it with Shuttle!
+
+P.S. Tweet `#shuttleai` when you are done and we'll check out and share your creations!
+
+## Summary
+In this tutorial, we built a command-line application in Rust that can analyze data from a CSV file. The app uses the `csv` and `llm_chain` crates to read the CSV data and generate a response based on the user's question.
+
+If you are up for another challenge; try making the data source dynamic, allowing users to upload their own `csv`, or even better, other file formats such as `pdf` or `json`!
+
+Read more:
+- [Creating a RAG-assisted web service with Axum](https://www.shuttle.rs/blog/2024/02/28/rag-llm-rust)
+- [More than you've ever wanted to know about error handling](https://www.shuttle.rs/blog/2022/06/30/error-handling)
