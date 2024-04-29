@@ -39,7 +39,7 @@ Next, open the `Cargo.toml` file and add the required dependencies:
 csv = "1.1"
 dotenvy = "0.15.7"
 llm-chain = "0.13.0"
-llm-chain-openai - "0.13.0"
+llm-chain-openai = "0.13.0"
 tokio = { version = "1.25.0", features = ["macros", "rt-multi-thread"] }
 ```
 
@@ -244,11 +244,11 @@ That's the end of our loop and now we need to wrap it all up by adding `Ok(())` 
 
 ### Running our App
 
-To run the app, navigate to the project directory and execute the following command:
-
-`cargo run`
-
-You should see the prompt `Enter your prompt (or 'quit'` to exit):. Enter your question related to the data in the data2.csv file, and the app will provide a concise answer based on the analysis.
+To run the app, navigate to the project directory and execute `cargo run`. You should see the following message in your terminal:
+```bash
+Enter your prompt (or 'quit'` to exit):
+````
+Enter your question related to the data in the data2.csv file, and the app will provide a concise answer based on the analysis.
 
 Here are some CSV-specific questions you can ask your helper:
 1. "Who has the highest annual income, and what is their occupation?"
