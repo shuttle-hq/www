@@ -4,7 +4,7 @@ import { GithubLogo, Hamburger, Logo } from 'components/svgs'
 import { trackEvent } from 'lib/posthog'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { useLayoutEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { DISCORD_URL } from '../../../lib/constants'
 
 const ThemeSwitcher = dynamic(() => import('./ThemeSwitcher'), { ssr: false })
@@ -34,7 +34,7 @@ const LinkItem = ({
 const Navigation = () => {
 	const [open, setOpen] = useState(false)
 
-	useLayoutEffect(() => {
+	useEffect(() => {
 		function updateMenu() {
 			const isMobileAndOpen = window.innerWidth < 1280 && open
 			const isDesktopAndClosed = window.innerWidth >= 1280 && !open
@@ -71,6 +71,11 @@ const Navigation = () => {
 							href: '/blog/tags/all',
 							event: 'homepage_mainnav_blog',
 							text: 'Blog',
+						},
+						{
+							href: '/templates',
+							event: 'homepage_mainnav_templates',
+							text: 'Templates',
 						},
 						{
 							href: '/pricing',

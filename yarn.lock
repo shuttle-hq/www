@@ -78,6 +78,11 @@
   resolved "https://registry.npmjs.org/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
+"@iarna/toml@^2.2.5":
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/@iarna/toml/-/toml-2.2.5.tgz#b32366c89b43c6f8cefbdefac778b9c828e3ba8c"
+  integrity sha512-trnsAYxU3xnS1gPHPyU961coFyLkh4gAD/0zQ5mymY4yOZ+CYvsPqUbOFSw0aDM4y0tV7tiFxL/1XfXPNC6IPg==
+
 "@jridgewell/gen-mapping@^0.3.2":
   version "0.3.3"
   resolved "https://registry.npmjs.org/@jridgewell/gen-mapping/-/gen-mapping-0.3.3.tgz"
@@ -492,11 +497,6 @@
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
-
-"@vercel/analytics@^1.0.1":
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/@vercel/analytics/-/analytics-1.0.2.tgz"
-  integrity sha512-BZFxVrv24VbNNl5xMxqUojQIegEeXMI6rX3rg1uVLYUEXsuKNBSAEQf4BWEcjQDp/8aYJOj6m8V4PUA3x/cxgg==
 
 "@xobotyi/scrollbar-width@^1.9.5":
   version "1.9.5"
@@ -5299,6 +5299,11 @@ react-countdown@^2.3.5:
   integrity sha512-K26ENYEesMfPxhRRtm1r+Pf70SErrvW3g4CArLi/x6MPFjgfDFYePT4UghEj8p2nI0cqVV7/JjDgjyr//U60Og==
   dependencies:
     prop-types "^15.7.2"
+
+react-custom-checkbox@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/react-custom-checkbox/-/react-custom-checkbox-3.1.5.tgz#cf096f772fdebb874c8c99c10706e38ff0d8e6dc"
+  integrity sha512-MTGyAkebTsMjDnsJ/HpkRT49yy4ODhmy/CUAFlCnsejQAjyn6Lgmg2ihB0CNf+R1cu5ytJ/ORdovFlB88madaQ==
 
 react-dom@18.2.0:
   version "18.2.0"

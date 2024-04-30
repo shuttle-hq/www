@@ -1,10 +1,10 @@
-import ReactMarkdown from 'react-markdown'
 import { useState } from 'react'
 import AnimateHeight from 'react-animate-height'
-import remarkGfm4 from 'remark-gfm-4'
+
 import PlusIcon from 'components/svgs/PlusIcon'
 import MinusIcon from 'components/svgs/MinusIcon'
 import { Release } from 'pages/releases'
+import { Markdown } from 'components/elements/Markdown'
 
 export default function ReleaseCard({ release }: { release: Release }) {
 	const [height, setHeight] = useState<'auto' | number>('auto')
@@ -34,31 +34,7 @@ export default function ReleaseCard({ release }: { release: Release }) {
 					{height === SrhunkHeight ? <PlusIcon /> : <MinusIcon />}
 				</div>
 
-				<ReactMarkdown
-					remarkPlugins={[remarkGfm4]}
-					components={{
-						h1: ({ children }) => <h1 className='mb-3 text-sm text-body'>{children}</h1>,
-						h2: ({ children }) => <h2 className='mb-2 text-xl text-head'>{children}</h2>,
-						p: ({ children }) => <p className='mb-8 text-sm text-body'>{children}</p>,
-						li: ({ children }) => (
-							<li className='mb-1 ml-4 list-disc text-sm text-body'>{children}</li>
-						),
-						code: ({ children }) => (
-							<code className='text-code mx-[.15em] mb-1 text-sm text-head'>{children}</code>
-						),
-						pre: ({ children }) => (
-							<pre className='mb-8 rounded-xl bg-[#121212] p-4 text-head'>{children}</pre>
-						),
-						ul: ({ children }) => <ul className='mb-8'>{children}</ul>,
-						a: ({ children, href, target }) => (
-							<a {...{ href, target }} className='text-link underline' target='_blank'>
-								{children}
-							</a>
-						),
-					}}
-				>
-					{release.body}
-				</ReactMarkdown>
+				<Markdown body={release.body} />
 			</div>
 		</AnimateHeight>
 	)

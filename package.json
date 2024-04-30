@@ -10,6 +10,7 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
+		"@iarna/toml": "^2.2.5",
 		"@mapbox/rehype-prism": "^0.8.0",
 		"@next/third-parties": "^14.1.4",
 		"@splidejs/react-splide": "^0.7.12",
@@ -18,7 +19,6 @@
 		"@types/node": "18.11.11",
 		"@types/react": "18.0.26",
 		"@types/react-dom": "18.0.9",
-		"@vercel/analytics": "^1.0.1",
 		"axios": "^1.2.1",
 		"clsx": "^1.2.1",
 		"eslint": "8.29.0",
@@ -38,6 +38,7 @@
 		"react-animate-height": "^3.2.3",
 		"react-cookie-consent": "^8.0.1",
 		"react-countdown": "^2.3.5",
+		"react-custom-checkbox": "^3.1.5",
 		"react-dom": "18.2.0",
 		"react-markdown": "^9.0.1",
 		"react-scrollchor": "^7.0.2",
