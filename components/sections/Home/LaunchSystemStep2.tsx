@@ -9,8 +9,8 @@ export default function LaunchSystemStep2() {
 	return (
 		<div className='flex flex-col items-center gap-8 bg-black lg:justify-center'>
 			<Xarrow
-				start='top-1'
-				end='left-1'
+				start='top-2'
+				end='left-2'
 				startAnchor='left'
 				endAnchor='top'
 				color='#525150'

@@ -9,13 +9,13 @@ import StartBuilding from 'components/sections/Home/StartBuilding'
 
 export default function Home() {
 	return (
-		<main>
+		<main className='mx-auto max-w-7xl px-5'>
 			<Hero />
 			<LaunchSystem />
 			<LaunchSystemStep1 />
-			<LaunchSystemStep2 />
+			{/* <LaunchSystemStep2 />
 			<LaunchSystemStep3 />
-			<LaunchSystemStep4 />
+			<LaunchSystemStep4 /> */}
 			<StartBuilding />
 			<Testimonials />
 			<CTA />
