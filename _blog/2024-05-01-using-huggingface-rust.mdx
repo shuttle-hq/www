@@ -41,6 +41,11 @@ To use Huggingface with your Rust application requires the `hf_hub` crate to be 
 cargo add hf_hub
 ```
 
+You'll also want the following dependencies which you can grab from this shell snippet:
+```bash
+cargo add anyhow candle-core candle-nn candle-transformers serde serde_json tokenizers -F serde/derive
+```
+
 Before we start initialising the model, let’s talk about models. Models typically have a weights map, which determine the strength of connections within your neural network. For example if we were to go to [a HuggingFace repo](https://huggingface.co/mistralai/Mistral-7B-v0.1) (assuming we’re logged in and have been granted access), you might see a bunch of files regarding tensors (see below), a JSON file containing model weights as well as some other stuff.
 
 But first before we continue, let’s have a quick look at what tensors actually are - as they’re quite important to know about!
@@ -446,6 +451,11 @@ impl TextGeneration {
 ## Using Candle with a web service
 
 Using the previous functions we’ve made, we can create a web service using `axum` and `tokio`  with an endpoint to run our prompt! No local work required.
+
+To install Axum and Tokio you can use this shell snippet:
+```bash
+cargo add axum tokio -F tokio/macros,tokio/rt-multi-thread
+```
 
 To get started, we’ll create an `AppState` that implements `Clone` and some helper methods to shorten down code in application-related functions:
 
