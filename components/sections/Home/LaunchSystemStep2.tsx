@@ -7,7 +7,7 @@ import Step2Bottom from './Step2Bottom'
 
 export default function LaunchSystemStep2() {
 	return (
-		<div className='flex flex-col items-center gap-8 bg-black lg:justify-center'>
+		<div className='relative mb-[200px] flex flex-col items-center gap-8 bg-black lg:justify-center'>
 			<Xarrow
 				start='top-2'
 				end='left-2'
@@ -17,7 +17,7 @@ export default function LaunchSystemStep2() {
 				strokeWidth={1}
 				dashness={{ strokeLen: 2, nonStrokeLen: 5 }}
 				showHead={false}
-				curveness={1}
+				path='grid'
 				divContainerProps={{ className: 'hidden lg:block' }}
 			/>
 			<Xarrow
@@ -29,7 +29,7 @@ export default function LaunchSystemStep2() {
 				strokeWidth={1}
 				dashness={{ strokeLen: 2, nonStrokeLen: 5 }}
 				showHead={false}
-				curveness={1}
+				path='grid'
 				divContainerProps={{ className: 'hidden lg:block' }}
 			/>
 
@@ -41,7 +41,7 @@ export default function LaunchSystemStep2() {
 				color='#525150'
 				showHead={false}
 				strokeWidth={1}
-				curveness={1}
+				path='grid'
 				divContainerProps={{ className: 'hidden lg:block' }}
 			/>
 			<Xarrow
@@ -52,14 +52,18 @@ export default function LaunchSystemStep2() {
 				color='#525150'
 				strokeWidth={1}
 				showHead={false}
-				curveness={1}
+				path='grid'
 				divContainerProps={{ className: 'hidden lg:block' }}
 			/>
-			<RocketColor2 className='absolute lg:static' />
-			<Step2Top id='top-2' className='step-top static' />
-			<Step2Left id='left-2' className='static' />
-			<Step2Right id='right-2' className='static' />
-			<Step2Bottom id='bottom-2' className='static' />
+			<div className='flex h-auto w-full flex-col items-center justify-between gap-8 lg:h-[90vh]'>
+				<Step2Top id='top-2' />
+				<div className='flex w-full flex-col items-center justify-between gap-8 lg:flex-row'>
+					<Step2Left id='left-2' />
+					<Step2Right id='right-2' />
+				</div>
+				<Step2Bottom id='bottom-2' />
+			</div>
+			<RocketColor2 />
 		</div>
 	)
 }

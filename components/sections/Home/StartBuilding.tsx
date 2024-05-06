@@ -3,7 +3,7 @@ import TemplateCard from './TemplateCard'
 
 export default function StartBuilding() {
 	return (
-		<div className='mx-auto mt-8 max-w-7xl sm:mx-auto sm:mt-16 sm:px-10 lg:mt-32 desktop:mt-64'>
+		<div className='mx-auto mt-8 max-w-7xl sm:mx-auto sm:px-10'>
 			<h1 className='text-[56px] text-[#F0F0F0]'>Start Building</h1>
 			<p>Use one of our starter templates to get your project off the ground in minutes.</p>
 

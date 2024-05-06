@@ -2,10 +2,7 @@ import React from 'react'
 
 export default function Step3Left({ className, id }: { className?: string; id?: string }) {
 	return (
-		<div
-			id={id}
-			className={`z-40 rounded-[24px] border border-[#525150] bg-black p-7 ${className} left-[3%] top-[20%] w-full sm:w-[500px]`}
-		>
+		<div id={id} className={`z-40 w-full rounded-[24px] border border-[#525150] bg-black p-7 sm:w-[500px]`}>
 			<div className='mb-3 flex items-baseline gap-[6px] text-[24px] text-[#F0F0F0]'>
 				<h1 className='text-2xl leading-none'>AWS under the hood </h1>
 			</div>

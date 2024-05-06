@@ -7,7 +7,7 @@ import RocketColor1 from './RocketColor1'
 
 export default function LaunchSystemStep1() {
 	return (
-		<div className='relative flex flex-col items-center gap-8 bg-black lg:justify-center'>
+		<div className='relative mb-[200px] flex flex-col items-center gap-8 bg-black lg:justify-center'>
 			<Xarrow
 				start='top-1'
 				end='left-1'

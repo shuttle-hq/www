@@ -13,9 +13,9 @@ export default function Home() {
 			<Hero />
 			<LaunchSystem />
 			<LaunchSystemStep1 />
-			{/* <LaunchSystemStep2 />
+			<LaunchSystemStep2 />
 			<LaunchSystemStep3 />
-			<LaunchSystemStep4 /> */}
+			<LaunchSystemStep4 />
 			<StartBuilding />
 			<Testimonials />
 			<CTA />

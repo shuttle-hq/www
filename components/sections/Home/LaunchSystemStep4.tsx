@@ -5,8 +5,8 @@ import Step3Top from './Step3Top'
 
 export default function LaunchSystemStep4() {
 	return (
-		<div className='flex flex-col items-center gap-8 bg-black lg:justify-center'>
-			<div className='overall-steps static right-[3%] top-1/2 flex flex-col gap-5 lg:-translate-y-1/2'>
+		<div className='relative mb-[100px] flex items-center gap-8 bg-black lg:mb-auto lg:justify-end'>
+			<div className='flex w-full flex-col items-center justify-center gap-5 lg:h-[90vh] lg:w-auto'>
 				<Step1Top />
 				<Step2Top />
 				<Step3Top />

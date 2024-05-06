@@ -3,7 +3,7 @@ import Code from './Code'
 export default function Step3Top({ className, id }: { className?: string; id?: string }) {
 	return (
 		<div
-			className={`top-0 z-40 rounded-[24px] border border-[#525150] bg-black p-4 ${className} w-full sm:w-[500px]`}
+			className={`z-40 rounded-[24px] border border-[#525150] bg-black p-4 ${className} top-0 w-full sm:w-[500px]`}
 			id={id}
 		>
 			<div className='mb-3 flex items-baseline gap-[6px] text-[24px] text-[#F0F0F0]'>

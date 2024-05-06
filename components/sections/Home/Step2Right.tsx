@@ -7,7 +7,7 @@ export default function Step2Right({ className, id }: { className?: string; id?:
 			viewBox='0 0 409 208'
 			fill='none'
 			xmlns='http://www.w3.org/2000/svg'
-			className={`right-[3%] top-[20%] z-50 w-full bg-black sm:w-[500px] ${className}`}
+			className='z-50 w-full bg-black sm:w-[500px]'
 		>
 			<g filter='url(#filter0_b_4147_5752)'>
 				<g clip-path='url(#clip0_4147_5752)'>

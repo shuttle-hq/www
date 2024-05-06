@@ -7,7 +7,7 @@ import Step3Right from './Step3Right'
 
 export default function LaunchSystemStep3() {
 	return (
-		<div className='flex flex-col items-center gap-8 bg-black lg:justify-center'>
+		<div className='relative mb-[200px] flex flex-col items-center gap-8 bg-black lg:justify-center'>
 			<Xarrow
 				start='top-3'
 				end='left-3'
@@ -17,7 +17,7 @@ export default function LaunchSystemStep3() {
 				strokeWidth={1}
 				dashness={{ strokeLen: 2, nonStrokeLen: 5 }}
 				showHead={false}
-				curveness={1}
+				path='grid'
 				divContainerProps={{ className: 'hidden lg:block' }}
 			/>
 			<Xarrow
@@ -29,14 +29,21 @@ export default function LaunchSystemStep3() {
 				strokeWidth={1}
 				dashness={{ strokeLen: 2, nonStrokeLen: 5 }}
 				showHead={false}
-				curveness={1}
+				path='grid'
 				divContainerProps={{ className: 'hidden lg:block' }}
 			/>
-			<RocketColor3 className='absolute lg:static' />
-			<Step3Top id='top-3' className='step-top static' />
-			<Step3Left className='static' id='left-3' />
-			<Step3Left2 className='static' />
-			<Step3Right className='static' id='right-3' />
+			<div className='flex h-auto w-full flex-col items-center justify-between gap-8 lg:h-[90vh]'>
+				<Step3Top id='top-3' />
+				<div className='flex w-full flex-col items-center justify-between gap-8 lg:flex-row'>
+					<div className='flex flex-col gap-7'>
+						<Step3Left id='left-3' />
+						<Step3Left2 />
+					</div>
+					<Step3Right id='right-3' />
+				</div>
+				<div />
+			</div>
+			<RocketColor3 />
 		</div>
 	)
 }
