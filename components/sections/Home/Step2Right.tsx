@@ -1,7 +1,7 @@
 import CustomServiceIcon from 'components/svgs/CustomServiceIcon'
 import DatabaseIcon from 'components/svgs/DatabaseIcon'
 import MetadataIcon from 'components/svgs/MetadataIcon'
-import SecretsIcon from 'components/svgs/Secretsicon'
+import SecretsIcon from 'components/svgs/SecretsIcon'
 
 const services = [
 	{ name: 'Database', icon: <DatabaseIcon /> },
