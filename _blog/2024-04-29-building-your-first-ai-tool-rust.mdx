@@ -37,13 +37,12 @@ Next, open the `Cargo.toml` file and add the required dependencies:
 ```toml
 [dependencies]
 csv = "1.1"
-dotenvy = "0.15.7"
 llm-chain = "0.13.0"
 llm-chain-openai = "0.13.0"
 tokio = { version = "1.25.0", features = ["macros", "rt-multi-thread"] }
 ```
 
-These lines add the required dependencies for our project: `csv` for reading CSV files, [`llm_chain`](https://github.com/sobelio/llm-chain) for natural language processing, and [`tokio`](https://tokio.rs) for async runtime functionality. We use `dotenvy` for `.env` file handling as well as `llm-chain-openai` (for integration with the OpenAI API).
+These lines add the required dependencies for our project: `csv` for reading CSV files, [`llm_chain`](https://github.com/sobelio/llm-chain) for natural language processing, and [`tokio`](https://tokio.rs) for async runtime functionality. We also use `llm-chain-openai` (for integration with the OpenAI API).
 
 ## What is llm-chain?
 
@@ -91,33 +90,13 @@ The return type is set to `Result<(), Box<dyn Error>>` to enable error propagati
 
 ### Adding our API Key
 
-Instead of hardcoding the API key in our code, we'll store it in a `.env` file, which is a more secure and convenient approach.
+Find your API key from OpenAI and add it to your current shell session's environment variables:
 
-Quickly create a new file called `.env` in the root directory of your project, open it and add the following line to it:
-
-`OPENAI_API_KEY=your_api_key_here`
+`export OPENAI_API_KEY=your_api_key_here`
 
 Make sure to replace `your_api_key_here` with your actual API key which you can [get here](https://platform.openai.com/api-keys).
 
-Next, we'll add one more crate and that is the `dotenv` crate which will allow us to load the environment variables from the `.env` file. Simply run the `cargo install dotenv` command and you should be good to go.
-
-In your `main.rs` file, import the `dotenvy` crate at the top of the file:
-
-```rust
-use dotenvy::dotenv;
-```
-
-And finally, in your `main.rs` file, before any other code in the main function, call the `dotenv` function to load the environment variables from the `.env` file, like so:
-
-```rust
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn Error>> {
-    dotenv().ok();
-    // ... (rest of your code)
-}
-```
-
-By following this approach, we can keep the API key separate from our code, making it easier to manage and share our project without exposing any sensitive information.
+Now when we use our program, we won't have to worry about storing our environment variable anywhere in the program!
 
 ### Creating an Executor
 
