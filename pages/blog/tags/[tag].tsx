@@ -51,7 +51,8 @@ export default function BlogPage(props: Props): JSX.Element {
 	const [headPost, ...tailPosts] = props.posts
 
 	const meta_title = 'Shuttle Blog'
-	const meta_description = 'Get all your shuttle News on the shuttle blog.'
+	const meta_description =
+		'Dive into the Shuttle blog for insights on Rust programming, tutorials, web development tips, and exclusive thought leadership articles.'
 
 	return (
 		<>

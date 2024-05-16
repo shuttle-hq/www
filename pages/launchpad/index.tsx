@@ -1,8 +1,9 @@
 import { Description, Form, Waitlist } from 'components/sections/Launchpad'
-import LaunchpadIssues, { Issue } from 'components/sections/Launchpad/LaunchpadIssues'
-import { getAllTags, getSortedIssues } from 'lib/launchpad/issues'
+import { Issue } from 'components/sections/Launchpad/LaunchpadIssues'
+import { getSortedIssues } from 'lib/launchpad/issues'
 import { trackEvent } from 'lib/posthog'
 import { GetStaticPropsResult } from 'next'
+import { NextSeo } from 'next-seo'
 import Link from 'next/link'
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
@@ -24,6 +25,10 @@ export default function Launchpad(props: Props) {
 
 	return (
 		<>
+			<NextSeo
+				title='Launchpad by Shuttle - Learn Rust in Bite-Sized Chunks'
+				description='Subscribe to Launchpad, the newsletter dedicated to learning Rust. Enjoy byte-sized educational chunks to empower your Rust programming skills.'
+			/>
 			<Form />
 			<Description />
 			<section className='relative mx-auto max-w-[600px] px-5 pb-28 pt-28 sm:px-10'>

@@ -2,7 +2,6 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { DefaultSeo } from 'next-seo'
 import CookieConsent from 'react-cookie-consent'
-import Head from 'next/head'
 import { APP_NAME, SITE_TITLE, SITE_DESCRIPTION, SITE_URL, TWITTER_HANDLE } from '../lib/constants'
 import { ReactNode, useEffect } from 'react'
 import { useRouter } from 'next/router'
@@ -44,11 +43,8 @@ export default function App({ Component, pageProps }: AppProps) {
 
 	return (
 		<>
-			<Head>
-				<title>{SITE_TITLE}</title>
-			</Head>
 			<DefaultSeo
-				title={APP_NAME}
+				title={SITE_TITLE}
 				description={SITE_DESCRIPTION}
 				openGraph={{
 					type: 'website',
