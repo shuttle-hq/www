@@ -373,7 +373,7 @@ To do this, you could create a `Pipeline` trait  does two things:
 - Initialise the agents set (and return it as a `Vec<Box<dyn Agent>>`)
 - Run the vector as a pipeline, where the results of the previous agent gets fed into the next one
 
-An issue that you may come across with However, you may run into an issue with your Agents needing to implement `Sized`. This is because `Clone` requires an object to be a known size at compile-time - otherwise it won't work! To fix this, we can wrap the `dyn` type in a `Box`, allocating it on the heap. This works because the `Clone` trait requires the type to have a known, static size at compile-time.
+However, you may run into an issue with your Agents needing to implement `Sized`. This is because `Clone` requires an object to be a known size at compile-time - otherwise it won't work! To fix this, we can wrap the `dyn` type in a `Box`, allocating it on the heap. This works because the `Clone` trait requires the type to have a known, static size at compile-time.
 
 Additionally, you might also receive an error with not being able to compile because of the `prompt()` method being async. You can fix this by adding the `async_trait` crate, then using the attribute macro above your code:
 
