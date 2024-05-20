@@ -2,7 +2,6 @@ import { CallToAction, Pricing, Testimonials } from 'components/sections'
 import Plans from 'components/sections/Pricing/Plans'
 import LovedBy from 'components/sections/Pricing/LovedBy'
 import PriceCards from 'components/sections/Pricing/PriceCards'
-import BenefitCards from 'components/sections/Pricing/BenefitsCards'
 import Calculator from 'components/sections/Pricing/Calculator'
 import 'react-tooltip/dist/react-tooltip.css'
 import IncludedInAllPlans from 'components/sections/Pricing/IncludedInAllPlans'
@@ -17,10 +16,9 @@ export default function PricingPage() {
 			<Plans />
 			<LovedBy />
 			<IncludedInAllPlans />
-			<PriceCards />
-			<Calculator />
-			<BenefitCards />
 			<Pricing />
+			<Calculator />
+			<PriceCards />
 			<Testimonials />
 			<CallToAction />
 		</div>

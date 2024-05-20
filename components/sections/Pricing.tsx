@@ -82,6 +82,14 @@ const PRICING_ROWS: PricingTableRow[] = [
 		},
 	},
 	{
+		desc: '',
+		values: {
+			community: '',
+			pro: '',
+			team: '',
+		},
+	},
+	{
 		desc: 'Dedicated Database',
 		desc2: '(AWS RDS)',
 		values: {
@@ -252,40 +260,19 @@ const Pricing = () => {
 						))}
 					</div>
 					{/* Desktop */}
-					<div className='hidden divide-y divide-black/10 text-xl dark:divide-white/10 lg:block'>
-						<div className='mb-8 grid grid-cols-[5fr_4fr_4fr_4fr] py-[0.875rem]'>
-							<div>{/* grid filler */}</div>
+					<div className='hidden divide-y divide-black/10 rounded-4xl bg-[#0F0F0F] p-10 text-xl dark:divide-white/10 lg:block'>
+						<div className='text-main grid grid-cols-[5fr_4fr_4fr_4fr] items-center py-2 text-center capitalize text-[#C8C8C8]'>
+							<div />
 							{TIERS.map((t) => (
-								<div key={t.name} className='text-center text-black dark:text-body'>
-									<div className='mb-4 font-gradual text-2xl font-bold'>{t.displayName}</div>
-									<div className='mx-auto mb-4 w-4/5 text-base text-body'>{t.desc}</div>
-									<Button
-										variant={t.ctaPrimaryButton ? 'tertiary' : 'blackwhite'}
-										className='mx-auto scale-[0.95] hover:bg-gradient-2'
-										href={t.ctaLink}
-										onClick={() => {
-											trackEvent(`pricing_comparison_${t.name}`)
-										}}
-									>
-										{t.cta}
-									</Button>
-								</div>
+								<div key={t.name}>{t.name}</div>
 							))}
 						</div>
 						{PRICING_ROWS.map((r) => (
 							<div
 								key={r.desc}
-								className='text-main grid grid-cols-[5fr_4fr_4fr_4fr] items-center py-2 text-center'
+								className='text-main grid h-14 grid-cols-[5fr_4fr_4fr_4fr] items-center py-2 text-center text-sm text-[#C8C8C8]'
 							>
-								<div className='text-left text-body'>
-									{r.desc}
-									{r.desc2 ? (
-										<>
-											{' '}
-											<span className='text-sm'>{r.desc2}</span>
-										</>
-									) : null}
-								</div>
+								<div className='text-left text-body'>{r.desc}</div>
 								<div>{toCellContent(r.values['community'])}</div>
 								<div>{toCellContent(r.values['pro'])}</div>
 								<div>{toCellContent(r.values['team'])}</div>
