@@ -149,7 +149,7 @@ const Plan: FC<PlanProps> = ({
 				</Link>
 			</button>
 
-			{name === 'Pro' && (
+			{/* {name === 'Pro' && (
 				<button className={'absolute -bottom-12 left-0 z-[5] w-full text-white'}>
 					<Link
 						href='https://shuttlerust.typeform.com/featureideas'
@@ -162,7 +162,7 @@ const Plan: FC<PlanProps> = ({
 						Interested in Pro but missing a feature?
 					</Link>
 				</button>
-			)}
+			)} */}
 		</div>
 	)
 }
