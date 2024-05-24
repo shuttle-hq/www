@@ -30,9 +30,14 @@ const posts = getSortedPosts()
 
 export const exportedPosts = rssXML(posts).replaceAll('&', '&amp;')
 
-fs.writeFile('./public/rss.xml', exportedPosts, (err) => {
-	if (err != null) {
-		console.error(err)
-		process.exit(1)
+fs.stat('./public/rss.xml', function (err, stat) {
+	if (err != null && err.code === 'ENOENT') {
+		// file does not exist
+		fs.writeFile('./public/rss.xml', exportedPosts, (err) => {
+			if (err != null) {
+				console.error(err)
+				process.exit(1)
+			}
+		})
 	}
 })
