@@ -2,21 +2,15 @@ import { APP_NAME, SITE_URL } from '../constants'
 import { getSortedPosts, Post } from './posts'
 import fs from 'fs'
 
-const postXML = (post: Post): string => {
-	let sanitizedTitle = post.title
-	let sanitizedDescription = post.description
-
-	sanitizedTitle.replaceAll('&', 'and')
-	sanitizedDescription.replaceAll('&', 'and')
-	return ` <item>
+const postXML = (post: Post): string => `
+<item>
   <guid>${SITE_URL}blog/${post.url}</guid>
-  <title>${sanitizedTitle}</title>
+  <title>${post.title}</title>
   <link>${SITE_URL}blog/${post.url}</link>
-  <description>${sanitizedDescription}</description>
+  <description>${post.description}</description>
   <pubDate>${new Date(post.date).toUTCString()}</pubDate>
 </item>
 `
-}
 
 const rssXML = (posts: readonly Post[]): string => `
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
