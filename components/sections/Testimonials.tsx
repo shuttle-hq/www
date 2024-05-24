@@ -73,7 +73,7 @@ const Testimonials = () => {
 			</span>
 			<div className='mx-auto w-full max-w-[1280px] px-5 sm:px-10'>
 				<h2 className='font-gradual text-4.5 font-bold leading-none text-head lg:text-[3.5rem]'>
-					What the community says
+					Loved by Developers.
 				</h2>
 				<p className='mt-3 text-xl text-white/40 sm:mt-5 lg:text-2xl'>
 					Join thousands of developers using Shuttle. Connect with them on&nbsp;

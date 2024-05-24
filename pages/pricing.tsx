@@ -5,6 +5,7 @@ import PriceCards from 'components/sections/Pricing/PriceCards'
 import Calculator from 'components/sections/Pricing/Calculator'
 import 'react-tooltip/dist/react-tooltip.css'
 import IncludedInAllPlans from 'components/sections/Pricing/IncludedInAllPlans'
+import StartBuilding from 'components/sections/Pricing/StartBuilding'
 
 export default function PricingPage() {
 	return (
@@ -17,9 +18,10 @@ export default function PricingPage() {
 			<LovedBy />
 			<IncludedInAllPlans />
 			<Pricing />
-			<Calculator />
 			<PriceCards />
+			<Calculator />
 			<Testimonials />
+			<StartBuilding />
 			<CallToAction />
 		</div>
 	)
