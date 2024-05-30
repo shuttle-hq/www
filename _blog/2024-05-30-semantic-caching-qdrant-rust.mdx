@@ -70,8 +70,8 @@ use qdrant_client::prelude::QdrantClient;
 use async_openai::{config::OpenAIConfig, Client};
 
 struct RagSystem {
-	qdrant_client: QdrantClient,
-	openai_client: Client<OpenAIConfig>
+    qdrant_client: QdrantClient,
+    openai_client: Client<OpenAIConfig>
 }
 
 static REGULAR_COLLECTION_NAME: &str = "my-collection";
@@ -174,8 +174,8 @@ impl RagSystem {
     async fn embed_and_upsert_csv_file(&self, file_path: PathBuf) -> Result<()> {
         let file_contents = std::fs::read_to_string(&file_path)?;
 
-			  // note here that we skip 1 because CSV files typically have headers
-			  // if you don't have any headers, you can remove it
+	    // note here that we skip 1 because CSV files typically have headers
+		// if you don't have any headers, you can remove it
         let chunked_file_contents: Vec<String> =
             file_contents.lines().skip(1).map(|x| x.to_owned()).collect();
 
