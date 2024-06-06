@@ -1,0 +1,506 @@
+---
+title: "A Comprehensive Guide to the llm-chain Rust crate"
+description: "Deep diving into the llm chain crate and leveraging Rust's version of Langchain"
+author: josh
+tags: [rust, ai, llm-orchestration, guide]
+thumb: llm-chain-langchain-rust-thumb.png
+cover: llm-chain-langchain-rust-thumb.png
+date: '2024-06-06T15:30:00'
+---
+LLM orchestration is an important part of creating AI powered applications. Particularly in business use cases, AI agents and RAG pipelines are commonly utilised for refined LLM responses. Although Langchain is currently the most popular LLM orchestration suite, there are also similar crates in Rust that we can use. In this article, we’ll be diving into one of them - `llm-chain`.
+
+## What is llm-chain?
+
+`llm-chain` is a collection of crates that describes itself as “the ultimate toolbox” for working with Large Language Models (LLMs) to create AI-powered applications and other tooling.
+
+You can find the crate’s GitHub repository [here.](https://github.com/sobelio/llm-chain)
+
+### Comparison to other LLM orchestration crates
+
+If you’ve looked around for different crates, you probably noticed that there are a few crates for LLM orchestration in Rust:
+
+- `llm-chain` (this one!)
+- `langchain-rust`
+- `anchor-chain`
+
+In comparison to the others, `llm-chain` is somewhat macro heavy. However, it is also the most developed in terms of having extra data processing utilities. If you’re looking for an all-in-one package, `llm-chain` is the crate that’s most likely to help you get over the line. They also have [their own docs.](https://docs.llm-chain.xyz/docs/introduction)
+
+## Getting Started
+
+### Pre-requisites
+
+Before you add `llm-chain` to your project, make sure you have access to the prompting model you want to use. For example, if you want to use OpenAI, make sure you have an OpenAI API key (set as `OPENAI_API_KEY` in environment variables).
+
+### Setup
+
+To get started, all you need to do is to add the crate to your project (as well as Tokio for async):
+
+```bash
+cargo add llm-chain
+cargo add tokio -F full
+```
+
+Next, we'll want to add a provider for whatever method of model prompting you want to use. Here we'll add the OpenAI integration by adding the crate to our application:
+
+```bash
+cargo add llm-chain-openai
+```
+
+Note that a full list of integrations can be found [here](https://github.com/sobelio/llm-chain/tree/main/crates), split by package.
+
+## Basic usage
+
+### Prompting
+
+To get started with `llm-chain`, we can use their basic example as a way to quickly get something working. In this code snippet, we will:
+
+- Initialise an executor using `executor!()`
+- Use `prompt!()` with the system message and prompt to store both in a struct that will get used when the prompt (or chain) gets ran.
+- Runs the prompt and returns the results, using a reference to the executor.
+- Prints the results.
+
+```rust
+use std::error::Error;
+use llm_chain::{executor, parameters, prompt};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error>> {
+    let exec = executor!()?;
+
+    let res = prompt!(
+    "You are a robot assistant for making personalized greetings",
+    "Make a personalized greeting for Joe"
+    )
+    .run(&parameters!(), &exec)
+    .await?;
+
+    println!("{}", res);
+
+    Ok(())
+}
+```
+
+Running this prompt should yield a result that looks like this:
+
+```bash
+Assistant: Hello Joe! I hope you're having a fantastic day filled with joy and success. Remember to keep shining bright and making a positive impact wherever you go. Have a great day!
+```
+
+The default model for the `llm_chain_openai` executor is `gpt-3.5-turbo`. The executor parameters can be defined in the macro - you can also find more about this [here](https://docs.rs/llm-chain/latest/llm_chain/macro.executor.html).
+
+### Using Templates
+
+However, if we want to move onto more advanced pipelines the easiest way for us to do this would be to use a prompt template with parameters. You can see below that much like in the previous code snippet, we generate an executor and return the results. However, instead of using `prompt!()` by itself we use it in `Step::for_prompt_template` - which you can find more about [here](https://docs.rs/llm-chain/latest/llm_chain/step/struct.Step.html).
+
+```rust
+use llm_chain::step::Step;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error>> {
+    let exec = executor!()?;
+    let step = Step::for_prompt_template(prompt!(
+	    "You are a bot for making personalised greetings",
+	    "Make a personalized greeting tweet for {{text}}"
+    ));
+
+    let step_results = step.run(&parameters!("Emil"), &exec).await?;
+    println!("step_results: {step_results}");
+
+    let immediate_results = step_results.to_immediate().await?.as_content();
+    println!("immediate results: {immediate_results}");
+
+    Ok(())
+}
+```
+
+The results of the output should look like this:
+
+```bash
+step_results: Assistant: "Hey @Emil! Wishing you a fantastic day filled with joy, success, and lots of smiles! Keep shining bright and making a positive impact in the world. Cheers to you! 🌟 #YouGotThis"
+
+immediate results: Assistant: "Hey @Emil! Wishing you a fantastic day filled with joy, success, and lots of smiles! Keep shining bright and making a positive impact in the world. Cheers to you! 🌟 #YouGotThis"
+```
+
+## Chaining prompts
+
+Of course, one of the main reasons why we're using Langchain (or Langchain-like libraries) in the first place is to be able to orchestrate our LLM usage. The `llm-chain` Rust crate assists us with this by letting us create chains of LLM prompts using the `Chain` struct.
+
+There are three types of chains that we can use with `llm-chain`:
+
+- Sequential chains, which apply steps sequentially
+- Map-reduce chains, which use a "map" step to apply to each chunk from a loaded file and then reduce the text. This is quite useful for text summarization.
+- Conversational chains, which keep track of the conversation history and manage context. Conversational chains are great for chatbot applications, multi-step interactions and other places where context is essential.
+
+### Sequential chaining
+
+The easiest to use type of chaining is sequential chaining, which simply pipes the output from each step into the next step. When creating our steps, we will use the `Chain` struct instead of creating each step individually:
+
+```rust
+use llm_chain::step::Step;
+use llm_chain::chains::sequential::Chain;
+use llm_chain::prompt;
+
+// Create a chain of steps with two prompts
+let first_step = Step::for_prompt_template(
+            prompt!("You are a bot for making personalized greetings", "Make personalized birthday e-mail to the whole company for {{name}} who has their birthday on {{date}}. Include their name")
+    );
+
+// Second step: summarize the email into a tweet. Importantly, the text parameter is the result of the previous prompt.
+let second_step = Step::for_prompt_template(
+    prompt!( "You are an assistant for managing social media accounts for a company", "Summarize this email into a tweet to be sent by the company, use emojis if you can. \\n--\\n{{text}}")
+        );
+
+let chain: Chain = Chain::new( vec![first_step, second_step] );
+
+```
+
+Next, we'll then use the `parameters!` macro to inject parameters into the prompt pipeline:
+
+```rust
+use llm_chain::parameters;
+use llm_chain::traits::Executor as ExecutorTrait;
+use llm_chain_openai::chatgpt::Executor;
+
+    // Create a new ChatGPT executor with the default settings
+    let exec = Executor::new()?;
+
+    // Run the chain with the provided parameters
+    let res = chain
+        .run(
+            // Create a Parameters object with key-value pairs for the placeholders
+            parameters!("name" => "Emil", "date" => "February 30th 2023"),
+            &exec,
+        )
+        .await?;
+
+    // Print the result to the console
+    println!("{}", res.to_immediate().await?.as_content());
+    Ok(())
+}
+
+```
+
+Running the code should yield a result that looks like this:
+
+```bash
+Assistant: 🎉🎂 Join us in celebrating Emil's birthday on February 30th! 🎈🎁 Emil, your dedication and hard work are truly commendable. Wishing you happiness and success on your special day! 🥳🎉 #HappyBirthdayEmil #TeamAppreciation 🎂
+```
+
+### Map-reduce chains
+
+Map-reduce chains typically consist of two steps:
+
+- A "Map" step that takes a document and applies an LLM chain to it, treating the output as a new document
+- The new documents are then passed to a new chain that combines the separate documents to get a single output.
+At the end of a Map-Reduce chain, the output can be taken for further processing by sending it to another prompting model (for instance) or as part of a sequential pipeline.
+
+To use this pattern, we need to create a prompt template:
+
+```rust
+// note that we import Chain from a different module here!
+use llm_chain::chains::map_reduce::Chain;
+
+// Create the "map" step to summarize an article into bullet points
+let map_prompt = Step::for_prompt_template(prompt!(
+"You are a bot for summarizing wikipedia articles, you are terse and focus on accuracy",
+"Summarize this article into bullet points:\\n{{text}}"
+));
+
+// Create the "reduce" step to combine multiple summaries into one
+let reduce_prompt = Step::for_prompt_template(prompt!(
+"You are a diligent bot that summarizes text",
+"Please combine the articles below into one summary as bullet points:\\n{{text}}"
+));
+
+// Create a map-reduce chain with the map and reduce steps
+let chain = Chain::new(map_prompt, reduce_prompt);
+```
+
+Next, we need to take some text from a file and add it as a parameter - the `{{text}}` parameter in the Map prompt will automatically take in the file content:
+
+```rust
+// Load the content of the article to be summarized
+let article = include_str!("article_to_summarize.md");
+
+// Create a vector with the Parameters object containing the text of the article
+let docs = vec![parameters!(article)];
+
+let exec = executor!()?;
+// Run the chain with the provided documents and an empty Parameters object for the "reduce" step
+// Note that there are multiple modules with a Chain struct
+// This one takes two different modules for
+let res = chain.run(docs, Parameters::new(), &exec).await?;
+
+// Print the result to the console
+println!("{}", res.to_immediate().await?.as_content());
+
+```
+
+Note here that because we have **two** steps, the `chain.run()` function will take two different vectors - one for each step, in order. This means that we are passing the article content to the first prompt, but no parameters to the second document.
+
+### Conversational Chains
+
+Of course, the last chain we need to talk about is conversational chains. In a nutshell, conversational chains allow you to load context from memory by using saved chat history. In situations where the platform or model cannot access saved chat history, you might store the response and then use it as extra context in the next message.
+
+To use conversational chains, like before, we need to create a `Chain` (now imported from the conversation module) and define the steps for it:
+
+```rust
+use llm_chain::{
+    chains::conversation::Chain, executor, output::Output, parameters, prompt, step::Step,
+};
+
+let exec = executor!()?;
+
+let mut chain = Chain::new(
+    prompt!(system: "You are a robot assistant for making personalized greetings."),
+)?;
+
+// Define the conversation steps.
+let step1 = Step::for_prompt_template(prompt!(user: "Make a personalized greeting for Joe."));
+let step2 =
+    Step::for_prompt_template(prompt!(user: "Now, create a personalized greeting for Jane."));
+let step3 = Step::for_prompt_template(
+    prompt!(user: "Finally, create a personalized greeting for Alice."),
+);
+
+let step4 = Step::for_prompt_template(prompt!(user: "Remind me who did we just greet."));
+```
+
+Next, we will individually send each prompt to the `Chain` in turn, printing out the response from each one. Note that at step 4, we should receive an answer that includes the names of the previous three people we just made a personalized greeting for (Joe, Jane and Alice).
+
+```rust
+// Execute the conversation steps.
+let res1 = chain.send_message(step1, &parameters!(), &exec).await?;
+println!("Step 1: {}", res1.to_immediate().await?.primary_textual_output().unwrap());
+
+let res2 = chain.send_message(step2, &parameters!(), &exec).await?;
+println!("Step 2: {}", res2.to_immediate().await?.primary_textual_output().unwrap());
+
+let res3 = chain.send_message(step3, &parameters!(), &exec).await?;
+println!("Step 3: {}", res3.to_immediate().await?.primary_textual_output().unwrap());
+
+let res4 = chain.send_message(step4, &parameters!(), &exec).await?;
+println!("Step 4: {}", res4.to_immediate().await?.primary_textual_output().unwrap());
+```
+
+Running this should get an output that looks something like this:
+
+```bash
+Step 1: Hello, Joe! I hope you are having a fantastic day filled with positivity and joy. Keep shining bright and making a difference in the world with your unique presence. Wishing you continued success and happiness in all that you do!
+Step 2: Hello, Jane! Sending you warm greetings and positive vibes today. May your day be as wonderful and vibrant as you are. Remember to keep being your amazing self and always believe in the incredible things you are capable of achieving. Wishing you endless happiness and success in all your endeavors!
+Step 3: Hello, Alice! I hope this message finds you well and thriving. You are such a remarkable individual with a heart full of kindness and a spirit full of strength. Keep inspiring those around you with your grace and resilience. May your day be filled with love, laughter, and countless blessings. Stay amazing, Alice!
+Step 4: We just created personalized greetings for Joe, Jane, and Alice.
+```
+
+## Using embeddings with llm-chain
+
+In terms of using embeddings with `llm-chain`, it provides a helper method for using Qdrant as a vector store. It abstracts over the `qdrant_client` crate, providing an easy way to embed documents and carry out similarity search. Note that the `Qdrant` struct will assume your collection(s) that you want to use have already been created!
+
+### Basic usage
+
+While we can use `qdrant_client` to manually create our own embeddings, `llm-chain` also has an integration for easy access. We will be required to create our own client through `qdrant_client` - which we can then use with the `Qdrant` struct to be able to parse stuff.
+
+First, let's define a couple of passages that we want to insert into our Qdrant collection:
+
+```rust
+    const DOC_DOG_DEF: &str = r#"The dog (Canis familiaris[4][5] or Canis lupus familiaris[5]) is a domesticated descendant of the wolf. Also called the domestic dog, it is derived from the extinct Pleistocene wolf,[6][7] and the modern wolf is the dog's nearest living relative.[8] Dogs were the first species to be domesticated[9][8] by hunter-gatherers over 15,000 years ago[7] before the development of agriculture.[1] Due to their long association with humans, dogs have expanded to a large number of domestic individuals[10] and gained the ability to thrive on a starch-rich diet that would be inadequate for other canids.[11]
+
+    The dog has been selectively bred over millennia for various behaviors, sensory capabilities, and physical attributes.[12] Dog breeds vary widely in shape, size, and color. They perform many roles for humans, such as hunting, herding, pulling loads, protection, assisting police and the military, companionship, therapy, and aiding disabled people. Over the millennia, dogs became uniquely adapted to human behavior, and the human–canine bond has been a topic of frequent study.[13] This influence on human society has given them the sobriquet of "man's best friend"."#;
+
+    const DOC_WOODSTOCK_SOUND: &str = r#"Sound for the concert was engineered by sound engineer Bill Hanley. "It worked very well", he says of the event. "I built special speaker columns on the hills and had 16 loudspeaker arrays in a square platform going up to the hill on 70-foot [21 m] towers. We set it up for 150,000 to 200,000 people. Of course, 500,000 showed up."[48] ALTEC designed marine plywood cabinets that weighed half a ton apiece and stood 6 feet (1.8 m) tall, almost 4 feet (1.2 m) deep, and 3 feet (0.91 m) wide. Each of these enclosures carried four 15-inch (380 mm) JBL D140 loudspeakers. The tweeters consisted of 4×2-Cell & 2×10-Cell Altec Horns. Behind the stage were three transformers providing 2,000 amperes of current to power the amplification setup.[49][page needed] For many years this system was collectively referred to as the Woodstock Bins.[50] The live performances were captured on two 8-track Scully recorders in a tractor trailer back stage by Edwin Kramer and Lee Osbourne on 1-inch Scotch recording tape at 15 ips, then mixed at the Record Plant studio in New York.[51]"#;
+
+```
+
+The `Qdrant` struct will automatically assume you have your collection set up and have a `QdrantClient` that already exists, along with the collection name. We'll pass these as arguments into a new function that does the following:
+
+- Create embeddings using `llm-chain-openai`
+- Insert the embeddings into Qdrant
+- Conduct a similarity search using the prompt
+
+Firstly, we’ll want to define a method for creating our `Qdrant` struct so that we can re-use it later on:
+
+```rust
+use llm_chain_openai::embeddings::Embeddings;
+use llm_chain_qdrant::Qdrant;
+use llm_chain::schema::EmptyMetadata;
+use qdrant_client::prelude::{QdrantClient, QdrantClientConfig};
+
+// note that the URL must connect to port 6334 - qdrant_client uses GRPC!
+// feel free to replace this wit
+async fn create_qdrant_client(url: String) -> QdrantClient {
+    let mut config = QdrantClientConfig::from_url(url);
+    // this part is only required if you're running Qdrant on the cloud
+    // if running locally, no api key is required
+    config.api_key = std::env::var("QDRANT_API_KEY").ok();
+    QdrantClient::new(Some(config))
+}
+
+async fn create_qdrant_struct(qdrant_client: QdrantClient, collection_name: String) -> Qdrant {
+    let embeddings = Embeddings::default();
+
+    // Storing documents
+    Qdrant::new(
+        qdrant_client,
+        collection_name,
+        embeddings,
+        None,
+        None,
+        None,
+    )
+}
+```
+
+Next, we can use the `Qdrant` struct to carry out a similarity search! We’ll add our documents to our collection, then conduct a similarity search and print out the stored documents:
+
+```rust
+async fn similarity_search_qdrant(qdrant: Qdrant) -> Result<(), Box<dyn Error>> {
+    // embed and upsert the documents into Qdrant
+    let doc_ids = qdrant
+        .add_documents(
+            vec![
+                DOC_DOG_DEF.to_owned(),
+                DOC_WOODSTOCK_SOUND.to_owned(),
+            ]
+            .into_iter()
+            .map(Document::new)
+            .collect(),
+        )
+        .await?;
+
+    println!("Documents stored under IDs: {:?}", doc_ids);
+
+    // conduct similarity search and find similar vectors
+    let response = qdrant
+        .similarity_search(
+            "Sound engineering is involved with concerts and music events".to_string(),
+            1,
+        )
+        .await?;
+
+    // print out the stored documents with payload, embeddings etc
+    println!("Retrieved stored documents: {:?}", response);
+}
+```
+
+After this, we can then send it into a `Chain` or whatever else we need.
+
+### Usage within a prompt template
+
+In isolation, the Qdrant struct is not particularly helpful and mainly provides convenience methods for embedding things. However, we can also add it as part of a `ToolCollection` which lets the pipeline know that it is able to use embeddings.
+
+```rust
+let qdrant = create_qdrant_struct( ,
+  	"mycollection".to_string()).await;
+
+let exec = executor!().unwrap();
+
+let mut tool_collection = ToolCollection::<Multitool>::new();
+
+tool_collection.add_tool(
+    QdrantTool::new(
+        qdrant,
+        "factual information and trivia",
+        "facts, news, knowledgebuild_local_qdrant().await; or trivia",
+    )
+    .into(),
+);
+
+let task = "Tell me something about dogs";
+
+let prompt = ChatMessageCollection::new()
+    .with_system(StringTemplate::tera(
+        "You are an automated agent for performing tasks. Your output must always be YAML.",
+    ))
+    .with_user(StringTemplate::combine(vec![
+        tool_collection.to_prompt_template().unwrap(),
+        StringTemplate::tera("Please perform the following task: {{task}}."),
+    ]));
+
+let result = Step::for_prompt_template(prompt.into())
+    .run(&parameters!("task" => task), &exec)
+    .await
+    .unwrap();
+
+println!("{}", res.to_immediate().await?.as_content());
+```
+
+## Processing data using llm-chain
+
+While `llm-chain` provides tooling for creating LLM pipelines, another important part of Langchain and libraries like it is being able to process and transform data. Prompts (and prompt engineering) are important to get right. However if we're also feeding data into our pipeline, we'll also want to make sure it's as easy as possible to find the most relevant context.
+
+Below are a couple of useful use cases that you may want to check out.
+
+### Scraping search results
+
+`llm-chain` provides a convenience struct for scraping Google Results using the `GoogleSerper` struct - using the Serper.dev service.
+
+```rust
+use llm_chain::tools::{tools::GoogleSerper, Tool};
+
+#[tokio::main(flavor = "current_thread")]
+async fn main() {
+    let serper_api_key = std::env::var("SERPER_API_KEY").unwrap();
+    let serper = GoogleSerper::new(serper_api_key);
+    let result = serper
+        .invoke_typed(&"Who was the inventor of Catan?".into())
+        .await
+        .unwrap();
+    println!("Best answer from Google Serper: {}", result.result);
+}
+```
+
+As well as this, there is also support for Bing Search API which provides 1000 free searches a month - you can find more about the pricing [here](https://www.microsoft.com/en-us/bing/apis/pricing).  Below is a code snippet of how you can use the API:
+
+```rust
+use llm_chain::tools::{tools::BingSearch, Tool};
+
+#[tokio::main(flavor = "current_thread")]
+async fn main() {
+    let bing_api_key = std::env::var("BING_API_KEY").unwrap();
+    let bing = BingSearch::new(bing_api_key);
+    let result = bing
+        .invoke_typed(&"Who was the inventor of Catan?".into())
+        .await
+        .unwrap();
+    println!("Best answer from bing: {}", result.result);
+}
+
+```
+
+Should you need to change between one or the other, both are quite easy to use.
+
+### Extracting labelled text
+
+`llm-chain` also has some convenience methods for extracting labelled text. If you have a string of bullet points for instance, you can use `extract_labeled_text()` to be able to extract the text.
+
+```rust
+use llm_chain::parsing::extract_labeled_text;
+
+fn main() {
+    let text = r"
+- Title: The Matrix
+- Actor: Keanu Reeves
+- Director: The Wachowskis
+";
+
+    let result = extract_labeled_text(text);
+    println!("{:?}", result);
+}
+```
+
+Running this code should result in an output that looks like this:
+
+```bash
+[("Title", "The Matrix"), ("Actor", "Keanu Reeves"), ("Director", "The Wachowskis")]
+```
+
+You can find out more about the `parsing` module for `llm-chain` [here](https://docs.rs/llm-chain/latest/llm_chain/parsing/index.html) as well as [some of the examples](https://github.com/sobelio/llm-chain/tree/main/crates/llm-chain/examples).
+
+## Conclusion
+
+Thanks for reading! With the power of `llm-chain`, you can easily leverage AI for your applications.
+
+Read more:
+- [Building a RAG agent workflow](https://shuttle.rs/blog/2024/05/23/building-agentic-rag-rust-qdrant)
+- [Using Huggingface with Rust](https://shuttle.rs/blog/2024/05/01/using-huggingface-rust)
+- [Building an Axum web server to use with llm-chain](https://shuttle.rs/blog/2024/03/13/simple-web-server-rust)
