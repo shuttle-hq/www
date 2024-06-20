@@ -1,8 +1,8 @@
-import { Hero, Info, Steps } from 'components/sections/ShuttleAI'
+import { Hero, Info, Steps, Waitlist } from 'components/sections/ShuttleAI'
 import { Page } from 'components/templates'
 import { ReactNode } from 'react'
 import Image from 'next/image'
-import { Waitlist } from 'components/sections/ShuttleAI/Waitlist'
+import StartBuilding from 'components/sections/Home/StartBuilding'
 
 export default function ShuttleAIPage() {
 	return (
@@ -20,10 +20,8 @@ export default function ShuttleAIPage() {
 			<Hero />
 			<Info />
 			<Steps />
-			<Waitlist
-				cta='The fastest way to build and deploy in the cloud.'
-				description='Even faster than deploying a "hello world". Sign up for the waitlist!'
-			/>
+			<StartBuilding />
+			<Waitlist />
 		</div>
 	)
 }
