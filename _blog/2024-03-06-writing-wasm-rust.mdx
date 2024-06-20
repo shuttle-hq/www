@@ -128,7 +128,7 @@ pub fn convert_image(buffer: &Buffer) -> Vec<u8> {
     let mut new_vec: Vec<u8> = Vec::new();
     img2.write_to(&mut Cursor::new(&mut new_vec), ImageFormat::Jpeg).unwrap();
 
-    Ok(new_vec)
+    new_vec
 }
 ```
 
@@ -175,9 +175,10 @@ Next, we’ll create a `server.js` file in our root directory and insert the fol
 ```jsx
 const fileUpload = require('express-fileupload');
 const express = require('express');
-const { convert_image } = require('./pkg/wasmmeme.js');
+const { convert_image } = require('./pkg/wasm_example');
 
 const app = express();
+app.use(fileUpload());
 const port = 3030;
 
 app.get('/', (req, res) => {
@@ -192,7 +193,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/upload', (req, res, next) => {
-        const image = convertImage(req.files.file.data)
+  const image = convert_image(req.files.file.data)
 
   res.setHeader('Content-disposition', 'attachment; filename="meme.jpeg"');
   res.setHeader('Content-type', 'image/jpg');

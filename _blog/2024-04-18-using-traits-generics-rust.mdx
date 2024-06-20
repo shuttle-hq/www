@@ -1,0 +1,307 @@
+---
+title: "An introduction to advanced Rust traits and generics"
+description: "All about Rust traits, generics, trait bounds and implementing advanced trait bounds"
+author: josh
+tags: [rust, traits, generics, guide]
+thumb: traits-generics-rust-thumb.png
+cover: traits-generics-rust-thumb.png
+date: '2024-04-18T15:30:00'
+---
+Hello world! In this post we’re going to give a quick refresher course on Rust traits and generics, as well as implementing some more advanced trait bounds and type signatures.
+
+## A quick refresher on Rust traits
+
+Writing a Rust trait is as simple as this:
+
+```rust
+pub trait MyTrait {
+    fn some_method(&self) -> String;
+}
+```
+
+Whenever a type implements `MyTrait`, you can guarantee that it will implement the `some_method()` function. To implement a trait simply requires that you implement the required methods (the ones with a semi-colon at the end).
+
+```rust
+struct MyStruct;
+
+impl MyTrait for MyStruct {
+    fn some_method(&self) -> String {
+        "Hi from some_method!".to_string()
+    }
+}
+```
+
+You can also implement traits you don’t own on types you do own, or traits you do own on a type you don’t own - but not both! The reason you can’t do this is because of trait coherence. We want to make sure that we don’t accidentally have conflicting trait implementations:
+
+```rust
+// implementing Into<T>, a trait we don't own, on MyStruct
+impl Into<String> for MyStruct {
+    fn into(self) -> String {
+        "Hello world!".to_string()
+    }
+}
+
+// implementing MyTrait for a type we don't own
+impl MyTrait for String {
+    fn some_method(&self) -> String {
+        self.to_owned()
+    }
+}
+
+// You can't do this!
+impl Into<String> for &str {
+   fn into(self) -> String {
+       self.to_owned()
+   }
+}
+```
+
+A common workaround for this is to create a newtype pattern - that is, a one-field tuple struct encapsulating the type we want to extend.
+
+```rust
+struct MyStr<'a>(&'a str);
+
+// note here that implementing From<T> also implements Into<T> - so we can use .into() as well as String::from()
+impl<'a> From<MyStr<'a>> for String {
+    fn from(string: MyStr<'a>) -> String {
+        string.0.to_owned()
+    }
+}
+
+fn main() {
+    let my_str = MyStr("Hello world!");
+    let my_string: String = my_str.into();
+
+    println!("{my_string}");
+}
+```
+
+If you have multiple traits that have the same method name, you need to manually declare what trait implementation you’re calling the type from:
+
+```rust
+pub trait MyTraitTwo {
+    fn some_method(&self) -> i32;
+}
+
+impl MyTraitTwo for MyStruct {
+    fn some_method(&self) -> i32 {
+        42
+    }
+}
+
+fn main() {
+    let my_struct = MyStruct;
+    println("{}", MyTraitTwo::some_method(&my_struct);
+}
+```
+
+Sometimes, you might want the user to be able to have a default implementation as it may otherwise be quite tricky to do so. We can do this by simply defining the method within the trait.
+
+```rust
+trait MyTrait {
+    fn some_method(&self) -> String {
+        "Boo!".to_string()
+    }
+}
+```
+
+Traits can also require other traits! Take the `std::error::Error` trait for example:
+
+```rust
+trait Error: Debug + Display {
+    // .. re-implement the provided methods here if you want
+}
+```
+
+Here, we explicitly tell the compiler that our type must implement both `Debug` and `Display` traits before it can implement `Error`.
+
+## An introduction to marker traits
+
+Marker traits are used as a “marker” for the compiler to understand that when a marker trait is implemented for a type, certain guarantees can be upheld. They have no methods or specific properties but are often used to ensure certain behaviors by the compiler.
+
+There’s a couple of reasons why you would want marker traits:
+
+- The compiler needs to know if something can be guaranteed to do something
+- They’re an implementation-level detail that you can also implement manually
+
+Two marker traits in particular, in conjunction with other lesser-used marker traits, are quite important to us: `Send` and `Sync`.  `Send` and `Sync` are unsafe to implement manually - this is typically because you need to manually ensure that it is implemented safely. `Unpin` is also another example of this. You can find more about why it's unsafe to manually implement these traits [here.](https://doc.rust-lang.org/nomicon/send-and-sync.html)
+
+In addition to this, marker traits are also (generally speaking) auto traits. If a struct has fields that all implement an auto trait, the struct itself will also implement the auto trait. For example:
+
+- If all field types within a struct are `Send`, the struct is now automatically marked `Send` by the compiler with no input required from the user.
+- If all but one of your struct fields implement `Clone` but one doesn’t, your struct now cannot derive `Clone` anymore. You can get around this by wrapping the relevant type in an `Arc` or `Rc` - but this depends on your use case. In certain cases, this is not possible and you may need to think about an alternative solution.
+
+## Why do marker traits matter in Rust?
+
+Marker traits in Rust form the core of the ecosystem and allows us to provide garuantees that may not be possible in other languages. For example, Java has marker interfaces which are analogous to Rust’s marker traits. However, marker traits in Rust are not just for behavior like `Cloneable` or `Serializable`; they also ensure that types can be sent across threads, for example. This is a subtle but far-reaching difference within the Rust ecosystem. With `Send` types for example, we can ensure that it's always safe to send the type across a thread. This makes the problem of concurrency much easier to handle. Marker traits can also affect other things:
+
+- The `Copy` trait is required to duplicate things by performing a bitwise copy (although this requires Clone). Attempting to copy a pointer bitwise only returns the address! This is also the same reason why String is unable to be copied and must be cloned: Strings in Rust are smart pointers.
+- The `Pin` trait which allows us to "pin" a value to a static place in memory
+- The `Sized` trait allows us to define a type as having a constant size at compile-time - however, this is already implemented for most types automatically
+
+There are also marker traits like `?Sized`, `!Send` and `!Sync`. In comparison to `Sized`, `Send` and `Sync` they are negative trait bounds and do the absolute opposite:
+
+- `?Sized` allows a type to be unsized (or in other words, dynamically sized)
+- `!Send` tells the compiler that an object absolutely cannot be sent to other thread
+- `!Sync` tells the compiler that an object's references absolutely cannot be shared between threads
+
+Marker traits can also improve the ergonomics of library crates. For example, let's say you have a type that implements `Pin` because your application or library requires it (Futures being a huge example of this). This is great because you can use the type safely now, but it's much more difficult to use your `Pin` type with things that don't care about pinning. Implementing `Unpin` allows you to use the type with things that don't care about pinning, making your developer experience that much better.
+
+## Object traits and dynamic dispatch
+
+In addition to all of the above, traits can also make use of dynamic dispatch. Dynamic dispatch is essentially moving the process of selecting which implementation of a polymorphic function to use at runtime. While Rust does favour static dispatch for performance reasons, there are benefits to using dynamic dispatch through trait objects.
+
+The most common pattern for using trait objects would be `Box<dyn MyTrait>`, where we are required to wrap the trait object in `Box` to make it implement the `Sized` trait. Because we’re moving the polymorphism process to runtime, the compiler can’t know what size the type is. Wrapping the type in a pointer (or "boxing" it) puts it on the heap instead of the stack.
+
+```rust
+// a struct with your object trait in it
+struct MyStruct {
+     my_field: Box<dyn MyTrait>
+}
+
+// this works!
+fn my_function(my_item: Box<dyn MyTrait>) {
+     // .. some code here
+}
+
+// this doesn't!
+fn my_function(my_item: dyn MyTrait) {
+     // .. some code here
+}
+
+// an example of a trait with a Sized bound
+trait MySizedTrait: Sized {
+    fn some_method(&self) -> String {
+        "Boo!".to_string()
+    }
+}
+
+// an illegal struct that won't compile because of the Sized bound
+struct MyStruct {
+    my_field: Box<dyn MySizedTrait>
+}
+
+```
+
+The object type will then be computed during runtime, as opposed to generics which use compile-time.
+
+The main advantages of dynamic dispatch are that your function doesn’t need to know the concrete type; as long as the type implements the trait, you can use it as a trait object (as long as it’s trait object safe). This is similar to the concept of duck-typing in other languages, where the functions and properties available to an object determine the typing. Typically from a user standpoint, the compiler doesn't care what the underlying concrete type is - just that it implements the trait. There are cases however where it *does* matter - in which case Rust offers ways to determine concrete type, although tricky to use. You also save some code bloat, which depending on your use can be a good thing.
+
+Errors are also easier to understand from a library user perspective. From a library developer’s point of view this is not such an issue, but if you need to use a generics-heavy library, you can get some very confusing errors! Axum and Diesel are two libraries that can sometimes be guilty of this and have workarounds for this (Axum’s `#[debug_handler]` macro and Diesel’s documentation, respectively). Because you’re moving the dispatch process to runtime, you also save compilation time.
+
+The downsides are that you need to ensure object trait safety. The conditions you need to satisfy for object safety include:
+- your type doesn’t require `Self: Sized`
+- your type must use some type of "self" in function arguments (whether it's `&self`, `self`, `mut self` etc...)
+- your type must not return Self
+
+Find out more [here.](https://doc.rust-lang.org/reference/items/traits.html#object-safety)
+
+Note that if you have a trait that doesn't require `Self: Sized` but the trait has a method that requires it, you can't call that method on a `dyn` object.
+
+This stems from the fact that by moving dispatch to runtime, the compiler can’t guess the size of your type - object traits don’t have a constant size at compile-time. This is also why we need to box dynamically dispatched objects and put them on the heap as mentioned earlier. Because of this, your application also takes a performance hit - although of course this depends on how many dynamically dispatched objects you’re using and how large they are!
+
+To illustrate these points further, there are two HTML templating libraries that come to mind:
+
+- Askama, which uses macros and generics for compile-time checking
+- Tera, which uses dynamic dispatch for getting filters and testers at runtime
+
+Both of these libraries, while they can be used somewhat interchangeably for most use cases, have different trade-offs. Askama takes longer to compile and any errors will show in compile-time, but Tera only throws compilation errors at runtime and takes a performance hit due to dynamic dispatch. Zola, the Static Site Generator, uses Tera specifically because of certain design conditions that are unable to be satisfied by Askama. You can see [here](https://github.com/Keats/tera/blob/3b2e96f624bd898cc96e964cd63194d58701ca4a/src/tera.rs#L61) that the Tera framework uses `Arc<dyn T>`.
+
+## Combining traits and generics
+
+### Getting started
+
+Traits and generics synergise very well together and are easy to use. You can write a struct that implements generics like this without much trouble:
+
+```rust
+struct MyStruct<T> {
+    my_field: T
+}
+```
+
+However, to be able to use our struct with types from other crates, we will need to ensure that our struct can garuantee certain behavior. This is where we add trait bounds: conditions that a type must satisfy in order for the type to compile. A common trait bound you may find would be `Send + Sync + Clone`:
+
+```rust
+struct MyStruct<T: Send + Sync + Clone> {
+    my_field: T
+}
+```
+
+Now we can use any value we want for `T` as long as that type implements the `Send`, `Sync` and `Clone` traits!
+
+As a more complex example of using traits with generics that you may occasionally need to re-implement for your own types, take the `FromRequest` trait from Axum for example (the below code snippet is a simplification of the original trait to illustrate the point):
+
+```rust
+use axum::extract::State;
+use axum::response::IntoResponse;
+
+trait FromRequest<S>
+   where S: State
+    {
+    type Rejection: IntoResponse;
+
+    fn from_request(r: Request, _state: S) -> Result<Self, Self::Rejection>;
+}
+```
+
+Here we can also add trait bounds by using the `where` clause. This trait simply tells us that `S` implements `State`. However, `State` also requires the inner object to be `Clone`. By using complex trait bounds, we can create framework systems that make heavy use of traits to be able to do what some might refer to as “trait magic”. Take a look at this trait bound, for example:
+
+```rust
+use std::future::Future;
+
+struct MyStruct<T, B> where
+   B: Future<Output = String>,
+   T: Fn() -> B
+   {
+    my_field: T
+}
+
+#[tokio::main]
+async fn main() {
+    let my_struct = MyStruct { my_field: hello_world };
+    let my_future = (my_struct.my_field)();
+    println!("{:?}", my_future.await);
+}
+
+async fn hello_world() -> String {
+    "Hello world!".to_string()
+}
+```
+
+The above one-field struct stores a function closure that returns `impl Future<Output = String>`, that we store `hello_world` in and then call it in the main function. We then wrap parenthesis around the field to be able to call it, then await the future. Note that we **do not** have brackets at the end of the field. This is because adding `()` at the end actually invokes the function! You can see where we invoke the function after declaring the struct, then awaiting it.
+
+### Usage in libraries
+
+Combining traits and generics like this is extremely powerful. One use case where this is effectively leveraged is in HTTP frameworks. Actix Web for example, has a trait called `Handler<Args>` that takes a number of arguments, calls itself and then has a function called `call` that produces a Future:
+
+```rust
+pub trait Handler<Args>: Clone + 'static {
+     type Output;
+     type Future: Future<Output = Self::Output>;
+
+     fn call(&self, args: Args) -> Self::Future;
+}
+```
+
+This then allows us to extend this trait to a handler function. We can tell the web service that we have a function that has an inner function, some arguments and implements `Responder` (Actix Web’s HTTP response trait):
+
+```rust
+pub fn to<F, Args>(handler: F) -> Route where
+    F: Handler<Args>,
+    Args: FromRequest + 'static,
+    F::Output: Responder + 'static {
+         // .. the actual function  code here
+    }
+```
+
+Note that other frameworks like Axum also follow this same methodology to provide an extremely ergonomic developer experience.
+
+## Finishing up
+
+Thanks for reading! While traits and generics can be a confusing topic to understand, hopefully this guide to using Rust traits and generics has shed some light on the subject!
+
+Read more:
+
+- [Why Enums in Rust feel so much better](https://www.shuttle.rs/blog/2023/11/23/enums-in-rust)
+- [Async Rust in a nutshell](https://www.shuttle.rs/blog/2024/02/29/async-rust)
+- [Everything you need to know about testing in Rust](https://www.shuttle.rs/blog/2024/03/21/testing-in-rust)

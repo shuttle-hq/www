@@ -20,7 +20,7 @@ const rssXML = (posts: readonly Post[]): string => `
     <description>Latest news from ${APP_NAME}</description>
     <language>en</language>
     <lastBuildDate>${new Date(posts[0].date).toUTCString()}</lastBuildDate>
-    <atom:link href="${SITE_URL}/rss.xml" rel="self" type="application/rss+xml"/>
+    <atom:link href="${SITE_URL}rss.xml" rel="self" type="application/rss+xml"/>
     ${posts.map(postXML).join('')}
   </channel>
 </rss>
@@ -28,11 +28,16 @@ const rssXML = (posts: readonly Post[]): string => `
 
 const posts = getSortedPosts()
 
-if (!window) {
-	fs.writeFile('./public/rss.xml', rssXML(posts), (err) => {
-		if (err != null) {
-			console.error(err)
-			process.exit(1)
-		}
-	})
-}
+export const exportedPosts = rssXML(posts).replaceAll('&', '&amp;')
+
+fs.stat('./public/rss.xml', function (err, stat) {
+	if (err != null && err.code === 'ENOENT') {
+		// file does not exist
+		fs.writeFile('./public/rss.xml', exportedPosts, (err) => {
+			if (err != null) {
+				console.error(err)
+				process.exit(1)
+			}
+		})
+	}
+})

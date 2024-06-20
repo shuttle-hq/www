@@ -105,6 +105,13 @@ const authors: readonly Author[] = [
 		author_url: 'https://twitter.com/_sourabpramanik',
 		author_image_url: 'https://github.com/sourabpramanik.png',
 	},
+	{
+		author_id: 'ivan',
+		author: 'Ivan Cernja',
+		position: '',
+		author_url: 'https://twitter.com/cernjai',
+		author_image_url: '',
+	},
 ]
 
 export default authors

@@ -1,0 +1,393 @@
+---
+title: "Building Agentic RAG with Rust, Qdrant & OpenAI"
+description: "Using GPT-4o, Qdrant and Rust to build an agentic RAG workflow in a web service and deploy it"
+author: josh
+tags: [rust, ai, rag, gpt, guide]
+thumb: building-agentic-rag-rust-qdrant-thumb.png
+cover: building-agentic-rag-rust-qdrant-thumb.png
+date: '2024-05-23T16:30:00'
+---
+Hey there! In this article, we're gonna talk about building an agentic RAG workflow with Rust! We'll be building an agent that can take a CSV file, parse it and embed it into Qdrant, as well as retrieving the relevant embeddings from Qdrant to answer questions from users about the contents of the CSV file.
+
+Interested in deploying or just want to see what the final code looks like? You can find the repository [here.](https://github.com/joshua-mo-143/shuttle-agentic-rag)
+
+## What is Agentic RAG?
+
+Agentic RAG, or Agentic Retrieval Augmented Generation, is the concept of mixing AI agents with RAG to be able to produce a workflow that is even better at being tailored to a specific use case than an agent workflow normally would be.
+
+Essentially, the difference between this workflow and a regular agent workflow would be that each agent can individually access embeddings from a vector database to be able to retrieve contextually relevant data - resulting in more accurate answers across the board in an AI agent workflow!
+
+## Getting Started
+
+To get started, use `cargo shuttle init` to create a new project.
+
+Next, we'll add the dependencies we need using a shell snippet:
+
+```bash
+cargo add anyhow
+cargo add async-openai
+cargo add qdrant-client
+cargo add serde -F derive
+cargo add serde-json
+cargo add shuttle-qdrant
+cargo add uuid -F v4
+
+```
+
+We'll also need to make sure to have a Qdrant URL and an API key, as well as an OpenAI API key. Shuttle uses environment variables via a `SecretStore` macro in the main function, and can be stored in the `Secrets.toml` file:
+
+```toml
+OPENAI_API_KEY = ""
+```
+
+Next, we'll update our main function to have our Qdrant macro and our secrets macro. We'll iterate through each secret and set it as an environment variable - this allows us to use our secrets globally, without having to reference the `SecretStore` variable at all:
+
+```rust
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_qdrant::Qdrant] qdrant_client: QdrantClient,
+    #[shuttle_runtime::Secrets] secrets: SecretStore,
+) -> shuttle_axum::ShuttleAxum {
+    secrets.into_iter().for_each(|x| {
+        set_var(x.0, x.1);
+    });
+
+    let router = Router::new()
+        .route("/", get(hello_world));
+
+    Ok(router.into())
+}
+```
+
+## Building an agentic RAG workflow
+
+### Setting up our agent
+
+The agent itself is quite simple: it holds an OpenAI client, as well as a Qdrant client to be able to search for relevant document embeddings. Other fields can also be added here, depending on what capabilities your agent requires.
+
+```rust
+use async_openai::{config::OpenAIConfig, Client as OpenAIClient};
+use qdrant_client::prelude::QdrantClient;
+
+pub struct MyAgent {
+    openai_client: OpenAIClient<OpenAIConfig>,
+    qdrant_client: QdrantClient,
+}
+```
+
+Next we'll want to create a helper method for creating the agent, as well as a system message which we'll feed into the model prompt later.
+
+```rust
+static SYSTEM_MESSAGE: &str = "
+        You are a world-class data analyst, specialising in analysing comma-delimited CSV files.
+
+	    Your job is to analyse some CSV snippets and determine what the results are for the question that the user is asking.
+
+	    You should aim to be concise. If you don't know something, don't make it up but say 'I don't know.'.
+"
+
+impl MyAgent {
+    pub fn new(qdrant_client: QdrantClient) -> Self {
+        let api_key = std::env::var("OPENAI_API_KEY").unwrap();
+        let config = OpenAIConfig::new().with_api_key(api_key);
+
+        let openai_client = OpenAIClient::with_config(config);
+
+        Self {
+            openai_client,
+            qdrant_client,
+        }
+    }
+}
+
+```
+
+### File parsing and embedding into Qdrant
+
+Next, we will implement a `File` struct for CSV file parsing - it should be able to hold the file path, contents as well as the rows as a `Vec<String>` (string array, or more accurately a vector of strings). There's a few reasons why we store the rows as a `Vec<String>`:
+
+- Smaller chunks improve the retrieval accuracy, one of the biggest challenges that RAG has to deal with. Retrieving a wrong or otherwise inaccurate document can hamper accuracy significantly.
+- Improved retrieval accuracy leads to enhanced contextual relevance - which is quite important for complex queries that require specific question.
+- Processing and indexing smaller chunks
+
+```rust
+pub struct File {
+    pub path: String,
+    pub contents: String,
+    pub rows: Vec<String>,
+}
+
+impl File {
+    pub fn new(path: PathBuf) -> Result<Self> {
+        let contents = std::fs::read_to_string(&path)?;
+
+        let path_as_str = format!("{}", path.display());
+
+        let rows = contents
+            .lines()
+            .map(|x| x.to_owned())
+            .collect::<Vec<String>>();
+
+        Ok(Self {
+            path: path_as_str,
+            contents,
+            rows
+        })
+    }
+}
+```
+
+While the above parsing method *is* serviceable (collecting all the lines into a `Vec<String>`), note that it is a naive implementation. Based on how your CSV files are delimited and/or if there is dirty data to clean up, you may want to either prepare your data so that it is already well-prepared, or include some form of data cleaning or validation. Some examples of this might be:
+
+- `unicode-segmentation` - [a library crate for splitting sentences](https://github.com/unicode-rs/unicode-segmentation)
+- `csv_log_cleaner` - [a binary crate for cleaning CSVs](https://github.com/ambidextrous/csv_log_cleaner)
+- `validator` - [a library crate for validating struct/enum fields](https://github.com/Keats/validator)
+
+Next, we'll go back to our agent and implement a method for embedding documents into Qdrant that will take the `File` struct we defined.
+
+To do this, we need to do the following:
+
+- Take the rows we created earlier and add them as the input for our embed request.
+- Create the embeddings (with openAI) and create a payload for storing alongside the embeddings in Qdrant. Note that although we use a `uuid::Uuid` for unique storage, you could just as easily use numbers by adding a number counter to your struct and incrementing it by 1 after you've inserted an embedding.
+- Assuming there are no errors, return `Ok(())`
+
+```rust
+use async_openai::types::{ CreateEmbeddingRequest, EmbeddingInput };
+use async_openai::Embeddings;
+use qdrant_client::prelude::{Payload, PointStruct};
+
+static COLLECTION: &str = "my-collection";
+
+// text-embedding-ada-002 is the model name from OpenAI that deals with embeddings
+static EMBED_MODEL: &str = "text-embedding-ada-002";
+
+impl MyAgent {
+pub async fn embed_document(&self, file: File) -> Result<()> {
+        if file.rows.is_empty() {
+            return Err(anyhow::anyhow!("There's no rows to embed!"));
+        }
+
+        let request = CreateEmbeddingRequest {
+            model: EMBED_MODEL.to_string(),
+            input: EmbeddingInput::StringArray(file.rows.clone()),
+            user: None,
+            dimensions: Some(1536),
+            ..Default::default()
+        };
+
+        let embeddings_result = Embeddings::new(&self.openai_client).create(request).await?;
+
+        for embedding in embeddings_result.data {
+            let payload: Payload = serde_json::json!({
+                "id": file.path.clone(),
+                "content": file.contents,
+                "rows": file.rows
+            })
+            .try_into()
+            .unwrap();
+
+            println!("Embedded: {}", file.path);
+
+            let vec = embedding.embedding;
+
+            let points = vec![PointStruct::new(
+                uuid::Uuid::new_v4().to_string(),
+                vec,
+                payload,
+            )];
+            self.qdrant_client
+                .upsert_points(COLLECTION, None, points, None)
+                .await?;
+        }
+        Ok(())
+    }
+}
+```
+
+### Document searching
+
+Now that we’ve embedded our document, we’ll want a way to check whether our embeddings are contextually relevant to whatever prompt the user gives us. For this, we’ll create a `search_document` function that does the following:
+
+- Embed the prompt using `CreateEmbeddingRequest` and get the embedding from the results. We’ll be using this embedding in our document search. Because we’ve only added one sentence to embed here (the prompt), it will only return one sentence - so we can create an iterator from the vector and attempt to find the first result.
+- Create a parameter list for our document search through the `SearchPoints` struct (see below). Here we need to set the collection name, the vector that we want to search against (ie the input), how many results we want to be returned if there are any matches, as well as the payload selector.
+- Search the database for results - if there are no results, return an an error; if there is a result, then return the result back.
+
+```rust
+use qdrant_client::qdrant::{
+    with_payload_selector::SelectorOptions, SearchPoints, WithPayloadSelector,
+};
+
+impl MyAgent {
+    async fn search_document(&self, prompt: String) -> Result<String> {
+        let request = CreateEmbeddingRequest {
+            model: EMBED_MODEL.to_string(),
+            input: EmbeddingInput::String(prompt),
+            user: None,
+            dimensions: Some(1536),
+            ..Default::default()
+        };
+
+        let embeddings_result = Embeddings::new(&self.openai_client).create(request).await?;
+
+        let embedding = &embeddings_result.data.first().unwrap().embedding;
+
+        let payload_selector = WithPayloadSelector {
+            selector_options: Some(SelectorOptions::Enable(true)),
+        };
+
+        // set parameters for search
+        let search_points = SearchPoints {
+            collection_name: COLLECTION.to_string(),
+            vector: embedding.to_owned(),
+            limit: 1,
+            with_payload: Some(payload_selector),
+            ..Default::default()
+        };
+
+        // if the search is successful
+        // attempt to iterate through the results vector and find a result
+        let search_result = self.qdrant_client.search_points(&search_points).await?;
+        let result = search_result.result.into_iter().next();
+
+        match result {
+            Some(res) => Ok(res.payload.get("contents").unwrap().to_string()),
+            None => Err(anyhow::anyhow!("There were no results that matched :(")),
+        }
+    }
+}
+```
+
+Now that everything we need to use our agent effectively is set up, we can set up a prompt function!
+
+```rust
+use async_openai::types::{
+    ChatCompletionRequestMessage, ChatCompletionRequestSystemMessageArgs,
+    ChatCompletionRequestUserMessageArgs, CreateChatCompletionRequestArgs,
+};
+
+static PROMPT_MODEL: &str = "gpt-4o";
+
+impl MyAgent {
+    pub async fn prompt(&self, prompt: &str) -> anyhow::Result<String> {
+        let context = self.search_document(prompt.to_owned()).await?;
+        let input = format!(
+            "{prompt}
+
+            Provided context:
+            {}
+            ",
+            context // this is the payload from Qdrant
+        );
+
+        let res = self
+            .openai_client
+            .chat()
+            .create(
+                CreateChatCompletionRequestArgs::default()
+                    .model(PROMPT_MODEL)
+                    .messages(vec![
+                        //First we add the system message to define what the Agent does
+                        ChatCompletionRequestMessage::System(
+                            ChatCompletionRequestSystemMessageArgs::default()
+                                .content(SYSTEM_MESSAGE)
+                                .build()?,
+                        ),
+                        //Then we add our prompt
+                        ChatCompletionRequestMessage::User(
+                            ChatCompletionRequestUserMessageArgs::default()
+                                .content(input)
+                                .build()?,
+                        ),
+                    ])
+                    .build()?,
+            )
+            .await
+            .map(|res| {
+                //We extract the first one
+                res.choices[0].message.content.clone().unwrap()
+            })?;
+
+        println!("Retrieved result from prompt: {res}");
+
+        Ok(res)
+    }
+}
+```
+
+## Hooking the agent up to our web service
+
+Because we separated the agent logic from our web service logic, we just need to connect the bits together and we should be done!
+
+Firstly, we'll create a couple of structs - the `Prompt` struct that will take a JSON prompt, and the `AppState` function that will act as shared application state in our Axum web server.
+
+```rust
+#[derive(Deserialize)]
+pub struct Prompt {
+    prompt: String,
+}
+
+#[derive(Clone)]
+pub struct AppState {
+    agent: MyAgent,
+}
+
+```
+
+We'll also introduce our prompt handler endpoint here:
+
+```rust
+async fn prompt(
+    State(state): State<AppState>,
+    Json(json): Json<Prompt>,
+) -> Result<impl IntoResponse> {
+    let prompt_response = state.agent.prompt(&json.prompt).await?;
+
+    Ok((StatusCode::OK, prompt_response))
+}
+
+```
+
+Then we need to parse our CSV file in the main function, create our `AppState` and embed the CSV, as well as setting up our router:
+
+```rust
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_qdrant::Qdrant] qdrant_client: QdrantClient,
+    #[shuttle_runtime::Secrets] secrets: SecretStore,
+) -> shuttle_axum::ShuttleAxum {
+    secrets.into_iter().for_each(|x| {
+        set_var(x.0, x.1);
+    });
+
+    // note that this already assumes you have a file called "test.csv"
+    // in your project root
+    let file = File::new("test.csv".into())?;
+
+    let state = AppState {
+        agent: MyAgent::new(qdrant_client),
+    };
+
+    state.agent.embed_document(file).await?;
+
+    let router = Router::new()
+        .route("/", get(hello_world))
+        .route("/prompt", post(prompt))
+        .with_state(state);
+
+    Ok(router.into())
+}
+
+```
+
+## Deploying
+
+To deploy, all you need to do is use `cargo shuttle deploy` (with the `--ad` flag if on a Git branch with uncommitted changes), sit back and watch the magic happen!
+
+## Finishing Up
+
+Thanks for reading! With the power of combining AI agents and RAG, we can create powerful workflows to be able to satisfy many different use cases. With Rust, we can leverage performance benefits to be able to run our workflows safely and with a low memory footprint.
+
+Read more:
+- [Using Huggingface with Rust](https://www.shuttle.rs/blog/2024/05/01/using-huggingface-rust)
+- [Building a RAG web service with Qdrant & Rust](https://www.shuttle.rs/blog/2024/02/28/rag-llm-rust)
+- [Prompting AWS Bedrock with the AWS Rust SDK](https://www.shuttle.rs/blog/2024/05/10/prompting-aws-bedrock-rust)
