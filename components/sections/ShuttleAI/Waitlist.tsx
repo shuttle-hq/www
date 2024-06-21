@@ -2,11 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
 
-interface WaitListProps {
-	cta: string
-	description: string
-	subDescription?: string
-}
+interface WaitListProps {}
 
 export const Waitlist: FC<WaitListProps> = () => {
 	return (
