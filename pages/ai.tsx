@@ -26,10 +26,7 @@ export default function ShuttleAIPage() {
 				<Hero />
 				<Info />
 				<Steps />
-				<Waitlist
-					cta='The fastest way to build and deploy in the cloud.'
-					description='Even faster than deploying a "hello world". Sign up for the waitlist!'
-				/>
+				<Waitlist />
 			</div>
 		</>
 	)
