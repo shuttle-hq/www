@@ -30,7 +30,7 @@ export default function ShuttleAIPage() {
 					<div className='absolute -top-20 left-1/2 top-0 h-20 w-[1px] -translate-x-1/2 transform bg-white/20' />
 
 					<video autoPlay loop muted playsInline className='w-full max-w-3xl rounded-xl'>
-						<source src='/images/pages/shuttle-ai/Short 1-1600w.mp4' type='video/mp4' />
+						<source src='/images/pages/shuttle-ai/Shuttle-AI-1600x1460.mp4' type='video/mp4' />
 					</video>
 				</div>
 			</div>
