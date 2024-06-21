@@ -27,7 +27,7 @@ export default function ShuttleAIPage() {
 				<Hero />
 
 				<div className='relative mx-auto mb-48 mt-16 flex w-full max-w-screen-xl justify-center rounded-xl border border-[#434343] py-16'>
-					<div className='absolute -top-60 left-1/2 top-0 h-60 w-[1px] -translate-x-1/2 transform bg-white/20' />
+					<div className='absolute -top-20 left-1/2 top-0 h-20 w-[1px] -translate-x-1/2 transform bg-white/20' />
 
 					<video autoPlay loop muted playsInline className='w-full max-w-3xl rounded-xl'>
 						<source src='/images/pages/shuttle-ai/Short 1-1600w.mp4' type='video/mp4' />
