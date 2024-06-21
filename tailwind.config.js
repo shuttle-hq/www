@@ -20,6 +20,9 @@ module.exports = {
 			screens: {
 				desktop: '1440px',
 			},
+			gridTemplateColumns: {
+				'50/50': '50% 50%',
+			},
 			typography: ({ theme }) => {
 				const tocCSS = {
 					ul: {
