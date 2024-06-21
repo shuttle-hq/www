@@ -82,6 +82,9 @@ Add the following lines to the `read_podcats_from_xml` function. We use the `req
 We also create a new `EventReader` from the `xml` crate. The `EventReader` is a parser for XML files. It takes a `BufReader` as input, which we create from the XML data. The `BufReader` is a buffered reader that reads the XML data in chunks. This is more efficient than reading the whole file at once.
 
 ```rust
+use xml::EventReader;
+use std::io::BufReader;
+
 let data = reqwest::get(url).await?.text().await?;
 let parser = EventReader::new(BufReader::new(data.as_bytes()));
 ```
@@ -135,6 +138,8 @@ In the case of `enclosure`, we go through all its attributes and look for the `u
 When we find a closing `item` tag, we add the parsed podcast episode to our vector, reset the `state` variable, and create a new `Podcast` instance.
 
 ```rust
+use xml::reader::XmlEvent;
+
 for event in parser {
     match event {
         Ok(XmlEvent::StartElement {
@@ -187,6 +192,9 @@ Rewrite the `axum` function and make sure you load the podcasts into a `podcasts
 We also define two routes, one for the root path `/` and one for every podcast episode. The `root` callback returns a list of all podcasts, while the `podcast` callback returns the HTML for a single podcast episode.
 
 ```rust
+use std::sync::Arc;
+use axum::{routing::get, Router};
+
 type AppState = Arc<Vec<Podcast>>;
 
 #[shuttle_runtime::main]
@@ -239,6 +247,8 @@ Notice that the `audio_file` might either exist or it doesn't. Rust requires us 
 Now that we can create string representations for `Podcast`, we implement the `podcast` handler. We add two extractors, one for the state and one for the path. The state extractor allows us to access the `Arc<Vec<Podcast>>` that we defined earlier. The path extractor allows us to access the `id` parameter from the path.
 
 ```rust
+use axum::{extract::{State, Path}, response::{IntoResponse, Html}};
+
 async fn podcast(
     State(app_state): State<AppState>, Path(id): Path<usize>
 ) -> impl IntoResponse {
@@ -304,7 +314,7 @@ And that's it! You just deployed a podcast web application to the cloud! 🎉
 
 Let us quickly reiterate what we have learned:
 
-- Structs are used to group related data together. 
+- Structs are used to group related data together.
 - Enums are used to define a type that can have multiple variants. Each variant can have different data associated with it.
 -  Both can have `impl` blocks, which allow us to define methods on the struct or enum.
 - `Option` is an enum that can either be `Some` or `None`. It is used to represent the absence of a value.
@@ -314,7 +324,7 @@ Btw. the app looks a little bleak, give it some beautiful styles! You can find t
 
 ## Time for your feedback!
 
-We want to tailor Shuttle Launchpad to your needs! [Give us feedback](https://btl1d1x5z23.typeform.com/to/dTU2F8jI) on the most recent issue and your wishes here.
+We want to tailor Shuttle Launchpad to your needs! [Give us feedback](https://shuttlerust.typeform.com/to/dTU2F8jI) on the most recent issue and your wishes here.
 
 ## Join us!
 

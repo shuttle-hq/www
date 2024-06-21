@@ -1,18 +1,53 @@
+import clsx from 'clsx'
 import { Button, LoginButton } from 'components/elements'
 import { GithubLogo, Hamburger, Logo } from 'components/svgs'
+import { trackEvent } from 'lib/posthog'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { useState } from 'react'
-import clsx from 'clsx'
-import { useUser } from '@auth0/nextjs-auth0/client'
+import { useLayoutEffect, useState } from 'react'
 import { DISCORD_URL } from '../../../lib/constants'
 
 const ThemeSwitcher = dynamic(() => import('./ThemeSwitcher'), { ssr: false })
+const LinkItem = ({
+	event,
+	href,
+	text,
+	setOpen,
+}: {
+	event: string
+	href: string
+	text: string
+	setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}) => (
+	<Link
+		className='nav-link-shadow transition-all dark:hover:text-white'
+		href={href}
+		onClick={({ ctrlKey, metaKey }) => {
+			trackEvent(event)
+			setOpen(ctrlKey || metaKey)
+		}}
+	>
+		{text}
+	</Link>
+)
 
 const Navigation = () => {
 	const [open, setOpen] = useState(false)
 
-	const { user } = useUser()
+	useLayoutEffect(() => {
+		function updateMenu() {
+			const isMobileAndOpen = window.innerWidth < 1280 && open
+			const isDesktopAndClosed = window.innerWidth >= 1280 && !open
+
+			if (isMobileAndOpen || isDesktopAndClosed) return
+
+			setOpen(false)
+		}
+
+		window.addEventListener('resize', updateMenu)
+
+		return () => window.removeEventListener('resize', updateMenu)
+	}, [open])
 
 	return (
 		<nav className='mx-auto flex h-[5.5rem] w-full max-w-[1344px] items-center px-5 sm:px-10'>
@@ -22,7 +57,7 @@ const Navigation = () => {
 					setOpen(false)
 				}}
 			>
-				<Logo className='dark:text-[#C2C2C2]' />
+				<Logo className='dark:text-head' />
 			</Link>
 			<div
 				className={clsx(
@@ -31,91 +66,74 @@ const Navigation = () => {
 				)}
 			>
 				<div className='flex flex-col gap-4 xl:flex-row xl:gap-8'>
-					<Link
-						className='nav-link-shadow transition-all dark:hover:text-white'
-						href='/blog/tags/all'
-						onClick={() => {
-							setOpen(false)
-						}}
-					>
-						Blog
-					</Link>
-					<Link
-						className='nav-link-shadow transition-all dark:hover:text-white'
-						href='/pricing'
-						onClick={() => {
-							setOpen(false)
-						}}
-					>
-						Pricing
-					</Link>
-					<Link
-						className='nav-link-shadow transition-all dark:hover:text-white'
-						href='https://docs.shuttle.rs'
-						onClick={() => {
-							setOpen(false)
-						}}
-					>
-						Docs
-					</Link>
-					<Link
-						className='nav-link-shadow transition-all dark:hover:text-white'
-						href='/beta'
-						onClick={() => {
-							setOpen(false)
-						}}
-					>
-						Beta
-					</Link>
-					<Link
-						className='nav-link-shadow transition-all dark:hover:text-white'
-						href='/shuttle-heroes'
-						onClick={() => {
-							setOpen(false)
-						}}
-					>
-						Shuttle Heroes
-					</Link>
-					<Link
-						className='nav-link-shadow transition-all dark:hover:text-white'
-						href='/ai'
-						onClick={() => {
-							setOpen(false)
-						}}
-					>
-						Shuttle AI
-					</Link>
-					<Link
-						className='nav-link-shadow transition-all dark:hover:text-white'
-						href='/launchpad'
-						onClick={() => {
-							setOpen(false)
-						}}
-					>
-						Launchpad
-					</Link>
+					{[
+						{
+							href: '/blog/tags/all',
+							event: 'homepage_mainnav_blog',
+							text: 'Blog',
+						},
+						{
+							href: '/pricing',
+							event: 'homepage_mainnav_pricing',
+							text: 'Pricing',
+						},
+						{
+							href: 'https://docs.shuttle.rs',
+							event: 'homepage_mainnav_docs',
+							text: 'Docs',
+						},
+						{
+							href: '/beta',
+							event: 'homepage_mainnav_beta',
+							text: 'Beta',
+						},
+						{
+							href: '/shuttle-heroes',
+							event: 'homepage_mainnav_heroes',
+							text: 'Shuttle Heroes',
+						},
+						{
+							href: '/ai',
+							event: 'homepage_mainnav_ai',
+							text: 'Shuttle AI',
+						},
+						{
+							href: '/launchpad',
+							event: 'homepage_mainnav_launchpad',
+							text: 'Launchpad',
+						},
+					].map(({ event, href, text }) => (
+						<LinkItem key={href} event={event} href={href} text={text} setOpen={setOpen} />
+					))}
 				</div>
 				<div className='mt-10 xl:ml-auto xl:mt-0 xl:flex xl:items-center xl:gap-5'>
 					<div className='mt-10 flex flex-wrap items-center gap-5 xl:mt-0'>
-						<Button variant='secondary' invertOnDark href={DISCORD_URL}>
+						<Button
+							variant='secondary'
+							invertOnDark
+							href={DISCORD_URL}
+							onClick={() => {
+								trackEvent('homepage_mainnav_discord')
+							}}
+						>
 							Join Discord
 						</Button>
-						<LoginButton variant='primary' invertOnDark>
-							{user ? (
-								'Dashboard'
-							) : (
-								<>
-									<GithubLogo />
-									Log in
-								</>
-							)}
-						</LoginButton>
+						<div
+							onClick={() => {
+								trackEvent('homepage_mainnav_login')
+							}}
+						>
+							<LoginButton variant='primary' invertOnDark>
+								<GithubLogo />
+								Log in
+							</LoginButton>
+						</div>
 					</div>
 					<ThemeSwitcher className='mt-5 xl:-order-1 xl:mt-0' hidden />
 				</div>
 			</div>
 
-			<button className='ml-auto dark:text-[#D8D8D8] xl:hidden' onClick={() => setOpen((open) => !open)}>
+			<button className='ml-auto dark:text-head xl:hidden' onClick={() => setOpen((open) => !open)}>
 				<Hamburger />
 			</button>
 		</nav>

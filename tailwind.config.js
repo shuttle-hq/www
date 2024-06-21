@@ -5,8 +5,15 @@ module.exports = {
 	important: true,
 	theme: {
 		extend: {
+			colors: {
+				head: '#DDD',
+				body: '#A2A2A2',
+				orange: '#F09050',
+			},
 			fontFamily: {
 				gradual: 'BwGradual, sans-serif',
+				mono: 'Fira Mono, sans-serif',
+				atkinson: 'Atkinson, sans-serif',
 			},
 			borderRadius: {
 				'2.5xl': '1.5rem',
@@ -100,6 +107,12 @@ module.exports = {
 						},
 					},
 				}
+			},
+			backgroundImage: {
+				'gradient-1':
+					'linear-gradient(73deg, #FC540C -7.95%, rgba(255, 215, 111, 0.72) 45.94%, #38D4E9 116.73%)',
+				'gradient-2':
+					'linear-gradient(70deg, #FC540C 34.41%, rgba(255, 215, 111, 0.72) 93.53%, #38D4E9 118.82%)',
 			},
 		},
 	},

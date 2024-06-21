@@ -1,10 +1,10 @@
 const Mission = () => {
 	return (
-		<div className='relative mx-auto w-full py-20 px-5 sm:px-10 lg:py-40'>
+		<div className='relative mx-auto w-full px-5 py-20 sm:px-10 lg:py-40'>
 			<div className='group relative'>
 				<span className='pointer-events-none'>
 					<div className='relative z-10 mx-auto max-w-3xl'>
-						<h2 className='font-gradual text-4.5 font-bold leading-none dark:text-[#C2C2C2] lg:text-5xl'>
+						<h2 className='font-gradual text-4.5 font-bold leading-none dark:text-head lg:text-5xl'>
 							About Shuttle
 						</h2>
 						<p className='text-\ mt-3 max-w-[800px] sm:mt-5 lg:text-xl'>
@@ -21,7 +21,7 @@ const Mission = () => {
 							We have thousands of developers in our community incl. engineers from some of the top
 							companies and are about to launch Shuttle beta.
 						</p>
-						<h2 className='mt-14 font-gradual text-4.5 font-bold leading-none dark:text-[#C2C2C2] lg:text-5xl'>
+						<h2 className='mt-14 font-gradual text-4.5 font-bold leading-none dark:text-head lg:text-5xl'>
 							Our mission
 						</h2>
 						<p className='mt-3 max-w-[800px] text-xl sm:mt-5 lg:text-xl'>

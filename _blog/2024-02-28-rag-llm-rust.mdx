@@ -1,0 +1,536 @@
+---
+title: "Building a RAG Web Service with Qdrant and Rust"
+description: "Diving into Retrieval Augmented Generation to help enhance your web applications"
+author: josh
+tags: [rust, qdrant, openai, guide]
+thumb: rag-llm-rust-thumb.png
+cover: rag-llm-rust-thumb.png
+date: '2024-02-28T15:00:00'
+---
+
+Hey there! Today, we’re going to talk about creating a web application that utilises Retrieval Augmented Generation (RAG). By the end of this, you’ll have a web service that can parse markdown files to create a small knowledge base that you can query.
+
+Interested in deploying or wanting to fiddle around with the code yourself? You can find the repo [here](https://github.com/joshua-mo-143/shuttle-qdrant-template). You can deploy it in three steps:
+
+- Use `cargo shuttle init --from joshua-mo-143/shuttle-qdrant-template` and follow the prompt
+- Add your API keys (see Pre-requisites for this)
+- Use `cargo shuttle deploy --allow-dirty` to deploy and wait for the magic to happen!
+
+## What is Retrieval Augmented Generation?
+
+Retrieval Augmented Generation is an AI framework for improving the quality of LLM responses. This is done by providing documents or other kinds of data (for example, images) that improve the LLM’s internal representation of information.
+
+This has a few benefits:
+
+- You can provide users with the latest facts instead of relying on outdated training data.
+- The chance of LLM hallucinations and sensitive data leakages are reduced.
+- RAG can work with loads of different types of data, as long as you can embed it.
+
+RAG has recently gained a lot of popularity in use cases that require knowledge bases, for example:
+
+- Support ticket work (being able to automate answering common questions)
+- Searching a database of business documents to generate a report/analysis
+
+Without further ado, let’s get started!
+
+## Getting started
+
+### Pre-requisites
+
+Before we start, you need an OpenAI API key. You’ll also need to sign up for Qdrant to get an API key and database URL.
+
+After initialising your project, you’ll want to create a file named `Secrets.toml` in the root of your project with the following keys:
+
+```rust
+OPENAI_API_KEY = "YOUR_OPENAI_API_KEY"
+QDRANT_URL = "YOUR_QDRANT_DATABASE_URL"
+QDRANT_TOKEN = "YOUR_QDRANT_API_KEY"
+```
+
+You’ll also want to add the following to `Shuttle.toml` (again, create this file in the root of your project):
+
+```rust
+assets = ["docs/*"]
+```
+
+### Installing and project initialisation
+
+To get started, we’ll generate a new application using `cargo shuttle init` (requires `cargo-shuttle` installed). Make sure to pick Axum as the framework!
+
+We’ll need to add some dependencies, which we can do with the following shell snippet:
+
+```bash
+cargo add anyhow@1.0.71
+cargo add axum-streams@0.12.0 -F text
+cargo add futures@0.3.28
+cargo add openai@1.0.0-alpha.10
+cargo add qdrant-client@1.2.0
+cargo add serde@1.0.164 -F serde_derive
+cargo add serde_json@1.0.96
+cargo add shuttle-qdrant
+cargo add shuttle-secrets
+cargo add tokio-stream@0.1.14
+cargo add tower-http@0.5.0 -F fs
+cargo add uuid@1.3.3
+```
+
+To start, we’ll create a new struct called `File` that will hold the contents of a file, the pathname as well as individual sentences from the contents (as a `Vec<String>`). Our shared application state will hold a `Vec<File>` so that when we prompt our API, it will be able to easily load and search the file contents as it’s already in memory.
+
+```rust
+// src/contents.rs
+pub struct File {
+    pub path: String,
+    pub contents: String,
+    pub sentences: Vec<String>,
+}
+```
+
+We will also additionally set up a new struct called `VectorDB` so that we can easily extend the behavior of the `QdrantClient`.
+
+```rust
+// src/vector.rs
+
+use qdrant_client::qdrant::QdrantClient;
+
+pub struct VectorDB {
+    client: QdrantClient,
+    id: u64,
+}
+
+impl VectorDB {
+    pub fn new(client: QdrantClient) -> Self {
+        Self { client, id: 0 }
+    }
+}
+```
+
+To finish setting up, we’ll add our macro annotations to our main function. On a local or deployment run, the Shuttle runtime will automatically provision any things we need from the macros.
+
+```rust
+// src/main.rs
+mod vector;
+mod contents;
+
+use contents::File;
+use qdrant_client::qdrant::QdrantClient,
+
+struct AppState {
+    files: Vec<File>,
+    vector_db: VectorDB,
+}
+
+async fn hello_world() -> &'static str {
+    "Hello world!"
+}
+
+#[shuttle_runtime::main]
+async fn axum(
+    #[shuttle_secrets::Secrets] secrets: shuttle_secrets::SecretStore,
+    #[shuttle_qdrant::Qdrant(
+        cloud_url = "{secrets.QDRANT_URL}",
+        api_key = "{secrets.QDRANT_TOKEN}"
+    )]
+    qdrant_client: QdrantClient,
+) -> shuttle_axum::ShuttleAxum {
+    let router = Router::new()
+        .route("/", get(hello_world));
+
+    Ok(router.into())
+}
+```
+
+### Setup
+
+Before we start, we’ll need to set up a struct for dealing with errors while setting up. We can put this in a new `[error.rs](http://error.rs)` file and will be referencing this struct later on.
+
+```rust
+// src/errors.rs
+
+#[derive(Debug)]
+pub struct SetupError(pub &'static str);
+impl std::error::Error for SetupError {}
+impl std::fmt::Display for SetupError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Error: {}", self.0)
+    }
+}
+```
+
+Next, we’ll want to set up a function that will globally set the OpenAI key for all of the `openai` crate functions. This will take the `SecretStore` provided to us from our secrets annotation macro.
+
+```rust
+// src/open_ai.rs
+use anyhow::Result;
+
+pub fn setup(secrets: &SecretStore) -> Result<()> {
+    // This sets OPENAI_API_KEY as API_KEY for use with all openai crate functions
+    let openai_key = secrets
+        .get("OPENAI_API_KEY")
+        .ok_or(SetupError("OPENAI Key not available"))?;
+    openai::set_key(openai_key);
+    Ok(())
+}
+```
+
+### Embedding
+
+To get started, we need to find some files to embed! For our example we’ll be using the Shuttle docs website, but you can use whatever you want. In this section, we’ll be creating embeddings using an OpenAI-provided LLM and inserting/updating them in Qdrant as required.
+
+Before we start embedding, we’ll want to quickly define some error types that will represent possible errors that can happen while doing this. Our first error type, `EmbeddingError`, will represent embedding errors that can happen while creating an embedding. Our second error type, `NotAvailableError`, will represent errors while trying to load file paths from the file directory we want to use for our knowledge base.
+
+```rust
+// src/errors.rs
+
+#[derive(Debug)]
+pub struct EmbeddingError;
+
+impl std::error::Error for EmbeddingError {}
+impl Display for EmbeddingError {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Embedding error")
+    }
+}
+
+impl From<anyhow::Error> for EmbeddingError {
+    fn from(_: anyhow::Error) -> Self {
+        Self {}
+    }
+}
+
+#[derive(Debug)]
+pub struct NotAvailableError;
+
+impl std::error::Error for NotAvailableError {}
+impl std::fmt::Display for NotAvailableError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "File 'not available' error")
+    }
+}
+```
+
+To use `File`, we’ll write a function called `load_files_from_dir` that will return `Result<Vec<File>>`. Note that while `sub_files` calls the function recursively, the recursion depth is based on the folder depth of the document base you are embedding. Some `PathBuf` manipulation is done here to ensure that the paths are sanitized.
+
+```rust
+// src/contents.rs
+use anyhow::Result;
+use std::path::PathBuf;
+
+// Load files from directory according to their file extension ("ending")
+pub fn load_files_from_dir(dir: PathBuf, ending: &str, prefix: &PathBuf) -> Result<Vec<File>> {
+    let mut files = Vec::new();
+    for entry in fs::read_dir(dir)? {
+        let path = entry?.path();
+        if path.is_dir() {
+            let mut sub_files = load_files_from_dir(path, ending, prefix)?;
+            files.append(&mut sub_files);
+        } else if path.is_file() && path.has_file_extension(ending) {
+            println!("Path: {:?}", path);
+            let contents = fs::read_to_string(&path)?;
+            let path = Path::new(&path).strip_prefix(prefix)?.to_owned();
+            let key = path.to_str().ok_or(NotAvailableError {})?;
+            let mut file = File::new(key.to_string(), contents);
+            file.parse();
+            files.push(file);
+        }
+    }
+    Ok(files)
+}
+```
+
+For each file and sentence, we need to create embeddings. These are used separately as our program will need to find relevant sentences from an embedded file.
+
+```rust
+// src/open_ai.rs
+
+use openai::embeddings::{Embedding, Embeddings};
+use anyhow::Result;
+use crate::errors::EmbeddingError;
+
+pub async fn embed_file(file: &File) -> Result<Embeddings> {
+    let sentence_as_str: Vec<&str> = file.sentences.iter().map(|s| s.as_str()).collect();
+    Embeddings::create("text-embedding-ada-002", sentence_as_str, "shuttle")
+        .await
+        .map_err(|_| EmbeddingError {}.into())
+}
+
+pub async fn embed_sentence(prompt: &str) -> Result<Embedding> {
+    Embedding::create("text-embedding-ada-002", prompt, "shuttle")
+        .await
+        .map_err(|_| EmbeddingError {}.into())
+}
+```
+
+To be able to move the embedding to Qdrant easily, we’ll create a method for `VectorDB` that allows us to easily upsert (”insert or update”, depending on whether the point already exists or not) the points into the Qdrant database. We map the `Embedding` into a `Vec<f32>` and then upsert the points into the collection. We then increase the `VectorDB` ID by 1 to show that an embedding has been upserted.
+
+```rust
+// src/vector.rs
+use crate::errors::EmbeddingError;
+const COLLECTION: &str = "docs";
+
+impl VectorDB {
+    // .. your other functions
+
+    pub async fn upsert_embedding(&mut self, embedding: Embedding, file: &File) -> Result<()> {
+        let payload: Payload = json!({
+            "id": file.path.clone(),
+        })
+        .try_into()
+        .map_err(|_| EmbeddingError {})?;
+
+        println!("Embedded: {}", file.path);
+
+        let vec: Vec<f32> = embedding.vec.iter().map(|&x| x as f32).collect();
+
+        let points = vec![PointStruct::new(self.id, vec, payload)];
+        self.client.upsert_points(COLLECTION, None, points, None).await?;
+        self.id += 1;
+
+        Ok(())
+    }
+}
+```
+
+Next, we need to embed the documentation by passing it into GPT, retrieving the embedding data, and upserting it into Qdrant. We’ll use a function to embed the file and get a series of embeddings, then upsert the embeddings into Qdrant.
+
+```rust
+// src/main.rs
+use contents::File;
+use vector::VectorDB;
+
+mod open_ai;
+mod vector;
+mod contents;
+
+async fn embed_documentation(vector_db: &mut VectorDB, files: &Vec<File>) -> anyhow::Result<()> {
+    for file in files {
+        let embeddings = open_ai::embed_file(file).await?;
+        println!("Embedding: {:?}", file.path);
+        for embedding in embeddings.data {
+            vector_db.upsert_embedding(embedding, file).await?;
+        }
+    }
+
+    Ok(())
+}
+```
+
+Now that we’re done, we can move onto our next part: prompting our model!
+
+### Prompting
+
+To get started, we’ll need to create a chat stream. Receiving the chat as a streamed response allows us to output the stream to a webpage or CLI as it’s being received. This decreases the amount of time a user needs to wait. We use the GPT `ChatCompletionBuilder` to create the prompt, using `gpt-3.5-turbo` as the model. We set a temperature of 0.0 so that we only get exactly what we want, as any higher may cause LLM hallucinations.
+
+```rust
+// src/open_ai.rs
+use openai::{
+    chat::{ChatCompletion, ChatCompletionBuilder, ChatCompletionDelta, ChatCompletionMessage},
+    embeddings::{Embedding, Embeddings},
+};
+use shuttle_secrets::SecretStore;
+use tokio::sync::mpsc::Receiver;
+use anyhow::Result;
+use tokio::sync::mpsc::Receiver;
+
+type Conversation = Receiver<ChatCompletionDelta>;
+
+pub async fn chat_stream(prompt: &str, contents: &str) -> Result<Conversation> {
+    let content = format!("{}\n Context: {}\n Be concise", prompt, contents);
+
+    ChatCompletionBuilder::default()
+        .model("gpt-3.5-turbo")
+        .temperature(0.0)
+        .user("shuttle")
+        .messages(vec![ChatCompletionMessage {
+            role: openai::chat::ChatCompletionMessageRole::User,
+            content,
+            name: Some("shuttle".to_string()),
+        }])
+        .create_stream()
+        .await
+        .map_err(|_| EmbeddingError {}.into())
+}
+```
+
+Now we can feed this into a function that embeds the prompt and then searches the database for embeddings with similar values. We map elements in the embedding vector to an `f32` , create a `SearchPoints` struct that includes the vector we mapped, and then search all of the embedding points in the database.
+
+Once done, we can get the first search result and return it.
+
+```rust
+// src/vector.rs
+use openai::embeddings::Embedding;
+use qdrant_client::qdrant::{
+        vectors_config::Config, with_payload_selector::SelectorOptions,
+        ScoredPoint, SearchPoints, WithPayloadSelector,
+    },
+};
+
+impl VectorDB {
+    // .. your other functions
+
+    pub async fn search(&self, embedding: Embedding) -> Result<ScoredPoint> {
+        let vec: Vec<f32> = embedding.vec.iter().map(|&x| x as f32).collect();
+
+        let payload_selector = WithPayloadSelector {
+            selector_options: Some(SelectorOptions::Enable(true)),
+        };
+
+        let search_points = SearchPoints {
+            collection_name: COLLECTION.to_string(),
+            vector: vec,
+            limit: 1,
+            with_payload: Some(payload_selector),
+            ..Default::default()
+        };
+
+        let search_result = self.client.search_points(&search_points).await?;
+        let result = search_result.result[0].clone();
+        Ok(result)
+    }
+}
+```
+
+We can then write a function that includes getting the contents of the embedding and searches the database for similar embeddings and grabs the contents of the `File` from the `Vec<File>` in our shared application state. To make it easier for us, let’s implement a trait called `Finder` that helps us to find the embedding from the `ScoredPoint` struct.
+
+```rust
+// src/finder.rs
+
+use qdrant_client::qdrant::{value::Kind, ScoredPoint};
+use crate::contents::File;
+
+pub trait Finder {
+    fn find(&self, key: &str) -> Option<String>;
+    fn get_contents(&self, result: &ScoredPoint) -> Option<String>;
+}
+
+impl Finder for Vec<File> {
+    fn find(&self, key: &str) -> Option<String> {
+        for file in self {
+            if file.path == key {
+                return Some(file.contents.clone());
+            }
+        }
+        None
+    }
+
+    fn get_contents(&self, result: &ScoredPoint) -> Option<String> {
+        let text = result.payload.get("id")?;
+        let kind = text.kind.to_owned()?;
+        if let Kind::StringValue(value) = kind {
+            self.find(&value)
+        } else {
+            None
+        }
+    }
+}
+```
+
+Now that we’ve written all of this up, we can write our final `get_contents()` function that gives us the final chat stream:
+
+```rust
+// src/main.rs
+use crate::errors::PromptError;
+use anyhow::Result;
+use crate::{open_ai, AppState};
+
+async fn get_contents(
+    prompt: &str,
+    app_state: &AppState,
+) -> anyhow::Result<Receiver<ChatCompletionDelta>> {
+    let embedding = open_ai::embed_sentence(prompt).await?;
+    let result = app_state.vector_db.search(embedding).await?;
+    println!("Result: {:?}", result);
+    let contents = app_state
+        .files
+        .get_contents(&result)
+        .ok_or(PromptError {})?;
+    open_ai::chat_stream(prompt, contents.as_str()).await
+}
+```
+
+Finally, we can provide an endpoint to do all of this in but a few lines, returning a streamed response. If there is no error, return the response from GPT; if there is an error, return a streamed response with the error.
+
+```rust
+// src/main.rs
+use std::sync::Arc;
+use axum::{Json, extract::State};
+
+use tokio_stream::wrappers::ReceiverStream;
+use tokio_stream::StreamExt;
+use futures::Stream;
+
+#[derive(Deserialize)]
+struct Prompt {
+    prompt: String,
+}
+
+async fn prompt(
+    State(app_state): State<Arc<AppState>>,
+    Json(prompt): Json<Prompt>,
+) -> impl IntoResponse {
+    let prompt = prompt.prompt;
+    let chat_completion = get_contents(&prompt, &app_state).await;
+
+    if let Ok(chat_completion) = chat_completion {
+        return axum_streams::StreamBodyAs::text(chat_completion_stream(chat_completion));
+    }
+
+    axum_streams::StreamBodyAs::text(error_stream())
+}
+```
+
+## Hooking it all up
+
+Now that everything’s been written up, we can funnel it back into our main function!
+
+```rust
+// src/main.rs
+
+#[shuttle_runtime::main]
+async fn axum(
+    #[shuttle_secrets::Secrets] secrets: shuttle_secrets::SecretStore,
+    #[shuttle_qdrant::Qdrant(
+        cloud_url = "{secrets.QDRANT_URL}",
+        api_key = "{secrets.QDRANT_TOKEN}"
+    )]
+    qdrant_client: QdrantClient,
+) -> shuttle_axum::ShuttleAxum {
+    let embedding = false;
+    open_ai::setup(&secrets)?;
+    let mut vector_db = VectorDB::new(qdrant_client);
+    let files = contents::load_files_from_dir("./docs".into(), ".mdx", &".".into())?;
+
+    println!("Setup done");
+
+    embed_documentation(&mut vector_db, &files).await?;
+    println!("Embedding done");
+
+    let app_state = AppState { files, vector_db };
+    let app_state = Arc::new(app_state);
+
+    let router = Router::new()
+        .route("/prompt", post(prompt))
+        .nest_service("/", ServeDir::new("static"))
+        .with_state(app_state);
+    Ok(router.into())
+}
+```
+
+Note that every time you spin this up, it will attempt to embed the documentation. You may want to comment this part out if you need to want to run the web service multiple times (for example, when testing).
+
+## Deploying
+
+Now that we’re at the end, we can deploy! Run `cargo shuttle deploy` (with `--allow-dirty` attached) and `cargo-shuttle` will automatically make the magic happen. When finished, you’ll receive some data about your deployment and a link to your deployed project.
+
+## Finishing up
+
+Thanks for reading! Interested in extending this example? Here’s a couple of ways you can extend this example:
+
+- Try using Candle as the LLM instead of OpenAI’s GPT to reduce your costs.
+- Try parsing other types of files!
+- Add a frontend to your service (see the repo at the start for guidance on this)
+
+Here’s a few suggestions for other articles you may be interested in:
+
+- Learn about implementing authentication for your application [here.](https://www.shuttle.rs/blog/2024/02/21/using-jwt-auth-rust)
+- Learn about rate limiting your API [here.](https://www.shuttle.rs/blog/2024/02/22/api-rate-limiting-rust)
+- Learn more about writing Axum [here.](https://www.shuttle.rs/blog/2023/12/06/using-axum-rust)

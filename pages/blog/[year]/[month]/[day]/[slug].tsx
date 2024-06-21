@@ -23,6 +23,7 @@ import { TwitterTweetEmbed } from 'react-twitter-embed'
 import { Pre } from 'components/blog/Pre'
 import MastodonLogo from 'components/svgs/MastodonLogo'
 import HNLogo from 'components/svgs/HNLogo'
+import { trackEvent } from 'lib/posthog'
 
 export async function getStaticPaths() {
 	const paths = getAllPostSlugs()
@@ -116,7 +117,7 @@ const mdxComponents: MDXRemoteProps['components'] = {
 			)
 		}
 
-		return <Link {...(props as any)} className='my-0 no-underline'></Link>
+		return <Link {...(props as any)} className='my-0 text-body no-underline'></Link>
 	},
 	pre: (props) => {
 		return <Pre {...props} />
@@ -131,8 +132,8 @@ const mdxComponents: MDXRemoteProps['components'] = {
 	TLDR: (props) => {
 		return (
 			<div className='mb-24 text-left text-xl'>
-				<span className='font-bold text-black dark:text-[#C2C2C2]'>TLDR;</span>
-				<span className='text-[#525151] prose-p:!my-2 dark:text-[#BEBEBE]'>{props.children}</span>
+				<span className='font-bold text-black dark:text-head'>TLDR;</span>
+				<span className='prose-p:!my-2 dark:text-body'>{props.children}</span>
 			</div>
 		)
 	},
@@ -146,13 +147,13 @@ const mdxComponents: MDXRemoteProps['components'] = {
 					height={1}
 					className='overflow-hidden rounded-2xl object-contain'
 				/>
-				<span className='-mt-6 text-sm text-[#828282] dark:text-gray-300'>{props.caption}</span>
+				<span className='-mt-6 text-sm text-body'>{props.caption}</span>
 			</div>
 		)
 	},
 	blockquote(props) {
 		return (
-			<blockquote className='border-none bg-[linear-gradient(180deg,_#FC540C_25.63%,_rgba(255,_215,_111,_0.72)_60.67%,_#38D4E9_88.15%)] pl-2 text-left text-2xl font-normal not-italic text-[#525151] dark:text-[#BEBEBE]'>
+			<blockquote className='border-none bg-[linear-gradient(180deg,_#FC540C_25.63%,_rgba(255,_215,_111,_0.72)_60.67%,_#38D4E9_88.15%)] pl-2 text-left text-2xl font-normal not-italic text-body'>
 				<div className='bg-[#E9E9E9] py-1 pl-8 prose-p:!my-0 dark:bg-black'>{props.children}</div>
 			</blockquote>
 		)
@@ -217,7 +218,7 @@ export default function BlogPostPage(props: Props) {
 									className='w-full rounded-[2rem] object-contain'
 								/>
 								{props.blog.caption && (
-									<span className='mt-2 text-center text-sm text-[#525151] dark:text-[#BEBEBE] dark:text-gray-300'>
+									<span className='mt-2 text-center text-sm text-body'>
 										{props.blog.caption}
 									</span>
 								)}
@@ -233,7 +234,7 @@ export default function BlogPostPage(props: Props) {
 									'prose-headings:before:pt-36',
 									'prose-headings:lg:before:-mt-20',
 									'prose-headings:before:lg:pt-20',
-									'text-xl text-[#525151] prose-h2:text-5xl prose-h3:text-4xl prose-h4:text-3xl prose-h5:text-2xl dark:text-[#BEBEBE]'
+									'text-xl text-body prose-h2:text-5xl prose-h3:text-4xl prose-h4:text-3xl prose-h5:text-2xl'
 								)}
 							>
 								<MDXRemote {...props.blog.content} components={mdxComponents} />
@@ -254,18 +255,26 @@ export default function BlogPostPage(props: Props) {
 								className='absolute bottom-0 left-20 z-10'
 							/>
 							<Logo className='relative z-10 text-white' />
-							<span className='relative z-10 mt-5 text-[#FFFFFF8F] dark:text-[#BEBEBE]'>
-								This blog post is powered by Shuttle - The Rust-native, open source, cloud development platform that lets you build backends fast.
-								If you have any questions or want to provide feedback, join
+							<span className='relative z-10 mt-5 text-body'>
+								This blog post is powered by shuttle - The Rust-native, open source, cloud
+								development platform. If you have any questions, or want to provide feedback, join
 								our{' '}
-								<a target='_blank' rel='noreferrer' className='text-[#FF8A3F]' href={DISCORD_URL}>
+								<a
+									target='_blank'
+									rel='noreferrer'
+									className='text-orange'
+									href={DISCORD_URL}
+									onClick={() => {
+										trackEvent(`blog_article_${props.blog.title}_Discord`)
+									}}
+								>
 									Discord server!
 								</a>
 							</span>
 						</div>
 						{/* <Socials /> */}
 						<div className='mb-20 mt-14 flex items-center space-x-4'>
-							<span className='text-[#525151] dark:text-[#C2C2C2]'>Share article</span>
+							<span className='text-head'>Share article</span>
 							<a
 								href={`https://news.ycombinator.com/submitlink?u=${encodeURIComponent(
 									`${SITE_URL}blog/${props.blog.slug}`
@@ -273,6 +282,9 @@ export default function BlogPostPage(props: Props) {
 								className='flex items-center rounded-xl border border-black/10 bg-black p-3 dark:border-white/10'
 								target='_blank'
 								rel='noreferrer'
+								onClick={() => {
+									trackEvent(`blog_article_${props.blog.title}_hackernews`)
+								}}
 							>
 								<HNLogo />
 							</a>
@@ -283,6 +295,9 @@ export default function BlogPostPage(props: Props) {
 								className='flex items-center rounded-xl border border border-black/10 bg-black p-3 dark:border-white/10'
 								target='_blank'
 								rel='noreferrer'
+								onClick={() => {
+									trackEvent(`blog_article_${props.blog.title}_twitter`)
+								}}
 							>
 								<TwitterLogo />
 							</a>
@@ -291,13 +306,28 @@ export default function BlogPostPage(props: Props) {
 								className='flex items-center rounded-xl border border border-black/10 bg-black p-3 dark:border-white/10'
 								target='_blank'
 								rel='noreferrer'
+								onClick={() => {
+									trackEvent(`blog_article_${props.blog.title}_linkedin`)
+								}}
 							>
 								<LinkedInLogo />
 							</a>
 							<a
-								href={`https://mastodon.social/share?text=${encodeURIComponent(
-									`${props.blog.title} ${SITE_URL}blog/${props.blog.slug}`
-								)}`}
+								href='#'
+								onClick={(e) => {
+									e.preventDefault()
+
+									trackEvent(`blog_article_${props.blog.title}_mastodon`)
+
+									const instance = window.prompt(
+										'Enter your Mastodon instance (ex. mastodon.social):'
+									)
+									if (instance) {
+										window.location.href = `https://${instance}/share?text=${encodeURIComponent(
+											`${props.blog.title} ${SITE_URL}blog/${props.blog.slug}`
+										)}`
+									}
+								}}
 								className='flex items-center rounded-xl border border-black/10 bg-black p-3 dark:border-white/10'
 								target='_blank'
 								rel='noreferrer'

@@ -1,4 +1,5 @@
 import { Button } from 'components/elements'
+import { trackEvent } from 'lib/posthog'
 import Image from 'next/image'
 
 const ShuttleHeroesHero = () => {
@@ -6,7 +7,7 @@ const ShuttleHeroesHero = () => {
 		<div className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
 			<header className='md:grid md:grid-cols-2 md:items-center lg:grid-cols-[1.2fr_1fr] lg:gap-8'>
 				<div>
-					<h1 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-6.5'>
+					<h1 className='font-gradual text-5xl font-bold text-black dark:text-head lg:text-6.5'>
 						<span className='text-gradient block bg-clip-text text-transparent'>Join our Heroes</span>
 						program!
 					</h1>
@@ -18,7 +19,10 @@ const ShuttleHeroesHero = () => {
 							variant='primary'
 							invertOnDark
 							className='bg-[#13292C] text-white'
-							href='https://btl1d1x5z23.typeform.com/to/WAu53vBi'
+							href='https://shuttlerust.typeform.com/to/WAu53vBi'
+							onClick={() => {
+								trackEvent('heroes_becomeahero')
+							}}
 						>
 							Become a Shuttle hero
 						</Button>

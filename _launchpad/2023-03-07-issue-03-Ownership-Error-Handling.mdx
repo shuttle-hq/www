@@ -42,6 +42,8 @@ serde = "1.0.164"
 Adapt the main function to get rid of all the hello world stuff from the template. We want to have one route called `/solve` that accepts a POST request.
 
 ```rust
+use axum::{routing::post, Router};
+
 #[shuttle_runtime::main]
 async fn axum() -> shuttle_axum::ShuttleAxum {
     let router = Router::new().route("/solve", post(solve));
@@ -88,6 +90,8 @@ Try it out by writing the `solve` function, which takes a `Json` extractor to tr
 
 
 ```rust
+use axum::Json;
+
 async fn solve(Json(mut sudoku): Json<Sudoku>) -> Json<Sudoku> {
     sudoku
 }
@@ -218,6 +222,8 @@ Alright, we're almost there. There's just one thing we need to change. We want t
 There is an enum in Rust representing exactly that. It's called `Result`. It has two variants, `Ok` and `Err`. `Ok` contains the value you want to return, and `Err` contains an error. The error can be anything, but in our case, we want to return an HTTP error, represented by the `StatusCode` enum from the `axum` crate.
 
 ```rust
+use axum::http::StatusCode;
+
 async fn solve(Json(mut sudoku): Json<Sudoku>) -> Result<Json<Sudoku>, StatusCode> {
     if sudoku.solve() {
         Ok(Json(sudoku))
@@ -265,7 +271,7 @@ _If you're stuck somewhere, join our Discord channel and ask at [#launchpad](htt
 
 ## Time for your feedback!
 
-We want to tailor Shuttle Launchpad to your needs! [Give us feedback](https://btl1d1x5z23.typeform.com/to/dTU2F8jI) on the most recent issue and your wishes here.
+We want to tailor Shuttle Launchpad to your needs! [Give us feedback](https://shuttlerust.typeform.com/to/dTU2F8jI) on the most recent issue and your wishes here.
 
 ## Join us!
 

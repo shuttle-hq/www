@@ -1,5 +1,6 @@
 import clsx from 'clsx'
 import { YCombinator } from 'components/svgs'
+import { trackEvent } from 'lib/posthog'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
@@ -7,6 +8,41 @@ import { FC } from 'react'
 interface FooterProps {
 	disableMargin?: boolean
 }
+
+const SHUTTLE_LINKS = [
+	{ key: 'features', name: 'Features', href: '/#features' },
+	{ key: 'starters', name: 'Starters', href: '/starters' },
+	{ key: 'status', name: 'Status', href: 'https://status.shuttle.rs' },
+	{ key: 'releases', name: 'Releases', href: '/releases' },
+]
+
+const COMPANY_LINKS = [
+	{ key: 'about', name: 'About', href: '/about' },
+	{ key: 'contact', name: 'Contact', href: '/contact' },
+	{ key: 'careers', name: 'Careers', href: '/about#careers' },
+	{ key: 'terms', name: 'Terms of Service', href: '/terms' },
+	{ key: 'privacy', name: 'Privacy Policy', href: '/privacy' },
+	{ key: 'acceptable-use', name: 'Acceptable Use Policy', href: '/acceptable-use' },
+	{ key: 'cookies', name: 'Cookie Policy', href: '/cookies' },
+	{ key: 'dpa', name: 'Data Processing Addendum', href: '/dpa' },
+]
+
+const DEVELOPERS_LINKS = [
+	{ key: 'docs', href: 'https://docs.shuttle.rs', name: 'Docs' },
+	{ key: 'guides', href: 'https://docs.shuttle.rs/examples/axum', name: 'Guides' },
+	{ key: 'examples', href: 'https://docs.shuttle.rs/examples/axum', name: 'Examples' },
+	{ key: 'heroes', href: '/shuttle-heroes', name: 'Shuttle Heroes' },
+	{ key: 'launchpad', href: '/launchpad', name: 'Launchpad' },
+	{ key: 'codehunt', href: '/cch', name: 'Code Hunt' },
+	{ key: 'ai', href: '/ai', name: 'Shuttle AI' },
+]
+
+const COMMUNITY_LINKS = [
+	{ key: 'gitHub', name: 'GitHub', href: 'https://github.com/shuttle-hq/shuttle' },
+	{ key: 'discord', name: 'Discord', href: 'https://discord.com/invite/shuttle' },
+	{ key: 'twitter', name: 'Twitter', href: 'https://twitter.com/shuttle_dev' },
+	{ key: 'linkedIn', name: 'LinkedIn', href: 'https://www.linkedin.com/company/shuttle-yc' },
+]
 
 const Footer: FC<FooterProps> = ({ disableMargin }) => {
 	return (
@@ -18,147 +54,73 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
 				<div className='divide-y divide-black/10 dark:divide-white/10 lg:grid lg:grid-cols-2 lg:divide-x lg:divide-y-0'>
 					<div className='grid grid-cols-2 divide-x divide-black/10 text-xl dark:divide-white/10'>
 						<div className='flex flex-col gap-3 px-8 pb-8 pt-16 lg:p-16'>
-							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Shuttle</h3>
-							<Link
-								href='/#features'
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								Features
-							</Link>
-							<Link
-								href='/starters'
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								Starters
-							</Link>
-							<Link
-								href='https://status.shuttle.rs'
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								Status
-							</Link>
+							<h3 className='font-gradual font-bold text-black text-head'>Shuttle</h3>
+							{SHUTTLE_LINKS.map(({ key, name, href }) => (
+								<Link
+									key={key}
+									href={href}
+									className='text-body transition duration-300 hover:text-black dark:hover:text-head'
+									onClick={() => {
+										trackEvent(`homepage_footer_site_${key}`)
+									}}
+								>
+									{name}
+								</Link>
+							))}
 						</div>
 						<div className='flex flex-col gap-3 px-8 pb-8 pt-16 lg:p-16'>
-							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Company</h3>
-							<Link
-								href='/about'
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								About
-							</Link>
-							<Link
-								href='/contact'
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								Contact
-							</Link>
-							<Link
-								href='/about#careers'
-								scroll={false}
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								Careers
-							</Link>
-							<Link
-								href='/terms'
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								Terms of Service
-							</Link>
-							<Link
-								href='/privacy'
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								Privacy Policy
-							</Link>
-							<Link
-								href='/acceptable-use'
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								Acceptable Use Policy
-							</Link>
+							<h3 className='font-gradual font-bold text-black text-head'>Company</h3>
+							{COMPANY_LINKS.map(({ key, name, href }) => (
+								<Link
+									key={key}
+									href={href}
+									className='text-body transition duration-300 hover:text-black dark:hover:text-head'
+									onClick={() => {
+										trackEvent(`homepage_footer_site_${key}`)
+									}}
+								>
+									{name}
+								</Link>
+							))}
 						</div>
 					</div>
 					<div className='grid grid-cols-2 divide-x divide-black/10 text-xl dark:divide-white/10'>
 						<div className='flex flex-col gap-3 px-8 pb-8 pt-16 lg:p-16'>
-							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Developers</h3>
-							<Link
-								href='https://docs.shuttle.rs'
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								Docs
-							</Link>
-							<Link
-								href='https://docs.shuttle.rs/examples/axum'
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								Guides
-							</Link>
-							<Link
-								href='/shuttle-heroes'
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								Shuttle Heroes
-							</Link>
-							<Link
-								href='/shuttle-batch'
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								Shuttle Batch
-							</Link>
-							<Link
-								href='/launchpad'
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								Launchpad
-							</Link>
-							<Link
-								href='/ai'
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								Shuttle AI
-							</Link>
+							<h3 className='font-gradual font-bold text-black text-head'>Developers</h3>
+							{DEVELOPERS_LINKS.map(({ key, name, href }) => (
+								<Link
+									key={key}
+									href={href}
+									className='text-body transition duration-300 hover:text-black dark:hover:text-head'
+									onClick={() => {
+										trackEvent(`homepage_footer_site_${key}`)
+									}}
+								>
+									{name}
+								</Link>
+							))}
 						</div>
 						<div className='flex flex-col gap-3 px-8 pb-8 pt-16 lg:p-16'>
-							<h3 className='font-gradual font-bold text-black dark:text-[#C2C2C2]'>Community</h3>
-							<a
-								href='https://github.com/shuttle-hq/shuttle'
-								target='_blank'
-								rel='noreferrer'
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								GitHub
-							</a>
-							<a
-								href='https://discord.com/invite/shuttle'
-								target='_blank'
-								rel='noreferrer'
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								Discord
-							</a>
-							<a
-								href='https://twitter.com/shuttle_dev'
-								target='_blank'
-								rel='noreferrer'
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								Twitter
-							</a>
-							<a
-								href='https://www.linkedin.com/company/shuttle-yc'
-								target='_blank'
-								rel='noreferrer'
-								className='text-[#525151] transition duration-300 hover:text-black dark:text-[#FFFFFF8F] dark:hover:text-[#D8D8D8]'
-							>
-								LinkedIn
-							</a>
+							<h3 className='font-gradual font-bold text-black text-head'>Community</h3>
+							{COMMUNITY_LINKS.map(({ key, name, href }) => (
+								<Link
+									key={key}
+									href={href}
+									target='_blank'
+									className='text-body transition duration-300 hover:text-black dark:hover:text-head'
+									onClick={() => {
+										trackEvent(`homepage_footer_site_${key}`)
+									}}
+								>
+									{name}
+								</Link>
+							))}
 						</div>
 					</div>
 				</div>
 				<div className='grid grid-cols-2 divide-x divide-black/10 dark:divide-white/10 lg:col-span-2'>
 					<div className='lg:grid lg:grid-cols-2 lg:divide-x lg:divide-black/10 dark:lg:divide-white/10'>
-						<p className='px-8 pb-5 lg:px-16 lg:pb-9'>© 2023 shuttle</p>
+						<p className='px-8 pb-5 lg:px-16 lg:pb-9'>© 2024 Shuttle</p>
 						<div className='hidden lg:block' />
 					</div>
 					<div className='lg:grid lg:grid-cols-2 lg:divide-x lg:divide-black/10 dark:lg:divide-white/10'>

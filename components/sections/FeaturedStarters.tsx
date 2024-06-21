@@ -15,6 +15,7 @@ const StartersXProps: StarterXProps[] = [
 			'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3',
 		stars2: '/images/sections/featured-starters/1-stars-2.png',
 		stars2ClassName: 'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-cover',
+		templateKey: 1,
 	},
 	{
 		bg: '/images/sections/featured-starters/2-bg.png',
@@ -25,6 +26,7 @@ const StartersXProps: StarterXProps[] = [
 		stars2: '/images/sections/featured-starters/2-stars-2.png',
 		stars2ClassName:
 			'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1',
+		templateKey: 2,
 	},
 	{
 		bg: '/images/sections/featured-starters/3-bg.png',
@@ -35,6 +37,7 @@ const StartersXProps: StarterXProps[] = [
 		stars2: '/images/sections/featured-starters/3-stars-2.png',
 		stars2ClassName:
 			'pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1',
+		templateKey: 3,
 	},
 ]
 
@@ -42,7 +45,7 @@ const FeaturedStarters = ({ starters }: { starters: StarterAttrs[] }) => {
 	const children = StartersXProps.slice(0, 3).map((xprops, idx) => {
 		return (
 			<SplideSlide className='splide__slide overflow-hidden p-px' key={idx}>
-				<Starter {...{ ...xprops, ...starters[idx] }} />
+				<Starter {...{ ...xprops, ...starters[idx] }} templateKey={idx + 1} />
 			</SplideSlide>
 		)
 	})
@@ -51,10 +54,10 @@ const FeaturedStarters = ({ starters }: { starters: StarterAttrs[] }) => {
 		<div className='mt-24 sm:mt-28 lg:mt-36 desktop:mt-40'>
 			<div className='mx-auto w-full max-w-5xl px-5 sm:px-10'>
 				<div className='max-w-[510px]'>
-					<h2 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-[3.5rem]'>
+					<h2 className='font-gradual text-5xl font-bold text-black dark:text-head lg:text-[3.5rem]'>
 						Starters
 					</h2>
-					<p className='mt-5 text-xl text-[#525151] dark:text-[#BEBEBE] lg:text-2xl'>
+					<p className='mt-5 text-xl text-body lg:text-2xl'>
 						Set up and deploy a quick starter, in minutes, with detailed instructions on how it works.
 					</p>
 				</div>
@@ -104,6 +107,7 @@ const FeaturedStarters = ({ starters }: { starters: StarterAttrs[] }) => {
 						starsClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
 						stars2='/images/sections/featured-starters/4-stars-2.png'
 						stars2ClassName='pointer-events-none absolute left-0 top-0 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
+						templateKey={4}
 					/>
 				</SplideSlide>
 			</Splide>

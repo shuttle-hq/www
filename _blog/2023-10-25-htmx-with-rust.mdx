@@ -1,0 +1,298 @@
+---
+title: "htmx, Rust & Shuttle: A New Rapid Prototyping Stack"
+description: This article details how htmx with Rust and Shuttle can speed up your workflow and let you focus on the code with the assistance of Axum and Askama. 
+author: josh
+tags: [rust, htmx, html, guide]
+thumb: htmx-with-rust-thumb.png 
+cover: htmx-with-rust-thumb.png
+date: '2023-11-01T14:30:00'
+---
+When it comes to Rust, although it's lauded as a language that is memory-safe, blazing fast and efficient, it's also known for having a compiler that will complain at you for everything (hence terms like "compiler-driven development" becoming a thing) and complex trait bounds that can getting it just right take time. In this article, we'll talk about tools that you can use to speed up your workflow: htmx with a templating engine and the web framework Axum (and of course, Shuttle!).
+
+htmx is a JavaScript library designed to help you ship faster by allowing you to call endpoints from HTML elements instead of being required to do it manually which when combined with a HTML templating engine makes prototyping extremely quick - and we don't need to set anything up to do it, only being required as a minimum to use the CDN script (although we can also use it as an npm package). Shuttle allows you to move quickly by declaratively provisioning infrastructure like databases, key-value stores and more as main function parameters using the Shuttle runtime, letting you prototype new projects extremely quickly when used with htmx.
+
+## Using Shuttle
+Shuttle is a service designed to make deployment as easy as possible, by provisioning a runtime that lets you add macros (or "annotations") as function arguments to your entrypoint function. The runtime will then do static code analysis to figure out what needs provisioning and will then spin up the relevant infrastructure required - for example, if you need a Postgres instance, you can just declare it in your `fn main` arguments, use `cargo shuttle run` to run locally and then it'll spin up a container for you using Docker without any further input on your part!
+
+<video width="700" height="500" loop autoPlay muted>
+    <source src="/videos/blog/htmx-with-rust.mp4" type="video/mp4"></source>
+    Your browser does not support the video tag.
+</video>
+
+By using Shuttle, we can turn this:
+```rust
+#[tokio::main]
+async fn main() {
+    let sqlx_connection = PgPoolOptions::new().connect("your-addr-here").await.unwrap();
+
+    let router = Router::new().route("/", get(hello_world)).layer(Extension(Arc::new(sqlx_connection)));
+
+    let addr = SocketAddr::from(([0, 0, 0, 0], 8000));
+
+    axum::Server::bind(&addr).serve(router.into_make_service()).await.unwrap()
+}
+```
+to this:
+```rust
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_shared_db::Postgres] sqlx_connection: PgPool
+) -> shuttle_axum::ShuttleAxum {
+    let router = Router::new().route("/", get(hello_world)).layer(Extension(Arc::new(sqlx_connection)));
+
+    Ok(router.into())
+}
+```
+
+Once you're done writing code, all you need to do is use `cargo shuttle deploy` (with the `--allow-dirty` flag if on a Git branch with uncommitted changes) and when it's done deploying, you should get a link to see your website! If you need to check your database connection string again, you can also use `cargo shuttle resource list` to quickly check it.
+
+## Using HTMX
+
+To start off with, we want a `base.html` file that includes the head - which we'll add htmx to through the CDN. 
+
+```html
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/htmx.org@1.9.6"
+        integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/styles.css"/>
+    <title>Index</title>
+    {% block head %}{% endblock %}
+</head>
+    <body>
+        <div id="content">
+            {% block content %}<p>Placeholder content</p>{% endblock %}
+        </div>
+    </body>
+</html>
+```
+
+We are also using Askama, which is a Rust HTML templating crate, with htmx. If you've ever used Python before, you might notice the syntax is quite similar to Jinja2 templates. Jinja2 is a web templating engine that describes itself as a "fast, expressive and extensible web templating engine" that's been around for quite a while and is a well known format given how many copies there are of libraries, inside and outside of Rust, that emulate Jinja2 syntax. Interested in learning more about Askama? Our new recent Shuttle Launchpad issue talks about it [here.](https://www.shuttle.rs/launchpad/issues/2023-10-17-issue-10-Serving-HTML)
+
+Now let's make our `index.html` file:
+
+```html
+<!-- templates/index.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Shuttle Todos</h1>
+<form id="add-form">
+    <input placeholder="Your todo description..." required type=text name="description">
+    <button hx-post="/todos" hx-trigger="click" hx-target="#todos-content" hx-swap="beforeend">Add</button>
+</form>
+<div id="list" hx-get="/todos" hx-target="this" hx-trigger="load" hx-swap="outerHTML">
+    Loading...
+</div>
+{% endblock %}
+```
+
+As you can see, we are extending the `base.html` file and then declaring a block called `content` - this is where we put our HTML that we want to add. As a simple example, we've added a form to add a new todo, as well as a placeholder div with an ID of "list".
+
+For the next part, we'll want to have some of our HTML already written, so let's do that now:
+```html 
+<!-- templates/todos.html -->
+<div id="todos">
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody id="todos-content">
+        <!-- Askama allows for rendering an array of things -->
+        {% for todo in todos %}
+            {% include "todo.html" %}
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+```
+
+```html 
+<!-- templates/todo.html -->
+<tr id="shuttle-todo-{{ todo.id }}">
+    <td> {{ todo.id }} </td>
+    <td id="shuttle-todo-desc-{{todo.id}}"> {{ todo.description }} </td>
+    <td>
+        <button
+            hx-delete="/todos/{{todo.id}}"
+            hx-trigger="click"
+            hx-target="#shuttle-todo-{{todo.id}}"
+            hx-swap="delete"
+        >
+            Delete
+        </button>
+    </td>
+</tr>
+```
+As you can see, we've included a button with the `todo` component that makes a DELETE request to the `/todos/:id` route, but it targets the whole row and just deletes the row after the API call is done, which saves time having to manually delete the component from the DOM.
+
+## Making API calls
+htmx allows you to make an API call without explicitly writing JavaScript for it, by allowing you use HTML attributes instead. When you make an API call with htmx, the library requires you to return HTML as a response - which is great for us because we can combine it with Askama templating so that we don't have to go through the hassle of trying to create a whole new element through pure JavaScript and then appending it to whatever element we choose. Let's take the form from above as an example:
+```html
+<form id="add-form">
+    <input placeholder="Your todo description..." required type=text name="description">
+    <button
+        hx-post="/todos"
+        hx-trigger="click"
+        hx-target="#todos-content"
+        hx-swap="beforeend"
+    >
+        Add
+    </button>
+</form>
+```
+
+The button makes a POST request to `/todos`, triggered by clicking the button, targets the HTML element with an id of "todos-content" and places the resulting HTML as the last element within the target element. 
+
+As you can see, this speeds up development speed quite a lot! Not having to set up an opinionated framework and being able to quickly write things with a HTML templating engine makes things a lot quicker.
+
+## Streams and Server Sent Events with htmx
+
+Being able to quickly mock up a CRUD app with htmx is great. However, Server Sent Events (SSE) and Websockets are also important functions for web applications and web services to work. Thankfully, htmx natively supports both. We can look at a basic mockup of receiving SSE with htmx by creating a new channel in our main function, then appending it as an Extension to our main function, as well as creating the necessary structs we need for the messages we're going to send through the channel:
+```rust
+// src/main.rs
+#[derive(Clone, Serialize, Debug)]
+enum MutationKind {
+    Create,
+    Delete,
+}
+
+#[derive(Clone, Serialize, Debug)]
+pub struct TodoUpdate {
+    mutation_kind: MutationKind,
+    id: i32,
+}
+
+#[shuttle_runtime::main]
+async fn main(#[shuttle_shared_db::Postgres] db: PgPool) -> shuttle_axum::ShuttleAxum {
+    sqlx::migrate!()
+        .run(&db)
+        .await
+        .expect("Looks like something went wrong with migrations :(");
+
+    let (tx, rx) = channel::<TodoUpdate>(10);
+    let state = AppState { db };
+
+    let router = Router::new()
+        .route("/", get(home))
+        .route("/stream", get(stream))
+        .route("/todos", get(fetch_todos).post(create_todo))
+        .route("/todos/:id", delete(delete_todo))
+        // new handler - we will make this later
+        .route("/todos/stream", get(handle_stream))
+        .with_state(state)
+        .layer(Extension(tx))
+        .layer(Extension(rx));
+
+    Ok(router.into())
+}
+```
+
+Now we want to send a message from our `create_todo` and `delete_todo` handlers through our channel - we can add them by including our extension in the function signature, then after a successful SQL transaction we simply send a message to the channel:
+```rust
+// src/main.rs
+type TodosStream = Sender<TodoUpdate>;
+
+async fn create_todo(
+    State(state): State<AppState>,
+    Extension(tx): Extension<TodosStream>,
+    Form(form): Form<TodoNew>,
+) -> impl IntoResponse {
+    let todo = sqlx::query_as::<_, Todo>(
+        "INSERT INTO TODOS (description) VALUES ($1) RETURNING id, description",
+    )
+    .bind(form.description)
+    .fetch_one(&state.db)
+    .await
+    .unwrap();
+
+    if let Err(e) = tx.send(TodoUpdate { mutation_kind: MutationKind::Create, id: todo.id }) {
+      	eprintln!("Tried to send log of record with ID {} created but something went wrong: {e}", todo.id);
+    }
+
+    TodoNewTemplate { todo }
+}
+
+async fn delete_todo(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+    Extension(tx): Extension<TodosStream>,
+) -> impl IntoResponse {
+    sqlx::query("DELETE FROM TODOS WHERE ID = $1")
+        .bind(id)
+        .execute(&state.db)
+        .await
+        .unwrap();
+
+    if let Err(e) = tx.send(TodoUpdate { mutation_kind: MutationKind::Delete, id }) {
+    	eprintln!("Tried to send log of record with ID {id} created but something went wrong: {e}");
+    }
+
+    StatusCode::OK
+}
+```
+
+Now we need to implement the stream handler, which we can do by creating a `BroadcastStream` and then mapping our stream to Axum SSE events:
+
+```rust
+use std::convert::Infallible;
+use tokio_stream::{Stream, StreamExt as _};
+use std::time::Duration;
+use tokio::sync::broadcast::{channel, Sender, Receiver};
+use axum::{
+    http::StatusCode,
+    response::{sse::Event, IntoResponse, Sse, Response},
+    Extension
+};
+use serde_json::json;
+
+pub async fn handle_stream(
+    Extension(tx): Extension<TodosStream>,
+    Extension(rx): Extension<Receiver<TodoUpdate>>
+) -> Sse<impl Stream<Item = Result<Event, Infallible>>> {
+
+    let stream = BroadcastStream::new(rx);
+
+    // map the stream to axum Events which get sent through the SSE stream
+    Sse::new(
+        stream
+            .map(|msg| {
+                let msg = msg.unwrap();
+                // wrap the message in HTML because htmx expects a HTML fragment response
+                let json = format!("<div>{}</div>", json!(msg));
+                Event::default().data(json)
+            })
+            .map(Ok),
+    )
+    .keep_alive(
+        axum::response::sse::KeepAlive::new()
+            .interval(Duration::from_secs(600))
+            .text("keep-alive-text"),
+    )
+}
+```
+Then in our HTML, we will want to add an element that looks like this:
+```html 
+<!-- templates/stream.html -->
+
+<!-- Using hx-swap here will still allow us to swap into the inner element, despite not having any triggers -->
+<div hx-sse="connect:/todos/stream swap:message" hx-swap="beforeend">
+
+</div>
+```
+
+When you have the `hx-sse` HTML element and then add or delete an item from the main page, you will then see a log of what ID the record had and what the action was. The item will get appended to the inner div without any other input from our side!
+
+## Finishing Up
+Thanks for reading! I hope this guide to using htmx with Rust has helped you get a better insight into why it's currently rising in popularity at the moment. htmx is a great library that can be taken to new heights by using it in conjunction with HTML templating in Rust. 
+
+Did this article help you? Feel free to [give us a star on GitHub!](https://www.github.com/shuttle-hq/shuttle)
+
+You can find the article code [here.](https://github.com/shuttle-hq/shuttle-examples/tree/main/axum/htmx-crud)

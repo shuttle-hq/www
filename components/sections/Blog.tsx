@@ -2,6 +2,7 @@ import { Splide, SplideSlide } from '@splidejs/react-splide'
 import clsx from 'clsx'
 import { getAuthors } from 'lib/blog/authors'
 import { Post } from 'lib/blog/posts'
+import { trackEvent } from 'lib/posthog'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -51,6 +52,9 @@ const Blog: FC<BlogProps> = ({ tags, posts }) => {
 								'p-2 transition-all lg:hover:pl-4',
 								tag === activeTag && 'pl-4 text-transparent'
 							)}
+							onClick={() => {
+								trackEvent(`blog_tag_${tag}`)
+							}}
 						>
 							{tag}
 						</Link>
@@ -76,7 +80,7 @@ const BlogPost: FC<Post> = (post) => {
 		<div className='group grid gap-4 rounded-[2rem] border border-black/10 p-5 transition-all duration-300 hover:shadow-[0px_4px_64px_0px_rgba(252,84,12,0.25)] dark:border-white/10 md:grid-cols-2 md:items-center md:gap-5 md:p-8'>
 			<div className='grid gap-4 lg:gap-5'>
 				<div className='flex flex-wrap items-center gap-x-4 gap-y-1'>
-					<div className='mr-1 flex items-center gap-2 font-gradual font-bold dark:text-[#C2C2C2]'>
+					<div className='mr-1 flex items-center gap-2 font-gradual font-bold dark:text-head'>
 						<Image
 							src={authorImage}
 							onError={() => setAuthorImage('/images/logo.png')}
@@ -88,26 +92,34 @@ const BlogPost: FC<Post> = (post) => {
 						{firstAuthor?.author || 'Shuttle'}
 						{firstAuthor?.position ? ` - ${firstAuthor.position}` : ''}
 					</div>
-					<li className='list-disc text-[#BEBEBE]'>{post.date}</li>
+					<li className='list-disc text-body'>{post.date}</li>
 				</div>
-				<Link href={`/blog/${post.url}`}>
-					<h2 className='font-gradual text-2xl font-bold text-black dark:text-[#C2C2C2] lg:text-[1.75rem] lg:leading-9'>
+				<Link
+					href={`/blog/${post.url}`}
+					onClick={() => {
+						trackEvent(`homepage_footer_site_${post.title}`)
+					}}
+				>
+					<h2 className='font-gradual text-2xl font-bold text-black dark:text-head lg:text-[1.75rem] lg:leading-9'>
 						{post.title}
 					</h2>
-					<p className='mt-3 text-[#525151] dark:text-[#BEBEBE]'>{post.description}</p>
+					<p className='mt-3 text-body'>{post.description}</p>
 				</Link>
-				<div className='flex flex-wrap items-center gap-[0.625rem] text-sm text-black dark:text-[#C2C2C2]'>
+				<div className='flex flex-wrap items-center gap-[0.625rem] text-sm text-black dark:text-head'>
 					{(post?.tags || []).map((tag) => (
 						<Link
 							key={tag}
 							href={`/blog/tags/${tag}`}
 							className='border-gradient-h relative rounded-full px-2 py-1 outline outline-1 outline-black/10 hover:outline-transparent hover:after:rounded-full hover:after:bg-gradient-to-r hover:after:from-[#FC540C] hover:after:to-[#FFD76F] dark:bg-black dark:outline-[#1E1B19]'
+							onClick={() => {
+								trackEvent(`blog_tag_${tag}`)
+							}}
 						>
 							{tag}
 						</Link>
 					))}
 
-					<div className='text-[#BEBEBE]'>{post.readingTime}</div>
+					<div className='text-body'>{post.readingTime}</div>
 				</div>
 			</div>
 			<Link href={`/blog/${post.url}`} className='relative h-full overflow-hidden rounded-[2rem]'>

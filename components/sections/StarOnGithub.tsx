@@ -1,8 +1,12 @@
+import { trackEvent } from 'lib/posthog'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
 const StarOnGithub = () => {
 	const [starOpen, setStarOpen] = useState<boolean>(false)
 	const [mounted, setMounted] = useState<boolean>(false)
+
+	const router = useRouter()
 
 	useEffect(() => {
 		if (localStorage.getItem('starred')) setStarOpen(false)
@@ -10,6 +14,8 @@ const StarOnGithub = () => {
 
 		setMounted(true)
 	}, [])
+
+	if (router.pathname === '/cch') return null
 
 	return (
 		<div
@@ -19,8 +25,28 @@ const StarOnGithub = () => {
 				display: starOpen && mounted ? 'flex' : 'none',
 			}}
 		>
-			<a href='https://github.com/shuttle-hq/shuttle' target='_blank' rel='noopener noreferrer'>
-				⭐️ If you like Shuttle, give it a star on github!
+			⭐️ If you like Shuttle,&nbsp;
+			<a
+				href='https://github.com/shuttle-hq/shuttle'
+				target='_blank'
+				rel='noopener noreferrer'
+				onClick={() => {
+					trackEvent('github_star_cta')
+				}}
+			>
+				give it a star on GitHub
+			</a>
+			<span className='hidden sm:block'>&nbsp;or&nbsp;</span>
+			<a
+				href='https://twitter.com/shuttle_dev'
+				target='_blank'
+				rel='noopener noreferrer'
+				onClick={() => {
+					trackEvent('twitter_follow_cta')
+				}}
+				className='hidden sm:block'
+			>
+				follow us on Twitter
 			</a>
 			<button
 				className='absolute right-3'

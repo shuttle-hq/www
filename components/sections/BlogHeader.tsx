@@ -14,7 +14,7 @@ const BlogHeader: FC<BlogHeaderProps> = ({ post }) => {
 	return (
 		<div className='max-w-5xl space-y-8'>
 			<div className='space-y-4'>
-				<h1 className='text-4xl font-bold leading-tight text-black dark:text-[#C2C2C2] lg:text-6xl'>
+				<h1 className='text-4xl font-bold leading-tight text-black dark:text-head lg:text-6xl'>
 					{post.title}
 				</h1>
 				<div className='flex gap-3'>
@@ -35,10 +35,10 @@ const BlogHeader: FC<BlogHeaderProps> = ({ post }) => {
 												alt=''
 											/>
 										)}
-										<div className='flex font-bold text-[#525151] dark:text-[#C2C2C2]'>
+										<div className='flex font-bold text-head'>
 											{author?.author || 'Shuttle'}
 											{author?.position ? ` - ${author.position}` : ''}
-											<span className='font-normal text-[#525151] dark:text-[#BEBEBE]'>
+											<span className='font-normal text-body'>
 												&nbsp;&nbsp;• {post.date}
 											</span>
 										</div>

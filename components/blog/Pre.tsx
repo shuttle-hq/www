@@ -1,22 +1,22 @@
 import clsx from 'clsx'
 import { CopyButton } from 'components/elements'
-import { useMemo } from 'react'
 
 export const Pre = ({ children, ...props }: any) => {
 	let line = 1
 
-	const code = useMemo(() => {
-		return [children.props.children]
-			.flat()
-			.flatMap((child) => {
-				if (typeof child !== 'string') {
-					return child.props.children
-				} else {
-					return child
-				}
-			})
-			.join('')
-	}, [children])
+	function getChildren(children: any): string[] {
+		return [children].flat().flatMap((child: any) => {
+			// This is a fix for such code breaking mdx parser:
+			// <script src="/main.js"></script>
+			if (typeof child === 'string' || !child) {
+				return child
+			}
+
+			return getChildren(child.props.children)
+		})
+	}
+
+	const code = getChildren(children.props.children).join('')
 
 	return (
 		<div className={clsx('relative')}>
@@ -24,7 +24,7 @@ export const Pre = ({ children, ...props }: any) => {
 			<pre
 				{...props}
 				className={clsx(
-					'!border !border-black/10 !bg-white !pr-16 !text-sm text-[#525151] dark:!border-white/10 dark:!bg-black dark:text-[#BEBEBE] [&>*]:!bg-white dark:[&>*]:!bg-black',
+					'!border !border-black/10 !bg-white !pr-16 !text-sm dark:!border-white/10 dark:!bg-black dark:text-body [&>*]:!bg-white dark:[&>*]:!bg-black',
 					props.className ?? 'language-'
 				)}
 			>

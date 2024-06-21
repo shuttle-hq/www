@@ -1,11 +1,11 @@
-export const APP_NAME = 'shuttle'
+export const APP_NAME = 'Shuttle'
 
 export const SITE_TITLE = 'Build Backends. Fast.'
 
 export const SITE_DESCRIPTION =
-	'Stop worrying about the infrastructure. Focus on writing code, shuttle will do the rest.'
+	'Stop worrying about infrastructure. Focus on writing code, shuttle will do the rest.'
 
-export const SITE_URL = 'https://shuttle.rs/'
+export const SITE_URL = 'https://www.shuttle.rs/'
 
 export const TWITTER_HANDLE = '@shuttle_dev'
 
@@ -18,7 +18,8 @@ export const GITHUB_URL = 'https://github.com/shuttle-hq/shuttle'
 
 export const GITHUB_EXAMPLES_URL = 'https://github.com/shuttle-hq/examples'
 
-export const CONTACT_US_URI = 'https://btl1d1x5z23.typeform.com/shuttle-pro'
+export const CONTACT_US_URI = 'https://shuttlerust.typeform.com/shuttle-pro'
+export const GET_STARTED_URI = 'https://console.shuttle.rs/account/billing'
 
 export const DISCORD_URL = 'https://discord.gg/shuttle'
 export const TWITTER_URL = 'https://twitter.com/shuttle_dev'

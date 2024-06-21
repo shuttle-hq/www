@@ -1,4 +1,5 @@
 import { Issue } from 'lib/launchpad/issues'
+import { trackEvent } from 'lib/posthog'
 import Link from 'next/link'
 import { FC } from 'react'
 
@@ -9,9 +10,9 @@ interface IssueProps {
 const LaunchpadIssues: FC<IssueProps> = ({ issues }) => {
 	return (
 		<div className='mt-16 flex w-full flex-col lg:mx-auto lg:mt-20  lg:max-w-7xl lg:px-10'>
-			<h1 className='mb-16 text-[56px] font-bold text-[#C2C2C2]'>Shuttle Launchpad</h1>
+			<h1 className='mb-16 text-[56px] font-bold text-head'>Shuttle Launchpad</h1>
 
-			<p className='my-6 text-[#BEBEBE]'>
+			<p className='my-6 text-body'>
 				Dive into previous Launchpad issues that empower you with in-depth knowledge of Rust concepts while
 				building real-world web applications.
 			</p>
@@ -28,12 +29,15 @@ export function Issue({ issue, idx }: { idx: number; issue: Issue }) {
 	return (
 		<div className={`flex justify-between gap-4 border-b border-[#1A1A1A] py-5 ${idx === 0 && 'border-t'}`}>
 			<div className='flex gap-4'>
-				<Link href={`/launchpad/issues/${issue.url}`}>
-					<h2 className='text-xl text-[#D8D8D8]'>{issue.title}</h2>
+				<Link
+					href={`/launchpad/issues/${issue.url}`}
+					onClick={() => [trackEvent(`launchpad_issue_${issue.title}`)]}
+				>
+					<h2 className='text-xl text-head'>{issue.title}</h2>
 				</Link>
 			</div>
 
-			<p className='text-[#BEBEBE]'>{issue.date}</p>
+			<p className='text-body'>{issue.date}</p>
 		</div>
 	)
 }

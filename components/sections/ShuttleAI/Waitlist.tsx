@@ -8,7 +8,7 @@ interface WaitListProps {
 	subDescription?: string
 }
 
-export const Waitlist: FC<WaitListProps> = ({ cta, description, subDescription }) => {
+export const Waitlist: FC<WaitListProps> = () => {
 	return (
 		<div className='mt-8 border-t border-[#FFFFFF33] sm:mt-16 sm:px-10 lg:mt-32 desktop:mt-64'>
 			<div className='group relative z-[1] overflow-hidden rounded-[2rem] bg-[#13292C] dark:bg-black'>

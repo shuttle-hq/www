@@ -1,10 +1,10 @@
 const WorkingWithUs = () => {
 	return (
-		<div className='px:5 mx-auto w-full py-20 px-5 sm:px-10 lg:py-40'>
+		<div className='px:5 mx-auto w-full px-5 py-20 sm:px-10 lg:py-40'>
 			<div className=' group relative z-10 overflow-hidden'>
 				<span className='pointer-events-none'>
 					<div className='mx-auto max-w-3xl'>
-						<h2 className='font-gradual text-4.5 font-bold leading-none dark:text-[#C2C2C2] lg:text-5xl'>
+						<h2 className='font-gradual text-4.5 font-bold leading-none dark:text-head lg:text-5xl'>
 							Working with us
 						</h2>
 						<p className='text-\ mt-3 max-w-[800px] sm:mt-5 lg:text-xl'>

@@ -1,14 +1,23 @@
 import { CallToAction, FrequentlyAskedQuestions, Pricing, Testimonials, TrustedBy } from 'components/sections'
-import {QuestionAttrs} from "../components/sections/FrequentlyAskedQuestions";
-import {GetStaticPropsResult} from "next";
-import {Questions} from "../content";
+import { QuestionAttrs } from '../components/sections/FrequentlyAskedQuestions'
+import { GetStaticPropsResult } from 'next'
+import { pricingQuestions } from '../content'
+import Hero from 'components/sections/Pricing/Hero'
+import { Page } from 'components/templates'
+import { ReactNode } from 'react'
+import Plans from 'components/sections/Pricing/Plans'
+import LovedBy from 'components/sections/Pricing/LovedBy'
+import PriceCards from 'components/sections/Pricing/PriceCards'
+import Contact from 'components/sections/Pricing/Contact'
+import BenefitCards from 'components/sections/Pricing/BenefitsCards'
+import Calculator from 'components/sections/Pricing/Calculator'
+import 'react-tooltip/dist/react-tooltip.css'
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
-	const questions = Questions
 	return {
 		props: {
-			questions
-		}
+			questions: pricingQuestions,
+		},
 	}
 }
 
@@ -16,27 +25,27 @@ interface Props {
 	readonly questions: QuestionAttrs[]
 }
 
-export default function PricingPage({questions}: Props) {
+export default function PricingPage({ questions }: Props) {
 	return (
-		<>
-			<div className='mx-auto mt-24 w-full max-w-[1280px] px-5 sm:px-10 lg:mt-28'>
-				<header>
-					<h1 className='w-fit font-gradual text-5xl font-bold dark:text-[#C2C2C2] lg:text-6.5'>
-						<span className='text-gradient block bg-clip-text text-transparent'>
-							Make your life easier
-						</span>
-						with the right plan.
-					</h1>
-					<p className='mt-4 sm:text-xl lg:text-2xl'>
-						Experience the future of backend development with shuttle.
-					</p>
-				</header>
-			</div>
+		<div
+			className='relative flex-grow overflow-hidden bg-center bg-repeat'
+			style={{ backgroundImage: "url('/images/pages/shuttle-ai/stars.png')" }}
+		>
+			<Hero />
+			<Plans />
+			<LovedBy />
+			<PriceCards />
+			<Calculator />
+			<BenefitCards />
 			<Pricing />
-			<TrustedBy />
+			<Contact />
 			<Testimonials />
-			<FrequentlyAskedQuestions questions={questions}/>
+			<FrequentlyAskedQuestions questions={questions} page='pricing' />
 			<CallToAction />
-		</>
+		</div>
 	)
 }
+
+PricingPage.getLayout = (children: ReactNode) => (
+	<Page background={'/images/pages/pricing/background.png'}>{children}</Page>
+)

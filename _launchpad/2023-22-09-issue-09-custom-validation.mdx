@@ -1,0 +1,284 @@
+---
+title: "Issue #9: Custom Validation"
+date: "2023-09-22T15:00:00"
+---
+
+# Shuttle Launchpad #9: Custom Validation
+
+*We have a small favor to ask of our amazing readers and users. Shuttle Launchpad was founded with the simple idea of making Rust more accessible and approachable to individuals from diverse backgrounds. Our goal is to make Rust development and web development easier for everyone so, we want to reach everyone! We would sincerely appreciate it if you could help us by spreading the word on platforms such as [Twitter](https://twitter.com/intent/tweet?url=http%3A%2F%2Fshuttle.rs%2Flaunchpad&text=Check%20out%20the%20latest%20issue%20of%20Shuttle%20Launchpad%20for%20exciting%20Rust%20development%20content!%20%23Rust%20%23WebDevelopment%20%23ShuttleLaunchpad), [Reddit](https://www.reddit.com/submit?url=http%3A%2F%2Fshuttle.rs%2Flaunchpad&title=Shuttle%20Launchpad%20Newsletter%20-%20Check%20it%20out%21), or among your friends! A [star to the Shuttle repo](https://github.com/shuttle-hq/shuttle) is also greatly appreciated!*
+
+Without further ado, welcome to the latest issue of Shuttle Launchpad. This time we will take a look at how to implement custom validation for your Axum routes and dig into some really advanced concepts already! Just 9 issues in and we look at very complex trait bounds! Let's go!
+
+## Server side validation
+
+I was doing Frontend development for a long time and we always kept one rule high and above all else: User input needs to be validated on the server side. If I learned one thing about client-side JavaScript is that you can fake everything, so you need to make sure that all input is valid on the server.
+
+On the other hand, I also don't want to be bothered, and the Rust ecosystem is fantastic for abstracting the boring stuff away. So let's see how we can use the `validator` crate to validate our input.
+
+First, create a new Shuttle project.
+
+```bash
+$ cargo shuttle init
+```
+
+Select `axum` as the framework. Then add the following dependencies to your `Cargo.toml`:
+
+```bash
+$ cargo add async-trait
+$ cargo add validator --features derive
+$ cargo add serde --features derive
+$ cargo add serde-json
+```
+
+We need `serde` and `serde-json` for serialization and deserialization of our input. `validator` is the crate we will use for validation. And `async-trait` is a crate that allows us to use async functions as traits. We need the last one because async methods in traits are not supported by Rust yet. A lot of process has been made, but the features have not stabilized yet. I look forward to a world without `async-trait`, but for now it's just convenient to use it.
+
+In our example, we create a CRUD application, but for the contents of this issue, we stick to the `create` part. We will create a user and validate the input.
+
+In the project that has been created for you, open `main.rs` and change the main function to the following.
+
+```rust
+use axum::{Router, routing::post};
+
+#[shuttle_runtime::main]
+async fn axum() -> shuttle_axum::ShuttleAxum {
+    let router = Router::new().route("/user", post(create_user));
+
+    Ok(router.into())
+}
+```
+
+Then, we define our structs and enums. We have a `User` struct that contains information on the user's name, age, and e-mail address. We derive `Debug`, as well as `Deserialize` and `Serialize` from `serde`, so coming from a JSON to a struct and vice versa is easy.
+
+The struct also contains information on the activation status of the user, which is represented in the enum `UserStatus`. We don't want this to be set by the user creation, but rather by us in a defined process. So we tell `serde` to skip this field when serializing and deserializing.
+
+> 💡Enums are great if you want to represent a state like `UserStatus`. Sure, you could use a boolean `is_active`, but with an enum, you are prepared for more user states in the future. Also, the names are more expressive.
+
+```rust
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Deserialize, Serialize)]
+struct User {
+    name: String,
+    email: String,
+    age: u8,
+    #[serde(skip)]
+    status: UserStatus,
+}
+```
+
+The `UserStatus` itself also needs to be deserializable and serializable by `serde`, that's why we derive those traits as well. Since we are not getting a value from the user, but rather set it ourselves, we need to implement the `Default` trait so `serde` gets a value when deserializing.
+
+```rust
+#[derive(Debug, Deserialize, Serialize)]
+enum UserStatus {
+    Active,
+    Inactive,
+}
+
+impl Default for UserStatus {
+    fn default() -> Self {
+        UserStatus::Inactive
+    }
+}
+```
+
+Great! We can use `User` already to define our `create_user` route, but let's take a moment and think about what our data should look like.
+
+We have the user's name, sure, but also a mail address and an age. Both are represented by primitive data types like `String` and `u8`. But what if the user enters a mail address that is not valid? Or an age that is not in the range of 18 to 100? We need to validate the input before we can create a user.
+
+Thankfully, the `validator` crate takes care of that. All you need to do is derive the `Validate` trait and add some macro attributes. We want to make sure that `email` is a valid e-mail address and that `age` is in the range of 18 to 100. We can do that by adding the `#[validate(email)]` and `#[validate(range(min = 18, max = 100))]` attributes to the fields.
+
+```rust
+use validator::Validate;
+
+#[derive(Debug, Deserialize, Serialize, Validate)]
+struct User {
+    name: String,
+    #[validate(email)]
+    email: String,
+    #[validate(range(min = 18, max = 100))]
+    age: u8,
+    #[serde(skip)]
+    status: UserStatus,
+}
+```
+
+Now for the callback! We use a `Json` extractor to get from the request body to our `User` struct. This is already so nice in Axum. I don't need to make sure that the right data is set, I only need to say: "This is JSON, and this is the struct I want to have" and Axum does the rest for me. If some of the data is wrong, Axum will send the right response.
+
+So we know that the structure is alright, but we still need to check if the data is valid. This is where the `validator` crate comes into play. Everything that derives the `Validate` trait can be validated. We can call `validate` on the struct and get a `Result<(), ValidationError>` back. If the result is `Ok`, everything is fine. If it is `Err`, we need to handle the error.
+
+
+```rust
+use axum::Json;
+
+async fn create_user(Json(user): Json<User>) -> String {
+    if user.validate().is_ok() {
+        format!("User valid, status: {:?}", user.status)
+    } else {
+        "User invalid".to_string()
+    }
+}
+```
+
+Doesn't look so bad, does it? Have fun validating! 🚀
+
+Okay okay... I'm not 100% happy. One thing I like about Axum is that the function interface and the Extractor tell me what to expect from the handler. I know that I get JSON data that contains a User, good. I know what the return types are, also great! But the function interface says nothing about some validation that's going on. And I still need to validate my input manually. It's not a lot of work, but it's still work!
+
+What if I can tell Axum that I want to have a validated JSON that contains a user? And if the validation is successful, I execute the handler, if it isn't, Axum takes care. That would be great, wouldn't it?
+
+With a bit of trait magic, this is absolutely possible! Let's do it!
+
+Since stuff can go wrong, we first take care of a new Error type. We call it `ValidationError` and derive `Debug` and `Display` for it. We also implement the `Error` trait for it. This is important because we want to use it as an error type later on. You have seen something like this in [Shuttle Launchpad #5](https://www.shuttle.rs/launchpad/issues/2023-28-07-issue-05-Traits-Image-Processing) already.
+
+```rust
+#[derive(Debug)]
+struct ValidationError;
+
+impl std::fmt::Display for ValidationError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        "Server error".fmt(f)
+    }
+}
+
+impl Error for ValidationError {}
+```
+
+We also need to implement `IntoResponse` for `ValidationError`. This is the trait that allows us to return a custom response in Axum when something goes wrong. We want to return a `BAD_REQUEST` status code and a message that tells the user that the input is wrong.
+
+```rust
+use axum::response::IntoResponse;
+
+impl IntoResponse for ValidationError {
+    fn into_response(self) -> axum::response::Response {
+        (StatusCode::BAD_REQUEST, "Error with format").into_response()
+    }
+}
+```
+
+> 💡 This Error is very basic and doesn't contain any detailed info. Maybe you want to change it? Think about which information we need to store, and which situations can go wrong. Maybe change the struct to an enum and add some variants. It's up to you!
+
+Next, we create a struct for the extraction. It's a simple tuple struct that contains a single, generic value. This value will be the one struct that we are going to extract from the JSON input. We call the struct `ValidatedJson`.
+
+```rust
+struct ValidatedJson<T>(T);
+```
+
+Next, we implement `FromRequest` for `ValidatedJson`. This is the trait that allows Axum to use our struct as an extractor.
+
+This piece is a bit complex.
+
+First, we need to add the `#[async_trait]` macro attribute to the trait implementation. This is needed because the `from_request` function is async. You could write your own Future by hand, but this way it's much more convenient.
+
+Second, we need three generic parameters. `T` is the type in `ValidateJson` that we are implementing this for. We set trait bounds for `T` to be deserializable into an owned struct by `serde`, and we make sure that it implements the `Validate` trait. With those two things we say to Rust that for whatever struct there will be, this extraction will be possible as long as it's deserializable and validatable. Just like our `User` struct.
+
+The second generic parameter is `S`. This is the state that we can pass to the extractor. We don't do a lot with it, but we need to say that the state implements the `Send` and `Sync` traits. This is needed because we want to use the extractor in a multi-threaded environment, like a web server. 😉
+
+The third generic parameter is `B`. This is the body of the request. We need to say that it implements the `Send` trait and that it is a `HttpBody`. We need the `HttpBody` trait so we can parse an actual HTTP body from the request to JSON. It also needs a `'static` trait bound. `'static` tells us that the body is valid for the whole lifetime of the future. This is needed because we are using the `async_trait` macro attribute. If you want to know more about this, check out the [async_trait](https://docs.rs/async-trait/latest/async_trait/index.html) crate.
+
+Since we set a trait bound to `HttpBody`, every associated type of `HttpBody` also needs to implement `Send`, and sometimes `Sync` or `Error`. Those trait bounds are required for some of our code to work.
+
+```rust
+use axum::FromRequest;
+use serde::de::DeserializeOwned;
+
+#[async_trait]
+impl<T, S> FromRequest<S> for ValidatedJson<T>
+where
+    T: DeserializeOwned + Validate,
+    S: Send + Sync,
+{
+
+}
+```
+
+Note that I didn't know about those trait bounds when starting out either. I also don't know them upfront. The compiler told me that they were missing, and I just added them. Try removing `<B as HttpBody>::Data: Send` and see what the compiler tells you. It's eye-opening!
+
+Now that the trait bounds are set, we can work on the implementation. We need to implement the `from_request` function. This function takes a `Request` and a `State` as parameters and returns a `Result` with either the extracted value or a rejection. The rejection is the `ValidationError` that we defined earlier. We need to set the error type via the `Rejection` associated type.
+
+In the implementation, we first are parsing the JSON from the request. This is done by using the `Json` extractor that we already know. We are using the `Json` extractor because it already implements the `FromRequest` trait.
+
+Next, we call the `validate` method. Since we made sure in the trait bounds that all extractor structs need to implement `Validate`, we can make this call.
+
+In the end, we return the validated JSON as a `ValidatedJson` struct.
+
+```rust
+impl<T, S> FromRequest<S> for ValidatedJson<T>
+where
+    // See above
+{
+    type Rejection = ValidationError;
+
+    async fn from_request(req: Request, state: &S) -> Result<Self, Self::Rejection> {
+        let Json(json) = Json::<T>::from_request(req, state)
+            .await
+            .map_err(|_| ValidationError)?;
+        json.validate().map_err(|_| ValidationError)?;
+        Ok(ValidatedJson(json))
+    }
+}
+```
+
+Please note that every time an error could happen, we map the error to a `ValidationError` and bubble it up using the `?` operator.
+
+This is needed because the `from_request` function needs to return a `Result` with the `ValidationError` as the error type, but `Json::<T>::from_request` and `json.validate()` return a `Result` with a different error type. We need to convert those errors to our own error type.
+
+There's a more elegant way of doing that by implementing the `From` trait for conversions. Try that yourself! Maybe this is also the part where you introduce more information on _what_ goes wrong.
+
+Okay, this is all we need. Now we can use `ValidatedJson` just like we used `Json` before. Let's try it out!
+
+```rust
+async fn create_user(ValidatedJson(user): ValidatedJson<User>) -> String {
+    format!("User created: {:?}. Status: {:?}", user, user.status)
+}
+```
+
+The great thing is that all the validation happens. When writing the actual code of `create_user`, we can be sure that the input is alright. Isn't that beautiful? This is the power of traits in Rust, it allows you to abstract away the implementation details and just use the functionality. And a framework like Axum makes exceptional use of this.
+
+Go start your Shuttle server locally and try it out!
+
+
+```bash
+$ cargo shuttle run
+$ curl --request POST \
+  --url http://localhost:8000/user \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"name": "Testuser",
+	"email": "your@mail.com",
+	"age": 19
+}'
+```
+
+And if you like it, deploy it to Shuttle!
+
+```bash
+$ cargo shuttle deploy
+```
+
+From here on you can do a lot more. Now that you have a validated JSON input, you can use it to create a user in a database, write the activation route, and so many more things. Check out the [earlier issues](https://www.shuttle.rs/launchpad) where we create a CRUD app with SQLX and PostgreSQL.
+
+## Time for your feedback!
+
+We want to tailor Shuttle Launchpad to your needs! [Give us feedback](https://shuttlerust.typeform.com/to/dTU2F8jI) on the most recent issue and your wishes here.
+
+## Join us!
+
+Shuttle has a very active community. Join us on [Discord](https://discord.gg/shuttle), star us on [GitHub](https://github.com/shuttle-hq/shuttle), follow us on [Twitter](https://twitter.com/shuttle_dev), and watch out for video content on [YouTube](https://www.youtube.com/@shuttle-dev).
+
+If you have any questions regarding _Launchpad_, join the `#launchpad` channel on Shuttle's [Discord](https://discord.gg/shuttle).
+
+## Links, Videos, Tutorials
+
+[_Launchpad Examples_](https://github.com/ddprrt/shuttle-launchpad-examples): Check out all Launchpad Examples on GitHub.
+
+[_Best Rust Web Frameworks to Use in 2023_](https://www.shuttle.rs/blog/2023/08/23/rust-web-framework-comparison): A detailed analysis of Rust web frameworks by yours truly.
+
+[_Semantic Search with Qdrant, OpenAI and Shuttle_](https://www.shuttle.rs/blog/2023/09/08/building-semantic-search-in-rust): A new blog article by yours truly on how to create a semantic search engine that actually works!
+
+[_Logging in Rust - How to Get Started_](https://www.shuttle.rs/blog/2023/09/20/logging-in-rust): This article will help you gain insight on what the best log crate for your use case when it comes to Rust logging.
+
+## Bye!
+
+That's it for today. Get in touch with us and let us know what you want to see!
+
+-- [Stefan](https://oida.dev) and your friends from [Shuttle](https://shuttle.rs)

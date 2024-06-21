@@ -8,17 +8,13 @@ cover: ferris-error-handling.png
 date: "2022-06-30T18:00:00"
 ---
 
-This blog post is powered by shuttle! The serverless platform built for Rust.
-
----
-
 To quote the Rust Book, 'errors are a fact of life in software'. This post goes
 over how to handle them.
 
 Before talking about recoverable errors and the `Result` type, let's first
 touch on unrecoverable errors - a.k.a  panics.
 
-## Panics
+## An Introduction to Unrecoverable Errors
 
 [Panics](https://doc.rust-lang.org/std/macro.panic.html) are exceptions a program can throw. It stops all execution in the current thread. When a panic is thrown it returns a short description of what went wrong as well as information about the position of the the panic.
 
@@ -63,7 +59,7 @@ pub enum Result<T, E> {
 }
 ```
 
-## Basic error creation and handling
+## Basic Error Creation and Handling
 
 At the moment our `send_message` function doesn't return anything. This means no information can be received by the callee. We can change the definition to instead return a `Result` and rather than panicking we can early return a `Result::Err`.
 
@@ -87,7 +83,7 @@ if let Err(send_error) = send_message(message) {
 }
 ```
 
-### Rust knows when a Result is unused.
+### Dealing With Unused Results
 
 In the above example we inspect the value of the item and branch on it.
 However, if we didn't inspect and handle the returned Result then the Rust
@@ -101,9 +97,7 @@ explicitly deal with errors in your program.
 = note: this `Result` may be an `Err` variant, which should be handled
 ```
 
-### Examples of `Result` in the standard library
-
-`Result` can be found in most libraries. One of my favorite examples is the
+The `Result` type can be found in most libraries. One of my favorite examples is the
 return type of the [FromStr::from_str](https://doc.rust-lang.org/std/str/trait.FromStr.html#tymethod.from_str) trait method. With [str::parse](https://doc.rust-lang.org/std/primitive.str.html#method.parse) (which uses the `FromStr` trait) we can do the following:
 
 ```rust
@@ -142,7 +136,7 @@ bad
 
 Here we can see when we type in a number we get a `Ok` variant with the number else we get a [ParseFloatError](https://doc.rust-lang.org/std/num/struct.ParseFloatError.html)
 
-## Files, networks and databases
+## Files, Networks and Databases
 
 **All errors occur when you interact with the outside world or things
 outside the Rust runtime**. One of the places where a lot of errors can
@@ -154,7 +148,7 @@ before-hand. You can even access the error variants with the [`kind`](https://do
 and in order to implement your program logic or return an instructive error
 message to the user.
 
-### Aliasing Results and errors
+### Aliasing Results and Errors
 
 When you're working on a project you'll often find yourself repeating
 yourself when it comes to return types in function signatures:
@@ -176,7 +170,7 @@ pub type Result<T> = Result<T, io::Error>;
 If you have an API which has a common error type, you may want to
 consider this pattern.
 
-### The question mark operator
+### The Question Mark Operator
 
 One of the best things about Results is the question mark operator, The
 question mark operator can short circuit Result
@@ -233,7 +227,7 @@ fn do_stuff() -> Result<(), MyError> {
 
 We will look at more patterns for combining error types later!
 
-## [The Error trait](https://doc.rust-lang.org/std/error/trait.Error.html)
+## Introducing the Error Trait
 
 The [Error](https://doc.rust-lang.org/std/error/trait.Error.html#) trait is
 defined in the standard library. It basically represents the expectations of
@@ -284,9 +278,9 @@ other applications using the trait can be a lot simpler.
 Result and Option contains many useful functions. Here are some functions I
 commonly use:
 
-### [Result::map](https://doc.rust-lang.org/std/result/enum.Result.html#method.map)
+### Result::map()
 
-This maps or converts the `Ok` value if it exists. This can be more concise
+[Result::map](https://doc.rust-lang.org/std/result/enum.Result.html#method.map) maps or converts the `Ok` value if it exists. This can be more concise
 than using the `?` operator.
 
 ```rust
@@ -295,18 +289,18 @@ fn string_to_plus_one(s: &str) -> Result<i32, std::num::ParseIntError> {
 }
 ```
 
-### [Result::ok](https://doc.rust-lang.org/std/result/enum.Result.html#method.ok)
+### Result::ok() 
 
-Useful for converting Results to Options
+[Result::ok](https://doc.rust-lang.org/std/result/enum.Result.html#method.ok) is useful for converting Results to Options
 
 ```rust
 assert_eq!(Ok(2).ok(), Some(2));
 assert_eq!(Err("err!").ok(), None);
 ```
 
-### [Option::ok_or_else](https://doc.rust-lang.org/std/option/enum.Option.html#method.ok_or_else)
+### Option::ok_or_else()
 
-Useful for going the other way in converting from Options to Results
+[Option::ok_or_else](https://doc.rust-lang.org/std/option/enum.Option.html#method.ok_or_else) is useful for going the other way in converting from Options to Results
 
 ```rust
 fn get_first(vec: &Vec<i32>) -> Result<&i32, NotInVec> {
@@ -416,7 +410,7 @@ fn remove_at_idx(a: usize, vec: &mut Vec<i32>) -> Option<i32> {
 }
 ```
 
-## Handling multiple errors and helper crates:
+## Handling Multiple Errors and Helper Crates 
 
 Handling errors from multiple libraries and APIs can become challenging as
 you have to deal with a bunch of different types. They are different sizes
@@ -433,9 +427,9 @@ enum Errors {
 
 Some crates for making creating these unifying enums easier:
 
-### [thiserror](https://github.com/dtolnay/thiserror)
+### thiserror
 
-`thiserror` provides a derive implementation which adds the Error trait for us.
+[`thiserror`](https://github.com/dtolnay/thiserror) provides a derive implementation which adds the Error trait for us.
 As previously mentioned, to implement Error we have to implement display and
 thiserrors' `#[error]` attributes provide templating for the displayed errors.
 
@@ -458,9 +452,9 @@ pub enum DataStoreError {
 }
 ```
 
-### [anyhow](https://github.com/dtolnay/anyhow)
+### anyhow
 
-`anyhow` provides an ergonomic and idiomatic alternative to explicitly
+[`anyhow`](https://github.com/dtolnay/anyhow) provides an ergonomic and idiomatic alternative to explicitly
 handling errors. It is similar to the previously mentioned error trait but
 has additional features such as adding context to thrown errors.
 
@@ -498,9 +492,9 @@ Similar to the `Error` trait, `anyhow` suffers from the fact you can't match on
 `anyhow`'s result error variant. This is why it is suggested in `anyhow`'s
 docs to use `anyhow` for applications and `thiserror` for libraries.
 
-### [eyre](https://github.com/eyre-rs/eyre)
+### eyre
 
-Finally, `eyre` is a fork of `anyhow` and adds more backtrace information.
+Finally, [`eyre`](https://github.com/eyre-rs/eyre) is a fork of [`anyhow`](https://github.com/dtolnay/anyhow) and adds more backtrace information.
 It's highly customisable and using [color-eyre](https://lib.rs/crates/color-eyre) we get colors in our panic messages - a little color
 always brightens up the dev experience.
 
@@ -516,8 +510,6 @@ Location: examples\color_eyre.rs:6
                                 ⋮ 17 frames hidden ⋮
 ```
 
-## [Shuttle](https://www.shuttle.rs/): Stateful Serverless for Rust
+## Finishing Up
 
-Deploying and managing your Rust web apps can be an expensive, anxious and time consuming process.
-
-If you want a batteries included and ops-free experience, [try out Shuttle](https://docs.rs/shuttle-service/latest/shuttle_service/).
+Thank you for reading this article! Error handling can be tough, but with this guide hopefully you'll have a better idea of how to ensure you can reliably track errors and make debugging your Rust apps that much easier.

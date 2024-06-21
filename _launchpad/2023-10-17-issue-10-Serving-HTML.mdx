@@ -1,0 +1,250 @@
+---
+title: "Issue #10: Serving HTML"
+date: "2023-10-17T11:15:00"
+---
+# Shuttle Launchpad #10: Serving HTML
+
+Hello and welcome to a new edition of Shuttle Launchpad! First of all, we want to welcome all the new subscribers to Launchpad! There has been quite an influx in the last couple of days, and we are glad you are with us! We hope you enjoy the content we are creating and we are always open to feedback.
+
+To make it a bit easier for the new arrivals to get into the series, we want to focus on an important thing that comes with every web application: Serving basic HTML. This is something that we glanced over in the last editions as some of the stretch goals you can do on your own, but now we want to use this to learn a couple of things about traits!
+
+If you are completely new to Rust, check out [the archive](https://www.shuttle.rs/launchpad) as we have a ton of issues for beginners.
+
+If you are a launchpad regular, enjoy the missing piece to your web app!
+
+## Serving HTML
+
+In this issue, we will see how we can serve HTML via a template engine, as well as serving static assets. Like all tutorials on Launchpad we use *Axum* as our framework of choice, and we will use the highly popular *Askama* template engine.
+
+As always, we start with a new project (make sure you have [Shuttle installed](https://docs.shuttle.rs/getting-started/installation)):
+
+```bash
+$ cargo shuttle init
+```
+
+Make sure to select _Axum_. Then install the Askama template engine:
+
+```bash
+$ cargo add askama
+```
+
+Now we can create a template. Create a new folder called `templates` and add a file called `index.html` with the following content:
+
+```html
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+    <h1>Home</h1>
+    <p>Hello {{name}}</p>
+</body>
+
+</html>
+```
+
+There are two great things about Askama.
+
+1. It is a compile-time template engine, so you get all the benefits of compile-time checks and errors, and they will execute fast. This also means that all your templates are included with your server, no need to ship any template folders.
+2. You map Rust structs to your templates, meaning that your templates are type-safe. If you change the name of a variable in your template, the compiler will tell you that you need to change the struct as well.
+
+It's also very easy to use. We import `Template` from Askama and derive it for our struct. We then add a `path` attribute to tell Askama where to find the template.
+
+
+```rust
+use askama::Template;
+
+#[derive(Template)]
+#[template(path = "index.html")]
+struct HelloTemplate {
+    name: String,
+}
+```
+
+The fields of the struct mirror the variables in the template. All we need to say is that we want to derive the `Template` trait for our struct. We don't need to implement anything manually. Once the `Template` trait is slapped onto our struct, Rust will require us to also provide a `template` attribute macro with the path. From that time on, the Rust compiler will check if the template exists and if the variables match. Pretty neat!
+
+Once everything is set up, we can start writing our server. We want to pass a path argument with a name and say "Hello" to that name. We can do that by adding a `Path` extractor to our handler. Make sure you import the right `Path` type from `axum::extract::Path`.
+
+
+```rust
+use axum::{extract::Path, response::IntoResponse, http::StatusCode, Router, routing::get};
+
+async fn hello(Path(name): Path<String>) -> impl IntoResponse {
+    let template = HelloTemplate { name };
+    match template.render() {
+        Ok(html) => Html(html).into_response(),
+        Err(err) => (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            format!("Failed to render template. Error: {err}"),
+        )
+            .into_response(),
+    }
+}
+
+#[shuttle_runtime::main]
+async fn axum() -> shuttle_axum::ShuttleAxum {
+    let router = Router::new()
+        .route("/:name", get(hello));
+
+    Ok(router.into())
+}
+```
+
+The `hello` function is pretty straightforward. We create a new instance of the struct `HelloTemplate`, and since it implements the `Template` trait, we can call `render()` on it.
+
+The `render()` call returns a `Result`, in case the rendering goes wrong. We need to make sure that both cases are handled. If the rendering is successful, we wrap the HTML in an `Html` type and call `into_response()` on it. This will return a response with the HTML as the body and adds the right content type and status code. If the rendering fails, we return a 500 error with the error message as the body. Since both `Html` as well as a  tuple of `(StatusCode, String)` implement the `IntoResponse` trait, we can return both of them from our handler by calling `into_response()` on them.
+
+This is already very fantastic! But in a real-world web application, adding all that boilerplate can get quite annoying and repetitive. And should that be the case with a language like Rust, where we can have type-safe templates with just two lines of code?
+
+Let's look at the traits in the game.
+
+1. We have the `Template` trait. It takes care that our struct produces the right String output.
+2. There's the `IntoResponse` trait. It takes care that our result can be turned into a valid HTTP response.
+
+Wouldn't it be great if we could implement `IntoResponse` for everything that implements `Template`? That way we could just call `into_response()` on our struct and be done with it.
+
+There's a possibility, but it comes with a limitation. A thing that would come into your mind would be to implement `IntoResponse` for everything that implements `Template` using generics:
+
+```rust
+// DOES NOT COMPILE!!
+use axum::response::{Html, Response};
+
+impl<T> IntoResponse for T
+where
+    T: Template,
+{
+    fn into_response(self) -> Response {
+        match self.render() {
+            Ok(html) => Html(html).into_response(),
+            Err(err) => (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                format!("Failed to render template. Error: {err}"),
+            )
+                .into_response(),
+        }
+    }
+}
+```
+
+While the idea is good, you quickly hit a limit. You can't implement traits for types that aren't owned by you. While you own `HelloTemplate`, you don't own every `T` that implements `Template`, because you don't own `Template`. This is called the orphan rule, and it's there to prevent conflicts.
+
+Rust's orphan rule requires that either the trait or the type for which you are implementing the trait must be defined in the same crate as the impl. The Rust compiler actually tells you that with the error message *type parameter `T` must be used as the type parameter for some local type*. as well as the notes *implementing a foreign trait is only possible if at least one of the types for which it is implemented is local.* and *only traits defined in the current crate can be implemented for a type parameter*.
+
+There is a way to work around this limitation. If you need to own a type, then well, let's create a type. Make a tuple type called `HtmlTemplate<T>` and implement `IntoResponse` for it.
+
+```rust
+use axum::response::IntoResponse;
+
+struct HtmlTemplate<T>(T);
+
+impl<T> IntoResponse for HtmlTemplate<T>
+where
+    T: Template,
+{
+    fn into_response(self) -> Response {
+        match self.0.render() {
+            Ok(html) => Html(html).into_response(),
+            Err(err) => (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                format!("Failed to render template. Error: {err}"),
+            )
+                .into_response(),
+        }
+    }
+}
+```
+This is called the "Newtype" pattern, and is quite a well-used pattern in Rust.
+
+Since `HtmlTemplate` is generic over `T` and we implement `IntoResponse` for all `HtmlTemplate<T>` where `T` implements `Template`, we only need to wrap our struct in `HtmlTemplate` and be done with it!
+
+```rust
+async fn hello(Path(name): Path<String>) -> impl IntoResponse {
+    HtmlTemplate(HelloTemplate { name })
+}
+```
+
+Much better, and much easier to write!
+
+This already works really well, but you know what, Askama also did the exact same implementation for us. You can install Askama with the `with-axum` feature, and install `askama_axum` to make the conversion compatible with `axum`.
+
+```rust
+$ cargo add askama --features with-axum
+$ cargo add askama_axum
+```
+
+Then, your included `Template` trait also implements `IntoResponse` (because Askama owns the `Template`), so you only need to return an instance of `HelloTemplate`.
+
+```rust
+async fn hello(Path(name): Path<String>) -> impl IntoResponse {
+    HelloTemplate { name }
+}
+```
+
+And that's it! I think it never was easier and safer to work with templates when creating web applications.
+
+We just forgot one thing! What about the CSS files? It's okay that we define templates and routes for every basic route, but we don't want to do that for every static file. Luckily, there's a crate for that as well. It's called `tower-http` and it provides a `ServeDir` service that serves static files from a directory.
+
+`tower-http` has utilities that are useful for HTTP-based apps (well, web apps) which are based on the Tower library. Tower provides an abstraction of the Request/Response cycle and allows us to compose HTTP services together, defining a stack of middlewares, or a tower of middlewares, if you will.
+
+Axum is compatible with Tower, so is Warp, and many others. The great thing is that lots of features are already implemented in Tower, and we can just use them. One of those features is serving static files.
+
+Install `tower-http` with the `fs` feature, and then you can use `ServeDir` to serve static files from a directory.
+
+
+```rust
+$ cargo add tower_http --features fs
+```
+
+All you need to do is nest a service with `ServeDir` into your router.
+
+```rust
+use tower_http::services::ServeDir;
+
+#[shuttle_runtime::main]
+async fn axum() -> shuttle_axum::ShuttleAxum {
+    let router = Router::new()
+        .route("/:name", get(hello))
+        .nest_service("/static", ServeDir::new("static/"));
+
+    Ok(router.into())
+}
+```
+
+But that `Service` sounds ominous, doesn't it? Well, we dig deeper into Services and async traits in one of the next issues!
+
+Now it's your turn to crank up our little demo to produce a full-fledged website, and don't forget to deploy it to Shuttle:
+
+```bash
+$ cargo shuttle deploy
+```
+
+## Time for your feedback!
+
+We want to tailor Shuttle Launchpad to your needs! [Give us feedback](https://shuttlerust.typeform.com/to/dTU2F8jI) on the most recent issue and your wishes here.
+
+## Join us!
+
+Shuttle has a very active community. Join us on [Discord](https://discord.gg/shuttle), star us on [GitHub](https://github.com/shuttle-hq/shuttle), follow us on [Twitter](https://twitter.com/shuttle_dev), and watch out for video content on [YouTube](https://www.youtube.com/@shuttle-dev).
+
+If you have any questions regarding _Launchpad_, join the `#launchpad` channel on Shuttle's [Discord](https://discord.gg/shuttle).
+
+## Links, Videos, Tutorials
+
+[_Launchpad Examples_](https://github.com/ddprrt/shuttle-launchpad-examples): Check out all Launchpad Examples on GitHub.
+
+[_Best Rust Web Frameworks to Use in 2023_](https://www.shuttle.rs/blog/2023/08/23/rust-web-framework-comparison): A detailed analysis of Rust web frameworks by yours truly.
+
+[_Rust vs Go: A comparison_](https://www.shuttle.rs/blog/2023/09/27/rust-vs-go-comparison): Matthias Endler creates the same app in Rust and Go. Let's see what he figures out.
+
+[_Logging in Rust_](https://www.shuttle.rs/blog/2023/09/20/logging-in-rust): What possibilities do you have to log when creating a web application other than `println!`? This article shows you the most popular frameworks.
+
+## Bye!
+
+That's it for today. Get in touch with us and let us know what you want to see!
+
+-- [Stefan](https://oida.dev) and your friends from [Shuttle](https://shuttle.rs)

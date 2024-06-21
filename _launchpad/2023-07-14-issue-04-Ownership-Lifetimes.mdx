@@ -15,15 +15,17 @@ We want to implement a simple lottery number generator API. As always, we use Sh
 $ cargo shuttle init
 ```
 
-Pick _Axum_ for your framework, or choose the one you're most familiar with. Since we create random numbers, let's add the `rand` crate to our dependencies.
+Pick _Axum_ for your framework, or choose the one you're most familiar with. Since we create random numbers, let's add the `rand` crate to our dependencies (with the `small-rng` feature as it is required for the bulk of this issue).
 
 ```rust
-$ cargo add rand
+$ cargo add rand -F small-rng
 ```
 
 Let's start with the `Lotto` struct. The struct contains a `pot`, a vector with all the lotto numbers from 1 to an upper range. We also need a random number generator, and we use the `SmallRng` generator from the `rand` package for that.
 
 ```rust
+use rand::rngs::SmallRng;
+
 struct Lotto {
     pot: Vec<u32>,
     rng: SmallRng,
@@ -103,6 +105,8 @@ impl<'a> Lotto<'a> {
 Rust now has all the information it needs. And we can create the lotto handler function which we wire up to Axum.
 
 ```rust
+use axum::{extract::Path, response::IntoResponse, Json};
+
 async fn handler_lotto(
     Path((pot_size, amount)): Path<(u32, usize)>
 ) -> impl IntoResponse {
@@ -118,11 +122,15 @@ Fantastic! But we still create a new random number generator for every call. Let
 We also need to wrap the random number generator in an `Arc`. `Arc` is short for atomic reference counter. Since we have shared access to the random number generator, we need to make sure that we take care of all references in all threads. The `Arc` will take care of that for us. It counts up with every clone (which happens with every invocation), and then once the shared state goes out of scope, it counts down again. The original data stays intact and will only be discarded once the internal counter reaches zero. Basically a simple version of garbage collection.
 
 ```rust
+use std::sync::Arc;
+use tokio::sync::Mutex;
+use axum::{Router, routing::get, Extension};
+
 type SharedState = Arc<Mutex<SmallRng>>;
 
 #[shuttle_runtime::main]
 async fn axum() -> shuttle_axum::ShuttleAxum {
-    let state = 
+    let state =
          Arc::new(Mutex::new(SmallRng::from_entropy()));
     let router = Router::new()
         .route("/lotto/:pot/:amount", get(handler_lotto))
@@ -132,8 +140,6 @@ async fn axum() -> shuttle_axum::ShuttleAxum {
 ```
 
 To wire our shared state up, we add an `Extension` extractor to our handler function.
-
-**NOTE**: _You can also use the `with_state` call in Axum and use a `State` extractor. Shuttle currently doesn't support that, but it will in the future. `Extension` just works as well._
 
 ```rust
 async fn handler_lotto(
@@ -189,7 +195,7 @@ async fn handler_lotto(
     Extension(state): Extension<SharedState>,
 ) -> impl IntoResponse {
     let mut rng = state.lock().await;
-    let mut lotto: Lotto<'_, SmallRng> = 
+    let mut lotto: Lotto<'_, SmallRng> =
         Lotto::new(pot_size, &mut rng);
     let results = lotto.take(amount);
     Json(results)
@@ -200,7 +206,7 @@ Now you can re-use `Lotto` for every possible random number generator from the `
 
 ## Time for your feedback!
 
-We want to tailor Shuttle Launchpad to your needs! [Give us feedback](https://btl1d1x5z23.typeform.com/to/dTU2F8jI) on the most recent issue and your wishes here.
+We want to tailor Shuttle Launchpad to your needs! [Give us feedback](https://shuttlerust.typeform.com/to/dTU2F8jI) on the most recent issue and your wishes here.
 
 ## Join us!
 

@@ -5,7 +5,7 @@ const nextConfig = {
 		defaultLocale: 'en',
 	},
 	images: {
-		domains: ['github.com', 'cdn.discordapp.com'],
+		domains: ['github.com', 'cdn.discordapp.com', 'endler.dev'],
 	},
 	async rewrites() {
 		return [
@@ -21,6 +21,16 @@ const nextConfig = {
 				source: '/blog',
 				destination: '/blog/tags/all',
 				permanent: true,
+			},
+			{
+				source: '/install',
+				destination: 'https://raw.githubusercontent.com/shuttle-hq/shuttle/main/install.sh',
+				permanent: false,
+			},
+			{
+				source: '/install-win',
+				destination: 'https://raw.githubusercontent.com/shuttle-hq/shuttle/main/install.ps1',
+				permanent: false,
 			},
 		]
 	},

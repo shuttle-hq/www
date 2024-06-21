@@ -14,6 +14,7 @@ import TeamIcon from 'components/svgs/beta/TeamIcon'
 import { DISCORD_URL } from 'lib/constants'
 import Link from 'next/link'
 import { Scrollchor } from 'react-scrollchor'
+import { trackEvent } from 'lib/posthog'
 
 interface Feature {
 	icon: ReactNode
@@ -120,20 +121,23 @@ export default function Beta() {
 			<div className='group relative flex-grow overflow-hidden'>
 				<div className='px-5 py-24 sm:px-10 lg:py-28'>
 					<header>
-						<h1 className='max-w-4xl font-gradual text-5xl font-bold text-[#C2C2C2] lg:text-6.5'>
+						<h1 className='max-w-4xl font-gradual text-5xl font-bold text-head lg:text-6.5'>
 							Shuttle lets you{' '}
 							<span className='text-gradient bg-clip-text text-transparent'>
 								build backends, fast.
 							</span>
 						</h1>
-						<p className='mt-4 max-w-xl text-white dark:text-[#BEBEBE] sm:text-xl lg:text-2xl'>
+						<p className='mt-4 max-w-xl text-white dark:text-body sm:text-xl lg:text-2xl'>
 							Today, we&apos;re moving into Beta.
+						</p>
+						<p className='text-grey sm:text-m lg:text-l mt-2 max-w-xl dark:text-body'>
+							<i>Shuttle Team, 2023-06-28</i>
 						</p>
 					</header>
 				</div>
 			</div>
 			<div className='mx-auto flex w-full max-w-7xl flex-col gap-[100px] px-5 py-24 sm:px-10 lg:flex-row lg:py-28'>
-				<div className='flex flex-1 flex-col gap-5 text-center text-[#BEBEBE] lg:text-left'>
+				<div className='flex flex-1 flex-col gap-5 text-center text-body lg:text-left'>
 					<h2 className='text-[20px]'>Shuttle officially entered Alpha back in March 2022.</h2>
 					<p>
 						In just a bit over a year, we’ve been fortunate to work with thousands of users and
@@ -144,33 +148,33 @@ export default function Beta() {
 
 				<div className='flex flex-1 flex-col items-center justify-center gap-[60px] sm:flex-row sm:items-start lg:flex-col'>
 					<div className='flex flex-col items-center sm:items-start'>
-						<span className='text-[56px] font-bold text-[#C2C2C2]'>4,000+</span>
+						<span className='text-[56px] font-bold text-head'>4,000+</span>
 						<p>Users</p>
 					</div>
 					<div className='flex flex-col items-center sm:items-start'>
-						<span className='text-[56px] font-bold text-[#C2C2C2] '>3,000</span>
+						<span className='text-[56px] font-bold text-head '>3,000</span>
 						<p>Community members</p>
 					</div>
 				</div>
 
 				<div className='flex flex-1 flex-col items-center justify-center gap-[60px] sm:flex-row sm:items-start lg:flex-col'>
 					<div className='flex flex-col items-center sm:items-start'>
-						<span className='text-[56px] font-bold text-[#C2C2C2] '>4,000+</span>
+						<span className='text-[56px] font-bold text-head '>4,000+</span>
 						<p>Projects</p>
 					</div>
 					<div className='flex flex-col items-center sm:items-start'>
-						<span className='text-[56px] font-bold text-[#C2C2C2] '>68</span>
+						<span className='text-[56px] font-bold text-head '>68</span>
 						<p>Contributors</p>
 					</div>
 				</div>
 
 				<div className='flex flex-1 flex-col items-center justify-center gap-[60px] sm:flex-row sm:items-start lg:flex-col'>
 					<div className='flex flex-col items-center sm:items-start'>
-						<span className='text-[56px] font-bold text-[#C2C2C2] '>3,100+</span>
+						<span className='text-[56px] font-bold text-head '>3,100+</span>
 						<p>GitHub stars</p>
 					</div>
 					<div className='flex flex-col items-center sm:items-start'>
-						<span className='text-[56px] font-bold text-[#C2C2C2] '>∞</span>
+						<span className='text-[56px] font-bold text-head '>∞</span>
 						<p>Minutes saved</p>
 					</div>
 				</div>
@@ -179,7 +183,7 @@ export default function Beta() {
 			<div className='relative flex items-baseline justify-between gap-[80px]'>
 				<div>
 					<div className='max-w-3xl px-5 py-24 sm:px-10 lg:py-28'>
-						<h1 className='mb-[30px] text-[56px] text-[#C2C2C2]' id='01'>
+						<h1 className='mb-[30px] text-[56px] text-head' id='01'>
 							01 What is Shuttle?
 						</h1>
 
@@ -216,7 +220,7 @@ export default function Beta() {
 					</div>
 
 					<div className='max-w-3xl px-5 py-24 sm:px-10 lg:py-28'>
-						<h1 className='mb-[30px] text-[56px] text-[#C2C2C2]' id='02'>
+						<h1 className='mb-[30px] text-[56px] text-head' id='02'>
 							02 Why should I use it?
 						</h1>
 						<p className='mb-[30px]'>
@@ -243,11 +247,11 @@ export default function Beta() {
 					</div>
 
 					<div className='max-w-3xl px-5 py-24 sm:px-10 lg:py-28'>
-						<h1 className='mb-[30px] text-[56px] text-[#C2C2C2]' id='03'>
+						<h1 className='mb-[30px] text-[56px] text-head' id='03'>
 							03 What’s coming in Beta?
 						</h1>
 
-						<h2 className='mb-4 text-[32px] text-[#D8D8D8]'>Console</h2>
+						<h2 className='mb-4 text-[32px] text-head'>Console</h2>
 
 						<p className='mb-[30px]'>
 							Providing users with a variety of options to manage their projects and resources is
@@ -272,7 +276,7 @@ export default function Beta() {
 							className='mb-16'
 						/>
 
-						<h2 className='mb-4 text-[32px] text-[#D8D8D8]'>Support for more resources</h2>
+						<h2 className='mb-4 text-[32px] text-head'>Support for more resources</h2>
 
 						<p className='mb-[30px]'>
 							Continuous support for new resources is important for creating a flexible and
@@ -288,7 +292,7 @@ export default function Beta() {
 							and maintained by our lovely community so that you can get up and running quickly.
 						</p>
 
-						<h2 className='mb-4 text-[32px] text-[#D8D8D8]'>
+						<h2 className='mb-4 text-[32px] text-head'>
 							Supercharging developer productivity with LLMs
 						</h2>
 
@@ -308,7 +312,7 @@ export default function Beta() {
 							<code>shuttle-ai add-feature &quot;comments&quot;</code>.
 						</p>
 
-						<h2 className='mb-4 text-[32px] text-[#D8D8D8]'>Stability</h2>
+						<h2 className='mb-4 text-[32px] text-head'>Stability</h2>
 
 						<p className='mb-[30px]'>
 							As we transition from the alpha phase to the beta release of Shuttle, addressing
@@ -327,7 +331,7 @@ export default function Beta() {
 							stability.
 						</p>
 
-						<h2 className='mb-4 text-[32px] text-[#D8D8D8]'>Reliability</h2>
+						<h2 className='mb-4 text-[32px] text-head'>Reliability</h2>
 
 						<p className='mb-[30px]'>
 							Reliability is a cornerstone of any cloud development platform, as it ensures that
@@ -361,7 +365,7 @@ export default function Beta() {
 					</div>
 
 					<div className='max-w-3xl px-5 py-24 sm:px-10 lg:py-28'>
-						<h1 className='mb-[30px] text-[56px] text-[#C2C2C2]' id='04'>
+						<h1 className='mb-[30px] text-[56px] text-head' id='04'>
 							04 Launch week preview
 						</h1>
 
@@ -382,7 +386,7 @@ export default function Beta() {
 					</div>
 
 					<div className='max-w-3xl px-5 py-24 sm:px-10 lg:py-28'>
-						<h1 className='mb-[30px] text-[56px] text-[#C2C2C2]' id='05'>
+						<h1 className='mb-[30px] text-[56px] text-head' id='05'>
 							05 Testimonials
 						</h1>
 
@@ -431,7 +435,7 @@ export default function Beta() {
 					</div>
 
 					<div className='max-w-3xl px-5 py-24 sm:px-10 lg:py-28'>
-						<h1 className='mb-[30px] text-[56px] text-[#C2C2C2]' id='06'>
+						<h1 className='mb-[30px] text-[56px] text-head' id='06'>
 							06 What’s next
 						</h1>
 
@@ -448,9 +452,7 @@ export default function Beta() {
 									</div>
 
 									<div className='pt-2'>
-										<h3 className='mb-4 text-[24px] font-bold text-[#D8D8D8]'>
-											{feature.title}
-										</h3>
+										<h3 className='mb-4 text-[24px] font-bold text-head'>{feature.title}</h3>
 
 										<ul className='list-disc'>
 											{feature.points.map((point) => (
@@ -481,11 +483,11 @@ export default function Beta() {
 					</div>
 
 					<div className='max-w-3xl px-5 py-24 sm:px-10 lg:py-28'>
-						<h1 className='mb-[30px] text-[56px] text-[#C2C2C2]' id='07'>
+						<h1 className='mb-[30px] text-[56px] text-head' id='07'>
 							07 Fundraising
 						</h1>
 
-						<h2 className='mb-4 text-[32px] text-[#D8D8D8]'>Taking Shuttle to the Moon and Beyond!</h2>
+						<h2 className='mb-4 text-[32px] text-head'>Taking Shuttle to the Moon and Beyond!</h2>
 
 						<p className='mb-[30px]'>
 							As we are shifting gears from alpha to beta we’re excited to share that we’ve received
@@ -512,7 +514,7 @@ export default function Beta() {
 					</div>
 
 					<div className='max-w-3xl px-5 py-24 sm:px-10 lg:py-28'>
-						<h1 className='mb-[30px] text-[56px] text-[#C2C2C2]' id='08'>
+						<h1 className='mb-[30px] text-[56px] text-head' id='08'>
 							08 Growing our team
 						</h1>
 
@@ -538,7 +540,7 @@ export default function Beta() {
 						</p>
 					</div>
 				</div>
-				<div className='sticky top-8 mr-8 hidden w-[280px] flex-col gap-3 rounded-[20px] border border-[#343E47] p-6 text-[#C2C2C2] sm:flex'>
+				<div className='sticky top-8 mr-8 hidden w-[280px] flex-col gap-3 rounded-[20px] border border-[#343E47] p-6 text-head sm:flex'>
 					<p>
 						<Scrollchor to='#01'>01 What is shuttle</Scrollchor>
 					</p>
@@ -572,19 +574,31 @@ export default function Beta() {
 					fill
 					className='absolute left-0 top-0 -z-10 hidden h-full w-full rounded-b-[32px] md:block'
 				/>
-				<h2 className='text-gradient mt-12 max-w-4xl bg-clip-text text-center font-gradual text-[56px] font-bold leading-[150%] text-[#C2C2C2]'>
+				<h2 className='text-gradient mt-12 max-w-4xl bg-clip-text text-center font-gradual text-[56px] font-bold leading-[150%] text-head'>
 					Start your journey now
 				</h2>
-				<p className='mt-8 max-w-2xl text-center text-xl text-[#BEBEBE]'>
+				<p className='mt-8 max-w-2xl text-center text-xl text-body'>
 					Shuttle - a serverless backend framework with the fastest build, test and deploy times ever.
 				</p>
 
 				<div className='mt-[58px] flex gap-2'>
-					<button className='mt-4 h-[56px] w-full rounded-[14px] bg-[#D8D8D8] text-lg text-black sm:mt-0 sm:w-[154px]'>
-						Try Shuttle
-					</button>
-					<Link href={DISCORD_URL}>
-						<button className='button-shadow dark:border-gradient dark:shadow-gradient mt-4 h-[56px] w-full rounded-[14px] bg-[#000] bg-[#E9E9E9] text-lg text-[#C2C2C2] text-black hover:bg-gradient-to-r hover:from-[#fc540c] hover:to-[#f5c57a] hover:text-white dark:bg-black dark:text-[#C2C2C2] dark:hover:bg-none sm:mt-0 sm:w-[154px]'>
+					<Link
+						href='https://console.shuttle.rs/login'
+						onClick={() => {
+							trackEvent('beta_tryshuttle')
+						}}
+					>
+						<button className='mt-4 h-[56px] w-full rounded-[14px] bg-[#D8D8D8] text-lg text-black sm:mt-0 sm:w-[154px]'>
+							Try Shuttle
+						</button>
+					</Link>
+					<Link
+						href={DISCORD_URL}
+						onClick={() => {
+							trackEvent('beta_discord')
+						}}
+					>
+						<button className='button-shadow dark:border-gradient dark:shadow-gradient mt-4 h-[56px] w-full rounded-[14px] bg-[#000] bg-[#E9E9E9] text-lg text-black text-head hover:bg-gradient-to-r hover:from-[#fc540c] hover:to-[#f5c57a] hover:text-white dark:bg-black dark:text-head dark:hover:bg-none sm:mt-0 sm:w-[154px]'>
 							Join Discord
 						</button>
 					</Link>

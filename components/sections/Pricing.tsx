@@ -1,150 +1,193 @@
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import clsx from 'clsx'
-import { Button, LoginButton } from 'components/elements'
-import Image from 'next/image'
-import { FC, ReactNode, useState } from 'react'
-import { ContactUsButton } from '../elements/Button'
+import { Button } from 'components/elements'
+import { ReactElement, useState } from 'react'
+import { CONTACT_US_URI, GET_STARTED_URI } from 'lib/constants'
+import { trackEvent } from 'lib/posthog'
+
+export type TierName = 'community' | 'pro' | 'team'
+
+interface PricingTier {
+	name: TierName
+	displayName: string
+	desc: string
+	cta: string
+	ctaPrimaryButton?: boolean
+	ctaLink: string
+}
+interface PricingTableRow {
+	desc: string
+	desc2?: string
+	values: Record<TierName, PricingTableCell>
+}
+type PricingTableCell = string | boolean
+
+const TIERS: PricingTier[] = [
+	{
+		name: 'community',
+		displayName: 'Community',
+		desc: 'Everything you need to run your hobby projects, on us. Get projects deployed in minutes.',
+		cta: 'Start deploying',
+		ctaLink: 'https://console.shuttle.rs',
+	},
+	{
+		name: 'pro',
+		displayName: 'Pro',
+		desc: 'Raise limits and get access to custom domains, team features, and more.',
+		cta: 'Start 30-Day Trial',
+		ctaPrimaryButton: true,
+		ctaLink: GET_STARTED_URI,
+	},
+	{
+		name: 'team',
+		displayName: 'Team',
+		desc: "Custom-built tier to supercharge your team's productivity.",
+		cta: 'Contact us',
+		ctaLink: CONTACT_US_URI,
+	},
+]
+
+const PRICING_ROWS: PricingTableRow[] = [
+	{
+		desc: 'Max Team Size',
+		values: {
+			community: '1',
+			pro: '5',
+			team: '∞',
+		},
+	},
+	{
+		desc: 'Number of Projects',
+		values: {
+			community: '3',
+			pro: '15',
+			team: '∞',
+		},
+	},
+	{
+		desc: 'Custom Domains',
+		desc2: '(with SSL)',
+		values: {
+			community: false,
+			pro: '1 per project',
+			team: '∞',
+		},
+	},
+	{
+		desc: 'Shared DB Size',
+		values: {
+			community: '1 GB',
+			pro: '10 GB',
+			team: 'Custom',
+		},
+	},
+	{
+		desc: 'Dedicated Database',
+		desc2: '(AWS RDS)',
+		values: {
+			community: 'Add-on',
+			pro: 'Add-on',
+			team: 'Add-on',
+		},
+	},
+	{
+		desc: 'Log Retention',
+		values: {
+			community: '1 day',
+			pro: '7 days',
+			team: '28 days',
+		},
+	},
+	{
+		desc: 'Support',
+		values: {
+			community: 'Community',
+			pro: 'Enhanced',
+			team: 'Dedicated',
+		},
+	},
+	{
+		desc: 'Free Network egress',
+		desc2: 'per month',
+		values: {
+			community: '1 GB',
+			pro: '10 GB',
+			team: 'Custom',
+		},
+	},
+	{
+		desc: 'Max Deployments',
+		desc2: 'per day',
+		values: {
+			community: '20',
+			pro: 'Custom',
+			team: 'Custom',
+		},
+	},
+	{
+		desc: 'Max Build Minutes',
+		desc2: 'per deployment',
+		values: {
+			community: '10',
+			pro: 'Custom',
+			team: 'Custom',
+		},
+	},
+	{
+		desc: 'Free Object Storage',
+		desc2: '(AWS S3) (coming soon)',
+		values: {
+			community: '1 GB',
+			pro: '10 GB',
+			team: 'Custom',
+		},
+	},
+]
+
+const CROSS = (
+	<svg
+		width={15}
+		className='m-auto inline'
+		height={15}
+		viewBox='0 0 15 15'
+		fill='none'
+		xmlns='http://www.w3.org/2000/svg'
+	>
+		<path d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1' stroke='currentColor' strokeWidth='2' />
+	</svg>
+)
+
+const CHECK = (
+	<svg
+		width={15}
+		className='m-auto inline'
+		height={15}
+		viewBox='0 0 15 15'
+		fill='none'
+		xmlns='http://www.w3.org/2000/svg'
+	>
+		<path d='M1 6.5L6.33333 12L17 1' stroke='currentColor' stroke-width='2' />
+	</svg>
+)
+
+const toCellContent = (c: PricingTableCell): ReactElement => {
+	if (typeof c === 'boolean') {
+		return c ? CHECK : CROSS
+	}
+	return <>{c}</>
+}
 
 const Pricing = () => {
-	const [selectedPricing, setSelectedPricing] = useState<'monthly' | 'annual'>('monthly')
-	const [selectedMobilePlan, setSelectedMobilePlan] = useState<'hobby' | 'starter' | 'pro'>('hobby')
+	const [selectedMobilePlan, setSelectedMobilePlan] = useState<TierName>('community')
 
 	return (
-		<div className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
-			{/* <div className='flex items-center justify-center gap-5 text-xl'>
-				<div
-					className={clsx(
-						selectedPricing === 'monthly' ? 'text-black dark:text-[#C2C2C2]' : 'text-[#BEBEBE]'
-					)}
-				>
-					Monthly
-				</div>
-				<Switch
-					checked={selectedPricing !== 'monthly'}
-					setChecked={(checked) => setSelectedPricing(checked ? 'annual' : 'monthly')}
-				/>
-				<div
-					className={clsx(
-						selectedPricing === 'annual' ? 'text-black dark:text-[#C2C2C2]' : 'text-[#BEBEBE]'
-					)}
-				>
-					Annual
-					<sup className='ml-3 bg-gradient-to-r from-[#FC540C] to-[#FFD76F] bg-clip-text text-sm text-transparent'>
-						-10%
-					</sup>
-				</div>
-			</div> */}
-			<div className='mt-14 grid gap-5 lg:grid-cols-2'>
-				<div className='group relative z-10 flex flex-col items-start gap-8 overflow-hidden rounded-[2rem] bg-[#13292C] p-5 dark:bg-black sm:p-8'>
-					<Image
-						src='/images/sections/pricing/hobby/bg.png'
-						alt='background'
-						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-[2rem] object-cover'
-					/>
-					<Image
-						src='/images/sections/pricing/hobby/stars.png'
-						alt='stars'
-						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
-					/>
-					<Image
-						src='/images/sections/pricing/hobby/stars-2.png'
-						alt='stars 2'
-						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
-					/>
-					<div>
-						<h3 className='font-gradual text-[2rem] font-bold leading-none text-[#C2C2C2]'>Hobby</h3>
-						<p className='mt-2 text-[#C2C2C2]'>
-							The perfect confluence of features to run your hobby-projects for free - forever.
-						</p>
-					</div>
-					<div className='mt-auto'>
-						<p className='bg-gradient-to-r from-[#FC540C] to-[#D3893C] bg-clip-text font-gradual text-5xl font-bold text-transparent'>
-							$0
-						</p>
-						<p className='mt-1 text-sm text-[#C2C2C2]'>/ month</p>
-					</div>
-					<LoginButton variant='primary'>Get Started</LoginButton>
-				</div>
-				{/* <div className='group relative z-10 flex flex-col items-start gap-8 overflow-hidden rounded-[2rem] bg-[#13292C] p-5 shadow-[0px_0px_64px_rgba(252,84,12,0.25)] dark:bg-black sm:p-8'>
-					<Image
-						src='/images/sections/pricing/starter/bg.png'
-						alt='background'
-						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-[2rem] object-cover'
-					/>
-					<Image
-						src='/images/sections/pricing/starter/stars.png'
-						alt='stars'
-						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
-					/>
-					<Image
-						src='/images/sections/pricing/starter/stars-2.png'
-						alt='stars 2'
-						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
-					/>
-					<div>
-						<h3 className='font-gradual text-[2rem] font-bold leading-none text-[#C2C2C2]'>Starter</h3>
-						<p className='mt-2 text-[#C2C2C2]'>
-							The perfect confluence of features to run your hobby-projects for free - forever.
-						</p>
-					</div>
-					<div className='mt-auto'>
-						<p className='bg-gradient-to-r from-[#E87026] to-[#9BAC78] bg-clip-text font-gradual text-5xl font-bold text-transparent'>
-							$29
-						</p>
-						<p className='mt-1 text-sm text-[#C2C2C2]'>user / month</p>
-					</div>
-					<LoginButton variant='primary'>Get started for free</LoginButton>
-				</div> */}
-				<div className='group relative z-10 flex flex-col items-start gap-8 overflow-hidden rounded-[2rem] bg-[#13292C] p-5 dark:bg-black sm:p-8'>
-					<Image
-						src='/images/sections/pricing/pro/bg.png'
-						alt='background'
-						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-[2rem] object-cover'
-					/>
-					<Image
-						src='/images/sections/pricing/pro/stars.png'
-						alt='stars'
-						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3'
-					/>
-					<Image
-						src='/images/sections/pricing/pro/stars-2.png'
-						alt='stars 2'
-						fill
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-[2rem] object-contain transition-transform duration-1000 group-hover:-translate-x-5 group-hover:-translate-y-1'
-					/>
-					<div>
-						<h3 className='font-gradual text-[2rem] font-bold leading-none text-[#C2C2C2]'>Pro</h3>
-						<p className='mt-2 text-[#C2C2C2]'>
-							We’re still test-driving Shuttle Pro, so do get in touch if you’d like to get more
-							usage or features than is included in the Hobby tier.
-						</p>
-					</div>
-					<div className='mt-auto'>
-						<p className='bg-gradient-to-r from-[#BE964B] to-[#38D3E9] bg-clip-text font-gradual text-5xl font-bold text-transparent'>
-							Let’s chat
-						</p>
-						<p className='mt-1 text-sm text-[#C2C2C2]'>custom pricing</p>
-					</div>
-					<ContactUsButton variant='secondary'>Get Started</ContactUsButton>
-				</div>
-			</div>
+		<div className='mx-auto mt-36 w-full max-w-7xl px-4 sm:px-10 lg:mt-28'>
 			<div className='mt-24 lg:mt-32'>
-				<h2 className='font-gradual text-5xl font-bold leading-none dark:text-[#C2C2C2] lg:text-[3.5rem]'>
-					Compare plans &amp; features
-				</h2>
 				<div className='mt-16'>
 					{/* Mobile */}
 					<Splide
 						onMove={(splide, index) => {
-							setSelectedMobilePlan(index === 0 ? 'hobby' : 'pro')
+							setSelectedMobilePlan(TIERS[index].name)
 						}}
 						options={{
 							perPage: 3,
@@ -158,329 +201,100 @@ const Pricing = () => {
 							clones: 0,
 							perMove: 1,
 						}}
-						className='border-b border-black/10 py-2 dark:border-white/10 lg:hidden'
+						className='py-2 lg:hidden'
 					>
-						<SplideSlide
-							className={clsx(
-								selectedMobilePlan === 'hobby'
-									? 'text-gradient bg-clip-text text-4.5 text-transparent'
-									: 'text-xl text-[#BEBEBE]',
-								'!mt-auto font-bold leading-none transition-all'
-							)}
-						>
-							Hobby
-						</SplideSlide>
-						{/* <SplideSlide
-							className={clsx(
-								selectedMobilePlan === 'starter'
-									? 'text-gradient bg-clip-text text-4.5 text-transparent'
-									: 'text-xl text-[#BEBEBE]',
-								'!mt-auto font-bold leading-none transition-all'
-							)}
-						>
-							Starter
-						</SplideSlide> */}
-						<SplideSlide
-							className={clsx(
-								selectedMobilePlan === 'pro'
-									? 'text-gradient bg-clip-text text-4.5 text-transparent'
-									: 'text-xl text-[#BEBEBE]',
-								'!mt-auto font-bold leading-none transition-all'
-							)}
-						>
-							Pro
-						</SplideSlide>
+						{TIERS.map((t) => (
+							<SplideSlide
+								key={t.name}
+								className={clsx(
+									selectedMobilePlan === t.name ? 'text-head' : 'text-body',
+									'!mt-auto mb-[8px] text-xl font-bold leading-none transition-all'
+								)}
+							>
+								{t.displayName}
+								<div
+									className={clsx(
+										'absolute -top-1 z-[100] h-1 w-[calc(100%+10px)] translate-x-[-5px] translate-y-[1.5em]',
+										selectedMobilePlan === t.name ? 'block' : 'hidden'
+									)}
+									style={{
+										background:
+											'linear-gradient(71.78deg, #FC540C 1.89%, rgba(255, 215, 111, 0.72) 52.56%, #38D4E9 87.48%)',
+									}}
+								/>
+							</SplideSlide>
+						))}
 					</Splide>
-					<div className='space-y-8 lg:hidden'>
-						<MobilePlanFeatures
-							visible={selectedMobilePlan === 'hobby'}
-							teamSize='1'
-							deployment='unlimited'
-							numberOfProjects='5'
-							requests='150k/month'
-							workers='1'
-							databaseStorage='500MB'
-							community='Discord'
-							action={
-								<LoginButton variant='primary' className='bg-[#D8D8D8]'>
-									Get Started
-								</LoginButton>
-							}
-						/>
-						{/* <MobilePlanFeatures
-							visible={selectedMobilePlan === 'starter'}
-							teamSize='5'
-							deployment='unlimited'
-							numberOfProjects='5'
-							requests='300k/month'
-							workers='1'
-							databaseStorage='2TB'
-							subdomains='5'
-							customDomains='2'
-							community='Discord'
-							requestTurnaround='24h'
-							action={
-								<LoginButton variant='primary' className='bg-[#D8D8D8]'>
-									Get started
-								</LoginButton>
-							}
-						/> */}
-						<MobilePlanFeatures
-							visible={selectedMobilePlan === 'pro'}
-							teamSize='custom'
-							deployment='unlimited'
-							numberOfProjects='unlimited'
-							requests='custom'
-							workers='custom'
-							databaseStorage='custom'
-							customDomains='custom'
-							community='Discord'
-							requestTurnaround='8h'
-							action={<ContactUsButton variant='secondary'>Contact Us</ContactUsButton>}
-						/>
+					<div className='pt-2 lg:hidden'>
+						{TIERS.map((t) => (
+							<div
+								key={t.name}
+								className='divide-y divide-white/10 text-xl'
+								hidden={selectedMobilePlan !== t.name}
+							>
+								{PRICING_ROWS.map((r) => (
+									<div key={r.desc} className='flex justify-between gap-6 py-[0.625rem]'>
+										<div className='grow basis-3/5 text-body'>
+											{r.desc}
+											{r.desc2 ? (
+												<>
+													{' '}
+													<span className='text-sm'>{r.desc2}</span>
+												</>
+											) : null}
+										</div>
+										<div className='text-right text-head'>
+											{toCellContent(r.values[t.name])}
+										</div>
+									</div>
+								))}
+							</div>
+						))}
 					</div>
 					{/* Desktop */}
 					<div className='hidden divide-y divide-black/10 text-xl dark:divide-white/10 lg:block'>
-						<div className='grid grid-cols-3 py-[0.875rem]'>
-							<div className='font-gradual font-bold'>Features</div>
-							<div className='text-center font-gradual text-2xl font-bold text-black dark:text-[#C2C2C2]'>
-								Hobby
+						<div className='mb-8 grid grid-cols-[5fr_4fr_4fr_4fr] py-[0.875rem]'>
+							<div>{/* grid filler */}</div>
+							{TIERS.map((t) => (
+								<div key={t.name} className='text-center text-black dark:text-body'>
+									<div className='mb-4 font-gradual text-2xl font-bold'>{t.displayName}</div>
+									<div className='mx-auto mb-4 w-4/5 text-base text-body'>{t.desc}</div>
+									<Button
+										variant={t.ctaPrimaryButton ? 'tertiary' : 'blackwhite'}
+										className='mx-auto scale-[0.95] hover:bg-gradient-2'
+										href={t.ctaLink}
+										onClick={() => {
+											trackEvent(`pricing_comparison_${t.name}`)
+										}}
+									>
+										{t.cta}
+									</Button>
+								</div>
+							))}
+						</div>
+						{PRICING_ROWS.map((r) => (
+							<div
+								key={r.desc}
+								className='text-main grid grid-cols-[5fr_4fr_4fr_4fr] items-center py-2 text-center'
+							>
+								<div className='text-left text-body'>
+									{r.desc}
+									{r.desc2 ? (
+										<>
+											{' '}
+											<span className='text-sm'>{r.desc2}</span>
+										</>
+									) : null}
+								</div>
+								<div>{toCellContent(r.values['community'])}</div>
+								<div>{toCellContent(r.values['pro'])}</div>
+								<div>{toCellContent(r.values['team'])}</div>
 							</div>
-							{/* <div className='text-center font-gradual text-2xl font-bold text-black dark:text-[#C2C2C2]'>
-								Starter
-							</div> */}
-							<div className='text-center font-gradual text-2xl font-bold text-black dark:text-[#C2C2C2] '>
-								Pro
-							</div>
-						</div>
-						<div className='grid grid-cols-3 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>Team size</div>
-							<div>1</div>
-							{/* <div>5</div> */}
-							<div>custom</div>
-						</div>
-						<div className='grid grid-cols-3 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>
-								Deployment
-							</div>
-							<div>unlimited</div>
-							{/* <div>unlimited</div> */}
-							<div>unlimited</div>
-						</div>
-						<div className='grid grid-cols-3 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>
-								Number of projects
-							</div>
-							<div>5</div>
-							{/* <div>5</div> */}
-							<div>unlimited</div>
-						</div>
-						<div className='grid grid-cols-3 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>Requests</div>
-							<div>150k/month</div>
-							{/* <div>300k/month</div> */}
-							<div>custom</div>
-						</div>
-						<div className='grid grid-cols-3 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>Workers</div>
-							<div>1</div>
-							{/* <div>5</div> */}
-							<div>custom</div>
-						</div>
-						<div className='grid grid-cols-3 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>
-								Database storage
-							</div>
-							<div>500MB</div>
-							{/* <div>2TB</div> */}
-							<div>custom</div>
-						</div>
-						<div className='grid grid-cols-3 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>
-								Custom domains
-							</div>
-							<div>
-								<svg
-									width={15}
-									className='m-auto text-[#C2C2C2]'
-									height={15}
-									viewBox='0 0 15 15'
-									fill='none'
-									xmlns='http://www.w3.org/2000/svg'
-								>
-									<path
-										d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
-										stroke='currentColor'
-										strokeWidth={2}
-									/>
-								</svg>
-							</div>
-							{/* <div>2</div> */}
-							<div>custom</div>
-						</div>
-					</div>
-					<div className='mt-16 hidden divide-y divide-black/10 text-xl dark:divide-white/10 lg:block'>
-						<div className='mt-16 grid grid-cols-3 py-[0.875rem] lg:mt-0'>
-							<div className='font-gradual font-bold'>Support</div>
-						</div>
-						<div className='grid grid-cols-3 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>Community</div>
-							<div>Discord</div>
-							{/* <div>Discord</div> */}
-							<div>Discord</div>
-						</div>
-						<div className='grid grid-cols-3 items-center py-2 text-center'>
-							<div className='pl-[0.625rem] text-left text-black dark:text-[#C2C2C2]'>
-								Request turnaround
-							</div>
-							<div>
-								<svg
-									width={15}
-									className='m-auto text-[#C2C2C2]'
-									height={15}
-									viewBox='0 0 15 15'
-									fill='none'
-									xmlns='http://www.w3.org/2000/svg'
-								>
-									<path
-										d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
-										stroke='currentColor'
-										strokeWidth={2}
-									/>
-								</svg>
-							</div>
-							{/* <div>24h</div> */}
-							<div>8h</div>
-						</div>
-						<div className='grid grid-cols-3 items-center pt-11 text-center'>
-							<div />
-							<div>
-								<LoginButton variant='primary' className='mx-auto bg-[#D8D8D8]'>
-									Get Started
-								</LoginButton>
-							</div>
-							{/* <div>
-								<Button variant='primary' className='mx-auto bg-[#D8D8D8]'>
-									Get started
-								</Button>
-							</div> */}
-							<div>
-								<ContactUsButton variant='secondary' className='mx-auto'>
-									Contact Us
-								</ContactUsButton>
-							</div>
-						</div>
+						))}
 					</div>
 				</div>
 			</div>
 		</div>
 	)
 }
-
-interface MobilePlanFeaturesProps {
-	visible?: boolean
-	teamSize: string
-	deployment: string
-	numberOfProjects: string
-	requests: string
-	workers: string
-	databaseStorage: string
-	customDomains?: string
-	community: string
-	requestTurnaround?: string
-	action: ReactNode
-}
-
-const MobilePlanFeatures: FC<MobilePlanFeaturesProps> = ({
-	visible,
-	teamSize,
-	deployment,
-	numberOfProjects,
-	requests,
-	workers,
-	databaseStorage,
-	customDomains,
-	community,
-	requestTurnaround,
-	action,
-}) => {
-	return (
-		<div className='divide-y divide-black/10 text-xl dark:divide-white/10' hidden={!visible}>
-			<div className='px-2 py-[0.875rem] font-gradual font-bold'>Features</div>
-			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
-				<div className='text-[#525151] dark:text-[#C2C2C2]'>Team size</div>
-				<div className='text-right'>{teamSize}</div>
-			</div>
-			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
-				<div className='text-[#525151] dark:text-[#C2C2C2]'>Deployment</div>
-				<div className='text-right'>{deployment}</div>
-			</div>
-			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
-				<div className='text-[#525151] dark:text-[#C2C2C2]'>Number of projects</div>
-				<div className='text-right'>{numberOfProjects}</div>
-			</div>
-			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
-				<div className='text-[#525151] dark:text-[#C2C2C2]'>Requests</div>
-				<div className='text-right'>{requests}</div>
-			</div>
-			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
-				<div className='text-[#525151] dark:text-[#C2C2C2]'>Workers</div>
-				<div className='text-right'>{workers}</div>
-			</div>
-			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
-				<div className='text-[#525151] dark:text-[#C2C2C2]'>Database storage</div>
-				<div className='text-right'>{databaseStorage}</div>
-			</div>
-			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
-				<div className='text-[#525151] dark:text-[#C2C2C2]'>Custom domains</div>
-				<div className='text-right'>
-					{customDomains || (
-						<svg
-							width={15}
-							className='ml-auto h-full text-[#C2C2C2]'
-							height={15}
-							viewBox='0 0 15 15'
-							fill='none'
-							xmlns='http://www.w3.org/2000/svg'
-						>
-							<path
-								d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
-								stroke='currentColor'
-								strokeWidth={2}
-							/>
-						</svg>
-					)}
-				</div>
-			</div>
-			<div className='mt-16 px-2 py-[0.875rem] font-gradual font-bold lg:mt-0'>Support</div>
-			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
-				<div className='text-[#525151] dark:text-[#C2C2C2]'>Community</div>
-				<div className='text-right'>{community}</div>
-			</div>
-			<div className='grid grid-cols-2 px-2 py-[0.625rem]'>
-				<div className='text-[#525151] dark:text-[#C2C2C2]'>Request turnaround</div>
-				<div className='text-right'>
-					{requestTurnaround || (
-						<svg
-							width={15}
-							className='ml-auto h-full text-[#C2C2C2]'
-							height={15}
-							viewBox='0 0 15 15'
-							fill='none'
-							xmlns='http://www.w3.org/2000/svg'
-						>
-							<path
-								d='M1 14L7.5 7.5M14 1L7.5 7.5M7.5 7.5L14 14M7.5 7.5L1 1'
-								stroke='currentColor'
-								strokeWidth={2}
-							/>
-						</svg>
-					)}
-				</div>
-			</div>
-			<div className='flex justify-center pt-5'>{action}</div>
-		</div>
-	)
-}
-
 export default Pricing

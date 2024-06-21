@@ -1,0 +1,58 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 373 188" width="373" height="188">
+	<title>1-svg</title>
+	<defs>
+		<clipPath clipPathUnits="userSpaceOnUse" id="cp1">
+			<path d="m0 20c0-11.05 8.95-20 20-20h333c11.05 0 20 8.95 20 20v148c0 11.05-8.95 20-20 20h-333c-11.05 0-20-8.95-20-20z"/>
+		</clipPath>
+		<clipPath clipPathUnits="userSpaceOnUse" id="cp2">
+			<path d="m-409-240h1920v1000h-1920z"/>
+		</clipPath>
+		<filter x="-50%" y="-50%" width="200%" height="200%" id="f1"> <feGaussianBlur stdDeviation="3"/> </filter>
+		<filter x="-50%" y="-50%" width="200%" height="200%" id="f2"> <feGaussianBlur stdDeviation="150"/> </filter>
+		<linearGradient id="g1" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(236.728,-690.601,805.75,276.199,224,479.144)">
+			<stop offset="0" stop-color="#fc540c" stop-opacity="1"/>
+			<stop offset=".526" stop-color="#ffd76f" stop-opacity=".17"/>
+			<stop offset=".926" stop-color="#38d4e9" stop-opacity="1"/>
+		</linearGradient>
+	</defs>
+	<style>
+		.s0 { fill: #000000 } 
+		.s1 { filter: url(#f1);fill: #c2c2c2 } 
+		.s2 { fill: #c2c2c2 } 
+		.s3 { opacity: .6;filter: url(#f2);fill: url(#g1) } 
+	</style>
+	<g id="Layer">
+		<g id="Clip-Path" clip-path="url(#cp1)">
+			<g id="Layer">
+				<path id="Layer" class="s0" d="m0 20c0-11 9-20 20-20h333c11 0 20 9 20 20v148c0 11-9 20-20 20h-333c-11 0-20-9-20-20z"/>
+				<g id="Clip-Path" clip-path="url(#cp2)">
+					<g id="Layer">
+						<g id="Layer" style="opacity: .5">
+							<g id="Layer">
+								<path id="Layer" class="s1" d="m156.3 39.2c-0.2 0.8-1 1.3-1.9 1.1-0.8-0.2-1.2-1-1-1.9 0.2-0.8 1-1.2 1.8-1 0.8 0.2 1.3 1 1.1 1.8z"/>
+							</g>
+						</g>
+						<g id="Layer" style="opacity: .5">
+							<g id="Layer">
+								<path id="Layer" class="s1" d="m3.5 163.2c-0.2 0.8-1 1.3-1.8 1.1-0.8-0.2-1.3-1-1.1-1.8 0.2-0.8 1.1-1.3 1.9-1.1 0.8 0.2 1.2 1 1 1.8z"/>
+							</g>
+						</g>
+						<g id="Layer" style="opacity: .5">
+							<path id="Layer" class="s2" d="m355.4 174.6c0.1 0.4 0.5 0.6 0.9 0.5 0.4-0.1 0.6-0.5 0.5-0.9-0.1-0.4-0.5-0.7-0.9-0.6-0.4 0.2-0.7 0.6-0.5 1z"/>
+						</g>
+						<g id="Layer" style="opacity: .4">
+						</g>
+						<g id="Layer" style="opacity: .2">
+						</g>
+						<g id="Layer" style="opacity: .5">
+							<path id="Layer" class="s2" d="m229 131l-4.5 0.5-0.5 4.5-0.5-4.5-4.5-0.5 4.5-0.5 0.5-4.5 0.5 4.5z"/>
+						</g>
+					</g>
+				</g>
+				<g id="Layer">
+					<path id="Layer" class="s3" d="m1040.9-31.3l-30.5 375.9-926.2 126.3 56.7-415.3z"/>
+				</g>
+			</g>
+		</g>
+	</g>
+</svg>

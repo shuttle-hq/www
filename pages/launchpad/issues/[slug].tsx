@@ -2,8 +2,6 @@ import matter from 'gray-matter'
 import { serialize } from 'next-mdx-remote/serialize'
 import { NextSeo } from 'next-seo'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
-import { useMemo } from 'react'
 import { generateReadingTime } from 'lib/helpers'
 import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote'
 import gfm from 'remark-gfm'
@@ -17,9 +15,9 @@ import { GetStaticPropsContext, GetStaticPropsResult } from 'next'
 import { ParsedUrlQuery } from 'querystring'
 import Link from 'next/link'
 import clsx from 'clsx'
-import { CopyButton } from 'components/elements'
 import { TwitterTweetEmbed } from 'react-twitter-embed'
 import { Issue, getAllIssueSlugs, getIssueData } from 'lib/launchpad/issues'
+import { Pre } from 'components/blog/Pre'
 
 export async function getStaticPaths() {
 	const paths = getAllIssueSlugs()
@@ -84,70 +82,6 @@ export async function getStaticProps({
 	}
 }
 
-const Pre = ({ children, ...props }: any) => {
-	let line = 0
-
-	const code = useMemo(() => {
-		return [children.props.children]
-			.flat()
-			.flatMap((child) => {
-				if (typeof child !== 'string') {
-					return child.props.children
-				} else {
-					return child
-				}
-			})
-			.join('')
-	}, [children])
-
-	return (
-		<div className={clsx('relative')}>
-			<CopyButton code={code} className='absolute right-2 top-2 inline-flex items-center' />
-			<pre
-				{...props}
-				className={clsx(
-					'!border !border-black/10 !bg-white !pr-16 !text-sm text-[#525151] dark:!border-white/10 dark:!bg-black dark:text-[#BEBEBE] [&>*]:!bg-white dark:[&>*]:!bg-black',
-					props.className ?? 'language-'
-				)}
-			>
-				{{
-					...children,
-					props: {
-						...children.props,
-						className: children.props.className ?? 'language-',
-						children: [
-							...[children.props.children].flat().flatMap((child) => {
-								if (typeof child === 'string') {
-									const [head, ...tail] = child.split('\n')
-									return [
-										head,
-										...tail.flatMap((child) => {
-											line++
-
-											return [
-												'\n',
-												// <span
-												// 	key={head}
-												// 	className='mr-4 inline-block w-4 select-none text-right italic text-[rgb(92,99,112)] last:hidden'
-												// >
-												// 	{line}
-												// </span>,
-												child,
-											]
-										}),
-									]
-								} else {
-									return child
-								}
-							}),
-						],
-					},
-				}}
-			</pre>
-		</div>
-	)
-}
-
 const mdxComponents: MDXRemoteProps['components'] = {
 	a(props) {
 		if (props?.href?.match(/^https?:\/\//)) {
@@ -174,8 +108,8 @@ const mdxComponents: MDXRemoteProps['components'] = {
 	TLDR: (props: any) => {
 		return (
 			<div className='mb-24 text-left text-xl'>
-				<span className='font-bold text-[#C2C2C2]'>TLDR;</span>
-				<span className='text-[#BEBEBE] prose-p:!my-2'>{props.children}</span>
+				<span className='font-bold text-head'>TLDR;</span>
+				<span className='text-body prose-p:!my-2'>{props.children}</span>
 			</div>
 		)
 	},
@@ -195,7 +129,7 @@ const mdxComponents: MDXRemoteProps['components'] = {
 	},
 	blockquote(props) {
 		return (
-			<blockquote className='border-none bg-[linear-gradient(180deg,_#FC540C_25.63%,_rgba(255,_215,_111,_0.72)_60.67%,_#38D4E9_88.15%)] pl-2 text-left text-2xl font-normal not-italic text-[#525151] dark:text-[#BEBEBE]'>
+			<blockquote className='border-none bg-[linear-gradient(180deg,_#FC540C_25.63%,_rgba(255,_215,_111,_0.72)_60.67%,_#38D4E9_88.15%)] pl-2 text-left text-2xl font-normal not-italic text-body'>
 				<div className='bg-[#E9E9E9] py-1 pl-8 prose-p:!my-0 dark:bg-black'>{props.children}</div>
 			</blockquote>
 		)
@@ -207,8 +141,6 @@ interface Props {
 }
 
 export default function IssuePage(props: Props) {
-	const { basePath } = useRouter()
-
 	return (
 		<>
 			<NextSeo
@@ -216,7 +148,7 @@ export default function IssuePage(props: Props) {
 				openGraph={{
 					title: props.issue.title,
 					description: props.issue.description,
-					url: `${SITE_URL}blog/${props.issue.slug}`,
+					url: `${SITE_URL}launchpad/${props.issue.slug}`,
 					type: 'article',
 					article: {
 						publishedTime: props.issue.date,
@@ -225,14 +157,12 @@ export default function IssuePage(props: Props) {
 							return cat
 						}),
 					},
-					images: [
-						{
-							url: `${SITE_URL}${basePath}/images/blog/${props.issue.thumb}`,
-						},
-					],
 				}}
 			/>
 			<div className='mx-auto max-w-4xl p-4 sm:p-6 lg:p-8'>
+				<Link href='/launchpad/issues'>
+					<span className='mb-3'>← See all issues</span>
+				</Link>
 				<div className='grid grid-cols-1 gap-6 gap-y-12 lg:grid-cols-4'>
 					<div className='lg:col-span-3'>
 						{props.issue.content && (
@@ -245,7 +175,7 @@ export default function IssuePage(props: Props) {
 									'prose-headings:before:pt-36',
 									'prose-headings:lg:before:-mt-20',
 									'prose-headings:before:lg:pt-20',
-									'text-xl text-[#525151] prose-h2:text-5xl prose-h4:text-3xl prose-h5:text-2xl dark:text-[#BEBEBE]'
+									'text-xl text-body prose-h2:text-5xl prose-h4:text-3xl prose-h5:text-2xl'
 								)}
 							>
 								<MDXRemote {...props.issue.content} components={mdxComponents} />

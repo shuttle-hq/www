@@ -3,6 +3,7 @@ import { Grid } from '@splidejs/splide-extension-grid'
 import { Button } from 'components/elements'
 import { getAuthors } from 'lib/blog/authors'
 import { Post } from 'lib/blog/posts'
+import { trackEvent } from 'lib/posthog'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC, useState } from 'react'
@@ -15,10 +16,10 @@ const FeaturedBlogPosts: FC<FeaturedBlogPostsProps> = ({ posts = [] }) => {
 	return (
 		<div className='mt-24 overflow-hidden lg:mt-32 desktop:mt-40'>
 			<div className='mx-auto w-full max-w-[1000px] px-5 sm:px-10'>
-				<h2 className='font-gradual text-5xl font-bold text-black dark:text-[#C2C2C2] lg:text-[3.5rem]'>
+				<h2 className='font-gradual text-5xl font-bold text-black dark:text-head lg:text-[3.5rem]'>
 					What’s new
 				</h2>
-				<p className='mt-5 text-xl text-[#525151] dark:text-white/40 lg:text-2xl'>
+				<p className='text-main mt-5 text-xl lg:text-2xl'>
 					Read about Rust, Shuttle and development in general
 				</p>
 			</div>
@@ -87,6 +88,9 @@ const Article: FC<ArticleProps> = ({ post, className }) => {
 			<Link
 				href={`/blog/${post.url}`}
 				className='group block rounded-2.5xl bg-[#13292C] transition duration-500 hover:shadow-[0px_4px_64px_0px_rgba(252,84,12,0.25)] dark:border dark:border-[#1E1B19] dark:bg-black'
+				onClick={() => {
+					trackEvent(`homepage_whatsnew_blogpost_${post.title}`)
+				}}
 			>
 				<div className='relative aspect-[381/214] w-full overflow-hidden rounded-t-2.5xl'>
 					<Image
@@ -110,7 +114,7 @@ const Article: FC<ArticleProps> = ({ post, className }) => {
 							className={authorImage !== '/images/logo.png' ? 'rounded-full' : ''}
 						/>
 						<div>
-							<h3 className='font-gradual font-bold text-[#C2C2C2]'>
+							<h3 className='font-gradual font-bold text-head'>
 								{firstAuthor?.author || 'Shuttle'}
 								{firstAuthor?.position ? ` - ${firstAuthor.position}` : ''}
 							</h3>

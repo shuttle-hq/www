@@ -1,7 +1,6 @@
 ---
 title: Building and Deploying a URL shortener with Rust in 10 minutes or less
 description: Terrence hacks together a URL shortener way past midnight
-author: terrencewaters
 tags: [rust]
 thumb: 0959.png
 date: "2022-04-13T18:18:00"
@@ -15,7 +14,7 @@ My deployment broke production at 10pm (because I never learn) and I had to deal
 
 I don't want to have to deal with Terraform and Kubernetes at midnight. I want to write scalable code and just get it deployed. I want my dependencies generated and managed for me. I want to be able to sleep at night.
 
-It's 2022. **Surely** we can do better. As I stared blankly at my white ceiling, I decided to see if it was possible.
+It's 2023. **Surely** we can do better. As I stared blankly at my white ceiling, I decided to see if it was possible.
 
 I suddenly sat up in bed. Can I create a useful app, with some sort of database state, a custom subdomain, focus _only_ on my application code without needing to worry about infrastructure _and_ get it done in 10 minutes or less? I'll write a URL shortener or something. I'll write in Rust. I'll write it tonight.
 
@@ -106,7 +105,7 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-rocket = { version = "0.5.0-rc.1", features = ["json"] }
+rocket = { version = "0.5.0-rc.4", features = ["json"] }
 shuttle-service = { version = "0.2", features = ["sqlx-postgres", "web-rocket"] }
 ```
 
@@ -118,14 +117,15 @@ $ cargo shuttle deploy
    Archiving Cargo.toml
    Archiving Cargo.toml.orig
    Archiving src/lib.rs
-   Compiling tracing-attributes v0.1.20
-   Compiling tokio-util v0.6.9
-   Compiling multer v2.0.2
-   Compiling hyper v0.14.18
-   Compiling rocket_http v0.5.0-rc.1
-   Compiling rocket_codegen v0.5.0-rc.1
-   Compiling rocket v0.5.0-rc.1
-   Compiling shuttle-service v0.2.5
+   Compiling tracing-attributes v0.1.27
+   Compiling tokio-util v0.7.10
+   Compiling multer v2.1.0
+   Compiling hyper v0.14.27
+   Compiling rocket_http v0.5.0-rc.4
+   Compiling rocket_codegen v0.5.0-rc.4
+   Compiling rocket v0.5.0-rc.4
+   Compiling shuttle-rocket v0.32.0
+   Compiling shuttle-rutnime v0.32.0
    Compiling url-shortener v0.1.0 (/opt/shuttle/crates/url-shortener)
     Finished dev [unoptimized + debuginfo] target(s) in 1m 01s
 

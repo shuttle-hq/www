@@ -15,7 +15,7 @@ const BlogSidebar: FC<BlogSidebarProps> = ({ tags, relatedPosts, toc, mdxCompone
 		<div className='relative w-full'>
 			<div className='w-full space-y-6 lg:sticky lg:top-0'>
 				<div className='rounded-3xl border border-black/10 px-6 py-4 dark:border-white/10'>
-					<div className='mb-2 dark:text-[#C2C2C2]'>Categories</div>
+					<div className='mb-2 dark:text-head'>Categories</div>
 
 					<div className='flex flex-wrap gap-2'>
 						{(tags || []).map((tag: string) => {
@@ -32,23 +32,23 @@ const BlogSidebar: FC<BlogSidebarProps> = ({ tags, relatedPosts, toc, mdxCompone
 					</div>
 				</div>
 				<div className='rounded-3xl border border-black/10 px-6 py-4 dark:border-white/10'>
-					<div className='mb-4 dark:text-gray-200'>On this page</div>
+					<div className='mb-4 text-head'>On this page</div>
 					{toc && (
-						<div className='prose prose-toc !mt-0 pl-4 dark:prose-dark-toc'>
+						<div className='prose prose-toc !mt-0 pl-4 text-body dark:prose-dark-toc'>
 							<MDXRemote {...toc} components={mdxComponents} />
 						</div>
 					)}
 				</div>
 				{relatedPosts.length > 0 ? (
 					<div className='rounded-3xl border border-black/10 px-6 py-4 dark:border-white/10'>
-						<div className='mb-4 dark:text-[#C2C2C2]'>Related articles</div>
+						<div className='mb-4 dark:text-head'>Related articles</div>
 
 						<div className='relative flex flex-col gap-2 space-y-3'>
 							{relatedPosts.map((post, index) => (
 								<Link
 									href={`/blog/${post.url}`}
 									key={index}
-									className='relative left-0 flex gap-2 text-sm text-slate-500 transition-all duration-500 hover:left-1 hover:text-slate-900 dark:text-[#BEBEBE] hover:dark:text-white'
+									className='relative left-0 flex gap-2 text-sm text-slate-500 transition-all duration-500 hover:left-1 hover:text-slate-900 dark:text-body hover:dark:text-white'
 								>
 									<svg
 										width='24'
@@ -70,7 +70,7 @@ const BlogSidebar: FC<BlogSidebarProps> = ({ tags, relatedPosts, toc, mdxCompone
 							<div className='mt-2'>
 								<Link
 									href='/blog/tags/all'
-									className='group flex cursor-pointer items-center space-x-2 text-sm text-[#525151] hover:text-black hover:underline dark:text-[#BEBEBE] hover:dark:text-white'
+									className='group flex cursor-pointer items-center space-x-2 text-sm text-body hover:text-black hover:underline hover:dark:text-white'
 								>
 									<span>View all</span>
 									<svg

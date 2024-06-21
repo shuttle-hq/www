@@ -1,12 +1,13 @@
 import { Description, Form, Waitlist } from 'components/sections/Launchpad'
-import LaunchpadIssues, { Issue } from 'components/sections/Launchpad/LaunchpadIssues'
-import { getAllTags, getSortedIssues } from 'lib/launchpad/issues'
+import { Issue } from 'components/sections/Launchpad/LaunchpadIssues'
+import { getSortedIssues } from 'lib/launchpad/issues'
+import { trackEvent } from 'lib/posthog'
 import { GetStaticPropsResult } from 'next'
+import { NextSeo } from 'next-seo'
 import Link from 'next/link'
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
 	const issues = getSortedIssues(0)
-	console.log('issues:', issues)
 
 	return {
 		props: {
@@ -22,14 +23,16 @@ interface Props {
 export default function Launchpad(props: Props) {
 	const { issues = [] } = props
 
-	console.log('issues:', issues)
-
 	return (
 		<>
+			<NextSeo
+				title='Launchpad by Shuttle - Learn Rust in Bite-Sized Chunks'
+				description='Subscribe to Launchpad, the newsletter dedicated to learning Rust. Enjoy byte-sized educational chunks to empower your Rust programming skills.'
+			/>
 			<Form />
 			<Description />
 			<section className='relative mx-auto max-w-[600px] px-5 pb-28 pt-28 sm:px-10'>
-				<h1 className='mb-4 text-[32px] font-bold text-[#C2C2C2]'>Past issues</h1>
+				<h1 className='mb-4 text-[32px] font-bold text-head'>Past issues</h1>
 				<p className='mb-[40px]'>
 					For our upcoming issues, we have some exciting project ideas lined up for you, such as an
 					e-commerce application that performs safe transactions with a payment provider and an Activity
@@ -40,8 +43,13 @@ export default function Launchpad(props: Props) {
 					<Issue key={issue.slug} idx={idx} issue={issue} />
 				))}
 
-				<Link href='/launchpad/issues'>
-					<p className='mt-4 text-right text-[#BEBEBE]'>
+				<Link
+					href='/launchpad/issues'
+					onClick={() => {
+						trackEvent('launchpad_seemore')
+					}}
+				>
+					<p className='mt-4 text-right text-body'>
 						See More <span className='ml-4'>→</span>
 					</p>
 				</Link>

@@ -4,60 +4,43 @@ import clsx from 'clsx'
 import { Copy } from 'components/svgs'
 import { CodeBlock } from 'components/elements'
 import { useCopyToClipboard, useIntersection } from 'react-use'
+import { trackEvent } from 'lib/posthog'
+
+type GetStartedStep =
+	| 'homepage_getstartedinseconds_clipboard_install'
+	| 'homepage_getstartedinseconds_clipboard_initalize'
+	| 'homepage_getstartedinseconds_clipboard_deploy'
 
 const GetStarted = () => {
 	const [selectedSlide, setSelectedSlide] = useState(0)
-	const [locked, setLocked] = useState(false)
 
-	const intersectionRef = useRef(null)
-	const intersection = useIntersection(intersectionRef, {
-		root: null,
-		rootMargin: '0px',
-		threshold: 1,
-	})
-
-	const handleClick = (id: number, lock?: boolean) => {
-		// If the user is already locked on a slide, don't allow them to change slides by hovering (when lock is undefined)
-		if (locked && !lock) return
-
+	const handleClick = (id: number) => {
 		setSelectedSlide(id)
-
-		if (lock) setLocked(true)
 	}
-
-	useEffect(() => {
-		const interval = setInterval(() => {
-			if (!locked && (intersection?.intersectionRatio || 0) === 1)
-				setSelectedSlide((selectedSlide) => (selectedSlide === 2 ? 0 : selectedSlide + 1))
-		}, 5000)
-
-		return () => clearInterval(interval)
-	}, [locked, intersection])
 
 	return (
 		<>
 			<div className='mx-auto mt-24 w-full max-w-[800px] px-5 sm:mt-28 sm:px-10 lg:mt-32 xl:mt-36 desktop:mt-52'>
-				<h2 className='font-gradual text-4.5 font-bold leading-none dark:text-[#C2C2C2]'>
-					Get started in seconds
-				</h2>
+				<h2 className='font-gradual text-4.5 font-bold leading-none text-head'>Get started in seconds</h2>
 				<p className='mt-5 lg:text-xl'>
 					Build an app with your favourite Rust framework and deploy it immediately. We’ll take care of
 					all the infrastructure.
 				</p>
 			</div>
-			<div
-				className='mx-auto mt-10 w-full max-w-7xl gap-x-6 px-5 sm:px-10 lg:mt-16 lg:grid lg:grid-cols-[1fr_400px] lg:gap-5 xl:mt-20 xl:items-center xl:gap-12'
-				onMouseLeave={() => setLocked(false)}
-				ref={intersectionRef}
-			>
-				<div className='group relative z-10 block h-full items-end overflow-hidden rounded-2xl bg-[#13292C] px-8 pt-16 dark:bg-black sm:mt-10 sm:items-center sm:px-4 sm:px-12 sm:py-24 lg:mt-0 lg:items-end lg:items-center lg:px-8 lg:py-12 xl:flex xl:p-[4.375rem] desktop:items-end desktop:pt-[2.75rem] desktop:pb-0'>
+			<div className='mx-auto mt-10 w-full max-w-7xl gap-x-6 px-5 sm:px-10 lg:mt-16 lg:grid lg:grid-cols-[1fr_400px] lg:gap-5 xl:mt-20 xl:items-center xl:gap-12'>
+				<div className='group relative z-10 block h-full items-end overflow-hidden rounded-2xl bg-[#13292C] px-8 pt-16 dark:bg-black sm:mt-10 sm:h-[600px] sm:items-center sm:px-12 sm:px-4 sm:py-24 lg:mt-0 lg:items-end lg:items-center lg:px-8 lg:py-12 xl:flex xl:p-[4.375rem] desktop:items-end desktop:pb-0 desktop:pt-[2.75rem]'>
 					<CodeBlock
-						language={selectedSlide === 1 ? 'rust' : 'none' }
-						code={selectedSlide === 0 ? SHUTTLE_INSTALL : selectedSlide === 1 ? SHUTTLE_INIT : SHUTTLE_DEPLOY }
-						showLineNumbers
-						className={clsx(
-							'absolute left-1/2 mx-auto h-full -translate-x-1/2 transform overflow-auto rounded-t-xl sm:rounded-xl lg:w-full lg:rounded-t-3xl lg:rounded-b-3xl xl:overflow-hidden desktop:relative desktop:-bottom-px desktop:rounded-b-none'
-						)}
+						language={selectedSlide === 1 ? 'rust' : 'none'}
+						showLineNumbers={selectedSlide === 1}
+						copyBtn={selectedSlide === 1}
+						code={
+							selectedSlide === 0
+								? SHUTTLE_INSTALL
+								: selectedSlide === 1
+								? SHUTTLE_INIT
+								: SHUTTLE_DEPLOY
+						}
+						className='absolute left-1/2 mx-auto h-full -translate-x-1/2 transform overflow-auto rounded-t-xl sm:block sm:rounded-xl lg:w-full lg:rounded-b-3xl lg:rounded-t-3xl xl:overflow-hidden desktop:relative desktop:-bottom-px desktop:rounded-b-none'
 					/>
 					<Image
 						src='/images/sections/get-started/noise.png'
@@ -70,14 +53,14 @@ const GetStarted = () => {
 						alt='get started background'
 						width={739}
 						height={422}
-						className='pointer-events-none absolute left-0 bottom-0 -z-10 w-full opacity-50 transition duration-500 group-hover:opacity-70'
+						className='pointer-events-none absolute bottom-0 left-0 -z-10 w-full opacity-50 transition duration-500 group-hover:opacity-70'
 					/>
 					<Image
 						src='/images/sections/get-started/top-left.png'
 						alt='get started top'
 						width={366}
 						height={233}
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full object-cover group-hover:-top-5 group-hover:-left-5'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full object-cover group-hover:-left-5 group-hover:-top-5'
 					/>
 					{/* Tablet */}
 					<Image
@@ -92,7 +75,7 @@ const GetStarted = () => {
 						width={595}
 						height={487}
 						sizes='100vw, (min-width: 768px) 768px'
-						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full object-contain transition-transform duration-1000 group-hover:translate-x-20 group-hover:-translate-y-3 sm:hidden lg:block'
+						className='pointer-events-none absolute left-0 top-0 -z-10 h-full w-full object-contain transition-transform duration-1000 group-hover:-translate-y-3 group-hover:translate-x-20 sm:hidden lg:block'
 					/>
 					<Image
 						src='/images/sections/get-started/stars-2.png'
@@ -104,24 +87,26 @@ const GetStarted = () => {
 					/>
 				</div>
 
-				<div className='mt-12 flex h-full gap-3 overflow-y-hidden overflow-x-scroll p-1 lg:mt-0 lg:flex-col lg:overflow-visible'>
+				<div className='mt-12 flex gap-3 overflow-y-hidden overflow-x-scroll p-1 lg:mt-0 lg:flex-col lg:overflow-visible'>
 					<GetStartedSlide
 						number={0}
 						title='Install'
-						command="cargo install cargo-shuttle"
+						command='cargo install cargo-shuttle'
 						text='Install the CLI'
 						handleClick={handleClick}
 						isSelected={0 === selectedSlide}
 						gradient='from-[#FC540C] to-[#C39348]'
+						step='homepage_getstartedinseconds_clipboard_install'
 					/>
 					<GetStartedSlide
 						number={1}
 						title='Initialize'
-						command="cargo shuttle init"
+						command='cargo shuttle init'
 						text='Bootstrap your project'
 						handleClick={handleClick}
 						isSelected={1 === selectedSlide}
 						gradient='from-[#D1883C] to-[#ABA363]'
+						step='homepage_getstartedinseconds_clipboard_initalize'
 					/>
 					<GetStartedSlide
 						number={2}
@@ -131,6 +116,7 @@ const GetStarted = () => {
 						handleClick={handleClick}
 						isSelected={2 === selectedSlide}
 						gradient='from-[#C19549] to-[#8AB58D]'
+						step='homepage_getstartedinseconds_clipboard_deploy'
 					/>
 				</div>
 			</div>
@@ -146,6 +132,7 @@ interface GetStartedSlideProps {
 	gradient?: string
 	handleClick: (id: number, lock?: boolean) => void
 	isSelected: boolean
+	step: GetStartedStep
 }
 
 const GetStartedSlide: FC<GetStartedSlideProps> = ({
@@ -156,107 +143,108 @@ const GetStartedSlide: FC<GetStartedSlideProps> = ({
 	gradient,
 	handleClick,
 	isSelected,
+	step,
 }) => {
-	const [_, copyToClipboard] = useCopyToClipboard();
+	const [_, copyToClipboard] = useCopyToClipboard()
 	// React splide is 0-indexed
 	const adjustedNumber = number + 1
 
 	return (
-		<div onClick={() => handleClick(number, true)}
-			 onMouseEnter={() => handleClick(number)}
-			 className={clsx(
-				 'group relative h-max min-w-max cursor-pointer p-[1px] cursor-pointer rounded-2xl transition after:rounded-2xl',
-				 isSelected ? clsx('bg-gradient-to-r to-transparent', gradient) : 'transparent'
-			 )}
+		<div
+			onMouseEnter={() => handleClick(number)}
+			className={clsx(
+				'group relative h-max min-w-max cursor-pointer cursor-pointer rounded-2xl p-[1px] transition after:rounded-2xl',
+				isSelected ? clsx('bg-gradient-to-r to-transparent', gradient) : 'transparent'
+			)}
 		>
-			<div className={clsx('bg-[#E9E9E9] dark:bg-black p-6 rounded-2xl after:rounded-2xl')}>
-				<h3 className='font-gradual text-2xl font-bold dark:text-[#C2C2C2]'>
-				<span className={clsx('bg-gradient-to-r bg-clip-text text-transparent', gradient)}>
-					0{adjustedNumber}
-				</span>
+			<div className={clsx('rounded-2xl bg-[#E9E9E9] p-6 after:rounded-2xl dark:bg-black')}>
+				<h3 className='font-gradual text-2xl font-bold dark:text-head'>
+					<span className={clsx('bg-gradient-to-r bg-clip-text text-transparent', gradient)}>
+						0{adjustedNumber}
+					</span>
 					&nbsp;{title}
 				</h3>
 				<p className='mt-2'>{text}</p>
 
 				<div className='relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none'>
 					$ {command}
-					<button className='absolute right-3 rounded-lg border border-transparent p-1 hover:border-[#484848] hover:bg-[#343434] dark:text-[#C2C2C2]'>
-						<Copy onClick={() => copyToClipboard(command)}/>
+					<button
+						className='absolute right-3 rounded-lg border border-transparent p-1 hover:border-[#484848] hover:bg-[#343434] dark:text-head'
+						onClick={() => {
+							trackEvent(step)
+							copyToClipboard(command)
+						}}
+					>
+						<Copy />
 					</button>
 				</div>
 
-				{/* If it the whole slide isn't outlined, add a line under the slide */}
-				{adjustedNumber !== 1 && (
-					<hr className='absolute -bottom-px left-6 w-[calc(100%-3rem)] border-black/10 group-hover:hidden dark:border-[#191919]' />
-				)}
+				<hr className='absolute -bottom-px left-6 w-[calc(100%-3rem)] border-black/10 dark:border-[#191919]' />
 			</div>
 		</div>
-
 	)
 }
 
 export default GetStarted
 
 const SHUTTLE_INSTALL = `
-❯ cargo shuttle help
-A cargo command for the shuttle platform (https://www.shuttle.rs/)
+$ cargo shuttle help
 
 Usage: cargo-shuttle [OPTIONS] <COMMAND>
 
 Commands:
-  deploy      deploy a shuttle service
-  deployment  manage deployments of a shuttle service
-  init        create a new shuttle service
-  generate    generate shell completions
-  status      view the status of a shuttle service
-  logs        view the logs of a deployment in this shuttle service
-  clean       remove artifacts that were generated by cargo
-  stop        stop this shuttle service
-  secrets     manage secrets for this shuttle service
-  login       login to the shuttle platform
-  logout      log out of the shuttle platform
-  run         run a shuttle service locally
-  feedback    Open an issue on github and provide feedback
-  project     manage a project on shuttle
-  help        Print this message or the help of the given subcommand(s)
+  init        Create a new Shuttle project
+  run         Run a Shuttle service locally
+  deploy      Deploy a Shuttle service
+  deployment  Manage deployments of a Shuttle service
+  status      View the status of a Shuttle service
+  stop        Stop this Shuttle service
+  logs        View the logs of a deployment
+  project     List or manage projects on Shuttle
+  resource    Manage resources of a Shuttle project
+  secrets     Manage secrets for this Shuttle service
+  clean       Remove cargo build artifacts
+  login       Login to the Shuttle platform
+  logout      Log out of the Shuttle platform
+  generate    Generate shell completions
+  feedback    Open an issue on GitHub and provide feedback
+  help        Print this message
 `.trim()
 
 const SHUTTLE_INIT = `
-#[get("/")]
-fn hello() -> &'static str {
-    "Hello, Cloud!"
+use axum::{routing::get, Router};
+
+async fn hello_world() -> &'static str {
+    "Hello, world!"
 }
 
-#[shuttle_service::main]
-async fn rocket() -> shuttle_service::ShuttleRocket {
-    Ok(rocket::build().mount("/", routes![hello]))
+#[shuttle_runtime::main]
+async fn main() -> shuttle_axum::ShuttleAxum {
+    let router = Router::new().route("/", get(hello_world));
+
+    Ok(router.into())
 }
 `.trim()
 
 const SHUTTLE_DEPLOY = `
-❯ cargo shuttle deploy
-   Packaging url-shortener v0.1.0 (/shuttle/url-shortener)
-   Archiving Cargo.toml
-   Archiving Cargo.toml.orig
-   Archiving README.md
-   Archiving Shuttle.toml
-   Archiving migrations/20220324143837_urls.sql
-   Archiving src/lib.rs
-   Compiling tracing-attributes v0.1.20
-   Compiling tokio-util v0.6.9
-   Compiling multer v2.0.2
-   Compiling hyper v0.14.18
-   Compiling rocket_http v0.5.0-rc.1
-   Compiling rocket_codegen v0.5.0-rc.1
-   Compiling rocket v0.5.0-rc.1
-   Compiling shuttle-service v0.2.5
-   Compiling url-shortener v0.1.0 (/opt/unveil/crates/s-2)
-    Finished dev [unoptimized + debuginfo] target(s) in 1m 01s
-        Project:            url-shortener
-        Deployment Id:      3d08ac34-ad63-41c1-836b-99af...
-        Deployment Status:  DEPLOYED
-        Host:               url-shortener.shuttleapp.rs
-        Created At:         2022-04-01 08:32:34.412602556 UTC
-        Database URI:       postgres://***:***@pg.shuttle.rs/db
-❯
+$ cargo shuttle deploy
+
+ INFO Starting deployment
+ INFO Building project
+   Compiling proc-macro2 v1.0.68
+   Compiling unicode-ident v1.0.12
+   ...
+   Compiling shuttle-runtime v0.28.0
+   Compiling shuttle-axum v0.28.0
+   Compiling hello-world v0.1.0
+    Finished release [optimized] target(s) in 1m 28s
+ INFO Loading resources
+ INFO Starting service
+
+Service Name:  hello-world
+Deployment ID: 2ee051bf-d9f7-43db-928e-c099dccc35de
+Status:        running
+Last Updated:  2023-10-07T16:51:48Z
+URI:           https://hello-world.shuttleapp.rs
+Database URI:  postgres://***:***@pg.shuttle.rs/db
 `.trim()
