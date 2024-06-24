@@ -23,13 +23,27 @@ export default function ShuttleAIPage() {
 					height={1023}
 					className='absolute -top-[5.5rem] w-full mix-blend-overlay'
 				/>
+
 				<Hero />
-				<Info />
-				<Steps />
-				<Waitlist
-					cta='The fastest way to build and deploy in the cloud.'
-					description='Even faster than deploying a "hello world". Sign up for the waitlist!'
-				/>
+
+				<div className='relative mb-48 mt-16 flex w-full max-w-screen-xl justify-center rounded-xl border border-[#434343] py-16 lg:mx-auto'>
+					<div className='absolute -top-20 left-1/2 top-0 h-20 w-max -translate-x-1/2 transform bg-white/20' />
+
+					<video
+						autoPlay
+						loop
+						muted
+						playsInline
+						className='h-full w-[90%] max-w-3xl rounded-xl lg:w-full'
+					>
+						<source
+							media='(min-width: 1980px)'
+							src='/images/pages/shuttle-ai/Shuttle-AI-1920x1080.mp4'
+							type='video/mp4'
+						/>
+						<source src='/images/pages/shuttle-ai/Shuttle-AI-1600x1460.mp4' type='video/mp4' />
+					</video>
+				</div>
 			</div>
 		</>
 	)
