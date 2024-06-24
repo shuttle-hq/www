@@ -26,10 +26,21 @@ export default function ShuttleAIPage() {
 
 				<Hero />
 
-				<div className='relative mx-auto mb-48 mt-16 flex w-full max-w-screen-xl justify-center rounded-xl border border-[#434343] py-16'>
-					<div className='absolute -top-20 left-1/2 top-0 h-20 w-[1px] -translate-x-1/2 transform bg-white/20' />
+				<div className='relative mb-48 mt-16 flex w-full max-w-screen-xl justify-center rounded-xl border border-[#434343] py-16 lg:mx-auto'>
+					<div className='absolute -top-20 left-1/2 top-0 h-20 w-max -translate-x-1/2 transform bg-white/20' />
 
-					<video autoPlay loop muted playsInline className='w-full max-w-3xl rounded-xl'>
+					<video
+						autoPlay
+						loop
+						muted
+						playsInline
+						className='h-full w-[90%] max-w-3xl rounded-xl lg:w-full'
+					>
+						<source
+							media='(min-width: 1980px)'
+							src='/images/pages/shuttle-ai/Shuttle-AI-1920x1080.mp4'
+							type='video/mp4'
+						/>
 						<source src='/images/pages/shuttle-ai/Shuttle-AI-1600x1460.mp4' type='video/mp4' />
 					</video>
 				</div>
