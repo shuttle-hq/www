@@ -13,6 +13,10 @@ const nextConfig = {
 				source: '/rss.xml',
 				destination: '/api/rss',
 			},
+			{
+				source: '/ingest/:path*',
+				destination: 'https://eu.posthog.com/:path*',
+			},
 		]
 	},
 	redirects() {
