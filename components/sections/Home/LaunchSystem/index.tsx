@@ -62,24 +62,10 @@ export default function LaunchSystem() {
 		return eased
 	}
 
-	console.log(scrollPosition)
-
 	return (
 		<>
 			<style>{css}</style>
 			<motion.div ref={ref} className='launch-system'>
-				<motion.div
-					style={{
-						position: 'fixed',
-						top: 0,
-						left: 0,
-						width: '100%',
-						scaleX: scrollYProgress,
-						background: 'red',
-						height: 30,
-						zIndex: 100,
-					}}
-				/>
 				<div className='top-0 pt-24 lg:pt-28 2xl:sticky'>
 					<section className='relative z-50 mx-auto mb-[50px] w-full max-w-7xl px-5 sm:px-10'>
 						<div className='flex flex-col items-center justify-center'>
