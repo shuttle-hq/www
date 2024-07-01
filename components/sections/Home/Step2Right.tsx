@@ -19,11 +19,20 @@ function getBorder(idx: number) {
 	return ''
 }
 
-export default function Step2Right({ id }: { id?: string }) {
+export default function Step2Right({
+	id,
+	className,
+	style,
+}: {
+	id?: string
+	className?: string
+	style?: React.SVGAttributes<SVGSVGElement>['style']
+}) {
 	return (
 		<div
 			id={id}
-			className='z-10 grid w-full grid-cols-2 rounded-3xl border border-[#525150] backdrop-blur-sm sm:w-auto'
+			className={`z-10 grid w-full grid-cols-2 rounded-3xl border border-[#525150] backdrop-blur-sm sm:w-max ${className}`}
+			style={style}
 		>
 			{services.map((service, idx) => (
 				<div

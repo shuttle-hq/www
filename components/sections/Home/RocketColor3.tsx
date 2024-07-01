@@ -1,12 +1,16 @@
-export default function RocketColor3({ className }: { className?: string }) {
+import clsx from 'clsx'
+import { SVGProps } from 'react'
+
+export default function RocketColor3(props: SVGProps<SVGSVGElement>) {
 	return (
 		<svg
-			className='absolute h-full w-full'
 			width='1088'
 			height='1078'
 			viewBox='0 0 1088 1078'
 			fill='none'
 			xmlns='http://www.w3.org/2000/svg'
+			{...props}
+			className={clsx('absolute h-full w-full', props.className)}
 		>
 			<g clip-path='url(#clip0_4147_51398)'>
 				<g clip-path='url(#clip1_4147_51398)'>

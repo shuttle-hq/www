@@ -1,12 +1,16 @@
-export default function RocketColor4() {
+import clsx from 'clsx'
+import { SVGProps } from 'react'
+
+export default function RocketColor4(props: SVGProps<SVGSVGElement>) {
 	return (
 		<svg
-			className='absolute -bottom-[30%] -left-[26%] hidden w-full lg:block'
 			width='1062'
 			height='1458'
 			viewBox='0 0 1062 1458'
 			fill='none'
 			xmlns='http://www.w3.org/2000/svg'
+			{...props}
+			className={clsx('absolute -bottom-[30%] -left-[26%] hidden w-full lg:block', props.className)}
 		>
 			<path d='M1014.17 509H536.333' stroke='url(#paint0_linear_3299_52514)' stroke-width='1.25081' />
 			<path

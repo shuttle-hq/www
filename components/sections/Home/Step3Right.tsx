@@ -1,6 +1,14 @@
 import React from 'react'
 
-export default function Step3Right({ className, id }: { className?: string; id?: string }) {
+export default function Step3Right({
+	className,
+	id,
+	style,
+}: {
+	className?: string
+	id?: string
+	style?: React.SVGAttributes<SVGSVGElement>['style']
+}) {
 	return (
 		<svg
 			id={id}
@@ -10,7 +18,8 @@ export default function Step3Right({ className, id }: { className?: string; id?:
 			fill='none'
 			xmlns='http://www.w3.org/2000/svg'
 			xmlnsXlink='http://www.w3.org/1999/xlink'
-			className={`z-10 hidden lg:block`}
+			className={`z-10 hidden lg:block ${className}`}
+			style={style}
 		>
 			<g filter='url(#filter0_b_4133_5288)'>
 				<rect width='447' height='402' rx='24' fill='black' fill-opacity='0.9' />
