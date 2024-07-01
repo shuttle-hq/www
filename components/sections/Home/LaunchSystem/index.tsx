@@ -254,7 +254,7 @@ export default function LaunchSystem() {
 									</div>
 								</div>
 								<div
-									className='absolute bottom-0 z-40'
+									className='absolute bottom-0 z-40 flex items-center justify-center'
 									style={{ opacity: changeOpacity(3, scrollPosition, 1, 0, 0.2) }}
 								>
 									<Step1Bottom
