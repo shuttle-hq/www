@@ -259,12 +259,12 @@ export default function LaunchSystem() {
 								>
 									<Step1Bottom
 										id='bottom-2'
-										className='absolute'
+										className='absolute bottom-0'
 										style={{ opacity: changeOpacity(0, scrollPosition, 1, 0, 1.2) }}
 									/>
 									<Step2Bottom
 										id='bottom-3'
-										className='absolute'
+										className='absolute bottom-0'
 										style={{
 											opacity:
 												scrollPosition * 4 > 2
