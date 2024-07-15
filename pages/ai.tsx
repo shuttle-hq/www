@@ -30,7 +30,6 @@ export default function ShuttleAIPage() {
 					<div className='absolute -top-20 left-1/2 top-0 h-20 w-max -translate-x-1/2 transform bg-white/20' />
 
 					<video
-						unmute
 						playsInline
 						controls
 						className='h-full w-[90%] max-w-3xl rounded-xl lg:w-full'
