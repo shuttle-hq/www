@@ -29,20 +29,7 @@ export default function ShuttleAIPage() {
 				<div className='relative mb-48 mt-16 flex w-full max-w-screen-xl justify-center rounded-xl border border-[#434343] py-16 lg:mx-auto'>
 					<div className='absolute -top-20 left-1/2 top-0 h-20 w-max -translate-x-1/2 transform bg-white/20' />
 
-					<video
-						autoPlay
-						loop
-						muted
-						playsInline
-						className='h-full w-[90%] max-w-3xl rounded-xl lg:w-full'
-					>
-						<source
-							media='(min-width: 1980px)'
-							src='/images/pages/shuttle-ai/Shuttle-AI-1920x1080.mp4'
-							type='video/mp4'
-						/>
-						<source src='/images/pages/shuttle-ai/Shuttle-AI-1600x1460.mp4' type='video/mp4' />
-					</video>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/kfof_CB5VfI?si=QCNJTnerhDZ3j-j_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 				</div>
 			</div>
 		</>
