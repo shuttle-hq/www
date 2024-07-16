@@ -1,4 +1,14 @@
-export default function Step1Bottom({ className, id }: { className?: string; id: string }) {
+import clsx from 'clsx'
+
+export default function Step1Bottom({
+	className,
+	id,
+	style,
+}: {
+	className?: string
+	id: string
+	style?: React.SVGAttributes<SVGSVGElement>['style']
+}) {
 	return (
 		<svg
 			id={id}
@@ -8,7 +18,8 @@ export default function Step1Bottom({ className, id }: { className?: string; id:
 			fill='none'
 			xmlns='http://www.w3.org/2000/svg'
 			xmlnsXlink='http://www.w3.org/1999/xlink'
-			className='z-10'
+			className={clsx('z-10', className)}
+			style={style}
 		>
 			<g filter='url(#filter0_b_4133_4647)'>
 				<rect width='509' height='360' rx='24' fill='black' fill-opacity='0.9' />

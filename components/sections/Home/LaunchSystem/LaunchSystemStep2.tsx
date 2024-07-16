@@ -1,13 +1,13 @@
 import Xarrow from 'react-xarrows'
-import RocketColor2 from './RocketColor2'
-import Step2Top from './Step2Top'
-import Step2Left from './Step2Left'
-import Step2Right from './Step2Right'
-import Step2Bottom from './Step2Bottom'
+import RocketColor2 from '../RocketColor2'
+import Step2Top from '../Step2Top'
+import Step2Left from '../Step2Left'
+import Step2Right from '../Step2Right'
+import Step2Bottom from '../Step2Bottom'
 
 export default function LaunchSystemStep2() {
 	return (
-		<div className='relative mb-[200px] flex flex-col items-center gap-8 bg-black lg:justify-center'>
+		<div className='relative mb-[200px] flex flex-col items-center gap-8 bg-black 2xl:justify-center'>
 			<Xarrow
 				start='top-2'
 				end='left-2'
@@ -18,7 +18,7 @@ export default function LaunchSystemStep2() {
 				dashness={{ strokeLen: 2, nonStrokeLen: 5 }}
 				showHead={false}
 				path='grid'
-				divContainerProps={{ className: 'hidden lg:block' }}
+				divContainerProps={{ className: 'hidden 2xl:block' }}
 			/>
 			<Xarrow
 				start='top-2'
@@ -30,7 +30,7 @@ export default function LaunchSystemStep2() {
 				dashness={{ strokeLen: 2, nonStrokeLen: 5 }}
 				showHead={false}
 				path='grid'
-				divContainerProps={{ className: 'hidden lg:block' }}
+				divContainerProps={{ className: 'hidden 2xl:block' }}
 			/>
 
 			<Xarrow
@@ -42,7 +42,7 @@ export default function LaunchSystemStep2() {
 				showHead={false}
 				strokeWidth={1}
 				path='grid'
-				divContainerProps={{ className: 'hidden lg:block' }}
+				divContainerProps={{ className: 'hidden 2xl:block' }}
 			/>
 			<Xarrow
 				start='right-2'
@@ -53,11 +53,11 @@ export default function LaunchSystemStep2() {
 				strokeWidth={1}
 				showHead={false}
 				path='grid'
-				divContainerProps={{ className: 'hidden lg:block' }}
+				divContainerProps={{ className: 'hidden 2xl:block' }}
 			/>
-			<div className='flex h-auto w-full flex-col items-center justify-between gap-8 lg:h-[90vh]'>
+			<div className='flex h-auto w-full flex-col items-center justify-between gap-8 2xl:h-[90vh]'>
 				<Step2Top id='top-2' />
-				<div className='flex w-full flex-col items-center justify-between gap-8 lg:flex-row'>
+				<div className='flex w-full flex-col items-center justify-between gap-8 2xl:flex-row'>
 					<Step2Left id='left-2' />
 					<Step2Right id='right-2' />
 				</div>
