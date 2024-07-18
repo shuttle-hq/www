@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { trackEvent } from 'lib/posthog'
 
 const Hero = () => {
 	return (
@@ -25,6 +26,9 @@ const Hero = () => {
 					href='https://forms.gle/hYXxroVqXaT4aGBM7'
 					target='_blank'
 					className='mt-4 flex h-[56px] cursor-pointer items-center rounded-[14px] bg-[#D8D8D8] px-6 text-lg text-black sm:mt-0'
+					onClick={() => {
+					trackEvent(`shuttle_ai_form_button`)
+					}}
 				>
 					Get access
 				</Link>
