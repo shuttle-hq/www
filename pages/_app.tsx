@@ -16,44 +16,44 @@ import IntercomProvider from 'providers/IntercomProvider'
 
 // Check that PostHog is client-side (used to handle Next.js SSR)
 if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_POSTHOG_KEY) {
-	posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
-		api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://app.posthog.com',
-		// Enable debug mode in development
-		loaded: (posthog) => {
-			if (process.env.NODE_ENV === 'development') posthog.debug()
-		},
-		capture_pageview: true,
-	})
+    posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
+	    api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://app.posthog.com',
+	    // Enable debug mode in development
+	    loaded: (posthog) => {
+		    if (process.env.NODE_ENV === 'development') posthog.debug()
+	    },
+	    capture_pageview: true,
+    })
 }
 
 export default function App({ Component, pageProps }: AppProps) {
-	const router = useRouter()
+    const router = useRouter()
 
-	useEffect(() => {
-		// Track page views
-		const handleRouteChange = () => posthog?.capture('$pageview')
+    useEffect(() => {
+	    // Track page views
+	    const handleRouteChange = () => posthog?.capture('$pageview')
 
-		router.events.on('routeChangeComplete', handleRouteChange)
+	    router.events.on('routeChangeComplete', handleRouteChange)
 
-		return () => {
-			router.events.off('routeChangeComplete', handleRouteChange)
-		}
-	}, [router.events])
+	    return () => {
+		    router.events.off('routeChangeComplete', handleRouteChange)
+	    }
+    }, [router.events])
 
-	const getLayout = (Component as any).getLayout || ((page: ReactNode) => <Page>{page}</Page>)
+    const getLayout = (Component as any).getLayout || ((page: ReactNode) => <Page>{page}</Page>)
 
-	return (
-		<>
-			<DefaultSeo
-				title={SITE_TITLE}
-				description={SITE_DESCRIPTION}
-				openGraph={{
-					type: 'website',
-					url: SITE_URL,
-					site_name: APP_NAME,
-				}}
-				twitter={{
-					handle: TWITTER_HANDLE,
+    return (
+	    <>
+		    <DefaultSeo
+			    title={SITE_TITLE}
+			    description={SITE_DESCRIPTION}
+			    openGraph={{
+				    type: 'website',
+				    url: SITE_URL,
+				    site_name: APP_NAME,
+			    }}
+			    twitter={{
+				    handle: TWITTER_HANDLE,
 					site: TWITTER_HANDLE,
 					cardType: 'summary_large_image',
 				}}
