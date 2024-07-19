@@ -1,13 +1,24 @@
 import { Hero, Info, Steps } from 'components/sections/ShuttleAI'
+import React from 'react'
 import { Page } from 'components/templates'
 import { ReactNode } from 'react'
 import Image from 'next/image'
 import { Waitlist } from 'components/sections/ShuttleAI/Waitlist'
 import { NextSeo } from 'next-seo'
+import { initTwitter, sendTwitterConversion, shuttleAiPageview } from 'lib/useTwitter';
+import Script from 'next/script'
 
 export default function ShuttleAIPage() {
+
+       React.useEffect(() => {
+       initTwitter()
+      sendTwitterConversion(shuttleAiPageview)
+}, [])
+     
+
 	return (
 		<>
+
 			<NextSeo
 				title='Shuttle AI - Deploy Apps from Prompts | Cloud Development Tools'
 				description='Build and deploy cloud applications effortlessly using Shuttle AI. Discover the power of single-prompt app deployment in our Rust-centric product.'

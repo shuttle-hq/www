@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { trackEvent } from 'lib/posthog'
+import { sendTwitterConversion, shuttleAiFormButtonClick } from 'lib/useTwitter'
 
 const Hero = () => {
 	return (
@@ -28,6 +29,7 @@ const Hero = () => {
 					className='mt-4 flex h-[56px] cursor-pointer items-center rounded-[14px] bg-[#D8D8D8] px-6 text-lg text-black sm:mt-0'
 					onClick={() => {
 					trackEvent(`shuttle_ai_form_button`)
+					sendTwitterConversion(shuttleAiFormButtonClick)
 					}}
 				>
 					Get access
