@@ -8,15 +8,18 @@ cover: rust-on-the-backend-thumb.png
 date: '2024-07-31T15:30:00'
 ---
 
-With Rust having been named most admired language in the Stack Overflow 2024 survey, more and more developers are looking to get into Rust. Though Rust is a versatile language, many newer Rust developers are using it for backend web development in particular. In this article, we'll talk about why Rust makes a good fit for backend web development compared to other languages.
+With Rust named most admired language in the Stack Overflow 2024 survey, more and more developers are looking to get into Rust. Though Rust is a versatile language, many newer Rust developers are using it for backend web development in particular. In this article, we'll talk about why Rust makes a good fit for backend web development compared to other languages.
 
 ## What does a Rust web service look like?
 
 Before we dive into the benefits of Rust on the backend, let's have a look at what a Rust web service looks like - using Axum as our web framework, for reference.
 
-Below is an example of adding a database pool from `sqlx` to shared application state and using it within a router, complete with a basic CRUD route for grabbing all users from a database table and returning it as a JSON response:
+Below is an example of adding a database pool from `sqlx` to shared application state. We'll use it within a router, with an endpoint for grabbing database records and returning a JSON response:
+
 ```rust
 use sqlx::PgPool;
+use axum::{Router, routing::get};
+use tokio::net::TcpListener;
 
 // we auto-implement the Clone trait here so that this struct can be cloned
 // by the framework when required for requests
@@ -49,6 +52,9 @@ async fn main -> Result<(), Box<dyn std::error::Error> {
 We'll also add our endpoint code below:
 
 ```rust
+use serde::Serialize;
+use axum::{extract::State, response::IntoResponse};
+
 // here we auto-derive the FromRow trait from `sqlx`
 // and Serialize from `serde` to serialize our struct into JSON
 // as well as automatically converting retrieved Postgres rows into our struct
@@ -81,18 +87,19 @@ This generally matters more for web services than other types of applications. I
 
 The other primary consequence of this advantage is that it's far easier to run Rust web servers on IoT devices. For example, running an Actix Web server on a Raspberry Pi. You could technically do that with something like Django, Flask, or even Ruby on Rails. However, chances are with a sufficiently large application that there might not be much room for running anything else. At the very least, you'll be able to run an extra few programs on your small machine which depending on your use case, can be quite useful.
 
-While frontloading so much to the compiler does of course increase compilation times, your application will typically be running for much longer in production. Compilation times can additionally be significantly reduced with the help of [crane](https://github.com/ipetkov/crane) and [mold linker](https://github.com/rui314/mold), easing the developer experience while iterating early on. Although first-time compiles can take a few minutes, typically with subsequent compilations it takes much less thereafter.
+Frontloading so much to the compiler does, of course, increase compilation times. Even so, your application will typically be running for much longer in production. Using [crane](https://github.com/ipetkov/crane) and [mold linker](https://github.com/rui314/mold) can also be used to reduce compilation time significantly. Although first-time compiles can take a few minutes, typically with subsequent compilations it takes much less thereafter.
 
 ### Concurrency
-Concurrency has always been a difficult problem to solve. This can be made more difficult with language design choices designed to abstract away complexity. For example Python's Global Interpreter Lock (GIL) has undeniably had benefits in terms of development and making it easier to run C extensions in Python. However, it can also significantly increase the complexity of multithreaded applications through lock acqusition and thread contention, as well as making it more difficult to express parallelism.
+Concurrency has always been a difficult problem to solve. Language design choices designed to abstract away complexity can often contribute to this. For example, Python's Global Interpreter Lock (GIL) has undeniably had benefits in terms of development and making it easier to run C extensions in Python. However, it can also significantly increase the complexity of multithreaded applications. This is primarily through lock acquisition and thread contention. As a consequence, things like parallelism can be much more difficult to express.
 
-In contrast, Rust doesn't hide the complexity of writing concurrent data structures and general concurrent programs. This can make it somewhat intimidating to get started. However, libraries have been created that significantly build on the stdlib primitives to provide much more usable abstractions that make handling concurrency much easier at scale. For example: [dashmap](https://docs.rs/dashmap/latest/dashmap/), a concurrent `HashMap` implementation, as well as [parking-lot](https://github.com/Amanieu/parking_lot) which primarily provides the parking and unparking of threads but provides deadlock detection for mutexes and other synchronization primitives.
+In contrast, Rust doesn't hide the complexity of writing concurrent programs. This can make it somewhat intimidating to get started. However, the current ecosystem extends the stdlib primitives significantly to provide much more usable abstractions that make handling concurrency much easier at scale. For example: [dashmap](https://docs.rs/dashmap/latest/dashmap/), a concurrent `HashMap` implementation, as well as [parking-lot](https://github.com/Amanieu/parking_lot) which primarily provides the parking and unparking of threads but provides deadlock detection for mutexes and other synchronization primitives.
 
 If you're using the Tokio runtime for async Rust, it's also easy to use Tokio's synchronisation primitives which can be used across threads. If you want basic concurrency in a Rust backend service without going the whole way, making use of the primitives can be a great way to implement this:
 
 ```rust
 use std::sync::Arc;
 use tokio::sync::RwLock;
+use std::collections::HashMap;
 
 #[tokio::main]
 async fn main() {
