@@ -1,0 +1,53 @@
+---
+title: "Eating Our Own Dog Food: How We Used ShuttleAI to Supercharge Our Metrics Analysis"
+description: "Exploring how we used Shuttle AI to supercharge our metrics analysis"
+author: josh
+tags: [rust, ai, metrics]
+thumb: llm-chain-langchain-rust-thumb.png
+cover: llm-chain-langchain-rust-thumb.png
+date: '2024-06-06T15:30:00'
+---
+As the creators of [ShuttleAI](https://shuttle.rs/ai), we knew we had to put our money where our mouth is and use our own tool to solve our own real-world problems. One of the biggest headaches we faced within the community team was analysing our metrics across various platforms like Twitter, YouTube, LinkedIn, and Discord. We had a massive, unloved spreadsheet that had seen better days. It was time for a change, and ShuttleAI was the perfect tool for the job.
+
+## The Unloved Spreadsheet
+
+Picture this: a messy spreadsheet that would make even the most seasoned data analyst weep. That's what we were dealing with. The problems were numerous:
+
+1. **Data inconsistency —** Different team members had their own ways of logging data, leading to inconsistencies in formats and structures.
+2. **Manual labor —** Cleaning and analyzing the data was very time-consuming and it took hours each week.
+3. **Inaccurate insights**: With so many inconsistencies and errors, we couldn't trust the insights we were getting.
+
+It was clear that we needed to practice what we preached and use ShuttleAI to create a custom solution.
+
+## Enter ShuttleAI: Our Trusty Sidekick
+
+We fired up ShuttleAI and got to work. The process was simple:
+
+1. **Define the requirements —** We started by entering our prompt: "I need a CSV analysis tool for our metrics." ShuttleAI generated a project proposal that outlined almost exactly what we needed.
+2. **Refine and iterate —** The things it got slightly-off were easily correctable by just editing the markdown proposal/specification file and, once we were done with the corrections, we’ve told ShuttleAI to generate the project.
+3. **No magic, just good code —** ShuttleAI then, not using magic (we don’t like magic), generated all the necessary project files. We reviewed the code using the TUI file viewer via a simple prompt, we’ve requested just some little fine-tuning changes before being happy with it.
+4. **Deploy with ease —** With the code ready to go, we just typed "build and deploy," and ShuttleAI took care of the rest. It provisioned an EC2 instance using Shuttle’s Infrastructure from Code and ensured that our tool was up and running.
+
+Phew. We went from just a simple prompt, to an up-and-running AND WORKING tool that saves us multiple hours per week in under 10 minutes. Insane.
+
+## So what did it bring us in the end?
+
+Our new CSV analysis tool, powered by ShuttleAI, has been a game-changer for our team:
+
+1. **Time savings —** We've gone from spending hours each week on data analysis to just minutes. That's more time for us to focus on what really matters: building awesome products.
+2. **Accurate insights —** With automated data cleaning and processing, we can now trust the insights we're getting. No more second-guessing or double-checking.
+3. **Consistent reporting —** Every week, we get a shiny new report tailored to our specific needs. It's like clockwork, and it's beautiful.
+
+But don't just take our word for it. Here's what our team members have to say:
+
+> "I used to dread my turn to update the spreadsheet. Now, I look forward to seeing the weekly report in my inbox. It's like Christmas every week!" - Archie, Community Manager
+>
+
+> "I never thought I'd say this, but I actually enjoy analyzing our community metrics now. ShuttleAI has made it so easy and painless." - Josh, Junior DevRel Engineer
+>
+
+*P.S. Josh & Archie didn’t get 2 extra vacation days for writing their testimonials 👀*
+
+## The Bottom Line
+
+As developers, we know how important it is to have the right tools for the job. ShuttleAI has proven to be an invaluable asset for our team, and we couldn't be happier with the results. If you're tired of fighting with spreadsheets and want to streamline your data analysis process, give ShuttleAI a try. Trust us, your future self will thank you.
