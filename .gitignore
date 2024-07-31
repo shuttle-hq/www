@@ -43,3 +43,6 @@ public/rss.xml
 public/sitemap-*.xml
 public/sitemap.xml
 tsconfig.tsbuildinfo
+
+# markdown-preview-mode
+.markdown-preview.html
