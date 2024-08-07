@@ -56,6 +56,16 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
 			<NextSeo
 				title='Shuttle - Build Backends Fast'
 				description='Develop backends with zero infra setup using Shuttle: Code-driven cloud provisioning.'
+ 				openGraph={{
+				images: [
+          {
+            url: 'images/og-image.png',
+            width: 3516,
+            height: 1432,
+            alt: 'Shuttle.rs - Build Backends Fast',
+          },
+		  ]
+		  }}
 			/>
 			<main className='text-body'>
 				<Hero />
