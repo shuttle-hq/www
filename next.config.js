@@ -32,11 +32,6 @@ const nextConfig = {
 				destination: 'https://raw.githubusercontent.com/shuttle-hq/shuttle/main/install.ps1',
 				permanent: false,
 			},
-			{
-				source: '/login',
-				destination: 'https://console.shuttle.rs',
-				permanent: false
-			}
 		]
 	},
 	async headers() {
