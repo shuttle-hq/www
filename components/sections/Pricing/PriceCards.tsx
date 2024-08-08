@@ -168,13 +168,32 @@ const PriceCards = () => (
 					</h1>
 					<h4>
 						per instance{' '}
-						<Link
-							href='https://docs.shuttle.rs/resources/shuttle-aws-rds'
-							target='_blank'
-							className='cursor-pointer'
+						<div
+							data-tooltip-id='info-text'
+							data-tooltip-content='More info.'
+							data-tooltip-place='top'
+							data-tooltip-float
+							data-tooltip-offset={30}
+							className='inline-block'
 						>
-							&#9432;
-						</Link>
+							<Tooltip
+								id='info-text'
+								style={{
+									color: '#fff',
+									border: '1px solid #3F4848',
+									borderWidth: 1,
+									borderColor: '#3F4848',
+									borderRadius: 8,
+								}}
+							/>
+							<Link
+								href='https://docs.shuttle.rs/resources/shuttle-aws-rds'
+								target='_blank'
+								className='cursor-pointer'
+							>
+								&#9432;
+							</Link>
+						</div>
 					</h4>
 				</div>
 			</div>
