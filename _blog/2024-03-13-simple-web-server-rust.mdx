@@ -192,7 +192,7 @@ use axum::{extract::State, http::StatusCode};
 async fn hello_world(
     State(state): State<MyState>
 ) -> StatusCode {
-    sqlx::query("SELECT 'Hello world!")
+    sqlx::query("SELECT 'Hello world!'")
          .execute(&state.db)
          .await
          .unwrap();
