@@ -142,6 +142,10 @@ Using databases generally isn’t much different in Rust than any other language
 
 Here’s an example of how you can do exactly that, using SQLx with Postgres as example. We initialise the `PgPool`, initialise our state struct and attach it to the router. 
 
+```bash
+cargo add sqlx -F postgres
+```
+
 ```rust
 use sqlx::PgPool;
 use axum::{extract::State, Router, routing::get, http::StatusCode};
