@@ -78,7 +78,7 @@ async fn main() -> shuttle_axum::ShuttleAxum {
 
 ## Routing
 
-HTTP responses from routing within Rust frameworks can be done by anything that implements a trait that represents a HTTP response. In Axum, this would be the `IntoResponse` trait (or `IntoResponseParts` for headers and other non-response body parts). Web servers can only return things that are valid HTTP responses. Implementing `IntoResponse` (and `IntoResponseParts` respectively) ensures this!
+HTTP responses from routing within Rust frameworks can be done by anything that implements a trait that represents a HTTP response. In Axum, this would be the `axum::response::IntoResponse` trait (or `axum::response::IntoResponseParts` for headers and other non-response body parts). Web servers can only return things that are valid HTTP responses. Implementing `IntoResponse` (and `IntoResponseParts` respectively) ensures this!
 
 It is possible to use `impl IntoResponse` as the return type for a function (for convenience). However, we would need to make sure all of the responses are of the same type. This can lead to confusion later down the line, particularly if you’re working in a team.
 
