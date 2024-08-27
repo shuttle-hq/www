@@ -137,11 +137,22 @@ Extractors are handler function arguments. They extract parts of the HTTP reques
 Here is an example of how you can use extractors. Note here that we use de-structuring to automatically get the inner variable in `Json<MyStruct>` as it looks cleaner.
 
 ```rust
+use axum::routing::post;
 
 async fn function_with_extractors(
     Json(json): Json<MyStruct>,
 ) -> impl IntoResponse {
     format!("The contents of my_field is: {}", json.my_field)
+}
+
+#[shuttle_runtime::main]
+async fn main() -> shuttle_axum::ShuttleAxum {
+    let router = Router::new()
+        .route("/", get(hello_world))
+        .route("/json/", get(return_some_json))
+        .route("/json-struct/", post(function_with_extractors));
+
+    Ok(router.into())
 }
 ```
 
