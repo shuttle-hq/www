@@ -93,6 +93,15 @@ async fn return_some_json() -> Json<Value> {
 
     Json(json)
 }
+
+#[shuttle_runtime::main]
+async fn main() -> shuttle_axum::ShuttleAxum {
+    let router = Router::new()
+        .route("/", get(hello_world))
+        .route("/json/", get(return_some_json));
+
+    Ok(router.into())
+}
 ```
 
 However, a more likely situation is that you’ll want to return data that follows a schema. We can use the `Deserialize` and `Serialize` traits from the `serde` crate to do this.  We can easily apply these traits by adding the `derive` feature and then adding it as a derive macro to a struct:
