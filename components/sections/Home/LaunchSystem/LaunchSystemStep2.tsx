@@ -3,7 +3,7 @@ import RocketColor2 from '../RocketColor2'
 import Step2Top from '../Step2Top'
 import Step2Left from '../Step2Left'
 import Step2Right from '../Step2Right'
-import Step2Bottom from '../Step2Bottom'
+import Step2Bottom from './Step2Bottom'
 
 export default function LaunchSystemStep2() {
 	return (

@@ -24,18 +24,20 @@ function cargo(Prism: any) {
 SyntaxHighlighter.registerLanguage('cargo', cargo)
 
 interface Props {
+	readonly id?: string
 	readonly language: string
 	readonly code: string
 	readonly showLineNumbers?: boolean
 	readonly className?: string
 	readonly copyBtn?: boolean
+	readonly style?: React.CSSProperties
 }
 
-export default function CodeBlock({ code, language, showLineNumbers, className, copyBtn }: Props) {
+export default function CodeBlock({ id, code, language, showLineNumbers, className, copyBtn, style }: Props) {
 	useWindowSize()
 
 	return (
-		<div className={clsx('relative rounded !bg-black p-4 shadow-lg', className)}>
+		<div className={clsx('relative rounded !bg-black p-4 shadow-lg', className)} style={style} id={id}>
 			{copyBtn && <CopyButton code={code} className='absolute right-2 top-2 inline-flex items-center' />}
 
 			<HeightMagic>

@@ -1,16 +1,16 @@
 'use client'
 
-import { motion, useMotionValueEvent, useScroll } from 'framer-motion'
+import { distance, motion, useMotionValueEvent, useScroll, useVelocity } from 'framer-motion'
 
 import LaunchSystemStep1 from './LaunchSystemStep1'
 import LaunchSystemStep2 from './LaunchSystemStep2'
 import LaunchSystemStep3 from './LaunchSystemStep3'
 import LaunchSystemStep4 from './LaunchSystemStep4'
-import { useRef, useState } from 'react'
+import { use, useRef, useState } from 'react'
 import Step1Top from '../Step1Top'
 import Step1Left from '../Step1Left'
 import Step1Right from '../Step1Right'
-import Step1Bottom from '../Step1Bottom'
+import Step1Bottom from './Step1Bottom'
 import RocketColor1 from '../RocketColor1'
 import RocketColor2 from '../RocketColor2'
 import RocketColor3 from '../RocketColor3'
@@ -21,7 +21,7 @@ import Step2Left from '../Step2Left'
 import Step3Left from '../Step3Left'
 import Step2Right from '../Step2Right'
 import Step3Right from '../Step3Right'
-import Step2Bottom from '../Step2Bottom'
+import Step2Bottom from './Step2Bottom'
 
 export default function LaunchSystem() {
 	const css = `
@@ -35,8 +35,88 @@ export default function LaunchSystem() {
 	const ref = useRef(null)
 	const { scrollYProgress } = useScroll({ target: ref })
 	const [scrollPosition, setScrollPosition] = useState(0)
+	const [scrollVelocity, setScrollVelocity] = useState(0)
+	const [scrollingToNext, setScrollingToNext] = useState(false)
 
-	useMotionValueEvent(scrollYProgress, 'change', setScrollPosition)
+	useMotionValueEvent(scrollYProgress, 'change', (position) => {
+		let distanceToNextCheckpoint = 0
+		let distanceToPrevCheckpoint = 0
+
+		if (scrollPosition < 0.37) {
+			distanceToNextCheckpoint = 0.37 - scrollPosition
+		} else if (scrollPosition < 0.6) {
+			distanceToNextCheckpoint = 0.6 - scrollPosition
+		} else if (scrollPosition < 1) {
+			distanceToNextCheckpoint = 1 - scrollPosition
+		}
+
+		if (scrollPosition >= 0.99) {
+			distanceToPrevCheckpoint = scrollPosition - 0.6
+		} else if (scrollPosition >= 0.59) {
+			distanceToPrevCheckpoint = scrollPosition - 0.37
+		} else if (scrollPosition >= 0.36) {
+			distanceToPrevCheckpoint = scrollPosition
+		}
+		const prevCheckpoint = scrollPosition - distanceToPrevCheckpoint
+		const nextCheckpoint = scrollPosition + distanceToNextCheckpoint
+
+		if (scrollVelocity > 0.25 && position >= 0.01 && scrollPosition <= 1.01 && !scrollingToNext) {
+			if (scrollPosition >= 1) {
+				// Scroll to the very end of the section
+
+				setScrollingToNext(false)
+
+				// @ts-ignore
+				const endOfSection = ref.current.scrollHeight
+				window.scrollTo({ top: endOfSection, behavior: 'smooth' })
+				return
+			}
+
+			const interval = setInterval(() => {
+				setScrollingToNext(true)
+				setScrollPosition((prev) => {
+					if (prev > nextCheckpoint) {
+						clearInterval(interval)
+						setScrollingToNext(false)
+						return nextCheckpoint
+					}
+					return prev + 0.02
+				})
+			}, 50)
+		}
+
+		// Same for opposite
+		else if (scrollVelocity < -0.25 && position >= 0.01 && scrollPosition <= 1.01 && !scrollingToNext) {
+			if (scrollPosition <= 0.02) {
+				// Scroll to the very end of the section
+
+				setScrollingToNext(false)
+
+				// @ts-ignore
+				const startOfSection = ref.current.getBoundingClientRect().top
+				window.scrollTo({ top: startOfSection, behavior: 'smooth' })
+				return
+			}
+
+			const interval = setInterval(() => {
+				setScrollingToNext(true)
+				setScrollPosition((prev) => {
+					if (prev < prevCheckpoint) {
+						clearInterval(interval)
+						setScrollingToNext(false)
+						return prevCheckpoint
+					}
+
+					return prev - 0.02
+				})
+			}, 50)
+		}
+	})
+
+	const scrollYVelocity = useVelocity(scrollYProgress)
+	useMotionValueEvent(scrollYVelocity, 'change', setScrollVelocity)
+
+	// console.log(scrollVelocity, scrollPosition)
 
 	// Change opacity based on section
 	const changeOpacity = (
@@ -245,17 +325,18 @@ export default function LaunchSystem() {
 								>
 									<Step1Bottom
 										id='bottom-2'
-										className='absolute bottom-0'
+										className='absolute bottom-0 left-1/2 -translate-x-1/2 transform'
 										style={{ opacity: changeOpacity(0, scrollPosition, 1, 0, 1.2) }}
 									/>
 									<Step2Bottom
 										id='bottom-3'
-										className='absolute bottom-0'
+										className='absolute bottom-0 left-1/2 -translate-x-1/2 transform'
 										style={{
 											opacity:
 												scrollPosition * 4 > 2
 													? changeOpacity(2, scrollPosition, 1, 0, 0.2)
 													: changeOpacity(1, scrollPosition, 0, 1, 0.2),
+											visibility: scrollPosition * 4 > 1.2 ? 'visible' : 'collapse',
 										}}
 									/>
 								</div>
@@ -300,11 +381,6 @@ export default function LaunchSystem() {
 					<LaunchSystemStep3 />
 					<LaunchSystemStep4 />
 				</div>
-
-				{/* {currentSection === 1 && <LaunchSystemStep1 />}
-			{currentSection === 2 && <LaunchSystemStep2 />}
-			{currentSection === 3 && <LaunchSystemStep3 />}
-			{currentSection === 4 && <LaunchSystemStep4 />} */}
 			</motion.div>
 		</>
 	)

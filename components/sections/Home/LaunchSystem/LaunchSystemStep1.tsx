@@ -2,7 +2,7 @@ import Xarrow from 'react-xarrows'
 import Step1Top from '../Step1Top'
 import Step1Left from '../Step1Left'
 import Step1Right from '../Step1Right'
-import Step1Bottom from '../Step1Bottom'
+import Step1Bottom from './Step1Bottom'
 import RocketColor1 from '../RocketColor1'
 
 export default function LaunchSystemStep1() {
@@ -61,7 +61,7 @@ export default function LaunchSystemStep1() {
 					<Step1Left id='left-1' />
 					<Step1Right id='right-1' />
 				</div>
-				<Step1Bottom id='bottom-1' />
+				<Step1Bottom id='bottom-1' className='overflow-hidden' />
 			</div>
 			<RocketColor1 />
 		</div>
