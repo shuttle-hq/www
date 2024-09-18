@@ -119,6 +119,13 @@ const authors: readonly Author[] = [
 		author_url: 'https://jeff-mitchell.dev/',
 		author_image_url: '',
 	},
+	{
+		author_id: 'mark',
+		author: 'Mark S.',
+		position: 'Software Engineer @ Shuttle',
+		author_url: '',
+		author_image_url: '/images/authors/mark.png',
+	},
 ]
 
 export default authors
