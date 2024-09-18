@@ -7,7 +7,7 @@ import Step3Right from '../Step3Right'
 
 export default function LaunchSystemStep3() {
 	return (
-		<div className='relative mb-[200px] flex flex-col items-center gap-8 bg-black 2xl:justify-center'>
+		<div className='relative mb-[200px] flex flex-col items-center gap-8 bg-black'>
 			<Xarrow
 				start='top-3'
 				end='left-3'
@@ -32,9 +32,9 @@ export default function LaunchSystemStep3() {
 				path='grid'
 				divContainerProps={{ className: 'hidden 2xl:block' }}
 			/>
-			<div className='flex h-auto w-full flex-col items-center justify-between gap-8 2xl:h-[90vh]'>
+			<div className='flex h-auto w-full flex-col items-center justify-between gap-8'>
 				<Step3Top id='top-3' />
-				<div className='flex w-full flex-col items-center justify-between gap-8 2xl:flex-row'>
+				<div className='flex w-full flex-col items-center justify-between gap-8'>
 					<div className='flex flex-col gap-7'>
 						<Step3Left id='left-3' />
 						<Step3Left2 />
