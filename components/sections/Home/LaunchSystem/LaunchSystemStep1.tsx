@@ -7,7 +7,7 @@ import RocketColor1 from '../RocketColor1'
 
 export default function LaunchSystemStep1() {
 	return (
-		<div className='relative mb-[200px] flex flex-col items-center gap-8 bg-black '>
+		<div className='relative mb-[200px] flex flex-col items-center gap-8 bg-black 2xl:justify-center'>
 			<Xarrow
 				start='top-1'
 				end='left-1'
@@ -55,9 +55,9 @@ export default function LaunchSystemStep1() {
 				path='grid'
 				divContainerProps={{ className: 'hidden 2xl:block' }}
 			/>
-			<div className='flex h-auto w-full flex-col items-center justify-between gap-8 '>
+			<div className='flex h-auto w-full flex-col items-center justify-between gap-8 2xl:h-[90vh]'>
 				<Step1Top id='top-1' />
-				<div className='flex w-full flex-col items-center justify-between gap-8 '>
+				<div className='flex w-full flex-col items-center justify-between gap-8 2xl:flex-row'>
 					<Step1Left id='left-1' />
 					<Step1Right id='right-1' />
 				</div>
