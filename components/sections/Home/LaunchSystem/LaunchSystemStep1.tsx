@@ -55,11 +55,11 @@ export default function LaunchSystemStep1() {
 				path='grid'
 				divContainerProps={{ className: 'hidden 2xl:block' }}
 			/>
-			<div className='flex h-auto w-full flex-col items-center justify-between gap-8 2xl:h-[90vh]'>
+			<div className='flex h-auto w-full flex-col items-center justify-between gap-8 2xl:h-[70vh]'>
 				<Step1Top id='top-1' />
-				<div className='flex w-full flex-col items-center justify-between gap-8 2xl:flex-row'>
-					<Step1Left id='left-1' />
-					<Step1Right id='right-1' />
+				<div className='relative flex w-full flex-col items-center justify-between gap-8 2xl:flex-row'>
+					<Step1Left id='left-1' className='absolute -left-12' />
+					<Step1Right id='right-1' className='absolute -right-12' />
 				</div>
 				<Step1Bottom id='bottom-1' className='overflow-hidden' />
 			</div>

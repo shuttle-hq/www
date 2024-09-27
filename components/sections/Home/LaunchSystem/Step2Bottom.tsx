@@ -95,6 +95,7 @@ const Step2Bottom: FC<Step2BottomProps> = ({ id, className, style }) => {
 				</Splide>
 				<div className='mt-3 w-full max-w-lg overflow-auto rounded-[2rem] border border-[#191919] bg-[#13292C] text-right dark:bg-black md:mt-0 md:rounded-tl-none lg:max-w-2xl'>
 					<CodeBlock
+						copyBtn
 						code={
 							selectedItem === 'hello-world'
 								? HELLO_WORLD
@@ -104,9 +105,10 @@ const Step2Bottom: FC<Step2BottomProps> = ({ id, className, style }) => {
 								? USING_SECRETS
 								: HELLO_WORLD
 						}
+						biggestAmountOfLines={USING_SECRETS.split('\n').length}
 						language={'rust'}
 						showLineNumbers={false}
-						className='py-6'
+						className='py-6 sm:w-[800px]'
 					/>
 				</div>
 			</div>
