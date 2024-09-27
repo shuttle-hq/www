@@ -6,6 +6,9 @@ export default function FilterDesktop({
 	setSearch,
 	setSelectedTags,
 	setSelectedUseCases,
+	types,
+	selectedTypes,
+	setSelectedTypes,
 	tags,
 	useCases,
 	selectedUseCases,
@@ -15,6 +18,9 @@ export default function FilterDesktop({
 	setSearch: (search: string) => void
 	setSelectedTags: (tags: string[]) => void
 	setSelectedUseCases: (useCases: string[]) => void
+	types: string[]
+	selectedTypes: string[]
+	setSelectedTypes: (types: string[]) => void
 	tags: string[]
 	useCases: string[]
 	selectedUseCases: string[]
@@ -53,6 +59,13 @@ export default function FilterDesktop({
 			</div>
 
 			<hr className='mb-6 border-[#FFFFFF1A]' />
+
+			<TemplateFilterGroup
+				items={types}
+				selectedItems={selectedTypes}
+				setSelectedItems={setSelectedTypes}
+				title='Types'
+			/>
 
 			<TemplateFilterGroup
 				items={useCases}
