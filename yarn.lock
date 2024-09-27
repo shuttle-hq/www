@@ -401,6 +401,11 @@
   resolved "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.8.tgz"
   integrity sha512-kMpQpfZKSCBqltAJwskgePRaYRFukDkm1oItcAbC3gNELR20XIBcN9VRgg4+m8DKsTfkWeA4m4Imp4DDuWy7FQ==
 
+"@types/prop-types@^15.7.3":
+  version "15.7.12"
+  resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.12.tgz#12bb1e2be27293c1406acb6af1c3f3a1481d98c6"
+  integrity sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==
+
 "@types/react-dom@18.0.9":
   version "18.0.9"
   resolved "https://registry.npmjs.org/@types/react-dom/-/react-dom-18.0.9.tgz"
@@ -1249,6 +1254,11 @@ copy-to-clipboard@^3.3.1:
   integrity sha512-2KV8NhB5JqC3ky0r9PMCAZKbUHSwtEo4CwCs0KXgruG43gX5PMqDEBbVU4OUzw2MuAWUfsuFmWvEKG5QRfSnJA==
   dependencies:
     toggle-selection "^1.0.6"
+
+core-js@^3.6.4:
+  version "3.37.0"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.37.0.tgz#d8dde58e91d156b2547c19d8a4efd5c7f6c426bb"
+  integrity sha512-fu5vHevQ8ZG4og+LXug8ulUtVxjOcEYvifJr7L5Bfq9GOztVqsKd9/59hUk2ZSbCrS3BqUr3EpaYGIYzq7g3Ug==
 
 core-util-is@^1.0.2, core-util-is@~1.0.0:
   version "1.0.3"
@@ -2136,6 +2146,13 @@ fraction.js@^4.3.6:
   version "4.3.6"
   resolved "https://registry.npmjs.org/fraction.js/-/fraction.js-4.3.6.tgz"
   integrity sha512-n2aZ9tNfYDwaHhvFTkhFErqOMIb8uyzSQ+vGJBjZyanAKZVbGUQ1sngfk9FdkBw7G26O7AgNjLcecLffD1c7eg==
+
+framer-motion@^11.2.12:
+  version "11.2.12"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.2.12.tgz#ca5c49f8a1c70163cbadabcbd318acdcfea569fb"
+  integrity sha512-lCjkV4nA9rWOy2bhR4RZzkp2xpB++kFmUZ6D44V9VQaxk+JDmbDd5lq+u58DjJIIllE8AZEXp9OG/TyDN4FB/w==
+  dependencies:
+    tslib "^2.4.0"
 
 fs-constants@^1.0.0:
   version "1.0.0"
@@ -3365,7 +3382,7 @@ lodash.templatesettings@^4.0.0:
   dependencies:
     lodash._reinterpolate "^3.0.0"
 
-lodash@^4.17.15, lodash@^4.17.19:
+lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -5386,6 +5403,15 @@ react-use@^17.4.0:
     ts-easing "^0.2.0"
     tslib "^2.1.0"
 
+react-xarrows@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-xarrows/-/react-xarrows-2.0.2.tgz#7555687612339eaefd4ed55fc5c63f2302726d9c"
+  integrity sha512-tDlAqaxHNmy0vegW/6NdhoWyXJq1LANX/WUAlHyzoHe9BwFVnJPPDghmDjYeVr7XWFmBrVTUrHsrW7GKYI6HtQ==
+  dependencies:
+    "@types/prop-types" "^15.7.3"
+    lodash "^4.17.21"
+    prop-types "^15.7.2"
+
 react@18.2.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
@@ -5948,6 +5974,14 @@ slash@^3.0.0:
   resolved "https://registry.npmjs.org/slash/-/slash-3.0.0.tgz"
   integrity sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==
 
+smooth-scrollbar@^8.8.4:
+  version "8.8.4"
+  resolved "https://registry.yarnpkg.com/smooth-scrollbar/-/smooth-scrollbar-8.8.4.tgz#0705e9b3defeb5b46cd43871f3ebcd62ae389a26"
+  integrity sha512-Wn2Q/iE+PE1ef4EfhFMhgaIMfSrjJl2LalRu0hBWSrw5nZKGsUIjWFWHnLB/Lpx7N+a1pJH6+wkQzBr+5nWPUg==
+  dependencies:
+    core-js "^3.6.4"
+    tslib "^1.10.0"
+
 smpltmpl@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npmjs.org/smpltmpl/-/smpltmpl-1.0.2.tgz"
@@ -6422,7 +6456,7 @@ tsconfig-paths@^3.14.2:
     minimist "^1.2.6"
     strip-bom "^3.0.0"
 
-tslib@^1.8.1, tslib@^1.9.0:
+tslib@^1.10.0, tslib@^1.8.1, tslib@^1.9.0:
   version "1.14.1"
   resolved "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
