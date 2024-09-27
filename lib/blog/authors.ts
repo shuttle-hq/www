@@ -105,6 +105,27 @@ const authors: readonly Author[] = [
 		author_url: 'https://twitter.com/_sourabpramanik',
 		author_image_url: 'https://github.com/sourabpramanik.png',
 	},
+	{
+		author_id: 'ivan',
+		author: 'Ivan Cernja',
+		position: '',
+		author_url: 'https://twitter.com/cernjai',
+		author_image_url: '',
+	},
+	{
+		author_id: 'jeff',
+		author: 'Jeff Mitchell',
+		position: '',
+		author_url: 'https://jeff-mitchell.dev/',
+		author_image_url: '',
+	},
+	{
+		author_id: 'mark',
+		author: 'Mark S.',
+		position: 'Software Engineer @ Shuttle',
+		author_url: '',
+		author_image_url: '/images/authors/mark.png',
+	},
 ]
 
 export default authors

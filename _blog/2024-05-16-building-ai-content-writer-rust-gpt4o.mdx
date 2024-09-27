@@ -1,0 +1,402 @@
+---
+title: "Building AI Agents with Rust"
+description: "Using GPT-4o and Rust to build AI agents in a web service and deploy them"
+author: josh
+tags: [rust, ai, gpt, guide]
+thumb: building-ai-agents-rust-thumb.png
+cover: building-ai-agents-rust-thumb.png
+date: '2024-05-16T18:30:00'
+---
+Hello world! In this guide, we're going to talk about how you can get started with using AI agents to create a content writer that will use the [Serper.dev](http://Serper.dev) API to search Google for results on your query, then use the results together with GPT-4o to create a summary of the results and finally create an article about it.
+
+Interested in just deploying or got stuck during the tutorial? [Have a look at the repository.](https://github.com/joshua-mo-143/shuttle-content-writer)
+
+## Setting up
+
+To get started, we'll create a new project using `cargo-shuttle init`, making sure to pick Axum as the framework. After that, we'll install the dependencies we need:
+
+```bash
+cargo add async-openai
+cargo add reqwest -F json
+cargo add serde -F derive
+cargo add serde_json
+cargo add thiserror
+```
+
+You will also additionally need API keys from Serper and OpenAI, which you will put in a new `Secrets.toml` file in your project root:
+
+```toml
+SERPER_API_KEY = ""
+OPENAI_API_KEY = ""
+```
+
+## Error handling
+
+Before we get started, let's quickly define some error types. We can add this to an `errors.rs` file and use `thiserror`. The reason why we'll do this is for error propagation: instead of manually pattern matching, if we want the error to be propagated we can use this enum as the error return type then use error propagation:
+
+```rust
+use async_openai::error::OpenAIError;
+use axum::http::StatusCode;
+use axum::response::{IntoResponse, Response};
+use thiserror::Error;
+
+#[derive(Error, Debug)]
+pub enum ApiError {
+    #[error("OpenAI error: {0}")]
+    OpenAI(#[from] OpenAIError),
+    #[error("Reqwest error: {0}")]
+    Reqwest(#[from] reqwest::Error),
+    #[error("De/serialization error: {0}")]
+    SerdeJson(#[from] serde_json::Error),
+}
+
+impl IntoResponse for ApiError {
+    fn into_response(self) -> Response {
+        let (status, body) = match self {
+            Self::OpenAI(err) => (StatusCode::INTERNAL_SERVER_ERROR, err.to_string()),
+            Self::Reqwest(err) => (StatusCode::INTERNAL_SERVER_ERROR, err.to_string()),
+            Self::SerdeJson(err) => (StatusCode::INTERNAL_SERVER_ERROR, err.to_string()),
+        };
+
+        println!("An error happened: {body}");
+
+        (status, body).into_response()
+    }
+}
+```
+
+This is enabled by `ApiError` implementing `From<T>`, allowing easy propagation.
+
+## Building AI Agents
+
+Our first step will be defining a generic interface that all of our autonomous agents will work with. We'll be creating two agents:
+
+- A researcher (takes some data from a Google search, feeds it into ChatGPT and asks it to summarize the information)
+- A writer (takes the summary and writes an article about it)
+
+It will look something like this:
+
+```rust
+use async_openai::{config::OpenAIConfig, Client as OpenAIClient};
+
+pub trait Agent {
+    fn name(&self) -> String;
+    fn client(&self) -> OpenAIClient<OpenAIConfig>;
+    fn system_message(&self) -> String;
+
+    // to be given a default implementation later
+    async fn prompt(&self, input: &str, data: String) -> Result<String, ApiError>;
+}
+
+```
+
+Why do we need the other 3 methods if `prompt()` already uses `self`? This is because as part of the `Agent` trait, the prompt function **cannot** reference types that it doesn't know about. If we have a struct that has the `async_openai::Client` type already, we need to create a method from the `Agent` trait to be able to access the client.
+
+If you're only creating one agent, typically you don't need a specific trait. However, if you wanted to create more agents in the same library or application, it would be a good idea to have a generic interface to hold all of the relevant methods!
+
+Let's define our `Researcher` struct, which will hold the data and methods for us to query the Serper API and then use the data to prompt a model:
+
+```rust
+#[derive(Clone)]
+pub struct Researcher {
+    http_client: reqwest::Client,
+    system: Option<String>,
+    openai_client: OpenAIClient<OpenAIConfig>,
+}
+
+```
+
+Next, we can implement the `Agent` trait for our struct:
+
+```rust
+impl Agent for Researcher {
+    fn name(&self) -> String {
+        "Researcher".to_string()
+    }
+
+    fn client(&self) -> OpenAIClient<OpenAIConfig> {
+        self.openai_client.clone()
+    }
+
+    fn system_message(&self) -> String {
+        if let Some(message) = &self.system {
+            message.to_owned()
+        } else {
+            "You are an agent.
+
+        You will receive a question that may be quite short or does not have much context.
+        Your job is to research the Internet and to return with a high-quality summary to the user, assisted by the provided context.
+        The provided context will be in JSON format and contains data about the initial Google results for the website or query.
+
+        Be concise.
+
+        Question:
+        ".to_string()
+        }
+    }
+}
+```
+
+Note that here, the `name()` and `client()` functions are mostly boilerplate. If you wanted to extend this even further, you could use a macro to get rid of this totally.
+
+The system message will be for pre-prompting the model. When we prompt the model, the system message will be passed in and then the bot will respond to the prompt according to the system message. In models where system messages don't exist, this would simply represent the text before you put your prompt.
+
+We also implement two methods for `impl Researcher`: one to initialise the struct itself, and then one for preparing the data to send into our agent pipeline:
+
+```rust
+use std::env;
+use reqwest::header::HeaderMap;
+
+impl Researcher {
+    pub fn new() -> Self {
+        let api_key = env::var("OPENAI_API_KEY").unwrap();
+        let config = OpenAIConfig::new().with_api_key(api_key);
+
+        let openai_client = OpenAIClient::with_config(config);
+
+        let mut headers = HeaderMap::new();
+        headers.insert(
+            "X-API-KEY",
+            env::var("SERPER_API_KEY").unwrap().parse().unwrap(),
+        );
+        headers.insert("Content-Type", "application/json".parse().unwrap());
+
+        let http_client = reqwest::Client::builder()
+            .default_headers(headers)
+            .build()
+            .unwrap();
+
+        Self {
+            http_client,
+            system: None,
+            openai_client,
+        }
+    }
+
+    pub async fn prepare_data(&self, prompt: &str) -> Result<String, ApiError> {
+        let json = serde_json::json!({
+            "q": prompt
+        });
+
+        let res = self
+            .http_client
+            .post("<https://google.serper.dev/search>")
+            .json(&json)
+            .send()
+            .await
+            .unwrap();
+
+        let json = res.json::<Value>().await?;
+        Ok(serde_json::to_string_pretty(&json)?)
+    }
+}
+
+```
+
+The `Writer` half of our AI agents will mostly be the same, save the `reqwest::Client`. We need to implement `Agent` alongside it, however,
+
+```rust
+#[derive(Clone)]
+pub struct Writer {
+    system: Option<String>,
+    client: OpenAIClient<OpenAIConfig>,
+}
+
+impl Writer {
+    pub fn new() -> Self {
+        let api_key = env::var("OPENAI_API_KEY").unwrap();
+        let config = OpenAIConfig::new().with_api_key(api_key);
+
+        let client = OpenAIClient::with_config(config);
+        Self {
+            system: None,
+            client,
+        }
+    }
+}
+
+impl Agent for Writer {
+    fn name(&self) -> String {
+        "Writer".to_string()
+    }
+
+    fn client(&self) -> OpenAIClient<OpenAIConfig> {
+        self.client.clone()
+    }
+
+    fn system_message(&self) -> String {
+        if let Some(message) = &self.system {
+            message.to_owned()
+        } else {
+            "You are an agent.
+
+        You will receive some context from another agent about some Google results that a user has searched.
+        Your job is to research the Internet and to write a high-quality article that a user has written. The article must not appear to be AI written. The article should be SEO optimised without overly compromising the
+        quality of the article.
+
+        You are free to be as creative as you wish. However, each paragraph must have the following:
+        - The point you are trying to make
+        - If there is a follow up action point
+        - Why the follow up action point exists (or why the user needs to carry it out)
+
+        Search query:
+".to_string()
+        }
+    }
+}
+
+```
+
+Finally, we'll go back and fill the `prompt` method back in on the default `Agent` trait so that we have a default method implementation (and therefore don't need to keep re-implementing it):
+
+```rust
+use async_openai::types::{
+    ChatCompletionRequestMessage, ChatCompletionRequestSystemMessageArgs,
+    ChatCompletionRequestUserMessageArgs, CreateChatCompletionRequestArgs,
+};
+    async fn prompt(&self, input: &str, data: String) -> Result<String, ApiError> {
+        let input = format!(
+            "{input}
+
+            Provided context:
+            {}
+            ",
+            serde_json::to_string_pretty(&data)?
+        );
+        let res = self
+            .client()
+            .chat()
+            .create(
+                CreateChatCompletionRequestArgs::default()
+                    .model("gpt-4o")
+                    .messages(vec![
+                        //First we add the system message to define what the Agent does
+                        ChatCompletionRequestMessage::System(
+                            ChatCompletionRequestSystemMessageArgs::default()
+                                .content(&self.system_message())
+                                .build()?,
+                        ),
+                        //Then we add our prompt
+                        ChatCompletionRequestMessage::User(
+                            ChatCompletionRequestUserMessageArgs::default()
+                                .content(input)
+                                .build()?,
+                        ),
+                    ])
+                    .build()?,
+            )
+            .await
+            .map(|res| {
+                //We extract the first one
+                res.choices[0].message.content.clone().unwrap()
+            })?;
+
+        println!("Retrieved result from prompt: {res}");
+
+        Ok(res)
+    }
+
+```
+
+### Writing our web service
+
+Now that the hard work is over - we can implement the AI agents in our web application!
+
+To get started, we'll create an `AppState` struct that implements `Clone`. Typically, this is a trait bound set by Axum or pretty much any Rust-based framework that you use. In it we'll have our `Researcher` and `Writer` struct:
+
+```rust
+use crate::agent::{Researcher, Writer};
+
+#[derive(Clone)]
+pub struct AppState {
+    pub researcher: Researcher,
+    pub writer: Writer,
+}
+
+impl AppState {
+    pub fn new() -> Self {
+        let researcher = Researcher::new();
+        let writer = Writer::new();
+
+        Self { researcher, writer }
+    }
+}
+
+```
+
+Next, we will write our handler endpoint that will take in a JSON input, run the agent pipeline and then return the end result:
+
+```rust
+#[derive(Deserialize, Serialize)]
+pub struct Prompt {
+    q: String,
+}
+
+#[axum::debug_handler]
+async fn prompt(
+    State(state): State<AppState>,
+    Json(prompt): Json<Prompt>,
+) -> Result<impl IntoResponse, ApiError> {
+    let data = state.researcher.prepare_data(&prompt.q).await?;
+    let resarcher_result = state.researcher.prompt(&prompt.q, data).await?;
+    let writer_result = state.writer.prompt(&prompt.q, res).await?;
+
+    Ok(writer_result)
+}
+
+```
+
+And that's basically it!
+
+We can then hook it all up by adding our endpoint to the router:
+
+```rust
+    let router = Router::new()
+        .route("/", get(hello_world))
+        .route("/prompt", post(prompt))
+        .with_state(state);
+
+```
+
+## Deployment
+
+Now all we need to do is use `cargo shuttle deploy` (adding the `--ad` flag if on an uncommitted Git branch) and watch the magic happen!
+
+## Extending this project
+
+### Making a Pipeline struct for your agents
+
+So let's say you've built this example, and want to go even further. What about pulling in another agent that generates a Twitter post or a LinkedIn post. At this point, you probably want to build a pipeline that holds all your agents, then you can just write `.run_pipeline()` and it'll do everything for you.
+
+To do this, you could create a `Pipeline` trait  does two things:
+
+- Initialise the agents set (and return it as a `Vec<Box<dyn Agent>>`)
+- Run the vector as a pipeline, where the results of the previous agent gets fed into the next one
+
+However, you may run into an issue with your Agents needing to implement `Sized`. This is because `Clone` requires an object to be a known size at compile-time - otherwise it won't work! To fix this, we can wrap the `dyn` type in a `Box`, allocating it on the heap. This works because the `Clone` trait requires the type to have a known, static size at compile-time.
+
+Additionally, you might also receive an error with not being able to compile because of the `prompt()` method being async. You can fix this by adding the `async_trait` crate, then using the attribute macro above your code:
+
+```rust
+#[async_trait::async_trait]
+trait Agent {
+     // ..
+}
+```
+
+Note that for every `impl Agent for T`, you’ll also need to remember to add the async trait macro. Otherwise, you’ll get an error about the lifetime annotations not matching!
+
+### Updating the prompt
+
+If you’re not happy with the prompt results, don’t forgetyou can always update the message prompt that gets sent to your model!
+
+## Finishing Up
+
+By leveraging Rust with the power of GPT-4o, you can develop a robust AI-powered content writer.
+
+## Additional Resources
+
+For further learning and details, refer to:
+
+- [Building Your First AI Tool in Rust - Shuttle.rs](https://www.shuttle.rs/blog/2024/04/29/building-your-first-ai-tool-rust)
+- [Using Huggingface with Rust - Shuttle.rs](https://www.shuttle.rs/blog/2023/03/01/getting-started-with-rust-and-gpt)
