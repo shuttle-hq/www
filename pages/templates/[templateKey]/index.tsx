@@ -1,3 +1,5 @@
+'use client'
+
 import toml from '@iarna/toml'
 import {
 	Example,
@@ -20,6 +22,7 @@ import TemplateMetadata from 'components/sections/Templates/TemplateMetadata'
 import TemplateLaunch from 'components/sections/Templates/TemplateLaunch'
 import TemplateLogo from 'components/sections/Templates/TemplateLogo'
 import TemplateInit from 'components/sections/Templates/TemplateInit'
+import { useState } from 'react'
 
 export const getStaticPaths = (async () => {
 	const response = await fetch(TEMPLATES_URL)
@@ -135,6 +138,8 @@ export const getStaticProps = (async (context) => {
 }>
 
 export default function TemplateDetails({ template }: InferGetStaticPropsType<typeof getStaticProps>) {
+	const [isModalOpen, setIsModalOpen] = useState(false)
+
 	return (
 		<section className='mx-auto my-[65px] w-full max-w-screen-xl px-10'>
 			<Link className='mb-14 flex items-center gap-1' href='/templates'>
@@ -149,13 +154,31 @@ export default function TemplateDetails({ template }: InferGetStaticPropsType<ty
 
 						<TemplateInit path={template?.path} />
 
-						<TemplateLaunch path={template?.path} />
+						{isModalOpen && (
+							<div className='my-5 flex w-full flex-col justify-start'>
+								<h3 className='font-gradual text-2xl font-bold text-head'>Instructions</h3>
+								<ol className='mt-1 text-head opacity-60'>
+									<li>Step 1. Start rust</li>
+									<li>Step 2. Copy cargo shuttle init command with info above</li>
 
-						<TemplateMetadata
-							tags={template?.tags ?? []}
-							use_cases={template?.use_cases ?? []}
-							type={template?.type}
+									<li>Step 3. Login into dashboard</li>
+								</ol>
+							</div>
+						)}
+
+						<TemplateLaunch
+							path={template?.path}
+							modalOpen={isModalOpen}
+							setModalOpen={setIsModalOpen}
 						/>
+
+						{!isModalOpen && (
+							<TemplateMetadata
+								tags={template?.tags ?? []}
+								use_cases={template?.use_cases ?? []}
+								type={template?.type}
+							/>
+						)}
 					</div>
 
 					<div className='w-full'>

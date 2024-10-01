@@ -9,6 +9,9 @@ export default function FilterMobile({
 	setSearch,
 	setSelectedTags,
 	setSelectedUseCases,
+	types,
+	selectedTypes,
+	setSelectedTypes,
 	tags,
 	useCases,
 	selectedUseCases,
@@ -18,6 +21,9 @@ export default function FilterMobile({
 	setSearch: (search: string) => void
 	setSelectedTags: (tags: string[]) => void
 	setSelectedUseCases: (useCases: string[]) => void
+	types: string[]
+	selectedTypes: string[]
+	setSelectedTypes: (types: string[]) => void
 	tags: string[]
 	useCases: string[]
 	selectedUseCases: string[]
@@ -114,6 +120,13 @@ export default function FilterMobile({
 							Clear
 						</button>
 					</div>
+
+					<TemplateFilterGroup
+						items={types}
+						selectedItems={selectedTypes}
+						setSelectedItems={setSelectedTypes}
+						title='Types'
+					/>
 
 					<TemplateFilterGroup
 						items={useCases}

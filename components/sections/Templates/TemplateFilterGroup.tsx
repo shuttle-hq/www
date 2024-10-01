@@ -15,23 +15,23 @@ export default function TemplateFilterGroup({
 	const isChecked = (item: string) => selectedItems.includes(item)
 
 	return (
-		<div className='mb-9 text-[#7A7A7A]'>
+		<div className='ny mb-9 text-[#7A7A7A]'>
 			<span className='uppercase'>{title}</span>
 			<fieldset>
 				{items.map((item) => (
-					<div key={item}>
+					<div key={item} className='py-2.5'>
 						<Checkbox
 							checked={selectedItems.includes(item)}
 							icon={<CheckIcon />}
 							className={`${
-								isChecked(item) ? 'border-[#FC540C]' : 'border-[#1A1A1A]'
+								isChecked(item) ? 'border-[#FC540C] text-[#D8D8D8]' : 'border-[#1A1A1A]'
 							} transition-all hover:border-[#FC540C]`}
 							style={{
 								overflow: 'hidden',
 								backgroundColor: isChecked(item) ? '#FC540C' : 'transparent',
 							}}
 							size={20}
-							labelClassName=' ml-[10px] transition-all'
+							labelClassName=' ml-[10px] transition-all capitalize'
 							labelStyle={{ color: isChecked(item) ? '#fff' : '#C8C8C8' }}
 							label={item}
 							onChange={(value: boolean) => {
