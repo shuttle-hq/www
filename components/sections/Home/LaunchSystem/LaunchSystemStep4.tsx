@@ -11,7 +11,7 @@ export default function LaunchSystemStep4() {
 				<Step2Top />
 				<Step3Top />
 			</div>
-			<RocketColor4 />
+			<RocketColor4 className='bottom-[-150%] 2xl:bottom-[-80%]' />
 		</div>
 	)
 }

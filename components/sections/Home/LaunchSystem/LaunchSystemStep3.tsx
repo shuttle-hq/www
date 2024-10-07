@@ -32,7 +32,7 @@ export default function LaunchSystemStep3() {
 				path='grid'
 				divContainerProps={{ className: 'hidden 2xl:block' }}
 			/>
-			<div className='flex h-auto w-full flex-col items-center justify-between gap-8 2xl:h-[70vh]'>
+			<div className='flex h-auto w-full flex-col items-center justify-between gap-8 2xl:h-[90vh]'>
 				<Step3Top id='top-3' />
 				<div className='flex w-full flex-col items-center justify-between gap-8 2xl:flex-row'>
 					<div className='flex flex-col gap-7'>
