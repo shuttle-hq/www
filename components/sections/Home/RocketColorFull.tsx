@@ -10,7 +10,7 @@ export default function RocketColor4(props: SVGProps<SVGSVGElement>) {
 			fill='none'
 			xmlns='http://www.w3.org/2000/svg'
 			{...props}
-			className={clsx('absolute -bottom-[30%] -left-[26%] hidden w-full lg:block', props.className)}
+			className={clsx('absolute -left-[26%] hidden w-full lg:block', props.className)}
 		>
 			<path d='M1014.17 509H536.333' stroke='url(#paint0_linear_3299_52514)' stroke-width='1.25081' />
 			<path

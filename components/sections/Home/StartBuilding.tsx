@@ -5,7 +5,10 @@ export default function StartBuilding() {
 	return (
 		<div className='mx-auto mt-8 max-w-7xl sm:mx-auto sm:px-10'>
 			<h1 className='text-[56px] text-[#F0F0F0]'>Start Building</h1>
-			<p>Use one of our starter templates to get your project off the ground in minutes.</p>
+			<p>
+				Use one of our starter templates to get your
+				<br /> project off the ground in minutes.
+			</p>
 
 			<Link href='/starters'>
 				<p className='my-5 flex items-center gap-1 text-[#F0F0F0]'>
