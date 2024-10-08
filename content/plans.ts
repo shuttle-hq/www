@@ -11,7 +11,7 @@ export const Plans: PlanProps[] = [
 		billsResources: false,
 		features: [
 			{
-				feature: 'Up to 3 projects',
+				feature: '1 project',
 			},
 			{
 				feature: 'Enough CPU & RAM to get you started',
@@ -52,7 +52,7 @@ export const Plans: PlanProps[] = [
 		billsResources: true,
 		features: [
 			{
-				feature: 'Up to 15 projects',
+				feature: 'Up to 3 projects',
 			},
 			{
 				feature: 'Higher CPU & RAM limits',
