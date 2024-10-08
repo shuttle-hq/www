@@ -5,7 +5,7 @@ export const Plans: PlanProps[] = [
 	{
 		key: 'community',
 		name: 'Community',
-		description: 'Everything you need to simply run your hobby projects. On us.',
+		description: 'Everything you need to simply run your hobby project. On us.',
 		price: '$0',
 		term: '/ month',
 		billsResources: false,
