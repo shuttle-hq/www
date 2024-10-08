@@ -76,7 +76,7 @@ use llm_chain::{executor, parameters, prompt, step::Step};
 
 Next, we will mark our `main` function with the `async` keyword and add the `#[tokio::main]` macro right on-top of it. This allows us to use the Tokio asynchronous runtime for async functionality and automatic polling of futures (values that have may or may not finished work).
 
-P.S. If you'd like to learn more about Async in Rust, you can check out our [Async Rust in a Nutshell](https://www.shuttle.rs/blog/2024/02/29/async-rust) article!
+P.S. If you'd like to learn more about Async in Rust, you can check out our [Async Rust in a Nutshell](https://shuttle.dev/blog/2024/02/29/async-rust) article!
 
 ```rust
 #[tokio::main]
@@ -254,5 +254,5 @@ In this tutorial, we built a command-line application in Rust that can analyze d
 If you are up for another challenge; try making the data source dynamic, allowing users to upload their own `csv`, or even better, other file formats such as `pdf` or `json`!
 
 Read more:
-- [Creating a RAG-assisted web service with Axum](https://www.shuttle.rs/blog/2024/02/28/rag-llm-rust)
-- [More than you've ever wanted to know about error handling](https://www.shuttle.rs/blog/2022/06/30/error-handling)
+- [Creating a RAG-assisted web service with Axum](https://shuttle.dev/blog/2024/02/28/rag-llm-rust)
+- [More than you've ever wanted to know about error handling](https://shuttle.dev/blog/2022/06/30/error-handling)

@@ -5,11 +5,11 @@ date: "2023-08-28T16:00:00"
 
 # Shuttle Launchpad #7: A little more CRUD
 
-Welcome to the next issue of Shuttle Launchpad! Before we start, we want to invite you to take a good look at an article we just published, where we [compare all popular Rust web frameworks](https://www.shuttle.rs/blog/2023/08/23/rust-web-framework-comparison). We spent a lot of time investigating and trying to go a bit deeper than just the surface. We hope you enjoy it!
+Welcome to the next issue of Shuttle Launchpad! Before we start, we want to invite you to take a good look at an article we just published, where we [compare all popular Rust web frameworks](https://shuttle.dev/blog/2023/08/23/rust-web-framework-comparison). We spent a lot of time investigating and trying to go a bit deeper than just the surface. We hope you enjoy it!
 
 ## Defining traits
 
-This time I want to go back to a launchpad issue that we did [the last time](https://www.shuttle.rs/launchpad/issues/2023-11-08-issue-06-CRUD-Postgres), where we created a simple CRUD application. The app is nice, but there is something that annoys me personally. Let's take a look at the two handler functions that we created. Don't forget to re-import all of the `use` items from the last issue!
+This time I want to go back to a launchpad issue that we did [the last time](https://shuttle.dev/launchpad/issues/2023-11-08-issue-06-CRUD-Postgres), where we created a simple CRUD application. The app is nice, but there is something that annoys me personally. Let's take a look at the two handler functions that we created. Don't forget to re-import all of the `use` items from the last issue!
 
 The `create_article` function is using the `QueryBuilder` and manually handles the result of the query execution. The `get_article` is much more direct as it executes an SQL statement and maps the result to a `Json<Article>`.
 
@@ -202,10 +202,10 @@ If you have any questions regarding _Launchpad_, join the `#launchpad` channel o
 
 [_Launchpad Examples_](https://github.com/ddprrt/shuttle-launchpad-examples): Check out all Launchpad Examples on GitHub.
 
-[_Best Rust Web Frameworks to Use in 2023_](https://www.shuttle.rs/blog/2023/08/23/rust-web-framework-comparison): A detailled analysis of Rust web frameworks by your's truly.
+[_Best Rust Web Frameworks to Use in 2023_](https://shuttle.dev/blog/2023/08/23/rust-web-framework-comparison): A detailled analysis of Rust web frameworks by your's truly.
 
 ## Bye!
 
 That's it for today. Get in touch with us and let us know what you want to see!
 
--- [Stefan](https://oida.dev) and your friends from [Shuttle](https://shuttle.rs)
+-- [Stefan](https://oida.dev) and your friends from [Shuttle](https://shuttle.dev)

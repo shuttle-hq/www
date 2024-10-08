@@ -37,7 +37,7 @@ Although initially there is more boilerplate setup than using a raw SQL library 
 
 SeaORM is a fully async-friendly Rust ORM that aims to “help you build web services in Rust with the familiarity of dynamic languages”. This library builds on SQLx and abstracts the raw SQL away to provide a clean interface that allows you to use structs as models, using derive macros and traits to allow you to build the experience that you want. It also comes with a CLI for generating migrations, entities, and models.
 
-SeaORM also implements a system called `ActiveModel` through traits to be able to extend the behavior of models that an application might use. Additionally, you can add traits for extending behavior before or after saving a record, and the `ActiveModel` itself. This is quite helpful for us as it allows us to slim down the application code while abstracting it away to other areas. A new framework called [Loco](https://loco.rs/) aims to reproduce the “Ruby on Rails” experience in Rust by including heavy use of SeaORM to slim down application code by allowing you to instead use traits to implement the behavior that you want - you can explore this with our article [here.](https://www.shuttle.rs/blog/2023/12/28/using-loco-rust-rails)
+SeaORM also implements a system called `ActiveModel` through traits to be able to extend the behavior of models that an application might use. Additionally, you can add traits for extending behavior before or after saving a record, and the `ActiveModel` itself. This is quite helpful for us as it allows us to slim down the application code while abstracting it away to other areas. A new framework called [Loco](https://loco.rs/) aims to reproduce the “Ruby on Rails” experience in Rust by including heavy use of SeaORM to slim down application code by allowing you to instead use traits to implement the behavior that you want - you can explore this with our article [here.](https://shuttle.dev/blog/2023/12/28/using-loco-rust-rails)
 
 SeaORM has quite a lot of helpful documentation which you can find [here.](https://www.sea-ql.org/SeaORM/docs/index/) There’s a page for mostly everything you can do with SeaORM. Some parts like `ActiveModel` that are quite useful to know about are mainly tucked away into parts of other pages, so it could be inferred there’s an assumption that you’re going to read every page or use the search bar. If you plan to use SeaORM regularly it would be a good idea to do so already, but this can make casual browsing somewhat more awkward.
 
@@ -236,5 +236,5 @@ Thanks for reading! I hope you have gained a better understanding of what Rust O
 
 Further reading:
 
-- Want to use raw SQL instead? Check out our article about SQLx [here.](https://www.shuttle.rs/blog/2023/10/04/sql-in-rust)
-- Interested in finding the best web framework for you? Check out our comparison article [here.](https://www.shuttle.rs/blog/2023/08/23/rust-web-framework-comparison)
+- Want to use raw SQL instead? Check out our article about SQLx [here.](https://shuttle.dev/blog/2023/10/04/sql-in-rust)
+- Interested in finding the best web framework for you? Check out our comparison article [here.](https://shuttle.dev/blog/2023/08/23/rust-web-framework-comparison)

@@ -138,7 +138,7 @@ impl Query {
 }
 ```
 
-As you can see, we've written a function that returns the vector of structs. Because we're using `query_as`, it automatically binds the query results to the structs so we don't have to worry about mapping it out - you can find more about this [here](https://www.shuttle.rs/blog/2023/10/04/sql-in-rust).
+As you can see, we've written a function that returns the vector of structs. Because we're using `query_as`, it automatically binds the query results to the structs so we don't have to worry about mapping it out - you can find more about this [here](https://shuttle.dev/blog/2023/10/04/sql-in-rust).
 
 What about if we want to query only specific rows based on filter criteria? We will want to make sure to add a description on each of the parameters so that when anyone visits our GraphQL playground, they'll be able to understand what each of the parameters actually does - then in our SQL query, we will want to filter conditionally based on what parameters have been filled in:
 
@@ -270,7 +270,7 @@ Similarly, we can do it exactly the same way for delete functions.
 
 ## Subscriptions
 
-Subscriptions in GraphQL are a way of subscribing to changes - for example, when a new record gets created or updated, you might want a way for your users to know about or get real time updates. Subscriptions in this respect are similar to PostgreSQL Listen/Notify functions which you can use to listen and notify updates through channels in Postgres - which if you don't know about yet, which you can read more about [here](https://www.shuttle.rs/blog/2023/10/04/sql-in-rust#postgresql-listennotify). 
+Subscriptions in GraphQL are a way of subscribing to changes - for example, when a new record gets created or updated, you might want a way for your users to know about or get real time updates. Subscriptions in this respect are similar to PostgreSQL Listen/Notify functions which you can use to listen and notify updates through channels in Postgres - which if you don't know about yet, which you can read more about [here](https://shuttle.dev/blog/2023/10/04/sql-in-rust#postgresql-listennotify). 
 
 In `async-graphql`, subscriptions are types that implement `futures_util::Stream` and always return an `impl Stream<Item = T>`; that is to say, the type we're returning needs to implement `Stream` so that the compiler knows that the type can return a stream of data. The most common way to do this is through types that wrap channel Senders/Receivers, and we will show how to do this below.
 
@@ -489,7 +489,7 @@ If you use `cargo shuttle run` and go to `http://localhost:8000`, you'll be able
 
 Once you're done, feel free to deploy by using `cargo shuttle deploy` (with `--allow-dirty` if on a dirty Git branch). Your app will then be deployed to Shuttle servers along with a provisioned database - nothing more is needed! When finished, you'll be able to view your connection string (if you lose it for whatever reason, you can use `cargo-shuttle resource list` to get the connection string again).
 
-If you're looking for something a bit more isolated, we also offer a completely isolated AWS RDS database as a paid add-on. Find out more about our pricing [here.](https://www.shuttle.rs/pricing)
+If you're looking for something a bit more isolated, we also offer a completely isolated AWS RDS database as a paid add-on. Find out more about our pricing [here.](https://shuttle.dev/pricing)
 
 ## Finishing Up
 	

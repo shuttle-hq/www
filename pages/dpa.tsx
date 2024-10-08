@@ -7,7 +7,7 @@ export default function Terms() {
 					This Data Processing Addendum (the <strong>DPA</strong>) is incorporated by reference into our
 					Terms and Conditions{' '}
 					<a href='https://www.shuttle.rs/terms' className='underline'>
-						https://www.shuttle.rs/terms
+						https://shuttle.dev/terms
 					</a>{' '}
 					(the Terms) governing the use of our Hosting Services entered by and between you and{' '}
 					<strong>Openquery Ltd</strong>, a company registered in England under number{' '}

@@ -125,7 +125,7 @@ async fn axum(
     // .. the rest of your code
 }
 ```
-Locally this is done through Docker, but in deployment there is an overarching process that does this for you! No extra work is required. We also have an AWS RDS database offering that requires zero AWS knowledge to set up - visit [here](https://shuttle.rs/pricing) to find out more.
+Locally this is done through Docker, but in deployment there is an overarching process that does this for you! No extra work is required. We also have an AWS RDS database offering that requires zero AWS knowledge to set up - visit [here](https://shuttle.dev/pricing) to find out more.
 
 ## App State in Axum
 Now you might be wondering, "how do I store my database pool and other state-wide variables? I don't want to initialise my connection pool every time I want to do something!" - which is a perfectly valid question and is easily answered! You may have noticed that before we used `axum::Extension` to store it - this is perfectly fine for some use cases, but comes with the disadvantage of not being entirely typesafe. In most Rust web frameworks, Axum included, we use what is called "app state" - a struct dedicated to holding all of your variables that you want to share across your routes on the app. The only requirement to do this in Axum is that the struct needs to implement `Clone`, which we can do like so. For example:
@@ -457,7 +457,7 @@ fn init_router() -> Router {
 }
 ```
 
-You can also use HTML templating with crates like [`askama`](https://github.com/djc/askama), [`tera`](https://github.com/Keats/tera) and [`maud`](https://maud.lambda.xyz/)! This can be combined with the power of lightweight JavaScript libraries like [`htmx`](https://htmx.org) to speed up time to production. You can read more about this on our other article about using HTMX with Rust which you can find [here.](https://www.shuttle.rs/blog/2023/10/25/htmx-with-rust). We also collaborated with [Stefan Baumgartner](https://fettblog.eu) on an article for [serving HTML with Askama!](https://www.shuttle.rs/launchpad/issues/2023-10-17-issue-10-Serving-HTML)
+You can also use HTML templating with crates like [`askama`](https://github.com/djc/askama), [`tera`](https://github.com/Keats/tera) and [`maud`](https://maud.lambda.xyz/)! This can be combined with the power of lightweight JavaScript libraries like [`htmx`](https://htmx.org) to speed up time to production. You can read more about this on our other article about using HTMX with Rust which you can find [here.](https://shuttle.dev/blog/2023/10/25/htmx-with-rust). We also collaborated with [Stefan Baumgartner](https://fettblog.eu) on an article for [serving HTML with Askama!](https://shuttle.dev/launchpad/issues/2023-10-17-issue-10-Serving-HTML)
 
 ## How to Deploy Axum
 Deployment with Rust backend programs in general can be less than ideal due to having to use Dockerfiles, although if you are experienced with Docker already this may not be such an issue for you - particularly if you are using `cargo-chef`. However, if you're using Shuttle you can just use `cargo shuttle deploy` and you're done already. No setup is required.
@@ -466,5 +466,5 @@ Deployment with Rust backend programs in general can be less than ideal due to h
 Thanks for reading! Axum is a great framework that has a strong team backing and is highly compatible with the Rust web ecosystem, and we believe now is a better time than ever to get started writing a REST API in Rust.
  
 Interested in more?
-- Check out how you can implement authentication in Axum [here!](https://www.shuttle.rs/blog/2022/08/11/authentication-tutorial)
-- Have a look at how you can get started with logging for your web application [here.](https://www.shuttle.rs/blog/2023/09/20/logging-in-rust)
+- Check out how you can implement authentication in Axum [here!](https://shuttle.dev/blog/2022/08/11/authentication-tutorial)
+- Have a look at how you can get started with logging for your web application [here.](https://shuttle.dev/blog/2023/09/20/logging-in-rust)

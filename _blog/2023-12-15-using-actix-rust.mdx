@@ -218,7 +218,7 @@ async fn actixweb(
 }
 ```
 
-Locally this is done through Docker, but in deployment there is an overarching process that does this for you! No extra work required. We also have an AWS RDS database offering that requires zero AWS knowledge to set up - visit [here](https://shuttle.rs/pricing) to find out more.
+Locally this is done through Docker, but in deployment there is an overarching process that does this for you! No extra work required. We also have an AWS RDS database offering that requires zero AWS knowledge to set up - visit [here](https://shuttle.dev/pricing) to find out more.
 
 ## App State in Actix Web
 
@@ -478,7 +478,7 @@ async fn index_route() -> impl Responder {
 
 Then we can add it as a regular handler function in our Actix Web service and we're good to go! When you go to a path that returns `index_route`, you should see "Hello, Shuttle!" as the HTML response.
 
-Interested in learning more about Askama? We have a Shuttle Launchpad newsletter issue that talks about this! You can find it [here](https://www.shuttle.rs/launchpad/issues/2023-10-17-issue-10-Serving-HTML).
+Interested in learning more about Askama? We have a Shuttle Launchpad newsletter issue that talks about this! You can find it [here](https://shuttle.dev/launchpad/issues/2023-10-17-issue-10-Serving-HTML).
 
 ## Deploying
 
@@ -490,5 +490,5 @@ Thanks for reading! Actix Web is a strong framework that you can use to boost yo
 
 Interested in more?
 
-- Check out this [comprehensive primer for Rust error handling](https://www.shuttle.rs/blog/2022/06/30/error-handling).
-- Compare how Actix Web measures up against other frameworks in [our framework comparison article](https://www.shuttle.rs/blog/2023/08/23/rust-web-framework-comparison).
+- Check out this [comprehensive primer for Rust error handling](https://shuttle.dev/blog/2022/06/30/error-handling).
+- Compare how Actix Web measures up against other frameworks in [our framework comparison article](https://shuttle.dev/blog/2023/08/23/rust-web-framework-comparison).

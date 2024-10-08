@@ -13,7 +13,7 @@ export default function AcceptableUse() {
 					</a>
 					, and governs your access to and use of our website at{' '}
 					<a href='https://www.shuttle.rs' className='underline'>
-						https://www.shuttle.rs
+						https://shuttle.dev
 					</a>{' '}
 					(the <strong>Website</strong>) and the Services (as defined in our Terms and Conditions).
 				</p>

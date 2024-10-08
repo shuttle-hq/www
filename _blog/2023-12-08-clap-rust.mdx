@@ -80,7 +80,7 @@ fn main() {
 Currently, this program will take two different commands - which are "get" and "set". If we run `cargo run get` now, we should receive the debug printout of what was parsed from when we ran the program. The same would be the same if you run `cargo run set` - if you attempt to run the program without outputting any commands, or if you try to input an invalid command, clap should return the help menu as mentioned before.
 
 ## Adding Clap Command Flags
-We can also use tuple-like struct syntax and named-field struct syntax for enum variants within our enum; this is because unlike in other OOP languages, Rust enums are actually **sum types**. You can read more about how powerful Rust enums are in another article we wrote [here.](https://www.shuttle.rs/blog/2023/11/23/enums-in-rust) You can have optional arguments by simply wrapping the types in `Option`, but if you want to add a flag to a command you can use `bool`, since [`clap`](https://github.com/clap-rs/clap) recognises that flags are either there or not there. Let's have a look at what this might look like:
+We can also use tuple-like struct syntax and named-field struct syntax for enum variants within our enum; this is because unlike in other OOP languages, Rust enums are actually **sum types**. You can read more about how powerful Rust enums are in another article we wrote [here.](https://shuttle.dev/blog/2023/11/23/enums-in-rust) You can have optional arguments by simply wrapping the types in `Option`, but if you want to add a flag to a command you can use `bool`, since [`clap`](https://github.com/clap-rs/clap) recognises that flags are either there or not there. Let's have a look at what this might look like:
 ```rust
 use clap::{Parser, Subcommand};
 
@@ -271,5 +271,5 @@ If you're stuck with getting a high-level view of how clap can be used in produc
 Thanks for reading! Writing a CLI tool in Rust can be a great first step into learning the language - but that doesn't mean you can't also make great production-grade tools in the command line. Hopefully, this article has given you some insight into how you can improve any of the CLI tools you've made, or perhaps help you write a new Rust [`clap`](https://github.com/clap-rs/clap) application.
 
 Interested in more?
-- Check out how you can use raw SQL in Rust with SQLx [here.](https://www.shuttle.rs/blog/2023/10/04/sql-in-rust)
-- If you'd like to know more about how macros work, [this article should help you out.](https://www.shuttle.rs/blog/2022/12/23/procedural-macros)
+- Check out how you can use raw SQL in Rust with SQLx [here.](https://shuttle.dev/blog/2023/10/04/sql-in-rust)
+- If you'd like to know more about how macros work, [this article should help you out.](https://shuttle.dev/blog/2022/12/23/procedural-macros)
