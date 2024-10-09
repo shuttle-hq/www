@@ -9,7 +9,7 @@ export default function Terms() {
 					These terms and conditions (the <strong className='text-head'>Terms</strong>) govern your
 					access to, and use of our website at{' '}
 					<a href='https://www.shuttle.rs/' className='underline'>
-						https://shuttle.dev/
+						https://www.shuttle.dev/
 					</a>{' '}
 					(the <strong className='text-head'>Website</strong>), and the use of, and registration with,
 					our backend development tool offered through our Website (the{' '}
@@ -268,7 +268,7 @@ export default function Terms() {
 								<strong className='text-head'>Fees.</strong> Where you chose the “pro” plan on the
 								Website, you will pay us the fees set out on our Website at{' '}
 								<a href='https://www.shuttle.rs/pricing' target='_blank'>
-									https://shuttle.dev/pricing
+									https://www.shuttle.dev/pricing
 								</a>
 								, or as otherwise agreed between us. The fees are exclusive of any VAT and
 								applicable tax.

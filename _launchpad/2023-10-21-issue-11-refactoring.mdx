@@ -13,7 +13,7 @@ In this issue, we also want to talk about refactoring, and how a few simple tech
 
 ## Refactoring: A CRUD KV Store with Image Processing
 
-The project we're looking at is an extension of the image processing app we've written in [Shuttle Launchpad Issue #5](https://shuttle.dev/launchpad/issues/2023-28-07-issue-05-Traits-Image-Processing). It's an Axum app, and we have an in-memory key-value store that allows us to store any arbitrary data. We have a `/kv/:key` route, with `:key` being a path parameter that we replace with the actual key we want to store. This route listens to both `get` and `post` requests. If we `get` the route, we return the value for the given key. If we `post` to the route, we store the value in the key-value store.
+The project we're looking at is an extension of the image processing app we've written in [Shuttle Launchpad Issue #5](https://www.shuttle.dev/launchpad/issues/2023-28-07-issue-05-Traits-Image-Processing). It's an Axum app, and we have an in-memory key-value store that allows us to store any arbitrary data. We have a `/kv/:key` route, with `:key` being a path parameter that we replace with the actual key we want to store. This route listens to both `get` and `post` requests. If we `get` the route, we return the value for the given key. If we `post` to the route, we store the value in the key-value store.
 
 ```rust
 use axum::{extract::{Path, State}, response::IntoResponse, Rotuer, routing::get};
@@ -77,7 +77,7 @@ The `POST` route also has a `Bytes` parameter, which allows us to get the reques
 
 In the `GET` route, we also use both the stored data as well as the `content-type` to send out the stored data again.
 
-`KVError` is a custom error type that we created just like in  [Shuttle Launchpad Issue #5](https://shuttle.dev/launchpad/issues/2023-28-07-issue-05-Traits-Image-Processing).
+`KVError` is a custom error type that we created just like in  [Shuttle Launchpad Issue #5](https://www.shuttle.dev/launchpad/issues/2023-28-07-issue-05-Traits-Image-Processing).
 
 So far, so good. Now we want to create a new feature based on this key-value store. For every image stored, we want to expose a route that allows a grayscale transformation. First, let's wire up a new route:
 
@@ -390,13 +390,13 @@ If you have any questions regarding _Launchpad_, join the `#launchpad` channel o
 
 [_Launchpad Examples_](https://github.com/ddprrt/shuttle-launchpad-examples): Check out all Launchpad Examples on GitHub.
 
-[_Rust vs Go: A comparison_](https://shuttle.dev/blog/2023/09/27/rust-vs-go-comparison): Matthias Endler creates the same app in Rust and Go. Let's see what he figures out.
+[_Rust vs Go: A comparison_](https://www.shuttle.dev/blog/2023/09/27/rust-vs-go-comparison): Matthias Endler creates the same app in Rust and Go. Let's see what he figures out.
 
-[_Using GraphQL in Rust_](https://shuttle.dev/blog/2023/10/16/graphql-in-rust): A tutorial on how to use GraphQL in Rust.
+[_Using GraphQL in Rust_](https://www.shuttle.dev/blog/2023/10/16/graphql-in-rust): A tutorial on how to use GraphQL in Rust.
 
 ## Bye!
 
 That's it for today. Get in touch with us and let us know what you want to see!
 
--- [Stefan](https://oida.dev) and your friends from [Shuttle](https://shuttle.dev)
+-- [Stefan](https://oida.dev) and your friends from [Shuttle](https://www.shuttle.dev)
 

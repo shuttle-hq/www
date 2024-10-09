@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://shuttle.dev
+Host: https://www.shuttle.dev
 
 # Sitemaps
-Sitemap: https://shuttle.dev/sitemap.xml
+Sitemap: https://www.shuttle.dev/sitemap.xml

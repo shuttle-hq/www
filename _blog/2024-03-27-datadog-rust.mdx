@@ -19,9 +19,9 @@ Fortunately, in the Rust ecosystem, we have [Tokio Tracing](https://docs.rs/trac
 
 ## Shuttle logs
 
-A while ago, I wrote a [post](https://robertohuertas.com/2023/01/09/shuttle-rust-backend-deployment/) about [Shuttle](https://shuttle.dev/), where I explained how ridiculously easy it is to deploy a Rust backend to the cloud by using their [CLI tool](https://docs.shuttle.rs/introduction/quick-start).
+A while ago, I wrote a [post](https://robertohuertas.com/2023/01/09/shuttle-rust-backend-deployment/) about [Shuttle](https://www.shuttle.dev/), where I explained how ridiculously easy it is to deploy a Rust backend to the cloud by using their [CLI tool](https://docs.shuttle.rs/introduction/quick-start).
 
-[Shuttle](https://shuttle.dev/) is still in beta, and although its observability features are not really polished yet, they offer [support](https://docs.shuttle.rs/introduction/telemetry) for [Tokio Tracing](https://docs.rs/tracing/latest/tracing/) and a way to [view logs](https://docs.shuttle.rs/introduction/telemetry#viewing-logs) by using their CLI tool.
+[Shuttle](https://www.shuttle.dev/) is still in beta, and although its observability features are not really polished yet, they offer [support](https://docs.shuttle.rs/introduction/telemetry) for [Tokio Tracing](https://docs.rs/tracing/latest/tracing/) and a way to [view logs](https://docs.shuttle.rs/introduction/telemetry#viewing-logs) by using their CLI tool.
 
 By simply running `cargo shuttle logs --follow`, you will be able to see something like this:
 
@@ -68,7 +68,7 @@ Ideally, if we had access to the underlying infrastructure, we could probably in
 
 Those solutions are generally great because they allow us to remove the burden of sending our logs to [Datadog](https://datadoghq.com) from our application, thus becoming the **responsibility of the platform** itself.
 
-If we could do something like that with [Shuttle](https://shuttle.dev/), it would be great. But, as we just mentioned, in the case of [Shuttle](https://shuttle.dev/), we **don't have access to the underlying infrastructure**, so we need to find a way to send our logs to [Datadog](https://datadoghq.com) from our application.
+If we could do something like that with [Shuttle](https://www.shuttle.dev/), it would be great. But, as we just mentioned, in the case of [Shuttle](https://www.shuttle.dev/), we **don't have access to the underlying infrastructure**, so we need to find a way to send our logs to [Datadog](https://datadoghq.com) from our application.
 
 And that's what we are going to try to do in this post.
 
@@ -76,7 +76,7 @@ And that's what we are going to try to do in this post.
 
 So, the basic idea is to add a new [tracing layer](https://docs.rs/tracing-subscriber/latest/tracing_subscriber/layer/) to the subscriber which will be responsible for sending our logs to [Datadog](https://datadoghq.com).
 
-But for that, we'll need to get **access to the subscriber instance prior to its initialization**, and it turns out that [Shuttle](https://shuttle.dev/) provides a way to do that just by disabling the default features on `shuttle-runtime` crate.
+But for that, we'll need to get **access to the subscriber instance prior to its initialization**, and it turns out that [Shuttle](https://www.shuttle.dev/) provides a way to do that just by disabling the default features on `shuttle-runtime` crate.
 
 ```toml
 shuttle-runtime = { version = "*" default-features = false }
@@ -84,7 +84,7 @@ shuttle-runtime = { version = "*" default-features = false }
 
 ## Creating our project
 
-As a walkthrough, we are going to create a new [Shuttle](https://shuttle.dev/) project from scratch.
+As a walkthrough, we are going to create a new [Shuttle](https://www.shuttle.dev/) project from scratch.
 
 The idea is to build a simple REST API using [Axum](https://docs.rs/axum/latest/axum/) and send our logs to [Datadog](https://datadoghq.com) using the [dd-tracing-layer](https://crates.io/crates/dd-tracing-layer) crate.
 
@@ -94,7 +94,7 @@ Feel free to use it as a reference.
 
 ### Initializing the project
 
-First of all, we need to create a new [Shuttle](https://shuttle.dev/) project. You can do that by using the [Shuttle CLI](https://docs.shuttle.rs/getting-started/cli):
+First of all, we need to create a new [Shuttle](https://www.shuttle.dev/) project. You can do that by using the [Shuttle CLI](https://docs.shuttle.rs/getting-started/cli):
 
 ```bash
 cargo shuttle init --template axum
@@ -286,7 +286,7 @@ It works! 🎉
 
 ## Conclusion
 
-As you can see, it's pretty easy to send your logs to [Datadog](https://datadoghq.com) from your [Shuttle](https://shuttle.dev/) powered backend.
+As you can see, it's pretty easy to send your logs to [Datadog](https://datadoghq.com) from your [Shuttle](https://www.shuttle.dev/) powered backend.
 
 Again, you can see the full code in [this GitHub repository](https://github.com/robertohuertasm/shuttle-datadog-logs).
 
