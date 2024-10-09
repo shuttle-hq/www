@@ -59,7 +59,7 @@ export default function Home({ posts, starters, questions, stargazersCount }: Pr
  				openGraph={{
 				images: [
           {
-            url: 'https://www.shuttle.rs/images/og-image.png',
+            url: 'https://www.shuttle.dev/images/og-image.png',
             width: 3516,
             height: 1432,
             alt: 'Shuttle.rs - Build Backends Fast',

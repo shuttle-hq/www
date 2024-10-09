@@ -8,7 +8,7 @@ export default function Terms() {
 				<p className='mb-6 text-xl'>
 					These terms and conditions (the <strong className='text-head'>Terms</strong>) govern your
 					access to, and use of our website at{' '}
-					<a href='https://www.shuttle.rs/' className='underline'>
+					<a href='https://www.shuttle.dev/' className='underline'>
 						https://www.shuttle.dev/
 					</a>{' '}
 					(the <strong className='text-head'>Website</strong>), and the use of, and registration with,
@@ -43,7 +43,7 @@ export default function Terms() {
 				<p className='mb-6 text-xl'>
 					Our{' '}
 					<strong className='text-head'>
-						<a href='https://www.shuttle.rs/privacy' target='_blank'>
+						<a href='https://www.shuttle.dev/privacy' target='_blank'>
 							Privacy Policy
 						</a>
 					</strong>
@@ -52,7 +52,7 @@ export default function Terms() {
 				<p className='mb-6 text-xl'>
 					Our{' '}
 					<strong className='text-head'>
-						<a href='https://www.shuttle.rs/acceptable-use' target='_blank'>
+						<a href='https://www.shuttle.dev/acceptable-use' target='_blank'>
 							Acceptable Use Policy
 						</a>
 					</strong>
@@ -62,7 +62,7 @@ export default function Terms() {
 				<p className='mb-6 text-xl'>
 					Our{' '}
 					<strong className='text-head'>
-						<a href='https://www.shuttle.rs/cookies' target='_blank'>
+						<a href='https://www.shuttle.dev/cookies' target='_blank'>
 							Cookie Policy
 						</a>
 					</strong>
@@ -147,7 +147,7 @@ export default function Terms() {
 									</li>
 									<li>
 										you comply with our{' '}
-										<a href='http://www.shuttle.rs/acceptable-use' target='_blank'>
+										<a href='http://www.shuttle.dev/acceptable-use' target='_blank'>
 											Acceptable Use Policy
 										</a>{' '}
 										which forms part of these Terms.
@@ -166,7 +166,7 @@ export default function Terms() {
 									you will input some data in the Website or the Services (your{' '}
 									<strong className='text-head'>Customer Data</strong>). When adding Customer
 									Data to the Services, you agree that you will comply with our{' '}
-									<a href='http://www.shuttle.rs/acceptable-use' target='_blank'>
+									<a href='http://www.shuttle.dev/acceptable-use' target='_blank'>
 										Acceptable Use Policy
 									</a>{' '}
 								</span>
@@ -220,17 +220,17 @@ export default function Terms() {
 								are, how we process personal data and for what purposes and the rights of data
 								subjects in relation to personal data and how to exercise them. This information is
 								provided in our{' '}
-								<a href='http://www.shuttle.rs/privacy' target='_blank'>
+								<a href='http://www.shuttle.dev/privacy' target='_blank'>
 									Privacy Policy
 								</a>{' '}
 								and it is important that you read that information. You are required to agree to
 								the terms of the{' '}
-								<a href='http://www.shuttle.rs/privacy' target='_blank'>
+								<a href='http://www.shuttle.dev/privacy' target='_blank'>
 									Privacy Policy
 								</a>{' '}
 								by clicking “Accept” in the relevant box on the Website. If you do not accept the
 								terms of the{' '}
-								<a href='http://www.shuttle.rs/privacy' target='_blank'>
+								<a href='http://www.shuttle.dev/privacy' target='_blank'>
 									Privacy Policy
 								</a>{' '}
 								you will not be permitted to use our Services.
@@ -238,7 +238,7 @@ export default function Terms() {
 							<li>
 								<strong className='text-head'>We may process Customer Data on your behalf.</strong>{' '}
 								By using the Services, you also accept our{' '}
-								<a href='http://www.shuttle.rs/dpa' target='_blank'>
+								<a href='http://www.shuttle.dev/dpa' target='_blank'>
 									Data Processing Addendum
 								</a>
 								, which governs our processing on your behalf of the personal data you provide us
@@ -267,7 +267,7 @@ export default function Terms() {
 							<li>
 								<strong className='text-head'>Fees.</strong> Where you chose the “pro” plan on the
 								Website, you will pay us the fees set out on our Website at{' '}
-								<a href='https://www.shuttle.rs/pricing' target='_blank'>
+								<a href='https://www.shuttle.dev/pricing' target='_blank'>
 									https://www.shuttle.dev/pricing
 								</a>
 								, or as otherwise agreed between us. The fees are exclusive of any VAT and

@@ -6,7 +6,7 @@ export default function Terms() {
 				<p className='mb-6 text-xl'>
 					This Data Processing Addendum (the <strong>DPA</strong>) is incorporated by reference into our
 					Terms and Conditions{' '}
-					<a href='https://www.shuttle.rs/terms' className='underline'>
+					<a href='https://www.shuttle.dev/terms' className='underline'>
 						https://www.shuttle.dev/terms
 					</a>{' '}
 					(the Terms) governing the use of our Hosting Services entered by and between you and{' '}
