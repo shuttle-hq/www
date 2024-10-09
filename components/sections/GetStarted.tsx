@@ -101,7 +101,7 @@ const GetStarted = () => {
 					<GetStartedSlide
 						number={1}
 						title='Initialize'
-						command='cargo shuttle init'
+						command='shuttle init'
 						text='Bootstrap your project'
 						handleClick={handleClick}
 						isSelected={1 === selectedSlide}
@@ -111,7 +111,7 @@ const GetStarted = () => {
 					<GetStartedSlide
 						number={2}
 						title='Deploy'
-						command='cargo shuttle deploy'
+						command='shuttle deploy'
 						text='Take-off in 3, 2, 1..'
 						handleClick={handleClick}
 						isSelected={2 === selectedSlide}
@@ -188,7 +188,7 @@ const GetStartedSlide: FC<GetStartedSlideProps> = ({
 export default GetStarted
 
 const SHUTTLE_INSTALL = `
-$ cargo shuttle help
+$ shuttle help
 
 Usage: cargo-shuttle [OPTIONS] <COMMAND>
 
@@ -227,7 +227,7 @@ async fn main() -> shuttle_axum::ShuttleAxum {
 `.trim()
 
 const SHUTTLE_DEPLOY = `
-$ cargo shuttle deploy
+$ shuttle deploy
 
  INFO Starting deployment
  INFO Building project

@@ -186,7 +186,7 @@ async fn main() -> shuttle_rocket::ShuttleRocket {
 `.trim()
 
 const DEPLOY1 = `
-$ cargo shuttle deploy
+$ shuttle deploy
 
  INFO Starting deployment
  INFO Building project
@@ -236,7 +236,7 @@ async fn rocket(
 `.trim()
 
 const DEPLOY2 = `
-$ cargo shuttle deploy
+$ shuttle deploy
 
 Service Name:  hello-world
 Deployment ID: 2ee051bf-d9f7-43db-928e-c099dccc35de
