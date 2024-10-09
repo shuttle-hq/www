@@ -52,7 +52,7 @@ export const Plans: PlanProps[] = [
 		billsResources: true,
 		features: [
 			{
-				feature: 'Up to 3 projects',
+				feature: 'More projects',
 			},
 			{
 				feature: 'Higher CPU & RAM limits',

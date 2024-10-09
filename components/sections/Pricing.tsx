@@ -60,7 +60,7 @@ const PRICING_ROWS: PricingTableRow[] = [
 		desc: 'Number of Projects',
 		values: {
 			community: '1',
-			pro: '3',
+			pro: '3 + add-on',
 			team: '∞',
 		},
 	},
