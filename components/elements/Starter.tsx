@@ -97,7 +97,7 @@ const Starter: FC<StarterProps> = ({
 						</span>
 						<Button
 							variant='primary'
-							href={deployLink || 'https://console.shuttle.rs/login'}
+							href={deployLink || 'https://console.shuttle.dev/'}
 							onClick={() => {
 								trackEvent(`homepage_starters_${templateKey}_deploy`)
 							}}
