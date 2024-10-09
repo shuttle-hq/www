@@ -30,7 +30,7 @@ export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
 		},
 	})
 	const repoData = await githubResponse.json()
-	const stargazersCount = repoData.stargazers_count ?? 5000
+	const stargazersCount = repoData.stargazers_count ?? 6000
 
 	return {
 		props: {
