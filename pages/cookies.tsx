@@ -6,14 +6,14 @@ export default function Cookies() {
 				<p className='mb-6 text-xl'>
 					This Cookies Policy forms part of our general Privacy Policy
 					<a href='https://shuttle.rs/privacy' target='_blank'>
-						https://www.shuttle.rs/privacy
+						https://www.shuttle.dev/privacy
 					</a>
 					.
 				</p>
 				<p className='mb-6 text-xl'>
 					This Cookies Policy will give you more information as to the technologies we use on{' '}
 					<a href='https://www.shuttle.rs/' target='_blank'>
-						https://www.shuttle.rs
+						https://www.shuttle.dev
 					</a>{' '}
 					(our Website) and your rights to restrict such use.
 				</p>

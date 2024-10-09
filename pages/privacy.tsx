@@ -9,7 +9,7 @@ export default function Privacy() {
 					from you, how we use it, who we share it with and how long we keep it for (the Privacy Policy).
 					This Privacy Policy relates to your access and use of our website at{' '}
 					<a href='https://shuttle.rs ' target='_blank'>
-						https://shuttle.rs
+						https://www.shuttle.dev
 					</a>{' '}
 					(the Website), and any other solutions, software, tool, features or functionality in relation
 					thereto, in order to, inter alia, our cloud development platform (the Services).
@@ -19,7 +19,7 @@ export default function Privacy() {
 					Unless otherwise stated, any defined terms herein shall have the same meaning as provided in
 					the Terms and Conditions{' '}
 					<a href='https://www.shuttle.rs/terms' target='_blank'>
-						https://www.shuttle.rs/terms
+						https://www.shuttle.dev/terms
 					</a>{' '}
 					(the Terms).
 				</p>
@@ -51,7 +51,7 @@ export default function Privacy() {
 					You are a data controller of the/your customer’s Personal Data (Customer Data) you submit to us
 					to host your behalf (Hosting Services). We process such Customer Data on your behalf, in our
 					capacity as data processor, in accordance with our Data Processing Addendum
-					https://www.shuttle.rs/dpa
+					https://www.shuttle.dev/dpa
 				</p>
 
 				<h3 className='mb-2 text-2xl font-bold text-head'>
@@ -173,7 +173,7 @@ export default function Privacy() {
 						Automated technologies or interactions. As you interact with our Website and Services, we
 						will automatically collect Technical Data about your equipment, browsing actions and
 						patterns. We collect this Personal Data by using cookies and other similar technologies.
-						Please see our Cookie Policy https://www.shuttle.rs/cookies for further details.
+						Please see our Cookie Policy https://www.shuttle.dev/cookies for further details.
 					</li>
 
 					<li className='mb-2'>
@@ -438,7 +438,7 @@ export default function Privacy() {
 					You can set your browser to refuse all or some browser cookies, or to alert you when websites
 					set or access cookies. If you disable or refuse cookies, please note that some parts of this
 					website may become inaccessible or not function properly. For more information about the
-					cookies we use, please see our Cookies Policy https://www.shuttle.rs/cookies .
+					cookies we use, please see our Cookies Policy https://www.shuttle.dev/cookies .
 				</p>
 
 				<h3 className='mb-2 text-2xl font-bold text-head'>Change of purpose</h3>
