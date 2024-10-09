@@ -83,11 +83,6 @@ const Navigation = () => {
 							text: 'Docs',
 						},
 						{
-							href: '/beta',
-							event: 'homepage_mainnav_beta',
-							text: 'Beta',
-						},
-						{
 							href: '/shuttle-heroes',
 							event: 'homepage_mainnav_heroes',
 							text: 'Shuttle Heroes',
