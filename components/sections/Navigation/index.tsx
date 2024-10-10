@@ -78,14 +78,9 @@ const Navigation = () => {
 							text: 'Pricing',
 						},
 						{
-							href: 'https://docs.shuttle.rs',
+							href: 'https://docs.shuttle.dev',
 							event: 'homepage_mainnav_docs',
 							text: 'Docs',
-						},
-						{
-							href: '/beta',
-							event: 'homepage_mainnav_beta',
-							text: 'Beta',
 						},
 						{
 							href: '/shuttle-heroes',

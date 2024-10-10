@@ -12,7 +12,7 @@ export default function Cookies() {
 				</p>
 				<p className='mb-6 text-xl'>
 					This Cookies Policy will give you more information as to the technologies we use on{' '}
-					<a href='https://www.shuttle.rs/' target='_blank'>
+					<a href='https://www.shuttle.dev/' target='_blank'>
 						https://www.shuttle.dev
 					</a>{' '}
 					(our Website) and your rights to restrict such use.

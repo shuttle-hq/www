@@ -28,9 +28,9 @@ const COMPANY_LINKS = [
 ]
 
 const DEVELOPERS_LINKS = [
-	{ key: 'docs', href: 'https://docs.shuttle.rs', name: 'Docs' },
-	{ key: 'guides', href: 'https://docs.shuttle.rs/examples/axum', name: 'Guides' },
-	{ key: 'examples', href: 'https://docs.shuttle.rs/examples/axum', name: 'Examples' },
+	{ key: 'docs', href: 'https://docs.shuttle.dev', name: 'Docs' },
+	{ key: 'guides', href: 'https://docs.shuttle.dev/examples/axum', name: 'Guides' },
+	{ key: 'examples', href: 'https://docs.shuttle.dev/examples/axum', name: 'Examples' },
 	{ key: 'heroes', href: '/shuttle-heroes', name: 'Shuttle Heroes' },
 	{ key: 'launchpad', href: '/launchpad', name: 'Launchpad' },
 	{ key: 'codehunt', href: '/cch', name: 'Code Hunt' },

@@ -59,7 +59,7 @@ const Button: FC<ButtonProps> = ({ variant = 'none', invertOnDark, className, ch
 
 export const LoginButton: FC<CommonButtonProps> = ({ children, ...inner }) => {
 	return (
-		<Button href='https://console.shuttle.rs/login' {...inner}>
+		<Button href='https://console.shuttle.dev/' {...inner}>
 			{children}
 		</Button>
 	)

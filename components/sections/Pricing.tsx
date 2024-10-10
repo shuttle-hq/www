@@ -28,7 +28,7 @@ const TIERS: PricingTier[] = [
 		displayName: 'Community',
 		desc: 'Everything you need to run your hobby projects, on us. Get projects deployed in minutes.',
 		cta: 'Start deploying',
-		ctaLink: 'https://console.shuttle.rs',
+		ctaLink: 'https://console.shuttle.dev',
 	},
 	{
 		name: 'pro',

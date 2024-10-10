@@ -8,11 +8,11 @@ export default function AcceptableUse() {
 				</p>
 				<p className='mb-6 text-xl'>
 					This Acceptable Use Policy forms part of our{' '}
-					<a href='https://www.shuttle.rs/terms' className='underline'>
+					<a href='https://www.shuttle.dev/terms' className='underline'>
 						Terms and Conditions
 					</a>
 					, and governs your access to and use of our website at{' '}
-					<a href='https://www.shuttle.rs' className='underline'>
+					<a href='https://www.shuttle.dev' className='underline'>
 						https://www.shuttle.dev
 					</a>{' '}
 					(the <strong>Website</strong>) and the Services (as defined in our Terms and Conditions).
@@ -21,7 +21,7 @@ export default function AcceptableUse() {
 					Unless otherwise stated, <strong>You</strong> means the user of the Website and/or the
 					Services. Unless otherwise defined in this Acceptable Use Policy, capitalised terms shall have
 					the same meaning as in the{' '}
-					<a href='https://www.shuttle.rs/terms' className='underline'>
+					<a href='https://www.shuttle.dev/terms' className='underline'>
 						Terms and Conditions
 					</a>
 				</p>

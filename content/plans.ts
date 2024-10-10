@@ -39,7 +39,7 @@ export const Plans: PlanProps[] = [
 				feature: 'Community support',
 			},
 		],
-		url: 'https://console.shuttle.rs/login',
+		url: 'https://console.shuttle.dev/',
 		textGradient: 'linear-gradient(69deg, #FC540C -4.04%, rgba(255, 215, 111, 0.72) 218.65%, #38D4E9 304.95%)',
 		cta: 'Start deploying',
 	},

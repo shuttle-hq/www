@@ -18,7 +18,7 @@ export default function Privacy() {
 					This Privacy Policy will also tell you about privacy rights and how the law protects you.
 					Unless otherwise stated, any defined terms herein shall have the same meaning as provided in
 					the Terms and Conditions{' '}
-					<a href='https://www.shuttle.rs/terms' target='_blank'>
+					<a href='https://www.shuttle.dev/terms' target='_blank'>
 						https://www.shuttle.dev/terms
 					</a>{' '}
 					(the Terms).

@@ -169,7 +169,7 @@ const PriceCards = () => (
 					<h4>
 						per instance{' '}
 						<Link
-							href='https://docs.shuttle.rs/resources/shuttle-aws-rds'
+							href='https://docs.shuttle.dev/resources/shuttle-aws-rds'
 							target='_blank'
 							className='cursor-pointer'
 						>
