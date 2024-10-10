@@ -190,7 +190,7 @@ export default GetStarted
 const SHUTTLE_INSTALL = `
 $ shuttle help
 
-Usage: cargo-shuttle [OPTIONS] <COMMAND>
+Usage: shuttle [OPTIONS] <COMMAND>
 
 Commands:
   init        Create a new Shuttle project
