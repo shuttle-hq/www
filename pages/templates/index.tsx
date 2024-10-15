@@ -178,7 +178,7 @@ export default function Templates({
 						Templates
 					</span>
 				</h1>
-				<p className='text-2xl'>Optional description of something.</p>
+				<p className='text-2xl'>Explore our collection of ready-to-use <br></br> Shuttle templates to jumpstart your projects.</p>
 			</div>
 
 			<section className='mt-32 grid grid-cols-1 items-start justify-between gap-[30px] px-0 md:grid-cols-4 md:px-[128px]'>
