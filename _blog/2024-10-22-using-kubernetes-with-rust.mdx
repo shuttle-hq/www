@@ -531,7 +531,7 @@ async fn forward_connection(
 
 Kubernetes has an interesting concept called custom resources. These allow you to extend the Kubernetes API and add new resources. This by itself isn’t very descriptive, so let’s take things a step further with an example.
 
-Say you wanted to inform Kubernetes about a new resource called `crustacean`, by default if you run `kubectl get crustacean`, you will get an error saying `error: the server doesn't have a resource type "crustacean."`. To create the resource, start out by defining a new custom resource:
+Say you wanted to inform Kubernetes about a new resource called `crustacean`. By default if you run `kubectl get crustacean`, you will get an error saying `error: the server doesn't have a resource type "crustacean."`. To create the resource, start out by defining a new custom resource:
 
 ```rust
 use kube::CustomResource;
@@ -706,7 +706,7 @@ At this point, you should be able to run:
 kubectl get crustaceans
 ```
 
-Output is similar to:
+The output is similar to:
 
 ```rust
 NAME    HABITAT
@@ -819,7 +819,7 @@ If you made it to this part, you probably are really interested in `kube-rs`. Wh
 
 ### Know when to use a controller or an operator.
 
-These concepts have some overlap and can be very confusing, which is why I avoided mentioning so as not to blow this out of scope. Luckily, people far smarter than me have written on this topic. Check outIvan Velichko’s guide on [Kubernetrs operators.](https://iximiuz.com/en/posts/kubernetes-operator-pattern/) Looking for something with more Rust? The folks at Metalbear have an entire guide on [creating an operator using kube-rs](https://metalbear.co/blog/writing-a-kubernetes-operator/).
+These concepts have some overlap and can be very confusing, which is why I avoided mentioning so as not to blow this out of scope. Luckily, people far smarter than me have written on this topic. Check out Ivan Velichko’s guide on [Kubernetes operators.](https://iximiuz.com/en/posts/kubernetes-operator-pattern/) Looking for something with more Rust? The folks at Metalbear have an entire guide on [creating an operator using kube-rs](https://metalbear.co/blog/writing-a-kubernetes-operator/).
 
 ### Examples don’t bite
 
