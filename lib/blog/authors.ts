@@ -126,6 +126,13 @@ const authors: readonly Author[] = [
 		author_url: '',
 		author_image_url: '/images/authors/mark.png',
 	},
+	{
+		author_id: 'jubril',
+		author: 'Jubril Oyetunji',
+		position: '',
+		author_url: '',
+		author_image_url: '',
+	},
 ]
 
 export default authors
