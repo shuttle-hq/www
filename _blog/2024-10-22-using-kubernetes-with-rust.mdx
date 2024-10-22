@@ -24,7 +24,7 @@ If you’re on Mac, you can install kind using brew:
 brew install kind
 ```
 
-For Linux users,if you have Go installed and [path set correctly](https://www.google.com/search?client=firefox-b-d&q=setting+gopath), you can install Kind using:
+For Linux users, if you have Go installed and [path set correctly](https://www.google.com/search?client=firefox-b-d&q=setting+gopath), you can install KinD using:
 
 ```bash
 go install sigs.k8s.io/kind@v0.24.0
@@ -38,7 +38,7 @@ kind create  cluster --name krust-playground
 
 ### **Pre-requisites**
 
-Along with Kind, you will also need to install Kubectl; if you are feeling adventurous, you can install that right away using:
+Along with KinD, you will also need to install Kubectl. If you are feeling adventurous, you can install that right away using:
 
 ```bash
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -56,7 +56,7 @@ Otherwise, take a look at [this section](https://kubernetes.io/docs/tasks/tools/
 
 ## Kube-rs?
 
-To interact with the Kubernetes API we will need a client library. As described in the project’s readme, kube-rs is:
+To interact with the Kubernetes API we will need a client library. As described in the project’s readme, `kube-rs` is:
 
 | A [Rust](https://rust-lang.org/) client for [Kubernetes](http://kubernetes.io/) in the style of a more generic [client-go](https://github.com/kubernetes/client-go), a runtime abstraction inspired by [controller-runtime](https://github.com/kubernetes-sigs/controller-runtime), and a derive macro for [CRDs](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/) inspired by K[ubebuilder](https://book.kubebuilder.io/reference/generating-crd.html)
 
@@ -90,7 +90,7 @@ yaml-rust2 = "0.8"
 
 ## Connecting to Your Cluster
 
-We’ll begin by looking at how to connect to the cluster we created earlier. By default, your connection information is stored in `~/.kube/config` . To use this in rust, we can use the following code:
+We’ll begin by looking at how to connect to the cluster we created earlier. By default, your connection information is stored in `~/.kube/config`. To use this in Rust, we can use the following code:
 
 We’ll begin by looking at how to connect to the cluster we created earlier:
 
@@ -128,7 +128,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ## Working with Pods
 
-Pods are a fundamental resource in Kubernetes. To create one using kube-rs we can use the following code:
+Pods are a fundamental resource in Kubernetes. To create one using `kube-rs` we can use the following code:
 
 ### Create a pod
 
@@ -413,6 +413,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 This example demonstrates a slightly more realistic scenario of working with Pods in a Kubernetes cluster. We create a Pod running Nginx, wait for it to be ready, and then fetch its logs.
 
+
 After creating the Pod, we use the `status` field to determine if the Pod is running:
 
 ```rust
@@ -530,7 +531,7 @@ async fn forward_connection(
 
 Kubernetes has an interesting concept called custom resources. These allow you to extend the Kubernetes API and add new resources. This by itself isn’t very descriptive, so let’s take things a step further with an example.
 
-Say you wanted to inform Kubernetes about a new resource called `crustacean`, by default if you run `kubectl get crustacean`, you will get an error saying `error: the server doesn't have a resource type "crustacean."`, to create the resource, start out by defining a new custom resource:
+Say you wanted to inform Kubernetes about a new resource called `crustacean`, by default if you run `kubectl get crustacean`, you will get an error saying `error: the server doesn't have a resource type "crustacean."`. To create the resource, start out by defining a new custom resource:
 
 ```rust
 use kube::CustomResource;
@@ -788,7 +789,7 @@ In the **while loop**, we watch for events in the stream provided by the `crusta
 
 Using `await_condition(pods.clone(), &pod_name, is_pod_running())`creates a future that waits for the condition where the Pod is running. `is_pod_running()` is a predefined condition function that checks the Pod's status to see if it's in the "Running" state.
 
-Running the example should result in the following output
+Running the example should result in the following output:
 
 ```rust
 warning: `k8s-rs` (bin "k8s-rs") generated 4 warnings (run `cargo fix --bin "k8s-rs"` to apply 3 suggestions)
@@ -814,15 +815,15 @@ Sure enough, Larry should be there.
 
 ## Summary
 
-If you made it to this part, you probably are really interested in kube-rs, while the library is pretty neat, kubernetes has a LOT of API’s and a can quickly get confusing. When working with kube-rs or kubernetes in general here are some things to keep in mind.
+If you made it to this part, you probably are really interested in `kube-rs`. While the library is pretty neat, Kubernetes has a LOT of API’s and can quickly get confusing. When working with `kube-rs` or Kubernetes in general, here are some things to keep in mind.
 
 ### Know when to use a controller or an operator.
 
-These concepts have some overlap and can be very confusing, which is why i avoided mentioning so as not to blow this out of scope. Luckily people far smarter than me have written on this topic , check outIvan Velichko’s guide on [Kubernetrs operators.](https://iximiuz.com/en/posts/kubernetes-operator-pattern/) Looking for something with more rust? The folks at Metalbear have an entire guide on [creating an operator using kube-rs](https://metalbear.co/blog/writing-a-kubernetes-operator/).
+These concepts have some overlap and can be very confusing, which is why I avoided mentioning so as not to blow this out of scope. Luckily, people far smarter than me have written on this topic. Check outIvan Velichko’s guide on [Kubernetrs operators.](https://iximiuz.com/en/posts/kubernetes-operator-pattern/) Looking for something with more Rust? The folks at Metalbear have an entire guide on [creating an operator using kube-rs](https://metalbear.co/blog/writing-a-kubernetes-operator/).
 
 ### Examples don’t bite
 
-The maintainers of kube-rs did an amazing job of creating several examples of using the crate. This guide is not an exhaustive list of all its features; some of the [examples used here](https://github.com/kube-rs/kube/tree/main/examples) were adapted from the repo.
+The maintainers of `kube-rs` did an amazing job of creating several examples of using the crate. This guide is not an exhaustive list of all its features; some of the [examples used here](https://github.com/kube-rs/kube/tree/main/examples) were adapted from the repo.
 
 Using Rust to interact with Kubernetes can be quite refreshing, especially if you come from the [Kubebuilder](https://github.com/kubernetes-sigs/kubebuilder) world. Creating a CRD by adding a [macro](https://www.shuttle.dev/blog/2022/12/23/procedural-macros) is extremely powerful, and in my experience thus far, I have written less code to achieve common functionality. If you’re curious about admission controllers, check out the guide I wrote [here](https://www.civo.com/learn/kubernetes-admission-controllers-for-beginners?ref=shuttle.dev).
 
