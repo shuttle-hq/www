@@ -112,7 +112,7 @@ export const getStaticProps = (async (context) => {
 	let readmeText = ''
 
 	const readmeResponse = await fetch(
-		`https://raw.githubusercontent.com/shuttle-hq/shuttle-examples/main/${template.path}/README.md`
+		`https://raw.githubusercontent.com/joshua-mo-143/shuttle-examples/update-readmes/${template.path}/README.md`
 	)
 
 	if (readmeResponse.status === 404) {
@@ -183,7 +183,7 @@ export default function TemplateDetails({ template }: InferGetStaticPropsType<ty
 
 					<div className='w-full'>
 						<TemplateButton
-							href={`https://github.com/shuttle-hq/shuttle-examples/blob/main/${template?.path}`}
+							href={`https://github.com/joshua-mo-143/shuttle-examples/update-readmes/main/${template?.path}`}
 							title='Github Repo'
 						/>
 					</div>
