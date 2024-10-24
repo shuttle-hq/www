@@ -101,6 +101,9 @@ export const getStaticProps = (async () => {
 		}
 	})
 
+	const types = Array.from(
+		new Set([...starterArr, ...templateArr, ...exampleArr].map((template) => template.type))
+	)
 	const tags = Array.from(
 		new Set([...starterArr, ...templateArr, ...exampleArr].map((template) => template.tags).flat())
 	)
@@ -111,6 +114,7 @@ export const getStaticProps = (async () => {
 	return {
 		props: {
 			templates: [...starterArr, ...templateArr, ...exampleArr],
+			types,
 			tags,
 			useCases,
 			logos,
@@ -118,6 +122,7 @@ export const getStaticProps = (async () => {
 	}
 }) satisfies GetStaticProps<{
 	templates: TemplateWithKeyAndType[]
+	types: string[]
 	tags: string[]
 	useCases: string[]
 	logos: Record<string, string>
@@ -126,18 +131,21 @@ export const getStaticProps = (async () => {
 const ITEMS_PER_PAGE = 12
 
 export default function Templates({
+	types,
 	tags,
 	useCases,
 	templates,
 	logos,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
 	const [search, setSearch] = useState('')
+	const [selectedTypes, setSelectedTypes] = useState<string[]>([])
 	const [selectedTags, setSelectedTags] = useState<string[]>([])
 	const [selectedUseCases, setSelectedUseCases] = useState<string[]>([])
 	const [currentPage, setCurrentPage] = useState(1)
 
 	const filteredTemplates = templates.filter((template) => {
 		const searchMatch = template.title.toLowerCase().includes(search.toLowerCase())
+		const templateMatch = selectedTypes.length === 0 || selectedTypes.includes(template.type)
 		const tagMatch =
 			selectedTags.length === 0 ||
 			selectedTags.reduce((acc, curr) => acc || template.tags.includes(curr), false)
@@ -145,7 +153,7 @@ export default function Templates({
 			selectedUseCases.length === 0 ||
 			selectedUseCases.reduce((acc, curr) => acc || template.use_cases.includes(curr), false)
 
-		return searchMatch && tagMatch && useCaseMatch
+		return searchMatch && templateMatch && tagMatch && useCaseMatch
 	})
 
 	const totalPages = Math.ceil(filteredTemplates.length / ITEMS_PER_PAGE)
@@ -166,9 +174,11 @@ export default function Templates({
 		<section className='mx-auto my-[140px] w-full max-w-screen-2xl'>
 			<div className='mx-auto my-0 w-full text-center'>
 				<h1>
-					<span className='text-gradient bg-clip-text text-[64px] text-transparent'>Templates</span>
+					<span className='text-gradient bg-clip-text font-gradual text-[64px] font-bold text-transparent'>
+						Templates
+					</span>
 				</h1>
-				<p className='text-2xl'>Optional description of something.</p>
+				<p className='text-2xl'>Explore our collection of ready-to-use <br></br> Shuttle templates to jumpstart your projects.</p>
 			</div>
 
 			<section className='mt-32 grid grid-cols-1 items-start justify-between gap-[30px] px-0 md:grid-cols-4 md:px-[128px]'>
@@ -181,6 +191,9 @@ export default function Templates({
 					useCases={useCases}
 					selectedUseCases={selectedUseCases}
 					selectedTags={selectedTags}
+					types={types}
+					selectedTypes={selectedTypes}
+					setSelectedTypes={setSelectedTypes}
 				/>
 
 				<FilterMobile
@@ -192,6 +205,9 @@ export default function Templates({
 					useCases={useCases}
 					selectedUseCases={selectedUseCases}
 					selectedTags={selectedTags}
+					types={types}
+					selectedTypes={selectedTypes}
+					setSelectedTypes={setSelectedTypes}
 				/>
 
 				<div className='col-span-3 grid grid-cols-1 gap-6 px-[28px] md:grid-cols-2 md:px-0 lg:grid-cols-3'>
