@@ -1,0 +1,57 @@
+---
+title: Using Rust in sprints and marathons
+description: Tips for using Rust in sprints and the benefits of Rust in long term projects
+author: josh
+tags: [rust]
+thumb: using-rust-in-sprints-and-marathons-thumb.png
+cover: using-rust-in-sprints-and-marathons-thumb.png
+date: "2024-10-24T14:30:00"
+---
+
+Rust is growing more than ever. Though not as commonplace as a language like Java or C#, it is slowly becoming a mainstream language. A lot of large companies have placed their bets on Rust: Microsoft’s inclusion of Rust in the windows kernel, Android, Huawei and many of Amazon’s services and more have solidified its place in the ecosystem. Through my time using Rust, I’ve used it in both short and longer term projects professionally and have been able to learn a lot about what Rust projects look like both in the short and long term, as well as potential pitfalls.
+
+As mentioned in our previous article [that talks about using Rust on the backend](https://www.shuttle.dev/blog/2024/07/31/rust-on-the-backend), Rust offers a lot of advantages. Of course, it does not go without saying that what advantages Rust can offer you will depend on your use case, but for many, many developers, Rust can absolutely be the right choice.
+
+## What does Rust look like in a sprint?
+
+Unless you are working in a company that uses Rust across the stack, using it in the short term can be a contentious decision for many. When you are in an environment with a “ship fast and break things” mentality, it can be challenging to keep velocity in a new Rust project especially if you are not a domain expert.
+
+### Speeding up time-to-ship with Shuttle
+
+Shuttle makes Rust easy to ship with by providing resource annotations from code. For example, we support Postgres database resources as a code annotation through providing it to your main function as a function parameter. As well as this, we support one-line deploys that require zero infra configuration. This makes it much easier to focus on code without context switches. On projects that require a high cognitive load this can significantly reduce complexity, as well as reduce time to first deployment and iteration.
+
+<video width="700" height="500" loop autoPlay muted>
+    <source src="/videos/blog/htmx-with-rust.mp4" type="video/mp4"></source>
+    Your browser does not support the video tag.
+</video>
+
+With Shuttle, you can deploy quickly and securely, which is perfect for companies like tech startups and larger companies who may be considering greenfield Rust projects.
+
+### Not everything has to be perfect
+
+While Rust can absolutely be the right choice for a lot of projects, it can occasionally be difficult to not get caught up in over-engineering your project or making sure your project is perfectly efficient. The beauty of Rust isn’t just that you can fearlessly refactor. If you don’t need a perfect solution out the gate, it can oftentimes be easier to (for example) just `.clone()` variables if you are running into complicated lifetime issues. Additionally, using `.unwrap()` or `.expect()` and then refactoring later on can also be another way to speed up development. Shortcuts like these can help speed up development in Rust significantly.
+
+### What about after the first iteration?
+
+Once you’ve managed to complete the first iteration, you can then focus on refactoring through adding crates like `eyre` or `anyhow` for better error handling or converting some functions to use more efficient parameters (for example, taking `&str` instead of `String`, or even using `AsRef<str>` for more flexibility). You may also want to create traits for types where you want to add a generic implementation.
+
+## What does Rust look like in a marathon?
+
+Of course, Rust is known for being a language that shines in large-scale projects and marathons. After shipping the MVP plus a few features, it is relatively easy to add code without breaking production (not including logic bugs!) due to compile-time assistance.  Being able to easily being able to set up tests in the same files as your code also helps - or if you want more in-depth tests, you can create your own test harness.
+
+### Fearless refactoring
+
+Fearless refactoring is not only the ability to refactor comfortably. It is also knowing that once you’re done refactoring, it’s much easier to ensure your program still works (potentially with the help of added tests for any additional functionality). It is no secret that Rust being a compiled, statically typed language helps significantly with this. However, traits also allow additional compile-time guarantees that are typically not possible in many languages where a programming sprint may turn into a marathon (Python without `basedpyright`, JavaScript, etc…). While it’s possible to still cause deadlocks and memory leaks in Rust, typically you won’t have to think about runtime errors as much due to compile-time checks.
+
+### Onboarding new developers
+
+Typically, in a large project, you’ll already have one or two senior developers who can onboard less experienced members. Rust plays extremely well into this, as coding in Rust can often lead to better dev practices. This is absolutely what you want for a long term project, especially if the team members are going to stick around for a while.
+
+## Finishing up
+
+For both short and long term projects, Rust can be a great language, and its recent growth has showcased this. Fast, secure programming is key to sprints that lead into marathons. If you’re looking to try and use Rust, whether in a new greenfield project or as an addition to a current project, feel free to reach out and let us know what you are working on!
+
+More reading:
+- [Everything you need to know about testing in Rust](https://www.shuttle.dev/blog/2024/03/21/testing-in-rust)
+- [Event driven services with Kafka and Rust](https://www.shuttle.dev/blog/2024/04/25/event-driven-services-using-kafka-rust)
+- [Getting started with Actix Web](https://www.shuttle.dev/blog/2023/12/15/using-actix-rust)
