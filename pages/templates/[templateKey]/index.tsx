@@ -1,3 +1,5 @@
+'use client'
+
 import toml from '@iarna/toml'
 import {
 	Example,
@@ -20,6 +22,7 @@ import TemplateMetadata from 'components/sections/Templates/TemplateMetadata'
 import TemplateLaunch from 'components/sections/Templates/TemplateLaunch'
 import TemplateLogo from 'components/sections/Templates/TemplateLogo'
 import TemplateInit from 'components/sections/Templates/TemplateInit'
+import { useState } from 'react'
 
 export const getStaticPaths = (async () => {
 	const response = await fetch(TEMPLATES_URL)
@@ -109,7 +112,7 @@ export const getStaticProps = (async (context) => {
 	let readmeText = ''
 
 	const readmeResponse = await fetch(
-		`https://raw.githubusercontent.com/shuttle-hq/shuttle-examples/main/${template.path}/README.md`
+		`https://raw.githubusercontent.com/joshua-mo-143/shuttle-examples/update-readmes/${template.path}/README.md`
 	)
 
 	if (readmeResponse.status === 404) {
@@ -135,6 +138,8 @@ export const getStaticProps = (async (context) => {
 }>
 
 export default function TemplateDetails({ template }: InferGetStaticPropsType<typeof getStaticProps>) {
+	const [isModalOpen, setIsModalOpen] = useState(false)
+
 	return (
 		<section className='mx-auto my-[65px] w-full max-w-screen-xl px-10'>
 			<Link className='mb-14 flex items-center gap-1' href='/templates'>
@@ -147,20 +152,38 @@ export default function TemplateDetails({ template }: InferGetStaticPropsType<ty
 					<div className=' flex w-full flex-col items-center'>
 						<TemplateLogo />
 
-						<TemplateInit path={template?.path} />
+						<TemplateInit path={template?.path} template={template?.template} />
 
-						<TemplateLaunch path={template?.path} />
+						{isModalOpen && (
+							<div className='my-5 flex w-full flex-col justify-start'>
+								<h3 className='font-gradual text-2xl font-bold text-head'>Instructions</h3>
+								<ol className='mt-1 text-head opacity-60'>
+									<li>Step 1. Start Rust</li>
+									<li>Step 2. Copy shuttle init command with info above</li>
 
-						<TemplateMetadata
-							tags={template?.tags ?? []}
-							use_cases={template?.use_cases ?? []}
-							type={template?.type}
+									<li>Step 3. Login into dashboard</li>
+								</ol>
+							</div>
+						)}
+
+						<TemplateLaunch
+							path={template?.path}
+							modalOpen={isModalOpen}
+							setModalOpen={setIsModalOpen}
 						/>
+
+						{!isModalOpen && (
+							<TemplateMetadata
+								tags={template?.tags ?? []}
+								use_cases={template?.use_cases ?? []}
+								type={template?.type}
+							/>
+						)}
 					</div>
 
 					<div className='w-full'>
 						<TemplateButton
-							href={`https://github.com/shuttle-hq/shuttle-examples/blob/main/${template?.path}`}
+							href={`https://github.com/joshua-mo-143/shuttle-examples/update-readmes/main/${template?.path}`}
 							title='Github Repo'
 						/>
 					</div>
