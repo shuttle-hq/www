@@ -152,14 +152,14 @@ export default function TemplateDetails({ template }: InferGetStaticPropsType<ty
 					<div className=' flex w-full flex-col items-center'>
 						<TemplateLogo />
 
-						<TemplateInit path={template?.path} />
+						<TemplateInit path={template?.path} template={template?.template} />
 
 						{isModalOpen && (
 							<div className='my-5 flex w-full flex-col justify-start'>
 								<h3 className='font-gradual text-2xl font-bold text-head'>Instructions</h3>
 								<ol className='mt-1 text-head opacity-60'>
-									<li>Step 1. Start rust</li>
-									<li>Step 2. Copy cargo shuttle init command with info above</li>
+									<li>Step 1. Start Rust</li>
+									<li>Step 2. Copy shuttle init command with info above</li>
 
 									<li>Step 3. Login into dashboard</li>
 								</ol>
