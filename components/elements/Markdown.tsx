@@ -6,12 +6,14 @@ export function Markdown({ body }: { body: string }) {
 		<ReactMarkdown
 			remarkPlugins={[remarkGfm4]}
 			components={{
-				h1: ({ children }) => <h1 className='mb-3 text-2xl text-head'>{children}</h1>,
-				h2: ({ children }) => <h2 className='mb-2 text-xl text-head'>{children}</h2>,
-				p: ({ children }) => <p className='mb-8 text-sm text-body'>{children}</p>,
-				li: ({ children }) => <li className='mb-1 ml-4 list-disc text-sm text-body'>{children}</li>,
+				h1: ({ children }) => <h1 className='mb-3 text-2xl text-head lg:text-3xl'>{children}</h1>,
+				h2: ({ children }) => <h2 className='mb-2 text-xl text-head lg:text-2xl'>{children}</h2>,
+				p: ({ children }) => <p className='mb-8 text-sm text-body lg:text-lg'>{children}</p>,
+				li: ({ children }) => (
+					<li className='mb-1 ml-4 list-disc text-sm text-body lg:text-xl'>{children}</li>
+				),
 				code: ({ children }) => (
-					<code className='text-code mx-[.15em] mb-1 text-sm text-head'>{children}</code>
+					<code className='text-code mx-[.15em] mb-1 text-sm  text-head '>{children}</code>
 				),
 				pre: ({ children }) => (
 					<pre

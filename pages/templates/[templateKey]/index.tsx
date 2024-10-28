@@ -126,7 +126,7 @@ export const getStaticProps = (async (context) => {
 		readme: readmeText,
 		type,
 		key: templateKey,
-	} as TemplateWithKeyAndType & { readme: string }
+	} as TemplateWithKeyAndType & { readme: string; template: string }
 
 	return {
 		props: {
@@ -134,7 +134,7 @@ export const getStaticProps = (async (context) => {
 		},
 	}
 }) satisfies GetStaticProps<{
-	template: TemplateWithKeyAndType & { readme: string }
+	template: TemplateWithKeyAndType & { readme: string; template: string }
 }>
 
 export default function TemplateDetails({ template }: InferGetStaticPropsType<typeof getStaticProps>) {
@@ -154,36 +154,16 @@ export default function TemplateDetails({ template }: InferGetStaticPropsType<ty
 
 						<TemplateInit path={template?.path} template={template?.template} />
 
-						{isModalOpen && (
-							<div className='my-5 flex w-full flex-col justify-start'>
-								<h3 className='font-gradual text-2xl font-bold text-head'>Instructions</h3>
-								<ol className='mt-1 text-head opacity-60'>
-									<li>Step 1. Start Rust</li>
-									<li>Step 2. Copy shuttle init command with info above</li>
-
-									<li>Step 3. Login into dashboard</li>
-								</ol>
-							</div>
-						)}
-
-						<TemplateLaunch
-							path={template?.path}
-							modalOpen={isModalOpen}
-							setModalOpen={setIsModalOpen}
+						<TemplateMetadata
+							tags={template?.tags ?? []}
+							use_cases={template?.use_cases ?? []}
+							type={template?.type}
 						/>
-
-						{!isModalOpen && (
-							<TemplateMetadata
-								tags={template?.tags ?? []}
-								use_cases={template?.use_cases ?? []}
-								type={template?.type}
-							/>
-						)}
 					</div>
 
 					<div className='w-full'>
 						<TemplateButton
-							href={`https://github.com/joshua-mo-143/shuttle-examples/update-readmes/main/${template?.path}`}
+							href={`https://github.com/joshua-mo-143/shuttle-examples/tree/update-readmes/${template?.path}`}
 							title='Github Repo'
 						/>
 					</div>
