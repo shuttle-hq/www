@@ -4,36 +4,46 @@ import { Hamburger, Logo } from 'components/svgs'
 import { trackEvent } from 'lib/posthog'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useLayoutEffect, useState } from 'react'
 import { DISCORD_URL } from '../../../lib/constants'
 
 const ThemeSwitcher = dynamic(() => import('./ThemeSwitcher'), { ssr: false })
+
+
 const LinkItem = ({
 	event,
 	href,
 	text,
+	active,
 	setOpen,
 }: {
 	event: string
 	href: string
 	text: string
+	active: boolean
 	setOpen: React.Dispatch<React.SetStateAction<boolean>>
-}) => (
-	<Link
-		className='nav-link-shadow transition-all dark:hover:text-white'
-		href={href}
-		onClick={({ ctrlKey, metaKey }) => {
-			trackEvent(event)
-			setOpen(ctrlKey || metaKey)
-		}}
-	>
-		{text}
-	</Link>
-)
+}) => {
+	return (<div className='flex'> 
+		<div className='relative'>
+			<Link
+				className={clsx('nav-link-shadow transition-all dark:hover:text-white', active && 'text-white font-bold')}
+				href={href}
+				onClick={({ ctrlKey, metaKey }) => {
+					trackEvent(event)
+					setOpen(ctrlKey || metaKey)
+				}}
+			>
+				{text}
+			</Link>
+		</div>
+	</div>)
+}
+
 
 const Navigation = () => {
 	const [open, setOpen] = useState(false)
-
+	const router = useRouter()
 	useLayoutEffect(() => {
 		function updateMenu() {
 			const isMobileAndOpen = window.innerWidth < 1280 && open
@@ -76,24 +86,28 @@ const Navigation = () => {
 							href: '/blog/tags/all',
 							event: 'homepage_mainnav_blog',
 							text: 'Blog',
+							keyword: 'blog',
 						},
 						{
 							href: '/pricing',
 							event: 'homepage_mainnav_pricing',
 							text: 'Pricing',
+							keyword: 'pricing',
 						},
 						{
 							href: 'https://docs.shuttle.dev',
 							event: 'homepage_mainnav_docs',
 							text: 'Docs',
+							keyword: 'docs',
 						},
 						{
 							href: '/ai',
 							event: 'homepage_mainnav_ai',
 							text: 'Shuttle AI',
+							keyword: 'ai',
 						},
-					].map(({ event, href, text }) => (
-						<LinkItem key={href} event={event} href={href} text={text} setOpen={setOpen} />
+					].map(({ event, href, text, keyword }) => (
+						<LinkItem key={href} event={event} href={href} text={text} setOpen={setOpen} active={router.pathname.includes(keyword)} />
 					))}
 				</div>
 				<div className='mt-10 xl:ml-auto xl:mt-0 xl:flex xl:items-center xl:gap-5'>
