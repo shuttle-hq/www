@@ -143,6 +143,13 @@ export default function Templates({
 	const [selectedUseCases, setSelectedUseCases] = useState<string[]>([])
 	const [currentPage, setCurrentPage] = useState(1)
 
+	const handleSearch = (input: string) => {
+		setSearch(input)
+		if (currentPage !== 1) {
+			setCurrentPage(1)
+		}
+	}
+
 	const filteredTemplates = templates.filter((template) => {
 		const searchMatch = template.title.toLowerCase().includes(search.toLowerCase())
 		const templateMatch = selectedTypes.length === 0 || selectedTypes.includes(template.type)
@@ -178,13 +185,15 @@ export default function Templates({
 						Templates
 					</span>
 				</h1>
-				<p className='text-2xl'>Explore our collection of ready-to-use <br></br> Shuttle templates to jumpstart your projects.</p>
+				<p className='text-2xl'>
+					Explore our collection of ready-to-use <br></br> Shuttle templates to jumpstart your projects.
+				</p>
 			</div>
 
 			<section className='mt-32 grid grid-cols-1 items-start justify-between gap-[30px] px-0 md:grid-cols-4 md:px-[128px]'>
 				<FilterDesktop
 					search={search}
-					setSearch={setSearch}
+					setSearch={handleSearch}
 					setSelectedTags={setSelectedTags}
 					setSelectedUseCases={setSelectedUseCases}
 					tags={tags}
