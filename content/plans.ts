@@ -5,13 +5,13 @@ export const Plans: PlanProps[] = [
 	{
 		key: 'community',
 		name: 'Community',
-		description: 'Everything you need to simply run your hobby project. On us.',
+		description: 'Everything you need to simply run your hobby projects. On us.',
 		price: '$0',
 		term: '/ month',
 		billsResources: false,
 		features: [
 			{
-				feature: 'One project',
+				feature: 'Up to 3 projects',
 			},
 			{
 				feature: 'Enough CPU & RAM to get you started',
@@ -52,7 +52,7 @@ export const Plans: PlanProps[] = [
 		billsResources: true,
 		features: [
 			{
-				feature: 'More projects',
+				feature: 'Up to 15 projects',
 			},
 			{
 				feature: 'Higher CPU & RAM limits',
