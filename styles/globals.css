@@ -134,9 +134,9 @@ body.dark {
 
 	.button-shadow,
 	.shadow-gradient,
-	.tab-shadow,
-	.nav-link-shadow {
+	.tab-shadow {
 		position: relative;
+
 	}
 
 	.button-shadow::before {
@@ -296,6 +296,7 @@ body.dark {
 			position: absolute;
 			top: 50%;
 			left: 50%;
+		
 			transform: translateX(-50%) translateY(-50%);
 
 			height: 33px;
