@@ -119,7 +119,6 @@ const Navigation = () => {
 							}}
 						>
 							<LoginButton variant='primary' invertOnDark>
-								<GithubLogo />
 								Log in
 							</LoginButton>
 						</div>

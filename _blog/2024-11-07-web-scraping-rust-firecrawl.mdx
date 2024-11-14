@@ -1,0 +1,170 @@
+---
+title: Supercharged Web Scraping with Rust & Firecrawl
+description: Simplify your Rust data pipeline with LLM-assisted web scraping
+author: josh
+tags: [rust]
+thumb: web-scraping-rust-firecrawl-thumb.png
+cover: web-scraping-rust-firecrawl-thumb.png
+date: "2024-11-07T14:30:00"
+---
+
+Building data aggregation pipelines can be tricky work. Having built some LLM-assisted services recently as well as a data scraping service, ironing out all of the edge cases can take a lot of time and effort (as well as selecting specifically what you want from the page!). In this article, we’ll check out Firecrawl - an API for scraping the web and getting back LLM-ready ingestion material - and how you can deploy it with Shuttle.
+
+Firecrawl can be immensely helpful for anyone looking to simplify their data pipeline. It is a self-hostable API that aims to make LLM-assisted website scraping data pipelines much simpler by allowing you to scrape websites then automatically convert it in a format that is LLM-ready. Website scraping, while not necessarily difficult, can often be a time-consuming and tricky task to get right. This is particularly relevant if the used data is part of an ingestion pipeline: for example, data aggregation services (or users who need to collect aggregate data) may use scraping for websites that do not have their own API.
+
+Interested in checking out the code so you can deploy it or want to try running locally? [Check it out.](https://github.com/joshua-mo-143/shuttle-firecrawl-ex)
+
+## Why use Shuttle with Firecrawl?
+
+Shuttle allows you to deploy Rust web services seamlessly and hassle-free with one-line deploys and being able to provision your infrastructure directly from annotations (main function parameter).
+
+<video width="700" height="500" loop autoPlay muted>
+    <source src="/videos/blog/htmx-with-rust.mp4" type="video/mp4"></source>
+    Your browser does not support the video tag.
+</video>
+
+Whether you need a provisioned database to store your scraping results, or a frontend for your web service so you can display your scraping results, Shuttle can do it for you. The less time you spend context switching, the more time you can spend writing code and fixing problems.
+
+## Pre-requisites
+
+To get started, you will need the following:
+
+- A [Firecrawl](https://www.firecrawl.dev/) account
+- A Shuttle account (with `cargo-shuttle` installed)
+- The Rust programming language installed
+
+Once you’ve created your Firecrawl account, don’t forget to grab your API key! You will need it in a little bit.
+
+## Getting Started
+
+To get started, create a new Shuttle web service using `shuttle init --template axum`.
+
+This does the following:
+
+- Creates a new Hello World template with Axum and Tokio already added, as well as Shuttle-related dependencies (to enable deploying to Shuttle)
+- Initialises a new Shuttle project (if you’ve chosen to do so)
+
+Next, we’ll add our required dependencies with a one-line command:
+
+```bash
+cargo add firecrawl serde -F serde/derive
+```
+
+When using Shuttle, secrets are stored in a `Secrets.toml` (`Secrets.dev.toml` for local dev) file in the project root - it should look like so:
+
+```toml
+FIRECRAWL_API_KEY = "my-api-key"
+```
+
+This is then used by an annotation macro in your main function to provide an immutable key-value store for your secrets:
+
+```rust
+use shuttle_runtime::SecretStore;
+
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_runtime::Secrets] secrets: SecretStore // secrets get outputted as a variable here
+) // ... rest of your code
+```
+
+Now to get started on writing code. Before we do anything else, we’ll create a new `AppState` struct that will hold our Firecrawl client. This helps avoid overhead for creating the client each time we want to crawl or scrape a URL.
+
+```rust
+use firecrawl::FirecrawlApp;
+
+#[derive(Clone)]
+struct AppState {
+    ctx: FirecrawlApp,
+}
+
+impl AppState {
+    fn new(firecrawl_key: String) -> Self {
+        let ctx = FirecrawlApp::new(firecrawl_key)
+            .expect("FirecrawlApp to be created");
+
+        Self { ctx }
+    }
+}
+```
+
+## Scraping
+
+In this part, we’ll add a simple endpoint for scraping - which will take a POST request and a URL to be scraped (as part of the JSON body).
+
+```rust
+use serde::Deserialize;
+
+#[derive(Deserialize)]
+struct Request {
+    url: String,
+}
+```
+
+When a HTTP request is received, we should then grab our application state as well as the JSON body as function parameters. Note that the `axum::extract::State` and `axum::Json` types have been destructured to automatically provide access to the inner types (`AppState` and `Request`, respectively). We then create our `ScrapeOptions` struct and use it with our Firecrawl client to scrape a given URL, which will return two things:
+
+- The scraped document, as a markdown file
+- The original document HTML
+
+```rust
+use axum::{Json, extract::State, http::StatusCode};
+use firecrawl::scrape::{ScrapeFormats, ScrapeOptions};
+
+async fn scrape_url(
+    State(state): State<AppState>,
+    Json(json): Json<Request>,
+) -> Result<impl IntoResponse, impl IntoResponse> {
+    let formats = vec![ScrapeFormats::Markdown, ScrapeFormats::HTML];
+
+    let scrape_opts = ScrapeOptions {
+        formats: Some(formats),
+        ..Default::default()
+    };
+
+    let result = match state.ctx.scrape_url(&json.url, scrape_opts).await {
+        Ok(res) => res,
+        Err(e) => return Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
+    };
+
+    Ok(Json(result))
+}
+```
+
+## Hooking it all back up
+
+Before we deploy, we need to hook everything back up to our main function! We’ll hook up the async function handler to our `axum::Router` as well as our application state, then return the router.
+
+```rust
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_runtime::Secrets] secrets: SecretStore
+) -> shuttle_axum::ShuttleAxum {
+    let firecrawl_api_key = secrets
+        .get("FIRECRAWL_API_KEY")
+        .expect("FIRECRAWL_API_KEY secret to exist");
+
+    let state = AppState::new(firecrawl_api_key);
+    let rtr = Router::new().route("/", post(scrape_url)).with_state(state);
+
+    Ok(rtr.into())
+}
+```
+
+The `secrets` variable is provided as an immutable key-value store - so we can simply use the `get()`  function to try to grab our API key, erroring out if it doesn’t exist.
+
+## Deploying
+
+To deploy, all you need to do is use `shuttle deploy` and watch the magic happen! Note that you will need to add the `--allow-dirty` flag at the end if working on a dirty Git branch.
+
+## Finishing up
+
+Thanks for reading! Hopefully this article has made it easier for you to understand how using Firecrawl can help to accelerate your workflow and simplify your data ingestion.
+
+Ideas for extending if you want to take this tutorial further:
+
+- Try adding a job queue to make website scraping requests more resilient - allow users to view the results of their scrape through adding CRUD endpoints
+- Try adding a database to store your results!
+
+Further reading:
+- [Make a RAG web service with Qdrant & Rust](https://www.shuttle.dev/blog/2024/02/28/rag-llm-rust)
+- [Prompting AWS Bedrock with Rust](https://www.shuttle.dev/blog/2024/05/10/prompting-aws-bedrock-rust)
+- [Implement an API rate limiter for your web service](https://www.shuttle.dev/blog/2024/02/22/api-rate-limiting-rust)
