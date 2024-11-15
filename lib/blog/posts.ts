@@ -33,6 +33,7 @@ export interface Post {
 	readonly tags?: string[]
 	readonly logo?: string
 	readonly hideAuthor?: boolean
+	readonly contentTOC?: any
 }
 
 export function getSortedPosts(limit?: number, tags?: readonly string[]): Post[] {

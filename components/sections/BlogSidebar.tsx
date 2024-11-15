@@ -31,14 +31,6 @@ const BlogSidebar: FC<BlogSidebarProps> = ({ tags, relatedPosts, toc, mdxCompone
 						})}
 					</div>
 				</div>
-				<div className='rounded-3xl border border-black/10 px-6 py-4 dark:border-white/10'>
-					<div className='mb-4 text-head'>On this page</div>
-					{toc && (
-						<div className='prose prose-toc !mt-0 pl-4 text-body dark:prose-dark-toc'>
-							<MDXRemote {...toc} components={mdxComponents} />
-						</div>
-					)}
-				</div>
 				{relatedPosts.length > 0 ? (
 					<div className='rounded-3xl border border-black/10 px-6 py-4 dark:border-white/10'>
 						<div className='mb-4 dark:text-head'>Related articles</div>
