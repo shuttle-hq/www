@@ -7,10 +7,8 @@ interface HeaderProps {
 }
 
 function get_margin(lvl: number): number {
-	if (lvl === 2) {
-		return 4
-	} else if (lvl === 3) {
-		return 8
+	if (lvl >= 1 && lvl <= 6) {
+		return lvl * 4
 	} else {
 		throw new Error(`Margin level is invalid: ${lvl}`)
 	}
@@ -34,7 +32,6 @@ interface Props {
 }
 
 export const TableOfContents = ({ toc }: Props) => {
-	console.log(toc)
 	return (
 		<div className='mb-16 mt-16 border-b-2 border-t-2 border-b-white pb-4 pt-4'>
 			<p className='pb-4 pt-4 text-2xl font-bold leading-10 lg:text-3xl'>Table of Contents</p>

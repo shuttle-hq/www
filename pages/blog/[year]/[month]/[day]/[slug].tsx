@@ -172,8 +172,6 @@ interface Props {
 export default function BlogPostPage(props: Props) {
 	const { basePath } = useRouter()
 
-	console.log(props.blog.contentTOC.json)
-
 	return (
 		<>
 			<NextSeo
