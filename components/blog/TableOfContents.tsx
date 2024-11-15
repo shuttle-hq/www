@@ -33,7 +33,7 @@ interface Props {
 
 export const TableOfContents = ({ toc }: Props) => {
 	return (
-		<div className='mb-16 mt-16 border-b-2 border-t-2 border-b-white pb-8 pt-4'>
+		<div className='mb-12 mt-16 border-b-2 border-t-2 border-b-[#A2A2A2] border-t-[#A2A2A2] pb-8 pt-4'>
 			<p className='pb-4 pt-4 text-2xl font-bold leading-10 lg:text-3xl'>Table of Contents</p>
 			<ol>
 				{toc.map((header) => (
