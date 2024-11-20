@@ -24,6 +24,7 @@ import { Pre } from 'components/blog/Pre'
 import MastodonLogo from 'components/svgs/MastodonLogo'
 import HNLogo from 'components/svgs/HNLogo'
 import { trackEvent } from 'lib/posthog'
+import { TableOfContents } from '../../../../../components/blog/TableOfContents'
 
 export async function getStaticPaths() {
 	const paths = getAllPostSlugs()
@@ -97,6 +98,7 @@ export async function getStaticProps({
 			blog: {
 				slug: `${params.year}/${params.month}/${params.day}/${params.slug}`,
 				content: mdxPost,
+				contentTOC,
 				...data,
 				toc: mdxTOC,
 				readingTime,
@@ -224,6 +226,8 @@ export default function BlogPostPage(props: Props) {
 								)}
 							</div>
 						)}
+						<TableOfContents toc={props.blog.contentTOC.json} />
+
 						{props.blog.content && (
 							<article
 								className={clsx(
