@@ -68,6 +68,11 @@ const Navigation = () => {
 				<div className='flex flex-col gap-4 xl:flex-row xl:gap-8'>
 					{[
 						{
+							href: '/cch',
+							event: 'homepage_mainnav_cch',
+							text: 'Christmas Code Hunt',
+						},
+						{
 							href: '/blog/tags/all',
 							event: 'homepage_mainnav_blog',
 							text: 'Blog',
@@ -82,21 +87,21 @@ const Navigation = () => {
 							event: 'homepage_mainnav_docs',
 							text: 'Docs',
 						},
-						{
-							href: '/shuttle-heroes',
-							event: 'homepage_mainnav_heroes',
-							text: 'Shuttle Heroes',
-						},
+						// {
+						// 	href: '/shuttle-heroes',
+						// 	event: 'homepage_mainnav_heroes',
+						// 	text: 'Shuttle Heroes',
+						// },
 						{
 							href: '/ai',
 							event: 'homepage_mainnav_ai',
 							text: 'Shuttle AI',
 						},
-						{
-							href: '/launchpad',
-							event: 'homepage_mainnav_launchpad',
-							text: 'Launchpad',
-						},
+						// {
+						// 	href: '/launchpad',
+						// 	event: 'homepage_mainnav_launchpad',
+						// 	text: 'Launchpad',
+						// },
 					].map(({ event, href, text }) => (
 						<LinkItem key={href} event={event} href={href} text={text} setOpen={setOpen} />
 					))}
