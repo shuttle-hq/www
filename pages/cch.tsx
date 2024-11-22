@@ -35,9 +35,9 @@ export default function CCHPage() {
 					<span className='text-orange'>&gt;</span> what
 				</p>
 				<p>
-					Shuttle&apos;s Christmas Code Hunt, inspired by Advent of Code, invites you to solve challenges
-					using Rust in a relaxed environment. In each challenge, you implement HTTP endpoints that
-					return the solutions. It is a great way to get started with Rust and Shuttle!
+					Shuttle&apos;s Christmas Code Hunt, (inspired by Advent of Code), invites you to solve challenges
+					using Rust in a fun and relaxed environment. In each challenge, you&apos;ll implement HTTP endpoints that
+					respond with the challenge&apos;s solution. It is a great way to get started with Rust and Shuttle!
 				</p>
 
 				{/* <p className='mt-8 font-bold'>
@@ -61,7 +61,7 @@ export default function CCHPage() {
 					<span className='text-[#F09050]'>&gt;</span> why
 				</p>
 				<p>
-					By participating, you get the chance to improve your Rust skills, build new friendships with
+					Participating gives you get the chance to improve your Rust skills, build new friendships with
 					like minded Rustaceans and enjoy the run up to the holidays!
 				</p>
 
@@ -78,7 +78,7 @@ export default function CCHPage() {
 					<span className='text-[#F09050]'>&gt;</span> prizes
 				</p>
 				<p>
-					Completing all the challenges by December 31st, 2024 will make you eligible for prizing, so no
+					Completion of all 7 challenges by December 31st, 2024 at 23:59 UTC will make you eligible for the prize pool, so no
 					need to rush. More details coming soon!
 				</p>
 
