@@ -68,6 +68,11 @@ const Navigation = () => {
 				<div className='flex flex-col gap-4 xl:flex-row xl:gap-8'>
 					{[
 						{
+							href: '/cch',
+							event: 'homepage_mainnav_cch',
+							text: 'CCH',
+						},
+						{
 							href: '/blog/tags/all',
 							event: 'homepage_mainnav_blog',
 							text: 'Blog',
