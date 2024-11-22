@@ -7,8 +7,8 @@ import { ReactNode } from 'react'
 export default function CCHPage() {
 	return (
 		<section className='mx-auto mb-10 w-full max-w-5xl px-4 py-12 font-mono font-normal text-head'>
-			<div className='mx-auto mb-8 flex max-w-[686px] flex-col items-end'>
-				<h1 className='text-center text-[60px]'>
+			<div className='mx-auto mb-8 flex max-w-[786px] flex-col items-end'>
+				<h1 className='text-center text-[50px]'>
 					<span className='relative'>
 						<Image
 							src='/images/cch/santa-hat.png'
@@ -19,7 +19,7 @@ export default function CCHPage() {
 						/>
 						C
 					</span>
-					hristmas Code Hunt
+					hristmas Code Hunt 2024
 				</h1>
 
 				<p className='flex items-center gap-2 self-end text-base text-body'>
@@ -31,17 +31,6 @@ export default function CCHPage() {
 			</div>
 
 			<div className='mb-8 flex flex-col text-base'>
-				<Link
-					href='https://shuttlerust.typeform.com/cch2024'
-					target='_blank'
-					className='text-[#F09050] text-center text-xl font-bold border rounded p-6'
-					onClick={() => {
-						trackEvent('cch_sign_up')
-					}}
-				>
-					Click here to be notified when each new challenge goes live.
-				</Link>
-
 				<p className='mt-8 font-bold'>
 					<span className='text-orange'>&gt;</span> what
 				</p>
@@ -72,25 +61,37 @@ export default function CCHPage() {
 					<span className='text-[#F09050]'>&gt;</span> why
 				</p>
 				<p>
-					By participating, you get the chance to improve your Rust skills,
-					build new friendships with like minded Rustaceans and enjoy the run up to the holidays!
+					By participating, you get the chance to improve your Rust skills, build new friendships with
+					like minded Rustaceans and enjoy the run up to the holidays!
 				</p>
 
 				<p className='mt-8 font-bold'>
 					<span className='text-[#F09050]'>&gt;</span> when
 				</p>
 				<p>
-					The first challenge will be released on December 2, 12:00 UTC.
-					Signup and a warmup challenge will be released at the end of November.
+					The first challenge will be released on December 2nd, 2024 at 12:00 UTC. A total of 7
+					challenges will be released throughout the month of December. Signup and a warmup challenge
+					will be released at the end of November.
 				</p>
 
 				<p className='mt-8 font-bold'>
 					<span className='text-[#F09050]'>&gt;</span> prizes
 				</p>
 				<p>
-					Completing all the challenges by December 31 will make you eligible for prizing.
-					More details coming soon!
+					Completing all the challenges by December 31st, 2024 will make you eligible for prizing, so no
+					need to rush. More details coming soon!
 				</p>
+
+				<Link
+					href='https://shuttlerust.typeform.com/cch2024'
+					target='_blank'
+					className='mt-16 rounded border p-6 text-center text-xl font-bold text-[#F09050]'
+					onClick={() => {
+						trackEvent('cch_sign_up')
+					}}
+				>
+					Click here to sign up
+				</Link>
 			</div>
 		</section>
 	)
