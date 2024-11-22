@@ -31,6 +31,17 @@ export default function CCHPage() {
 			</div>
 
 			<div className='mb-8 flex flex-col text-base'>
+				<Link
+					href='https://shuttlerust.typeform.com/cch2024'
+					target='_blank'
+					className='text-[#F09050] text-center text-xl font-bold border rounded p-6'
+					onClick={() => {
+						trackEvent('cch_sign_up')
+					}}
+				>
+					Click here to be notified when each new challenge goes live.
+				</Link>
+
 				<p className='mt-8 font-bold'>
 					<span className='text-orange'>&gt;</span> what
 				</p>
@@ -40,13 +51,13 @@ export default function CCHPage() {
 					return the solutions. It is a great way to get started with Rust and Shuttle!
 				</p>
 
-				<p className='mt-8 font-bold'>
+				{/* <p className='mt-8 font-bold'>
 					<span className='text-orange'>&gt;</span> where
 				</p>
 				<p>
 					You can access the challenge by logging in to the{' '}
 					<Link
-						href='https://console.shuttle.rs/cch'
+						href='https://console.shuttle.dev/shuttlings/cch24'
 						target='_blank'
 						className='text-orange'
 						onClick={() => {
@@ -54,8 +65,31 @@ export default function CCHPage() {
 						}}
 					>
 						Shuttle Console
-					</Link>{' '}
-					with a GitHub account!
+					</Link>!
+				</p> */}
+
+				<p className='mt-8 font-bold'>
+					<span className='text-[#F09050]'>&gt;</span> why
+				</p>
+				<p>
+					By participating, you get the chance to improve your Rust skills,
+					build new friendships with like minded Rustaceans and enjoy the run up to the holidays!
+				</p>
+
+				<p className='mt-8 font-bold'>
+					<span className='text-[#F09050]'>&gt;</span> when
+				</p>
+				<p>
+					The first challenge will be released on December 2, 12:00 UTC.
+					Signup and a warmup challenge will be released at the end of November.
+				</p>
+
+				<p className='mt-8 font-bold'>
+					<span className='text-[#F09050]'>&gt;</span> prizes
+				</p>
+				<p>
+					Completing all the challenges by December 31 will make you eligible for prizing.
+					More details coming soon!
 				</p>
 			</div>
 		</section>
