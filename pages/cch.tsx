@@ -95,6 +95,7 @@ export default function CCHPage() {
 					className='mt-16 rounded border p-6 text-center text-xl font-bold text-[#F09050]'
 					onClick={() => {
 						trackEvent('cch_sign_up')
+						sendTwitterConversion(shuttleCchSignupClick)
 					}}
 				>
 					Click here to sign up
