@@ -4,9 +4,12 @@ import { initTwitter, sendTwitterConversion, shuttleCchSignupClick } from 'lib/u
 import Image from 'next/image'
 import Link from 'next/link'
 import { ReactNode } from 'react'
+import React from 'react'
 
 export default function CCHPage() {
-	initTwitter()
+	React.useEffect(() => {
+		initTwitter()
+	}, [])
 
 	return (
 		<section className='mx-auto mb-10 w-full max-w-5xl px-4 py-12 font-mono font-normal text-head'>
