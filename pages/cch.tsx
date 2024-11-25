@@ -1,10 +1,16 @@
 import { Page } from 'components/templates'
 import { trackEvent } from 'lib/posthog'
+import { initTwitter, sendTwitterConversion, shuttleCchSignupClick } from 'lib/useTwitter'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ReactNode } from 'react'
+import React from 'react'
 
 export default function CCHPage() {
+	React.useEffect(() => {
+		initTwitter()
+	}, [])
+
 	return (
 		<section className='mx-auto mb-10 w-full max-w-5xl px-4 py-12 font-mono font-normal text-head'>
 			<div className='mx-auto mb-8 flex max-w-[786px] flex-col items-end'>
@@ -51,6 +57,7 @@ export default function CCHPage() {
 						className='text-orange'
 						onClick={() => {
 							trackEvent('cch_sign_up')
+							sendTwitterConversion(shuttleCchSignupClick)
 						}}
 					>
 						Shuttle Console
