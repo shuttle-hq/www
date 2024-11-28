@@ -1,0 +1,196 @@
+---
+title: "The Essence of Templating with Tera"
+description: "How to get started with Shuttle and the Tera Crate"
+author: Jeff Mitchell
+tags: [rust]
+thumb: tera_placeholder.png
+cover: tera_placeholder.png
+date: '2024-11-29T:00:00:00'
+---
+
+### Introduction
+
+[Tera](https://keats.github.io/tera/) is a powerful and flexible template engine for the Rust language. What is a template engine? Well, it's a way for you the developer to build a server side rendered web application and use templates to describe the structure and content of the app. Rather than build each page individually, using Tera you describe the overall structure and format, and the data can be dynamically pulled in on the fly. Without a template engine, it would be pretty tedious to build anything server side rendered.
+
+This is an introductory article, as such I want to focus on:
+
+- Initialize a new Rust project with a binary
+- Set up Tera
+- Basic usage
+- Optimization with `OnceLock` from the standard library
+
+I'm not going to build a full application in this piece, but instead want to cover the basics of getting off the ground.
+
+Let's go!
+
+### Initialize a New project
+
+The starter we're going to create will be a simple Rust app which outputs raw HTML to the console. It won't have a web server and won't be tailored for deployment on Shuttle. The goal here is to give you the tools to explore on your own. Let's begin with Step #1, create a new Rust binary project:
+
+```bash
+cargo new --bin hello-world-tera
+```
+
+This will create a new project called "hello-world-tera" and will set you up with a binary crate so that you can run the project and observe the output.
+
+### Setting Up Tera
+
+After you've changed into the `hello-world-tera` directory, Step #2 is to add the Tera crate as a dependency to your project.
+
+```bash
+cargo add tera
+```
+
+This will make the crate available in your project.
+
+Now, in the root of your project, create a `templates/` directory. This will serve as the central repository of all the templates you build for your project. As we'll see in a moment, at compile time they will all be pulled from this directory for rendering. Now we need an actual template. For the moment, create one called `base.html`. This will be the base template and serves as the baseline for the whole project.
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+  </head>
+  <body>
+    <h1>Welcome to {{ site_name }}</h1>
+    <p>{{ message }}</p>
+  </body>
+</html>
+```
+
+Here you can see a very rudimentary HTML file. It has some variables though, surrounded by `{{ }}`. This is the way we denote that Tera should inject something into the particular location. How exactly?
+
+### Rendering Templates
+
+Alright, we've got a template, what next? Let's write some actual Rust code. In the `src` directory, go to the `main.rs` file and type in the following code:
+
+```rust
+// src/main.rs
+
+// dependences
+use tera::{Tera, Context};
+
+// main function
+fn main() {
+  let tera = Tera::new("templates/**/*").unwrap();
+  let mut context = Context::new();
+  context.insert("title", "First Steps with Tera");
+  context.insert("site_name", "example.com");
+  context.insert("message", "Hello, world!");
+
+  let rendered = tera.render("base.html", &context).unwrap();
+  println!("{}", rendered);
+}
+```
+
+Let's walk through it step by step:
+
+- we bring the two things into context from the `Tera` crate, namely the `Tera` type, which is a struct, and `Context`, which is also a struct
+- we create a new Tera instance (using the contents of the directory you created in the previous step) and bind that to a variable so we can use it
+- create an empty instance of `Context` which is effectively the individual pieces of content to render into the template, and bind it to a variable
+- fill in the empty `context` variable with the actual values we want filled in. Remember those `{{ }}` in the template you made? Yes, we're filling all those in with this info.
+
+That's it! If you compile and run this code, you'll get your filled template rendered back to the console.
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>First Steps with Tera</title>
+  </head>
+  <body>
+    <h1>Welcome to example.com</h1>
+    <p>Hello, world!</p>
+  </body>
+</html>
+```
+
+So, pretty easy eh? It is. There is one pitfall to watch out for though.
+
+### Optimizing Template Rendering
+
+Templates are very expensive to render. The above example is trivial, but in something real, you don't want to be rendering the templates from scratch every time they are requested. Instead, you want to compile them once, then put them somewhere to be re-used later. This way, they're ready and the server isn't wasting time and resources re-building every template each time they are requested. 
+
+How can we achieve this? We lean on the standard library and pull in [OnceLock](https://doc.rust-lang.org/std/sync/struct.OnceLock.html), which allows us to create a thing and tuck it off in the corner to use later. `OnceLock` is thread-safe as it implements the `Sync` marker trait which denotes it is safe for the type to be referenced from multiple threads.
+
+Modify your `src/main.rs` to look like this:
+
+```rust
+// src/main.rs
+
+// dependences
+use std::sync::OnceLock;
+use tera::{Context, Error, Tera};
+
+// declare a static variable to hold the initialized templates
+static COMPILED_TEMPLATE: OnceLock<Tera> = OnceLock::new();
+
+// function to create the tera template, handling any errors and returning them to the caller
+fn create_template() -> Result<Tera, Error> {
+    let mut base_template = Tera::new("templates/**/*")?;
+    base_template.add_template_file("templates/base.html", Some("base"))?;
+    Ok(base_template)
+}
+
+// function to build the Tera template, returns a Result type, where
+// the Ok variant is the rendered template and the error is the Error type provided by Tera
+fn get_template() -> Result<&'static Tera, Error> {
+    let template = create_template()?;
+    Ok(COMPILED_TEMPLATE.get_or_init(|| template))
+}
+
+// function which renders the Tera templates, returns a Result type, where
+// the Ok variant is a string of HTML and the error is the Error type provided by Tera
+fn render_template() -> Result<String, Error> {
+    let mut context = Context::new();
+    context.insert("title", "First Steps with Tera");
+    context.insert("site_name", "example.com");
+    context.insert("message", "Hello, world!");
+
+    get_template()?.render("base.html", &context)
+}
+
+// main function
+fn main() -> Result<(), Error> {
+    let rendered = render_template();
+    match rendered {
+        Ok(template) => println!("{}", template),
+        Err(e) => eprintln!("Error: {}", e),
+    }
+
+    Ok(())
+}
+```
+
+There's a lot here, and I've handled errors. What did we do?
+
+- The `OnceLock` type is brought into scope from `std::sync` in the standard library
+  - Fun fact: `OnceLock` used to be part of the `once_cell` crate, which was brought into the Rust standard library with version 1.70
+- The `Context`, `Error`, and `Tera` types are brough into scope from the `Tera` crate
+- We declare a static variable to hold our compiled template, it's intialized with an empty value by using the `OnceLock::new()` constructor
+- We need a separate function which gets our Tera instance started and adds in the base template we created in the `templates/` directory
+  - Errors could happen in this process, so to handle them, we use the `?` operator to propagate any errors back to the caller
+- We have a function which `get_template()` which leverages the function we just created, any errors are propagated back to the caller
+  - You'll see that the `get_or_init()` method accepts a closure, we pass in our template that we just created
+  - The closure here wants to work with an actual good value, meaning we can't handle errors effectively inside the closure without an `.unwrap()`. I like to try to show how to handle errors, rather than not.
+- Now that our template is compiled and placed on a shelf, so to speak, we can render it with the desired content. Two things are needed, a template, and context. Remember those variables you put into the `base.html` above? That's the context information which gets inserted into the template.
+- Finally, we have a main function which calls our `render_template()` function and outputs the result, or outputs any errors
+
+That's it! You now know how to do things with Tera templating.
+
+### Common Mistakes
+
+There is one aspect of Tera that you have to be careful with and that's pathing. In the initialization step above (the `create_template()` function), it's really important to get your paths correct. The `Tera::new()` constructor needs a path that's absolute from the root of your project. You should also be careful to use the glob format noted above to capture everything below the template root, assuming you want that. When you use `add_template_file()` to add in a template, you have to again use an absolute path relative to your root directory.
+
+When deploying, take care to actually include your `templates` folder with the deployment files. Been there, done that, trust me.
+
+### Conclusion and Next Steps
+
+To extend out this very basic starter, you can learn to work with multiple template files, by using the `add_template_files()` function. This function takes multiple files, by building their path and name info into a Vector. This example doesn't show you how to leverage templating in the context of a web server. You could do that very easily with Rocket or Axum. Rocket does a lot of the work for you, but in Axum you'll need to leverage serving static files, which can be your Tera templates.
+
+Here are some resources to aid in your adventures with Tera:
+
+- [Tera Documentation](https://keats.github.io/tera/)
+- [Tera on crates.io](https://docs.rs/tera/1.20.0/tera/)
+
+Good luck! And have fun!
