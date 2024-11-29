@@ -10,7 +10,7 @@ date: '2024-11-29T:00:00:00'
 
 ### Introduction
 
-[Tera](https://keats.github.io/tera/) is a powerful and flexible template engine for the Rust language. What is a template engine? Well, it's a way for you the developer to build a server side rendered web application and use templates to describe the structure and content of the app. Rather than build each page individually, using Tera you describe the overall structure and format, and the data can be dynamically pulled in on the fly. Without a template engine, it would be pretty tedious to build anything server side rendered.
+[Tera](https://keats.github.io/tera/) is a powerful and flexible template engine for the Rust language. What is a template engine? Well, it's a way for you the developer to build a server side rendered web application and use templates to describe the structure and content of the app. Rather than build each page individually, using Tera you describe the overall structure and format, and the data can be dynamically pulled in on the fly.
 
 This is an introductory article, as such I want to focus on:
 
@@ -62,7 +62,7 @@ Here you can see a very rudimentary HTML file. It has some variables though, sur
 
 ### Rendering Templates
 
-Alright, we've got a template, what next? Let's write some actual Rust code. In the `src` directory, go to the `main.rs` file and type in the following code:
+Alright, we've got a template, what next? Let's write some actual Rust code as Step #3. In the `src` directory, go to the `main.rs` file and type in the following code:
 
 ```rust
 // src/main.rs
@@ -72,23 +72,25 @@ use tera::{Tera, Context};
 
 // main function
 fn main() {
-  let tera = Tera::new("templates/**/*").unwrap();
+  let tera = Tera::new("templates/**/*").unwrap();  // constructor is fallible, so we unwrap() to get the good value
   let mut context = Context::new();
   context.insert("title", "First Steps with Tera");
   context.insert("site_name", "example.com");
   context.insert("message", "Hello, world!");
 
-  let rendered = tera.render("base.html", &context).unwrap();
+  let rendered = tera.render("base.html", &context).unwrap(); // render() method is fallible, so we unwrap()
   println!("{}", rendered);
 }
 ```
 
-Let's walk through it step by step:
+Let's walk through it:
 
-- we bring the two things into context from the `Tera` crate, namely the `Tera` type, which is a struct, and `Context`, which is also a struct
-- we create a new Tera instance (using the contents of the directory you created in the previous step) and bind that to a variable so we can use it
-- create an empty instance of `Context` which is effectively the individual pieces of content to render into the template, and bind it to a variable
-- fill in the empty `context` variable with the actual values we want filled in. Remember those `{{ }}` in the template you made? Yes, we're filling all those in with this info.
+- We need two things to render a template, the dynamic information, and a place to put it; we bring two things into scope from the `Tera` crate, namely the [Tera](https://docs.rs/tera/1.20.0/tera/struct.Tera.html) type, which is a struct, and [Context](https://docs.rs/tera/1.20.0/tera/struct.Context.html), which is also a struct
+- The `Tera` type and `Context` type are our two main tools for working with Tera templates
+- We create a new Tera instance (using the contents of the directory you created in the previous step) and bind that to a variable
+- Create an empty instance of `Context` which is effectively a holding container for the content to render into the template, and bind it to a variable
+- Fill in the empty `context` variable with our data. Remember those `{{ }}` in the template you made? Yes, we're filling all those in with this info.
+- There isn't any error handling happening here, `.unwrap()` will give us back good values from any fallible functions, but result in a panic otherwise
 
 That's it! If you compile and run this code, you'll get your filled template rendered back to the console.
 
@@ -162,12 +164,12 @@ fn main() -> Result<(), Error> {
 }
 ```
 
-There's a lot here, and I've handled errors. What did we do?
+There's a lot here, and I've handled errors. What changed and how is this better?
 
 - The `OnceLock` type is brought into scope from `std::sync` in the standard library
   - Fun fact: `OnceLock` used to be part of the `once_cell` crate, which was brought into the Rust standard library with version 1.70
-- The `Context`, `Error`, and `Tera` types are brough into scope from the `Tera` crate
-- We declare a static variable to hold our compiled template, it's intialized with an empty value by using the `OnceLock::new()` constructor
+- The `Context`, `Error`, and `Tera` types are brought into scope from the `Tera` crate
+- We declare a static variable to hold our compiled template, it's initialized with an empty value by using the `OnceLock::new()` constructor
 - We need a separate function which gets our Tera instance started and adds in the base template we created in the `templates/` directory
   - Errors could happen in this process, so to handle them, we use the `?` operator to propagate any errors back to the caller
 - We have a function which `get_template()` which leverages the function we just created, any errors are propagated back to the caller
@@ -175,6 +177,8 @@ There's a lot here, and I've handled errors. What did we do?
   - The closure here wants to work with an actual good value, meaning we can't handle errors effectively inside the closure without an `.unwrap()`. I like to try to show how to handle errors, rather than not.
 - Now that our template is compiled and placed on a shelf, so to speak, we can render it with the desired content. Two things are needed, a template, and context. Remember those variables you put into the `base.html` above? That's the context information which gets inserted into the template.
 - Finally, we have a main function which calls our `render_template()` function and outputs the result, or outputs any errors
+
+This approach is a better solution because we compile the templates once and they are saved in static memory and accessible in a thread-safe way.
 
 That's it! You now know how to do things with Tera templating.
 
@@ -186,11 +190,13 @@ When deploying, take care to actually include your `templates` folder with the d
 
 ### Conclusion and Next Steps
 
-To extend out this very basic starter, you can learn to work with multiple template files, by using the `add_template_files()` function. This function takes multiple files, by building their path and name info into a Vector. This example doesn't show you how to leverage templating in the context of a web server. You could do that very easily with Rocket or Axum. Rocket does a lot of the work for you, but in Axum you'll need to leverage serving static files, which can be your Tera templates.
+To extend out this very basic starter, you can learn to work with multiple template files, by using the `add_template_files()` function. This function takes multiple files, by building their path and name info into a Vector. This example doesn't show you how to leverage templating in the context of a web server. You could do that very easily with Rocket or Axum. Rocket does a lot of the work for you, but in Axum you'll need to pull in `tower-http` as a dependency, to get access to `ServeDir` and it's methods for serving static files, which can be all the assets needed for your project, including the Tera templates.
 
 Here are some resources to aid in your adventures with Tera:
 
 - [Tera Documentation](https://keats.github.io/tera/)
 - [Tera on crates.io](https://docs.rs/tera/1.20.0/tera/)
+- [Serving the Web with Rocket](https://jeff-mitchell.dev/blog/2024/2024-09-15-serving-the-web-with-rocket/)
+- [Tera and Axum](https://github.com/sentinel1909/dev-blog-api)
 
 Good luck! And have fun!
