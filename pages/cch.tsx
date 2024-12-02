@@ -47,7 +47,7 @@ export default function CCHPage() {
 					respond with the challenge&apos;s solution. It is a great way to get started with Rust and Shuttle!
 				</p>
 
-				{/* <p className='mt-8 font-bold'>
+				<p className='mt-8 font-bold'>
 					<span className='text-orange'>&gt;</span> where
 				</p>
 				<p>
@@ -57,13 +57,12 @@ export default function CCHPage() {
 						target='_blank'
 						className='text-orange'
 						onClick={() => {
-							trackEvent('cch_sign_up')
-							sendTwitterConversion(shuttleCchSignupClick)
+							trackEvent('cch_go_to_console');
 						}}
 					>
 						Shuttle Console
 					</Link>!
-				</p> */}
+				</p>
 
 				<p className='mt-8 font-bold'>
 					<span className='text-[#F09050]'>&gt;</span> why
@@ -78,8 +77,7 @@ export default function CCHPage() {
 				</p>
 				<p>
 					The first challenge will be released on December 2nd, 2024 at 12:00 UTC. A total of 7
-					challenges will be released throughout the month of December. Signup and a warmup challenge
-					will be released at the end of November.
+					challenges will be released throughout the month of December.
 				</p>
 
 				<p className='mt-8 font-bold'>
@@ -95,7 +93,7 @@ export default function CCHPage() {
 					target='_blank'
 					className='mt-16 rounded border p-6 text-center text-xl font-bold text-[#F09050]'
 					onClick={() => {
-						trackEvent('cch_sign_up')
+						trackEvent('cch_sign_up');
 					}}
 				>
 					Click here to sign up
