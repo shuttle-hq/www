@@ -47,24 +47,6 @@ export default function CCHPage() {
 					respond with the challenge&apos;s solution. It is a great way to get started with Rust and Shuttle!
 				</p>
 
-				{/* <p className='mt-8 font-bold'>
-					<span className='text-orange'>&gt;</span> where
-				</p>
-				<p>
-					You can access the challenge by logging in to the{' '}
-					<Link
-						href='https://console.shuttle.dev/shuttlings/cch24'
-						target='_blank'
-						className='text-orange'
-						onClick={() => {
-							trackEvent('cch_sign_up')
-							sendTwitterConversion(shuttleCchSignupClick)
-						}}
-					>
-						Shuttle Console
-					</Link>!
-				</p> */}
-
 				<p className='mt-8 font-bold'>
 					<span className='text-[#F09050]'>&gt;</span> why
 				</p>
@@ -78,8 +60,7 @@ export default function CCHPage() {
 				</p>
 				<p>
 					The first challenge will be released on December 2nd, 2024 at 12:00 UTC. A total of 7
-					challenges will be released throughout the month of December. Signup and a warmup challenge
-					will be released at the end of November.
+					challenges will be released throughout the month of December.
 				</p>
 
 				<p className='mt-8 font-bold'>
@@ -90,16 +71,33 @@ export default function CCHPage() {
 					need to rush. More details coming soon!
 				</p>
 
-				<Link
+				<p className='mt-8 font-bold'>
+					<span className='text-orange'>&gt;</span> where
+				</p>
+				<p>
+					You can access the challenge by logging in to the{' '}
+					<Link
+						href='https://console.shuttle.dev/shuttlings/cch24'
+						target='_blank'
+						className='text-orange'
+						onClick={() => {
+							trackEvent('cch_go_to_console');
+						}}
+					>
+						Shuttle Console
+					</Link>!
+				</p>
+
+				{/* <Link
 					href='https://shuttlerust.typeform.com/cch2024'
 					target='_blank'
 					className='mt-16 rounded border p-6 text-center text-xl font-bold text-[#F09050]'
 					onClick={() => {
-						trackEvent('cch_sign_up')
+						trackEvent('cch_sign_up');
 					}}
 				>
 					Click here to sign up
-				</Link>
+				</Link> */}
 			</div>
 		</section>
 	)
