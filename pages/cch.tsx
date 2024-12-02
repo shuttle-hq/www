@@ -48,23 +48,6 @@ export default function CCHPage() {
 				</p>
 
 				<p className='mt-8 font-bold'>
-					<span className='text-orange'>&gt;</span> where
-				</p>
-				<p>
-					You can access the challenge by logging in to the{' '}
-					<Link
-						href='https://console.shuttle.dev/shuttlings/cch24'
-						target='_blank'
-						className='text-orange'
-						onClick={() => {
-							trackEvent('cch_go_to_console');
-						}}
-					>
-						Shuttle Console
-					</Link>!
-				</p>
-
-				<p className='mt-8 font-bold'>
 					<span className='text-[#F09050]'>&gt;</span> why
 				</p>
 				<p>
@@ -88,7 +71,24 @@ export default function CCHPage() {
 					need to rush. More details coming soon!
 				</p>
 
-				<Link
+				<p className='mt-8 font-bold'>
+					<span className='text-orange'>&gt;</span> where
+				</p>
+				<p>
+					You can access the challenge by logging in to the{' '}
+					<Link
+						href='https://console.shuttle.dev/shuttlings/cch24'
+						target='_blank'
+						className='text-orange'
+						onClick={() => {
+							trackEvent('cch_go_to_console');
+						}}
+					>
+						Shuttle Console
+					</Link>!
+				</p>
+
+				{/* <Link
 					href='https://shuttlerust.typeform.com/cch2024'
 					target='_blank'
 					className='mt-16 rounded border p-6 text-center text-xl font-bold text-[#F09050]'
@@ -97,7 +97,7 @@ export default function CCHPage() {
 					}}
 				>
 					Click here to sign up
-				</Link>
+				</Link> */}
 			</div>
 		</section>
 	)
