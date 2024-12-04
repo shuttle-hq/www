@@ -1,14 +1,16 @@
 ---
 title: "The Essence of Templating with Tera"
 description: "How to get started with Shuttle and the Tera Crate"
-author: Jeff Mitchell
+author: jeff
 tags: [rust]
-thumb: tera_placeholder.png
-cover: tera_placeholder.png
-date: '2024-11-29T:00:00:00'
+thumb: rust-templating-tera-thumb.png
+cover: rust-templating-tera-thumb.png
+date: '2024-11-29T00:00:00'
 ---
 
 ### Introduction
+
+Note: Interested in finding the original blog post? You can do so [here.](https://jeff-mitchell.dev/blog/2024/2024-11-23-the-essence-of-templating-with-tera/)
 
 [Tera](https://keats.github.io/tera/) is a powerful and flexible template engine for the Rust language. What is a template engine? Well, it's a way for you the developer to build a server side rendered web application and use templates to describe the structure and content of the app. Rather than build each page individually, using Tera you describe the overall structure and format, and the data can be dynamically pulled in on the fly.
 
@@ -111,7 +113,7 @@ So, pretty easy eh? It is. There is one pitfall to watch out for though.
 
 ### Optimizing Template Rendering
 
-Templates are very expensive to render. The above example is trivial, but in something real, you don't want to be rendering the templates from scratch every time they are requested. Instead, you want to compile them once, then put them somewhere to be re-used later. This way, they're ready and the server isn't wasting time and resources re-building every template each time they are requested. 
+Templates are very expensive to render. The above example is trivial, but in something real, you don't want to be rendering the templates from scratch every time they are requested. Instead, you want to compile them once, then put them somewhere to be re-used later. This way, they're ready and the server isn't wasting time and resources re-building every template each time they are requested.
 
 How can we achieve this? We lean on the standard library and pull in [OnceLock](https://doc.rust-lang.org/std/sync/struct.OnceLock.html), which allows us to create a thing and tuck it off in the corner to use later. `OnceLock` is thread-safe as it implements the `Sync` marker trait which denotes it is safe for the type to be referenced from multiple threads.
 
