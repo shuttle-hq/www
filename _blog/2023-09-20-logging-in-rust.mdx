@@ -1,14 +1,14 @@
 ---
 title: Logging in Rust - How to Get Started
-description: This article talks about the most popular logging crates in Rust and what the best one for your use case is, including both simple and more complex crates. 
+description: This article talks about the most popular logging crates in Rust and what the best one for your use case is, including both simple and more complex crates.
 author: josh
-tags: [rust, logging, comparison, guide]
-thumb: logging-thumbnail.png 
+tags: [rust, logging, guide]
+thumb: logging-thumbnail.png
 cover: logging-thumbnail.png
 date: '2023-09-20T15:00:00'
 ---
 # Logging in Rust - How to Get Started
-With so many different libraries at our disposal for outputting logs in Rust, it's difficult to know which one to choose. When `println!`, `dbg!` and `eprintln!` don't cut it, having a way to structure your logs is extremely important, especially in production-grade applications. This article will help you gain insight on what the best log crate for your use case is when it comes to Rust logging. 
+With so many different libraries at our disposal for outputting logs in Rust, it's difficult to know which one to choose. When `println!`, `dbg!` and `eprintln!` don't cut it, having a way to structure your logs is extremely important, especially in production-grade applications. This article will help you gain insight on what the best log crate for your use case is when it comes to Rust logging.
 
 ## How does logging work in Rust?
 In short: loggers in Rust depend on a library to act as a "logging facade" - a crate which provides the logging API that the logger can work with. So for example, if we have a crate like `log` that provides a logging implementation for us that we can use with a logger, we then will also need to add a crate that actually carries out the logging - for example, `simple-logger` being one of many crates that can use `log`. Some logging facades may only be able to be used by their own special logger - for example, `tracing` either requires you to use the `tracing-subscriber` crate, or otherwise implement your own custom type that implements `tracing::Subscriber`.
@@ -52,7 +52,7 @@ A quick summary:
 ## env-logger
 [env-logger](https://github.com/rust-cli/env_logger) is a simple Rust logger that's easy to use and is quite convenient for any small project where you want to implement logging but don't want something heavy-duty that will more than likely require a considerable amount of boilerplate. It's owned by the Rust CLI Working Group (WG), meaning it'll see long-term support which is great for us.
 
-It can be set up in a one-line statement: 
+It can be set up in a one-line statement:
 ```rust
 let logger = Logger::from_default_env();
 ```
@@ -70,7 +70,7 @@ let env = Env::new()
  .filter_or("MY_LOG", "info")
 // always use styles when printing
  .write_style_or("MY_LOG_STYLE", "always");
- 
+
 let logger = Logger::from_env(env);
 ```
 
@@ -229,7 +229,7 @@ tracing::debug!("Looks just like the log crate!");
 tracing::info_span!("a more convenient version of creating spans!");
 ```
 
-[tracing-subscriber](https://github.com/tokio-rs/tracing/tree/master/tracing-subscriber) is the logger crate designed to work with `tracing` by letting you define a logger that implements the `Subscriber` trait from `tracing`. 
+[tracing-subscriber](https://github.com/tokio-rs/tracing/tree/master/tracing-subscriber) is the logger crate designed to work with `tracing` by letting you define a logger that implements the `Subscriber` trait from `tracing`.
 
 You can start a subscriber that takes the `RUST_LOG` environment variable like so:
 ```rust
@@ -246,13 +246,13 @@ use tracing_subscriber::filter::{EnvFilter, LevelFilter};
 let my_filter = EnvFilter::builder()
     .with_default_directive(LevelFilter::ERROR.into())
     .from_env_lossy();
-    
+
 tracing_subscriber::registry()
     .with(fmt::layer())
     .with(filter)
     .init();
 ```
-You can also layer filters on top of each other! This is quite useful in case you want the effect of having multiple subscribers at the same time. 
+You can also layer filters on top of each other! This is quite useful in case you want the effect of having multiple subscribers at the same time.
 
 If you need to export your logs somewhere, there's also the [tracing_appender](https://github.com/tokio-rs/tracing/tree/master/tracing-appender) crate. You would want to add this in with your tracing subscriber by using the `.with_writer()` method, like so:
 
@@ -293,7 +293,7 @@ tracing_subscriber::fmt()
     .with_writer(non_blocking)
     .init();
 ```
-As you can see, the `tracing` family of crates offers a tonne of power in terms of what it can do and is robust enough for any web application and it's maintained by the Tokio team so it is sure to be supported for a long time. However, using it requires learning about how `tracing` works as it uses concepts that are not utilised in other logging crates - so you'll be locked in if you need to migrate from the crate for whatever reason and you're using spans. However, if you're asking yourself "what is the best logger crate in Rust", you can't go wrong with `tracing` crates in terms of how powerful this family of crates is. 
+As you can see, the `tracing` family of crates offers a tonne of power in terms of what it can do and is robust enough for any web application and it's maintained by the Tokio team so it is sure to be supported for a long time. However, using it requires learning about how `tracing` works as it uses concepts that are not utilised in other logging crates - so you'll be locked in if you need to migrate from the crate for whatever reason and you're using spans. However, if you're asking yourself "what is the best logger crate in Rust", you can't go wrong with `tracing` crates in terms of how powerful this family of crates is.
 
 Summary:
 - Requires some learning about spans, etc to utilise fully

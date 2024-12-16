@@ -2,9 +2,9 @@
 title: 'Raw SQL in Rust with SQLx'
 description:  This article shows you how you can use SQL in Rust with SQLx - you will find a rundown of all the advantages SQLx offers you, the best ways to use it and how to use SQLx with Shuttle.
 author: josh
-tags: [rust, sql, sqlx, guide]
-thumb: sql-in-rust-thumb.png 
-cover: sql-in-rust-thumb.png 
+tags: [rust, sql, sqlx, tutorial]
+thumb: sql-in-rust-thumb.png
+cover: sql-in-rust-thumb.png
 date: '2023-10-04T14:30:00'
 ---
 When it comes to using SQL, the Rust ecosystem has us spoiled for choice: thankfully, there are already a few that have come out on top which we can use. SQLx is a purely async, runtime-agnostic Rust SQL crate that allows you to use compile-time type checked queries without a DSL. As [one of the most popular ways to use SQL in Rust,](https://github.com/search?q=sql+rust+language%3ARust&type=repositories&s=stars&o=desc&l=Rust) it offers the following advantages:
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS foo (
 );
 ```
 
-As long as it's valid SQL, whichever method you decide to use will succeed and will create a `_sqlx_migrations` table in your database, with a list of the migrations that have been applied. 
+As long as it's valid SQL, whichever method you decide to use will succeed and will create a `_sqlx_migrations` table in your database, with a list of the migrations that have been applied.
 
 An in-app migrate command might look like this:
 ```rust
@@ -84,7 +84,7 @@ struct Foo {
 async fn foo(pool: PgPool) -> Vec<Foo> {
 let res = sqlx::query_as::<_, Foo>("SELECT * FROM FOO")
   .fetch_all(&pool).await.unwrap();
-  
+
   Ok(res)
 }
 ```
@@ -186,7 +186,7 @@ let query = query_file!("query.sql", 1i32).fetch_one(&pool).await.unwrap();
 
 This particular macro also, of course, supports struct binding and scalar queries with `query_file_as!` and `query_file_scalar!`.
 
-Something of note is that if you *only* want to compile-time check the syntax and not whether or not the database inputs and outputs are correct for a query macro, you can add `unchecked` at the end of a macro. For example: `query!` would become `query_unchecked!`. This is useful in cases where you don't actually have a database set up yet or there's no convenient method for retrieving the database URL (or in other such circumstances where you don't want to give SQLx direct access to your database). 
+Something of note is that if you *only* want to compile-time check the syntax and not whether or not the database inputs and outputs are correct for a query macro, you can add `unchecked` at the end of a macro. For example: `query!` would become `query_unchecked!`. This is useful in cases where you don't actually have a database set up yet or there's no convenient method for retrieving the database URL (or in other such circumstances where you don't want to give SQLx direct access to your database).
 
 ## PostgreSQL Listen/Notify
 
@@ -224,7 +224,7 @@ async fn return_stream(Extension(listener): Extension<PgListener>) -> Sse<impl S
   Sse::new(stream
     .map(|msg| {
       let msg = msg.uwnrap();
-    
+
       let json = json!(msg).to_string();
      Event::default().data(json)
     }).map(Ok),
@@ -272,7 +272,7 @@ async fn main(
   #[shuttle_shared_db::Postgres] db: PgPool // gets declared here
 ) -> shuttle_axum::ShuttleAxum {
   sqlx::migrate!().run(&db).await.map_err(|e| format!("Oh no! Migrations failed :( {e}");
-  
+
   ... the rest of your code
 }
 ```

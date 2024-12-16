@@ -2,9 +2,9 @@
 title: 'Using GraphQL in Rust'
 description: This article details how to build a GraphQL server in Rust. We will explore using queries, mutations as well as subscriptions to make a fully working endpoint.
 author: josh
-tags: [rust, graphql, sql, guide]
-thumb: graphql-in-rust-thumb.png 
-cover: graphql-in-rust-thumb.png 
+tags: [rust, graphql, sql, tutorial]
+thumb: graphql-in-rust-thumb.png
+cover: graphql-in-rust-thumb.png
 date: '2023-10-16T14:30:00'
 ---
 When it comes to writing an API, sometimes you might have several data sources and want to coalesce them into one easy-to-query API on the frontend. This is where GraphQL comes in: an query language made for APIs and declarative data fetching (you only query what you want). Here are some advantages that GraphQL can bring to your Rust web application:
@@ -85,7 +85,7 @@ pub async fn axum(
             "/",
             get(graphiql).post_service(GraphQL::new(schema.clone())),
         );
-        
+
         Ok(router.into())
 }
 ```
@@ -145,9 +145,9 @@ What about if we want to query only specific rows based on filter criteria? We w
 ```rust src/queries.rs
 async fn dogs(&self, ctx: &Context<'_>,
 	#[graphql(desc = "Filter by specific ID")]
-        id: Option<i32>, 
+        id: Option<i32>,
         #[graphql(desc = "Filter by specific name")]
-        name: Option<String>, 
+        name: Option<String>,
         #[graphql(desc = "Filter by exact age")]
         age: Option<i32>
 ) -> Result<Option<Vec<Dog>>, String> {
@@ -157,7 +157,7 @@ async fn dogs(&self, ctx: &Context<'_>,
             Ok(db) => db,
             Err(err) => return Err(err.message.to_string()),
         };
-        
+
 	// note that we use a CASE for SQL - this is like a "switch case" or pattern match
         let res = match sqlx::query_as::<_, Dog>("SELECT * FROM dogs
                  WHERE (CASE when $1 is not null then (id = $1) else (id = id) end)
@@ -165,14 +165,14 @@ async fn dogs(&self, ctx: &Context<'_>,
                 AND (CASE when $3 is not null then (age = $3) else (age = age) end)
                  ")
                 .bind(id)
-                .bind(name)    
-                .bind(age)    
+                .bind(name)
+                .bind(age)
             .fetch_all(db)
             .await
-        {   
+        {
             Ok(res) => res,
             Err(err) => return Err(err.to_string()),
-        };  
+        };
 
         Ok(Some(res))
     }
@@ -223,7 +223,7 @@ impl Mutation {
             Err(err) => return Err(err.to_string()),
         };
 
-	Ok(res.id)	
+	Ok(res.id)
     }
 }
 ```
@@ -234,24 +234,24 @@ As you can see, it's practically the same as if we just did it normally in SQL -
 #[Object]
 impl Mutation {
 // ... your other functions
-async fn update_dog(&self, ctx: &Context<'_>, 
+async fn update_dog(&self, ctx: &Context<'_>,
         #[graphql(desc = "New name value to update to")]
-        name: Option<String>, 
+        name: Option<String>,
         #[graphql(desc = "New age value to update to")]
-        age: Option<i32>, 
+        age: Option<i32>,
         #[graphql(desc = "(REQUIRED) The ID of the record to update")]
         id: i32) -> Result<i32, String> {
         let db = match ctx.data::<PgPool>() {
-            Ok(db) => db, 
+            Ok(db) => db,
             Err(err) => return Err(err.message.to_string()),
-        };  
+        };
 
         let res = match sqlx::query_as::<_, Dog>(
-            "UPDATE dogs SET 
+            "UPDATE dogs SET
                 NAME = (CASE when $1 IS NOT NULL THEN $1 ELSE name END),
-                AGE = (CASE when $2 IS NOT NULL THEN $2 ELSE age END)   
+                AGE = (CASE when $2 IS NOT NULL THEN $2 ELSE age END)
           WHERE id = $3 RETURNING id, name, age",
-        )   
+        )
         .bind(name)
         .bind(age)
         .bind(id)
@@ -261,16 +261,16 @@ async fn update_dog(&self, ctx: &Context<'_>,
             Ok(res) => res,
             Err(err) => return Err(err.to_string()),
         };
-    
-        Ok(res.id)    
-    } 
+
+        Ok(res.id)
+    }
 }
 ```
-Similarly, we can do it exactly the same way for delete functions. 
+Similarly, we can do it exactly the same way for delete functions.
 
 ## Subscriptions
 
-Subscriptions in GraphQL are a way of subscribing to changes - for example, when a new record gets created or updated, you might want a way for your users to know about or get real time updates. Subscriptions in this respect are similar to PostgreSQL Listen/Notify functions which you can use to listen and notify updates through channels in Postgres - which if you don't know about yet, which you can read more about [here](https://www.shuttle.dev/blog/2023/10/04/sql-in-rust#postgresql-listennotify). 
+Subscriptions in GraphQL are a way of subscribing to changes - for example, when a new record gets created or updated, you might want a way for your users to know about or get real time updates. Subscriptions in this respect are similar to PostgreSQL Listen/Notify functions which you can use to listen and notify updates through channels in Postgres - which if you don't know about yet, which you can read more about [here](https://www.shuttle.dev/blog/2023/10/04/sql-in-rust#postgresql-listennotify).
 
 In `async-graphql`, subscriptions are types that implement `futures_util::Stream` and always return an `impl Stream<Item = T>`; that is to say, the type we're returning needs to implement `Stream` so that the compiler knows that the type can return a stream of data. The most common way to do this is through types that wrap channel Senders/Receivers, and we will show how to do this below.
 
@@ -299,7 +299,7 @@ struct Senders<T>(Slab<UnboundedSender<T>>);
 struct BrokerStream<T: Sync + Send + Clone + 'static>(usize, UnboundedReceiver<T>);
 
 // PhantomData is a type that allows us to act as if the broker type can own the type
-// without PhantomData we can't add the generic 
+// without PhantomData we can't add the generic
 pub struct SimpleBroker<T>(PhantomData<T>);
 ```
 
@@ -315,12 +315,12 @@ where
 {
    // get access to the subscribers hashmap
     let mut map = SUBSCRIBERS.lock().unwrap();
-    // using .or_insert_with() ensures we can insert a value if .entry() returns nothing 
+    // using .or_insert_with() ensures we can insert a value if .entry() returns nothing
     // ie, if there's nobody connected to the GraphQL subscription
     let senders = map
         .entry(TypeId::of::<Senders<T>>())
         .or_insert_with(|| Box::new(Senders::<T>(Default::default())));
-     
+
      // do some work on the message senders, which are downcasted to Senders
     f(senders.downcast_mut::<Senders<T>>().unwrap())
 }
@@ -350,7 +350,7 @@ impl<T: Sync + Send + Clone + 'static> Stream for BrokerStream<T> {
 ```
 Note that the T type, as above, requires `Sync + Send + Clone + 'static` - this is also required for us to use more than one type with the `SimpleBroker`. Otherwise, we will end up being able to only stream one type - which is good in some cases, but let's assume we want to stream more than one type eventually and will therefore, need to make it generic.
 
-Once we're done with the above, we need to write the implementation for the broker itself. See below:								     
+Once we're done with the above, we need to write the implementation for the broker itself. See below:
 ```rust
 impl<T: Sync + Send + Clone + 'static> SimpleBroker<T> {
     /// Publish a message that all subscription streams can receive.
@@ -409,7 +409,7 @@ impl DogChanged {
 ```
 
 We can now add the subscription method itself:
-	
+
 ```rust
 #[Subscription]
 impl Subscription {
@@ -437,13 +437,13 @@ However, this won't work on its own and we still need to push the messages to th
 SimpleBroker::publish(DogChanged {
 	mutation_type: MutationType::Created,
 	id: res.id,
-}); 
+});
 ```
 We've finished all of the parts we need to make our GraphQL server fully functional, so it's time to hook it all up!
-	
+
 ## Connecting it all up
-	
-See below for what your main file should look like: 
+
+See below for what your main file should look like:
 ```rust src/main.rs
 async fn graphiql() -> impl IntoResponse {
     Html(
@@ -492,6 +492,5 @@ Once you're done, feel free to deploy by using `cargo shuttle deploy` (with `--a
 If you're looking for something a bit more isolated, we also offer a completely isolated AWS RDS database as a paid add-on. Find out more about our pricing [here.](https://www.shuttle.dev/pricing)
 
 ## Finishing Up
-	
-I hope you enjoyed reading this article about using GraphQL in Rust! It can be a powerful resource for data fetching if you're in a team, but it's important to cover all angles so that we can make the most of it.
 
+I hope you enjoyed reading this article about using GraphQL in Rust! It can be a powerful resource for data fetching if you're in a team, but it's important to cover all angles so that we can make the most of it.
