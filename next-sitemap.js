@@ -1,4 +1,4 @@
 module.exports = {
-	siteUrl: process.env.SITE_URL || 'https://shuttle.rs',
+	siteUrl: process.env.SITE_URL || 'https://shuttle.dev',
 	generateRobotsTxt: true,
 }
