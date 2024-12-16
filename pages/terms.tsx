@@ -102,7 +102,7 @@ export default function Terms() {
 									<strong className='text-head'>Create an account.</strong> In order to use our
 									Services, you must create an account using your Github account credentials
 									(Account). If you don’t have a Github account you must create one at{' '}
-									<a href='http://https://github.com/' target='_blank' rel='noopener noreferrer'>
+									<a href='https://github.com/' target='_blank' rel='noopener noreferrer'>
 										https://github.com/
 									</a>{' '}
 									in order to use our Services. You are solely responsible for maintaining the

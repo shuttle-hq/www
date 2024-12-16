@@ -170,7 +170,7 @@ Brilliant! Now that we can go from Markdown files to single sentences, we can st
 
 ## Embedding
 
-The next step is to embed the sentences. We use the [OpenAI API](https://beta.openai.com/docs/api-reference) to embed the sentences. The API is very simple and we can use the [openai](https://crates.io/crates/openai) crate to interact with it.
+The next step is to embed the sentences. We use the [OpenAI API](https://beta.openai.com/docs/api-reference) to embed the sentences. The API is very simple and we can use the [openai](https://docs.rs/openai/latest/openai/) crate to interact with it.
 
 The Shuttle `SecretStore` helps us to load the API key from the environment. We use the `OPENAI_API_KEY` environment variable to setup the `openai` crate for our usage. All oyu need to do is to add the API key to your `Secrets.toml` file and then you can use it in your code.
 
@@ -199,7 +199,7 @@ pub async fn embed_file(file: &File) -> Result<Embeddings> {
 }
 ```
 
-Once we have all the embeddings, we need to store them somewhere. We use the [Qdrant](https://qdrant.tech/) database for this. It is a very simple vector database that allows us to store vectors and then query them. We use the [qdrant_client](https://crates.io/crates/qdrant_client) crate to interact with the database.
+Once we have all the embeddings, we need to store them somewhere. We use the [Qdrant](https://qdrant.tech/) database for this. It is a very simple vector database that allows us to store vectors and then query them. We use the [qdrant_client](https://docs.rs/qdrant-client/latest/qdrant_client/) crate to interact with the database.
 
 We define a `VectorDB` struct that holds the `QdrantClient` and the `id` of the collection we want to use. We use the `QDRANT_TOKEN` and `QDRANT_URL` environment variables to setup the `QdrantClient`. Again, you can add these to your `Secrets.toml` file and then use them in your code.
 
@@ -414,7 +414,7 @@ async fn embed(State(app_state): State<Arc<Mutex<AppState>>>) -> Result<()> {
 
 The prompt route is a little more complicated. We first embed the prompt, then we search for relevant documents, and then we ask OpenAI to answer the question based on the document we found.
 
-We use the [`axum_streams` crate](https://crates.io/crates/axum-streams) to stream the response back to the user. This is important, because the response can be quite large. We don't want to wait for the entire response to be generated before we send it back to the user. Instead, we stream the response back to the user as it is generated.
+We use the [`axum_streams` crate](https://docs.rs/axum-streams/latest/axum_streams/) to stream the response back to the user. This is important, because the response can be quite large. We don't want to wait for the entire response to be generated before we send it back to the user. Instead, we stream the response back to the user as it is generated.
 
 ```rust
 async fn get_contents(

@@ -475,7 +475,7 @@ And a new template file `index.html`:
 </html>
 ```
 
-Now we can start our web service and open [http://localhost:8080](http://localhost:8080) in our browser:
+Now we can start our web service and open http://localhost:8080 in our browser:
 
 ![index page](/images/blog/rust-vs-go-index.png)
 
@@ -1690,7 +1690,7 @@ async fn main(#[shuttle_shared_db::Postgres] pool: PgPool) -> shuttle_axum::Shut
 ```
 
 See that part about the schema? That's how we initialize our database with
-our existing table definitions. [Migrations are also supported through sqlx](https://docs.rs/sqlx/latest/sqlx/macro.migrate.html) and [sqlx-cli](https://crates.io/crates/sqlx-cli).
+our existing table definitions. [Migrations are also supported through sqlx](https://docs.rs/sqlx/latest/sqlx/macro.migrate.html) and [sqlx-cli](https://github.com/launchbadge/sqlx/tree/main/sqlx-cli).
 
 We got rid of a lot of boilerplate code and can now deploy our app
 with ease.
