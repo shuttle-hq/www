@@ -35,7 +35,7 @@ This is great for simple applications, but what if you want to send your logs to
 
 > As a disclaimer, I must say that I'm currently working at [Datadog](https://datadoghq.com), so I'm a bit biased, but I'm also a huge fan of the product and I think it's a great tool for developers 😅.
 
-Most of the time, the easiest way to send anything to the [Datadog platform](https://www.datadoghq.com/observability-platform/) is by using the [Datadog Agent](https://docs.datadoghq.com/agent/), but in this case, as **we cannot install it** in any way, we will use a **small library I created for the occasion** called [dd-tracing-layer](https://crates.io/crates/dd-tracing-layer), which happens to be using the [Datadog HTTP API](https://docs.datadoghq.com/api/latest/logs/) under the hood to send logs to the  [Datadog platform](https://www.datadoghq.com/observability-platform/).
+Most of the time, the easiest way to send anything to the [Datadog platform](https://www.datadoghq.com/observability-platform/) is by using the [Datadog Agent](https://docs.datadoghq.com/agent/), but in this case, as **we cannot install it** in any way, we will use a **small library I created for the occasion** called [dd-tracing-layer](https://docs.rs/dd-tracing-layer/latest/dd_tracing_layer/), which happens to be using the [Datadog HTTP API](https://docs.datadoghq.com/api/latest/logs/) under the hood to send logs to the  [Datadog platform](https://www.datadoghq.com/observability-platform/).
 
 ## How to use tracing with Shuttle
 

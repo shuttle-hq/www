@@ -1,6 +1,6 @@
 ---
 title: Implementing Middleware in Rust
-description: This article explores how you can use and write your own middleware in Rust web servers, using Rocket and Axum as examples. 
+description: This article explores how you can use and write your own middleware in Rust web servers, using Rocket and Axum as examples.
 author: ben
 tags: [rust, tutorial, middleware]
 thumb: middleware-banner.png
@@ -12,9 +12,9 @@ In this post we will take a general look into what middleware in Rust is, the be
 
 ## What is middleware?
 
-A web server generally provides responses to requests. Very often, the protocol of choice is HTTP. A handler (sometimes called a response callback) is a function which takes a request's data and returns a response. 
+A web server generally provides responses to requests. Very often, the protocol of choice is HTTP. A handler (sometimes called a response callback) is a function which takes a request's data and returns a response.
 
-Most server frameworks have a system called a 'router' which routes requests based on various parameters - usually the URL path. In HTTP routing is typically a combination of the path and the request method (GET, POST, PUT etc.). The benefit of a router is that it allows splitting logic up by path, which makes building large systems with lots of endpoints easier to manage. 
+Most server frameworks have a system called a 'router' which routes requests based on various parameters - usually the URL path. In HTTP routing is typically a combination of the path and the request method (GET, POST, PUT etc.). The benefit of a router is that it allows splitting logic up by path, which makes building large systems with lots of endpoints easier to manage.
 
 Individual path handlers are great, but sometimes you want logic which applies to a group of paths or indeed all paths. This is where **middleware** comes in. Unlike a handler, middleware is called on **every request and path** that it's registered on. Like handlers, middleware are functions.
 
@@ -31,7 +31,7 @@ Middleware tends to be well-ordered. That is, a request or response passes throu
 +----- layer_three -----+
 | +---- layer_two ----+ |
 | | +-- layer_one --+ | |
-| | |               | | |    
+| | |               | | |
 | | |    handler    | | |
 | | |               | | |
 | | +-- layer_one --+ | |
@@ -113,7 +113,7 @@ Rocket is a server framework. Rocket's middleware implementation is known as [fa
 From Rocket's fairing documentation:
 
 > Rocket’s fairings are a lot like middleware from other frameworks, but they bear a few key distinctions:
-> 
+>
 > Fairings cannot terminate or respond to an incoming request directly.
 > Fairings cannot inject arbitrary, non-request data into a request.
 > Fairings can prevent an application from launching.
@@ -166,7 +166,7 @@ As an aside, Rocket has a different non-middleware implementation that can be be
 
 #### Response using `on_response`
 
-Similar to `on_request` this has mutable access to the response object (it also has immutable access to the request). Using this hook you can **inject headers** or amend **partial responses (aka 404)**. 
+Similar to `on_request` this has mutable access to the response object (it also has immutable access to the request). Using this hook you can **inject headers** or amend **partial responses (aka 404)**.
 
 #### General server hooks
 
@@ -176,7 +176,7 @@ Rocket's fairings go beyond request and responses and can act as hooks into appl
 - Liftoff (`on_liftoff`). After server has launched (started) "A liftoff callback can be a convenient hook for launching services related to the Rocket application being launched."
 - Shutdown (`on_shutdown`). This hook can be used to wind down services and save state before the application closes. Runs concurrently and no requests are returned before.
 
-All Rocket fairings have a [info field](https://api.rocket.rs/v0.5-rc/rocket/fairing/trait.Fairing.html#tymethod.info). The kind property decides which hooks the fairing can fire.
+All Rocket fairings have a [info field](https://api.rocket.rs/v0.5/rocket/fairing/trait.Fairing#tymethod.info). The kind property decides which hooks the fairing can fire.
 
 #### Ad hoc fairings
 
@@ -270,7 +270,7 @@ Router::new()
 
 #### A simpler way
 
-Similar to Rocket's trait fairings and ad hoc fairings there are two ways to write middleware for Axum using [middleware::from_fn](https://docs.rs/axum/latest/axum/middleware/fn.from_fn.html). 
+Similar to Rocket's trait fairings and ad hoc fairings there are two ways to write middleware for Axum using [middleware::from_fn](https://docs.rs/axum/latest/axum/middleware/fn.from_fn.html).
 
 Using a demo from the [Axum docs](https://docs.rs/axum/latest/axum/middleware/index.html#writing-middleware).
 
@@ -340,7 +340,7 @@ async fn auth<B>(
         .headers()
         .get("Cookie")
         .and_then(|value| value.to_str().ok())
-        .map(|value| 
+        .map(|value|
             value
                 .split_once(';')
                 .map(|(left, _)| left)
@@ -359,11 +359,11 @@ async fn auth<B>(
     } else {
         None
     };
-    
+
     req.extensions_mut().insert(AuthState(
         auth_state
             .map(|v| (
-                v, 
+                v,
                 Arc::new(OnceCell::new()),
                 database
             )),
@@ -391,7 +391,7 @@ Router::new()
     }))
 ```
 
-Because our middleware also needs application state (in this case the database pool), we create a intermediate function which pulls that in. 
+Because our middleware also needs application state (in this case the database pool), we create a intermediate function which pulls that in.
 
 ### Using the middleware
 

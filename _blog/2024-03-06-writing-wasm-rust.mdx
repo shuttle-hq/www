@@ -17,7 +17,7 @@ This article will focus on writing a WASM module for image processing that can b
 
 ## Getting started
 
-To get started, you’ll need Rust installed. If you don’t, you can install it [here](https://www.rust-lang.org/install).
+To get started, you’ll need Rust installed. If you don’t, you can install it [here](https://www.rust-lang.org/tools/install).
 
 We’ll be focusing on trying out writing a WASM module in three different ways:
 
@@ -56,7 +56,7 @@ crate-type = ["cdylib"]
 
 ### JavaScript types in Rust
 
-To be able to use JavaScript types in Rust, we need to use `extern C` in addition to using the `wasm-bindgen` macros. This allows us to import functions straight out of JavaScript and into Rust! 
+To be able to use JavaScript types in Rust, we need to use `extern C` in addition to using the `wasm-bindgen` macros. This allows us to import functions straight out of JavaScript and into Rust!
 
 The Hello World application in WASM looks like this (from the book):
 
@@ -213,7 +213,7 @@ This snippet does the following:
 
 If we use `node server.js`, head to `[http://localhost:3030](http://localhost:3030)` in our browser then fill the form out and attach an image, we should get an image download response back!
 
-Note that depending on the settings you are using for your image file format conversion, your file size may increase post-conversion; this is because you may be using lossless conversion. If you want to use lossy conversion to decrease your file size, you want the `new_with_quality` method while instantiating the image encoder in your Rust code. 
+Note that depending on the settings you are using for your image file format conversion, your file size may increase post-conversion; this is because you may be using lossless conversion. If you want to use lossy conversion to decrease your file size, you want the `new_with_quality` method while instantiating the image encoder in your Rust code.
 
 ## Building our app with alternative CLIs
 

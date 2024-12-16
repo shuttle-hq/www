@@ -88,7 +88,7 @@ pub fn router(state: &SharedState) -> Router<SharedState> {
 }
 ```
 
-Then, based on the [image crate](https://crates.io/crates/image), we want to create a transformation of the stored bytes.
+Then, based on the [image crate](https://github.com/image-rs/image), we want to create a transformation of the stored bytes.
 
 ```rust
 use axum::http::StatusCode;
@@ -351,7 +351,7 @@ pub async fn get_kv(
             Ok(ImageResponse::try_from(image)?.into_response()),
         Some(StoredType::Other(bytes)) =>
             Ok(bytes.clone().into_response()),
-        None => 
+        None =>
             Err(KVError::new(StatusCode::NOT_FOUND, "Key not found")),
     }
 }
@@ -399,4 +399,3 @@ If you have any questions regarding _Launchpad_, join the `#launchpad` channel o
 That's it for today. Get in touch with us and let us know what you want to see!
 
 -- [Stefan](https://oida.dev) and your friends from [Shuttle](https://www.shuttle.dev)
-

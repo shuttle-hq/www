@@ -22,7 +22,7 @@ Command::new("cmd")
     .output()
 ```
 
-[`Rocket`](https://api.rocket.rs/v0.5-rc/rocket/struct.Rocket.html) in Rocket
+[`Rocket`](https://api.rocket.rs/v0.5/rocket/struct.Rocket) in Rocket
 ```rust
 rocket::build()
     .mount("/hello", routes![world])
@@ -85,10 +85,10 @@ fn build_message_from_console_input(
     let mut buffer = String::new();
     let mut stdin = std::io::stdin();
     stdin.read_line(&mut buffer).unwrap();
-    
+
     let split = buffer.rsplit_once("with attachment: ");
     if let Some((message, attachment_path)) = split {
-        let attachment = 
+        let attachment =
             std::fs::read_to_string(attachment_path).unwrap();
         builder
             .content(message.into());
@@ -112,7 +112,7 @@ struct FutureRequest<T: FnOnce()> {
 }
 ```
 
-We don't want the program to be able to create a `FutureRequest` for a time in the past. 
+We don't want the program to be able to create a `FutureRequest` for a time in the past.
 
 With regular struct initialisation and public fields there isn't a good way to constrain the values being given to the struct[^type_constraints]
 
@@ -120,7 +120,7 @@ With regular struct initialisation and public fields there isn't a good way to c
 let fq = FutureRequest {
     at: chrono::DateTime::from_utc(
         chrono::NaiveDate::from_ymd(-112, 2, 18)
-            .and_hms(11, 5, 6), 
+            .and_hms(11, 5, 6),
         Utc
     ),
     func: || println!("𓅥𓃶𓀫"),
@@ -135,7 +135,7 @@ struct SchedulingInPastError;
 
 impl<T: FnOnce() -> ()> FutureRequestBuilder<T> {
     fn at(
-        &mut self, 
+        &mut self,
         date_time: chrono::DateTime<Utc>
     ) -> Result<&mut Self, SchedulingInPastError> {
         if date_time < Utc::now() {
@@ -170,7 +170,7 @@ struct Query {
 }
 
 fn foo(query: &mut Query) {
-    // You want mutable access to call mutable methods on the query 
+    // You want mutable access to call mutable methods on the query
     // but want to prevent against:
     query.on_database.drain(..);
 }
@@ -240,7 +240,7 @@ Here there is builder associated with each variant:
 HTMLNode::text_builder()
     .text("Some text".into())
     .build()
-    
+
 // vs
 
 HTMLNode::Text("Some text".into())
@@ -252,7 +252,7 @@ HTMLNode::element_builder()
     .attribute("class".into(), "big quote".into())
     .attribute("tabindex".into(), "5".into())
     .content("Some text")
-    
+
 // vs
 
 HTMLNode::Element(HTMLElement {
@@ -397,7 +397,7 @@ Query::builder()
     .database("fishbase".into())
 ```
 
-Which takes the value of the last set field which is likely a mistake. Although Rust can optimize out a write without a read it is very difficult to have a linter error for this mistake. `derive_builder` also delegates the check to whether all the required fields have been set to runtime. 
+Which takes the value of the last set field which is likely a mistake. Although Rust can optimize out a write without a read it is very difficult to have a linter error for this mistake. `derive_builder` also delegates the check to whether all the required fields have been set to runtime.
 
 With `typed-builder` it has a very similar implementation but has a different output which Rust can reason about and check that they are no duplicate sets and the build is well formed (all the required fields have been set).
 
