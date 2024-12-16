@@ -1,8 +1,8 @@
 ---
 title: Writing a Web Scraper in Rust using Reqwest
-description: Learn to leverage the power of Rust for web scraping. This article explores how you can competently create a web scraping service and host it online without hassle. 
+description: Learn to leverage the power of Rust for web scraping. This article explores how you can competently create a web scraping service and host it online without hassle.
 author: josh
-tags: [rust, Web Scraping, Reqwest, guide]
+tags: [rust, web-scraping, reqwest, tutorial]
 thumb: web_scraper_thumbnail.png
 cover: web_scraper_thumbnail.png
 date: '2023-09-13T14:00:00'
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS products (
         price VARCHAR NOT NULL,
         old_price VARCHAR,
         link VARCHAR,
-        scraped_at DATE NOT NULL DEFAULT CURRENT_DATE   
+        scraped_at DATE NOT NULL DEFAULT CURRENT_DATE
 );
 ```
 
@@ -98,13 +98,13 @@ async fn scrape(ctx: Client) -> Result<(), String> {
     let mut retry_attempts = 0;
     let url = format!("https://www.amazon.com/s?k=raspberry+pi&page={pagenum}");
 
-    let res = match ctx.get(url).send().await { 
+    let res = match ctx.get(url).send().await {
         Ok(res) => res,
             Err(e) => {
                error!("Error while attempting to send HTTP request: {e}");
                break
             }};
-  
+
     let res = match res.text().await {
         Ok(res) => res,
         Err(e) => {
@@ -141,11 +141,11 @@ if res.status() == StatusCode::SERVICE_UNAVAILABLE {
 
 retry_attempts = 0;
 ```
-Assuming the HTTP request is successful, we'll get a HTML body that we can parse using `scraper`. 
+Assuming the HTTP request is successful, we'll get a HTML body that we can parse using `scraper`.
 
 If you go to Amazon in your browser and search for "raspberry pi", you'll then receive a product list. You can examine this product list by using the dev tools function on your browser (in this instance, it's the Inspect function in Firefox but you can also use Chrome Devtools, Microsoft Edge DevTools, etc...). It should look like the following:
 
-![Devtools preview of webpage analysis for web scraping in a browser](/images/blog/web_scraper_amazon.png) 
+![Devtools preview of webpage analysis for web scraping in a browser](/images/blog/web_scraper_amazon.png)
 
 You might notice that the `div` element has a data attribute of `data-component-type` for which the value of `s-search-result`. This is helpful for us as no other page components other than the ones we want to scrape have that attribute! Therefore, we can scrape the data by selecting it as a CSS selector (see below for more information). We'll want to make sure we prepare our HTML by parsing it as a HTML fragment, and then we can declare our initial `scraper::Selector`:
 ```rust
@@ -155,7 +155,7 @@ use scraper::{Html, Selector};
 let html = Html::parse_fragment(&res);
 let selector = Selector::parse("div[data-component-type='s-search-result']").unwrap();
 ```
-As you can see, the `Selector` uses CSS selectors to be able to parse the HTML. In this case, we are specifically attempting to search for a HTML `div` element that has a data attribute called "data-component-type" with a value of "s-search-result". 
+As you can see, the `Selector` uses CSS selectors to be able to parse the HTML. In this case, we are specifically attempting to search for a HTML `div` element that has a data attribute called "data-component-type" with a value of "s-search-result".
 
 If you attempt to run our program now and `html.select(&selector)` as per the `scraper` documentation, you'll see that it returns an iterator over HTML elements. However, because the iteration count can also technically be zero, we'll want to make sure that there are actually things we can iterate over - so let's make sure we cover that point by adding an if statement to check for the iterator count:
 ```rust
@@ -165,7 +165,7 @@ if html.select(&selector).count() == 0 {
     break
 };
 ```
-In our final iteration of the app, this should just break the loop as this will normally signal that there's no more products we can retrieve as in the first case there should always be product results. 
+In our final iteration of the app, this should just break the loop as this will normally signal that there's no more products we can retrieve as in the first case there should always be product results.
 
 Now that we've done our respective error handling, we can iterate through the entries and create a Product, then append it to our vector of Products.
 ```rust
@@ -174,12 +174,12 @@ for entry in html.select(&selector) {
 // declaring more Selectors to use on each entry
     let price_selector = Selector::parse("span.a-price > span.a-offscreen").unwrap();
     let productname_selector = Selector::parse("h2 > a").unwrap();
-    
+
     let name = entry.select(&productname_selector).next().expect("Couldn't find the product name").text.next().unwrap().to_string();
 
 // Amazon products can have two prices: a current price, and an "old price". We iterate through both of these and map them to a Vec<String>.
     let price_text = entry.select(&price_selector).map(|x| x.text().next().unwrap().to_string()).collect::<Vec<String>>();
-    
+
 // get local date from chrono for database storage purposes
     let scraped_at = Local::now().date_naive();
 
@@ -187,10 +187,10 @@ for entry in html.select(&selector) {
     let link = entry.select(&productname_selector).map(|link| {format!("https://amazon.co.uk{}", link.value().attr("href").unwrap())}).collect::<String>();
 
     vec.push(Product {
-        name,   
+        name,
         price: price_text[0].clone(),
         old_price: Some(price_text[1].clone()),
-        link,                    
+        link,
         scraped_at,
     });
 }
@@ -198,15 +198,15 @@ for entry in html.select(&selector) {
 pagenum += 1;
 std_sleep(Duration::from_secs(20));
 ```
-Note that in the above codeblock we use sleep from the standard library - if we attempt to use `tokio::time::sleep`, the compiler returns an error about holding a non-`Send` future across an await point. 
+Note that in the above codeblock we use sleep from the standard library - if we attempt to use `tokio::time::sleep`, the compiler returns an error about holding a non-`Send` future across an await point.
 
 Now that we've written our code for processing the data we've gathered from the web page, we can wrap what we've written so far in a loop, moving our `Vec<Product>` and `pagenum` declarations to an outer loop that will run infinitely. Next, we'll want to make sure we have somewhere to save our data! We'll want to use a batched transaction here, which thankfully we can do by using `db.begin` and `db.commit`. Check the code out below:
 ```rust
 // src/main.rs
 let transaction = db.begin().await.unwrap();
-	
+
 for product in vec {
-    if let Err(e) = sqlx::query("INSERT INTO 
+    if let Err(e) = sqlx::query("INSERT INTO
         products
        (name, price, old_price, link, scraped_at)
        VALUES
@@ -396,4 +396,4 @@ Thanks for reading this article! I hope you have a more thorough understanding o
 Ways to extend this article:
 - Add a frontend so you can show stats for your scraper bot
 - Add a proxy for your web scraper
-- Scrape more than one website 
+- Scrape more than one website

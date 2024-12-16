@@ -2,7 +2,7 @@
 title: "ShuttleAI: Build & Deploy AI-Powered Web Services from a Single Prompt"
 description: "At Shuttle, we've been working on a new tool that we think could change how developers approach AI integration. We're calling it ShuttleAI, and it allows you to build and deploy AI-powered web services from a single prompt."
 author: ivan
-tags: [rust, ai, shuttleai, guide]
+tags: [rust, ai, shuttle-ai, guide]
 thumb: shuttleaicover.png
 cover: shuttleaicover.png
 date: '2024-07-18T15:30:00'
@@ -36,31 +36,31 @@ These barriers can be significant, especially for smaller teams or developers ne
 ShuttleAI aims to simplify this process dramatically. Here's a step-by-step breakdown:
 
 1. **Describe Your Service**: You provide a prompt describing the AI service you want to build. For example:
-    
+
     ```
     "Build a web service that takes weather forecast data and user profiles as input, then returns personalized weather recommendations."
     ```
-    
+
 2. **Review the Spec**: ShuttleAI generates a project specification document in markdown. This includes:
     - API endpoints
     - Data models
     - AI model selection
     - Infrastructure requirements
-    
+
     You can review and modify this spec as needed.
-    
+
 3. **Generate Project Files**: Once you approve the spec, ShuttleAI creates all necessary project files. This includes:
     - Backend code (eg. Python with Flask)
     - AI model integration code
     - Infrastructure in the form of [Infrastructure from Code](https://docs.shuttle.rs/introduction/how-shuttle-works)
 4. **Iterative Refinement**: You can prompt ShuttleAI to make changes at this stage. For example:
-    
+
     ```
     "Add rate limiting to the API endpoints"
     ```
-    
+
     ShuttleAI will update the project files accordingly.
-    
+
 5. **Deploy**: Once you're satisfied, ShuttleAI compiles and deploys your project on the Shuttle platform.
 
 ## Use Cases

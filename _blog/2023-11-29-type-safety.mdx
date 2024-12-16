@@ -2,7 +2,7 @@
 title: "Why Type Safety is Important"
 description: This article takes a deep dive into type safety, language features that enable type safety, and why type safety is a good idea.
 author: josh
-tags: [rust, type safety, tutorial, guide]
+tags: [rust, type-safety, tutorial, guide]
 thumb: type-safety-thumb.png
 cover: type-safety-thumb.png
 date: '2023-11-29T14:30:00'
@@ -63,7 +63,7 @@ def greeting(name: str) -> str:
 However, because it's not statically typed it loses some of the benefits of being statically typed; there's no way to check types automatically so fewer errors are caught before runtime (unless you use static type analysis tools like `mypy`), and if you're migrating a large codebase where there is little type hinting it will take a considerable effort to do so. Needless to say, there are far fewer quirks in Python than JavaScript.
 
 ## Using Statically Typed Languages
-Statically typed languages are exactly that: languages where the type of variables and similar things must be known by the compiler. With the advent of typed inference, the developer experience when using statically typed languages has been greatly improved - primarily because you don't need to declare the type explicitly; you can just declare the variable and instantiate it, and then the compiler will infer what type the variable is by looking at what the value is. 
+Statically typed languages are exactly that: languages where the type of variables and similar things must be known by the compiler. With the advent of typed inference, the developer experience when using statically typed languages has been greatly improved - primarily because you don't need to declare the type explicitly; you can just declare the variable and instantiate it, and then the compiler will infer what type the variable is by looking at what the value is.
 
 In the C family of languages, you need to declare that you want the compiler to infer the type by using a keyword. In C# you would use the `var` keyword:
 ```csharp
@@ -73,7 +73,7 @@ With C++ types, you would instead use `auto`:
 ```cpp
 auto x = 4;
 ```
-It's not particularly ergonomic, but it's there! Of course, in C++ you can also use `void* ' for a variable to signify a universal pointer - however, most C++ devs will tell you that this is almost certainly a huge footgun that's going to end badly whichever way you use it. 
+It's not particularly ergonomic, but it's there! Of course, in C++ you can also use `void* ' for a variable to signify a universal pointer - however, most C++ devs will tell you that this is almost certainly a huge footgun that's going to end badly whichever way you use it.
 
 Other languages like Rust have type inference by default and simply let you declare what the variable is without a specific keyword:
 ```rust
@@ -98,13 +98,13 @@ instance FloatTraits Float where
 ```
 
 It should be noted that languages like Java have their own equivalent in the form of Interfaces (not to be confused with TypeScript interfaces!).
-  
+
 ## Can type safety ever be a bad thing?
 While it is difficult to justify why exactly it could be a bad thing, typing can complicate things. Especially in languages that have language features that define specific functional behaviour of a type, it can be very easy to create a long type signature even during regular use. For example, a common design pattern for async Rust is to use `Arc<Mutex<T>>` to wrap a generic type in a type that locks access while in use on a thread, but then can be copied to other threads. This is fine at first but then can escalate quite quickly when you need to use things like `UnboundedSender` for things like hashmaps of websocket client lists (for example). This is particularly relevant in async Rust as when working with complex functions or writing Rust async libraries, you need to implement functions that may require generics - and the generics will likely require several trait bounds, or more.
 
 Suffice it to say, it can get complicated pretty quickly and people who are discovering this for the first time with Rust will soon find themselves with brain freeze. However, there is a good reason for this. Let's take the `String` type in Rust for example; trying to copy a `String` type in Rust will simply tell you through the compiler that `String does not implement Copy` (or some variation of this message). Why doesn't it implement it? The [docs.rs page for the Copy trait](https://doc.rust-lang.org/std/marker/trait.Copy.html) has the following:
 
-> Types whose values can be duplicated simply by copying bits. 
+> Types whose values can be duplicated simply by copying bits.
 
 Strings in Rust are actually smart pointers and not the data itself - if you try to copy a String, you will only be copying the pointer which will lead to a double-free error down the line and a memory leak. Although traits themselves are language features and not type, this is a good example of how language features in combination with typing can be used to ensure that errors are caught upfront instead of during runtime (and potentially, in production!).
 
@@ -112,4 +112,3 @@ There's also the annoyance of many languages not having type inference, meaning 
 
 ## Finishing Up
 Type safety, while being a very good thing to have, does come with some annoyances - some much larger than others, depending on what programming language you're using. Although there are a lot of fans of both sides of the spectrum when it comes to typing, with the advent of certain features of functional programming [making its way into other languages](https://typeable.io/blog/2021-11-15-fp-features) it's almost certain that there is more that can be learned from functional programming about how typing can be made easier.
-

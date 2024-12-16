@@ -2,15 +2,15 @@
 title: How to Implement OAuth in Rust
 description: Learn what OAuth2 can do for your web apps. Explore how you competently can use OAuth in your web application without stress. Make it easier than ever for your users to use your application.
 author: josh
-tags: [rust, guide, authentication, oauth]
+tags: [rust, tutorial, authentication, oauth]
 thumb: oauth-axum-thumb.png
 cover: oauth-axum-thumb.png
 date: '2023-08-30T18:18:00'
 ---
 In this post, we'll be learning how to implement OAuth 2.0 in Rust by writing a backend service that will interact with
 [Google OAuth](https://developers.google.com/identity/protocols/oauth2) and will interact with [OpenID Connect](https://auth0.com/docs/authenticate/protocols/openid-connect-protocol) ("OIDC") service from Google to retrieve a user's email.
-We'll first learn to use the [oauth2](https://github.com/ramosbugs/oauth2-rs) library to authorise our users using database-backed sessions to 
-keep them authenticated with a private cookie jar, then we'll use a middleware for Rust authentication to authenticate users and insert an extension to the request from the middleware. 
+We'll first learn to use the [oauth2](https://github.com/ramosbugs/oauth2-rs) library to authorise our users using database-backed sessions to
+keep them authenticated with a private cookie jar, then we'll use a middleware for Rust authentication to authenticate users and insert an extension to the request from the middleware.
 
 The final code for the repository can be found [here.](https://github.com/shuttle-hq/shuttle-examples/tree/main/axum/oauth2)
 
@@ -123,7 +123,7 @@ async fn axum(
     // More info about this below - we will build an oauth client that can interface with any OAuth service
     // Depending on the URLs we pass into it - read more here: https://docs.rs/oauth2/latest/oauth2/struct.Client.html?search=bassiclient#method.new
     let client = build_oauth_client(oauth_id, oauth_secret);
-        
+
     Ok(router.into())
 }
 ```
@@ -228,11 +228,11 @@ async fn homepage(
     Extension(oauth_id): Extension<String>
 ) -> Html<String> {
     Html(format!("<p>Welcome!</p>
-    
+
     <a href=\"https://accounts.google.com/o/oauth2/v2/auth?scope=openid%20profile%20email&client_id={oauth_id}&response_type=code&redirect_uri=http://localhost:8000/api/auth/google_callback\">
     Click here to sign into Google!
      </a>"))
-    
+
 }
 ```
 
@@ -299,7 +299,7 @@ let profile = state.ctx.get("https://openidconnect.googleapis.com/v1/userinfo")
 let profile = profile.json::<UserProfile>().await.unwrap();
 ```
 As you can see, we needed to create a struct for the type. This particular OIDC endpoint returns much more than just an email and you'll be able to see that if you use `.text().await.unwrap()` instead of trying to convert the response to JSON - however, for our purposes currently we only need the email for verification - `serde` ignores unknown fields (unless [deny_unknown_fields](https://serde.rs/container-attrs.html#deny_unknown_fields) is enabled),
-so this is safe to do. 
+so this is safe to do.
 
 ## Using OAuth with Axum Extensions
 Now that we've got our access token, all we need to do is store the token somewhere our service can access it. We can do this with SQLx and usage of the `PrivateCookieJar` type from `axum_extra`, which uses cryptographically secure cookies. Let's have a look at what the code would look like:
@@ -324,12 +324,12 @@ let cookie = Cookie::build("sid", token.access_token().secret().to_owned())
     .bind(profile.email.clone())
     .execute(&state.db)
     .await?;
-    
+
     sqlx::query("INSERT INTO sessions (user_id, session_id, expires_at) VALUES (
     (SELECT ID FROM USERS WHERE email = $1 LIMIT 1),
      $2, $3)
-    ON CONFLICT (user_id) DO UPDATE SET 
-    session_id = excluded.session_id, 
+    ON CONFLICT (user_id) DO UPDATE SET
+    session_id = excluded.session_id,
     expires_at = excluded.expires_at")
     .bind(profile.email)
     .bind(token.access_token().secret().to_owned())

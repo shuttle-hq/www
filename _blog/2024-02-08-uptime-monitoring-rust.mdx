@@ -2,9 +2,9 @@
 title: Building an Uptime Monitor in Rust
 description: This article explores how you can write and deploy an uptime monitoring web service in Rust.
 author: josh
-tags: [rust, uptime monitoring, template, guide]
-thumb: uptime-monitoring-rust-thumb.png 
-cover: uptime-monitoring-rust-thumb.png 
+tags: [rust, uptime-monitoring, template, guide]
+thumb: uptime-monitoring-rust-thumb.png
+cover: uptime-monitoring-rust-thumb.png
 date: '2024-02-08T18:00:00'
 ---
 
@@ -19,7 +19,7 @@ For everyone who wants to learn how to build it, let’s get started - if you ge
 
 ## Getting Started
 
-Firstly, we’ll initialize our project using `cargo shuttle init` (requires `cargo-shuttle` to be installed). Make sure you pick Axum as the framework! 
+Firstly, we’ll initialize our project using `cargo shuttle init` (requires `cargo-shuttle` to be installed). Make sure you pick Axum as the framework!
 
 Now you’ll want to install all of your dependencies. You can do that with the following shell snippet below:
 
@@ -49,7 +49,7 @@ create table if not exists logs (
     website_id int not null references websites(id),
     status smallint,
     created_at timestamp with time zone not null default date_trunc('minute', current_timestamp),
-    UNIQUE (website_id, created_at) 
+    UNIQUE (website_id, created_at)
 );
 ```
 
@@ -137,7 +137,7 @@ async fn check_websites(db: PgPool) {
 }
 ```
 
- We *could* use `fetch_all()`, but by using `fetch()` we get a `Stream` back and can skip dealing with `RowNotFound` SQL errors by checking whether or not there are any rows to fetch. 
+ We *could* use `fetch_all()`, but by using `fetch()` we get a `Stream` back and can skip dealing with `RowNotFound` SQL errors by checking whether or not there are any rows to fetch.
 
 Now that we have our list of websites (or lack thereof), we can try to send a request sequentially to each website that exists then store the results of the fetch in our database:
 
@@ -194,7 +194,7 @@ async fn check_websites(db: PgPool) {
 
 ### Backend
 
-Before we start our backend, we should probably add an error handling enum. Let’s add an enum with one arm, implement `axum::response::IntoResponse` for it (currently aliased in our program as `AxumIntoResponse`) and then implement `From<sqlx::Error>` for easy error propagation: 
+Before we start our backend, we should probably add an error handling enum. Let’s add an enum with one arm, implement `axum::response::IntoResponse` for it (currently aliased in our program as `AxumIntoResponse`) and then implement `From<sqlx::Error>` for easy error propagation:
 
 ```rust
 enum ApiError {
@@ -249,7 +249,7 @@ async fn create_website(
 }
 ```
 
-Now let’s write a route to grab all the websites we’re monitoring, as well as get a quick report on what the uptime was like in the last recorded 24 hours (filling in any gaps where required) for each website. 
+Now let’s write a route to grab all the websites we’re monitoring, as well as get a quick report on what the uptime was like in the last recorded 24 hours (filling in any gaps where required) for each website.
 
 Like before with the monitoring tasks, we need to grab a list of all of the websites we’re currently tracking and add them to a vector of website data (except we will assume there are results there. If not, `askama` will handle it for us by automatically not rendering any records):
 
@@ -289,7 +289,7 @@ async fn get_websites(State(state): State<AppState>) -> Result<impl AskamaIntoRe
 }
 ```
 
-Once this is done, we’ll then need to make a new Vector. This will hold all the website URLs (and respective aliases) as well as a list of timestamps with the uptime percentage over the last 24 hours, calculated per hour from how many HTTP requests returned with `200 OK`. We then need to check if there’s any gaps and fill them in with a `None`. This lets the person viewing the data know that no data was recorded at the time (for example if we’re either developing locally, or if the service itself had an outage and was unable to record data). 
+Once this is done, we’ll then need to make a new Vector. This will hold all the website URLs (and respective aliases) as well as a list of timestamps with the uptime percentage over the last 24 hours, calculated per hour from how many HTTP requests returned with `200 OK`. We then need to check if there’s any gaps and fill them in with a `None`. This lets the person viewing the data know that no data was recorded at the time (for example if we’re either developing locally, or if the service itself had an outage and was unable to record data).
 
 To start with, let’s write a function for getting the daily stats for a given URL:
 
@@ -383,7 +383,7 @@ fn fill_data_gaps(
 }
 ```
 
-Once done, we’ll want to create a dynamic route for getting more information about a monitored URL. We can use this page to display things like past incidents/alerts. This function will follow most of the previous handler function except we’re fetching one URL and additionally grabbing any records of HTTP requests that didn’t return `200 OK` and labelling them as “Incidents”. 
+Once done, we’ll want to create a dynamic route for getting more information about a monitored URL. We can use this page to display things like past incidents/alerts. This function will follow most of the previous handler function except we’re fetching one URL and additionally grabbing any records of HTTP requests that didn’t return `200 OK` and labelling them as “Incidents”.
 
 As you can see below it is *mostly* the same as grabbing data for all websites, except now we also have last month’s data (split by day) to add to our return results:
 
@@ -415,9 +415,9 @@ async fn get_website_by_alias(
     let monthly_data = get_monthly_stats(&website.alias, &state.db).await?;
 
     let incidents = sqlx::query_as::<_, Incident>(
-        "SELECT logs.created_at as time, 
-         logs.status from logs 
-         left join websites on websites.id = logs.website_id 
+        "SELECT logs.created_at as time,
+         logs.status from logs
+         left join websites on websites.id = logs.website_id
          where websites.alias = $1 and logs.status != 200",
     )
     .bind(&alias)
@@ -656,7 +656,7 @@ async fn styles() -> impl AxumIntoResponse {
 }
 ```
 
-Then when we add the route to our `Router`, we need to specify the route as `/styles.css`. 
+Then when we add the route to our `Router`, we need to specify the route as `/styles.css`.
 
 ### Hooking everything up
 

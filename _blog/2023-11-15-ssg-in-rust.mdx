@@ -1,9 +1,9 @@
 ---
-title: "Building and Deploying A Static Site Generator" 
-description: This article documents how someone built and deployed a static site generator using Rust in an hour, converting Markdown to HTML as well as adding OG tag support and CSS. 
+title: "Building and Deploying A Static Site Generator"
+description: This article documents how someone built and deployed a static site generator using Rust in an hour, converting Markdown to HTML as well as adding OG tag support and CSS.
 author: josh
-tags: [rust, static site generator, frontend, guide]
-thumb: ssg-in-rust-thumb.png 
+tags: [rust, static-site-generator, frontend, guide]
+thumb: ssg-in-rust-thumb.png
 cover: ssg-in-rust-thumb.png
 date: '2023-11-15T14:30:00'
 ---
@@ -15,9 +15,9 @@ We'll be making a website in the form of a Rust static site generator that we'll
 
 Don't forget to make sure that `cargo-shuttle` is installed and that you're logged in! You can also visit the repo [here.](https://www.github.com/joshua-mo-143/shuttle-ssg)
 
-<hr/> 
+<hr/>
 
-Rust has always been seen from the outside as a language that takes quite a long time to write something in. While that might be true for more things involving more advanced type machinery (implementing your own job queues, implementing async traits manually, lifetimes), for a lot of things that don't require things that amount to mental space rocketry you can knock out a project surprisingly quickly. I want to challenge the assumption that Rust is a slow language to program in by writing a usable, extendable web service in an hour that also provides immediate value to anyone who would also like to use it. 
+Rust has always been seen from the outside as a language that takes quite a long time to write something in. While that might be true for more things involving more advanced type machinery (implementing your own job queues, implementing async traits manually, lifetimes), for a lot of things that don't require things that amount to mental space rocketry you can knock out a project surprisingly quickly. I want to challenge the assumption that Rust is a slow language to program in by writing a usable, extendable web service in an hour that also provides immediate value to anyone who would also like to use it.
 
 ## 59:59 - Getting Started
 It's time to lock in. I went on Youtube and put on a breakcore playlist, then used `cargo shuttle init --template axum` to quickly spin up what I wanted. I used the project name `ssg` and put it in my projects folder, then got to work. What helps me move quickly is that with Shuttle I don't need a Dockerfile; I just use the runtime, provision the things I need and I'm ready to get cracking.
@@ -47,7 +47,7 @@ async fn parser(State(state): State<AppState>, Path(page): Path<String>) -> impl
 
     let mut html_output = String::new();
     let parser = pulldown_cmark::Parser::new(&string_output);
-    
+
     pulldown_cmark::html::push_html(&mut html_output, parser);
 
     Html(html_output)
@@ -106,43 +106,43 @@ I had a quick look for `pulldown-cmark` compatible libraries to see what would t
 I got to work and wrote a function that would comprise of the HTML page head, which would get inserted before the markdown text itself, as well as moving the stylesheet link tag into this function and adding some extra helpful HTML boilerplate:
 ```rust
 // src/main.rs
-#[derive(Deserialize)] 
-struct PageMetadata { 
-    title: String, 
-    description: String, 
-} 
- 
-fn get_page_header(input: &str) -> String { 
-    let document: Document<PageMetadata> = YamlFrontMatter::parse::<PageMetadata>(input).unwrap(); 
-    let PageMetadata { title, description } = document.metadata; 
- 
-    let mut html_output = String::new(); 
-    html_output.push_str("<head>"); 
-    html_output.push_str( 
-        r#"<meta charset="UTF-8"/> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
-    <meta http-equiv="X-UA-Compatible" content="ie=edge"/> 
-    <link rel="stylesheet" type="text/css" href="/styles.css">"#); 
-    html_output.push_str(&format!( 
-        "<title>{title}</title> 
-        <meta property=\"og:title\" content=\"{title}\"/> 
-        <meta property=\"og:description\" content=\"{description}\"/>" 
-    )); 
-    html_output.push_str("</head>"); 
-    html_output 
+#[derive(Deserialize)]
+struct PageMetadata {
+    title: String,
+    description: String,
+}
+
+fn get_page_header(input: &str) -> String {
+    let document: Document<PageMetadata> = YamlFrontMatter::parse::<PageMetadata>(input).unwrap();
+    let PageMetadata { title, description } = document.metadata;
+
+    let mut html_output = String::new();
+    html_output.push_str("<head>");
+    html_output.push_str(
+        r#"<meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <link rel="stylesheet" type="text/css" href="/styles.css">"#);
+    html_output.push_str(&format!(
+        "<title>{title}</title>
+        <meta property=\"og:title\" content=\"{title}\"/>
+        <meta property=\"og:description\" content=\"{description}\"/>"
+    ));
+    html_output.push_str("</head>");
+    html_output
 }
 ```
 
-I only added two tags for now as a matter of convenience. I didn't want to spend too much more time on it and I'd already used quite a lot of time just trying to figure out what library to use. 
+I only added two tags for now as a matter of convenience. I didn't want to spend too much more time on it and I'd already used quite a lot of time just trying to figure out what library to use.
 
 Then I added the following to my `hello_world.md` file:
 ```md
----                                                                            
-title: 'Hello world!'                                                         
-description: 'Hello world!'               
----                     
-                                                                                                          
-## Hello world!  
+---
+title: 'Hello world!'
+description: 'Hello world!'
+---
+
+## Hello world!
 ```
 
 Then I spun up local run, went to the route and... oh no. It looks like there was just a huge line at the top, with the title and description showing up as h2 tags. That's definitely not what I wanted to happen.
@@ -156,7 +156,7 @@ async fn parser(State(state): State<AppState>, Path(page): Path<String>) -> impl
     let markdown_input = match tokio::fs::read(file).await {
         Ok(res) => res,
         Err(_) => return Html("Couldn't find this page - does it exist?".to_string()),
-    };  
+    };
 
     let string_output = std::str::from_utf8(&markdown_input).unwrap();
 
@@ -172,7 +172,7 @@ async fn parser(State(state): State<AppState>, Path(page): Path<String>) -> impl
 }
 ```
 
-I quickly span up local run again, then went to `/hello_world` and checked everything worked. I only saw a large "Hello world!" on the page. I breathed a sigh of relief - the worst was somewhat over, for now. 
+I quickly span up local run again, then went to `/hello_world` and checked everything worked. I only saw a large "Hello world!" on the page. I breathed a sigh of relief - the worst was somewhat over, for now.
 
 ## 16:20 - Pages in directories
 Now that the hard part was over, I could turn my attention to other things: for one, I'd like to be able to serve pages that are in a directory. I quickly cloned the handler function for one route and then augmented it very quickly to be able to accept multiple path arguments:
@@ -186,7 +186,7 @@ async fn parser_dir(
     let markdown_input = match tokio::fs::read(file).await {
         Ok(res) => res,
         Err(_) => return Html("Couldn't find this page - does it exist?".to_string()),
-    };  
+    };
 
     let string_output = std::str::from_utf8(&markdown_input).unwrap();
 
@@ -222,7 +222,7 @@ async fn parser(State(state): State<AppState>, Path(page): Path<String>) -> impl
     // .. rest of code
 }
 ```
-Not much to change besides just trying to read the index file. 
+Not much to change besides just trying to read the index file.
 
 I also remembered I needed to actually serve `index.md` at the base route - so I quickly replaced the base route function with a similar function to the other handlers, except it's just trying to read `templates/index.md`:
 ```rust
@@ -319,7 +319,7 @@ async fn hello_world(State(state): State<AppState>) -> impl IntoResponse {
 
     let res = regex.replace(string_output, "");
     let parser = pulldown_cmark::Parser::new(&res);
-	
+
     pulldown_cmark::html::push_html(&mut html_output, parser);
 
     html_output.push_str("<div id=\"content\">");
@@ -348,7 +348,7 @@ I spun up the local server and checked to see if it works or not - it does! I ha
     flex-direction: column;
     align-items: center;
     gap: 1em;
-} 
+}
 ```
 Next, I wanted to add the [OpenGraph](https://ogp.me) tag for URL (`og:url`). Thankfully, Shuttle has a helper crate for this thing exactly called [`shuttle-metadata`](https://docs.shuttle.rs/resources/shuttle-metadata) that gives you all the information about your project! I `cargo add`ed it, then added it into my main function and added a variable that forms the domain string based on whether we're in debug or release mode:
 ```rust
@@ -361,17 +361,17 @@ async fn main(
         "http://localhost:8000".to_string()
     } else {
         format!("https://{}.shuttleapp.rs", metadata.project_name)
-    };  
-    
+    };
+
     // .. rest of code
 }
 ```
-Shuttle will always run in release mode during deployment, so we can safely assume that when we deploy, it'll always refer to the correct URL. 
+Shuttle will always run in release mode during deployment, so we can safely assume that when we deploy, it'll always refer to the correct URL.
 
 I added the domain as a variable in the `AppState` struct - we'll pass it in the HTML head function, like so:
 ```rust
-let mut html_output = get_page_header(string_output, 
-  &format!("{}/{dir}/{page}", state.domain), 
+let mut html_output = get_page_header(string_output,
+  &format!("{}/{dir}/{page}", state.domain),
   state.filenames);
 ```
 
@@ -394,7 +394,7 @@ So, I'd finally done it! I wrote a fully working Rust SSG in an hour. It wasn't 
 - Adding a sitemap
 - Adding a hits counter
 
-Despite the CSS being extremely minimal, we still managed to make it look relatively good. It shouldn't go without saying, of course, that real-world software engineering is much more than just creating an application in a vacuum. You have to deal with business logic, technical constraints, and many other things: coding is merely one piece of the puzzle. But for those of us who value being able to get code done quickly, being able to learn how to adapt to and use new things quickly is a valuable tool. 
+Despite the CSS being extremely minimal, we still managed to make it look relatively good. It shouldn't go without saying, of course, that real-world software engineering is much more than just creating an application in a vacuum. You have to deal with business logic, technical constraints, and many other things: coding is merely one piece of the puzzle. But for those of us who value being able to get code done quickly, being able to learn how to adapt to and use new things quickly is a valuable tool.
 
 Thanks for reading! I hope this has served as a helpful tutorial on how to make a static site generator in Rust if you're also looking to make something very quickly for your own website.
 
