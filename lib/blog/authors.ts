@@ -22,7 +22,7 @@ const authors: readonly Author[] = [
 		author: 'Christos Hadjiaslanis',
 		position: 'Founder',
 		author_url: 'https://github.com/christos-h',
-		author_image_url: 'https://github.com/christoshadjiaslanis.png',
+		author_image_url: '/images/authors/christos.jpeg',
 	},
 	{
 		author_id: 'brokad',
