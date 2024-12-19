@@ -1,14 +1,14 @@
 ---
 title: "Getting Started with Axum - Rust's Most Popular Web Framework"
-description: This guide is a deep-dive on Axum, a Rust web backend framework. We look at using Axum to write a competent web service with middleware, routing, static files and more. 
+description: This guide is a deep-dive on Axum, a Rust web backend framework. We look at using Axum to write a competent web service with middleware, routing, static files and more.
 author: josh
 tags: [rust, axum, tutorial, guide]
-thumb: axum-thumb.png 
-cover: axum-thumb.png 
+thumb: axum-thumb.png
+cover: axum-thumb.png
 date: '2023-12-06T14:30:00'
 ---
 
-With so many backend web frameworks in the Rust web ecosystem, it's difficult to know what to choose. Although much further in the past you might have seen Rocket shoot to the top of the leadeboard for popularity, nowadays it's typically Axum and Actix Web battling it out with Axum slowly coming on top. In this article, we are going to do a deep dive into Axum, a web framework for making Rust REST APIs backed by the Tokio team that's simple to use and has hyper-compatibility with Tower, a robust library of reusable, modular components for building network applications. 
+With so many backend web frameworks in the Rust web ecosystem, it's difficult to know what to choose. Although much further in the past you might have seen Rocket shoot to the top of the leadeboard for popularity, nowadays it's typically Axum and Actix Web battling it out with Axum slowly coming on top. In this article, we are going to do a deep dive into Axum, a web framework for making Rust REST APIs backed by the Tokio team that's simple to use and has hyper-compatibility with Tower, a robust library of reusable, modular components for building network applications.
 
 In this article we'll take a comprehensive look at how to use Axum to write a web service. This will also include the [0.7 changes.](https://github.com/tokio-rs/axum/releases/tag/axum-v0.7.0)
 
@@ -86,7 +86,7 @@ async fn my_function() -> Result<ApiResponse, ApiError> {
 }
 ```
 
-This allows us to differentiate between errors and successful requests when writing our Axum routing. 
+This allows us to differentiate between errors and successful requests when writing our Axum routing.
 
 ## Adding a Database in Axum
 Normally when setting up a database, you might need to set up your database connection:
@@ -106,9 +106,9 @@ async fn main() {
         .connect(<db-connection-string-here>).await;
 
     let state = AppState { pool };
-        
+
     let router = Router::new().route("/", get(hello_world)).with_state(state);
-    
+
     //... rest of your code
 }
 ```
@@ -121,7 +121,7 @@ async fn axum(
     #[shuttle_shared_db::Postgres] pool: PgPool,
 ) -> shuttle_axum::ShuttleAxum {
     let state = AppState { pool };
-    
+
     // .. the rest of your code
 }
 ```
@@ -142,7 +142,7 @@ async fn axum(
     #[shuttle_shared_db::Postgres] pool: PgPool,
 ) -> shuttle_axum::ShuttleAxum {
     let state = AppState { pool };
-    
+
     // .. the rest of your code
 }
 
@@ -176,7 +176,7 @@ use std::sync::Arc;
 
 let state = Arc::new(AppState { db });
 ```
-When you add the state to your application now, you would need to make sure to refer to the State extractor type as `State<Arc<AppState>>` rather than `State<AppState>`. 
+When you add the state to your application now, you would need to make sure to refer to the State extractor type as `State<Arc<AppState>>` rather than `State<AppState>`.
 
 From personal observation, it does not seem to be clear which method is better. It is likely that `Arcs` are going to perform better in a micro-benchmark but whether this leads to real-world improvements will likely depend on your use case.
 
@@ -231,11 +231,11 @@ async fn my_function(
     Json(json): Json<Submission>
 ) -> Result<ApiResponse, ApiError> {
     println!("{}", json.message);
-    
+
     // ... your code
 }
 ```
-Note that any fields that are not in the struct **will be ignored** - depending on your use case, this can be a good thing; for example, if you're receiving a webhook but only want to look at certain fields from the webhook request. 
+Note that any fields that are not in the struct **will be ignored** - depending on your use case, this can be a good thing; for example, if you're receiving a webhook but only want to look at certain fields from the webhook request.
 
 Forms and URL query parameters can be handled the same way by adding the appropriate type to your handler function - so for example, a form extractor might look like this:
 ```rust
@@ -243,11 +243,11 @@ async fn my_function(
     Form(form): Form<Submission>
 ) -> Result<ApiResponse, ApiError> {
     println!("{}", json.message);
-    
+
     // ... your code
 }
 ```
-On the HTML side when you're sending a HTTP request to your API, you will also of course want to make sure you are sending the correct content type. 
+On the HTML side when you're sending a HTTP request to your API, you will also of course want to make sure you are sending the correct content type.
 
 Headers can also be handled the same way except that headers don't consume the request body - which means you can use as many as you want! We can use the `TypedHeader` type to do this. For Axum 0.6 you will need to enable the `headers` feature, but in 0.7 this has been moved to the `axum-extra` crate which you will need to add the `typed-header` feature, like so:
 ```bash
@@ -264,7 +264,7 @@ async fn my_function(
     TypedHeader(origin): TypedHeader<Origin>
 ) -> Result<ApiResponse, ApiError> {
     println!("{}", origin.hostname);
-    
+
     // ... your code
 }
 ```
@@ -287,7 +287,7 @@ async fn handler(JsonOrForm(payload): JsonOrForm<Payload>) {
 
 struct JsonOrForm<T>(T);
 ```
-Now we can implement `FromRequest<S, B>` for our `JsonOrForm` struct! 
+Now we can implement `FromRequest<S, B>` for our `JsonOrForm` struct!
 ```rust
 #[async_trait]
 impl<S, B, T> FromRequest<S, B> for JsonOrForm<T>
@@ -418,7 +418,7 @@ If you need to add app state to your middleware, you can add it to your handler 
 ```rust
 fn init_router() -> Router {
     let state = setup_state(); // app state initialisation goes here
-    
+
     Router::new()
         .route("/", get(hello_world))
         .layer(middleware::from_fn_with_state(state.clone(), check_hello_world))
@@ -460,11 +460,11 @@ fn init_router() -> Router {
 You can also use HTML templating with crates like [`askama`](https://github.com/djc/askama), [`tera`](https://github.com/Keats/tera) and [`maud`](https://maud.lambda.xyz/)! This can be combined with the power of lightweight JavaScript libraries like [`htmx`](https://htmx.org) to speed up time to production. You can read more about this on our other article about using HTMX with Rust which you can find [here.](https://www.shuttle.dev/blog/2023/10/25/htmx-with-rust). We also collaborated with [Stefan Baumgartner](https://fettblog.eu) on an article for [serving HTML with Askama!](https://www.shuttle.dev/launchpad/issues/2023-10-17-issue-10-Serving-HTML)
 
 ## How to Deploy Axum
-Deployment with Rust backend programs in general can be less than ideal due to having to use Dockerfiles, although if you are experienced with Docker already this may not be such an issue for you - particularly if you are using `cargo-chef`. However, if you're using Shuttle you can just use `cargo shuttle deploy` and you're done already. No setup is required.
+Deployment with Rust backend programs in general can be less than ideal due to having to use Dockerfiles, although if you are experienced with Docker already this may not be such an issue for you - particularly if you are using `cargo-chef`. However, if you're using Shuttle you can just use `shuttle deploy` and you're done already. No setup is required.
 
 ## Finishing Up
 Thanks for reading! Axum is a great framework that has a strong team backing and is highly compatible with the Rust web ecosystem, and we believe now is a better time than ever to get started writing a REST API in Rust.
- 
+
 Interested in more?
 - Check out how you can implement authentication in Axum [here!](https://www.shuttle.dev/blog/2022/08/11/authentication-tutorial)
 - Have a look at how you can get started with logging for your web application [here.](https://www.shuttle.dev/blog/2023/09/20/logging-in-rust)

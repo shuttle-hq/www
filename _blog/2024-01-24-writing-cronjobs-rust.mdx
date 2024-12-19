@@ -3,12 +3,12 @@ title: "Writing Cronjobs in Rust"
 description: This article talks about how you can write cron jobs as a web service on Shuttle using the apalis cron job framework.
 author: josh
 tags: [cronjob, rust, tutorial, guide]
-thumb: cronjobs-rust-thumb.png 
+thumb: cronjobs-rust-thumb.png
 cover: cronjobs-rust-thumb.png
 date: '2024-01-23T14:30:00'
 ---
 
-In this article we’re going to talk about how you can write your own cron jobs as a web service using Shuttle! 
+In this article we’re going to talk about how you can write your own cron jobs as a web service using Shuttle!
 
 Cron jobs (or “scheduled tasks”) are useful for many things. They allow you to automatically do things like:
 
@@ -18,9 +18,9 @@ Cron jobs (or “scheduled tasks”) are useful for many things. They allow you 
 
 If you’re interested in the final code and want to deploy quickly, you can find the repo [here.](https://github.com/shuttle-hq/shuttle-examples/tree/main/shuttle-cron) You can deploy it with two simple steps:
 
-1) Run `cargo shuttle init --from shuttle-hq/shuttle-examples --subfolder shuttle-cron` and follow the prompt (requires `cargo-shuttle` installed)
+1) Run `shuttle init --from shuttle-hq/shuttle-examples --subfolder shuttle-cron` and follow the prompt (requires `cargo-shuttle` installed)
 
-2) Run `cargo shuttle deploy`. That’s it!
+2) Run `shuttle deploy`. That’s it!
 
 ## Getting Started
 
@@ -33,10 +33,10 @@ cargo install cargo-shuttle
 To get started, you’ll want to initialise a project with `cargo-shuttle`:
 
 ```bash
-cargo shuttle init 
+shuttle init
 ```
 
-You’ll want to make sure to follow the prompt and choose `None` when the framework options come up. This will spawn a custom service that you can use with Shuttle. For this article, we will be using the project name `shuttle-example-cron`. 
+You’ll want to make sure to follow the prompt and choose `None` when the framework options come up. This will spawn a custom service that you can use with Shuttle. For this article, we will be using the project name `shuttle-example-cron`.
 
 Once done, we’ll want to install the following dependencies:
 
@@ -55,7 +55,7 @@ cargo add chrono -F serde,clock
 cargo add serde -F derive
 cargo add shuttle-shared-db -F postgres
 cargo add sqlx -F runtime-tokio-native-tls,postgres
-cargo add tower 
+cargo add tower
 ```
 
 Now that everything is installed, it’s time to get coding!
@@ -132,8 +132,8 @@ However, if you want to add extra variables (for example, a database connection 
 
 ```rust
 #[derive(Clone)]
-struct CronjobData { 
-    message: String 
+struct CronjobData {
+    message: String
 }
 
 impl CronjobData {
@@ -166,7 +166,7 @@ To start with, we need to set up the `PostgresStorage` type so that we can use P
 #[shuttle_runtime::async_trait]
 impl shuttle_runtime::Service for MyService {
     async fn bind(
-        self, 
+        self,
         _addr: std::net::SocketAddr
     ) -> Result<(), shuttle_runtime::Error> {
         // set up Postgres-backed storage
@@ -196,7 +196,7 @@ let cron_service_ext = CronjobData {
 let service = ServiceBuilder::new()
     .layer(RetryLayer::new(DefaultRetryPolicy))
     .layer(Extension(cron_service_ext))
-    .service(job_fn(say_hello_world)); 
+    .service(job_fn(say_hello_world));
 ```
 
 Now that we’ve built the service, we need to build the worker and then finally create an `apalis::Monitor` process that will carry the work out:
@@ -231,39 +231,39 @@ Here is the full code for our main application:
 #[shuttle_runtime::async_trait]
 impl shuttle_runtime::Service for MyService {
     async fn bind(
-        self, 
+        self,
         _addr: std::net::SocketAddr
     ) -> Result<(), shuttle_runtime::Error> {
         let storage = PostgresStorage::new(self.db.clone());
         // set up storage
         storage.setup().await.expect("Unable to run migrations :(");
-    
-        let cron_service_ext = CronjobData { 
-            message: "Hello world".to_string() 
+
+        let cron_service_ext = CronjobData {
+            message: "Hello world".to_string()
         };
-    
+
         // create a servicebuilder for the cronjob
         let service = ServiceBuilder::new()
             .layer(RetryLayer::new(DefaultRetryPolicy))
             .layer(Extension(cron_service_ext))
             .service(job_fn(say_hello_world));
- 
+
         let schedule = Schedule::from_str("* * * * * *")
             .expect("Couldn't start the scheduler!");
-    
+
         // create a worker that uses the service created from the cronjob
         let worker = WorkerBuilder::new("morning-cereal")
             .with_storage(storage.clone())
             .stream(CronStream::new(schedule).timer(TokioTimer).to_stream())
             .build(service);
-    
+
         // start your worker up
         Monitor::new()
             .register(worker)
             .run()
             .await
             .expect("Unable to start worker");
-    
+
             Ok(())
     }
 }
@@ -271,7 +271,7 @@ impl shuttle_runtime::Service for MyService {
 
 ## Deploying
 
-Now that we’ve written everything, all you need to do is `cargo shuttle deploy` (with the `--allow-dirty` flag if working on a dirty Git branch). When the deployment is finished, you’ll get the deployment information as well as the deployment database URL string.
+Now that we’ve written everything, all you need to do is `shuttle deploy` (with the `--allow-dirty` flag if working on a dirty Git branch). When the deployment is finished, you’ll get the deployment information as well as the deployment database URL string.
 
 ## Extending
 

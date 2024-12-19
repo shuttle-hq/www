@@ -536,7 +536,7 @@ Of course, when you try to run this locally you may notice that CPU performance 
 
 GPU usage is gated by the use of the “CUDA” - Compute Unified Device Architecture - toolkit (and is a feature flag of `candle_core`). However, this would be difficult to use on the web unless you can have CUDA preinstalled. Nevertheless, it unlocks performance enhancing features outside of just your GPU. For example, Flash Attention, a technique that improves inference speeds with better parallelism and work partitioning. You can find the Arvix paper [here.](https://tridao.me/publications/flash2/flash2.pdf)
 
-This is even more noticeable when you’re running in debug mode. To alleviate this, you can run in release mode using `cargo shuttle run --release` (or without Shuttle: `cargo run --release`). This will run the release profile of your application, which is much more optimised.
+This is even more noticeable when you’re running in debug mode. To alleviate this, you can run in release mode using `shuttle run --release` (or without Shuttle: `cargo run --release`). This will run the release profile of your application, which is much more optimised.
 
 ## Finishing up
 

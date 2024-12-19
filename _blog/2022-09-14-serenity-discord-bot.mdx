@@ -52,12 +52,12 @@ At this moment, our bot is not running because there is no code. We will have to
 
 ### [Serenity](https://docs.rs/serenity/latest/serenity/index.html)
 
-Serenity is a library for writing Discord bots (and communicating with the Discord API). We can create a new Serenity project which is readily deployable on shuttle with: `cargo shuttle init --serenity`
+Serenity is a library for writing Discord bots (and communicating with the Discord API). We can create a new Serenity project which is readily deployable on shuttle with: `shuttle init --serenity`
 
 If you don’t have shuttle yet, you can install it with `cargo install cargo-shuttle`. Afterwards, run the following in an empty directory:
 
 ```
-cargo shuttle init --serenity
+shuttle init --serenity
 ```
 
 After running it you, should see the following generated in `src/lib.rs`:
@@ -143,7 +143,7 @@ impl EventHandler for Bot {
 ```
 
 > Serenity has a bit of a different way of registering commands using a callback. If you are working on a larger command application, [poise](https://docs.rs/poise/latest/poise/) (which builds on Serenity) might be better suited.
-> 
+>
 
 With our command registered, we will now add a hook for when these commands are called using `interaction_create`.
 
@@ -186,7 +186,7 @@ DISCORD_TOKEN="*your discord token*"
 DISCORD_GUILD_ID="*the guild we are testing on*"
 ```
 
-`cargo shuttle run`
+`shuttle run`
 
 We should see that our bot now displays as online:
 
@@ -312,7 +312,7 @@ pub async fn get_forecast(
             place: place.to_owned(),
         })?;
 
-		// Now have the location combine the key/identifier with the URL 
+		// Now have the location combine the key/identifier with the URL
     let url = format!("{}{}?apikey={}", DAY_REQUEST, first_location.key, api_key);
 
 		let request = client.get(url).build().unwrap();
@@ -410,7 +410,7 @@ Now in the interaction handler, we can add a new branch to the match tree. We pu
 
     let value = argument.unwrap().value.unwrap();
     let place = value.as_str().unwrap();
-    let result = weather::get_forecast(place).await;		
+    let result = weather::get_forecast(place).await;
 
     match result {
         Ok((location, forecast)) => format!(
@@ -439,7 +439,7 @@ WEATHER_API_KEY="***"
 
 With the secrets added, we can run the server:
 
-`cargo shuttle run`
+`shuttle run`
 
 While typing, we should see our command come up with the options/parameters:
 
@@ -457,13 +457,9 @@ And entering a location that isn’t registered returns an error, thanks to the 
 
 With all of that setup, it is really easy to get your bot hosted and running without having to run your PC 24/7.
 
-Create a project, this will start an isolated deployer container for you under the hood:
+To deploy your app, all you need to do is:
 ```bash
-cargo shuttle project start
-```
-Finally, to deploy your app, all you need to do is:
-```bash
-cargo shuttle deploy
+shuttle deploy
 ```
 
 And you are good to go. Easy-pease, right?

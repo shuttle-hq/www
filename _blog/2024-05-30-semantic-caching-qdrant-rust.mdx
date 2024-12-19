@@ -40,7 +40,7 @@ Of course, there are good reasons **not** to use semantic caching. Prompts that 
 
 ### Getting started
 
-To get started, don't forget to use `cargo shuttle init`, with the Axum framework. We'll install our dependencies using the shell snippet below:
+To get started, don't forget to use `shuttle init`, with the Axum framework. We'll install our dependencies using the shell snippet below:
 
 ```bash
 cargo add qdrant-client@1.7.0 anyhow async-openai serde serde-json \
@@ -538,7 +538,7 @@ async fn main(
 
 ## Deploying
 
-To deploy, all you need to do is use `cargo shuttle deploy` (with the `--ad` flag if on a Git branch with uncommitted changes) and wait for it to deploy! Once you've deployed, any further deploys needed will only need to re-compile your application (and any extra dependencies if added) then it'll be done much, much faster.
+To deploy, all you need to do is use `shuttle deploy` (with the `--ad` flag if on a Git branch with uncommitted changes) and wait for it to deploy! Once you've deployed, any further deploys needed will only need to re-compile your application (and any extra dependencies if added) then it'll be done much, much faster.
 
 ## Extending this example
 

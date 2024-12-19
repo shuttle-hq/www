@@ -12,9 +12,9 @@ Loco is a Rust framework that aims to do it all - authentication, tasks, migrati
 In this guide, we’ll deploying Loco on Shuttle via a fullstack template that also additionally includes SaaS subscription payments. By using their SaaS starter, we can leverage their pre-built authentication features to build payments out quickly and easily.  Interested in deploying or trying out the final repo? You can check it out [here.](https://github.com/joshua-mo-143/shuttle-stripe-ex)
 
 Steps to deploy from cloning:
-- Run `cargo shuttle init --from joshua-mo-143/shuttle-stripe-ex` and follow the prompt (requires `cargo-shuttle` installed)
+- Run `shuttle init --from joshua-mo-143/shuttle-stripe-ex` and follow the prompt (requires `cargo-shuttle` installed)
 - Set up API keys (see below)
-- Use `cargo shuttle deploy --allow-dirty` and watch the magic happen!
+- Use `shuttle deploy --allow-dirty` and watch the magic happen!
 
 ## Prerequisites
 
@@ -28,15 +28,15 @@ STRIPE_API_KEY = "<YOUR-STRIPE-KEY-HERE>"
 
 ### Getting started
 
-We’re going to use the following command to initialise our project (requires `cargo-shuttle` installed), following the prompt to initialise a project with our name. The `--from` flag allows us to take the starter from 
+We’re going to use the following command to initialise our project (requires `cargo-shuttle` installed), following the prompt to initialise a project with our name. The `--from` flag allows us to take the starter from
 
 ```bash
-cargo shuttle init --from loco-rs/loco --subfolder starters/saas
+shuttle init --from loco-rs/loco --subfolder starters/saas
 ```
 
 We will then use `cargo loco generate deployment` to generate a Shuttle deployment for our Loco project!
 
-While we’re here, make sure you’re using the latest version of `cargo-shuttle` and Shuttle dependencies in your project. We released v0.40.0 today! 
+While we’re here, make sure you’re using the latest version of `cargo-shuttle` and Shuttle dependencies in your project. We released v0.40.0 today!
 
 We’ll also add the following dependencies with a shell snippet:
 
@@ -79,7 +79,7 @@ async fn main(
 
 In the regular `src/bin/main.rs`, you may also need to adjust the app so that `Migrator` is also included.
 
-Once done, you can use `cargo shuttle run` and it should just automatically work! You’ll get a database connection URL (save this for later!).
+Once done, you can use `shuttle run` and it should just automatically work! You’ll get a database connection URL (save this for later!).
 
 ### Migrations
 
@@ -97,13 +97,13 @@ DATABASE_URL=<DB_URL_HERE> cargo loco db migrate
 DATABASE_URL=<DB_URL_HERE> cargo loco db entities
 ```
 
- Note that you will need a database URL for this. If you don’t have one yet, you can use `cargo shuttle run` to automatically spin up a Postgres container with a provided connection string or spin up your own Docker container.
+ Note that you will need a database URL for this. If you don’t have one yet, you can use `shuttle run` to automatically spin up a Postgres container with a provided connection string or spin up your own Docker container.
 
 These two commands will generate some files in the `migrations` folder as well as in `src/models`, which we’ll be making heavy use of as they are the main way to interface with the database when using Loco.
 
 ## Frontend
 
-We won’t be covering the frontend in this tutorial as there’s a lot of different ways you can do it - however, if you’d like to look at the way that we’ve done it, feel free to check out the repo here! We use React as provided by Loco with `react-router-dom` for routing and `zustand` for state management, with vanilla CSS. 
+We won’t be covering the frontend in this tutorial as there’s a lot of different ways you can do it - however, if you’d like to look at the way that we’ve done it, feel free to check out the repo here! We use React as provided by Loco with `react-router-dom` for routing and `zustand` for state management, with vanilla CSS.
 
 The following pages in the repo have been provided:
 
@@ -161,7 +161,7 @@ impl IntoResponse for ApiError {
 
 ## Using Stripe
 
-To get started with using Stripe, we’ll want to create a new loco controller file that will hold all of our routes. We can do this with `cargo loco generate controller stripe`, which will generate a new controller route at `src/controllers/stripe.rs` and inject some code into `src/app.rs` to make sure the controller gets automatically included. 
+To get started with using Stripe, we’ll want to create a new loco controller file that will hold all of our routes. We can do this with `cargo loco generate controller stripe`, which will generate a new controller route at `src/controllers/stripe.rs` and inject some code into `src/app.rs` to make sure the controller gets automatically included.
 
 Looking inside `src/controllers/stripe.rs` should give you a function that returns `Routes` (a struct that builds on `axum::Router`) and a couple of routes for returning “Hello, world!” and the contents of a given request.
 
@@ -208,14 +208,14 @@ impl fmt::Display for UserTier {
 }
 ```
 
-Note that the macros we are importing from `sea_orm` will let the enum be stored as a `varchar` type in Postgres. 
+Note that the macros we are importing from `sea_orm` will let the enum be stored as a `varchar` type in Postgres.
 
 ### Creating Stripe products and prices
 
 Before we do anything else, we will want to create a Stripe product that has some prices attached to it. To do that, we can create two functions; one for creating the Product item, and then one for adding a price (as products on Stripe can have multiple prices). Creating a price requires a product. To keep it simple, we’ll keep one price attached to one item. Both functions will be used as part of other functions.
 
 ```rust
-use stripe::{Client, Product, Price, CreatePrice, CreateProduct, IdOrCreate, 
+use stripe::{Client, Product, Price, CreatePrice, CreateProduct, IdOrCreate,
 CreatePriceRecurring, CreatePriceRecurringInterval, Currency};
 
 async fn create_product_item(client: &Client, user_tier: &UserTier) -> Result<Product, ApiError> {
@@ -311,7 +311,7 @@ async fn retrieve_product(
 }
 ```
 
-Later on, when we run the web service, the API should automatically be able to know if it is required to remake the Stripe product or not. 
+Later on, when we run the web service, the API should automatically be able to know if it is required to remake the Stripe product or not.
 
 Let’s write a function for creating a subscription. To get started, we will define what the JSON input should look like when the API receives a request:
 
@@ -329,9 +329,9 @@ pub struct UserSubscription {
 }
 ```
 
-Note that when sending the request, the variables must be in camel case and not snake case. 
+Note that when sending the request, the variables must be in camel case and not snake case.
 
-To make things a little bit easier for ourselves later, we will add an `impl` for `UserSubscription` which will allow us to automatically turn it into some structs that we’ll be using later on to create the customer and `CardDetailsParams`. 
+To make things a little bit easier for ourselves later, we will add an `impl` for `UserSubscription` which will allow us to automatically turn it into some structs that we’ll be using later on to create the customer and `CardDetailsParams`.
 
 ```rust
 impl UserSubscription {
@@ -379,17 +379,17 @@ pub async fn create_subscription(
 ) -> Result<StatusCode, ApiError> {
     let secret_key = std::env::var("STRIPE_API_KEY").expect("Missing STRIPE_API_KEY in env");
     let client = Client::new(secret_key);
-    
+
     // .. rest of your code
 }
 ```
 
-Here, note that we specifically use the `JWTWithUser` middleware to extract a Bearer JWT from the Authorization header and return a user model. 
+Here, note that we specifically use the `JWTWithUser` middleware to extract a Bearer JWT from the Authorization header and return a user model.
 
 Next, we want to create a customer and add it to our Stripe account. We will also create the payment method and attach it to the customer. Note here that while we’re using card payments as it’s a very common form of payment, Stripe also has quite a few other types of payments you can try.
 
 ```rust
-use stripe::{Customer, PaymentMethod, PaymentMethodTypeFilter, 
+use stripe::{Customer, PaymentMethod, PaymentMethodTypeFilter,
 CreatePaymentMethodCardUnion, AttachPaymentMethod};
 
 let customer = Customer::create(&client, json.as_create_customer()).await?;
@@ -541,7 +541,7 @@ if new_user_tier.user_tier == user_subscription.user_tier {
 }
 ```
 
-Once done, we can then find the subscription tier data from our database according to the requested tier change and update the subscription using the new tier’s Stripe price object ID. 
+Once done, we can then find the subscription tier data from our database according to the requested tier change and update the subscription using the new tier’s Stripe price object ID.
 
 ```rust
 let new_subscription = subscription_tiers::Entity
@@ -571,7 +571,7 @@ let updated_subscription = Subscription::update(
 ).await?;
 ```
 
-Before we finish this function up, we will need to update the user tier in the `user_subscriptions` table. 
+Before we finish this function up, we will need to update the user tier in the `user_subscriptions` table.
 
 ```rust
 use sea_orm::IntoActiveModel;
@@ -623,7 +623,7 @@ pub fn routes() -> Routes {
 
 ## Deployment
 
-To deploy, you just need to run `cargo shuttle deploy --allow-dirty` and let Shuttle make the magic happen! Once done, you’ll see information about your service.
+To deploy, you just need to run `shuttle deploy --allow-dirty` and let Shuttle make the magic happen! Once done, you’ll see information about your service.
 
 ## Finishing up
 

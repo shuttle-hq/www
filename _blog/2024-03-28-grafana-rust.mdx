@@ -24,7 +24,7 @@ To get the most out of this article, you need to either self-host Grafana servic
 
 To get started, you will want an API token that has the `write:logs` permissions. This can be done from Grafana Cloud user management. Make sure you save your Grafana user and API token variables, as you’ll need them in just a little bit.
 
-For initializing our service, we’ll use `cargo shuttle init --template axum`  (requires `cargo-shuttle` installed) to create a new Shuttle project with the Axum template. We will then add the following dependencies with this shell snippet:
+For initializing our service, we’ll use `shuttle init --template axum`  (requires `cargo-shuttle` installed) to create a new Shuttle project with the Axum template. We will then add the following dependencies with this shell snippet:
 
 ```bash
 cargo add url
@@ -35,7 +35,7 @@ cargo add base64
 cargo add shuttle-runtime --no-default-features
 ```
 
-We’ll also additionally need to add the `#[shuttle_runtime::Secrets]` annotation macro to our main function. This allows us to automatically grab secrets from our Secrets.toml file when we use `cargo shuttle run` to run our Shuttle service. It should look like this:
+We’ll also additionally need to add the `#[shuttle_runtime::Secrets]` annotation macro to our main function. This allows us to automatically grab secrets from our Secrets.toml file when we use `shuttle run` to run our Shuttle service. It should look like this:
 
 ```rust
 [..]
@@ -149,7 +149,7 @@ async fn main(
 }
 ```
 
-When using `cargo shuttle run` now, your terminal will become populated with traces. If you visit `localhost:8000` in the browser, you should see a debug tracing event with the description `An event happened!` in your traces. Note that it may take Grafana 5-10 minutes to receive your traces.
+When using `shuttle run` now, your terminal will become populated with traces. If you visit `localhost:8000` in the browser, you should see a debug tracing event with the description `An event happened!` in your traces. Note that it may take Grafana 5-10 minutes to receive your traces.
 
 ## Reading your logs
 
@@ -159,7 +159,7 @@ The label we added to our logs should show up under the `Labels` column. It will
 
 ## Deploying
 
-To deploy, simply use `cargo shuttle deploy` and watch the magic happen!
+To deploy, simply use `shuttle deploy` and watch the magic happen!
 
 ## Finishing up
 

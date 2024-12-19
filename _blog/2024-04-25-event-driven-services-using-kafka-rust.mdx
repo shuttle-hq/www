@@ -39,7 +39,7 @@ If you want to deploy this service to the web somewhere, you’ll also want to m
 
 ### Project setup
 
-To get started, we’ll want to make a new project using `cargo shuttle init` - don’t forget to select Axum as the framework! You will need `cargo-shuttle` installed for this. If you don’t have it installed, you can use `cargo install cargo-shuttle`.
+To get started, we’ll want to make a new project using `shuttle init` - don’t forget to select Axum as the framework! You will need `cargo-shuttle` installed for this. If you don’t have it installed, you can use `cargo install cargo-shuttle`.
 
 We’ll then want to use the following shell snippet to install our project dependencies:
 
@@ -393,7 +393,7 @@ let rtr = Router::new()
      .with_state(state);
 ```
 
-If you use `cargo shuttle run` to start your application (assuming Kafka is running) and run this curl command:
+If you use `shuttle run` to start your application (assuming Kafka is running) and run this curl command:
 
 ```bash
 	curl localhost:8000/send -H 'Content-Type: application/json' \
@@ -695,7 +695,7 @@ The address will link directly to the Kafka node which we can connect to and cre
 
 ## Deploying
 
-To deploy, simply write `cargo shuttle deploy --ad` and watch the magic happen! Once you’ve compiled the first time, you’ll benefit from incremental deployment compilations.
+To deploy, simply write `shuttle deploy --ad` and watch the magic happen! Once you’ve compiled the first time, you’ll benefit from incremental deployment compilations.
 
 ## Finishing up
 

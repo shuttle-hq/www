@@ -20,7 +20,7 @@ Stuck or want to know what the final code looks like? [You can find the reposito
 
 You'll want to initiate a new Shuttle project (requires `cargo-shuttle`):
 ```bash
-cargo shuttle init
+shuttle init
 ```
 
 For this article we'll be using the project name "graphql-example". When the CLI asks you what framework you want, pick Axum.
@@ -90,7 +90,7 @@ pub async fn axum(
 }
 ```
 
-If we use `cargo shuttle run` to load up our program and go to `http://localhost:8000`, we should see the GraphQL playground.
+If we use `shuttle run` to load up our program and go to `http://localhost:8000`, we should see the GraphQL playground.
 
 Clicking the Queries on the left hand side will show us all the queries we can run - there should be one called "howdy" (which corresponds to the function we wrote under the Query implementation). You can verify it works by running it.
 
@@ -194,7 +194,7 @@ impl Dog {
     }
 }
 ```
-If you run `cargo shuttle run` and go to `http://localhost:8000`, you'll be able to see that if you click on Queries on the left-hand side, it'll let you use `dogs` as a query.
+If you run `shuttle run` and go to `http://localhost:8000`, you'll be able to see that if you click on Queries on the left-hand side, it'll let you use `dogs` as a query.
 
 ## Mutations
 
@@ -483,11 +483,11 @@ async fn shuttle_main(
 }
 ```
 
-If you use `cargo shuttle run` and go to `http://localhost:8000`, you'll be able to access all of your queries, mutations and the subscription we created.
+If you use `shuttle run` and go to `http://localhost:8000`, you'll be able to access all of your queries, mutations and the subscription we created.
 
 ## Deployment
 
-Once you're done, feel free to deploy by using `cargo shuttle deploy` (with `--allow-dirty` if on a dirty Git branch). Your app will then be deployed to Shuttle servers along with a provisioned database - nothing more is needed! When finished, you'll be able to view your connection string (if you lose it for whatever reason, you can use `cargo-shuttle resource list` to get the connection string again).
+Once you're done, feel free to deploy by using `shuttle deploy` (with `--allow-dirty` if on a dirty Git branch). Your app will then be deployed to Shuttle servers along with a provisioned database - nothing more is needed! When finished, you'll be able to view your connection string (if you lose it for whatever reason, you can use `cargo-shuttle resource list` to get the connection string again).
 
 If you're looking for something a bit more isolated, we also offer a completely isolated AWS RDS database as a paid add-on. Find out more about our pricing [here.](https://www.shuttle.dev/pricing)
 

@@ -492,7 +492,7 @@ This will generate an optimized build in the `/frontend/dist` directory.
 Finally run the backend using:
 
 ```bash
-cargo shuttle run
+shuttle run
 ```
 
 Open the highlighted URL in the browser window:
@@ -501,7 +501,7 @@ Open the highlighted URL in the browser window:
 
 ## Deployment
 
-Now you can deploy your app on the Shuttle platform by running `cargo shuttle start` and `cargo shuttle deploy` (with the `--allow-dirty` flag if you have uncommitted changes).
+Now you can deploy your app on the Shuttle platform by running `shuttle deploy` (with the `--allow-dirty` flag if you have uncommitted changes).
 
 One important note is that the deployment using the **development** keys from Clerk will work just fine, but if you change to use the **Production Instance** of Clerk then you will need to update the keys with **Live** keys. Now since you have moved to production you will also need to set up the domain or subdomain of your application in Clerk and add the CNAME records that you will get from the Clerk dashboard to your DNS record for managing sessions, loading portal using your domain, sending verification emails, and using custom callback URL. Since this process can be different based on your domain provider and management system, I will leave a link to the Clerks documentation on [**Deploy to production**](https://clerk.com/docs/deployments/overview).
 

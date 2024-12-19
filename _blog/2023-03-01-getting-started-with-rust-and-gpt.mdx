@@ -117,7 +117,7 @@ That's it! Our frontend is done. Now we can focus on the meat of the app, which 
 Ok so now that we're finished with our frontend, we can now write a backend that we'll be using for the prompt. We will want to use the following command to initialise our project:
 
 ```rust
-cargo shuttle init --axum
+shuttle init --axum
 ```
 
 You'll be prompted to enter a name for your project, where you want to initialise the directory (we will be calling this folder "API" for the sake of clarity) and whether or not you want to start a project environment on shuttle. On initialisation, we will be including Axum, which is a strong, easy to use framework.
@@ -337,7 +337,7 @@ Now our frontend assets will compile into the static folder of our Rust project,
 Now our app is ready to deploy, so once we're ready we can finalise the process by running the following command:
 
 ```rust
-cargo shuttle deploy
+shuttle deploy
 ```
 
 If there's no issues, it should deploy! We'll be able to view our app at the link that was given to us in the terminal, and it should work with no issues whatsoever.
