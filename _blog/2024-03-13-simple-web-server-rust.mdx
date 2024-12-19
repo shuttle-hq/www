@@ -2,7 +2,7 @@
 title: "Building a Simple Web Server in Rust"
 description: "Building and deploying a simple web server in Rust with the Axum framework"
 author: josh
-tags: [rust, axum, web server, guide]
+tags: [rust, guide]
 thumb: simple-web-server-rust-thumb.png
 cover: simple-web-server-rust-thumb.png
 date: '2024-03-13T15:30:00'
@@ -23,7 +23,7 @@ Additionally, we also have an article about what framework you should use [here.
 
 To get started, you’ll want Rust installed on your system. Don’t have it installed? You can get it from [this install page.](https://www.rust-lang.org/tools/install)
 
-Next, you’ll want to use `cargo shuttle init` (requires `cargo-shuttle` installed). and then pick `Axum` for our framework. 
+Next, you’ll want to use `cargo shuttle init` (requires `cargo-shuttle` installed). and then pick `Axum` for our framework.
 
 ## Hello world!
 
@@ -59,7 +59,7 @@ If you used `cargo run` to load this program up then go to `[localhost:8000](htt
 
 When initialising a project with Shuttle, all of this gets set up for you. The basic project comes with a native integration so that you don’t need to set up the socket binding manually. The integration code is quite short and revolves around the usage of the `shuttle_runtime::Service` trait. If you have a non-standard service you want to run, you can run the service in a struct that implements the `Service` trait and you’ll be ready to go!
 
-See below for an example of how a Shuttle “Hello World” project looks like: 
+See below for an example of how a Shuttle “Hello World” project looks like:
 
 ```rust
 use axum::{Router, routing::get};
@@ -120,7 +120,7 @@ Now we can wrap it in `axum::Json` and return the struct in our HTTP response.
 ```rust
 async fn return_a_struct_as_json() -> Json<MyStruct> {
      let my_struct = MyStruct { my_field: "Hello world!".to_string() };
-     
+
      Json(my_struct)
 }
 ```
@@ -160,7 +160,7 @@ async fn main() -> shuttle_axum::ShuttleAxum {
 
 Using databases generally isn’t much different in Rust than any other language. The main difference is Rust web frameworks generally use shared mutable state to pass around data. This means that you’ll want to first initialise your database connection (pool) and pass it around using state. In Axum, state is required to implement `Clone`. If your type cannot implement `Clone` because one or more types don’t implement Clone, you can wrap the state struct in a `std::sync::Arc` which does implement `Clone`.
 
-Here’s an example of how you can do exactly that, using SQLx with Postgres as example. We initialise the `PgPool`, initialise our state struct and attach it to the router. 
+Here’s an example of how you can do exactly that, using SQLx with Postgres as example. We initialise the `PgPool`, initialise our state struct and attach it to the router.
 
 ```bash
 cargo add sqlx -F postgres
@@ -233,7 +233,7 @@ To get started with static files on Axum, we’ll create a folder in the root of
 assets = ["static/*"]
 ```
 
-Using the wildcard tag allows us to serve any file contained within the folder by using the file path. 
+Using the wildcard tag allows us to serve any file contained within the folder by using the file path.
 
 We can write a HTML file in the static folder called `index.html`:
 
@@ -261,7 +261,7 @@ If you are using a SPA framework like React or Vue for your static files, you wi
 ```rust
 let router = Router::new()
     .route_service("/", ServeDir::new("static")
-        .not_found_service(ServeFile::new("static/index.html") 
+        .not_found_service(ServeFile::new("static/index.html")
      )
 );
 ```

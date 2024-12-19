@@ -2,8 +2,8 @@
 title: "Using Serde in Rust"
 description: This article talks about serde, a Rust serialization library and how you can use it in applications.
 author: josh
-tags: [rust, serde, serialization, guide]
-thumb: serde-rust-thumb.png 
+tags: [rust, serde, guide]
+thumb: serde-rust-thumb.png
 cover: serde-rust-thumb.png
 date: '2024-01-23T14:30:00'
 ---
@@ -62,13 +62,13 @@ fn to_and_from_json() {
 }
 ```
 
-If you’re interested in using `serde-json` for your Rust application, we have an article talking about JSON parsing libraries which you can check out [here.](https://www.shuttle.dev/blog/2024/01/18/parsing-json-rust)  
+If you’re interested in using `serde-json` for your Rust application, we have an article talking about JSON parsing libraries which you can check out [here.](https://www.shuttle.dev/blog/2024/01/18/parsing-json-rust)
 
 We can also deserialize and serialize to/from many sources including from a file stream I/O, a JSON byte array and more!
 
 ### Implementing Deserialize and Serialize manually
 
-In order to better understand how `serde` works under the hood, we can also implement `Deserialize` and `Serialize` manually. This is quite complicated, but for now we will stick with a simple implementation. Here is a simple implementation for serializing an `i32` primitive type: 
+In order to better understand how `serde` works under the hood, we can also implement `Deserialize` and `Serialize` manually. This is quite complicated, but for now we will stick with a simple implementation. Here is a simple implementation for serializing an `i32` primitive type:
 
 ```rust
 use serde::{Serializer, Serialize};
@@ -110,7 +110,7 @@ impl Serialize for Color {
 ```
 Note that to serialize a field, the field type also needs to implement `Serialize`. If you have a custom type that doesn't implement `Serialize`, you will either need to implement `Serialize` or use a `Serialize` derive macro (if the struct/enum type holds types that all implement `Serialize`).
 
-The `Deserialize` trait is a little bit different and is a fair bit more complicated to implement. To be able to deserialize to a type, the type itself needs to implement `Sized` which means that there are a number of types which can’t use this trait (for example `&str`) because they are unsized types. To deserialize a type, you also need to use a type that implements the `Visitor` trait. 
+The `Deserialize` trait is a little bit different and is a fair bit more complicated to implement. To be able to deserialize to a type, the type itself needs to implement `Sized` which means that there are a number of types which can’t use this trait (for example `&str`) because they are unsized types. To deserialize a type, you also need to use a type that implements the `Visitor` trait.
 
 The `Visitor` trait uses the Visitor design pattern in Rust. This means that it encapsulates an algorithm that operates over a collection of same-sized objects. It allows you to write multiple different algorithms for operating over the data, without needing to change any original functionality. You can find out more about this [here.](https://rust-unofficial.github.io/patterns/patterns/behavioural/visitor.html)
 
@@ -171,7 +171,7 @@ impl<'de> Deserialize<'de> for MyStruct {
 }
 ```
 
-There is also documentation on deserializing structs which you can find [here.](https://serde.rs/deserialize-struct.html) However, generally speaking it is recommended that you use the `derive` feature macros as the manual implementation (as seen on the page itself) is quite large. The implementation involves mostly using a visitor that can visit a map or sequence then iterate through the elements to deserialize it. 
+There is also documentation on deserializing structs which you can find [here.](https://serde.rs/deserialize-struct.html) However, generally speaking it is recommended that you use the `derive` feature macros as the manual implementation (as seen on the page itself) is quite large. The implementation involves mostly using a visitor that can visit a map or sequence then iterate through the elements to deserialize it.
 
 ### Using serde attributes
 
@@ -219,7 +219,7 @@ fn my_function() -> String {
 }
 ```
 
-`serde` also offers other useful attributes, like being able to deny unknown fields using `#[serde(deny_unknown_fields)]` on top of the struct. This allows you to make sure that the struct is exactly as-is when serializing and deserializing. 
+`serde` also offers other useful attributes, like being able to deny unknown fields using `#[serde(deny_unknown_fields)]` on top of the struct. This allows you to make sure that the struct is exactly as-is when serializing and deserializing.
 
 ### Deserializing and Serializing enums
 
@@ -240,7 +240,7 @@ Note that when converting to and from this enum, it can take two options:
 - A String field named `id` and a JSON value with the key `data` (this can be a map, a value or anything that the `Json` value can hold)
 - An `i32` field named `id` and a `String` field named `name`
 
-You can then match the enum variant for further processing. 
+You can then match the enum variant for further processing.
 
 When the first enum variant is written in JSON, you can see that it should correspond with this:
 
@@ -338,7 +338,7 @@ Overall, an easy to use and simple crate that improves performance without much 
 
 ## Finishing up
 
-I hope you enjoyed reading about Serde! It's a pretty powerful Rust crate and forms the backbone of most Rust applications. 
+I hope you enjoyed reading about Serde! It's a pretty powerful Rust crate and forms the backbone of most Rust applications.
 
 Read more:
 - Read more about how you can get started with the Rocket web framework [here.](https://www.shuttle.dev/blog/2023/12/13/using-rocket-rust)

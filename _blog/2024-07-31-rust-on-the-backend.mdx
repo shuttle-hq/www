@@ -2,7 +2,7 @@
 title: "Why you should use Rust on the backend"
 description: "What makes Rust worth using for backend web services?"
 author: josh
-tags: [rust]
+tags: [rust, opinion]
 thumb: rust-on-the-backend-thumb.png
 cover: rust-on-the-backend-thumb.png
 date: '2024-07-31T15:30:00'
@@ -34,7 +34,7 @@ async fn main -> Result<(), Box<dyn std::error::Error> {
 	  // this assumes we already have our database connection function set up
 	  // using the `?` operator allows us to automatically propagate errors
 	  // without needing to manually handle them or use unwraps
-      let db = connect_to_db().await?; 
+      let db = connect_to_db().await?;
 	  let state = AppState { db };
 
       // set up router here
@@ -71,7 +71,7 @@ async fn get_users(State(state): State<AppState>) -> impl IntoResponse {
 	       .fetch_all(&state.db)
 		   .await
 		   .unwrap();
-      
+
 	  Ok(Json(query))
 }
 ```
@@ -104,16 +104,16 @@ use std::collections::HashMap;
 #[tokio::main]
 async fn main() {
 	let locked_map: Arc<RwLock<HashMap<String, String>>> = Arc::new(RwLock::new(HashMap::new()));
-	
+
 	let mut writer = locked_map.write().await.unwrap();
-	
+
 	writer.insert("Hello".to_string(), "world!".to_string());
-	
+
 	// manually drop the Writer lock here so we can get access back
 	drop(writer);
-	
+
 	let reader = locked_map.read().await.unwrap();
-	
+
 	println!("{}", reader.get("Hello".to_string()));
 }
 ```
@@ -123,7 +123,7 @@ async fn main() {
 Entire programming languages have been dedicated to dealing with concurrency: Erlang with BEAM (and any other languages that can run on the BEAM VM) being one example. Although Rust doesn't quite have concurrency baked in every single language design choice, if you wanted to make a fully concurrent section of your backend web service in Rust, you're given the tools to be able to do it safely and efficiently for backend Rust web services.
 
 ### Memory Safety
-Earlier this year, [the White House advocated for memory safe languages](https://www.whitehouse.gov/wp-content/uploads/2024/02/Final-ONCD-Technical-Report.pdf) which is a huge win for Rust. Although Rust was one of several languages in the discussion, the message is largely the same: move away from languages that don't have sufficient safeguards around introducing memory errors, whether they're memory access violations or leaks (or a simple use-after-free!). 
+Earlier this year, [the White House advocated for memory safe languages](https://www.whitehouse.gov/wp-content/uploads/2024/02/Final-ONCD-Technical-Report.pdf) which is a huge win for Rust. Although Rust was one of several languages in the discussion, the message is largely the same: move away from languages that don't have sufficient safeguards around introducing memory errors, whether they're memory access violations or leaks (or a simple use-after-free!).
 
 Rust is not entirely immune to memory issues. However, it does leverage sufficient safeguards such that you need to deliberately use the `unsafe` marker to bypass the forced memory safety garuantees of the compiler. For example, this code which is a method in the vector type (`Vec`) for removing an element at a given index:
 

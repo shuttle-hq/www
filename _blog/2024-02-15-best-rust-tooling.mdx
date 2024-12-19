@@ -2,8 +2,8 @@
 title: "Rust Tooling: 8 tools that will increase your productivity"
 description: "This article takes a look at Rust tooling that helps you ship faster by boosting your productivity."
 author: josh
-tags: [rust, tooling, guide]
-thumb: rust-tooling-thumb.png 
+tags: [rust, opinion]
+thumb: rust-tooling-thumb.png
 cover: rust-tooling-thumb.png
 date: '2024-02-15T16:00:00'
 ---
@@ -28,13 +28,13 @@ That’s it! That’s the crate.
 
 ### cargo-nextest
 
-[`cargo-nextest`](https://nexte.st/) describes itself as a “next-generation Rust test runner”. To install, you need to run `cargo install cargo-nextest`. 
+[`cargo-nextest`](https://nexte.st/) describes itself as a “next-generation Rust test runner”. To install, you need to run `cargo install cargo-nextest`.
 
 After `cd`ing into a Rust project (or workspace), you can run all tests with `cargo nextest run`; or list all of them using `cargo nextest list`. Running tests will produce an output that looks like this (taken from the docs page):
 
-![cargo-nextest test results](/images/blog/rust-tooling-article/nextest.png) 
+![cargo-nextest test results](/images/blog/rust-tooling-article/nextest.png)
 
-The main difference between this test runner and the regular `cargo test` is that `cargo-nextest` will detect leaky and flaky tests. If you have a test that spawns a child subprocess that fails to clean up on a failed test, `cargo-nextest` will label it appropriately for you. Additionally, although you can configure things like delay and backoff (for tests using rate limited APIs, for example), environment variables and more by using the `cargo-nextest` configuration file! 
+The main difference between this test runner and the regular `cargo test` is that `cargo-nextest` will detect leaky and flaky tests. If you have a test that spawns a child subprocess that fails to clean up on a failed test, `cargo-nextest` will label it appropriately for you. Additionally, although you can configure things like delay and backoff (for tests using rate limited APIs, for example), environment variables and more by using the `cargo-nextest` configuration file!
 
 This is quite an extensive tool; if you’d like to learn more about `cargo-nextest`, you can find their docs page [here.](https://nexte.st/index.html)
 
@@ -62,7 +62,7 @@ dependencies = [
 ]
 ```
 
-Now if we use `cargo make fmtclip`, it will automatically run `cargo fmt` and `cargo clippy`for us without needing anything! 
+Now if we use `cargo make fmtclip`, it will automatically run `cargo fmt` and `cargo clippy`for us without needing anything!
 
 We can additionally add environment variables to our commands through the usual way (providing them before the command). For example, if we have a `Makefile.toml` that looks like this:
 
@@ -78,7 +78,7 @@ args = [
 ]
 ```
 
-If we run `VALUE=HELLO_WORLD cargo make expand`, it should print out `VALUE: HELLO_WORLD` to the terminal! 
+If we run `VALUE=HELLO_WORLD cargo make expand`, it should print out `VALUE: HELLO_WORLD` to the terminal!
 
 `cargo-make` is quite useful when it comes to Rusty command runners - try it out!
 
@@ -124,7 +124,7 @@ use testcontainers_modules::{postgres::Postgres, testcontainers::clients::Cli};
         "postgres://postgres:postgres@127.0.0.1:{}/postgres",
         node.get_host_port_ipv4(5432)
     );
-    
+
     // the rest of your code goes here
     }
 }
@@ -161,9 +161,9 @@ On a successful connection, it should display something like this:
 
 ## cargo-flamegraph
 
-[`cargo-flamegraph`](https://github.com/flamegraph-rs/flamegraph) is a program for generating flamegraphs, written in Rust! Flamegraphs are a visualisation of distributed request traces and were originally written in Perl but have now been ported to Rust. 
+[`cargo-flamegraph`](https://github.com/flamegraph-rs/flamegraph) is a program for generating flamegraphs, written in Rust! Flamegraphs are a visualisation of distributed request traces and were originally written in Perl but have now been ported to Rust.
 
-By using a flamegraph, it’s much easier to see where a bug (for example, race conditions) may be originating from or where you might have a memory leak. Issues like unusually high latency or errors that are difficult to debug through regular logging can be solved much more easily this way as you can see a visual representation of the call stack. 
+By using a flamegraph, it’s much easier to see where a bug (for example, race conditions) may be originating from or where you might have a memory leak. Issues like unusually high latency or errors that are difficult to debug through regular logging can be solved much more easily this way as you can see a visual representation of the call stack.
 
 You can install `cargo-flamegraph` with `cargo install flamegraph`. There are some underlying requirements to be able to use `cargo-flamegraph`; you will want to take a look at the repo [here](https://github.com/flamegraph-rs/flamegraph) to make sure you have the right dependencies.
 
