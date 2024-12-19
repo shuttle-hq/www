@@ -116,7 +116,7 @@ For external-facing websites without a login, IP addresses are the only thing yo
 Working with user-based rate limiting allows us to solve these issues. While users can have more than one IP address, we can assign it all to the same user.
 
 ## Getting started
-To initialise our web service we'll use `cargo shuttle init` (requires `cargo-shuttle` installed) to create our project, making sure to pick Axum as the framework.
+To initialise our web service we'll use `shuttle init` (requires `cargo-shuttle` installed) to create our project, making sure to pick Axum as the framework.
 
 Before adding the rate limiter itself, we’re going to create a custom header key! This will be used in routes where we require user authentication. We can also use the header when implementing our custom key extractor for the rate limiter later on. We’ll want to start by adding `axum-extra` with the `typed-header` feature:
 
@@ -268,7 +268,7 @@ Note that in the builder, the `per_second()` function tells us exactly how many 
 
 ## Deploying
 
-Now that we’re done, you can deploy using `cargo shuttle deploy` (add `--ad` if on a dirty Git branch) and watch the magic happen. Once finished, Shuttle will output the details of your deployment in the terminal.
+Now that we’re done, you can deploy using `shuttle deploy` (add `--ad` if on a dirty Git branch) and watch the magic happen. Once finished, Shuttle will output the details of your deployment in the terminal.
 
 ## Finishing Up
 

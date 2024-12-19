@@ -3,7 +3,7 @@ title: "Implementing JWT Authentication in Rust"
 description: "Using JSON Web Tokens (JWTs) when implementing authentication in a Rust API"
 author: josh
 tags: [rust, auth, jwt, guide]
-thumb: jwt-auth-rust-thumb.png 
+thumb: jwt-auth-rust-thumb.png
 cover: jwt-auth-rust-thumb.png
 date: '2024-02-21T15:00:00'
 ---
@@ -18,7 +18,7 @@ JWTs are a popular option when deciding on an auth strategy. The client stores a
 
 ## Getting started
 
-To get started, let’s initialise a project using `cargo shuttle init`, making sure to pick Axum as the framework. 
+To get started, let’s initialise a project using `shuttle init`, making sure to pick Axum as the framework.
 
 Then we’ll add our dependencies:
 
@@ -66,7 +66,7 @@ static KEYS: Lazy<Keys> = Lazy::new(|| {
 });
 ```
 
-Note that there’s many different sources you can use to generate the byte array from for this - generating a random string and turning it into bytes is just one of them. For production usage, you may also want to use a cryptographically safe algorithm. 
+Note that there’s many different sources you can use to generate the byte array from for this - generating a random string and turning it into bytes is just one of them. For production usage, you may also want to use a cryptographically safe algorithm.
 
 ### Writing our JWT Claim
 
@@ -224,7 +224,7 @@ async fn main() -> shuttle_axum::ShuttleAxum {
 
 ### Testing
 
-To test that the API works, we can use `cargo shuttle run` to serve the API locally. 
+To test that the API works, we can use `shuttle run` to serve the API locally.
 
 To test our `/login` endpoint, we’ll send a cURL request to it with the data:
 
@@ -249,7 +249,7 @@ Welcome to the protected area, foo!
 
 ## Deploying
 
-Now that we’ve written our whole project, we can deploy! Type in `cargo shuttle deploy` and press enter (add `--ad` flag if on a dirty Git branch to allow dirty deploys). When finished, our terminal should print out all of the data about our deployment and project and a link to the live project!
+Now that we’ve written our whole project, we can deploy! Type in `shuttle deploy` and press enter (add `--ad` flag if on a dirty Git branch to allow dirty deploys). When finished, our terminal should print out all of the data about our deployment and project and a link to the live project!
 
 ## Extending this project
 

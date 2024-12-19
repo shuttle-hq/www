@@ -12,9 +12,9 @@ Hey there! Today, we’re going to talk about creating a web application that ut
 
 Interested in deploying or wanting to fiddle around with the code yourself? You can find the repo [here](https://github.com/joshua-mo-143/shuttle-qdrant-template). You can deploy it in three steps:
 
-- Use `cargo shuttle init --from joshua-mo-143/shuttle-qdrant-template` and follow the prompt
+- Use `shuttle init --from joshua-mo-143/shuttle-qdrant-template` and follow the prompt
 - Add your API keys (see Pre-requisites for this)
-- Use `cargo shuttle deploy --allow-dirty` to deploy and wait for the magic to happen!
+- Use `shuttle deploy --allow-dirty` to deploy and wait for the magic to happen!
 
 ## What is Retrieval Augmented Generation?
 
@@ -55,7 +55,7 @@ assets = ["docs/*"]
 
 ### Installing and project initialisation
 
-To get started, we’ll generate a new application using `cargo shuttle init` (requires `cargo-shuttle` installed). Make sure to pick Axum as the framework!
+To get started, we’ll generate a new application using `shuttle init` (requires `cargo-shuttle` installed). Make sure to pick Axum as the framework!
 
 We’ll need to add some dependencies, which we can do with the following shell snippet:
 
@@ -519,7 +519,7 @@ Note that every time you spin this up, it will attempt to embed the documentatio
 
 ## Deploying
 
-Now that we’re at the end, we can deploy! Run `cargo shuttle deploy` (with `--allow-dirty` attached) and `cargo-shuttle` will automatically make the magic happen. When finished, you’ll receive some data about your deployment and a link to your deployed project.
+Now that we’re at the end, we can deploy! Run `shuttle deploy` (with `--allow-dirty` attached) and `cargo-shuttle` will automatically make the magic happen. When finished, you’ll receive some data about your deployment and a link to your deployed project.
 
 ## Finishing up
 

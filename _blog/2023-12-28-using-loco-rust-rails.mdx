@@ -1,9 +1,9 @@
 ---
 title: "Getting Started with Loco in Rust: Part 1"
-description: This article goes into a deep dive on getting started with Loco in Rust and how you can utilise its capabilities to speed up your productivity. 
+description: This article goes into a deep dive on getting started with Loco in Rust and how you can utilise its capabilities to speed up your productivity.
 author: josh
 tags: [rust, loco, tutorial, guide]
-thumb: loco-rust-thumb.png 
+thumb: loco-rust-thumb.png
 cover: loco-rust-thumb.png
 date: '2023-12-28T14:30:00'
 ---
@@ -68,7 +68,7 @@ pub fn routes() -> Routes {
         .add("/echo", post(echo))
 ```
 
-Now we can get to work on the routes for this! 
+Now we can get to work on the routes for this!
 
 If you check the source code for what `AppContext` contains [here](https://github.com/loco-rs/loco/blob/68cb7598127893253478c4eddae0762e208aab6e/src/app.rs#L31), you should get this:
 
@@ -79,7 +79,7 @@ pub struct AppContext {
     /// The environment in which the application is running.
     pub environment: Environment,
     #[cfg(feature = "with-db")]
-    /// A database connection used by the application.    
+    /// A database connection used by the application.
     pub db: DatabaseConnection,
     /// An optional connection pool for Redis, for worker tasks
     pub redis: Option<Pool<RedisConnectionManager>>,
@@ -104,7 +104,7 @@ pub async fn hello(State(ctx): State<AppContext>) -> Result<Json<Vec<ItemModel>>
 }
 ```
 
-Note that we need to import our models and entities from the `entities` folder. 
+Note that we need to import our models and entities from the `entities` folder.
 
 We can extend this to create a full CRUD controller:
 
@@ -150,7 +150,7 @@ pub async fn update_item_quantity(
 }
 
 pub async fn delete_item(
-	Path<id>: Path<i32>, 
+	Path<id>: Path<i32>,
 	State(ctx): State<AppContext>
 ) -> Result<String> {
     let item: Option<item::Model> = Item::find_by_id(id).one(db).await?;
@@ -215,7 +215,7 @@ You can also write an `impl` for the `Model` itself to extend its behavior! Note
 
 ```rust
 // src/models/users.rs
-pub async fn find_by_email(db: &DatabaseConnection, email: &str) -> ModelResult<Self> 
+pub async fn find_by_email(db: &DatabaseConnection, email: &str) -> ModelResult<Self>
     let user = users::Entity::find()
         .filter(users::Column::Email.eq(email))
         .one(db)
@@ -311,10 +311,9 @@ assets = ["frontend/dist/*"]
 
 Then you can run the following to deploy your application (don't forget to install `cargo-shuttle`):
 ```bash
-cargo shuttle project start
-cargo shuttle deploy 
+shuttle deploy
 ```
-We are planning to release a native database integration with Loco! Stay tuned for part 2 where we will go into further detail about how you can build out your dream web application. 
+We are planning to release a native database integration with Loco! Stay tuned for part 2 where we will go into further detail about how you can build out your dream web application.
 
 ## Finishing Up
 Thanks for reading! We hope this Rust Loco guide has helped you. If you're looking to get started with Rust web development, now is a better time than ever to do so.

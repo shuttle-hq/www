@@ -12,14 +12,14 @@ In this article, we’re going to talk about building and deploying an uptime-mo
 
 Interested in just deploying your uptime monitor? You can find that in 2 steps:
 
-1. Open your terminal and run `cargo shuttle init --from joshua-mo-143/shuttle-monitoring-template`  (requires `cargo-shuttle` installed) and follow the prompt
-2. Run `cargo shuttle deploy --allow-dirty` and watch the magic happen!
+1. Open your terminal and run `shuttle init --from joshua-mo-143/shuttle-monitoring-template`  (requires `cargo-shuttle` installed) and follow the prompt
+2. Run `shuttle deploy --allow-dirty` and watch the magic happen!
 
 For everyone who wants to learn how to build it, let’s get started - if you get lost, you can find the repo with the final code [here.](https://github.com/joshua-mo-143/shuttle-monitoring-template)
 
 ## Getting Started
 
-Firstly, we’ll initialize our project using `cargo shuttle init` (requires `cargo-shuttle` to be installed). Make sure you pick Axum as the framework!
+Firstly, we’ll initialize our project using `shuttle init` (requires `cargo-shuttle` to be installed). Make sure you pick Axum as the framework!
 
 Now you’ll want to install all of your dependencies. You can do that with the following shell snippet below:
 
@@ -690,7 +690,7 @@ async fn main(#[shuttle_shared_db::Postgres] db: PgPool) -> shuttle_axum::Shuttl
 
 ## Deploying
 
-Now it’s time to deploy! Type in `cargo shuttle deploy` (add `--allow-dirty` if on a dirty Git branch) and watch the magic happen. When your program has deployed, it’ll give you the URL of your deployment where you can try it out as well as deployment ID and other details like your database connection (password is hidden until you use the `--show-secrets` flag).
+Now it’s time to deploy! Type in `shuttle deploy` (add `--allow-dirty` if on a dirty Git branch) and watch the magic happen. When your program has deployed, it’ll give you the URL of your deployment where you can try it out as well as deployment ID and other details like your database connection (password is hidden until you use the `--show-secrets` flag).
 
 ## Finishing up
 

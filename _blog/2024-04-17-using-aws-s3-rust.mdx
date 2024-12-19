@@ -53,7 +53,7 @@ When using S3-compatible APIs, this may look different depending on the service 
 
 ## Getting started
 
-To get started, we’ll create a Shuttle service via `cargo shuttle init`, making sure to pick the Axum framework. Make sure you have `cargo-shuttle` installed!
+To get started, we’ll create a Shuttle service via `shuttle init`, making sure to pick the Axum framework. Make sure you have `cargo-shuttle` installed!
 
 Next, you’ll want to install the following Rust dependencies using the following shell snippet:
 
@@ -502,7 +502,7 @@ async fn my_test() {
 
 ## Deploying
 
-To deploy our web service, all we need to do now is `cargo shuttle deploy`! Make sure to add the `--allow-dirty` flag if on a Git branch with uncommitted changes. If you’ve added tests, make sure to add the `--no-test` flag, as they may not work while deploying. One quick workaround for this is to add a test workflow before deployment.
+To deploy our web service, all we need to do now is `shuttle deploy`! Make sure to add the `--allow-dirty` flag if on a Git branch with uncommitted changes. If you’ve added tests, make sure to add the `--no-test` flag, as they may not work while deploying. One quick workaround for this is to add a test workflow before deployment.
 
 ## Finishing up
 

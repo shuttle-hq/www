@@ -1,9 +1,9 @@
 ---
-title: "Getting Started with Rocket in Rust" 
+title: "Getting Started with Rocket in Rust"
 description: This article talks about how you can use Rocket to write a web application, covering routing, middleware, static files and databases.
 author: josh
 tags: [rust, rocket, tutorial, guide]
-thumb: rocket-rust-thumb.png 
+thumb: rocket-rust-thumb.png
 cover: rocket-rust-thumb.png
 date: '2023-12-13T14:30:00'
 ---
@@ -16,7 +16,7 @@ The main things you need to know:
 - `rocket_contrib` is deprecated - you need to enable features in Rocket itself (and use `rocket_dyn_templates` and `rocket_sync_db_pools`/`rocket_db_pools` as required)
 - Rocket is now primarily async and now re-exports `tokio` if you need anything Tokio-related
 - You need to use `#[rocket::async_trait]` for trait implementations now
-- Query parameters now use `FromForm`! 
+- Query parameters now use `FromForm`!
 - Server Sent Events and Websockets are now officially supported.
 
 The above listed points are but a highlight - there have been an extremely significant number of changes in the upgrade to Rocket 0.5. If you're looking to migrate, you can check out the docs [here.](https://rocket.rs/v0.5/guide/upgrading/)
@@ -42,7 +42,7 @@ We can attach a route to a router like this by using `rocket::build()` and then 
 ```rust
 let rocket = rocket::build().mount("/hello", routes![index]);
 ```
-This essentially means that when you load up your web service and go to the `/hello` route in the browser, it should also print "Hello world!" - note that it is **based on the route where it is mounted**. You can also add additional routes to the `routes!` macro - so if you have multiple sub-routes that you want to host under main route, you can do that. 
+This essentially means that when you load up your web service and go to the `/hello` route in the browser, it should also print "Hello world!" - note that it is **based on the route where it is mounted**. You can also add additional routes to the `routes!` macro - so if you have multiple sub-routes that you want to host under main route, you can do that.
 
 Deserializing JSON in Rocket, similarly to other web frameworks in Rust, involves using `serde` to make the data compatible with (de)serialization. You can add the serde functionality to your web service by adding it as a crate with the `derive` feature:
 ```bash
@@ -65,7 +65,7 @@ fn new(task: Json<Task<'_>>) { /* .. */ }
 ```
 You can find out more about using JSON data with Rocket [here.](https://rocket.rs/v0.5/guide/requests/#json)
 
-Are you using forms? You can also use those! Rocket has a [huge](https://rocket.rs/v0.5/guide/requests/#forms) section detailing everything you can do with forms, but we'll cover the highlights and essentials you need to become good at using forms in Rocket. 
+Are you using forms? You can also use those! Rocket has a [huge](https://rocket.rs/v0.5/guide/requests/#forms) section detailing everything you can do with forms, but we'll cover the highlights and essentials you need to become good at using forms in Rocket.
 
 You can get started with forms by using the `FromForm` derive macro, then adding it as an argument to a handler function:
 ```rust
@@ -94,7 +94,7 @@ You can also just add `Strict` to the parameters when writing your handler funct
 #[post("/todo", data = "<task>")]
 fn new(task: Form<Strict<Task<'_>>>) { /* .. */ }
 ```
-Rocket is miles ahead of other web frameworks when it comes to forms, particularly because multipart forms are handled similarly to regular forms and do not require any extra work. For comparison: in Axum for example, you need to enable the `multipart` feature and iterate through every single multipart field manually in the function handler, which can be quite ugly. 
+Rocket is miles ahead of other web frameworks when it comes to forms, particularly because multipart forms are handled similarly to regular forms and do not require any extra work. For comparison: in Axum for example, you need to enable the `multipart` feature and iterate through every single multipart field manually in the function handler, which can be quite ugly.
 
 You can also nest your form structs:
 ```rust
@@ -173,7 +173,7 @@ It should be noted that if you need authentication or other processes that only 
 Instead of implementing a trait for your errors, error handling is done a bit differently in Rocket. Instead of traits, you handle errors by using an error handler which is called a "catcher" - the equivalent of this in other frameworks like Axum might be a fallback service, or a route that the HTTP client gets automatically redirected to if it can't find anything or a user isn't authenticated (for example). You can use a handler function for creating a catcher, like so:
 ```rust
 #[catch(default)]
-fn default_catcher(status: Status, request: &Request) -> String { 
+fn default_catcher(status: Status, request: &Request) -> String {
     format!("ERROR: {} - {}", status.code, status.reason)
 }
 
@@ -189,7 +189,7 @@ fn foo_not_found() -> &'static str {
     "Foo 404"
 }
 ```
-Although it is quite easy to use macros for error handling functions in Rocket, you need to also make sure that you attach the handlers to your router! 
+Although it is quite easy to use macros for error handling functions in Rocket, you need to also make sure that you attach the handlers to your router!
 
 ## Adding a Database
 Normally when setting up a database in Rust, you might need to set up your own database connection. To get started with doing this in Rocket, you will need to add the `rocket-db-pools` crate with the `sqlx_postgres` feature:
@@ -227,7 +227,7 @@ async fn rocket(
     #[shuttle_shared_db::Postgres] pool: PgPool,
 ) -> shuttle_rocket::ShuttleRocket {
     let state = AppState { pool };
-    
+
     pool.execute(include_str!("../schema.sql"))
         .await
         .map_err(CustomError::new)?;
@@ -243,7 +243,7 @@ Locally the database is provisioned through Docker, but in deployment there is a
 
 
 ## App State
-Rocket, like other Rust web frameworks, allows you to share variables between routes in your web application by holding it in a state struct in memory. Then in your handler functions, you can call the data as required (for example, if you need a database pool, you can attach it to your state struct and then use it as below). 
+Rocket, like other Rust web frameworks, allows you to share variables between routes in your web application by holding it in a state struct in memory. Then in your handler functions, you can call the data as required (for example, if you need a database pool, you can attach it to your state struct and then use it as below).
 
 To get started, you can add application state like so:
 ```rust
@@ -255,12 +255,12 @@ struct AppState {
 
 async fn main() {
     let db = connect_to_db();
-    
+
     rocket::build()
         .manage(AppState { db }});
 }
 ```
-As you can see, unlike in Axum where the application state struct requires it to implement Clone, there are no trait bounds besides `Send + Sync`. 
+As you can see, unlike in Axum where the application state struct requires it to implement Clone, there are no trait bounds besides `Send + Sync`.
 
 Now you can use whatever's in your state struct like this:
 ```rust
@@ -278,7 +278,7 @@ fn get_data(state: &State<AppState>, id: i32) -> Vec<Thing> {
         .fetch_all(&state.db)
         .await
         .unwrap();
-        
+
     result
 }
 ```
@@ -425,7 +425,7 @@ The `rocket_dyn_template` library supports both Handlebars templating as well as
 If you're looking to try out Tera, you can find the docs [here](https://keats.github.io/tera/docs/) - meanwhile if you're interested in Handlebars, you can get started [here.](https://handlebarsjs.com/guide/)
 
 ## Configuration
-Unlike most other frameworks, Rocket comes with config files based on the [figment crate](https://docs.rs/figment/0.10.12/figment/) that allow you to set the config from a few files rather than having the configuration spread out over your application, where you're able to split your configuration into development, staging and production. From this file you can set things like address and port, keep_alive timer, request timeouts, secret keys as well as request body limiting! 
+Unlike most other frameworks, Rocket comes with config files based on the [figment crate](https://docs.rs/figment/0.10.12/figment/) that allow you to set the config from a few files rather than having the configuration spread out over your application, where you're able to split your configuration into development, staging and production. From this file you can set things like address and port, keep_alive timer, request timeouts, secret keys as well as request body limiting!
 
 An example of this file would be like this:
 ```toml
@@ -457,10 +457,10 @@ secret_key = "hPrYyЭRiMyµ5sBB1π+CMæ1køFsåqKvBiQJxBVHQk="
 ```
 
 ## Deployment
-Deployment with Rust backend programs in general can be less than ideal due to having to use Dockerfiles, although if you are experienced with Docker already this may not be such an issue for you - particularly if you are using cargo-chef. However, if you're using Shuttle you can just use `cargo shuttle deploy` and you're done already. No setup is required.
+Deployment with Rust backend programs in general can be less than ideal due to having to use Dockerfiles, although if you are experienced with Docker already this may not be such an issue for you - particularly if you are using cargo-chef. However, if you're using Shuttle you can just use `shuttle deploy` and you're done already. No setup is required.
 
 ## Finishing Up
-Thanks for reading! Although Rocket has previously fell out of favor among people who wanted to use cutting-edge Rust frameworks, the 0.5 upgrade brings a lot of new changes - hopefully this  has helped you to create a competent Rust web API using Rocket! 
+Thanks for reading! Although Rocket has previously fell out of favor among people who wanted to use cutting-edge Rust frameworks, the 0.5 upgrade brings a lot of new changes - hopefully this  has helped you to create a competent Rust web API using Rocket!
 
 Interested in more?
 - We have a guide to getting started with Axum if you'd like to compare the two frameworks [here.](https://www.shuttle.dev/blog/2023/12/06/using-axum-rust)

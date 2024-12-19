@@ -625,7 +625,7 @@ Now we're done with the programming section! We can finally look at deploying.
 
 ### Deployment
 
-Deploying with [shuttle](https://www.shuttle.dev), thankfully, is quite easy - you just need to run `npm run deploy` in the root directory of your project and if there aren't any issues, you should be able to see that shuttle has launched your app and it will return a list of information about your deployment followed by the database connection string for your shuttle-provisioned database. If you need to find this database string again, you can run `cargo shuttle status` in the backend directory of your project and it will find it for you.
+Deploying with [shuttle](https://www.shuttle.dev), thankfully, is quite easy - you just need to run `npm run deploy` in the root directory of your project and if there aren't any issues, you should be able to see that shuttle has launched your app and it will return a list of information about your deployment followed by the database connection string for your shuttle-provisioned database. If you need to find this database string again, you can run `shuttle resource list --show-secrets` in the backend directory of your project and it will find it for you.
 
 You may wish to run `cargo fmt` and `cargo clippy` before you deploy as any warnings or errors will appear while your web service is being built. If you don't have either of these components, you can use `rustup component add rustfmt` and `rustup component add clippy` respectively - both of these tools are a great addition to any Rust developer's toolbox and I would highly recommend using both of them.
 

@@ -22,7 +22,7 @@ This isn't verified to be secure, use it at your own risk!!
 
 ## Let's get started
 
-First, we will install shuttle for creating the project (and later for deployment). If you don't already have it you can install it with `cargo install cargo-shuttle`. We will first go to a new directory for our project and create a new Axum app with `cargo shuttle init --axum`.
+First, we will install shuttle for creating the project (and later for deployment). If you don't already have it you can install it with `cargo install cargo-shuttle`. We will first go to a new directory for our project and create a new Axum app with `shuttle init --axum`.
 
 You should see the following in `src/lib.rs`:
 
@@ -159,7 +159,7 @@ let router = Router::new()
     .layer(Extension(Arc::new(tera)));
 ```
 
-With our main service we can now test it locally with `cargo shuttle run`.
+With our main service we can now test it locally with `shuttle run`.
 
 ![](/images/blog/authentication-demo-screenshot.png)
 
@@ -673,14 +673,9 @@ async fn axum(
 
 This is great, we now have a site with signup and login functionality. But we have no users, our friends can't log in on our localhost. We want it live on the interwebs. Luckily we are using shuttle, so it is as simple as:
 
-Create a project, this will start an isolated deployer container for you under the hood:
+To deploy your app, all you need to do is:
 ```
-cargo shuttle project start
-```
-
-Finally, to deploy your app, all you need to do is:
-```
-cargo shuttle deploy
+shuttle deploy
 ```
 
 Because of our `#[shuttle_service::main]` annotation and out-the-box Axum support our deployment doesn't need any prior config, it is instantly live!

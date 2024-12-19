@@ -53,7 +53,7 @@ In production, you may want to go a step further and create a Group that you can
 
 ### Initialisation
 
-To get started, we're going to use `cargo shuttle init` (requires `cargo-shuttle` installed) to initialise our template, picking Axum as the framework.
+To get started, we're going to use `shuttle init` (requires `cargo-shuttle` installed) to initialise our template, picking Axum as the framework.
 
 Next, we're going to add our dependencies:
 
@@ -433,7 +433,7 @@ async fn main(
 
 ## Deployment
 
-To deploy, all you need to do is `cargo shuttle deploy` (with the `--allow-dirty` flag if working from a Git branch with uncommitted changes) and watch the magic happen! Once finished, you’ll get a message containing information about your deployment as well as where you can reach the deployment URL.
+To deploy, all you need to do is `shuttle deploy` (with the `--allow-dirty` flag if working from a Git branch with uncommitted changes) and watch the magic happen! Once finished, you’ll get a message containing information about your deployment as well as where you can reach the deployment URL.
 
 Shuttle will also cache your dependencies, so if you need to re-deploy you won’t have to worry about waiting to re-compile!
 
