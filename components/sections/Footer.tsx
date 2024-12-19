@@ -13,7 +13,7 @@ const SHUTTLE_LINKS = [
 	{ key: 'features', name: 'Features', href: '/#features' },
 	{ key: 'starters', name: 'Starters', href: '/starters' },
 	{ key: 'status', name: 'Status', href: 'https://status.shuttle.rs' },
-	{ key: 'releases', name: 'Releases', href: '/releases' },
+	{ key: 'releases', name: 'Releases', href: 'https://github.com/shuttle-hq/shuttle/releases' },
 ]
 
 const COMPANY_LINKS = [
