@@ -16,7 +16,7 @@ export default function CCHPage() {
 	return (
 		<>
 			<NextSeo
-				title='Shuttle - Build Backends Fast'
+				title='Christmas Code Hunt | Shuttle'
 				description='Develop backends with zero infra setup using Shuttle: Code-driven cloud provisioning.'
 				openGraph={{
 					images: [
@@ -24,7 +24,7 @@ export default function CCHPage() {
 							url: 'https://www.shuttle.dev/images/og-image.png',
 							width: 3516,
 							height: 1432,
-							alt: 'Shuttle.rs - Build Backends Fast',
+							alt: 'Shuttle.dev - Build Backends Fast',
 						},
 					],
 				}}
