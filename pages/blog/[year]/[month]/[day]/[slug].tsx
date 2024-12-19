@@ -175,10 +175,10 @@ export default function BlogPostPage(props: Props) {
 	return (
 		<>
 			<NextSeo
-				title={props.blog.title}
+				title={`${props.blog.title} | Shuttle`}
 				description={props.blog.description}
 				openGraph={{
-					title: props.blog.title,
+					title: `${props.blog.title} | Shuttle`,
 					description: props.blog.description,
 					url: `${SITE_URL}blog/${props.blog.slug}`,
 					type: 'article',

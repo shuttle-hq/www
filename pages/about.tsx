@@ -6,7 +6,7 @@ export default function About() {
 	return (
 		<>
 			<NextSeo
-				title='About Shuttle - The Team Behind The Platform'
+				title='About | Shuttle'
 				description='Meet the innovators at Shuttle, the cloud development platform tailored for Rust. Read about our mission to empower developers worldwide.'
 			/>
 			<main>
