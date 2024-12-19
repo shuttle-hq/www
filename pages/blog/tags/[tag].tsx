@@ -27,6 +27,7 @@ export async function getStaticProps({
 	params,
 }: GetStaticPropsContext<Params>): Promise<GetStaticPropsResult<Props>> {
 	const tag = params?.tag !== undefined && params.tag !== 'all' ? params.tag : ''
+	const tagReadable = tag.replaceAll('-', ' ')
 	const posts = getSortedPosts(0, tag ? [tag] : undefined)
 
 	const tags = getAllTags()
@@ -34,6 +35,7 @@ export async function getStaticProps({
 	return {
 		props: {
 			posts,
+			tagReadable,
 			tags,
 		},
 	}
@@ -42,6 +44,7 @@ export async function getStaticProps({
 interface Props {
 	readonly posts: ReturnType<typeof getSortedPosts>
 	readonly tags: string[]
+	readonly tagReadable: string
 }
 
 export default function BlogPage(props: Props): JSX.Element {
@@ -50,7 +53,9 @@ export default function BlogPage(props: Props): JSX.Element {
 
 	const [headPost, ...tailPosts] = props.posts
 
-	const meta_title = 'Shuttle Blog'
+	const meta_title = props.tagReadable
+		? `Articles tagged: "${props.tagReadable}" - Shuttle Blog`
+		: `Shuttle Blog`
 	const meta_description =
 		'Dive into the Shuttle blog for insights on Rust programming, tutorials, web development tips, and exclusive thought leadership articles.'
 
