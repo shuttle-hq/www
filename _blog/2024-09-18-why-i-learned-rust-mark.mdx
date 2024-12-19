@@ -2,7 +2,7 @@
 title: "Why I Learned Rust - as a Python dev"
 description: "The story of how one developer, who currently works at Shuttle, came to Rust from Python."
 author: mark
-tags: [rust]
+tags: [rust, opinion]
 thumb: why-i-learned-rust-mark-thumb.png
 cover: why-i-learned-rust-mark-thumb.png
 date: '2024-09-18T15:30:00'
@@ -20,7 +20,7 @@ The plugin to the utility-wrapper-client-library-*thing*¹ that supported that s
 
 > Pictured: a biblically-accurate representation of myself working on the Python code described above
 
- ![https://images-cdn.9gag.com/photo/a04jWqQ_700b.jpg](https://images-cdn.9gag.com/photo/a04jWqQ_700b.jpg) 
+ ![https://images-cdn.9gag.com/photo/a04jWqQ_700b.jpg](https://images-cdn.9gag.com/photo/a04jWqQ_700b.jpg)
 
 ## Cue The Mysterious Stranger† On A Dark Night‡ Offering A Questionable Bargain§
 
@@ -57,7 +57,7 @@ What clinched it for me was an admittedly niche experience with a hard-to-replic
 > Disclaimer: I am not today the software engineer I was the better part of a decade ago
 
  ![](/images/blog/why-i-learned-rust-mark-lisa.jpg)
- 
+
 
 ## Act 3: Doin’ It To ’Em
 
@@ -65,7 +65,7 @@ So, I did it. I took the plunge and learned rust. I was apprehensive, because (a
 
 > Compiler errors can be frustrating, but really they only mean your program isn’t safely doing what you want it to do yet; they do not mean that you’re not a good programmer!
 >
->Experienced Rustaceans still get compiler errors. 
+>Experienced Rustaceans still get compiler errors.
 
 That more or less did away with any apprehension I felt about the compiler or the language itself. It almost felt like I’d made a deal with the compiler - “if you’ll do what I say, make the changes I suggest, I promise I’ll keep your feet safe from landmines and [footguns](https://matt-rickard.com/avoiding-footguns)”. Coming from Python, it was just plain reassuring that the compiler wouldn’t *let* me put code out into the world that was just going to throw an error at runtime. I mean, it’s still gonna yell, but it’s gonna yell *at me* and it’s always gonna do it *before* I ship something, not halfway through a customer’s once-a-night, business-critical reconciliation with our backend.
 
@@ -73,8 +73,8 @@ That was **huge**. Even huger though might be the amount of just plain… *paran
 
 ```python
 def convert(record):
-    # ...   
-    
+    # ...
+
     if isinstance(record.amount, str):
         record.amount = convert_strings_to_amounts(record.amount)
     elif isinstance(record.amount, float):
@@ -86,7 +86,7 @@ def convert(record):
 
     if record.amount < 1:
         raise ValueError("transactions must have a positive, non-zero total")
-    
+
     # ...
 ```
 
@@ -124,7 +124,7 @@ class RecordFromRemoteSystem:
     )
 
     # ...
-    
+
 
 def convert_to_local_record(record: RecordFromRemoteSystem) -> LocalRecord:
     """Convert the supplied record from {remote system} to a record compatible with {local system}."""
@@ -132,7 +132,7 @@ def convert_to_local_record(record: RecordFromRemoteSystem) -> LocalRecord:
 ```
 
 > Note: if we want to be even more nitpicky then I’m about to be: yes, you’re right, `convert_to_local_record` should be an associated method of the `RecordFromRemoteSystem` class, and it probably should be renamed `to_local_record` or somesuch, but… Rug. Swept. Hush 🤫
-> 
+>
 
 See the proper type annotations and docstring? In Python, you can *ask* devs to do that, you can even do things like configure [pre-commit hooks](https://pre-commit.com/) to try and enforce it, but ultimately there’s nothing in the language itself or its “standard” tooling that’s going to make it anything other that the equivalent of a “come on guys, I’m super for real, you gotta do this, please”.
 
@@ -168,7 +168,7 @@ I could probably go on all day with examples, but…
 ## Happily Ever After*
 
 > * - terms and conditions apply, only for certain definitions of “happy”, not legally binding in the State Of California or geographic areas under the sovereign authority of Victor von Doom
-> 
+>
 
 My journey to and through rust is (perhaps obviously) much more than these simple examples, and I wouldn’t dream of trying to keep you captive for all of them. For the purposes of the narrative, I will say that the experience of learning rust unquestionably made me a better Python developer. Aside from that though, coming to rust from Python, having experienced a lot of the most common and most *frustrating* pitfalls in Python means that a large portion of my appreciation for rust is born from the things that just *aren’t* problems in rust the same way they are in Python. By that I mean things that either outright *aren’t* problems in rust, (like “what happens if some ~~idiot~~ *downstream user* tries to call this function on a string and not an int like it’s expecting), or things that aren’t the same *caliber* of problem in rust that they are in Python (like ”start documenting your code or I’ll break your fingers”).
 

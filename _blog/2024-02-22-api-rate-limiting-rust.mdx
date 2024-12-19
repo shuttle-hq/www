@@ -2,8 +2,8 @@
 title: "Implementing API Rate Limiting in Rust"
 description: "Exploring how to implement rate limiting manually in a Rust API as well as using crates"
 author: josh
-tags: [rust, auth, jwt, guide]
-thumb: rate-limiting-rust-thumb.png 
+tags: [rust, rate-limiting, guide]
+thumb: rate-limiting-rust-thumb.png
 cover: rate-limiting-rust-thumb.png
 date: '2024-02-22T15:00:00'
 ---
@@ -16,7 +16,7 @@ For this tutorial we will be implementing the “sliding window” algorithm by 
 
 To figure out how we can do this from the ground up, let’s write a naive sliding window IP based rate limiter from scratch.
 
-To get started, we’re going to initialise a regular project using `cargo init` and follow the prompt, picking Axum as our framework of choice. 
+To get started, we’re going to initialise a regular project using `cargo init` and follow the prompt, picking Axum as our framework of choice.
 
 We’re going to need some extra dependencies, so let’s install them with this shell snippet:
 
@@ -25,7 +25,7 @@ cargo add serde@1.0.196 -F derive
 cargo add chrono@0.4.34 -F serde,clock
 ```
 
-We’ll declare a new struct that holds a `HashMap` of `IpAddr` keys with the values being `Vec<DateTime<Utc>>` (a Vector of UTC-timezone timestamps). 
+We’ll declare a new struct that holds a `HashMap` of `IpAddr` keys with the values being `Vec<DateTime<Utc>>` (a Vector of UTC-timezone timestamps).
 
 ```rust
 use std::sync::{Arc, Mutex};
@@ -113,7 +113,7 @@ For external-facing websites without a login, IP addresses are the only thing yo
 - Multiple users may have the same IP address
 - Users can simply change the IP address they use if you block them (via proxy or other methods)
 
-Working with user-based rate limiting allows us to solve these issues. While users can have more than one IP address, we can assign it all to the same user. 
+Working with user-based rate limiting allows us to solve these issues. While users can have more than one IP address, we can assign it all to the same user.
 
 ## Getting started
 To initialise our web service we'll use `cargo shuttle init` (requires `cargo-shuttle` installed) to create our project, making sure to pick Axum as the framework.
@@ -124,7 +124,7 @@ Before adding the rate limiter itself, we’re going to create a custom header k
 cargo add axum-extra -F typed-header
 ```
 
-Next we’ll want to create a struct that will hold a String and implement the `axum_extra` re-export of `headers::Header`. You can see the `Header` implementation below, where it decodes the value by iterating over `HeaderValue` and creates the `CustomHeader` struct. 
+Next we’ll want to create a struct that will hold a String and implement the `axum_extra` re-export of `headers::Header`. You can see the `Header` implementation below, where it decodes the value by iterating over `HeaderValue` and creates the `CustomHeader` struct.
 
 We can start by defining a `HeaderName`:
 
