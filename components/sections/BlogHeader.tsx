@@ -39,7 +39,7 @@ const BlogHeader: FC<BlogHeaderProps> = ({ post }) => {
 											{author?.author || 'Shuttle'}
 											{author?.position ? ` - ${author.position}` : ''}
 											<span className='font-normal text-body'>
-												&nbsp;&nbsp;• {post.date}
+												&nbsp;&nbsp;• {post.dateReadable}
 											</span>
 										</div>
 									</div>

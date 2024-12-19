@@ -76,7 +76,7 @@ const DirectionCard: FC<DirectionCardProps> = ({ post, className, hoverDirection
 					hoverDirection === 'left' ? 'left-0 group-hover:left-2' : 'right-0 group-hover:right-2'
 				)}
 			>
-				{post.date} • {post.readingTime}
+				{post.dateReadable} • {post.readingTime}
 			</div>
 		</Link>
 	)
