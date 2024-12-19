@@ -2,7 +2,7 @@
 title: How to Implement OAuth in Rust
 description: Learn what OAuth2 can do for your web apps. Explore how you competently can use OAuth in your web application without stress. Make it easier than ever for your users to use your application.
 author: josh
-tags: [rust, tutorial, authentication, oauth]
+tags: [rust, tutorial, auth]
 thumb: oauth-axum-thumb.png
 cover: oauth-axum-thumb.png
 date: '2023-08-30T18:18:00'
@@ -47,7 +47,7 @@ When we run our app we'll run the migrate macro, which will automatically attemp
 ## Getting Started
 To get started, you'll want to create a new project by running the following:
 ```bash
-cargo shuttle init
+shuttle init
 ```
 We'll want to pick "axum" as the framework. For the purposes of the project we will refer to the project name as "oauth-rust".
 
@@ -497,7 +497,7 @@ fn init_router(state: AppState, oauth_client: BasicClient, oauth_id: String) -> 
 ```
 
 ## Deploying to Production
-Once we're done implementing OAuth, all you need to do is use `cargo shuttle deploy` (with `--allow-dirty` if you're working on a dirty Git branch) and it'll work!
+Once we're done implementing OAuth, all you need to do is use `shuttle deploy` (with `--allow-dirty` if you're working on a dirty Git branch) and it'll work!
 
 # Finishing Up
 Thanks for reading! I hope you enjoyed this guide to implementing OAuth in Rust and leveraging the [oauth2](https://github.com/ramosbugs/oauth2-rs) library for Rust auth.
