@@ -1,10 +1,10 @@
-import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import { SITE_URL } from 'lib/constants'
 import { GetStaticPropsContext, GetStaticPropsResult } from 'next'
 import { getAllTags, getSortedPosts } from 'lib/blog/posts'
 import { Blog, FeaturedBlogPost } from 'components/sections'
 import { ParsedUrlQuery } from 'querystring'
+import { useRouter } from 'next/router'
 
 export async function getStaticPaths() {
 	const tags = getAllTags()

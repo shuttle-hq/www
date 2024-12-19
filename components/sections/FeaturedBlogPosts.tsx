@@ -119,7 +119,7 @@ const Article: FC<ArticleProps> = ({ post, className }) => {
 								{firstAuthor?.position ? ` - ${firstAuthor.position}` : ''}
 							</h3>
 							<p className='mt-1 text-sm text-white/50'>
-								{post.date} • {post.readingTime}
+								{post.dateReadable} • {post.readingTime}
 							</p>
 						</div>
 					</div>

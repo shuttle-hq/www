@@ -14,6 +14,9 @@ export interface Post {
 	readonly slug?: string
 	readonly title: string
 	readonly date: string
+	readonly dateReadable: string
+	readonly modified?: string
+	readonly modifiedReadable: string
 	readonly cover?: string
 	readonly caption?: string
 	readonly coverAspectRatio?: string
@@ -55,7 +58,8 @@ export function getSortedPosts(limit?: number, tags?: readonly string[]): Post[]
 			day: 'numeric',
 			year: 'numeric',
 		}
-		const formattedDate = new Date(data.date).toLocaleDateString('en-IN', options)
+		const formattedPublishDate = new Date(data.date).toLocaleDateString('en-IN', options)
+		const formattedModifiedDate = new Date(data.modified ?? data.date).toLocaleDateString('en-IN', options)
 
 		const readingTime = generateReadingTime(content)
 
@@ -67,8 +71,10 @@ export function getSortedPosts(limit?: number, tags?: readonly string[]): Post[]
 
 		return {
 			...data,
-			date: formattedDate,
-			readingTime,
+			date: data.date,
+			dateReadable: formattedPublishDate,
+			modified: data.modified ?? data.date,
+			modifiedReadable: formattedModifiedDate,
 			url: url,
 			slug,
 		} as Post
