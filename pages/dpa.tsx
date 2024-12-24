@@ -1,6 +1,22 @@
+import { NextSeo } from 'next-seo'
+
 export default function Terms() {
 	return (
 		<main className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
+			<NextSeo
+				title='Data Processing Addendum | Shuttle'
+				description='Learn more about how Shuttle processes your data.'
+				openGraph={{
+					images: [
+						{
+							url: 'https://www.shuttle.dev/images/og-image.png',
+							width: 3516,
+							height: 1432,
+							alt: 'Shuttle.dev - Build Backends Fast',
+						},
+					],
+				}}
+			/>
 			<div className='mb-[98px]'>
 				<h1 className='mb-[19px] text-[64px] font-bold text-head'>Data Processing Addendum (DPA)</h1>
 				<p className='mb-6 text-xl'>

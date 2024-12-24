@@ -1,4 +1,5 @@
 import { Button } from 'components/elements'
+import { NextSeo } from 'next-seo'
 import { FormEvent, MouseEvent, useState } from 'react'
 
 type FormTargetOption = 'support@shuttle.rs' | 'hello@shuttle.rs'
@@ -25,6 +26,20 @@ export default function About() {
 
 	return (
 		<main>
+			<NextSeo
+				title='Contact | Shuttle'
+				description="Need to contact us? Fill out the form and we'll get back to you."
+				openGraph={{
+					images: [
+						{
+							url: 'https://www.shuttle.dev/images/og-image.png',
+							width: 3516,
+							height: 1432,
+							alt: 'Shuttle.dev - Build Backends Fast',
+						},
+					],
+				}}
+			/>
 			<section className='mx-auto mt-24 w-full max-w-2xl items-center px-5 sm:px-10 lg:mt-28'>
 				<h2 className='text-gradient my-12 bg-clip-text text-center font-gradual text-[56px] font-bold leading-[150%] text-head'>
 					Contact
