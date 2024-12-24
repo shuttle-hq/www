@@ -25,8 +25,8 @@ function Issues(props: Props) {
 
 	const router = useRouter()
 
-	const meta_title = 'Shuttle Launchpad'
-	const meta_description = 'Shuttle Launchpad'
+	const meta_title = 'Issues | Shuttle Launchpad'
+	const meta_description = 'Browse issues and learn about Rust from the Shuttle Launchpad.'
 
 	return (
 		<>
