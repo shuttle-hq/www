@@ -130,15 +130,17 @@ export const getPostData = async (slug: string) => {
 export function getAllTags(): string[] {
 	const posts = getSortedPosts()
 
-	const tags = posts.reduce(
-		(acc: string[], post) => {
-			;(post?.tags || []).map((tag: string) => {
-				if (!acc.includes(tag)) return acc.push(tag)
-			})
-			return acc
-		},
-		['all']
-	)
+	const tags = posts
+		.reduce(
+			(acc: string[], post) => {
+				;(post?.tags || []).map((tag: string) => {
+					if (!acc.includes(tag)) return acc.push(tag)
+				})
+				return acc
+			},
+			['all']
+		)
+		.sort((a, b) => a.localeCompare(b))
 
 	return tags
 }
