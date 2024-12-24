@@ -8,8 +8,7 @@ cover: proc-macro-banner.png
 date: "2022-12-23T15:00:00"
 ---
 
-
-# Reflection in Rust with procedural macros
+## Introduction
 Procedural macros are one of the more complex but powerful parts of Rust. For me, it's one of the features that really sets Rust apart from other languages. If you have ever seen this syntax and left scratching your head, then this post is for you:
 ```rust
 #[derive(derive_macros::MyTrait)] // << 🤨
@@ -375,7 +374,7 @@ struct Country {
 }
 ```
 
-#### cargo expand-ing our macro (optional)
+### cargo expand-ing our macro (optional)
 We can debug the output by installing [cargo-expand](https://github.com/dtolnay/cargo-expand) (`cargo install cargo-expand`). Running `cargo expand` we see the result which is the automatic generated what we wrote manually:
 
 ![](/images/blog/proc-macro-cargo-expand-output.png)
@@ -427,12 +426,12 @@ struct Country {
 ```
 Just remember when doing so to register with Rust that the attribute belongs to the derive macro by registering attributes in the `proc_macro_derive` attribute. E.g. `#[proc_macro_derive(Binary, attributes(serialization_skip))]`
 
-# Conclusion
+## Conclusion
 
-## Performance characteristics
+### Performance characteristics
 As code is generated at compile time. It can be faster than having to do the work at runtime. Compared to JavaScript reflection, the properties are known at compile time, and we can read them using memory offsets. We won't cover it here as it is difficult to benchmark the difference between JavaScript's runtime reflection and Rust with proc macro compile time reflection, without the results including other differences in the languages.
 
-## Real world procedural macro examples
+### Real world procedural macro examples
 Proc macros are used throughout Rust. Most standard library `derive`s are proc macro could be implemented as proc macros.
 
 ### Serde

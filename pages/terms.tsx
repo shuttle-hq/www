@@ -163,7 +163,7 @@ export default function Terms() {
 									</li>
 									<li>
 										you comply with our{' '}
-										<a href='http://www.shuttle.dev/acceptable-use' target='_blank'>
+										<a href='https://www.shuttle.dev/acceptable-use' target='_blank'>
 											Acceptable Use Policy
 										</a>{' '}
 										which forms part of these Terms.
@@ -182,7 +182,7 @@ export default function Terms() {
 									you will input some data in the Website or the Services (your{' '}
 									<strong className='text-head'>Customer Data</strong>). When adding Customer
 									Data to the Services, you agree that you will comply with our{' '}
-									<a href='http://www.shuttle.dev/acceptable-use' target='_blank'>
+									<a href='https://www.shuttle.dev/acceptable-use' target='_blank'>
 										Acceptable Use Policy
 									</a>{' '}
 								</span>
@@ -236,17 +236,17 @@ export default function Terms() {
 								are, how we process personal data and for what purposes and the rights of data
 								subjects in relation to personal data and how to exercise them. This information is
 								provided in our{' '}
-								<a href='http://www.shuttle.dev/privacy' target='_blank'>
+								<a href='https://www.shuttle.dev/privacy' target='_blank'>
 									Privacy Policy
 								</a>{' '}
 								and it is important that you read that information. You are required to agree to
 								the terms of the{' '}
-								<a href='http://www.shuttle.dev/privacy' target='_blank'>
+								<a href='https://www.shuttle.dev/privacy' target='_blank'>
 									Privacy Policy
 								</a>{' '}
 								by clicking “Accept” in the relevant box on the Website. If you do not accept the
 								terms of the{' '}
-								<a href='http://www.shuttle.dev/privacy' target='_blank'>
+								<a href='https://www.shuttle.dev/privacy' target='_blank'>
 									Privacy Policy
 								</a>{' '}
 								you will not be permitted to use our Services.
@@ -254,7 +254,7 @@ export default function Terms() {
 							<li>
 								<strong className='text-head'>We may process Customer Data on your behalf.</strong>{' '}
 								By using the Services, you also accept our{' '}
-								<a href='http://www.shuttle.dev/dpa' target='_blank'>
+								<a href='https://www.shuttle.dev/dpa' target='_blank'>
 									Data Processing Addendum
 								</a>
 								, which governs our processing on your behalf of the personal data you provide us

@@ -5,8 +5,8 @@ export default function ShuttleHeroes() {
 	return (
 		<>
 			<NextSeo
-				title='Privacy Policy | Shuttle'
-				description="Learn more about Shuttle's privacy policy."
+				title='Shuttle Batch | Shuttle'
+				description="Learn more about Shuttle Batch - Shuttle's online program for empowering Rustaceans."
 				openGraph={{
 					images: [
 						{
