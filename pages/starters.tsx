@@ -4,6 +4,7 @@ import { Calendar, Discord, Paperclip, React } from 'components/svgs'
 import { StarterAttrs } from '../components/elements/Starter'
 import { GetStaticPropsResult } from 'next'
 import { AllStartersContent } from '../content'
+import { NextSeo } from 'next-seo'
 
 const StarterXProps = {
 	bg: '/images/sections/featured-starters/3-bg.png',
@@ -35,6 +36,20 @@ export default function StartersPage({ starters }: Props) {
 	})
 	return (
 		<>
+			<NextSeo
+				title='Starter Templates | Shuttle'
+				description="Learn more about Shuttle's starter templates."
+				openGraph={{
+					images: [
+						{
+							url: 'https://www.shuttle.dev/images/og-image.png',
+							width: 3516,
+							height: 1432,
+							alt: 'Shuttle.dev - Build Backends Fast',
+						},
+					],
+				}}
+			/>
 			<div className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
 				<header className='max-w-2xl'>
 					<h1 className='w-fit font-gradual text-5xl font-bold dark:text-head lg:text-6.5'>

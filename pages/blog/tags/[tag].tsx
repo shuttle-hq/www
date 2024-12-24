@@ -57,7 +57,9 @@ export default function BlogPage(props: Props): JSX.Element {
 		? `Articles tagged: "${props.tagReadable}" - Shuttle Blog`
 		: `Shuttle Blog`
 	const meta_description =
-		'Dive into the Shuttle blog for insights on Rust programming, tutorials, web development tips, and exclusive thought leadership articles.'
+		props.tagReadable === 'all'
+			? 'Dive into the Shuttle blog for insights on Rust programming, tutorials, web development tips, and exclusive thought leadership articles.'
+			: `Learn more about ${props.tagReadable} through reading the Shuttle Blog.`
 
 	return (
 		<>

@@ -1,6 +1,22 @@
+import { NextSeo } from 'next-seo'
+
 export default function Privacy() {
 	return (
 		<main className='mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-28'>
+			<NextSeo
+				title='Privacy Policy | Shuttle'
+				description="Learn more about Shuttle's privacy policy."
+				openGraph={{
+					images: [
+						{
+							url: 'https://www.shuttle.dev/images/og-image.png',
+							width: 3516,
+							height: 1432,
+							alt: 'Shuttle.dev - Build Backends Fast',
+						},
+					],
+				}}
+			/>
 			<div className='mb-[98px]'>
 				<h1 className='mb-[19px] text-[64px] font-bold text-head'>Privacy policy</h1>
 				<p className='mb-6 text-xl'>
