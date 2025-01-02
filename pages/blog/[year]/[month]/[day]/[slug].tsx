@@ -90,6 +90,7 @@ export async function getStaticProps({
 	}
 	const formattedPublishDate = new Date(data.date).toLocaleDateString('en-IN', options)
 	const formattedModifiedDate = new Date(data.modified ?? data.date).toLocaleDateString('en-IN', options)
+	const pageTitle = data.pageTitle ?? data.title
 
 	return {
 		props: {
@@ -99,6 +100,7 @@ export async function getStaticProps({
 			blog: {
 				slug: `${params.year}/${params.month}/${params.day}/${params.slug}`,
 				content: mdxPost,
+				pageTitle,
 				contentTOC,
 				...data,
 				toc: mdxTOC,
@@ -176,13 +178,15 @@ interface Props {
 export default function BlogPostPage(props: Props) {
 	const { basePath } = useRouter()
 
+	const title = props.blog.pageTitle ?? props.blog.title
+
 	return (
 		<>
 			<NextSeo
-				title={`${props.blog.title} | Shuttle`}
+				title={`${title} | Shuttle`}
 				description={props.blog.description}
 				openGraph={{
-					title: `${props.blog.title} | Shuttle`,
+					title: `${title} | Shuttle`,
 					description: props.blog.description,
 					url: `${SITE_URL}blog/${props.blog.slug}`,
 					type: 'article',

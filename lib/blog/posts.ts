@@ -13,6 +13,7 @@ const POST_DIRECTORY = path.join(process.cwd(), '_blog')
 export interface Post {
 	readonly slug?: string
 	readonly title: string
+	readonly pageTitle?: string
 	readonly date: string
 	readonly dateReadable: string
 	readonly modified?: string
@@ -44,7 +45,6 @@ export function getSortedPosts(limit?: number, tags?: readonly string[]): Post[]
 	const fileNames = fs.readdirSync(POST_DIRECTORY)
 
 	// categories stored in this array
-
 	let allPostsData: Post[] = fileNames.map((filename) => {
 		const slug = filename.replace('.mdx', '')
 
@@ -60,6 +60,7 @@ export function getSortedPosts(limit?: number, tags?: readonly string[]): Post[]
 		}
 		const formattedPublishDate = new Date(data.date).toLocaleDateString('en-IN', options)
 		const formattedModifiedDate = new Date(data.modified ?? data.date).toLocaleDateString('en-IN', options)
+		const pageTitle: String = data.pageTitle ?? data.title
 
 		const readingTime = generateReadingTime(content)
 
@@ -72,6 +73,7 @@ export function getSortedPosts(limit?: number, tags?: readonly string[]): Post[]
 		return {
 			...data,
 			date: data.date,
+			pageTitle,
 			dateReadable: formattedPublishDate,
 			modified: data.modified ?? data.date,
 			modifiedReadable: formattedModifiedDate,
