@@ -145,6 +145,7 @@ export default function IssuePage(props: Props) {
 		<>
 			<NextSeo
 				title={`${props.issue.title} | Shuttle Launchpad`}
+				description={props.issue.description}
 				openGraph={{
 					title: props.issue.title,
 					description: props.issue.description,

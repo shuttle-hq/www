@@ -17,14 +17,14 @@ export default function CCHPage() {
 		<>
 			<NextSeo
 				title='Christmas Code Hunt | Shuttle'
-				description='Develop backends with zero infra setup using Shuttle: Code-driven cloud provisioning.'
+				description="Learn about Shuttle's Christmas Code Hunt."
 				openGraph={{
 					images: [
 						{
 							url: 'https://www.shuttle.dev/images/og-image.png',
 							width: 3516,
 							height: 1432,
-							alt: 'Shuttle.dev - Build Backends Fast',
+							alt: "Learn about Shuttle's Christmas Code Hunt.",
 						},
 					],
 				}}
