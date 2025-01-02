@@ -16,7 +16,7 @@ const LogosReferences = () => {
 					<Link href='https://www.uipath.com/'>
 						<UiPath />
 					</Link>
-					<Link href='https://www.meta.com/'>
+					<Link href='https://www.meta.com/gb/'>
 						<Meta />
 					</Link>
 					<Link href='https://stellar.org/'>
