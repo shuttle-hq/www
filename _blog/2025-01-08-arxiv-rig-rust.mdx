@@ -12,12 +12,12 @@ Hi there! In this tutorial we're going to be using the Rig AI framework to creat
 Interested in just looking at the code? [Check out the GitHub repository.](https://github.com/0xPlaygrounds/rig-arxiv-agent-example/tree/main/shuttle)
 
 ## Why Rig?
-Rig (by [Playgrounds](https://playgrounds.network/), who also additionally maintains [arc.fun](https://arc.fun)) is a new up-and-coming Rust framework designed to make AI agent creation as easy as possible. It can currently create agentic pipelines with conversation capability, integrate RAG with AI agents as well as exposing an API that you can use to create your own tools.
+Rig (by [Playgrounds](https://playgrounds.network/), who also additionally maintains [arc.fun](https://arc.fun)) is a new up-and-coming Rust framework designed to make AI agent creation as easy as possible. It can currently create agentic pipelines (ie. pipelines that can execute a number of prompts LLM-assisted steps), integrate RAG with AI agents as well as exposing an API that you can use to create your own tools.
 
 The framework itself is growing quite rapidly with the maintainer team using it in production, so it will be receiving updates for quite some time! They're also holding an event called [the ARC Handshake](https://www.arc.fun/handshake), which will be a showcase of AI agents built using Rig.
 
 ## Pre-requisites
-Before we start, you'll want to ensure you have the Rust programming installed and additionally an OpenAI API token. If you don't have one already, you will need to sign in and [obtain an API key from the dashboard](https://platform.openai.com/settings/organization/general) as this will be required to make it work.
+Before we start, you'll want to ensure you have the Rust programming language installed and additionally an OpenAI API token. If you don't have one already, you will need to sign in and [obtain an API key from the dashboard](https://platform.openai.com/settings/organization/general) as this will be required to make it work.
 
 ## Let's get building!
 
@@ -99,6 +99,8 @@ By doing this, a couple of cool things happen:
 Next, we want to write the implementation block. It requires us to provide functionality for two methods - `definition()` which provides the tool definition and prompting for the model, as well as `call()` which is the actual functionality for the tool.
 
 ```rust
+const ARXIV_URL: &str = "http://export.arxiv.org/api/query";
+
 impl Tool for ArxivSearchTool {
     const NAME: &'static str = "search_arxiv";
     type Error = ArxivError;
@@ -198,7 +200,7 @@ We will implement several methods on this struct:
 To start with, we'll create methods for handling the start of an XML tag as well as any text that is contained within the tag:
 ```rust
 impl<'a> ArxivParser<'a> {
-        fn parse_start_event(&mut self, event: &BytesStart) {
+    fn parse_start_event(&mut self, event: &BytesStart) {
         match event.name().as_ref() {
             // if the tag is "entry", this means we're at the start of a new xml block
             // so we can clear related variables and start anew
@@ -496,7 +498,7 @@ async fn axum(
 ```
 
 ## Deploying
-If you've added any frontend assets, make sure you add them to a `Shuttle.toml` file in your root folder:
+If you've added any frontend assets, make sure you add them to a `Shuttle.toml` file in your root folder (this will allow the frontend templates folder to be included in deployment):
 
 ```toml
 [build]
