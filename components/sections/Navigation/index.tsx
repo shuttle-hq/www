@@ -67,11 +67,11 @@ const Navigation = () => {
 			>
 				<div className='flex flex-col gap-4 xl:flex-row xl:gap-8'>
 					{[
-						{
-							href: '/cch',
-							event: 'homepage_mainnav_cch',
-							text: 'Christmas Code Hunt',
-						},
+						// {
+						// 	href: '/cch',
+						// 	event: 'homepage_mainnav_cch',
+						// 	text: 'Christmas Code Hunt',
+						// },
 						{
 							href: '/blog/tags/all',
 							event: 'homepage_mainnav_blog',
