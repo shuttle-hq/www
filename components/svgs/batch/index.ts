@@ -1,2 +1,2 @@
-export * from './Divider'
-export * from './Quote'
+export * from "./Divider";
+export * from "./Quote";

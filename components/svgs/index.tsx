@@ -1,13 +1,13 @@
-export * from './features'
-export * from './heroes-benefits'
-export * from './logos'
-export * from './starters'
-export { default as Copy } from './Copy'
-export { default as GithubLogo } from './GithubLogo'
-export { default as Hamburger } from './Hamburger'
-export { default as Lightbulb } from './gradient/Lightbulb'
-export { default as LinkedInLogo } from './LinkedInLogo'
-export { default as Logo } from './Logo'
-export { default as Moon } from './gradient/Moon'
-export { default as TwitterLogo } from './TwitterLogo'
-export { default as Information } from './Information'
+export * from "./features";
+export * from "./heroes-benefits";
+export * from "./logos";
+export * from "./starters";
+export { default as Copy } from "./Copy";
+export { default as GithubLogo } from "./GithubLogo";
+export { default as Hamburger } from "./Hamburger";
+export { default as Lightbulb } from "./gradient/Lightbulb";
+export { default as LinkedInLogo } from "./LinkedInLogo";
+export { default as Logo } from "./Logo";
+export { default as Moon } from "./gradient/Moon";
+export { default as TwitterLogo } from "./TwitterLogo";
+export { default as Information } from "./Information";
