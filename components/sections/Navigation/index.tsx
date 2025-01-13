@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { Button, LoginButton } from 'components/elements'
-import { GithubLogo, Hamburger, Logo } from 'components/svgs'
+import { Hamburger, Logo } from 'components/svgs'
 import { trackEvent } from 'lib/posthog'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
@@ -87,21 +87,11 @@ const Navigation = () => {
 							event: 'homepage_mainnav_docs',
 							text: 'Docs',
 						},
-						// {
-						// 	href: '/shuttle-heroes',
-						// 	event: 'homepage_mainnav_heroes',
-						// 	text: 'Shuttle Heroes',
-						// },
 						{
 							href: '/ai',
 							event: 'homepage_mainnav_ai',
 							text: 'Shuttle AI',
 						},
-						// {
-						// 	href: '/launchpad',
-						// 	event: 'homepage_mainnav_launchpad',
-						// 	text: 'Launchpad',
-						// },
 					].map(({ event, href, text }) => (
 						<LinkItem key={href} event={event} href={href} text={text} setOpen={setOpen} />
 					))}
