@@ -10,7 +10,6 @@ import { DISCORD_URL } from '../../../lib/constants'
 
 const ThemeSwitcher = dynamic(() => import('./ThemeSwitcher'), { ssr: false })
 
-
 const LinkItem = ({
 	event,
 	href,
@@ -24,22 +23,26 @@ const LinkItem = ({
 	active: boolean
 	setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
-	return (<div className='flex'> 
-		<div className='relative'>
-			<Link
-				className={clsx('nav-link-shadow transition-all dark:hover:text-white', active && 'text-white font-bold')}
-				href={href}
-				onClick={({ ctrlKey, metaKey }) => {
-					trackEvent(event)
-					setOpen(ctrlKey || metaKey)
-				}}
-			>
-				{text}
-			</Link>
+	return (
+		<div className='flex'>
+			<div className='relative'>
+				<Link
+					className={clsx(
+						'nav-link-shadow transition-all dark:hover:text-white',
+						active && 'font-bold text-white'
+					)}
+					href={href}
+					onClick={({ ctrlKey, metaKey }) => {
+						trackEvent(event)
+						setOpen(ctrlKey || metaKey)
+					}}
+				>
+					{text}
+				</Link>
+			</div>
 		</div>
-	</div>)
+	)
 }
-
 
 const Navigation = () => {
 	const [open, setOpen] = useState(false)
@@ -107,7 +110,14 @@ const Navigation = () => {
 							keyword: 'ai',
 						},
 					].map(({ event, href, text, keyword }) => (
-						<LinkItem key={href} event={event} href={href} text={text} setOpen={setOpen} active={router.pathname.includes(keyword)} />
+						<LinkItem
+							key={href}
+							event={event}
+							href={href}
+							text={text}
+							setOpen={setOpen}
+							active={router.pathname.includes(keyword)}
+						/>
 					))}
 				</div>
 				<div className='mt-10 xl:ml-auto xl:mt-0 xl:flex xl:items-center xl:gap-5'>
