@@ -202,6 +202,7 @@ export default function BlogPostPage(props: Props) {
 
   const title = props.blog.pageTitle ?? props.blog.title;
 
+<<<<<<< Updated upstream
   return (
     <>
       <NextSeo
@@ -351,6 +352,158 @@ export default function BlogPostPage(props: Props) {
                 href="#"
                 onClick={(e) => {
                   e.preventDefault();
+=======
+	return (
+		<>
+			<NextSeo
+				title={`${title} | Shuttle`}
+				description={props.blog.description}
+				openGraph={{
+					title: `${title} | Shuttle`,
+					description: props.blog.description,
+					url: `${SITE_URL}blog/${props.blog.slug}`,
+					type: 'article',
+					article: {
+						//
+						// TODO: add expiration and modified dates
+						// https://github.com/garmeeh/next-seo#article
+						publishedTime: props.blog.date,
+						modifiedTime: props.blog.modified,
+						//
+						// TODO: author urls should be internal in future
+						// currently we have external links to github profiles
+						authors: [props.blog.author_url || ''],
+						tags: (props.blog.tags || []).map((cat: string) => {
+							return cat
+						}),
+					},
+					images: [
+						{
+							url: `${SITE_URL}${basePath}/images/blog/${props.blog.thumb}`,
+						},
+					],
+				}}
+			/>
+			<div className='mx-auto max-w-6xl p-4 sm:p-6 lg:p-8'>
+				<div className='grid grid-cols-1 gap-6 gap-y-12 lg:grid-cols-4'>
+					{/* Content */}
+					<div className='lg:col-span-3'>
+						<BlogHeader post={props.blog} />
+					</div>
+					<div className='hidden lg:block' />
+					<div className='lg:col-span-3'>
+						{(props.blog.thumb ?? props.blog.cover) && (
+							<div className='mb-8 grid grid-cols-1 justify-items-center'>
+								<Image
+									src={'/images/blog/' + (props.blog.cover ?? props.blog.thumb)}
+									alt='Cover image'
+									width={810}
+									height={424}
+									className='w-full rounded-[2rem] object-contain'
+								/>
+								{props.blog.caption && (
+									<span className='mt-2 text-center text-sm text-body'>
+										{props.blog.caption}
+									</span>
+								)}
+							</div>
+						)}
+						{props.blog.contentTOC.json.length > 0 ? (
+							<TableOfContents toc={props.blog.contentTOC.json} />
+						) : null}
+						{props.blog.content && (
+							<article
+								className={clsx(
+									'prose dark:prose-invert',
+									'max-w-none overflow-x-hidden',
+									'prose-headings:before:block',
+									'prose-headings:before:-mt-36',
+									'prose-headings:before:pt-36',
+									'prose-headings:lg:before:-mt-20',
+									'prose-headings:before:lg:pt-20',
+									'text-xl text-body prose-h2:text-5xl prose-h3:text-4xl prose-h4:text-3xl prose-h5:text-2xl'
+								)}
+							>
+								<MDXRemote {...props.blog.content} components={mdxComponents} />
+							</article>
+						)}
+						{/* Powered By */}
+						<div className='relative mt-11 flex w-full flex-col overflow-hidden rounded-[2rem] bg-[#13292C] p-8 dark:bg-black'>
+							<Image
+								src='/images/sections/powered-by/bg.png'
+								alt=''
+								fill
+								className='absolute left-0 top-0 z-10'
+							/>
+							<Image
+								src='/images/sections/powered-by/stars.png'
+								alt=''
+								fill
+								className='absolute bottom-0 left-20 z-10'
+							/>
+							<Logo className='relative z-10 text-white' />
+							<span className='relative z-10 mt-5 text-body'>
+								This blog post is powered by shuttle - The Rust-native, open source, cloud
+								development platform. If you have any questions, or want to provide feedback, join
+								our{' '}
+								<a
+									target='_blank'
+									rel='noreferrer'
+									className='text-orange'
+									href={DISCORD_URL}
+									onClick={() => {
+										trackEvent(`blog_article_${props.blog.title}_Discord`)
+									}}
+								>
+									Discord server!
+								</a>
+							</span>
+						</div>
+						{/* <Socials /> */}
+						<div className='mb-20 mt-14 flex items-center space-x-4'>
+							<span className='text-head'>Share article</span>
+							<a
+								href={`https://news.ycombinator.com/submitlink?u=${encodeURIComponent(
+									`${SITE_URL}blog/${props.blog.slug}`
+								)}&t=${encodeURIComponent(props.blog.title)}`}
+								className='flex items-center rounded-xl border border-black/10 bg-black p-3 dark:border-white/10'
+								target='_blank'
+								rel='noreferrer'
+								onClick={() => {
+									trackEvent(`blog_article_${props.blog.title}_hackernews`)
+								}}
+							>
+								<HNLogo />
+							</a>
+							<a
+								href={`https://twitter.com/share?text=${encodeURIComponent(
+									props.blog.title
+								)}&url=${SITE_URL}blog/${props.blog.slug}`}
+								className='flex items-center rounded-xl border border border-black/10 bg-black p-3 dark:border-white/10'
+								target='_blank'
+								rel='noreferrer'
+								onClick={() => {
+									trackEvent(`blog_article_${props.blog.title}_twitter`)
+								}}
+							>
+								<TwitterLogo />
+							</a>
+							<a
+								href={`https://www.linkedin.com/shareArticle?url=${SITE_URL}blog/${props.blog.slug}&title=${props.blog.title}`}
+								className='flex items-center rounded-xl border border border-black/10 bg-black p-3 dark:border-white/10'
+								target='_blank'
+								rel='noreferrer'
+								onClick={() => {
+									trackEvent(`blog_article_${props.blog.title}_linkedin`)
+								}}
+							>
+								<LinkedInLogo />
+							</a>
+							<a
+								href='#'
+								onClick={(e) => {
+									e.preventDefault()
+>>>>>>> Stashed changes
 
                   trackEvent(`blog_article_${props.blog.title}_mastodon`);
 
