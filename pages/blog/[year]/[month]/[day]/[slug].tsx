@@ -80,7 +80,7 @@ export async function getStaticProps({
 
   const relatedPosts = getSortedPosts(
     6,
-    mdxPost.scope.tags as readonly string[],
+    mdxPost.scope.tags as readonly string[]
   )
     .filter((p) => p.slug != filePath)
     .slice(0, 5);
@@ -103,10 +103,10 @@ export async function getStaticProps({
   };
   const formattedPublishDate = new Date(data.date).toLocaleDateString(
     "en-IN",
-    options,
+    options
   );
   const formattedModifiedDate = new Date(
-    data.modified ?? data.date,
+    data.modified ?? data.date
   ).toLocaleDateString("en-IN", options);
   const pageTitle = data.pageTitle ?? data.title;
 
@@ -257,7 +257,9 @@ export default function BlogPostPage(props: Props) {
                 )}
               </div>
             )}
-            <TableOfContents toc={props.blog.contentTOC.json} />
+            {props.blog.contentTOC.json.length > 0 ? (
+              <TableOfContents toc={props.blog.contentTOC.json} />
+            ) : null}
 
             {props.blog.content && (
               <article
@@ -269,7 +271,7 @@ export default function BlogPostPage(props: Props) {
                   "prose-headings:before:pt-36",
                   "prose-headings:lg:before:-mt-20",
                   "prose-headings:before:lg:pt-20",
-                  "text-xl text-body prose-h2:text-5xl prose-h3:text-4xl prose-h4:text-3xl prose-h5:text-2xl",
+                  "text-xl text-body prose-h2:text-5xl prose-h3:text-4xl prose-h4:text-3xl prose-h5:text-2xl"
                 )}
               >
                 <MDXRemote {...props.blog.content} components={mdxComponents} />
@@ -312,7 +314,7 @@ export default function BlogPostPage(props: Props) {
               <span className="text-head">Share article</span>
               <a
                 href={`https://news.ycombinator.com/submitlink?u=${encodeURIComponent(
-                  `${SITE_URL}blog/${props.blog.slug}`,
+                  `${SITE_URL}blog/${props.blog.slug}`
                 )}&t=${encodeURIComponent(props.blog.title)}`}
                 className="flex items-center rounded-xl border border-black/10 bg-black p-3 dark:border-white/10"
                 target="_blank"
@@ -325,7 +327,7 @@ export default function BlogPostPage(props: Props) {
               </a>
               <a
                 href={`https://twitter.com/share?text=${encodeURIComponent(
-                  props.blog.title,
+                  props.blog.title
                 )}&url=${SITE_URL}blog/${props.blog.slug}`}
                 className="flex items-center rounded-xl border border border-black/10 bg-black p-3 dark:border-white/10"
                 target="_blank"
@@ -355,11 +357,11 @@ export default function BlogPostPage(props: Props) {
                   trackEvent(`blog_article_${props.blog.title}_mastodon`);
 
                   const instance = window.prompt(
-                    "Enter your Mastodon instance (ex. mastodon.social):",
+                    "Enter your Mastodon instance (ex. mastodon.social):"
                   );
                   if (instance) {
                     window.location.href = `https://${instance}/share?text=${encodeURIComponent(
-                      `${props.blog.title} ${SITE_URL}blog/${props.blog.slug}`,
+                      `${props.blog.title} ${SITE_URL}blog/${props.blog.slug}`
                     )}`;
                   }
                 }}

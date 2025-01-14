@@ -129,6 +129,13 @@ const authors: readonly Author[] = [
     author_url: "",
     author_image_url: "",
   },
+  {
+    author_id: "antithesis",
+    author: "Antithesis",
+    position: "",
+    author_url: "",
+    author_image_url: "",
+  },
 ];
 
 export default authors;
