@@ -1,15 +1,15 @@
 .moon {
-	display: inline-block;
+  display: inline-block;
 }
 
 .moon stop {
-	transition: 0.4s ease;
+  transition: 0.4s ease;
 }
 
 .moon:hover stop:first-child {
-	stop-color: rgba(56, 212, 233, 0.5);
+  stop-color: rgba(56, 212, 233, 0.5);
 }
 
 .moon:hover stop:last-child {
-	stop-color: rgba(252, 84, 12, 0.5);
+  stop-color: rgba(252, 84, 12, 0.5);
 }
