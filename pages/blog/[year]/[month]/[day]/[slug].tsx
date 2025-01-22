@@ -27,6 +27,7 @@ import {
   BlogPrevNext,
   BlogSidebar,
   CallToAction,
+  CallToActionNewsletter,
 } from "components/sections";
 import { LinkedInLogo, Logo, TwitterLogo } from "components/svgs";
 import { TwitterTweetEmbed } from "react-twitter-embed";
@@ -35,6 +36,7 @@ import MastodonLogo from "components/svgs/MastodonLogo";
 import HNLogo from "components/svgs/HNLogo";
 import { trackEvent } from "lib/posthog";
 import { TableOfContents } from "../../../../../components/blog/TableOfContents";
+import { Button } from "components/elements";
 
 export async function getStaticPaths() {
   const paths = getAllPostSlugs();
@@ -257,6 +259,7 @@ export default function BlogPostPage(props: Props) {
                 )}
               </div>
             )}
+            <CallToActionNewsletter bg={false} />
             {props.blog.contentTOC.json.length > 0 ? (
               <TableOfContents toc={props.blog.contentTOC.json} />
             ) : null}
@@ -278,37 +281,7 @@ export default function BlogPostPage(props: Props) {
               </article>
             )}
             {/* Powered By */}
-            <div className="relative mt-11 flex w-full flex-col overflow-hidden rounded-[2rem] bg-[#13292C] p-8 dark:bg-black">
-              <Image
-                src="/images/sections/powered-by/bg.png"
-                alt=""
-                fill
-                className="absolute left-0 top-0 z-10"
-              />
-              <Image
-                src="/images/sections/powered-by/stars.png"
-                alt=""
-                fill
-                className="absolute bottom-0 left-20 z-10"
-              />
-              <Logo className="relative z-10 text-white" />
-              <span className="relative z-10 mt-5 text-body">
-                This blog post is powered by shuttle - The Rust-native, open
-                source, cloud development platform. If you have any questions,
-                or want to provide feedback, join our{" "}
-                <a
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-orange"
-                  href={DISCORD_URL}
-                  onClick={() => {
-                    trackEvent(`blog_article_${props.blog.title}_Discord`);
-                  }}
-                >
-                  Discord server!
-                </a>
-              </span>
-            </div>
+            <CallToActionNewsletter bg={true} />
             {/* <Socials /> */}
             <div className="mb-20 mt-14 flex items-center space-x-4">
               <span className="text-head">Share article</span>
