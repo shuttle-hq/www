@@ -37,7 +37,7 @@ const CallToActionNewsletter = ({ subtext, bg }: CallToActionProps) => {
           Get Shuttle blog posts in your inbox
         </h2>
         <span className="relative z-10 mt-2 block text-body/80">
-          We'll send you complete blog posts via email - tutorials, guides,
+          We&apos;ll send you complete blog posts via email - tutorials, guides,
           collaborations, and product updates delivered straight to your inbox.
         </span>
         <form
