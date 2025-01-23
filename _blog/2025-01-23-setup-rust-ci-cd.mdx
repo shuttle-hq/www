@@ -89,18 +89,18 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
-	env:
-	  SCCACHE_GHA_ENABLED: "true"
-	  RUSTC_WRAPPER: "sccache"
+  env:
+    SCCACHE_GHA_ENABLED: "true"
+    RUSTC_WRAPPER: "sccache"
 
   steps:
     # .. initialisation steps go up here
 
-	  # run sccache
+    # run sccache
     - name: Run sccache-cache
       uses: mozilla-actions/sccache-action@v0.0.7
 
-	  # run your cargo commands here
+    # run your cargo commands here
 ```
 
 And now you're done! Interested in finding out more? Check out [the sccache Github readme](https://github.com/Mozilla-Actions/sccache-action?tab=readme-ov-file), which will have everything you need to know.
