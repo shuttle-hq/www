@@ -259,7 +259,7 @@ export default function BlogPostPage(props: Props) {
                 )}
               </div>
             )}
-            <CallToActionNewsletter bg={true} />
+            <CallToActionNewsletter bg={false} />
             {props.blog.contentTOC.json.length > 0 ? (
               <TableOfContents toc={props.blog.contentTOC.json} />
             ) : null}
