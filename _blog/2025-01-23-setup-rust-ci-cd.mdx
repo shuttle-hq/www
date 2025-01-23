@@ -1,0 +1,173 @@
+---
+title: "Setting up effective CI/CD for Rust projects - a short primer"
+description: "Implement Continuous Integration & Continuous Development effectively in your Rust project."
+author: josh
+tags: [rust, guide]
+thumb: setup-rust-ci-cd-thumb.png
+cover: setup-rust-ci-cd-thumb.png
+date: '2025-01-25T16:30:00'
+---
+## Introduction
+
+The importance of a good CI/CD pipeline cannot go understated. The more you can automate in your deployment pipeline, the less work you have to do overall. That being said, it can be difficult to set up an effective CI/CD pipeline if it's your first time doing it. YAML files can be quite tricky to debug, and you can also additionally incur high costs from inefficient pipelines if you aren't careful.
+
+That being said, let's explore how to create effective CI/CD through Github Actions, an easy to use CI runner.
+
+## Fundamentals of a Rust CI/CD Workflow
+
+The average Rust project might have the following things carried out in CI:
+
+- Automatic usage of `clippy`, exiting the workflow if there are **any** warnings or errors
+- Automatic usage of `fmt`, exiting the workflow if there is **any** diff
+- Automatic testing
+- Automatic website deployment
+- Dependabot
+
+Below is an example of a CI/CD workflow using YAML that you might find for a Rust project. For this file to be usable by Github Actions, it needs to be in the `.github/workflows` folder (relative to your project root). We’ll call our file `workflow.yml` for the purpose of simplicity.  Let's go through the steps:
+
+- Our workflow will only run on a pull request to `main`. Before we merge to main we need to ensure that the code compiles on a pull request - once the code's been pushed to main, it's a bit too late to make any changes by then and we'll have to push another PR to fix it!
+- We check out the code and install our required dependencies (meaning the Rust toolchain and `cargo-nextest`). Note that for external dependencies, using pure binary downloads is often far faster than trying to use `cargo install`.
+- We then run all the required commands (`clippy`, `fmt` and `cargo nextest run`) and exit the workflow automatically if any of the 3 commands fail.
+
+```yaml
+# .github/workflows/workflow.yml
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Install Rust toolchain
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+
+      #
+      - name: Install cargo-nextest
+	      uses: taiki-e/install-action@cargo-nextest
+
+      # Run Clippy (linting)
+      - name: Run Clippy
+        run: cargo clippy --all-targets -- -D warnings
+
+      # Check code formatting
+      - name: Check formatting
+        run: cargo fmt --all --check
+
+      # Run tests with cargo-nextest
+      - name: Run Tests
+        run: cargo nextest run
+
+```
+
+## Speed up Rust CI/CD with sccache
+
+In addition to the above tools, you can use `sccache` to speed up your builds. `sccache` is a tool designed to speed up compilations (like `cacche`) by utilising caching. It supports quite a few different backends like S3 which means you're able to use it in many locations - but it also means you can use it in Github Actions.
+
+```yaml
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+  env:
+    SCCACHE_GHA_ENABLED: "true"
+    RUSTC_WRAPPER: "sccache"
+
+  steps:
+    # .. initialisation steps go up here
+
+    # run sccache
+    - name: Run sccache-cache
+      uses: mozilla-actions/sccache-action@v0.0.7
+
+    # run your cargo commands here
+```
+
+And now you're done! Interested in finding out more? Check out [the sccache Github readme](https://github.com/Mozilla-Actions/sccache-action?tab=readme-ov-file), which will have everything you need to know.
+
+## Dependabot
+
+Dependabot is a tool provided by Github to help you manage dependencies effectively. While Dependabot *itself* is not a CI tool, it is a great complement for any CI/CD pipeline on Github. Without it, you will often otherwise having to spend time manually checking dependency versions.
+
+You can set up Dependabot quickly and easily by adding it in your Github workflows like so (file should be in `# <project_root>/.github/dependabot.yml`):
+
+```yaml
+# Please see the documentation for all configuration options:
+# <https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates>
+
+version: 2
+updates:
+  - package-ecosystem: "cargo"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    ignore:
+        # These are peer deps of Cargo and should not be automatically bumped
+        - dependency-name: "semver"
+        - dependency-name: "crates-io"
+    rebase-strategy: "disabled"
+
+```
+
+Once you've added it to version control, nothing else is required. When there are new dependencies, Dependabot will automatically create issues/PRs as required. You can also additonally customise your Dependabot config much further - which you can [find out more in the Github documentation.](https://docs.github.com/en/code-security/dependabot/working-with-dependabot/managing-pull-requests-for-dependency-updates)
+
+## Releasing new library versions with CI
+
+Let's face it, releasing new libraries is a lot of work. You need to manually add release notes and create a release on Github, you need to publish a new crate version on Github, you need to check for any breaking changes and ensure they're in the list... the list goes on.
+
+Fortunately, there's a way to easily automate all of this. You can use [release-plz](https://github.com/release-plz/release-plz) to do all of it for you - when you're ready to go through with the update, simply merge the Release PR provided by `release-plz`.
+
+![An image showing how release-plz works](/images/blog/setup-rust-ci-cd/release-plz.png)
+
+## Using CI/CD with Shuttle
+
+Of course, you can also use CI/CD with Shuttle. Check out [the deploy-action repo](https://github.com/shuttle-hq/deploy-action/tree/v2) where there is an easy-to-follow example on how to deploy Shuttle from your CI/CD pipeline rather than having to do it from the CLI.
+
+```yaml
+name: Shuttle Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: shuttle-hq/deploy-action@v2
+        with:
+          shuttle-api-key: ${{ secrets.SHUTTLE_API_KEY }}
+          project-id: proj_0123456789
+          working-directory: "backend"
+          cargo-shuttle-version: "0.48.1"
+          extra-args: --allow-dirty --debug
+          secrets: |
+            MY_AWESOME_SECRET_1 = '${{ secrets.SECRET_1 }}'
+            MY_AWESOME_SECRET_2 = '${{ secrets.SECRET_2 }}'
+```
+
+## Finishing Up
+
+Thanks for reading! Hopefully you have gotten a good idea of how you can improve the effectiveness of your workflow using Github Actions with Rust codebases.
