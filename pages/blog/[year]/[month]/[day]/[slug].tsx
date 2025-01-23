@@ -27,6 +27,7 @@ import {
   BlogPrevNext,
   BlogSidebar,
   CallToAction,
+  CallToActionNewsletter,
 } from "components/sections";
 import { LinkedInLogo, Logo, TwitterLogo } from "components/svgs";
 import { TwitterTweetEmbed } from "react-twitter-embed";
@@ -35,6 +36,7 @@ import MastodonLogo from "components/svgs/MastodonLogo";
 import HNLogo from "components/svgs/HNLogo";
 import { trackEvent } from "lib/posthog";
 import { TableOfContents } from "../../../../../components/blog/TableOfContents";
+import { Button } from "components/elements";
 
 export async function getStaticPaths() {
   const paths = getAllPostSlugs();
@@ -80,7 +82,7 @@ export async function getStaticProps({
 
   const relatedPosts = getSortedPosts(
     6,
-    mdxPost.scope.tags as readonly string[]
+    mdxPost.scope.tags as readonly string[],
   )
     .filter((p) => p.slug != filePath)
     .slice(0, 5);
@@ -103,10 +105,10 @@ export async function getStaticProps({
   };
   const formattedPublishDate = new Date(data.date).toLocaleDateString(
     "en-IN",
-    options
+    options,
   );
   const formattedModifiedDate = new Date(
-    data.modified ?? data.date
+    data.modified ?? data.date,
   ).toLocaleDateString("en-IN", options);
   const pageTitle = data.pageTitle ?? data.title;
 
@@ -257,6 +259,7 @@ export default function BlogPostPage(props: Props) {
                 )}
               </div>
             )}
+            <CallToActionNewsletter bg={false} />
             {props.blog.contentTOC.json.length > 0 ? (
               <TableOfContents toc={props.blog.contentTOC.json} />
             ) : null}
@@ -271,50 +274,20 @@ export default function BlogPostPage(props: Props) {
                   "prose-headings:before:pt-36",
                   "prose-headings:lg:before:-mt-20",
                   "prose-headings:before:lg:pt-20",
-                  "text-xl text-body prose-h2:text-5xl prose-h3:text-4xl prose-h4:text-3xl prose-h5:text-2xl"
+                  "text-xl text-body prose-h2:text-5xl prose-h3:text-4xl prose-h4:text-3xl prose-h5:text-2xl",
                 )}
               >
                 <MDXRemote {...props.blog.content} components={mdxComponents} />
               </article>
             )}
             {/* Powered By */}
-            <div className="relative mt-11 flex w-full flex-col overflow-hidden rounded-[2rem] bg-[#13292C] p-8 dark:bg-black">
-              <Image
-                src="/images/sections/powered-by/bg.png"
-                alt=""
-                fill
-                className="absolute left-0 top-0 z-10"
-              />
-              <Image
-                src="/images/sections/powered-by/stars.png"
-                alt=""
-                fill
-                className="absolute bottom-0 left-20 z-10"
-              />
-              <Logo className="relative z-10 text-white" />
-              <span className="relative z-10 mt-5 text-body">
-                This blog post is powered by shuttle - The Rust-native, open
-                source, cloud development platform. If you have any questions,
-                or want to provide feedback, join our{" "}
-                <a
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-orange"
-                  href={DISCORD_URL}
-                  onClick={() => {
-                    trackEvent(`blog_article_${props.blog.title}_Discord`);
-                  }}
-                >
-                  Discord server!
-                </a>
-              </span>
-            </div>
+            <CallToActionNewsletter bg={true} />
             {/* <Socials /> */}
             <div className="mb-20 mt-14 flex items-center space-x-4">
               <span className="text-head">Share article</span>
               <a
                 href={`https://news.ycombinator.com/submitlink?u=${encodeURIComponent(
-                  `${SITE_URL}blog/${props.blog.slug}`
+                  `${SITE_URL}blog/${props.blog.slug}`,
                 )}&t=${encodeURIComponent(props.blog.title)}`}
                 className="flex items-center rounded-xl border border-black/10 bg-black p-3 dark:border-white/10"
                 target="_blank"
@@ -327,7 +300,7 @@ export default function BlogPostPage(props: Props) {
               </a>
               <a
                 href={`https://twitter.com/share?text=${encodeURIComponent(
-                  props.blog.title
+                  props.blog.title,
                 )}&url=${SITE_URL}blog/${props.blog.slug}`}
                 className="flex items-center rounded-xl border border border-black/10 bg-black p-3 dark:border-white/10"
                 target="_blank"
@@ -357,11 +330,11 @@ export default function BlogPostPage(props: Props) {
                   trackEvent(`blog_article_${props.blog.title}_mastodon`);
 
                   const instance = window.prompt(
-                    "Enter your Mastodon instance (ex. mastodon.social):"
+                    "Enter your Mastodon instance (ex. mastodon.social):",
                   );
                   if (instance) {
                     window.location.href = `https://${instance}/share?text=${encodeURIComponent(
-                      `${props.blog.title} ${SITE_URL}blog/${props.blog.slug}`
+                      `${props.blog.title} ${SITE_URL}blog/${props.blog.slug}`,
                     )}`;
                   }
                 }}
