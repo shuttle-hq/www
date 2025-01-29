@@ -36,7 +36,7 @@ Before we get started, you'll need to make sure you have the following installed
 
 ## Getting Started
 
-To get started, we will spin up a framework boilerplate that deploys a bot using the `serenity`Discord bot framework:
+To get started, we will spin up a framework boilerplate that deploys a bot using the `serenity` Discord bot framework:
 
 ```bash
 shuttle init --template serenity
@@ -305,7 +305,7 @@ Running your program locally will now use Docker to provision a Postgres databas
 
 Note that there's a return type here - `ShuttleSerenity`. We don't need to run the Discord bot manually because the runtime does this automatically for us - instead, we return the Discord bot struct using `.into()` - this will be illustrated later on.
 
-Next, we need to get our secrets from the `SecretStore` (ie our `Secrets.toml` file that we created earlier). We also need to parse our channel ID into a `u64` as this will then allow us to automatically convert it into a `serenity::all::ChannelId`, which we need to then use for sending messages to with a Discord HTTP client.
+Next, we need to get our secrets from the `SecretStore` (i.e., our `Secrets.toml` file that we created earlier). We also need to parse our channel ID into a `u64` as this will then allow us to automatically convert it into a `serenity::all::ChannelId`, which we need to then use for sending messages to with a Discord HTTP client.
 
 ```rust
 use anyhow::Context as _;
