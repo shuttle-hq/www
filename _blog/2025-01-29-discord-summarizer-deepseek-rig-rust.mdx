@@ -1,0 +1,352 @@
+---
+title: "Building a Discord Summarizer bot with DeepSeek, Rig & Rust"
+description: "Exploring real life use cases with AI, using DeepSeek and the Rig AI framework."
+author: josh
+tags: [rust, guide, ai, discord]
+thumb: discord-bot-deepseek-rig-rust-thumb.png
+cover: discord-bot-deepseek-rig-rust-thumb.png
+date: '2025-01-29T14:45:00'
+---
+
+## Introduction
+
+Whether you’re a community manager or part of a collaborative team, staying on top of conversations can be challenging. What if you could automate the process and generate concise, Markdown-based summaries of your server’s activity every day? That’s exactly what we’re going to build in this tutorial!
+
+In this guide, we’ll create a Discord bot that listens to your server, collects messages from the previous day, and generates a neatly formatted Markdown summary. The summary will highlight key points and group messages by topics and authors. This bot will save time, improve organisation, and make it easier to follow conversations. We'll also be using the new DeepSeek R1 model to generate our summaries with [Hyperbolic,](https://hyperbolic.xyz/) an AI cloud provider that provides GPU renting services as well as an AI inference API.
+
+Interested in checking out the full example? Find it [here.](https://github.com/joshua-mo-143/discord-message-summarizer-bot)
+
+## Pre-Requisites
+
+Before we get started, you'll need to make sure you have the following installed:
+
+- the Rust programming language
+- The `cargo-shuttle` CLI tool (for deploying to Shuttle & project initialisation)
+- You will also additionally need a Hyperbolic API key. To get one, follow the instructions below:
+    - You’ll need to [make a Hyperbolic account](https://app.hyperbolic.xyz/) from the application.
+    - Once registered, navigate to the [Settings](https://app.hyperbolic.xyz/settings) page on the dashboard.
+    - You'll be able to view and copy your Hyperbolic API Key from there. Keep ahold of your API key as we’ll be using it later.
+- A Discord API key is also required. If you don’t already have one, follow the instructions to get one (it’s totally free!):
+    - Click the New Application button, name your application and click Create.
+    - Navigate to the Bot tab in the lefthand menu, and add a new bot.
+    - On the bot page click the Reset Token button to reveal your token. Keep ahold of this token as we’ll be using it later.
+    - For the sake of this example, you also need to scroll down on the
+    bot page to the Message Content Intent section and enable that option.
+- You will also need `sqlx-cli` installed (the SQLx CLI tool) which will allow you to easily manage SQL migrations versions.
+
+## Getting Started
+
+To get started, we will spin up a framework boilerplate that deploys a bot using the `serenity` Discord bot framework:
+
+```bash
+shuttle init --template serenity
+
+```
+
+This will create a template with the following:
+
+- A `Bot` unit struct that has a basic `EventHandler` implementation
+- A `main` function that sets up a `serenity` client for automatic deployment to Shuttle
+
+You’ll also notice that a `Secrets.toml` file has been created. We’ll extend it to include the Hyperbolic API key & Discord we obtained before. Note that you will also need a Discord channel ID where you want your bot to send the reports to - you can select a channel by simply right clicking it and getting the channel ID.
+
+```toml
+# Secrets.toml
+DISCORD_TOKEN = 'the contents of my discord token'
+CHANNEL_ID = 'the ID of the Discord channel to send your reports to'
+HYPERBOLIC_API_KEY = 'your hyperbolic API key'
+```
+
+### Adding crate dependencies
+
+Before we continue, let's add our crate dependencies. You can add all the required dependencies by copying the one-liner below:
+
+```bash
+	cargo add chrono rig-core serde-json shuttle-shared-db sqlx -F \
+	chrono/serde,shuttle-shared-db/sqlx,shuttle-shared-db/postgres,\
+	sqlx/runtime-tokio-rustls,sqlx/postgres,sqlx/chrono,sqlx/macros
+```
+
+Let's closely examine what our new dependencies are for:
+
+- **rig-core:** The `rig` framework.
+- **sqlx:** A library for working with SQL. We add the `runtime-tokio-rustls` and `postgres` features (both are mandatory), as well as the `macros` and `chrono` features for enabling usage with the `chrono` crate.
+- **shuttle-shared-db:** A crate that allows provisioning of a Postgres database from Shuttle servers (and locally, Docker). We can allow it to output a connection pool from the Shuttle  resource annotation
+- **chrono:** A crate for dealing with time.
+- **serde-json:** A crate for (de)serializing to and from JSON.
+
+## Let’s Build!
+
+### Migrations
+
+Before we do anything, we need to create our migration table. Let's create our first migration - we'll make it reversible:
+
+```bash
+sqlx migrate add -r init
+
+```
+
+This creates a folder called `migrations` in your project root and additionally creates an `up` and `down` file for creating and reversing migrations, respectively.
+
+We'll want to store both received messages, as well as summaries:
+
+```sql
+-- Add up migration script here
+create table if not exists messages (
+    id int generated always as identity primary key,
+    data jsonb not null,
+    created_at timestamptz default current_timestamp not null
+);
+
+create table if not exists summaries (
+    id int generated always as identity primary key,
+    summary varchar not null,
+    date date not null,
+    created_at timestamptz default current_timestamp not null
+);
+
+```
+
+Next, we'll set up our `down` file which will reverse the migration. You should not need this in most cases, but in case you want to drop the table for whatever reason (e.g. during development or testing), you can do so:
+
+```sql
+-- Add down migration script here
+drop table if exists messages;
+drop table if exists summaries;
+```
+
+### Storing Messages
+
+To store messages, we will upgrade our `Bot` struct (which acts as the event handler struct) to additionally include our `PgPool`. When we implement `EventHandler` for our struct, we will then be able to access the database pool to make insertion queries.
+
+```rust
+// main.rs
+use sqlx::PgPool;
+
+struct Bot {
+    pool: PgPool
+}
+
+// add convenience init method
+impl Bot {
+    fn new(pool: PgPool) -> Self {
+        Self {
+            pool
+        }
+    }
+}
+```
+
+Next, we will make it so that any and all messages created will be stored in our Postgres instance as a JSON object - we will adjust our `impl EventHandler for Bot` block to simply convert the message into a raw JSON string then store it.
+
+```rust
+// main.rs
+use serenity::model::channel::Message;
+use serenity::model::gateway::Ready;
+use serenity::prelude::*;
+
+#[async_trait]
+impl EventHandler for Bot {
+    async fn message(&self, _: Context, msg: Message) {
+        // note we can basically garuantee this will be a JSON compatible
+        // object, so we can unwrap here while developing
+        let message = serde_json::to_string_pretty(&msg).unwrap();
+        sqlx::query("INSERT INTO messages (data) values ($1)")
+            .bind(message)
+            .execute(&self.pool)
+            .await
+            .unwrap();
+    }
+
+    async fn ready(&self, _: Context, ready: Ready) {
+        info!("{} is connected!", ready.user.name);
+    }
+}
+
+```
+
+That's pretty much it for the Discord bot interactions at a basic level. Nothing else required! Note that this is a relatively naive implementation. If you wanted to improve this, a good way to do so would be to have some kind of durable message queueing to ensure that there is no information loss.
+
+### Creating a Summarization Agent
+
+This part is fortunately quite simple. For our summaries, we only need to implement a single AI agent that summarizes all the messages. We then return the result.
+
+```rust
+// llm.rs
+use std::env;
+use rig::completion::Prompt;
+
+pub async fn summarize_messages(messages_json: String) -> Result<String, Box<dyn std::error::Error>> {
+    // Create OpenAI client
+    let client = rig::providers::hyperbolic::Client::new(
+        &env::var("HYPERBOLIC_API_KEY").expect("HYPERBOLIC_API_KEY not set"),
+    );
+
+    // Create agent with a single context prompt
+    let summarizer_agent = client
+        .agent("deepseek-ai/DeepSeek-R1")
+        .preamble("Your job is to summarize a list of Discord messages from a single day in JSON format.
+
+            The output should be in Markdown and is intended to provide a summary of important events and conversation topics from the day given.
+
+            If there are no messages, simply respond 'Nothing was discussed.'")
+        .build();
+
+    let result = summarizer_agent.prompt(&messages_json).await?;
+
+    Ok(result)
+}
+
+```
+
+### Creating and sending summaries
+
+Now for the fun part - creating and sending summaries (to a Discord channel of our choosing!). We'll split this into a couple of separate functions:
+
+- One for generating the report itself (so that we can extend it to be used elsewhere other than the scheduled task that sends generated reports to a Discord channel)
+- One for running a scheduled task (that carries out report generation & sending)
+
+```rust
+// main.rs
+pub mod llm;
+
+pub async fn generate_report(pool: &PgPool) -> Result<String, Box<dyn std::error::Error>> {
+    let date_yesterday = chrono::Utc::now().date_naive() - chrono::Days::new(1);
+    let res: Option<serde_json::Value> =
+        sqlx::query_scalar("SELECT jsonb_agg(data) FROM messages WHERE created::date = $1")
+            .bind(date_yesterday)
+            .fetch_optional(pool)
+            .await?;
+
+    let Some(res) = res else {
+        return Err("There were no messages in the database :(".into());
+    };
+
+    let raw_json = serde_json::to_string_pretty(&res).unwrap();
+
+    let prompt_result = match llm::summarize_messages(raw_json).await {
+        Ok(res) => res,
+        Err(e) => {
+            return Err(
+                format!("Something went wrong while trying to summarize messages: {e}").into(),
+            )
+        }
+    };
+
+    if let Err(e) = sqlx::query("INSERT INTO summaries (summary, date) VALUES ($1, $2)")
+        .bind(&prompt_result)
+        .bind(date_yesterday)
+        .execute(pool)
+        .await
+    {
+        return Err(format!("Error ocurred while storing summary: {e}").into());
+    };
+
+    Ok(prompt_result)
+}
+```
+
+The other half of this is creating our loop for automatically sending summaries. To ensure that the loop properly executes the task on time, we use `tokio::time::Interval` which is more accurate compared to simply just using the `tokio::time::sleep()` method.
+
+```rust
+// main.rs
+use serenity::all::{ChannelId, Http};
+
+pub async fn automated_summarized_messages(
+    channel_id: ChannelId,
+    token: String,
+    pool: PgPool,
+) {
+    let http_client = Http::new(&token);
+
+	// here we wait 24 hours
+    let mut interval = tokio::time::interval(Duration::from_secs(86400));
+    loop {
+	      // wait until the next tick
+		    // we wait 24 hours here as there may be no messages in Discord
+        interval.tick().await;
+
+		    // instead of returning an error here, we simply continue
+		    // due to the error potentially not being related to the bot runtime
+        let report = match generate_report(&pool).await {
+            Ok(res) => res,
+            Err(e) => {
+                println!("{e}");
+                continue;
+            }
+        };
+
+        if let Err(e) = http_client.send_message(channel_id, Vec::new(), &report).await {
+            println!("Something went wrong while sending summary message: {e}");
+        };
+    }
+}
+```
+
+### Hooking it all back up
+
+The first time we need to do is to add our `Postgres` annotation from `shuttle-shared-db` - to do so, we simply add it as a function argument to our main function (shown as annotated by the runtime macro):
+
+```rust
+// main.rs
+use shuttle_runtime::SecretStore;
+
+#[shuttle_runtime::main]
+async fn serenity(
+    #[shuttle_runtime::Secrets] secrets: SecretStore,
+    #[shuttle_shared_db::Postgres] pool: PgPool, // add annotation here
+) -> shuttle_serenity::ShuttleSerenity {
+	sqlx::migrate!().run(&pool).await.expect("Couldn't run database migrations");
+	// code goes here
+}
+```
+
+Running your program locally will now use Docker to provision a Postgres database. Additionally, when deployed the Shuttle servers will automatically provision a Postgres database for you using the shared cluster.
+
+Note that there's a return type here - `ShuttleSerenity`. We don't need to run the Discord bot manually because the runtime does this automatically for us - instead, we return the Discord bot struct using `.into()` - this will be illustrated later on.
+
+Next, we need to get our secrets from the `SecretStore` (i.e., our `Secrets.toml` file that we created earlier). We also need to parse our channel ID into a `u64` as this will then allow us to automatically convert it into a `serenity::all::ChannelId`, which we need to then use for sending messages to with a Discord HTTP client.
+
+```rust
+use anyhow::Context as _;
+
+secrets.into_iter().for_each(|(key, val)| {
+    std::env::set_var(key, val);
+});
+
+// Get the discord token set in `Secrets.toml`
+let token = std::env::var("DISCORD_TOKEN").context("'DISCORD_TOKEN' was not found")?;
+let channel_id: ChannelId = std::env::var("CHANNEL_ID")
+    .context("'CHANNEL_ID' was not found")?
+    .parse::<u64>()
+    .context("Tried to convert CHANNEL_ID env var but the value is not a valid u64")?
+    .into();
+```
+
+Finally we will set up Discord bot and scheduled task, then return the Discord bot client, then return the bot (note that `ShuttleSerenity` implements `From<Client>` which is why we can use `.into()` here):
+
+```rust
+let intents = GatewayIntents::GUILD_MESSAGES
+    | GatewayIntents::MESSAGE_CONTENT;
+
+let client = serenity::Client::builder(&token, intents)
+    .event_handler(Bot::new(pool.clone()))
+    .await
+    .expect("Err creating client");
+
+tokio::spawn(async move {
+    automated_summarized_messages(channel_id, token, pool).await;
+});
+
+Ok(client.into())
+```
+
+## Deploying
+
+Now that we've written all of the code, we can just use `shuttle deploy` and watch the magic happen!
+
+Note that we're not using a web service framework - trying to reach the deployment URL will simply return with a 404.
+
+## Finishing up
+
+Thanks for reading! Hopefully you have found this useful. While AI assisted applications aren't quite ready to do the dishes yet, they can certainly be quite helpful in a number of ways.
