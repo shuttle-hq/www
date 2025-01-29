@@ -215,7 +215,7 @@ pub async fn generate_report(pool: &PgPool) -> Result<String, Box<dyn std::error
     let res: Option<serde_json::Value> =
         sqlx::query_scalar("SELECT jsonb_agg(data) FROM messages WHERE created::date = $1")
             .bind(date_yesterday)
-            .fetch_one(pool)
+            .fetch_optional(pool)
             .await?;
 
     let Some(res) = res else {
