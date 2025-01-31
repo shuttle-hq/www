@@ -30,7 +30,7 @@ export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
       headers: {
         Authorization: `token ${githubToken}`,
       },
-    },
+    }
   );
   const repoData = await githubResponse.json();
   const stargazersCount = repoData.stargazers_count ?? 6000;
@@ -75,7 +75,7 @@ export default function Home({
           ],
         }}
       />
-      <div className="w-full text-center p-2 bg-yellow-400 text-black">🚨 Beware of impersonators and scams! Never trust communication that are not from our official websites and socials.</div>
+      {/* <div className="w-full text-center p-2 bg-yellow-400 text-black">🚨 Beware of impersonators and scams! Never trust communication that are not from our official websites and socials.</div> */}
       <main className="text-body">
         <Hero />
         <GetStarted />
