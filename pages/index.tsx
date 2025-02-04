@@ -60,9 +60,6 @@ export default function Home({
   questions,
   stargazersCount,
 }: Props) {
-  const x = useRouter();
-  console.log(x);
-
   return (
     <>
       <NextSeo
