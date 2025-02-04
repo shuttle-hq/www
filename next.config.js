@@ -34,6 +34,19 @@ const nextConfig = {
           "https://raw.githubusercontent.com/shuttle-hq/shuttle/main/install.ps1",
         permanent: false,
       },
+      // redirect docs.shuttle.rs -> docs.shuttle.dev
+      // done here instead of in Mintlify since Mintlify can only host one custom domain for the site.
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: 'host',
+            value: 'docs.shuttle.rs',
+          },
+        ],
+        permanent: true,
+        destination: 'https://docs.shuttle.dev/:path*',
+      },
     ];
   },
   async headers() {
