@@ -40,12 +40,12 @@ const nextConfig = {
         source: "/:path*",
         has: [
           {
-            type: 'host',
-            value: 'docs.shuttle.rs',
+            type: "host",
+            value: "docs.shuttle.rs",
           },
         ],
         permanent: true,
-        destination: 'https://docs.shuttle.dev/:path*',
+        destination: "https://docs.shuttle.dev/:path*",
       },
     ];
   },

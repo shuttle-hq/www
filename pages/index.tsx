@@ -30,7 +30,7 @@ export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
       headers: {
         Authorization: `token ${githubToken}`,
       },
-    }
+    },
   );
   const repoData = await githubResponse.json();
   const stargazersCount = repoData.stargazers_count ?? 6000;
