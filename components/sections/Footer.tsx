@@ -12,7 +12,6 @@ interface FooterProps {
 const SHUTTLE_LINKS = [
   { key: "features", name: "Features", href: "/#features" },
   { key: "starters", name: "Starters", href: "/starters" },
-  { key: "status", name: "Status", href: "https://status.shuttle.rs" },
   {
     key: "releases",
     name: "Releases",

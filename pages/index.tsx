@@ -17,7 +17,6 @@ import { StarterAttrs } from "../components/elements/Starter";
 import { QuestionAttrs } from "../components/sections/FrequentlyAskedQuestions";
 import { landingQuestions, FeaturedStartersContent } from "../content";
 import { NextSeo } from "next-seo";
-import { useRouter } from "next/router";
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
   const posts = getSortedPosts(3);
