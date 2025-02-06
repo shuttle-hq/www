@@ -6,7 +6,7 @@ author: oddgrd
 tags: [rust, acme, tls]
 thumb: tls-certs-acme-thumb.png
 cover: tls-certs-acme-thumb.png
-date: '2025-02-03T14:45:00'
+date: '2025-02-06T14:45:00'
 ---
 
 ## Introduction
@@ -124,7 +124,7 @@ async fn main() -> anyhow::Result<()> {
         terms_of_service_agreed: true,
         only_return_existing: false,
     };
-    
+
     // We'll use methods on the returned account struct for future calls to the ACME server.
     let (account, _credentials) = Account::create(&account, &LetsEncrypt::Staging.url(), None)
         .await
@@ -243,7 +243,7 @@ pub async fn http01_challenge(
     Path(token): Path<String>,
 ) -> Result<String, StatusCode> {
     tracing::info!(%token, "received HTTP-01 ACME challenge");
-    
+
     if let Some(key_auth) = challenges.get(&token) {
         Ok({
             tracing::info!(%key_auth, "responding to ACME challenge");
@@ -258,7 +258,7 @@ pub async fn http01_challenge(
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     [...]
-    
+
     let challenge = authorization
         .challenges
         .iter()
@@ -368,13 +368,13 @@ async fn main() -> anyhow::Result<()> {
     params.distinguished_name = DistinguishedName::new();
     let private_key = KeyPair::generate()?;
     let signing_request = params.serialize_request(&private_key)?;
-    
+
     // DER encode the CSR and use it to request our certificate from the ACME server.
     order
         .finalize(signing_request.der())
         .await
         .context("failed to finalize order")?;
-        
+
     // Poll for certificate, do this for a few rounds.
     let mut cert_chain_pem: Option<String> = None;
     let mut retries = 5;
