@@ -1,0 +1,50 @@
+---
+title: "What even is observability, anyway?"
+description: Looking at what observability is, how it can help you and how to use it with Rust
+author: josh
+tags: [rust, observability]
+thumb: what-is-observability-rust-thumb.webp
+cover: what-is-observability-rust-thumb.webp
+date: '2025-02-13T18:45:00'
+---
+
+
+## Introduction
+
+You’ve probably heard the term “observability” thrown around, but what does it actually mean? At its core, it’s all about making your systems easier to understand and troubleshoot by seeing what's going on inside them. It’s more than just logs and metrics—it’s about having a clear view of your system’s health in real-time. In this article, we’ll break down what observability really is and why it’s crucial for keeping your apps running smoothly.
+
+## What makes observability useful?
+
+Observability can be as simple or as powerful as you want. It can be something like this:
+
+```rust
+println!("I just did a thing!")
+```
+
+Or it can be all the way up to complete distributed tracing systems that outputs every span down to the trace in Datadog and also archives your logs in S3. Both have their use cases and have varying levels of complexity for a technical implementation.
+
+Either way, observability is an important part of being able to debug issues within your application. It's even moreso important in production because when things break, there's consequences - typically in the form of your customers voting elsewhere with their wallet. Nobody wants that (except your competitors).
+
+## A quick look at the observability ecosystem
+
+The ecosystem for observability is quite sizeable. There are complete observability solutions like [Grafana](https://grafana.com/) (which is self-hostable) and [Datadog](https://www.datadoghq.com/), there are also specialized tools focused on specific aspects like [Prometheus](https://prometheus.io/) for metrics collection, [Elasticsearch](https://www.elastic.co/elasticsearch) for log aggregation, and [Jaeger](https://www.jaegertracing.io/) for distributed tracing. These tools often integrate with each other, providing a more holistic view of system performance and health. Other solutions like [Honeycomb](https://www.honeycomb.io/) and [New Relic](https://newrelic.com/) offer deep insights into application behavior, with an emphasis on high-resolution data for debugging and optimizing complex systems.
+
+In the Rust ecosystem, while observability isn't as mature as in other languages, there are promising tools emerging. Crates like `tracing` and `tokio-console` are gaining traction for their ability to provide structured logging and performance insights, making it easier for Rust developers to monitor and debug their applications. These tools, combined with integrations into cloud observability platforms, make it easier to build performant and reliable systems.
+
+## Powerful tracing with OpenTelemetry
+
+Many of the aforementioned platforms also support OpenTelemetry (often referred to as OTel) - which is an open standard that allows telemetry tools, platforms, and services from different vendors to operate together. It provides reference implementations of SDKs in all popular programming languages, as well as a data collector process that can receive the telemetry data from a variety of sources, transform it, and send to a variety of consumers. They even have native Rust support with their `opentelemetry` crate as well as their [tracing-opentelemetry](https://docs.rs/tracing-opentelemetry/latest/tracing_opentelemetry/) crate. This is huge, as Rust is typically a popular choice for distributed systems.
+
+### How does it work?
+
+Unlike regular logging systems, OpenTelemetry expands upon the idea of "spans" as unit of work within your program. These spans can represent either a unit of time, or some function execution (for example). Those spans are often used in traces and can consist of either more spans or lower-level operations which can correlate to what is happening at the time of a recorded span - for example, a database record insertion operation. Spans can also additionally have attributes which act as labels which allows the receiving observability platform to facilitate navigation between different spans/traces.
+
+While this is initially much more confusing than "just logs", it adds much more context which can additionally be shared over multiple machines or systems. This allows you to create a much more complete picture of what may have caused an incident. For example, let's say you want to know what happened in a service in a VM that sent a request to another service in a different VM which has then crashed. By aligning the IDs of the traces, you can create a full picture of the workflow up until that point.
+
+Interested in trying it out? Check out [our guide on using OTel.](https://www.shuttle.dev/blog/2024/04/10/using-opentelemetry-rust)
+
+## How do I use observability on Shuttle?
+
+We're excited to announce that **starting** **next** **week**, **Pro** **Tier** users will have access to our new observability features, allowing you to send logs and traces to your preferred provider (that supports OTel)! Our Shuttle runtime takes care of the whole process for you end-to-end, allowing you to simply use your API key with a relevant supported provider and it’ll **just** work. Our initial launch will support BetterStack integration, with plans to expand to other providers like Datadog in the coming months.
+
+What observability platform would you like to see supported next? [Open an issue in our Github repo now.](https://github.com/shuttle-hq/shuttle)
