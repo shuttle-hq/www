@@ -18,6 +18,11 @@ const nextConfig = {
   redirects() {
     return [
       {
+        source: "/docs",
+        destination: "https://docs.shuttle.dev/",
+        permanent: true,
+      },
+      {
         source: "/blog",
         destination: "/blog/tags/all",
         permanent: true,
