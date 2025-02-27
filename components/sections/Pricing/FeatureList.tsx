@@ -17,7 +17,7 @@ const features = [
 
 export const FeatureList: React.FC = () => {
   return (
-    <section className="flex gap-8 items-center text-xl tracking-wide leading-relaxed text-neutral-400">
+    <section className="flex gap-8 justify-center items-center text-xl tracking-wide leading-relaxed text-neutral-400">
       {features.map((feature, index) => (
         <FeatureItem
           key={`feature-${index}`}
