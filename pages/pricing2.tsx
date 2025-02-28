@@ -23,6 +23,8 @@ import FeatureList from "components/sections/Pricing/FeatureList";
 import { ImageSection } from "../components/sections/Pricing/ImageSection";
 import PricingCards from "../components/sections/Pricing/PricingCards/PricingCards";
 import { PricingComparison } from "../components/sections/Pricing/Comparison/PricingComparison";
+import PricingGrid from "../components/sections/Pricing/UsageBasedPricing/PricingGrid";
+import BlogCards from "../components/sections/Pricing/BlogCards";
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
   return {
@@ -99,6 +101,28 @@ export default function PricingPage({ questions }: Props) {
       <br />
       <br />
       <PricingComparison />
+
+      <br />
+      <br />
+      <br />
+      <PricingGrid />
+      <br />
+      <br />
+      <br />
+      <h1 className="w-fit text-center font-gradual text-5xl font-bold text-black dark:text-head lg:text-6.5">
+        Why Developers Choose Shuttle
+      </h1>
+      <br />
+      <br />
+      <p className="pt-0 w-full text-xl tracking-wide leading-8 text-center max-w-[577px] text-neutral-400 max-md:max-w-full">
+        At Shuttle, we don't just provide cloud infrastructure - we provide a
+        developer-first experience designed to make building and deploying Rust
+        applications effortless and joyful.
+      </p>
+      <br />
+      <br />
+      <br />
+      <BlogCards />
 
       <Plans />
       <LovedBy />
