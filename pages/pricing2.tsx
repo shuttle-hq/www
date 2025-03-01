@@ -25,6 +25,8 @@ import PricingCards from "../components/sections/Pricing/PricingCards/PricingCar
 import { PricingComparison } from "../components/sections/Pricing/Comparison/PricingComparison";
 import PricingGrid from "../components/sections/Pricing/UsageBasedPricing/PricingGrid";
 import BlogCards from "../components/sections/Pricing/BlogCards";
+import Faq from "../components/sections/Faq/Faq";
+import { faqData } from "../components/sections/Pricing/faqData";
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
   return {
@@ -124,6 +126,9 @@ export default function PricingPage({ questions }: Props) {
       <br />
       <BlogCards />
 
+      <Faq faqData={faqData} />
+
+      {/*
       <Plans />
       <LovedBy />
       <PriceCards />
@@ -134,6 +139,7 @@ export default function PricingPage({ questions }: Props) {
       <Testimonials />
       <FrequentlyAskedQuestions questions={questions} page="pricing" />
       <CallToAction />
+      */}
     </div>
   );
 }
