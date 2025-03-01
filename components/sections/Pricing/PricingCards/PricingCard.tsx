@@ -2,7 +2,7 @@ import React from "react";
 import { PricingFeature } from "./PricingFeature";
 import { PricingButton } from "./PricingButton";
 
-interface PricingCardProps {
+export interface PricingCardProps {
   title: string;
   description: string;
   price: string;
@@ -10,7 +10,8 @@ interface PricingCardProps {
   features: string[];
   buttonText: string;
   buttonVariant?: "default" | "highlight";
-  iconUrl: string;
+  icon: React.ComponentType<any>;
+  collapsed?: boolean;
 }
 
 export const PricingCard: React.FC<PricingCardProps> = ({
@@ -21,38 +22,49 @@ export const PricingCard: React.FC<PricingCardProps> = ({
   features,
   buttonText,
   buttonVariant = "default",
-  iconUrl,
+  icon,
+  collapsed,
 }) => {
+  const featuresListClassName = collapsed ? "xl:max-h-0" : "xl:max-h-[300px]";
+
   return (
     <article className="overflow-hidden p-8 bg-black border border-solid border-slate-600 border-opacity-30 min-w-60 rounded-[32px] w-[304px] max-md:px-5">
-      <div className="w-full">
-        <header>
-          <h2 className="text-3xl font-bold text-zinc-300">{title}</h2>
-          <p className="mt-1 text-base leading-6 text-white">{description}</p>
-        </header>
+      <div className="w-full flex flex-col">
+        <div className="flex flex-col gap-2">
+          <header>
+            <h2 className="text-3xl font-bold text-zinc-300">{title}</h2>
+            <p className="mt-1 text-base leading-6 text-white/60">
+              {description}
+            </p>
+          </header>
 
-        <div className="flex gap-1 items-start mt-2 w-full">
-          <span className="text-2xl font-bold leading-[52px] text-zinc-300">
-            {price}
-          </span>
-          <span className="text-sm leading-none text-neutral-400">
-            {priceSuffix}
-          </span>
+          <div className="flex gap-1 items-end w-full py-3.5">
+            <span className="text-2xl font-bold leading-6 text-zinc-300">
+              {price}
+            </span>
+            <span className="text-sm leading-none text-neutral-400">
+              {priceSuffix}
+            </span>
+          </div>
         </div>
-
-        <ul className="mt-8 w-full text-sm leading-tight text-white">
+        <ul
+          className={`w-full text-sm transition-all duration-300 leading-tight text-white ${featuresListClassName} overflow-hidden`}
+        >
+          <div className="h-8" />
           {features.map((feature, index) => (
             <li
               key={index}
               className="mt-4 first:mt-0 flex gap-2 items-center w-full"
             >
-              <PricingFeature text={feature} iconUrl={iconUrl} />
+              <PricingFeature text={feature} icon={icon} />
             </li>
           ))}
         </ul>
       </div>
 
-      <PricingButton text={buttonText} variant={buttonVariant} />
+      <div className={`${collapsed ? "xl:hidden" : "xl:block"}`}>
+        <PricingButton text={buttonText} variant={buttonVariant} />
+      </div>
     </article>
   );
 };

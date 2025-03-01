@@ -1,6 +1,8 @@
 "use client";
 import React from "react";
 import { ComparisonSection } from "./ComparisonSection";
+import { CheckIcon } from "components/svgs/pricing-icons/CheckIcon";
+import { MinusIcon } from "components/svgs/pricing-icons/MinusIcon";
 
 const computeSection = {
   title: "Compute & Infrastructure",
@@ -8,22 +10,22 @@ const computeSection = {
     {
       cells: [
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "1",
           secondary: "project",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "3",
           secondary: "projects",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "10",
           secondary: "projects",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           isCustom: true,
         },
       ],
@@ -31,22 +33,22 @@ const computeSection = {
     {
       cells: [
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Spot",
           secondary: "instance",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Reserved",
           secondary: "instance",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Reserved",
           secondary: "instance",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           isCustom: true,
         },
       ],
@@ -54,21 +56,21 @@ const computeSection = {
     {
       cells: [
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Spot",
           secondary: "instance",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/4c73b0976e20a9d8143827ca115a2c6d0dd1547bbee2e1c9101d16d6246cc4e9?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: MinusIcon,
           primary: "Autoscaling",
           isDisabled: true,
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Autoscaling",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           isCustom: true,
         },
       ],
@@ -76,22 +78,22 @@ const computeSection = {
     {
       cells: [
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "10",
           secondary: "request/second",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "50",
           secondary: "request/second",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "1000",
           secondary: "request/second",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           isCustom: true,
         },
       ],
@@ -99,22 +101,22 @@ const computeSection = {
     {
       cells: [
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "512",
           secondary: "MB memory",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "512",
           secondary: "MB memory",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "512",
           secondary: "MB memory",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           isCustom: true,
         },
       ],
@@ -122,23 +124,23 @@ const computeSection = {
     {
       cells: [
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/4c73b0976e20a9d8143827ca115a2c6d0dd1547bbee2e1c9101d16d6246cc4e9?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: MinusIcon,
           primary: "Scalable",
           secondary: "memory available",
           isDisabled: true,
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Scalable",
           secondary: "memory available",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Scalable",
           secondary: "memory available",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Scalable",
           secondary: "memory available",
         },
@@ -147,22 +149,22 @@ const computeSection = {
     {
       cells: [
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "0.25",
           secondary: "vCPU",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "0.25",
           secondary: "vCPU",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Usage",
           secondary: "based",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           isCustom: true,
         },
       ],
@@ -170,23 +172,23 @@ const computeSection = {
     {
       cells: [
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/4c73b0976e20a9d8143827ca115a2c6d0dd1547bbee2e1c9101d16d6246cc4e9?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: MinusIcon,
           primary: "Scalable",
           secondary: "vCPU available",
           isDisabled: true,
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Scalable",
           secondary: "to vCPU available",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Scalable",
           secondary: "to vCPU available",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Scalable",
           secondary: "to vCPU available",
         },
@@ -201,22 +203,22 @@ const storageSection = {
     {
       cells: [
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "0.5",
           secondary: "GB (db storage)",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "0.5",
           secondary: "GB (db storage)",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Usage",
           secondary: "Based",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           isCustom: true,
         },
       ],
@@ -224,23 +226,23 @@ const storageSection = {
     {
       cells: [
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/4c73b0976e20a9d8143827ca115a2c6d0dd1547bbee2e1c9101d16d6246cc4e9?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: MinusIcon,
           primary: "Additional",
           secondary: "Storage available",
           isDisabled: true,
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Additional",
           secondary: "storage available",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Additional",
           secondary: "storage available",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           isCustom: true,
         },
       ],
@@ -248,22 +250,22 @@ const storageSection = {
     {
       cells: [
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Shared",
           secondary: "database",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Shared",
           secondary: "database",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Dedicated",
           secondary: "database",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           isCustom: true,
         },
       ],
@@ -271,23 +273,23 @@ const storageSection = {
     {
       cells: [
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/4c73b0976e20a9d8143827ca115a2c6d0dd1547bbee2e1c9101d16d6246cc4e9?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: MinusIcon,
           primary: "Additional",
           secondary: "dedicated DB",
           isDisabled: true,
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Additional",
           secondary: "dedicated DB",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Additional",
           secondary: "dedicated DB",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           isCustom: true,
         },
       ],
@@ -301,22 +303,22 @@ const networkSection = {
     {
       cells: [
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "1",
           secondary: "custom domain/project",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "1",
           secondary: "custom domain/project",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "1",
           secondary: "custom domain/project",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           isCustom: true,
         },
       ],
@@ -324,23 +326,23 @@ const networkSection = {
     {
       cells: [
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/4c73b0976e20a9d8143827ca115a2c6d0dd1547bbee2e1c9101d16d6246cc4e9?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: MinusIcon,
           primary: "Additional",
           secondary: "Custom Domain",
           isDisabled: true,
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Extra",
           secondary: "Custom Domain available",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Extra",
           secondary: "Custom Domain available",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Extra",
           secondary: "Custom Domain available",
         },
@@ -349,22 +351,22 @@ const networkSection = {
     {
       cells: [
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "1 GB/m",
           secondary: "Network Egress",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "1 GB/m",
           secondary: "Network Egress",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Usage based",
           secondary: "network egress",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           isCustom: true,
         },
       ],
@@ -372,23 +374,23 @@ const networkSection = {
     {
       cells: [
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/4c73b0976e20a9d8143827ca115a2c6d0dd1547bbee2e1c9101d16d6246cc4e9?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: MinusIcon,
           primary: "Additional",
           secondary: "Network Egress",
           isDisabled: true,
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Additional",
           secondary: "Network Egress",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Additional",
           secondary: "Network Egress",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Additional",
           secondary: "Network Egress",
         },
@@ -403,22 +405,22 @@ const devopsSection = {
     {
       cells: [
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "100",
           secondary: "Monthly build minutes",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "100",
           secondary: "Monthly build minutes",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Usage",
           secondary: "based",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           isCustom: true,
         },
       ],
@@ -426,22 +428,22 @@ const devopsSection = {
     {
       cells: [
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/4c73b0976e20a9d8143827ca115a2c6d0dd1547bbee2e1c9101d16d6246cc4e9?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: MinusIcon,
           primary: "Additional Build Minutes",
           isDisabled: true,
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Additional",
           secondary: "Build Minutes",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Additional",
           secondary: "Build Minutes",
         },
         {
-          icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9259372b0e46b29bfaa1d2c97cec5177cd29a57f82f40c3d5a9710b35c7c92dd?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+          icon: CheckIcon,
           primary: "Additional",
           secondary: "Build Minutes",
         },

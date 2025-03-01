@@ -12,6 +12,8 @@ module.exports = {
         head: "#DDD",
         body: "#A2A2A2",
         orange: "#F09050",
+        grey100: "#D8D8D8",
+        grey300: "#7A7A7A",
       },
       fontFamily: {
         gradual: "BwGradual, sans-serif",
