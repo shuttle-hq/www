@@ -4,7 +4,7 @@ import * as React from "react";
 
 export default function BlogCards() {
   return (
-    <section className="flex flex-wrap gap-5 leading-8">
+    <section className="flex flex-wrap gap-5 leading-8 max-w-[1280px] m-auto">
       <article
         className={`flex flex-col flex-1 shrink justify-center p-8 bg-black border border-solid basis-0 border-slate-600 border-opacity-30 min-w-60 rounded-[32px] max-md:px-5 min-h-[266px]`}
       >
@@ -23,7 +23,7 @@ export default function BlogCards() {
               href="#"
               className="mt-1 text-base tracking-normal text-neutral-400 inline-block"
             >
-              <span className="underline">Read story</span>
+              <span className="underline hover:no-underline">Read story</span>
             </a>
           </div>
         </div>
@@ -46,7 +46,7 @@ export default function BlogCards() {
               href="#"
               className="mt-1 text-base tracking-normal text-neutral-400 inline-block"
             >
-              <span className="underline">Read story</span>
+              <span className="underline hover:no-underline">Read story</span>
             </a>
           </div>
         </div>
@@ -69,7 +69,7 @@ export default function BlogCards() {
               href="#"
               className="mt-1 text-base tracking-normal text-neutral-400 inline-block"
             >
-              <span className="underline">Read story</span>
+              <span className="underline hover:no-underline">Read story</span>
             </a>
           </div>
         </div>

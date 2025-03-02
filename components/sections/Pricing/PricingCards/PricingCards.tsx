@@ -89,13 +89,12 @@ const PricingCards = () => {
     <>
       <div ref={ref} className="absolute w-full h-[100px] opacity-0 -z-10" />
       <div className="relative flex justify-center xl:sticky z-10 top-0 mb-14">
-        <section
-          className="flex flex-wrap justify-center max-w-[1280px]"
-          aria-label="Pricing plans"
-        >
-          {pricingTiers.map((tier, index) => (
-            <PricingCard collapsed={collapseSections} key={index} {...tier} />
-          ))}
+        <section className=" max-w-[1280px]" aria-label="Pricing plans">
+          <div className="flex flex-wrap justify-center mx-[-0.5rem]">
+            {pricingTiers.map((tier, index) => (
+              <PricingCard collapsed={collapseSections} key={index} {...tier} />
+            ))}
+          </div>
         </section>
         <Image
           fill

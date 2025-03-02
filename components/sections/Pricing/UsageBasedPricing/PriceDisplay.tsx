@@ -9,7 +9,7 @@ interface PriceDisplayProps {
 
 export const PriceDisplay: React.FC<PriceDisplayProps> = ({ price, unit }) => {
   return (
-    <div className="flex gap-2 items-start">
+    <div className="flex gap-2 items-center">
       <p className="text-2xl text-right text-white">{price}</p>
       <p className="text-sm text-center text-neutral-400">{unit}</p>
     </div>
