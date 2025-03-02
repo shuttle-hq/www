@@ -45,12 +45,12 @@ export default function PricingPage({ questions }: Props) {
       />
       {/*<Hero />*/}
       <div
-        style={{
-          height: "calc(100vh - 88px)",
-        }}
+        // style={{
+        //   height: "calc(100vh - 88px)",
+        // }}
         className="flex flex-col items-center justify-between gap-8 p-16 pt-28 2xl:p-28 2xl:pt-40"
       >
-        <div className="flex flex-col items-center gap-10">
+        <div className="flex flex-col items-center gap-8">
           <h1 className="w-fit text-center font-gradual text-5xl font-bold text-black dark:text-head lg:text-6.5">
             Cloud Development <br /> made Simple
           </h1>

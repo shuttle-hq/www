@@ -88,9 +88,9 @@ const PricingCards = () => {
   return (
     <>
       <div ref={ref} className="absolute w-full h-[100px] opacity-0 -z-10" />
-      <div className="relative xl:sticky z-10 top-0 mb-14">
+      <div className="relative flex justify-center xl:sticky z-10 top-0 mb-14">
         <section
-          className="flex flex-wrap justify-center gap-4"
+          className="flex flex-wrap justify-center max-w-[1280px]"
           aria-label="Pricing plans"
         >
           {pricingTiers.map((tier, index) => (

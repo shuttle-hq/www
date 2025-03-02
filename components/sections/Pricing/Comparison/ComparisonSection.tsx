@@ -22,8 +22,8 @@ export const ComparisonSection: React.FC<ComparisonSectionProps> = ({
 }) => {
   return (
     <section className={`w-full ${className} max-w-[1280px]`}>
-      <header className="flex gap-10 items-center pt-2 pb-5 max-w-full text-xl text-zinc-300 w-[264px]">
-        <h2 className="flex gap-2 items-center self-stretch my-auto min-w-60 w-[264px]">
+      <header className="flex gap-10 items-center pt-2 pb-5 px-8 max-w-full text-xl text-zinc-300">
+        <h2 className="flex gap-2 items-center self-stretch my-auto min-w-60">
           <span className="flex-1 shrink gap-1 self-stretch my-auto w-full basis-0 min-w-60">
             {title}
           </span>

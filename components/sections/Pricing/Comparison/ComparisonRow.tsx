@@ -22,7 +22,7 @@ export const ComparisonRow: React.FC<ComparisonRowProps> = ({
 
   return (
     <div
-      className={`flex gap-10 items-center py-5 w-full ${borderClass} max-md:max-w-full flex-wrap`}
+      className={`flex items-center py-5 w-full ${borderClass} max-md:max-w-full flex-wrap`}
     >
       {cells.map((cell, index) => (
         <ComparisonCell
