@@ -105,6 +105,26 @@ export default function PricingPage({ questions }: Props) {
 
       <BlogCards />
 
+      <div className=" flex justify-center my-10 text-base tracking-normal leading-8 bg-white bg-opacity-0 text-neutral-400 text-center">
+        <a
+          href="#"
+          className="flex gap-2 items-center hover:opacity-90 transition-opacity underline hover:no-underline"
+          aria-label="Check out what our customers say"
+        >
+          <p className="self-stretch my-auto">
+            <span className=" text-[#a2a2a2]">
+              Check out what our customers say
+            </span>
+          </p>
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/c8cd7228d5b149c59753a0e9d2f2b879/28c70d115ec211b71e4219329117fd12fc372b05d1a3953066649d170cd35687?placeholderIfAbsent=true"
+            alt=""
+            className="object-contain shrink-0 self-stretch my-auto aspect-[1.25] w-[15px]"
+            aria-hidden="true"
+          />
+        </a>
+      </div>
+
       <Faq faqData={faqData} />
 
       {/*
