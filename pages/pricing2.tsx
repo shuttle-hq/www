@@ -92,7 +92,7 @@ export default function PricingPage({ questions }: Props) {
         />
       </div>
 
-      <div className="flex flex-col gap-6 max-w-7xl py-16  m-auto">
+      <div className="flex flex-col gap-6 max-w-7xl py-16 m-auto">
         <h1 className="text-center font-gradual text-5xl font-bold text-black dark:text-head lg:text-4">
           Why Developers Choose Shuttle
         </h1>

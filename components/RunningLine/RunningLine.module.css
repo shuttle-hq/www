@@ -1,0 +1,59 @@
+.linesContainer {
+  overflow: hidden;
+}
+
+.linesContent {
+  display: flex;
+  flex-wrap: nowrap;
+  position: relative;
+  width: 80vw;
+}
+
+.line {
+  width: fit-content;
+  flex: none;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.firstHalf,
+.secondHalf {
+  transform: translate(100%, 0);
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  flex: none;
+  animation: ticker 30s infinite linear forwards;
+}
+
+.secondHalf {
+  animation: 30s ticker 15s infinite linear forwards;
+}
+
+@keyframes firstTicker {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(-100%, 0);
+  }
+}
+
+@keyframes ticker {
+  0% {
+    transform: translate(100%, 0);
+  }
+
+  50% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(-100%, 0);
+  }
+}

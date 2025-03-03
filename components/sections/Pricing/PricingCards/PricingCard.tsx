@@ -1,6 +1,7 @@
 import React from "react";
 import { PricingFeature } from "./PricingFeature";
 import { PricingButton } from "./PricingButton";
+import styles from "./PricingCards.module.css";
 
 export interface PricingCardProps {
   title: string;
@@ -29,7 +30,9 @@ export const PricingCard: React.FC<PricingCardProps> = ({
 
   return (
     <article className="w-1/4 px-2">
-      <div className="overflow-hidden p-8 bg-black border border-solid border-slate-600 border-opacity-30 min-w-60 rounded-[32px] max-md:px-5">
+      <div
+        className={`overflow-hidden p-8 bg-black border border-solid border-slate-600 border-opacity-30 min-w-60 rounded-[32px] max-md:px-5 ${styles.pricingCard}`}
+      >
         <div className="w-full flex flex-col">
           <div className="flex flex-col gap-2">
             <header>
@@ -63,9 +66,11 @@ export const PricingCard: React.FC<PricingCardProps> = ({
           </ul>
         </div>
 
-        <div className={`${collapsed ? "xl:hidden" : "xl:block"}`}>
-          <PricingButton text={buttonText} variant={buttonVariant} />
-        </div>
+        <PricingButton
+          collapsed={collapsed}
+          text={buttonText}
+          variant={buttonVariant}
+        />
       </div>
     </article>
   );

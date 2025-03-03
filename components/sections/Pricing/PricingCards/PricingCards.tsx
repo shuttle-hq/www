@@ -87,21 +87,27 @@ const PricingCards = () => {
 
   return (
     <>
-      <div ref={ref} className="absolute w-full h-[100px] opacity-0 -z-10" />
-      <div className="relative flex justify-center xl:sticky z-10 top-0 mb-14">
-        <section className=" max-w-[1280px]" aria-label="Pricing plans">
+      <div
+        ref={ref}
+        className="absolute w-full h-[100px] opacity-0 -z-10 -translate-y-[200px]"
+      />
+      <div className="absolute -z-10 hidden xl:block">
+        <Image
+          width={1024}
+          height={516}
+          src="/images/sections/pricing-tiers/bg.png"
+          alt="bg"
+          className="relative -translate-y-1/3"
+        />
+      </div>
+      <div className="relative flex flex-col justify-center xl:sticky top-0 mb-14 z-10">
+        <section className="relative max-w-[1280px]" aria-label="Pricing plans">
           <div className="flex flex-wrap justify-center mx-[-0.5rem]">
             {pricingTiers.map((tier, index) => (
               <PricingCard collapsed={collapseSections} key={index} {...tier} />
             ))}
           </div>
         </section>
-        <Image
-          fill
-          src="/images/sections/pricing-tiers/bg.png"
-          alt="bg"
-          className="absolute left-0 -top-[100%] -z-10 hidden w-auto h-[300%] object-cover md:aspect-auto xl:block"
-        />
       </div>
     </>
   );
