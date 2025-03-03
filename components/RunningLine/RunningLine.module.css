@@ -1,5 +1,24 @@
 .linesContainer {
+  --duration: 30s;
   overflow: hidden;
+  position: relative;
+}
+
+.shadowBlock {
+  width: 20px;
+  height: calc(100% + 5px);
+  filter: blur(5px);
+  background: black;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.leftShadowBlock {
+  transform: translate(-50%, 2.5px);
+}
+
+.rightShadowBlock {
+  transform: translate(50%, 2.5px);
 }
 
 .linesContent {
@@ -18,7 +37,7 @@
 
 .firstHalf,
 .secondHalf {
-  transform: translate(100%, 0);
+  transform: translate(0, 0);
   width: fit-content;
   display: flex;
   flex-direction: row;
@@ -27,14 +46,17 @@
   top: 0;
   right: 0;
   flex: none;
-  animation: ticker 30s infinite linear forwards;
+  animation:
+    calc(var(--duration) / 2) initialTicker linear forwards,
+    var(--duration) ticker calc(var(--duration) / 2) infinite linear forwards;
 }
 
 .secondHalf {
-  animation: 30s ticker 15s infinite linear forwards;
+  transform: translate(100%, 0);
+  animation: var(--duration) ticker infinite linear forwards;
 }
 
-@keyframes firstTicker {
+@keyframes initialTicker {
   0% {
     transform: translate(0, 0);
   }

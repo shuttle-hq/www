@@ -100,7 +100,7 @@ const PricingCards = () => {
           className="relative -translate-y-1/3"
         />
       </div>
-      <div className="relative flex flex-col justify-center xl:sticky top-0 mb-14 z-10">
+      <div className="relative flex justify-center xl:sticky top-0 mb-14 z-10">
         <section className="relative max-w-[1280px]" aria-label="Pricing plans">
           <div className="flex flex-wrap justify-center mx-[-0.5rem]">
             {pricingTiers.map((tier, index) => (

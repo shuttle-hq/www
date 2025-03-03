@@ -55,6 +55,12 @@ export const RunningLine = ({
           <div className={`${styles.line} ${lineClassName ?? ""}`}>{items}</div>
         </div>
       </div>
+      <div
+        className={`${styles.shadowBlock} ${styles.leftShadowBlock} absolute left-0`}
+      />
+      <div
+        className={`${styles.shadowBlock} ${styles.rightShadowBlock} absolute right-0`}
+      />
     </div>
   );
 };
