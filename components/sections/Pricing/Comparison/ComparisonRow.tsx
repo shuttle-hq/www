@@ -32,6 +32,7 @@ export const ComparisonRow: React.FC<ComparisonRowProps> = ({
           secondary={cell.secondary}
           isDisabled={cell.isDisabled}
           isCustom={cell.isCustom}
+          width="w-full lg:w-1/4"
         />
       ))}
     </div>

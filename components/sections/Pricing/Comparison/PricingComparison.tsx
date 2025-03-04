@@ -1,8 +1,9 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { ComparisonSection } from "./ComparisonSection";
 import { CheckIcon } from "components/svgs/pricing-icons/CheckIcon";
 import { MinusIcon } from "components/svgs/pricing-icons/MinusIcon";
+import { Select } from "../../../Select";
 
 const computeSection = {
   title: "Compute & Infrastructure",
@@ -452,13 +453,60 @@ const devopsSection = {
   ],
 };
 
+const options = [
+  { label: "Community", value: "0" },
+  { label: "Pro", value: "1" },
+  { label: "Growth", value: "2" },
+  { label: "Enterprise", value: "3" },
+];
+
 export function PricingComparison() {
+  const [sectionIndex, setSectionIndex] = useState(0);
+
   return (
-    <article className="text-base leading-tight flex flex-col justify-center items-center">
-      <ComparisonSection {...computeSection} />
-      <ComparisonSection {...storageSection} />
-      <ComparisonSection {...networkSection} className="mt-6" />
-      <ComparisonSection {...devopsSection} className="mt-14 max-md:mt-10" />
-    </article>
+    <>
+      <article className="hidden lg:flex text-base leading-tight flex-col justify-center items-center">
+        <ComparisonSection {...computeSection} />
+        <ComparisonSection {...storageSection} />
+        <ComparisonSection {...networkSection} className="mt-6" />
+        <ComparisonSection {...devopsSection} className="mt-14 max-md:mt-10" />
+      </article>
+      <article className="flex lg:hidden text-base leading-tight flex-col justify-center items-center mb-28">
+        <div className="w-full sticky lg:hidden top-4">
+          <Select
+            className="mb-5 mx-8"
+            options={options}
+            onChange={(option) => setSectionIndex(Number(option.value))}
+            value={options[sectionIndex]}
+          />
+        </div>
+        <ComparisonSection
+          {...computeSection}
+          rows={computeSection.rows.map((row) => ({
+            cells: [row.cells[sectionIndex]],
+          }))}
+        />
+        <ComparisonSection
+          {...storageSection}
+          rows={storageSection.rows.map((row) => ({
+            cells: [row.cells[sectionIndex]],
+          }))}
+        />
+        <ComparisonSection
+          {...networkSection}
+          rows={networkSection.rows.map((row) => ({
+            cells: [row.cells[sectionIndex]],
+          }))}
+          className="mt-6"
+        />
+        <ComparisonSection
+          {...devopsSection}
+          rows={devopsSection.rows.map((row) => ({
+            cells: [row.cells[sectionIndex]],
+          }))}
+          className="mt-14 max-md:mt-10"
+        />
+      </article>
+    </>
   );
 }
