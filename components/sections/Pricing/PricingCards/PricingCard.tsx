@@ -11,6 +11,7 @@ export interface PricingCardProps {
   features: string[];
   buttonText: string;
   buttonVariant?: "default" | "highlight";
+  href: string;
   icon: React.ComponentType<any>;
   collapsed?: boolean;
 }
@@ -23,6 +24,7 @@ export const PricingCard: React.FC<PricingCardProps> = ({
   features,
   buttonText,
   buttonVariant = "default",
+  href = "",
   icon,
   collapsed,
 }) => {
@@ -70,6 +72,7 @@ export const PricingCard: React.FC<PricingCardProps> = ({
           collapsed={collapsed}
           text={buttonText}
           variant={buttonVariant}
+          href={href}
         />
       </div>
     </article>

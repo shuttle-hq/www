@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { PricingCard, PricingCardProps } from "./PricingCard";
 import { CheckIcon } from "components/svgs/pricing-icons/CheckIcon";
+import { CONTACT_US_URI, GET_STARTED_URI } from "../../../../lib/constants";
 
 const pricingTiers: PricingCardProps[] = [
   {
@@ -17,6 +18,7 @@ const pricingTiers: PricingCardProps[] = [
       "1 custom domain per project",
     ],
     buttonText: "Start for free",
+    href: GET_STARTED_URI,
     icon: CheckIcon,
   },
   {
@@ -31,6 +33,7 @@ const pricingTiers: PricingCardProps[] = [
       "Monitoring & observability",
     ],
     buttonText: "Start 30 day trial",
+    href: GET_STARTED_URI,
     icon: CheckIcon,
   },
   {
@@ -46,6 +49,7 @@ const pricingTiers: PricingCardProps[] = [
     ],
     buttonText: "Start 30 day trial",
     buttonVariant: "highlight",
+    href: GET_STARTED_URI,
     icon: CheckIcon,
   },
   {
@@ -60,6 +64,7 @@ const pricingTiers: PricingCardProps[] = [
       "Custom RAM & CPU",
     ],
     buttonText: "Book a call",
+    href: CONTACT_US_URI,
     icon: CheckIcon,
   },
 ];
