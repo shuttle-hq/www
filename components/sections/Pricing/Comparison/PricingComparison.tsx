@@ -474,7 +474,7 @@ export function PricingComparison() {
       <article className="flex lg:hidden text-base leading-tight flex-col justify-center items-center mb-28">
         <div className="w-full sticky lg:hidden top-4">
           <Select
-            className="mb-5 mx-8"
+            className="mb-5"
             options={options}
             onChange={(option) => setSectionIndex(Number(option.value))}
             value={options[sectionIndex]}
