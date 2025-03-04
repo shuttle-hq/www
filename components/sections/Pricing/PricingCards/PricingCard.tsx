@@ -31,7 +31,7 @@ export const PricingCard: React.FC<PricingCardProps> = ({
   const featuresListClassName = collapsed ? "xl:max-h-0" : "xl:max-h-[300px]";
 
   return (
-    <article className="w-1/4 px-2">
+    <article className="w-full sm:w-1/2 xl:w-1/4 p-4 sm:p-2">
       <div
         className={`overflow-hidden p-8 bg-black border border-solid border-slate-600 border-opacity-30 min-w-60 rounded-[32px] max-md:px-5 ${styles.pricingCard}`}
       >

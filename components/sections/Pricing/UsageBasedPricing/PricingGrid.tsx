@@ -5,18 +5,18 @@ import { PricingCard } from "./PricingCard";
 
 export const PricingGrid: React.FC = () => {
   return (
-    <div className=" mx-auto max-w-7xl">
-      <div className="flex flex-row flex-wrap justify-center items-center xl:flex-nowrap mx-[-0.5rem]">
-        <div className="flex flex-col gap-5 px-10 min-w-0 text-center xl:text-left w-1/2">
-          <h1 className="text-5xl font-bold text-gray-300">
+    <div className="mx-auto max-w-7xl">
+      <div className="flex flex-row flex-wrap justify-center items-center gap-8 xl:gap-0 xl:flex-nowrap mx-[-0.5rem]">
+        <div className="flex flex-col gap-5 px-10 min-w-0 text-center xl:text-left xl:w-1/2">
+          <h1 className="text-[40px] md:text-5xl font-bold text-gray-300">
             Usage-based pricing
           </h1>
-          <div className="text-xl text-white/60">
+          <div className="text-base md:text-xl text-white/60 max-w-xl">
             Scale beyond included resources in Pro and Growth —only pay for what
             you use, when you need it.
           </div>
         </div>
-        <section className="rounded-[32px] px-2 w-1/2">
+        <section className="rounded-[32px] px-2 xl:w-1/2">
           <div className="flex flex-wrap gap-4 items-center w-full max-md:max-w-full">
             <PricingCard
               title="Database storage:"

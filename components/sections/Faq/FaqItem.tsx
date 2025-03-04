@@ -27,14 +27,14 @@ export const FaqItem: React.FC<FaqItemProps> = ({ question, answer }) => {
   };
 
   return (
-    <article className="flex gap-4 justify-center items-center p-8 w-full border-b border-slate-600 border-opacity-30 max-md:px-5 max-md:max-w-full">
+    <article className="flex gap-4 justify-center items-center py-5 px-4 md:p-8 w-full border-b border-slate-600 border-opacity-30 max-md:max-w-full">
       <div className="flex flex-col flex-1 shrink justify-center self-stretch w-full basis-0 min-w-60 max-md:max-w-full">
         <button
           onClick={toggleAccordion}
           className="flex justify-between items-center w-full text-left cursor-pointer group"
           aria-expanded={isOpen}
         >
-          <h2 className="text-xl tracking-wide leading-relaxed text-zinc-300 max-md:max-w-full group-hover:text-zinc-100 transition-colors">
+          <h2 className="text-base md:text-xl tracking-wide leading-relaxed text-zinc-300 max-md:max-w-full group-hover:text-zinc-100 transition-colors">
             {question}
           </h2>
           <span className="flex items-center justify-center w-6 h-6 ml-4 text-zinc-300 group-hover:text-zinc-100 transition-transform duration-300">
@@ -78,7 +78,7 @@ export const FaqItem: React.FC<FaqItemProps> = ({ question, answer }) => {
               animation: isOpen ? "fadeIn 0.3s ease-in-out" : "none",
             }}
           >
-            <p className="mt-2 text-base leading-6 text-neutral-400 max-md:max-w-full">
+            <p className="mt-2 text-sm md:text-base leading-6 text-neutral-400 max-md:max-w-full">
               {renderAnswer()}
             </p>
           </div>

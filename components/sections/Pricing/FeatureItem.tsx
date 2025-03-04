@@ -16,7 +16,7 @@ export const FeatureItem: React.FC<FeatureItemProps> = ({ iconUrl, text }) => {
           className="object-contain shrink-0 self-stretch my-auto aspect-square w-[18px]"
           aria-hidden="true"
         />
-        <p className="self-stretch my-auto">{text}</p>
+        <p className="text-base md:text-xl self-stretch my-auto">{text}</p>
       </div>
     </article>
   );

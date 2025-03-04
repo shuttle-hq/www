@@ -4,6 +4,7 @@ import Image from "next/image";
 import { PricingCard, PricingCardProps } from "./PricingCard";
 import { CheckIcon } from "components/svgs/pricing-icons/CheckIcon";
 import { CONTACT_US_URI, GET_STARTED_URI } from "../../../../lib/constants";
+import { BackgroundShape } from "../../../BackgroundShape";
 
 const pricingTiers: PricingCardProps[] = [
   {
@@ -107,10 +108,12 @@ const PricingCards = () => {
       </div>
       <div className="relative flex justify-center xl:sticky top-0 mb-14 z-10">
         <section className="relative max-w-[1280px]" aria-label="Pricing plans">
-          <div className="flex flex-wrap justify-center mx-[-0.5rem]">
+          <div className="relative flex flex-wrap justify-center mx-[-0.5rem]">
             {pricingTiers.map((tier, index) => (
               <PricingCard collapsed={collapseSections} key={index} {...tier} />
             ))}
+            <BackgroundShape left className="top-[10%] block md:hidden" />
+            <BackgroundShape right className="top-[60%] block md:hidden" />
           </div>
         </section>
       </div>

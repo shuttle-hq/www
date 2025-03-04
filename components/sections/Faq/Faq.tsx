@@ -11,7 +11,7 @@ interface FaqItemProps {
 export const Faq: React.FC = ({ faqData }: any) => {
   return (
     <section className="max-w-[1024px] my-16 mx-auto">
-      <h1 className="text-center font-gradual mb-16 text-5xl font-bold text-black dark:text-head lg:text-4">
+      <h1 className="text-left md:text-center font-gradual mb-8 md:mb-16 text-[40px] md:text-5xl font-bold text-black dark:text-head lg:text-4">
         Frequently Asked Questions
       </h1>
       {faqData.map((faq: FaqItemProps, index: number) => (
