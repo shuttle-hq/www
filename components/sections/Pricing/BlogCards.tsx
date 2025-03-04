@@ -4,9 +4,9 @@ import * as React from "react";
 
 export default function BlogCards() {
   return (
-    <section className="flex flex-wrap gap-5 leading-8 max-w-[1280px] m-auto">
+    <section className="flex flex-wrap flex-col gap-5 leading-8 max-w-[1280px] m-auto md:flex-row">
       <article
-        className={`flex flex-col flex-1 shrink justify-center p-8 bg-black border border-solid basis-0 border-slate-600 border-opacity-30 min-w-60 rounded-[32px] max-md:px-5 min-h-[266px]`}
+        className={`flex flex-col flex-1 shrink justify-center p-8 bg-black border border-solid basis-0 border-slate-600 border-opacity-30 rounded-[32px] md:w-1/3`}
       >
         <div className="w-full">
           <img
@@ -29,7 +29,7 @@ export default function BlogCards() {
         </div>
       </article>
       <article
-        className={`flex flex-col flex-1 shrink justify-center p-8 bg-black border border-solid basis-0 border-slate-600 border-opacity-30 min-w-60 rounded-[32px] max-md:px-5 min-h-[266px]`}
+        className={`flex flex-col flex-1 shrink justify-center p-8 bg-black border border-solid basis-0 border-slate-600 border-opacity-30 rounded-[32px] md:w-1/3`}
       >
         <div className="w-full">
           <img
@@ -52,7 +52,7 @@ export default function BlogCards() {
         </div>
       </article>
       <article
-        className={`flex flex-col flex-1 shrink justify-center p-8 bg-black border border-solid basis-0 border-slate-600 border-opacity-30 min-w-60 rounded-[32px] max-md:px-5 min-h-[266px]`}
+        className={`flex flex-col flex-1 shrink justify-center p-8 bg-black border border-solid basis-0 border-slate-600 border-opacity-30 rounded-[32px] md:w-1/3`}
       >
         <div className="w-full">
           <img
