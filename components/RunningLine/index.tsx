@@ -22,7 +22,16 @@ export const RunningLine = ({
   const [lineWidth, setLineWidth] = useState(0);
 
   useEffect(() => {
-    setLineWidth(lineRef.current?.getBoundingClientRect().width ?? 0);
+    const onResize = () => {
+      setLineWidth(lineRef.current?.getBoundingClientRect().width ?? 0);
+    };
+
+    window.addEventListener("resize", onResize);
+    onResize();
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
 
   return (
@@ -55,12 +64,6 @@ export const RunningLine = ({
           <div className={`${styles.line} ${lineClassName ?? ""}`}>{items}</div>
         </div>
       </div>
-      <div
-        className={`${styles.shadowBlock} ${styles.leftShadowBlock} absolute left-0`}
-      />
-      <div
-        className={`${styles.shadowBlock} ${styles.rightShadowBlock} absolute right-0`}
-      />
     </div>
   );
 };

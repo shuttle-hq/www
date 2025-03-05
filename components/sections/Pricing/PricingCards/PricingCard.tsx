@@ -33,7 +33,7 @@ export const PricingCard: React.FC<PricingCardProps> = ({
   return (
     <article className="w-full sm:w-1/2 xl:w-1/4 p-4 sm:p-2">
       <div
-        className={`overflow-hidden p-8 bg-black border border-solid border-slate-600 border-opacity-30 min-w-60 rounded-[32px] max-md:px-5 ${styles.pricingCard}`}
+        className={`overflow-hidden p-8 bg-black border border-solid border-white/30 min-w-60 rounded-[32px] max-md:px-5 ${styles.pricingCard}`}
       >
         <div className="w-full flex flex-col">
           <div className="flex flex-col gap-2">
@@ -54,7 +54,7 @@ export const PricingCard: React.FC<PricingCardProps> = ({
             </div>
           </div>
           <ul
-            className={`w-full text-sm transition-all duration-300 leading-tight text-white ${featuresListClassName} overflow-hidden`}
+            className={`w-full text-sm transition-all duration-500 leading-tight text-white ${featuresListClassName} overflow-hidden`}
           >
             <div className="h-8" />
             {features.map((feature, index) => (
@@ -67,7 +67,6 @@ export const PricingCard: React.FC<PricingCardProps> = ({
             ))}
           </ul>
         </div>
-
         <PricingButton
           collapsed={collapsed}
           text={buttonText}

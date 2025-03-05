@@ -45,12 +45,7 @@ export default function PricingPage({ questions }: Props) {
         }}
       />
       {/*<Hero />*/}
-      <div
-        // style={{
-        //   height: "calc(100vh - 88px)",
-        // }}
-        className="flex flex-col items-center justify-between gap-8 p-16 pt-28 2xl:p-28 2xl:pt-40"
-      >
+      <div className="md:h-[calc(100vh-88px)] flex flex-col items-center justify-between gap-8 p-16 pt-28 2xl:p-28 2xl:pt-40">
         <div className="flex flex-col items-center gap-4 md:gap-8">
           <h1 className="w-fit text-center font-gradual text-5xl font-bold text-black dark:text-head lg:text-6.5">
             Cloud Development <br /> made Simple
@@ -73,13 +68,19 @@ export default function PricingPage({ questions }: Props) {
         </p>
       </div>
 
-      <PricingCards />
+      <div>
+        <PricingCards />
 
-      <PricingComparison />
+        <PricingComparison />
+      </div>
 
       <div className="relative min-h-[568px] flex flex-col justify-center">
         <PricingGrid />
-        <BackgroundShape left className="top-[75%] md:top-1/2" />
+        <BackgroundShape
+          style={{ transform: "none" }}
+          className="w-full h-[200px] top-auto left-0 hidden lg:block"
+          background="linear-gradient(67.02deg, rgba(252, 84, 12, 0.7) 36.9%, rgba(255, 215, 111, 0.7) 63.12%, rgba(56, 212, 233, 0.7) 81.59%)"
+        />
       </div>
 
       <div className="flex flex-col gap-6 max-w-7xl py-16 m-auto">

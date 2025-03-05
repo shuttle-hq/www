@@ -1,5 +1,6 @@
 "use client";
 
+import { CSSProperties } from "react";
 import clsx from "clsx";
 
 interface BackgroundShapeProps {
@@ -7,6 +8,7 @@ interface BackgroundShapeProps {
   right?: boolean;
   left?: boolean;
   background?: string;
+  style?: CSSProperties;
 }
 
 export const BackgroundShape = ({
@@ -14,6 +16,7 @@ export const BackgroundShape = ({
   left,
   background,
   className,
+  style,
 }: BackgroundShapeProps) => {
   return (
     <div
@@ -33,6 +36,7 @@ export const BackgroundShape = ({
         background:
           background ??
           "linear-gradient(62.43deg, rgba(252, 84, 12, 0.425) 54.71%, rgba(56, 212, 233, 0.325) 79.8%)",
+        ...style,
       }}
     />
   );

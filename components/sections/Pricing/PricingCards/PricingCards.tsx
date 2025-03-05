@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { PricingCard, PricingCardProps } from "./PricingCard";
 import { CheckIcon } from "components/svgs/pricing-icons/CheckIcon";
 import { CONTACT_US_URI, GET_STARTED_URI } from "../../../../lib/constants";
@@ -72,6 +71,7 @@ const pricingTiers: PricingCardProps[] = [
 
 const PricingCards = () => {
   const ref = useRef<HTMLDivElement>(null);
+  const priceSectionsRef = useRef<HTMLDivElement>(null);
   const [collapseSections, setCollapseSections] = useState(false);
 
   useEffect(() => {
@@ -81,7 +81,10 @@ const PricingCards = () => {
     }
 
     const onScroll = () => {
-      setCollapseSections(section.getBoundingClientRect().top < 0);
+      const collapse = section.getBoundingClientRect().top < 0;
+      if (collapse !== collapseSections) {
+        setCollapseSections(collapse);
+      }
     };
     window.addEventListener("scroll", onScroll);
     onScroll();
@@ -89,26 +92,25 @@ const PricingCards = () => {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, []);
+  }, [collapseSections]);
 
   return (
     <>
       <div
         ref={ref}
-        className="absolute w-full h-[100px] opacity-0 -z-10 -translate-y-[200px]"
+        className="absolute left-0 w-full h-[100px] opacity-0 -z-10 -translate-y-[200px]"
       />
-      <div className="absolute -z-10 hidden xl:block">
-        <Image
-          width={1024}
-          height={516}
-          src="/images/sections/pricing-tiers/bg.png"
-          alt="bg"
-          className="relative -translate-y-1/3"
-        />
-      </div>
-      <div className="relative flex justify-center xl:sticky top-0 mb-14 z-10">
+      <BackgroundShape
+        style={{ transform: "translateY(75px)" }}
+        className="w-full h-[200px] top-auto left-0 hidden lg:block"
+        background="linear-gradient(67.02deg, rgba(252, 84, 12, 0.7) 36.9%, rgba(255, 215, 111, 0.7) 63.12%, rgba(56, 212, 233, 0.7) 81.59%)"
+      />
+      <div
+        ref={priceSectionsRef}
+        className="relative flex justify-center xl:sticky top-0 mb-14 z-10"
+      >
         <section className="relative max-w-[1280px]" aria-label="Pricing plans">
-          <div className="relative flex flex-wrap justify-center mx-[-0.5rem]">
+          <div className="relative flex flex-wrap justify-center mx-[-0.5rem] overflow-x-clip">
             {pricingTiers.map((tier, index) => (
               <PricingCard collapsed={collapseSections} key={index} {...tier} />
             ))}

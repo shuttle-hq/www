@@ -1,24 +1,7 @@
 .linesContainer {
-  --duration: 30s;
+  --duration: 60s;
   overflow: hidden;
   position: relative;
-}
-
-.shadowBlock {
-  width: 20px;
-  height: calc(100% + 5px);
-  filter: blur(5px);
-  background: black;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.leftShadowBlock {
-  transform: translate(-50%, 2.5px);
-}
-
-.rightShadowBlock {
-  transform: translate(50%, 2.5px);
 }
 
 .linesContent {

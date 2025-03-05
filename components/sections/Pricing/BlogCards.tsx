@@ -1,20 +1,29 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 
 export default function BlogCards() {
   return (
     <section className="flex flex-wrap flex-col gap-5 leading-8 max-w-[1280px] m-auto md:flex-row">
       <article
-        className={`flex flex-col flex-1 shrink justify-center p-8 bg-black border border-solid basis-0 border-slate-600 border-opacity-30 rounded-[32px] md:w-1/3`}
+        className={`relative flex flex-col flex-1 shrink justify-center overflow-hidden p-8 border border-solid border-slate-600 border-opacity-30 rounded-[32px] md:w-1/3`}
       >
         <div className="w-full">
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/6f990bf86a2395c9bbffb676fbf2525e2e9cd3db1ea14e307406e3e2ef339f0d?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879"
+          <Image
+            src="/images/pages/pricing/sections/chooseUs/web3.png"
+            alt="background"
+            fill
+            className="absolute left-0 top-0 -z-10 w-full"
+          />
+          <Image
+            src="/images/pages/pricing/sections/chooseUs/web3Icon.png"
             alt="Blog post illustration"
-            className="object-contain bg-blend-lighten aspect-square w-[38px]"
+            width={38}
+            height={38}
           />
           <div className="mt-4 w-full">
+            <p className="text-base leading-8 text-grey100">WeaveVM - Web3</p>
             <h2 className="text-2xl text-zinc-300">
               Our team required a streamlined solution for deploying a
               Rust-based.
@@ -29,15 +38,23 @@ export default function BlogCards() {
         </div>
       </article>
       <article
-        className={`flex flex-col flex-1 shrink justify-center p-8 bg-black border border-solid basis-0 border-slate-600 border-opacity-30 rounded-[32px] md:w-1/3`}
+        className={`relative flex flex-col flex-1 shrink justify-center overflow-hidden p-8 border border-solid border-slate-600 border-opacity-30 rounded-[32px] md:w-1/3`}
       >
         <div className="w-full">
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/821165cd454542b38019898477b349e6c2718bf618b7b8131e53b91b50e82d6b?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879"
+          <Image
+            src="/images/pages/pricing/sections/chooseUs/lidar.png"
+            alt="background"
+            fill
+            className="absolute left-0 top-0 -z-10 w-full"
+          />
+          <Image
+            src="/images/pages/pricing/sections/chooseUs/cube.png"
             alt="Blog post illustration"
-            className="object-contain bg-blend-lighten aspect-square w-[38px]"
+            width={38}
+            height={38}
           />
           <div className="mt-4 w-full">
+            <p className="text-base leading-8 text-grey100">Luminar - Lidar</p>
             <h2 className="text-2xl text-zinc-300">
               Luminar provides LiDar tech, while Shuttle helps them deploy
               rapidly.
@@ -52,15 +69,23 @@ export default function BlogCards() {
         </div>
       </article>
       <article
-        className={`flex flex-col flex-1 shrink justify-center p-8 bg-black border border-solid basis-0 border-slate-600 border-opacity-30 rounded-[32px] md:w-1/3`}
+        className={`relative flex flex-col flex-1 shrink justify-center overflow-hidden p-8 border border-solid border-slate-600 border-opacity-30 rounded-[32px] md:w-1/3`}
       >
         <div className="w-full">
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/821165cd454542b38019898477b349e6c2718bf618b7b8131e53b91b50e82d6b?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879"
+          <Image
+            src="/images/pages/pricing/sections/chooseUs/else.png"
+            alt="background"
+            fill
+            className="absolute left-0 top-0 -z-10 w-full"
+          />
+          <Image
+            src="/images/pages/pricing/sections/chooseUs/cube.png"
             alt="Blog post illustration"
-            className="object-contain bg-blend-lighten aspect-square w-[38px]"
+            width={38}
+            height={38}
           />
           <div className="mt-4 w-full">
+            <p className="text-base leading-8 text-grey100">Something - Else</p>
             <h2 className="text-2xl text-zinc-300">
               Luminar provides LiDar tech, while Shuttle helps them deploy
               rapidly.
