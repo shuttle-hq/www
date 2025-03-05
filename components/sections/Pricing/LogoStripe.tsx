@@ -6,7 +6,7 @@ import { RunningLine } from "../../RunningLine";
 
 const LogoStrip: React.FC = () => {
   return (
-    <section className="max-w-[789px]">
+    <section className="max-w-[780px]">
       <div>
         <RunningLine
           className="flex gap-10 items-center max-md:max-w-full"
