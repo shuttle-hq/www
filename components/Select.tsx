@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 import { DownIcon } from "./svgs/DownIcon";
 
@@ -26,7 +26,16 @@ export const Select = ({
   const [selectedValue, setSelectedValue] = useState(value);
   const [focused, setFocused] = useState(0);
 
-  useEffect(() => setSelectedValue(value ?? selectedValue), [value]);
+  useEffect(() => setSelectedValue((prev) => value ?? prev), [value]);
+
+  const onChange = useCallback(
+    (option: Option) => {
+      setSelectedValue(option);
+      propOnChange?.(option);
+      setOpen(false);
+    },
+    [propOnChange],
+  );
 
   useEffect(() => {
     if (!open) {
@@ -52,7 +61,7 @@ export const Select = ({
     return () => {
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [open, options, focused]);
+  }, [open, options, focused, onChange]);
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
@@ -71,12 +80,6 @@ export const Select = ({
       document.body.removeEventListener("click", onClick);
     };
   }, []);
-
-  const onChange = (option: Option) => {
-    setSelectedValue(option);
-    propOnChange?.(option);
-    setOpen(false);
-  };
 
   const toggleSelect = () => {
     setFocused(

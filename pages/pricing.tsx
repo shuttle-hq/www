@@ -88,7 +88,7 @@ export default function PricingPage({ questions }: Props) {
           Why Developers Choose Shuttle
         </h1>
         <p className="pt-0 w-full text-base md:text-xl tracking-wide leading-8 text-center mx-auto max-w-4xl text-neutral-400 max-md:max-w-full">
-          At Shuttle, we don't just provide cloud infrastructure - we provide a
+          At Shuttle, we don&apos;t just provide cloud infrastructure - we provide a
           developer-first experience designed to make building and deploying
           Rust applications effortless and joyful.
         </p>

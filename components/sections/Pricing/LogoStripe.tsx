@@ -1,8 +1,15 @@
 "use client";
 
 import * as React from "react";
+import dynamic from "next/dynamic";
 import LogoImage from "./LogoImage";
-import { RunningLine } from "../../RunningLine";
+
+const RunningLine = dynamic(
+  () => import("../../RunningLine").then((mod) => mod.RunningLine),
+  {
+    loading: () => <div />,
+  },
+);
 
 const LogoStrip: React.FC = () => {
   return (

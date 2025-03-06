@@ -1,3 +1,5 @@
+"use client";
+
 import { HTMLAttributes, ReactNode, useEffect, useRef, useState } from "react";
 import styles from "./RunningLine.module.css";
 
@@ -44,7 +46,7 @@ export const RunningLine = ({
           style={{
             width: lineWidth ? `${lineWidth * 2 + 2 * gapBetweenLines}px` : "",
           }}
-          className={`${styles.firstHalf} ${contentClassName ?? ""}`}
+          className={`${styles.lineWrapper} ${lineWidth ? styles.firstHalf : ""} ${contentClassName ?? ""}`}
         >
           <div
             ref={lineRef}
@@ -58,7 +60,7 @@ export const RunningLine = ({
           style={{
             width: lineWidth ? `${lineWidth * 2 + 2 * gapBetweenLines}px` : "",
           }}
-          className={`${styles.secondHalf} ${contentClassName ?? ""}`}
+          className={`${styles.lineWrapper} ${lineWidth ? styles.secondHalf : ""} ${contentClassName ?? ""}`}
         >
           <div className={`${styles.line} ${lineClassName ?? ""}`}>{items}</div>
           <div className={`${styles.line} ${lineClassName ?? ""}`}>{items}</div>

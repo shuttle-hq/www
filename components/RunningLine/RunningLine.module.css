@@ -18,8 +18,7 @@
   flex-wrap: nowrap;
 }
 
-.firstHalf,
-.secondHalf {
+.lineWrapper {
   transform: translate(0, 0);
   width: fit-content;
   display: flex;
@@ -29,6 +28,10 @@
   top: 0;
   right: 0;
   flex: none;
+}
+
+.firstHalf,
+.secondHalf {
   animation:
     calc(var(--duration) / 2) initialTicker linear forwards,
     var(--duration) ticker calc(var(--duration) / 2) infinite linear forwards;
