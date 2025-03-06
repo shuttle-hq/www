@@ -1,4 +1,6 @@
 import React from "react";
+import clsx from "clsx";
+import CustomButton from "../../../elements/CustomButton";
 
 interface PricingButtonProps {
   text: string;
@@ -13,19 +15,16 @@ export const PricingButton: React.FC<PricingButtonProps> = ({
   collapsed,
   href,
 }) => {
-  const baseStyles =
-    "block text-center gap-5 self-stretch px-6 py-2 mt-8 w-full text-base tracking-normal rounded-2xl min-h-10 max-md:px-5 transition duration-300 ease-in-out hover:opacity-80 ";
-  const variantStyles =
-    variant === "highlight"
-      ? "text-black bg-zinc-300"
-      : "bg-zinc-800 text-zinc-300";
-
   return (
-    <a
+    <CustomButton
       href={href}
-      className={`${baseStyles} ${variantStyles} ${collapsed ? "xl:mt-4" : "xl:mt-8"}`}
+      variant={variant === "default" ? "primary" : "secondary"}
+      className={clsx("justify-center w-full mt-4", {
+        "xl:mt-4": collapsed,
+        "xl:mt-8": !collapsed,
+      })}
     >
       {text}
-    </a>
+    </CustomButton>
   );
 };

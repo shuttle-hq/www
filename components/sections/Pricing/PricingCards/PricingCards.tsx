@@ -18,6 +18,7 @@ const pricingTiers: PricingCardProps[] = [
       "1 custom domain per project",
     ],
     buttonText: "Start for free",
+    buttonVariant: "highlight",
     href: GET_STARTED_URI,
     icon: CheckIcon,
   },
@@ -33,6 +34,7 @@ const pricingTiers: PricingCardProps[] = [
       "Monitoring & observability",
     ],
     buttonText: "Start 30 day trial",
+    buttonVariant: "highlight",
     href: GET_STARTED_URI,
     icon: CheckIcon,
   },
@@ -48,7 +50,6 @@ const pricingTiers: PricingCardProps[] = [
       "Choice of 3 regions",
     ],
     buttonText: "Start 30 day trial",
-    buttonVariant: "highlight",
     href: GET_STARTED_URI,
     icon: CheckIcon,
   },
@@ -64,6 +65,7 @@ const pricingTiers: PricingCardProps[] = [
       "Custom RAM & CPU",
     ],
     buttonText: "Book a call",
+    buttonVariant: "highlight",
     href: CONTACT_US_URI,
     icon: CheckIcon,
   },
@@ -98,11 +100,11 @@ const PricingCards = () => {
     <>
       <div
         ref={ref}
-        className="absolute left-0 w-full h-[100px] opacity-0 -z-10 -translate-y-[200px]"
+        className="absolute left-0 w-full h-[100px] opacity-0 -z-10 -translate-y-[150px]"
       />
       <BackgroundShape
         style={{ transform: "translateY(75px)" }}
-        className="w-full h-[200px] top-auto left-0 hidden lg:block"
+        className="w-full top-auto left-0 hidden lg:block !h-[200px]"
         background="linear-gradient(67.02deg, rgba(252, 84, 12, 0.7) 36.9%, rgba(255, 215, 111, 0.7) 63.12%, rgba(56, 212, 233, 0.7) 81.59%)"
       />
       <div

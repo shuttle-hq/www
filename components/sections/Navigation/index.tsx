@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { Button, LoginButton } from "components/elements";
+import CustomButton from "../../elements/CustomButton";
 import { Hamburger, Logo } from "components/svgs";
 import { trackEvent } from "lib/posthog";
 import dynamic from "next/dynamic";
@@ -128,7 +128,8 @@ const Navigation = () => {
         </div>
         <div className="mt-10 xl:ml-auto xl:mt-0 xl:flex xl:items-center xl:gap-5">
           <div className="mt-10 flex flex-wrap items-center gap-5 xl:mt-0">
-            <Button
+            <CustomButton
+              className="w-[140px] justify-center"
               variant="secondary"
               invertOnDark
               href={DISCORD_URL}
@@ -137,15 +138,19 @@ const Navigation = () => {
               }}
             >
               Join Discord
-            </Button>
+            </CustomButton>
             <div
               onClick={() => {
                 trackEvent("homepage_mainnav_login");
               }}
             >
-              <LoginButton variant="primary" invertOnDark>
+              <CustomButton
+                className="w-[140px] justify-center"
+                variant="primary"
+                invertOnDark
+              >
                 Log in
-              </LoginButton>
+              </CustomButton>
             </div>
           </div>
           <ThemeSwitcher className="mt-5 xl:-order-1 xl:mt-0" hidden />

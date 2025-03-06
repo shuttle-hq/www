@@ -7,6 +7,7 @@ import { Select } from "../../../Select";
 
 const computeSection = {
   title: "Compute & Infrastructure",
+  icon: "/images/pages/pricing/sections/pricingComparison/compute-and-infrastructure.svg",
   rows: [
     {
       cells: [
@@ -200,6 +201,7 @@ const computeSection = {
 
 const storageSection = {
   title: "Storage & Database",
+  icon: "/images/pages/pricing/sections/pricingComparison/storage-and-database.svg",
   rows: [
     {
       cells: [
@@ -300,6 +302,7 @@ const storageSection = {
 
 const networkSection = {
   title: "Network & Performance",
+  icon: "/images/pages/pricing/sections/pricingComparison/network-and-performance.svg",
   rows: [
     {
       cells: [
@@ -402,6 +405,7 @@ const networkSection = {
 
 const devopsSection = {
   title: "DevOps & Tooling",
+  icon: "/images/pages/pricing/sections/pricingComparison/dev-ops-and-tooling.svg",
   rows: [
     {
       cells: [
