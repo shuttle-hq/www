@@ -45,7 +45,7 @@ export default function PricingPage({ questions }: Props) {
         }}
       />
       {/*<Hero />*/}
-      <div className="md:h-[calc(100vh-88px)] flex flex-col items-center justify-between gap-8 p-16 pt-28 2xl:p-28 2xl:pt-40">
+      <div className="flex flex-col items-center justify-between gap-8 p-16 pt-28 2xl:p-28 2xl:pt-40">
         <div className="flex flex-col items-center gap-4 md:gap-8">
           <h1 className="w-fit text-center font-gradual text-5xl font-bold text-black dark:text-head lg:text-6.5">
             Cloud Development <br /> made Simple

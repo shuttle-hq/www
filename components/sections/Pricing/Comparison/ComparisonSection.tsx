@@ -1,19 +1,12 @@
 import React from "react";
 import Image from "next/image";
 import { ComparisonRow } from "./ComparisonRow";
+import {Row} from "./type";
 
 interface ComparisonSectionProps {
   title: string;
   icon?: string;
-  rows: {
-    cells: {
-      icon: React.ComponentType<any>;
-      primary?: string;
-      secondary?: string;
-      isDisabled?: boolean;
-      isCustom?: boolean;
-    }[];
-  }[];
+  rows: Row[];
   className?: string;
 }
 

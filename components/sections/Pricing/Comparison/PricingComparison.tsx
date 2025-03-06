@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { ComparisonSection } from "./ComparisonSection";
 import { CheckIcon } from "components/svgs/pricing-icons/CheckIcon";
-import { MinusIcon } from "components/svgs/pricing-icons/MinusIcon";
+import { CloseIcon } from "components/svgs/pricing-icons/CloseIcon";
 import { Select } from "../../../Select";
 
 const computeSection = {
@@ -63,7 +63,7 @@ const computeSection = {
           secondary: "instance",
         },
         {
-          icon: MinusIcon,
+          icon: CloseIcon,
           primary: "Autoscaling",
           isDisabled: true,
         },
@@ -82,17 +82,20 @@ const computeSection = {
         {
           icon: CheckIcon,
           primary: "10",
-          secondary: "request/second",
+          secondary: "rps",
+          secondaryTooltip: "Requests per Second.",
         },
         {
           icon: CheckIcon,
           primary: "50",
-          secondary: "request/second",
+          secondary: "rps",
+          secondaryTooltip: "Requests per Second.",
         },
         {
           icon: CheckIcon,
           primary: "1000",
-          secondary: "request/second",
+          secondary: "rps",
+          secondaryTooltip: "Requests per Second.",
         },
         {
           icon: CheckIcon,
@@ -126,7 +129,7 @@ const computeSection = {
     {
       cells: [
         {
-          icon: MinusIcon,
+          icon: CloseIcon,
           primary: "Scalable",
           secondary: "memory available",
           isDisabled: true,
@@ -174,7 +177,35 @@ const computeSection = {
     {
       cells: [
         {
-          icon: MinusIcon,
+          icon: CloseIcon,
+          primary: "Configurable",
+          secondary: "instance",
+          isDisabled: true,
+        },
+        {
+          icon: CheckIcon,
+          primary: "Configurable",
+          primaryTooltip: "Configurable",
+          secondary: "instance",
+        },
+        {
+          icon: CheckIcon,
+          primary: "Configurable",
+          primaryTooltip: "Configurable",
+          secondary: "instance",
+        },
+        {
+          icon: CheckIcon,
+          primary: "Configurable",
+          primaryTooltip: "Configurable",
+          secondary: "instance",
+        },
+      ],
+    },
+    {
+      cells: [
+        {
+          icon: CloseIcon,
           primary: "Scalable",
           secondary: "vCPU available",
           isDisabled: true,
@@ -229,7 +260,7 @@ const storageSection = {
     {
       cells: [
         {
-          icon: MinusIcon,
+          icon: CloseIcon,
           primary: "Additional",
           secondary: "Storage available",
           isDisabled: true,
@@ -276,7 +307,7 @@ const storageSection = {
     {
       cells: [
         {
-          icon: MinusIcon,
+          icon: CloseIcon,
           primary: "Additional",
           secondary: "dedicated DB",
           isDisabled: true,
@@ -330,7 +361,7 @@ const networkSection = {
     {
       cells: [
         {
-          icon: MinusIcon,
+          icon: CloseIcon,
           primary: "Additional",
           secondary: "Custom Domain",
           isDisabled: true,
@@ -378,7 +409,7 @@ const networkSection = {
     {
       cells: [
         {
-          icon: MinusIcon,
+          icon: CloseIcon,
           primary: "Additional",
           secondary: "Network Egress",
           isDisabled: true,
@@ -433,7 +464,7 @@ const devopsSection = {
     {
       cells: [
         {
-          icon: MinusIcon,
+          icon: CloseIcon,
           primary: "Additional Build Minutes",
           isDisabled: true,
         },

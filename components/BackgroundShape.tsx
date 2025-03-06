@@ -1,7 +1,7 @@
 "use client";
 
 import { CSSProperties } from "react";
-import clsx from "clsx";
+import { mergeClasses } from "../lib/helpers";
 
 interface BackgroundShapeProps {
   className?: string;
@@ -20,7 +20,7 @@ export const BackgroundShape = ({
 }: BackgroundShapeProps) => {
   return (
     <div
-      className={clsx(
+      className={mergeClasses(
         "w-[758px] h-[398px] absolute -z-10 top-1/2 rounded-3xl",
         {
           "left-0": left,

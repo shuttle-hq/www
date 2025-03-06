@@ -1,14 +1,9 @@
 import React from "react";
 import { ComparisonCell } from "./ComparisonCell";
+import { Cell } from "./type";
 
 interface ComparisonRowProps {
-  cells: {
-    icon: React.ComponentType<any>;
-    primary?: string;
-    secondary?: string;
-    isDisabled?: boolean;
-    isCustom?: boolean;
-  }[];
+  cells: Cell[];
   noBorder?: boolean;
 }
 
@@ -25,15 +20,7 @@ export const ComparisonRow: React.FC<ComparisonRowProps> = ({
       className={`flex items-center py-5 w-full ${borderClass} max-md:max-w-full flex-wrap`}
     >
       {cells.map((cell, index) => (
-        <ComparisonCell
-          key={index}
-          icon={cell.icon}
-          primary={cell.primary}
-          secondary={cell.secondary}
-          isDisabled={cell.isDisabled}
-          isCustom={cell.isCustom}
-          width="w-full lg:w-1/4"
-        />
+        <ComparisonCell key={index} width="w-full lg:w-1/4" {...cell} />
       ))}
     </div>
   );

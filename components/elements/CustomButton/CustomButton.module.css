@@ -5,7 +5,6 @@
 .secondaryButton {
   position: relative;
   background-color: rgba(255, 255, 255, 0.3);
-  transition: all 0.5s;
   z-index: 1;
 }
 
@@ -21,20 +20,19 @@
 .secondaryButtonShadow::before {
   content: "";
   position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
+  left: 50%;
+  top: 50%;
+  height: 80%;
   width: 100%;
   z-index: -1;
-  border-radius: 34px;
+  border-radius: 100%;
   background: linear-gradient(
     85.57deg,
     rgba(255, 92, 0, 1) 18.06%,
     rgba(0, 240, 255, 1) 136.08%
   );
   filter: blur(50px);
-  transform: scale(0.5);
-  transition: all 0.5s;
+  transform: translate(-50%, -50%) scaleY(0.5);
 }
 
 .secondaryButtonBorderGradient::after {
@@ -50,5 +48,5 @@
 }
 
 .secondaryButtonShadow:hover::before {
-  transform: scale(0.8);
+  transform: translate(-50%, -50%) scaleY(0.7);
 }

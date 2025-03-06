@@ -26,7 +26,7 @@ const CustomButton: FC<ButtonProps> = ({
   // Primary and secondary switch for dark mode
 
   const classNames = clsx(
-    `${styles.button} flex relative items-center gap-2 whitespace-nowrap px-6 py-3 transition-all duration-500`,
+    `${styles.button} flex relative items-center gap-2 whitespace-nowrap px-6 py-3`,
     variant === "primary"
       ? invertOnDark
         ? `bg-black text-head dark:bg-[#D8D8D8] dark:text-black dark:hover:bg-gradient-to-r dark:hover:from-[#fc540c] dark:hover:to-[#f5c57a] dark:hover:text-white`
@@ -38,7 +38,7 @@ const CustomButton: FC<ButtonProps> = ({
     variant === "tertiary" &&
       "${styles.buttonShadow} ${styles.shadowGradient} text-black",
     variant === "blackwhite" &&
-      "border-[1px] border-solid border-[#ffffff40] px-6 py-3 font-gradual text-base text-white transition-all hover:bg-gradient-1",
+      "border-[1px] border-solid border-[#ffffff40] px-6 py-3 font-gradual text-base text-white hover:bg-gradient-1",
     className,
   );
 

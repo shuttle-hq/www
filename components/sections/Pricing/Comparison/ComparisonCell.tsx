@@ -1,21 +1,21 @@
 import React from "react";
+import { Cell } from "./type";
+import { CustomCursor, Tooltip } from "../../../elements";
+import { mergeClasses } from "../../../../lib/helpers";
 
-interface ComparisonCellProps {
-  icon: React.ComponentType<any>;
-  primary?: string;
-  secondary?: string;
-  isDisabled?: boolean;
-  isCustom?: boolean;
+interface CellProps extends Cell {
   width?: string;
 }
 
-export const ComparisonCell: React.FC<ComparisonCellProps> = ({
+export const ComparisonCell: React.FC<CellProps> = ({
   icon: Icon,
   primary,
   secondary,
   isDisabled = false,
   isCustom = false,
   width = "w-1/4",
+  secondaryTooltip,
+  primaryTooltip,
 }) => {
   const textColorClass = isDisabled ? "text-grey300/40" : "text-zinc-300";
   const secondaryTextColorClass = isDisabled
@@ -33,15 +33,37 @@ export const ComparisonCell: React.FC<ComparisonCellProps> = ({
             </p>
           ) : (
             <>
-              <p className={`self-stretch my-auto ${textColorClass}`}>
-                {primary}
-              </p>
+              <Tooltip title={primaryTooltip} disabled={!primaryTooltip}>
+                <CustomCursor disabled={!primaryTooltip}>
+                  <p
+                    className={mergeClasses(
+                      "relative self-stretch my-auto",
+                      textColorClass,
+                      {
+                        "underline decoration-dotted": !!primaryTooltip,
+                      },
+                    )}
+                  >
+                    {primary}
+                  </p>
+                </CustomCursor>
+              </Tooltip>
               {secondary && (
-                <p
-                  className={`flex-1 shrink self-stretch my-auto basis-0 ${secondaryTextColorClass}`}
-                >
-                  {secondary}
-                </p>
+                <Tooltip title={secondaryTooltip} disabled={!secondaryTooltip}>
+                  <CustomCursor disabled={!secondaryTooltip}>
+                    <p
+                      className={mergeClasses(
+                        "relative flex-1 shrink self-stretch my-auto basis-0",
+                        secondaryTextColorClass,
+                        {
+                          "underline decoration-dotted": !!secondaryTooltip,
+                        },
+                      )}
+                    >
+                      {secondary}
+                    </p>
+                  </CustomCursor>
+                </Tooltip>
               )}
             </>
           )}
