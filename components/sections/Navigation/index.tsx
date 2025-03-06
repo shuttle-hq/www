@@ -1,3 +1,5 @@
+"use client";
+
 import clsx from "clsx";
 import CustomButton from "../../elements/CustomButton";
 import { Hamburger, Logo } from "components/svgs";
@@ -5,7 +7,7 @@ import { trackEvent } from "lib/posthog";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DISCORD_URL } from "../../../lib/constants";
 
 const ThemeSwitcher = dynamic(() => import("./ThemeSwitcher"), { ssr: false });
@@ -47,7 +49,8 @@ const LinkItem = ({
 const Navigation = () => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  useLayoutEffect(() => {
+
+  useEffect(() => {
     function updateMenu() {
       const isMobileAndOpen = window.innerWidth < 1280 && open;
       const isDesktopAndClosed = window.innerWidth >= 1280 && !open;
