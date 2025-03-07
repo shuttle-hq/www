@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { ComparisonRow } from "./ComparisonRow";
-import {Row} from "./type";
+import { Row } from "./type";
 
 interface ComparisonSectionProps {
   title: string;
@@ -18,7 +18,7 @@ export const ComparisonSection: React.FC<ComparisonSectionProps> = ({
 }) => {
   return (
     <section className={`w-full ${className} max-w-[1280px]`}>
-      <header className="flex gap-2 items-center pt-2 pb-5 px-4 lg:px-8 max-w-full text-xl text-zinc-300">
+      <header className="flex gap-2 items-center pt-2 pb-5 px-4 lg:px-10 max-w-full text-xl text-zinc-300 border-b border-slate-600 border-opacity-30">
         {icon && (
           <Image width={18} height={18} src={icon} alt={`${title} icon`} />
         )}
@@ -29,11 +29,7 @@ export const ComparisonSection: React.FC<ComparisonSectionProps> = ({
         </h2>
       </header>
       {rows.map((row, index) => (
-        <ComparisonRow
-          key={index}
-          cells={row.cells}
-          noBorder={index === rows.length - 1}
-        />
+        <ComparisonRow key={index} cells={row.cells} />
       ))}
     </section>
   );

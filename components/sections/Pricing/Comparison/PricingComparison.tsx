@@ -19,11 +19,13 @@ const computeSection = {
         {
           icon: CheckIcon,
           primary: "3",
+          primaryTooltip: "Up to 10 available, see docs",
           secondary: "projects",
         },
         {
           icon: CheckIcon,
           primary: "10",
+          primaryTooltip: "Up to 10 available, see docs",
           secondary: "projects",
         },
         {
@@ -51,7 +53,8 @@ const computeSection = {
         },
         {
           icon: CheckIcon,
-          isCustom: true,
+          primary: "Reserved",
+          secondary: "instance",
         },
       ],
     },
@@ -117,37 +120,13 @@ const computeSection = {
         },
         {
           icon: CheckIcon,
-          primary: "512",
-          secondary: "MB memory",
+          primary: "Usage",
+          secondary: "based",
         },
         {
           icon: CheckIcon,
-          isCustom: true,
-        },
-      ],
-    },
-    {
-      cells: [
-        {
-          icon: CloseIcon,
-          primary: "Scalable",
-          secondary: "memory available",
-          isDisabled: true,
-        },
-        {
-          icon: CheckIcon,
-          primary: "Scalable",
-          secondary: "memory available",
-        },
-        {
-          icon: CheckIcon,
-          primary: "Scalable",
-          secondary: "memory available",
-        },
-        {
-          icon: CheckIcon,
-          primary: "Scalable",
-          secondary: "memory available",
+          primary: "Usage",
+          secondary: "based",
         },
       ],
     },
@@ -185,19 +164,19 @@ const computeSection = {
         {
           icon: CheckIcon,
           primary: "Configurable",
-          primaryTooltip: "Configurable",
+          primaryTooltip: "Scale up to TBC Memory and TBC",
           secondary: "instance",
         },
         {
           icon: CheckIcon,
           primary: "Configurable",
-          primaryTooltip: "Configurable",
+          primaryTooltip: "Scale up to TBC Memory and TBC",
           secondary: "instance",
         },
         {
           icon: CheckIcon,
           primary: "Configurable",
-          primaryTooltip: "Configurable",
+          primaryTooltip: "Scale up to TBC Memory and TBC",
           secondary: "instance",
         },
       ],
@@ -206,24 +185,29 @@ const computeSection = {
       cells: [
         {
           icon: CloseIcon,
-          primary: "Scalable",
-          secondary: "vCPU available",
+          primary: "Horizontal",
+          secondary: "scaling",
           isDisabled: true,
         },
         {
           icon: CheckIcon,
-          primary: "Scalable",
-          secondary: "to vCPU available",
+          primary: "Horizontal",
+          secondary: "scaling",
+          isDisabled: true,
         },
         {
           icon: CheckIcon,
-          primary: "Scalable",
-          secondary: "to vCPU available",
+          primary: "Horizontal ",
+          primaryTooltip:
+            "Load balance across multiple instances, see usage based pricing",
+          secondary: "scaling",
         },
         {
           icon: CheckIcon,
-          primary: "Scalable",
-          secondary: "to vCPU available",
+          primary: "Horizontal ",
+          primaryTooltip:
+            "Load balance across multiple instances, see usage based pricing",
+          secondary: "scaling",
         },
       ],
     },
@@ -238,18 +222,43 @@ const storageSection = {
       cells: [
         {
           icon: CheckIcon,
+          primary: "Shared",
+          secondary: "DB",
+        },
+        {
+          icon: CheckIcon,
+          primary: "Dedicated DB",
+          secondary: "available",
+          secondaryTooltip: "$20/month",
+        },
+        {
+          icon: CheckIcon,
+          primary: "Dedicated DB",
+          secondary: "included",
+          secondaryTooltip: "Configurable",
+        },
+        {
+          icon: CheckIcon,
+          isCustom: true,
+        },
+      ],
+    },
+    {
+      cells: [
+        {
+          icon: CheckIcon,
           primary: "0.5",
-          secondary: "GB (db storage)",
+          secondary: "GB included",
         },
         {
           icon: CheckIcon,
           primary: "0.5",
-          secondary: "GB (db storage)",
+          secondary: "GB included",
         },
         {
           icon: CheckIcon,
-          primary: "Usage",
-          secondary: "Based",
+          primary: "20",
+          secondary: "GB included",
         },
         {
           icon: CheckIcon,
@@ -261,70 +270,23 @@ const storageSection = {
       cells: [
         {
           icon: CloseIcon,
-          primary: "Additional",
-          secondary: "Storage available",
-          isDisabled: true,
+          primary: "",
+          secondary: "Additional storage ",
         },
         {
           icon: CheckIcon,
           primary: "Additional",
-          secondary: "storage available",
+          secondary: "storage",
         },
         {
           icon: CheckIcon,
           primary: "Additional",
-          secondary: "storage available",
-        },
-        {
-          icon: CheckIcon,
-          isCustom: true,
-        },
-      ],
-    },
-    {
-      cells: [
-        {
-          icon: CheckIcon,
-          primary: "Shared",
-          secondary: "database",
-        },
-        {
-          icon: CheckIcon,
-          primary: "Shared",
-          secondary: "database",
-        },
-        {
-          icon: CheckIcon,
-          primary: "Dedicated",
-          secondary: "database",
-        },
-        {
-          icon: CheckIcon,
-          isCustom: true,
-        },
-      ],
-    },
-    {
-      cells: [
-        {
-          icon: CloseIcon,
-          primary: "Additional",
-          secondary: "dedicated DB",
-          isDisabled: true,
+          secondary: "storage",
         },
         {
           icon: CheckIcon,
           primary: "Additional",
-          secondary: "dedicated DB",
-        },
-        {
-          icon: CheckIcon,
-          primary: "Additional",
-          secondary: "dedicated DB",
-        },
-        {
-          icon: CheckIcon,
-          isCustom: true,
+          secondary: "storage",
         },
       ],
     },
@@ -340,65 +302,19 @@ const networkSection = {
         {
           icon: CheckIcon,
           primary: "1",
-          secondary: "custom domain/project",
+          secondary: "custom domain",
         },
         {
           icon: CheckIcon,
-          primary: "1",
-          secondary: "custom domain/project",
+          primary: "3",
+          secondary: "custom domains",
+          secondaryTooltip: "1 c.d. per project included, see docs for extra",
         },
         {
           icon: CheckIcon,
-          primary: "1",
-          secondary: "custom domain/project",
-        },
-        {
-          icon: CheckIcon,
-          isCustom: true,
-        },
-      ],
-    },
-    {
-      cells: [
-        {
-          icon: CloseIcon,
-          primary: "Additional",
-          secondary: "Custom Domain",
-          isDisabled: true,
-        },
-        {
-          icon: CheckIcon,
-          primary: "Extra",
-          secondary: "Custom Domain available",
-        },
-        {
-          icon: CheckIcon,
-          primary: "Extra",
-          secondary: "Custom Domain available",
-        },
-        {
-          icon: CheckIcon,
-          primary: "Extra",
-          secondary: "Custom Domain available",
-        },
-      ],
-    },
-    {
-      cells: [
-        {
-          icon: CheckIcon,
-          primary: "1 GB/m",
-          secondary: "Network Egress",
-        },
-        {
-          icon: CheckIcon,
-          primary: "1 GB/m",
-          secondary: "Network Egress",
-        },
-        {
-          icon: CheckIcon,
-          primary: "Usage based",
-          secondary: "network egress",
+          primary: "10",
+          secondary: "custom domains",
+          secondaryTooltip: "1 c.d. per project included, see docs for extra",
         },
         {
           icon: CheckIcon,
@@ -410,24 +326,50 @@ const networkSection = {
       cells: [
         {
           icon: CloseIcon,
-          primary: "Additional",
-          secondary: "Network Egress",
+          primary: "1 GB",
+          secondary: "egress included",
+        },
+        {
+          icon: CloseIcon,
+          primary: "1 GB",
+          secondary: "egress included",
+        },
+        {
+          icon: CloseIcon,
+          primary: "1 GB",
+          secondary: "egress included",
+        },
+        {
+          icon: CheckIcon,
+          isCustom: true,
+        },
+      ],
+    },
+    {
+      cells: [
+        {
+          icon: CloseIcon,
+          primary: "Additional egress",
+          secondary: "",
           isDisabled: true,
         },
         {
           icon: CheckIcon,
           primary: "Additional",
-          secondary: "Network Egress",
+          secondary: "egress",
+          secondaryTooltip: "See usage based pricing below",
         },
         {
           icon: CheckIcon,
           primary: "Additional",
-          secondary: "Network Egress",
+          secondary: "egress",
+          secondaryTooltip: "See usage based pricing below",
         },
         {
           icon: CheckIcon,
           primary: "Additional",
-          secondary: "Network Egress",
+          secondary: "egress",
+          secondaryTooltip: "See usage based pricing below",
         },
       ],
     },
@@ -443,17 +385,17 @@ const devopsSection = {
         {
           icon: CheckIcon,
           primary: "100",
-          secondary: "Monthly build minutes",
+          secondary: "build minutes",
         },
         {
           icon: CheckIcon,
           primary: "100",
-          secondary: "Monthly build minutes",
+          secondary: "build minutes",
         },
         {
           icon: CheckIcon,
-          primary: "Usage",
-          secondary: "based",
+          primary: "250",
+          secondary: "build minutes",
         },
         {
           icon: CheckIcon,
@@ -465,23 +407,257 @@ const devopsSection = {
       cells: [
         {
           icon: CloseIcon,
-          primary: "Additional Build Minutes",
+          primary: "Additional build minutes",
           isDisabled: true,
         },
         {
           icon: CheckIcon,
           primary: "Additional",
-          secondary: "Build Minutes",
+          secondary: "build minutes",
+          secondaryTooltip: "See usage based pricing below",
         },
         {
           icon: CheckIcon,
           primary: "Additional",
-          secondary: "Build Minutes",
+          secondary: "build minutes",
+          secondaryTooltip: "See usage based pricing below",
         },
         {
           icon: CheckIcon,
           primary: "Additional",
-          secondary: "Build Minutes",
+          secondary: "build minutes",
+          secondaryTooltip: "See usage based pricing below",
+        },
+      ],
+    },
+  ],
+};
+
+const monitoringSection = {
+  title: "Monitoring & Observability",
+  icon: "/images/pages/pricing/sections/pricingComparison/monitoring-and-observability.svg",
+  rows: [
+    {
+      cells: [
+        {
+          icon: CheckIcon,
+          primary: "7-day",
+          secondary: "log retention",
+        },
+        {
+          icon: CheckIcon,
+          primary: "14-day",
+          secondary: "log retention",
+        },
+        {
+          icon: CheckIcon,
+          primary: "30-day",
+          secondary: "log retention",
+        },
+        {
+          icon: CheckIcon,
+          primary: "Custom",
+          secondary: "log retention",
+        },
+      ],
+    },
+    {
+      cells: [
+        {
+          icon: CheckIcon,
+          primary: "Basic",
+          secondary: "usage metrics",
+        },
+        {
+          icon: CheckIcon,
+          primary: "Basic",
+          secondary: "usage metrics",
+        },
+        {
+          icon: CheckIcon,
+          primary: "Basic",
+          secondary: "usage metrics",
+        },
+        {
+          icon: CheckIcon,
+          primary: "Basic",
+          secondary: "usage metrics",
+        },
+      ],
+    },
+    {
+      cells: [
+        {
+          icon: CheckIcon,
+          primary: "App metrics & traces",
+          secondary: "",
+          isDisabled: true,
+        },
+        {
+          icon: CheckIcon,
+          primary: "App",
+          secondary: "metrics & traces",
+          secondaryTooltip: "Metrics & traces",
+        },
+        {
+          icon: CheckIcon,
+          primary: "App",
+          secondary: "metrics & traces",
+          secondaryTooltip: "Metrics & traces",
+        },
+        {
+          icon: CheckIcon,
+          primary: "App",
+          secondary: "metrics & traces",
+          secondaryTooltip: "Metrics & traces",
+        },
+      ],
+    },
+    {
+      cells: [
+        {
+          icon: CheckIcon,
+          primary: "Custom log destinations",
+          secondary: "",
+          isDisabled: true,
+        },
+        {
+          icon: CheckIcon,
+          primary: "Custom ",
+          secondary: "log destinations",
+          secondaryTooltip: "log destinations",
+        },
+        {
+          icon: CheckIcon,
+          primary: "Custom ",
+          secondary: "log destinations",
+          secondaryTooltip: "log destinations",
+        },
+        {
+          icon: CheckIcon,
+          primary: "Custom ",
+          secondary: "log destinations",
+          secondaryTooltip: "log destinations",
+        },
+      ],
+    },
+  ],
+};
+
+const teamAccessSection = {
+  title: "Team access",
+  icon: "/images/pages/pricing/sections/pricingComparison/team-access.svg",
+  rows: [
+    {
+      cells: [
+        {
+          icon: CheckIcon,
+          primary: "Team",
+          secondary: "access",
+          isDisabled: true,
+        },
+        {
+          icon: CheckIcon,
+          primary: "Team",
+          secondary: "access",
+          isDisabled: true,
+        },
+        {
+          icon: CheckIcon,
+          primary: "10",
+          primaryTooltip: "$25 per additional seat",
+          secondary: "seats",
+        },
+        {
+          icon: CheckIcon,
+          isCustom: true,
+        },
+      ],
+    },
+  ],
+};
+
+const supportSection = {
+  title: "Support",
+  icon: "/images/pages/pricing/sections/pricingComparison/support.svg",
+  rows: [
+    {
+      cells: [
+        {
+          icon: CheckIcon,
+          primary: "Community",
+          primaryTooltip: "Response time < 1 business day ",
+          secondary: "support",
+        },
+        {
+          icon: CheckIcon,
+          primary: "Priority",
+          primaryTooltip: "Response time < 1 business day ",
+          secondary: "support",
+        },
+        {
+          icon: CheckIcon,
+          primary: "Dedicated",
+          primaryTooltip: "Response time < 1 business day ",
+          secondary: "support",
+        },
+        {
+          icon: CheckIcon,
+          primary: "Dedicated",
+          primaryTooltip: "Response time < 1 business day ",
+          secondary: "support",
+        },
+      ],
+    },
+    {
+      cells: [
+        {
+          icon: CheckIcon,
+          primary: "Private",
+          secondary: "support channel",
+          isDisabled: true,
+        },
+        {
+          icon: CheckIcon,
+          primary: "Private",
+          secondary: "support channel",
+        },
+        {
+          icon: CheckIcon,
+          primary: "Private",
+          secondary: "support channel",
+        },
+        {
+          icon: CheckIcon,
+          primary: "Private",
+          secondary: "support channel",
+        },
+      ],
+    },
+    {
+      cells: [
+        {
+          icon: CheckIcon,
+          primary: "Uptime",
+          secondary: "SLA",
+          isDisabled: true,
+        },
+        {
+          icon: CheckIcon,
+          primary: "Uptime",
+          secondary: "SLA",
+          isDisabled: true,
+        },
+        {
+          icon: CheckIcon,
+          primary: "Uptime",
+          secondary: "SLA",
+          isDisabled: true,
+        },
+        {
+          icon: CheckIcon,
+          primary: "Uptime",
+          secondary: "SLA",
         },
       ],
     },
@@ -502,9 +678,12 @@ export function PricingComparison() {
     <>
       <article className="hidden lg:flex text-base leading-tight flex-col justify-center items-center">
         <ComparisonSection {...computeSection} />
-        <ComparisonSection {...storageSection} />
-        <ComparisonSection {...networkSection} className="mt-6" />
-        <ComparisonSection {...devopsSection} className="mt-14 max-md:mt-10" />
+        <ComparisonSection {...storageSection} className="mt-12" />
+        <ComparisonSection {...networkSection} className="mt-12" />
+        <ComparisonSection {...devopsSection} className="mt-12" />
+        <ComparisonSection {...monitoringSection} className="mt-12" />
+        <ComparisonSection {...teamAccessSection} className="mt-12" />
+        <ComparisonSection {...supportSection} className="mt-12 max-md:mt-10" />
       </article>
       <article className="flex lg:hidden text-base leading-tight flex-col justify-center items-center mb-28">
         <div className="w-full sticky lg:hidden top-4 resize z-10">

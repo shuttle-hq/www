@@ -17,9 +17,9 @@ export const ComparisonCell: React.FC<CellProps> = ({
   secondaryTooltip,
   primaryTooltip,
 }) => {
-  const textColorClass = isDisabled ? "text-grey300/40" : "text-zinc-300";
+  const textColorClass = isDisabled ? "text-neutral-500" : "text-zinc-300";
   const secondaryTextColorClass = isDisabled
-    ? "text-grey300/40"
+    ? "text-neutral-500"
     : "text-neutral-500";
 
   return (
