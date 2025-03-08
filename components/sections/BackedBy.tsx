@@ -9,7 +9,7 @@ const BackedBy = () => {
             Backed by
           </h2>
           <p className="mt-3 max-w-[800px] text-xl sm:mt-5 lg:text-2xl">
-            We’re continualy working on rethinking the way development works in
+            We’re continually working on rethinking the way development works in
             the cloud by building the best in class deployment system.
           </p>
         </div>
