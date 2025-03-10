@@ -25,7 +25,7 @@ const computeSection = {
         {
           icon: CheckIcon,
           primary: "10",
-          primaryTooltip: "Up to 10 available, see docs",
+          primaryTooltip: "Up to 50 available, see docs",
           secondary: "projects",
         },
         {
@@ -55,28 +55,6 @@ const computeSection = {
           icon: CheckIcon,
           primary: "Reserved",
           secondary: "instance",
-        },
-      ],
-    },
-    {
-      cells: [
-        {
-          icon: CheckIcon,
-          primary: "Spot",
-          secondary: "instance",
-        },
-        {
-          icon: CloseIcon,
-          primary: "Autoscaling",
-          isDisabled: true,
-        },
-        {
-          icon: CheckIcon,
-          primary: "Autoscaling",
-        },
-        {
-          icon: CheckIcon,
-          isCustom: true,
         },
       ],
     },
@@ -149,7 +127,8 @@ const computeSection = {
         },
         {
           icon: CheckIcon,
-          isCustom: true,
+          primary: "Usage",
+          secondary: "based",
         },
       ],
     },
@@ -157,26 +136,26 @@ const computeSection = {
       cells: [
         {
           icon: CloseIcon,
-          primary: "Configurable",
+          primary: "Scaleable",
           secondary: "instance",
           isDisabled: true,
         },
         {
           icon: CheckIcon,
-          primary: "Configurable",
+          primary: "Scaleable",
+          primaryTooltip:
+            "Scale up to 4vCPU and  8GB Memory - see usage based pricing below",
+          secondary: "instance",
+        },
+        {
+          icon: CheckIcon,
+          primary: "Scaleable",
           primaryTooltip: "Scale up to TBC Memory and TBC",
           secondary: "instance",
         },
         {
           icon: CheckIcon,
-          primary: "Configurable",
-          primaryTooltip: "Scale up to TBC Memory and TBC",
-          secondary: "instance",
-        },
-        {
-          icon: CheckIcon,
-          primary: "Configurable",
-          primaryTooltip: "Scale up to TBC Memory and TBC",
+          primary: "Scaleable",
           secondary: "instance",
         },
       ],
@@ -235,7 +214,6 @@ const storageSection = {
           icon: CheckIcon,
           primary: "Dedicated DB",
           secondary: "included",
-          secondaryTooltip: "Configurable",
         },
         {
           icon: CheckIcon,
@@ -271,22 +249,25 @@ const storageSection = {
         {
           icon: CloseIcon,
           primary: "",
-          secondary: "Additional storage ",
+          secondary: "More storage",
         },
         {
           icon: CheckIcon,
-          primary: "Additional",
+          primary: "More",
           secondary: "storage",
+          secondaryTooltip: "See usage based pricing below",
         },
         {
           icon: CheckIcon,
-          primary: "Additional",
+          primary: "More",
           secondary: "storage",
+          secondaryTooltip: "See usage based pricing below",
         },
         {
           icon: CheckIcon,
-          primary: "Additional",
+          primary: "More",
           secondary: "storage",
+          secondaryTooltip: "See usage based pricing below",
         },
       ],
     },
@@ -349,25 +330,25 @@ const networkSection = {
       cells: [
         {
           icon: CloseIcon,
-          primary: "Additional egress",
-          secondary: "",
+          primary: "More",
+          secondary: "egress",
           isDisabled: true,
         },
         {
           icon: CheckIcon,
-          primary: "Additional",
+          primary: "More",
           secondary: "egress",
           secondaryTooltip: "See usage based pricing below",
         },
         {
           icon: CheckIcon,
-          primary: "Additional",
+          primary: "More",
           secondary: "egress",
           secondaryTooltip: "See usage based pricing below",
         },
         {
           icon: CheckIcon,
-          primary: "Additional",
+          primary: "More",
           secondary: "egress",
           secondaryTooltip: "See usage based pricing below",
         },
@@ -385,21 +366,22 @@ const devopsSection = {
         {
           icon: CheckIcon,
           primary: "100",
-          secondary: "build minutes",
+          secondary: "monthly build minutes",
         },
         {
           icon: CheckIcon,
           primary: "100",
-          secondary: "build minutes",
+          secondary: "monthly build minutes",
         },
         {
           icon: CheckIcon,
           primary: "250",
-          secondary: "build minutes",
+          secondary: "monthly build minutes",
         },
         {
           icon: CheckIcon,
-          isCustom: true,
+          primary: "Custom",
+          secondary: "monthly build minutes",
         },
       ],
     },
@@ -489,26 +471,26 @@ const monitoringSection = {
       cells: [
         {
           icon: CheckIcon,
-          primary: "App metrics & traces",
+          primary: "Custom app metrics & traces",
           secondary: "",
           isDisabled: true,
         },
         {
           icon: CheckIcon,
-          primary: "App",
-          secondary: "metrics & traces",
+          primary: "Custom",
+          secondary: "app metrics & traces",
           secondaryTooltip: "Metrics & traces",
         },
         {
           icon: CheckIcon,
-          primary: "App",
-          secondary: "metrics & traces",
+          primary: "Custom",
+          secondary: "app metrics & traces",
           secondaryTooltip: "Metrics & traces",
         },
         {
           icon: CheckIcon,
-          primary: "App",
-          secondary: "metrics & traces",
+          primary: "Custom",
+          secondary: "app metrics & traces",
           secondaryTooltip: "Metrics & traces",
         },
       ],
@@ -525,19 +507,16 @@ const monitoringSection = {
           icon: CheckIcon,
           primary: "Custom ",
           secondary: "log destinations",
-          secondaryTooltip: "log destinations",
         },
         {
           icon: CheckIcon,
           primary: "Custom ",
           secondary: "log destinations",
-          secondaryTooltip: "log destinations",
         },
         {
           icon: CheckIcon,
           primary: "Custom ",
           secondary: "log destinations",
-          secondaryTooltip: "log destinations",
         },
       ],
     },
@@ -586,25 +565,29 @@ const supportSection = {
         {
           icon: CheckIcon,
           primary: "Community",
-          primaryTooltip: "Response time < 1 business day ",
+          primaryTooltip:
+            "Access to all help threads and Shuttle team when available",
           secondary: "support",
         },
         {
           icon: CheckIcon,
           primary: "Priority",
-          primaryTooltip: "Response time < 1 business day ",
+          primaryTooltip:
+            "White glove migration and response time < 1 business day",
           secondary: "support",
         },
         {
           icon: CheckIcon,
           primary: "Dedicated",
-          primaryTooltip: "Response time < 1 business day ",
+          primaryTooltip:
+            "White glove migration and response time < 1 business day ",
           secondary: "support",
         },
         {
           icon: CheckIcon,
           primary: "Dedicated",
-          primaryTooltip: "Response time < 1 business day ",
+          primaryTooltip:
+            "White glove migration and response time < 1 business day ",
           secondary: "support",
         },
       ],

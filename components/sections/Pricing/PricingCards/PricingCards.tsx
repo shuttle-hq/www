@@ -105,7 +105,7 @@ const PricingCards = () => {
       <BackgroundShape
         style={{ transform: "translateY(75px)" }}
         className="w-full top-auto left-0 hidden lg:block h-[200px]"
-        background="linear-gradient(67.02deg, rgba(252, 84, 12, 0.7) 36.9%, rgba(255, 215, 111, 0.7) 63.12%, rgba(56, 212, 233, 0.7) 81.59%)"
+        background="linear-gradient(62.43deg, rgba(252, 84, 12, 0.425) 54.71%, rgba(56, 212, 233, 0.325) 79.8%)"
       />
       <div
         ref={priceSectionsRef}
