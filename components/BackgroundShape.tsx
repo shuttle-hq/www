@@ -29,7 +29,7 @@ export const BackgroundShape = ({
         className,
       )}
       style={{
-        filter: "blur(200px)",
+        filter: "blur(120px)",
         transform: left
           ? "translateX(-20%) translateY(-50%) rotate(20deg)"
           : "translateX(20%) translateY(-50%) rotate(-20deg)",
