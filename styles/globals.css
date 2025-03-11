@@ -380,3 +380,9 @@ body.dark {
     background-color: #ffffff33;
   }
 }
+
+@layer utilities {
+  .box-shadow-design {
+    box-shadow: rgba(0, 0, 0, 0.024) 0px 0.706592px 2.11978px 0px, rgba(0, 0, 0, 0.06) 0px 1.80656px 5.41969px 0px, rgba(0, 0, 0, 0.12) 0px 3.62176px 10.8653px 0px, rgba(0, 0, 0, 0.227) 0px 6.8656px 20.5968px 0px, rgba(0, 0, 0, 0.455) 0px 13.6468px 40.9403px 0px, rgb(0, 0, 0) 0px 30px 90px 0px
+  }
+}
