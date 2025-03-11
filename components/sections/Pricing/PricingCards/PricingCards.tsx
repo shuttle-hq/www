@@ -100,7 +100,7 @@ const PricingCards = () => {
     <>
       <div
         ref={ref}
-        className="absolute left-0 w-full h-[100px] opacity-0 -z-10 -translate-y-[150px]"
+        className="absolute left-0 w-full h-[100px] opacity-0 -z-10 -translate-y-[10px]"
       />
       <BackgroundShape
         style={{ transform: "translateY(75px)" }}
