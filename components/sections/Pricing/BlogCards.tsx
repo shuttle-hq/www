@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function BlogCards() {
   return (
-    <section className="flex flex-wrap flex-col gap-5 leading-8 max-w-[1280px] m-auto md:flex-row">
+    <section className="flex flex-wrap flex-col gap-5 leading-8 max-w-[1280px] m-auto md:flex-row mb-48">
       <article
         className={`relative flex flex-col flex-1 shrink justify-center overflow-hidden p-8 border border-solid border-white border-opacity-30 rounded-[32px] md:w-1/3`}
       >
