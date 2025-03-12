@@ -107,20 +107,23 @@ const PricingCards = () => {
         className="w-full top-auto left-0 hidden lg:block h-[200px]"
         background="linear-gradient(62.43deg, rgba(252, 84, 12, 0.425) 54.71%, rgba(56, 212, 233, 0.325) 79.8%)"
       />
+      <div className="h-2" />
       <div
         ref={priceSectionsRef}
-        className="relative flex justify-center xl:sticky top-0 mb-14 z-10"
+        className="relative flex justify-center xl:sticky top-0 z-10"
       >
         <section className="relative max-w-[1280px]" aria-label="Pricing plans">
-          <div className="relative flex flex-wrap justify-center md:gap-0 mx-[-0.5rem] {/*overflow-x-clip*/} {/*box-shadow-design*/}">
+          <div className="relative flex flex-wrap justify-center md:gap-0 mx-[-0.5rem]">
             {pricingTiers.map((tier, index) => (
               <PricingCard collapsed={collapseSections} key={index} {...tier} />
             ))}
             <BackgroundShape left className="top-[10%] block md:hidden" />
             <BackgroundShape right className="top-[60%] block md:hidden" />
           </div>
+          <div className="absolute bottom-0 left-0 h-14 w-full box-shadow-design -z-10"/>
         </section>
       </div>
+      <div className="h-14" />
     </>
   );
 };
