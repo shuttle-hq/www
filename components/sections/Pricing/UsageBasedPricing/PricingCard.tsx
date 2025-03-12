@@ -27,7 +27,9 @@ export const PricingCard: React.FC<PricingCardProps> = ({
         <div className="md:flex-1 shrink self-stretch my-auto basis-0">
           <h3 className="text-base font-bold text-neutral-200">{title}</h3>
           <div className="flex gap-2 items-center">
-            <p className="text-2xl text-right text-white">{price}</p>
+            <p className="text-xl text-right text-white font-gradual font-medium">
+              {price}
+            </p>
             <p className="text-sm text-center text-neutral-400">{unit}</p>
           </div>
         </div>

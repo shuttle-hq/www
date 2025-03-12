@@ -11,6 +11,9 @@ html {
 body {
   font-family: "Atkinson Hyperlegible", sans-serif;
   background: #e9e9e9;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body.dark {
@@ -384,5 +387,19 @@ body.dark {
 @layer utilities {
   .box-shadow-design {
     box-shadow: rgba(0, 0, 0, 0.024) 0px 0.706592px 2.11978px 0px, rgba(0, 0, 0, 0.06) 0px 1.80656px 5.41969px 0px, rgba(0, 0, 0, 0.12) 0px 3.62176px 10.8653px 0px, rgba(0, 0, 0, 0.227) 0px 6.8656px 20.5968px 0px, rgba(0, 0, 0, 0.455) 0px 13.6468px 40.9403px 0px, rgb(0, 0, 0) 0px 30px 90px 0px
+  }
+  /*
+  .box-shadow-design:after {
+    content: "";
+    position: absolute;
+    left: 0px;
+    width: calc(100%);
+    box-shadow: rgba(0, 0, 0, 0.655) 0px 13.6468px 10.9403px 10px !important;
+    bottom: 0;
+    height: 10px;
+  }*/
+
+  .border-slate-6000 {
+    border-color: rgba(255,255,255, .3);
   }
 }

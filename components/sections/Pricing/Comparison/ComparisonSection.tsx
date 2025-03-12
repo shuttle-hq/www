@@ -18,7 +18,7 @@ export const ComparisonSection: React.FC<ComparisonSectionProps> = ({
 }) => {
   return (
     <section className={`w-full ${className} max-w-[1280px]`}>
-      <header className="flex gap-2 items-center pt-2 pb-5 px-4 lg:px-10 max-w-full text-xl text-zinc-300 border-b border-slate-600 border-opacity-30">
+      <header className="flex gap-2 items-center pt-2 pb-5 px-4 lg:px-10 max-w-full text-xl text-zinc-300 border-b border-slate-6000 border-opacity-30">
         {icon && (
           <Image width={18} height={18} src={icon} alt={`${title} icon`} />
         )}

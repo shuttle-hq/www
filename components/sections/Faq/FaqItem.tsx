@@ -27,7 +27,7 @@ export const FaqItem: React.FC<FaqItemProps> = ({ question, answer }) => {
   };
 
   return (
-    <article className="flex gap-4 justify-center items-center py-5 px-4 md:p-8 w-full border-b border-slate-600 border-opacity-30 max-md:max-w-full">
+    <article className="flex gap-4 justify-center items-center py-5 px-4 md:p-8 w-full border-b border-slate-6000 border-opacity-30 max-md:max-w-full">
       <div className="flex flex-col flex-1 shrink justify-center self-stretch w-full basis-0 min-w-60 max-md:max-w-full">
         <button
           onClick={toggleAccordion}
