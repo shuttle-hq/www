@@ -113,7 +113,7 @@ const PricingCards = () => {
         className="relative flex justify-center xl:sticky top-0 z-10"
       >
         <section className="relative max-w-[1280px]" aria-label="Pricing plans">
-          <div className="relative flex flex-wrap justify-center md:gap-0 mx-[-0.5rem]">
+          <div className="relative flex flex-wrap justify-center md:gap-0 mx-[-0.5rem] pt-3 backdrop-blur-lg">
             {pricingTiers.map((tier, index) => (
               <PricingCard collapsed={collapseSections} key={index} {...tier} />
             ))}
