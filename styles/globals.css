@@ -386,18 +386,25 @@ body.dark {
 
 @layer utilities {
   .box-shadow-design {
-    box-shadow: rgba(0, 0, 0, 0.024) 0px 0.706592px 2.11978px 0px, rgba(0, 0, 0, 0.06) 0px 1.80656px 5.41969px 0px, rgba(0, 0, 0, 0.12) 0px 3.62176px 10.8653px 0px, rgba(0, 0, 0, 0.227) 0px 6.8656px 20.5968px 0px, rgba(0, 0, 0, 0.455) 0px 13.6468px 40.9403px 0px, rgb(0, 0, 0) 0px 30px 90px 0px
+    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#000000+0,ffffff+100&1+0,0+100 */
+    box-shadow: rgba(0, 0, 0, 0.455) 0px 13.6468px 10.9403px 10px !important;
+
   }
-  /*
   .box-shadow-design:after {
     content: "";
     position: absolute;
     left: 0px;
+    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#000000+44,ffffff+100&1+44,0+100 */
+    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#000000+70,ffffff+100&1+68,0+100 */
+    /*background: linear-gradient(to bottom,  rgba(0,0,0,1) 68%,rgba(0,0,0,0.94) 70%,rgba(255,255,255,0) 100%); !* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ *!*/
+
+
     width: calc(100%);
-    box-shadow: rgba(0, 0, 0, 0.655) 0px 13.6468px 10.9403px 10px !important;
-    bottom: 0;
-    height: 10px;
-  }*/
+    height: 60px;
+    /*box-shadow: rgba(0, 0, 0, 0.655) 0px 13.6468px 10.9403px 10px !important;*/
+    bottom: -20px;
+    z-index: -1;
+  }
 
   .border-slate-6000 {
     border-color: rgba(255,255,255, .3);

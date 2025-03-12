@@ -39,7 +39,7 @@ export default function Cards() {
     <div className="mx-auto max-w-7xl w-full">
       <div className="flex flex-row flex-wrap justify-center items-center gap-8 xl:gap-0 xl:flex-nowrap mx-[-0.5rem]">
         <div className="flex flex-col gap-5 px-10 min-w-0 text-center xl:text-left xl:w-1/2">
-          <h3 className="text-[48px] md:text-5xl font-bold text-gray-300">
+          <h3 className="text-[48px] md:text-5xl font-bold text-gray-300 font-gradual">
             Usage-based pricing
           </h3>
           <div className="text-base md:text-xl text-white/60 max-w-xl">

@@ -35,7 +35,9 @@ export const PricingCard: React.FC<PricingCardProps> = ({
         <div className="w-full flex flex-col">
           <div className="flex flex-col gap-2">
             <header>
-              <h2 className="text-3xl font-bold text-zinc-300">{title}</h2>
+              <h2 className="text-3xl font-bold text-zinc-300 font-gradual">
+                {title}
+              </h2>
               <p className="mt-1 text-base leading-6 text-white/60">
                 {description}
               </p>

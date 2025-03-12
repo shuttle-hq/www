@@ -120,7 +120,7 @@ const PricingCards = () => {
             <BackgroundShape left className="top-[10%] block md:hidden" />
             <BackgroundShape right className="top-[60%] block md:hidden" />
           </div>
-          <div className="absolute bottom-0 left-0 h-14 w-full box-shadow-design -z-10"/>
+          <div className="absolute bottom-0 left-0 h-14 w-full -z-10" />
         </section>
       </div>
       <div className="h-14" />
