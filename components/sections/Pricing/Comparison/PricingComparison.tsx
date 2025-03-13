@@ -471,7 +471,7 @@ const monitoringSection = {
     {
       cells: [
         {
-          icon: CheckIcon,
+          icon: CloseIcon,
           primary: "Custom app metrics & traces",
           secondary: "",
           isDisabled: true,
@@ -499,7 +499,7 @@ const monitoringSection = {
     {
       cells: [
         {
-          icon: CheckIcon,
+          icon: CloseIcon,
           primary: "Custom log destinations",
           secondary: "",
           isDisabled: true,
