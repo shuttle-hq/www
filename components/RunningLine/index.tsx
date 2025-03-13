@@ -1,6 +1,6 @@
 "use client";
 
-import { HTMLAttributes, ReactNode, useEffect, useRef, useState } from "react";
+import { HTMLAttributes, ReactNode, useRef, useState } from "react";
 import styles from "./RunningLine.module.css";
 
 interface RunningLineProps extends HTMLAttributes<HTMLDivElement> {
@@ -21,20 +21,8 @@ export const RunningLine = ({
   ...props
 }: RunningLineProps) => {
   const lineRef = useRef<HTMLDivElement>(null);
-  const [lineWidth, setLineWidth] = useState(0);
-
-  useEffect(() => {
-    const onResize = () => {
-      setLineWidth(lineRef.current?.getBoundingClientRect().width ?? 0);
-    };
-
-    window.addEventListener("resize", onResize);
-    onResize();
-
-    return () => {
-      window.removeEventListener("resize", onResize);
-    };
-  }, []);
+  // If the items change, please update the lineWidth accordingly.
+  const [lineWidth] = useState(1038);
 
   return (
     <div className={`${styles.linesContainer} ${className}`} {...props}>

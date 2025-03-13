@@ -29,7 +29,7 @@ interface Props {
 
 export default function PricingPage({ questions }: Props) {
   return (
-    <div className="relative flex-grow bg-center bg-no-repeat px-4 custom-bg">
+    <div className="relative flex-grow bg-center bg-no-repeat px-4 custom-bg overflow-x-clip">
       <NextSeo
         title="Pricing | Shuttle"
         description="Learn more about the Shuttle pricing structure and our offering."
