@@ -1,4 +1,6 @@
 import {
+  Cube,
+  Luminar,
   F5,
   Github,
   Hulu,
@@ -18,6 +20,12 @@ const LogosReferences = () => {
         <div className="mx-auto grid w-full max-w-7xl grid-cols-4 items-center justify-items-center gap-12 p-6 sm:p-8 lg:grid-cols-8">
           <Link href="https://uber.com">
             <Uber />
+          </Link>
+          <Link href="https://uber.com">
+            <Cube />
+          </Link>
+          <Link href="https://uber.com">
+            <Luminar />
           </Link>
           <Link href="https://github.com/">
             <Github />

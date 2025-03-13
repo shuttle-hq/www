@@ -1,4 +1,5 @@
 import {
+  Cube,
   EdgeAndNode,
   F5,
   Github,
@@ -11,6 +12,7 @@ import {
   Tencent,
   Uber,
   UiPath,
+  Luminar,
 } from "components/svgs";
 import Image from "next/image";
 
@@ -49,6 +51,14 @@ const TrustedBy = () => {
               className="absolute left-[10%] top-[4.15%] text-white transition-all duration-500 group-hover:left-[12.2%] group-hover:top-0"
               width={56}
             />
+            {/*<Cube
+              className="absolute left-[10%] top-[4.15%] text-white transition-all duration-500 group-hover:left-[12.2%] group-hover:top-0"
+              width={56}
+            />*/}
+            {/*<Luminar
+              className="absolute left-[10%] top-[4.15%] text-white transition-all duration-500 group-hover:left-[12.2%] group-hover:top-0"
+              width={56}
+            />*/}
             <Github className="absolute left-[49.2%] top-[10.5%] text-white text-white transition-all duration-500 group-hover:left-[51.4%] group-hover:top-[6.4%]" />
             <Nike className="absolute left-[80.2%] top-0 text-white text-white transition-all duration-500 group-hover:left-[82.3%] group-hover:top-[2.2%]" />
             <Stellar

@@ -17,10 +17,10 @@ export const ComparisonCell: React.FC<CellProps> = ({
   secondaryTooltip,
   primaryTooltip,
 }) => {
-  const textColorClass = isDisabled ? "text-neutral-500" : "text-zinc-300";
+  const textColorClass = isDisabled ? "text-neutral-5000" : "text-zinc-300";
   const secondaryTextColorClass = isDisabled
-    ? "text-neutral-500"
-    : "text-neutral-500";
+    ? "text-neutral-5000"
+    : "text-neutral-501";
 
   return (
     <div className={`px-2 my-auto ${width} ${textColorClass}`}>

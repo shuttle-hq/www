@@ -409,4 +409,14 @@ body.dark {
   .border-slate-6000 {
     border-color: rgba(255,255,255, .3);
   }
+  .text-neutral-501 {
+    color: #7a7a7a;
+  }
+  .text-neutral-5000 {
+    color: #494949;
+  }
+  .custom-bg {
+    background-image: url("/images/pages/pricing/custom-bg.jpg");
+    background-position: 54% 9%!important;
+  }
 }

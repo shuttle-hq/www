@@ -12,3 +12,5 @@ export { default as Uber } from "./Uber";
 export { default as UiPath } from "./UiPath";
 export { default as YCombinator } from "./YCombinator";
 export { default as YCombinatorOrange } from "./YCombinatorOrange";
+export { default as Cube } from "./Cube";
+export { default as Luminar } from "./Luminar";
