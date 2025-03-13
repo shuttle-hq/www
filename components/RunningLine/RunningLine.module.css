@@ -1,5 +1,5 @@
 .linesContainer {
-  --duration: 60s;
+  --duration: 150s;
   overflow: hidden;
   position: relative;
 }
