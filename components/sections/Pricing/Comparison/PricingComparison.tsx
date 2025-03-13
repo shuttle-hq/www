@@ -169,7 +169,7 @@ const computeSection = {
           isDisabled: true,
         },
         {
-          icon: CheckIcon,
+          icon: CloseIcon,
           primary: "Horizontal",
           secondary: "scaling",
           isDisabled: true,
@@ -247,7 +247,8 @@ const storageSection = {
     {
       cells: [
         {
-          icon: CheckIcon,
+          icon: CloseIcon,
+          isDisabled: true,
           primary: "",
           secondary: "More storage",
         },
@@ -530,13 +531,13 @@ const teamAccessSection = {
     {
       cells: [
         {
-          icon: CheckIcon,
+          icon: CloseIcon,
           primary: "Team",
           secondary: "access",
           isDisabled: true,
         },
         {
-          icon: CheckIcon,
+          icon: CloseIcon,
           primary: "Team",
           secondary: "access",
           isDisabled: true,
@@ -595,7 +596,7 @@ const supportSection = {
     {
       cells: [
         {
-          icon: CheckIcon,
+          icon: CloseIcon,
           primary: "Private",
           secondary: "support channel",
           isDisabled: true,
@@ -620,19 +621,19 @@ const supportSection = {
     {
       cells: [
         {
-          icon: CheckIcon,
+          icon: CloseIcon,
           primary: "Uptime",
           secondary: "SLA",
           isDisabled: true,
         },
         {
-          icon: CheckIcon,
+          icon: CloseIcon,
           primary: "Uptime",
           secondary: "SLA",
           isDisabled: true,
         },
         {
-          icon: CheckIcon,
+          icon: CloseIcon,
           primary: "Uptime",
           secondary: "SLA",
           isDisabled: true,

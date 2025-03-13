@@ -29,7 +29,8 @@ export default function BlogCards() {
               Rust-based.
             </h2>
             <a
-              href="#"
+              href="https://www.shuttle.dev/blog/2025/01/17/shuttle-web3-weavevm"
+              target="_blank"
               className="mt-1 text-base tracking-normal text-neutral-400 inline-block"
             >
               <span className="underline hover:no-underline">Read story</span>
@@ -59,12 +60,6 @@ export default function BlogCards() {
               Luminar provides LiDar tech, while Shuttle helps them deploy
               rapidly.
             </h2>
-            <a
-              href="#"
-              className="mt-1 text-base tracking-normal text-neutral-400 inline-block"
-            >
-              <span className="underline hover:no-underline">Read story</span>
-            </a>
           </div>
         </div>
       </article>
@@ -90,12 +85,6 @@ export default function BlogCards() {
               Luminar provides LiDar tech, while Shuttle helps them deploy
               rapidly.
             </h2>
-            <a
-              href="#"
-              className="mt-1 text-base tracking-normal text-neutral-400 inline-block"
-            >
-              <span className="underline hover:no-underline">Read story</span>
-            </a>
           </div>
         </div>
       </article>
