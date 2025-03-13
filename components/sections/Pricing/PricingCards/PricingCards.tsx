@@ -45,9 +45,9 @@ const pricingTiers: PricingCardProps[] = [
     priceSuffix: "/ month + usage based",
     features: [
       "10 projects",
-      "Auto-scaling",
+      "Horizontal scaling",
       "Team access",
-      "Choice of 3 regions",
+      "Dedicated database",
     ],
     buttonText: "Start 30 day trial",
     href: GET_STARTED_URI,
