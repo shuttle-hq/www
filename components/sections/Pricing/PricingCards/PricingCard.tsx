@@ -55,7 +55,7 @@ export const PricingCard: React.FC<PricingCardProps> = ({
           <ul
             className={`w-full text-sm transition-all duration-500 leading-tight text-white ${featuresListClassName} overflow-hidden`}
           >
-            <div className="h-8" />
+            <div className="h-4" />
             {features.map((feature, index) => (
               <li
                 key={index}

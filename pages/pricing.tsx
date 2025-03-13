@@ -60,7 +60,7 @@ export default function PricingPage({ questions }: Props) {
       </div>
 
       <div className="flex flex-col items-center mb-[40px] md:mb-[100px]">
-        <h2 className="w-fit text-center font-gradual leading-[72px] text-[48px] font-bold text-black dark:text-head lg:leading-[96px]">
+        <h2 className="w-fit text-center font-gradual leading-[72px] text-[40px] font-bold text-black dark:text-head md:text-[48px] lg:leading-[96px]">
           Pricing tiers
         </h2>
         <p className="pt-0 w-full text-base md:text-xl tracking-wide leading-8 text-center max-w-[577px] text-neutral-400 max-md:max-w-full">
