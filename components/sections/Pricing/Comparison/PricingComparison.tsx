@@ -247,7 +247,7 @@ const storageSection = {
     {
       cells: [
         {
-          icon: CloseIcon,
+          icon: CheckIcon,
           primary: "",
           secondary: "More storage",
         },
@@ -306,17 +306,17 @@ const networkSection = {
     {
       cells: [
         {
-          icon: CloseIcon,
+          icon: CheckIcon,
           primary: "1 GB",
           secondary: "egress included",
         },
         {
-          icon: CloseIcon,
+          icon: CheckIcon,
           primary: "1 GB",
           secondary: "egress included",
         },
         {
-          icon: CloseIcon,
+          icon: CheckIcon,
           primary: "1 GB",
           secondary: "egress included",
         },
