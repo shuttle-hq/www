@@ -388,7 +388,6 @@ body.dark {
   .box-shadow-design {
     /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#000000+0,ffffff+100&1+0,0+100 */
     box-shadow: rgba(0, 0, 0, 0.455) 0px 13.6468px 10.9403px 10px !important;
-
   }
   .box-shadow-design:after {
     content: "";
@@ -398,7 +397,6 @@ body.dark {
     /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#000000+70,ffffff+100&1+68,0+100 */
     /*background: linear-gradient(to bottom,  rgba(0,0,0,1) 68%,rgba(0,0,0,0.94) 70%,rgba(255,255,255,0) 100%); !* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ *!*/
 
-
     width: calc(100%);
     height: 60px;
     /*box-shadow: rgba(0, 0, 0, 0.655) 0px 13.6468px 10.9403px 10px !important;*/
@@ -407,7 +405,7 @@ body.dark {
   }
 
   .border-slate-6000 {
-    border-color: rgba(255,255,255, .3);
+    border-color: rgba(255, 255, 255, 0.3);
   }
   .text-neutral-501 {
     color: #7a7a7a;
@@ -417,6 +415,7 @@ body.dark {
   }
   .custom-bg {
     background-image: url("/images/pages/pricing/custom-bg.jpg");
-    background-position: 54% 9%!important;
+    background-position: 54% 9% !important;
+    background-size: contain;
   }
 }
