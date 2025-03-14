@@ -74,7 +74,7 @@ export default function PricingPage({ questions }: Props) {
         <PricingComparison />
       </div>
 
-      <div className="relative flex flex-col justify-center custom-bg2 bg-no-repeat sm:min-h-[850px]">
+      <div className="relative flex flex-col justify-center custom-bg2 bg-no-repeat sm:min-h-[1050px]">
         <PricingGrid />
         {/*<BackgroundShape
           style={{ transform: "none" }}
