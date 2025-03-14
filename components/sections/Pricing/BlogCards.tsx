@@ -7,7 +7,7 @@ export default function BlogCards() {
   return (
     <section className="flex flex-wrap flex-col gap-5 leading-8 max-w-[1280px] m-auto md:flex-row mb-24 md:mb-48">
       <article
-        className={`relative flex flex-col flex-1 shrink justify-center overflow-hidden p-8 border border-solid border-white border-opacity-30 rounded-[32px] md:w-1/3`}
+        className={`relative flex flex-col flex-1 shrink justify-top overflow-hidden p-8 border border-solid border-white border-opacity-30 rounded-[32px] md:w-1/3`}
       >
         <div className="w-full">
           <Image
@@ -22,8 +22,9 @@ export default function BlogCards() {
             alt="Blog post illustration"
             width={38}
             height={38}
+            className="mt-1"
           />
-          <div className="mt-4 w-full">
+          <div className="mt-5 w-full">
             <p className="text-base leading-8 text-grey100">
               Decent.Land - Web3
             </p>
@@ -42,7 +43,7 @@ export default function BlogCards() {
         </div>
       </article>
       <article
-        className={`relative flex flex-col flex-1 shrink justify-center overflow-hidden p-8 border border-solid border-white border-opacity-30 rounded-[32px] md:w-1/3`}
+        className={`relative flex flex-col flex-1 shrink justify-top overflow-hidden p-8 border border-solid border-white border-opacity-30 rounded-[32px] md:w-1/3`}
       >
         <div className="w-full">
           <Image
@@ -67,7 +68,7 @@ export default function BlogCards() {
         </div>
       </article>
       <article
-        className={`relative flex flex-col flex-1 shrink justify-center overflow-hidden p-8 border border-solid border-white border-opacity-30 rounded-[32px] md:w-1/3`}
+        className={`relative flex flex-col flex-1 shrink justify-top overflow-hidden p-8 border border-solid border-white border-opacity-30 rounded-[32px] md:w-1/3`}
       >
         <div className="w-full">
           <Image
