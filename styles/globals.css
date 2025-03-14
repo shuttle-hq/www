@@ -421,5 +421,10 @@ body.dark {
       background-position: 54% 9% !important;
       background-size: contain;
     }
+		.custom-galaxy-bg {
+			background-image: url("/images/pages/careers/sections/BG-img.jpg");
+			background-position: 80% center !important;
+			background-size: 100%;
+		}
   }
 }
