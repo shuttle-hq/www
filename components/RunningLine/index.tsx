@@ -22,7 +22,7 @@ export const RunningLine = ({
 }: RunningLineProps) => {
   const lineRef = useRef<HTMLDivElement>(null);
   // If the items change, please update the lineWidth accordingly.
-  const [lineWidth] = useState(1038);
+  const [lineWidth] = useState(1500);
 
   return (
     <div className={`${styles.linesContainer} ${className}`} {...props}>

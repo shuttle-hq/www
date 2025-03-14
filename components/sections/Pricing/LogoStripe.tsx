@@ -67,6 +67,21 @@ const LogoStrip: React.FC = () => {
               src="/images/pages/pricing/featuresList/unwritten.svg"
               className="w-[99px] h-[17px]"
             />,
+            <LogoImage
+              key="10"
+              src="/images/pages/pricing/featuresList/stronghold.svg"
+              className="w-[103px] h-[24px]"
+            />,
+            <LogoImage
+              key="11"
+              src="/images/pages/pricing/featuresList/fortanix.svg"
+              className="w-[113px] h-[23px]"
+            />,
+            <LogoImage
+              key="12"
+              src="/images/pages/pricing/featuresList/hrmano.svg"
+              className="w-[126px] h-[27px]"
+            />,
           ]}
         />
       </div>

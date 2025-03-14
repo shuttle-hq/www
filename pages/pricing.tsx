@@ -76,11 +76,11 @@ export default function PricingPage({ questions }: Props) {
 
       <div className="relative min-h-[800px] flex flex-col justify-center custom-bg bg-no-repeat">
         <PricingGrid />
-        <BackgroundShape
+        {/*<BackgroundShape
           style={{ transform: "none" }}
           className="w-full h-[200px] top-auto left-0 hidden lg:block"
           background="linear-gradient(67.02deg, rgba(252, 84, 12, 0.7) 36.9%, rgba(255, 215, 111, 0.7) 63.12%, rgba(56, 212, 233, 0.7) 81.59%)"
-        />
+        />*/}
       </div>
 
       <div className="flex flex-col gap-6 max-w-7xl pb-16 m-auto">
