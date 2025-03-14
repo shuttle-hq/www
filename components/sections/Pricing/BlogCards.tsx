@@ -16,6 +16,7 @@ export default function BlogCards() {
             fill
             className="absolute left-0 top-0 -z-10 w-full"
           />
+
           <Image
             src="/images/pages/pricing/sections/chooseUs/layers.png"
             alt="Blog post illustration"
