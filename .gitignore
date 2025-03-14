@@ -46,3 +46,4 @@ tsconfig.tsbuildinfo
 
 # markdown-preview-mode
 .markdown-preview.html
+.idea
