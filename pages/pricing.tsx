@@ -45,7 +45,7 @@ export default function PricingPage({ questions }: Props) {
         }}
       />
       {/*<Hero />*/}
-      <div className="flex flex-col items-center justify-between gap-8 p-16 pt-28">
+      <div className="flex flex-col items-center justify-between gap-8 p-8 pt-8 md:p-16 md:pt-28">
         <div className="flex flex-col items-center gap-4 md:gap-8">
           <h1 className="w-fit text-center font-gradual text-5xl font-bold text-black dark:text-head lg:text-6.5">
             Cloud Development <br /> made Simple
@@ -59,7 +59,7 @@ export default function PricingPage({ questions }: Props) {
         <ImageSection />
       </div>
 
-      <div className="flex flex-col items-center mb-[40px]">
+      <div className="flex flex-col items-center mb-5 md:mb-10">
         <h2 className="w-fit text-center font-gradual leading-[72px] text-[40px] font-bold text-black dark:text-head md:text-[48px] lg:leading-[96px]">
           Pricing tiers
         </h2>
@@ -74,7 +74,7 @@ export default function PricingPage({ questions }: Props) {
         <PricingComparison />
       </div>
 
-      <div className="relative min-h-[850px] flex flex-col justify-center custom-bg2 bg-no-repeat">
+      <div className="relative flex flex-col justify-center custom-bg2 bg-no-repeat sm:min-h-[850px]">
         <PricingGrid />
         {/*<BackgroundShape
           style={{ transform: "none" }}
@@ -84,7 +84,7 @@ export default function PricingPage({ questions }: Props) {
       </div>
 
       <div className="flex flex-col gap-6 max-w-7xl pb-16 m-auto">
-        <h3 className="text-center font-gradual text-[40px] md:text-5xl font-bold text-black dark:text-head md:text-4">
+        <h3 className="text-center font-gradual text-[40px] md:text-5xl font-bold text-black dark:text-head md:text-4 leading-[48px]">
           Why Developers Choose Shuttle
         </h3>
         <p className="pt-0 w-full text-base md:text-xl tracking-wide leading-8 text-center mx-auto max-w-4xl text-neutral-400 max-md:max-w-full">
