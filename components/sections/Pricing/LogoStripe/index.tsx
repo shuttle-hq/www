@@ -3,9 +3,11 @@
 import * as React from "react";
 import dynamic from "next/dynamic";
 import LogoImage from "./LogoImage";
+import styles from "./LogoStripe.module.css";
+import { mergeClasses } from "../../../../lib/helpers";
 
 const RunningLine = dynamic(
-  () => import("../../RunningLine").then((mod) => mod.RunningLine),
+  () => import("../../../RunningLine").then((mod) => mod.RunningLine),
   {
     loading: () => <div />,
   },
@@ -13,7 +15,7 @@ const RunningLine = dynamic(
 
 const LogoStrip: React.FC = () => {
   return (
-    <section className="max-w-[780px]">
+    <section className="relative max-w-[780px]">
       <div>
         <RunningLine
           className="flex gap-10 items-center max-md:max-w-full"
@@ -83,6 +85,22 @@ const LogoStrip: React.FC = () => {
               className="w-[126px] h-[27px]"
             />,
           ]}
+        />
+      </div>
+      <div className={styles.mask}>
+        <div
+          className={mergeClasses(
+            styles.shadowBlock,
+            styles.leftShadowBlock,
+            "absolute left-0",
+          )}
+        />
+        <div
+          className={mergeClasses(
+            styles.shadowBlock,
+            styles.rightShadowBlock,
+            "absolute right-0",
+          )}
         />
       </div>
     </section>
