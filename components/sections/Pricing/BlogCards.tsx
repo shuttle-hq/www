@@ -17,16 +17,18 @@ export default function BlogCards() {
             className="absolute left-0 top-0 -z-10 w-full"
           />
           <Image
-            src="/images/pages/pricing/sections/chooseUs/web3Icon.png"
+            src="/images/pages/pricing/sections/chooseUs/layers.png"
             alt="Blog post illustration"
             width={38}
             height={38}
           />
           <div className="mt-4 w-full">
-            <p className="text-base leading-8 text-grey100">WeaveVM - Web3</p>
+            <p className="text-base leading-8 text-grey100">
+              Decent.Land - Web3
+            </p>
             <h2 className="text-2xl text-zinc-300">
-              Our team required a streamlined solution for deploying a
-              Rust-based.
+              Shuttle eliminated the need for code refactoring or complex
+              infrastructure management.
             </h2>
             <a
               href="https://www.shuttle.dev/blog/2025/01/17/shuttle-web3-weavevm"
@@ -57,8 +59,8 @@ export default function BlogCards() {
           <div className="mt-4 w-full">
             <p className="text-base leading-8 text-grey100">Luminar - Lidar</p>
             <h2 className="text-2xl text-zinc-300">
-              Luminar provides LiDar tech, while Shuttle helps them deploy
-              rapidly.
+              Shuttle allows us to rapidly deploy tools and services with low
+              cost and excellent reliability.
             </h2>
           </div>
         </div>
@@ -74,16 +76,17 @@ export default function BlogCards() {
             className="absolute left-0 top-0 -z-10 w-full"
           />
           <Image
-            src="/images/pages/pricing/sections/chooseUs/cube.png"
+            src="/images/pages/pricing/sections/chooseUs/web3Icon.png"
             alt="Blog post illustration"
             width={38}
             height={38}
           />
           <div className="mt-4 w-full">
-            <p className="text-base leading-8 text-grey100">Something - Else</p>
+            <p className="text-base leading-8 text-grey100">
+              SL8.online - Blockchain
+            </p>
             <h2 className="text-2xl text-zinc-300">
-              Luminar provides LiDar tech, while Shuttle helps them deploy
-              rapidly.
+              Shuttle transformed our deployment process for Rust applications.
             </h2>
           </div>
         </div>
