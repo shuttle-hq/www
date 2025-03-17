@@ -704,6 +704,27 @@ export function PricingComparison() {
           }))}
           className="mt-14 max-md:mt-10"
         />
+        <ComparisonSection
+          {...monitoringSection}
+          rows={monitoringSection.rows.map((row) => ({
+            cells: [row.cells[sectionIndex]],
+          }))}
+          className="mt-14 max-md:mt-10"
+        />
+        <ComparisonSection
+          {...teamAccessSection}
+          rows={teamAccessSection.rows.map((row) => ({
+            cells: [row.cells[sectionIndex]],
+          }))}
+          className="mt-14 max-md:mt-10"
+        />
+        <ComparisonSection
+          {...supportSection}
+          rows={supportSection.rows.map((row) => ({
+            cells: [row.cells[sectionIndex]],
+          }))}
+          className="mt-14 max-md:mt-10"
+        />
       </article>
     </>
   );

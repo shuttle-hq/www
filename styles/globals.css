@@ -421,6 +421,9 @@ body.dark {
       background-position: center 7% !important;
       background-repeat: no-repeat !important;
     }
+    .custom-bg2 {
+      padding: 0 -16px 40px;
+    }
   }
     .custom-bg2 {
       background-image: url("/images/pages/pricing/custom-bg.jpg");
