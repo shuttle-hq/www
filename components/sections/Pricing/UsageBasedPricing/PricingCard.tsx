@@ -18,7 +18,7 @@ export const PricingCard: React.FC<PricingCardProps> = ({
 }) => {
   return (
     <article className="w-full md:w-1/2 px-2 my-2" role="listitem">
-      <div className="flex grow shrink gap-4 items-center justify-center self-stretch px-6 py-8 my-auto bg-black border border-solid border-white border-opacity-30 rounded-[32px] max-md:px-5 whitespace-nowrap">
+      <div className="flex gap-4 items-center justify-center px-6 py-8 my-auto bg-black border border-solid border-white border-opacity-30 rounded-[32px] max-md:px-5 whitespace-nowrap w-max flex-none min-w-[240px] m-auto md:w-full md:flex-grow md:flex-shrink">
         <img
           src={iconSrc}
           alt={`${title} icon`}
