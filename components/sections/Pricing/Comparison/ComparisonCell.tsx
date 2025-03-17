@@ -23,7 +23,7 @@ export const ComparisonCell: React.FC<CellProps> = ({
     : "text-neutral-501";
 
   return (
-    <div className={`px-2 my-auto ${width} ${textColorClass}`}>
+    <div className={`my-auto ${width} ${textColorClass} md:px-2 `}>
       <div className="flex gap-2 lg:px-8 items-center self-stretch">
         <Icon className="object-contain shrink-0 self-stretch my-auto w-4 aspect-square" />
         <div className="flex flex-1 shrink gap-1 items-center self-stretch my-auto basis-0">

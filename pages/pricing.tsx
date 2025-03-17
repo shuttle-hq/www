@@ -45,12 +45,12 @@ export default function PricingPage({ questions }: Props) {
         }}
       />
       {/*<Hero />*/}
-      <div className="flex flex-col items-center justify-between gap-8 p-8 pt-8 md:p-16 md:pt-28">
+      <div className="flex flex-col items-center justify-between gap-8 pt-8 md:p-16 md:pt-28">
         <div className="flex flex-col items-center gap-4 md:gap-8">
           <h1 className="w-fit text-center font-gradual text-5xl font-bold text-black dark:text-head lg:text-6.5">
             Cloud Development <br /> made Simple
           </h1>
-          <p className="pt-0 w-full text-base md:text-xl tracking-wide leading-8 text-center max-w-[577px] text-neutral-400 max-md:max-w-full">
+          <p className="pt-0 w-full text-base md:text-xl tracking-wide leading-6 text-center max-w-[577px] text-neutral-400 max-md:max-w-full md:leading-8">
             Shuttle puts your developer experience first. Build with joy, scale
             with ease while we handle the infrastructure.
           </p>

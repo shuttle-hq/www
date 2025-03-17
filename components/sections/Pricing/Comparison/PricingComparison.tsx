@@ -670,7 +670,7 @@ export function PricingComparison() {
         <ComparisonSection {...supportSection} className="mt-12 max-md:mt-10" />
       </article>
       <article className="flex lg:hidden text-base leading-tight flex-col justify-center items-center mb-14 md:mb-28">
-        <div className="w-full sticky lg:hidden top-4 resize z-10">
+        <div className="w-full sticky lg:hidden top-0 resize z-10">
           <Select
             className="mb-5"
             options={options}
