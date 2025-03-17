@@ -689,6 +689,7 @@ export function PricingComparison() {
           rows={storageSection.rows.map((row) => ({
             cells: [row.cells[sectionIndex]],
           }))}
+          className="mt-6"
         />
         <ComparisonSection
           {...networkSection}

@@ -383,7 +383,27 @@ body.dark {
     background-color: #ffffff33;
   }
 }
+.custom-bg2 {
+  background-image: url("/images/pages/pricing/custom-bg.jpg");
+  /*background-size: cover;*/
+  background-position: center 7% !important;
+  background-repeat: no-repeat !important;
+  margin: 0 -16px 0px;
+  padding: 40px 16px 180px;
+}
 
+@media (min-width: 768px) {
+  .custom-bg {
+    background-image: url("/images/pages/pricing/custom-bg.jpg");
+    background-size: 200% 19% !important;
+    background-position: center 7% !important;
+    background-repeat: no-repeat !important;
+  }
+
+  .custom-bg2 {
+    padding: 0 16px 40px!important;
+  }
+}
 @layer utilities {
   .box-shadow-design {
     /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#000000+0,ffffff+100&1+0,0+100 */
@@ -414,25 +434,10 @@ body.dark {
     color: #494949;
   }
 
-  @media (min-width: 768px) {
-    .custom-bg {
-      background-image: url("/images/pages/pricing/custom-bg.jpg");
-      background-size: 200% 19% !important;
-      background-position: center 7% !important;
-      background-repeat: no-repeat !important;
-    }
-    .custom-bg2 {
-      padding: 0 -16px 40px;
-    }
-  }
-    .custom-bg2 {
-      background-image: url("/images/pages/pricing/custom-bg.jpg");
-      /*background-size: cover;*/
-      background-position: center 7% !important;
-      background-repeat: no-repeat !important;
-      margin: 0 -16px 0px;
-      padding: 40px 16px 180px;
-    }
+
+
+
+
   @media (min-width: 768px) {
     margin: 0 -16px 40px;
     padding: 0 16px;
