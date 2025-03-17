@@ -427,7 +427,11 @@ body.dark {
       /*background-size: cover;*/
       background-position: center 7% !important;
       background-repeat: no-repeat !important;
-      margin: 0 -16px 40px;
-      padding: 0 16px;
+      margin: 0 -16px 0px;
+      padding: 40px 16px 180px;
     }
+  @media (min-width: 768px) {
+    margin: 0 -16px 40px;
+    padding: 0 16px;
+  }
 }
