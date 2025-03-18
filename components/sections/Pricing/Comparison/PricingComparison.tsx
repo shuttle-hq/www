@@ -39,21 +39,25 @@ const computeSection = {
         {
           icon: CheckIcon,
           primary: "Spot",
+          primaryTooltip: "See FAQ for definition",
           secondary: "instance",
         },
         {
           icon: CheckIcon,
           primary: "Reserved",
+          primaryTooltip: "See FAQ for definition",
           secondary: "instance",
         },
         {
           icon: CheckIcon,
           primary: "Reserved",
+          primaryTooltip: "See FAQ for definition",
           secondary: "instance",
         },
         {
           icon: CheckIcon,
           primary: "Reserved",
+          primaryTooltip: "See FAQ for definition",
           secondary: "instance",
         },
       ],
@@ -136,26 +140,27 @@ const computeSection = {
       cells: [
         {
           icon: CloseIcon,
-          primary: "Scaleable",
+          primary: "Configurable",
           secondary: "instance",
           isDisabled: true,
         },
         {
           icon: CheckIcon,
-          primary: "Scaleable",
+          primary: "Configurable",
           primaryTooltip:
             "Scale up to 4vCPU and  8GB Memory - see usage based pricing below",
           secondary: "instance",
         },
         {
           icon: CheckIcon,
-          primary: "Scaleable",
-          primaryTooltip: "Scale up to TBC Memory and TBC",
+          primary: "Configurable",
+          primaryTooltip:
+            "Scale up to 8vCPU and  16GB Memory - see usage based pricing below",
           secondary: "instance",
         },
         {
           icon: CheckIcon,
-          primary: "Scaleable",
+          primary: "Custom",
           secondary: "instance",
         },
       ],
@@ -186,7 +191,7 @@ const computeSection = {
           primary: "Horizontal ",
           primaryTooltip:
             "Load balance across multiple instances, see usage based pricing",
-          secondary: "scaling",
+          secondary: "auto-scaling",
         },
       ],
     },
@@ -249,24 +254,24 @@ const storageSection = {
         {
           icon: CloseIcon,
           isDisabled: true,
-          primary: "",
-          secondary: "More storage",
+          primary: "Additional ",
+          secondary: "storage",
         },
         {
           icon: CheckIcon,
-          primary: "More",
+          primary: "Additional",
           secondary: "storage",
           secondaryTooltip: "See usage based pricing below",
         },
         {
           icon: CheckIcon,
-          primary: "More",
+          primary: "Additional",
           secondary: "storage",
           secondaryTooltip: "See usage based pricing below",
         },
         {
           icon: CheckIcon,
-          primary: "More",
+          primary: "Additional",
           secondary: "storage",
           secondaryTooltip: "See usage based pricing below",
         },
@@ -309,17 +314,17 @@ const networkSection = {
         {
           icon: CheckIcon,
           primary: "1 GB",
-          secondary: "egress included",
+          secondary: "network egress included",
         },
         {
           icon: CheckIcon,
           primary: "1 GB",
-          secondary: "egress included",
+          secondary: "network egress included",
         },
         {
           icon: CheckIcon,
           primary: "1 GB",
-          secondary: "egress included",
+          secondary: "network egress included",
         },
         {
           icon: CheckIcon,
@@ -331,26 +336,26 @@ const networkSection = {
       cells: [
         {
           icon: CloseIcon,
-          primary: "More",
-          secondary: "egress",
+          primary: "Additional",
+          secondary: "network egress",
           isDisabled: true,
         },
         {
           icon: CheckIcon,
-          primary: "More",
-          secondary: "egress",
+          primary: "Additional",
+          secondary: "network egress",
           secondaryTooltip: "See usage based pricing below",
         },
         {
           icon: CheckIcon,
-          primary: "More",
-          secondary: "egress",
+          primary: "Additional",
+          secondary: "network egress",
           secondaryTooltip: "See usage based pricing below",
         },
         {
           icon: CheckIcon,
-          primary: "More",
-          secondary: "egress",
+          primary: "Additional",
+          secondary: "network egress",
           secondaryTooltip: "See usage based pricing below",
         },
       ],
@@ -449,21 +454,29 @@ const monitoringSection = {
         {
           icon: CheckIcon,
           primary: "Basic",
+          primaryTooltip:
+            "Export CPU usage, Memory usage, Network I/O & Disk I/O",
           secondary: "usage metrics",
         },
         {
           icon: CheckIcon,
           primary: "Basic",
+          primaryTooltip:
+            "Export CPU usage, Memory usage, Network I/O & Disk I/O",
           secondary: "usage metrics",
         },
         {
           icon: CheckIcon,
           primary: "Basic",
+          primaryTooltip:
+            "Export CPU usage, Memory usage, Network I/O & Disk I/O",
           secondary: "usage metrics",
         },
         {
           icon: CheckIcon,
           primary: "Basic",
+          primaryTooltip:
+            "Export CPU usage, Memory usage, Network I/O & Disk I/O",
           secondary: "usage metrics",
         },
       ],
@@ -480,19 +493,19 @@ const monitoringSection = {
           icon: CheckIcon,
           primary: "Custom",
           secondary: "app metrics & traces",
-          secondaryTooltip: "Metrics & traces",
+          secondaryTooltip: "Export everything",
         },
         {
           icon: CheckIcon,
           primary: "Custom",
           secondary: "app metrics & traces",
-          secondaryTooltip: "Metrics & traces",
+          secondaryTooltip: "Export everything",
         },
         {
           icon: CheckIcon,
           primary: "Custom",
           secondary: "app metrics & traces",
-          secondaryTooltip: "Metrics & traces",
+          secondaryTooltip: "Export everything",
         },
       ],
     },
