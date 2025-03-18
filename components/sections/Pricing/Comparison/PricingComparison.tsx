@@ -689,42 +689,42 @@ export function PricingComparison() {
           rows={storageSection.rows.map((row) => ({
             cells: [row.cells[sectionIndex]],
           }))}
-          className="mt-6"
+          className="mt-10"
         />
         <ComparisonSection
           {...networkSection}
           rows={networkSection.rows.map((row) => ({
             cells: [row.cells[sectionIndex]],
           }))}
-          className="mt-6"
+          className="mt-10"
         />
         <ComparisonSection
           {...devopsSection}
           rows={devopsSection.rows.map((row) => ({
             cells: [row.cells[sectionIndex]],
           }))}
-          className="mt-14 max-md:mt-10"
+          className="mt-10"
         />
         <ComparisonSection
           {...monitoringSection}
           rows={monitoringSection.rows.map((row) => ({
             cells: [row.cells[sectionIndex]],
           }))}
-          className="mt-14 max-md:mt-10"
+          className="mt-10"
         />
         <ComparisonSection
           {...teamAccessSection}
           rows={teamAccessSection.rows.map((row) => ({
             cells: [row.cells[sectionIndex]],
           }))}
-          className="mt-14 max-md:mt-10"
+          className="mt-10"
         />
         <ComparisonSection
           {...supportSection}
           rows={supportSection.rows.map((row) => ({
             cells: [row.cells[sectionIndex]],
           }))}
-          className="mt-14 max-md:mt-10"
+          className="mt-10"
         />
       </article>
     </>

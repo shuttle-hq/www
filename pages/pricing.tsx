@@ -87,7 +87,7 @@ export default function PricingPage({ questions }: Props) {
         <h3 className="text-center font-gradual text-[40px] md:text-5xl font-bold text-black dark:text-head md:text-4 leading-[48px]">
           Why Developers Choose Shuttle
         </h3>
-        <p className="pt-0 w-full text-base md:text-xl tracking-wide leading-8 text-center mx-auto max-w-4xl text-neutral-400 max-md:max-w-full">
+        <p className="pt-0 w-full text-base md:text-xl tracking-wide leading-6 text-center mx-auto max-w-4xl text-neutral-400 max-md:max-w-full">
           At Shuttle, we don&apos;t just provide cloud infrastructure - we
           provide a developer-first experience designed to make building and
           deploying Rust applications effortless and joyful.
