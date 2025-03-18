@@ -396,6 +396,7 @@ body.dark {
 .bg-img1 {
   background-image: url("/images/pages/pricing/sections/chooseUs/web3.png");
   background-repeat: no-repeat;
+  background-position: 50% 50%;
 }
 
 .bg-img2 {
