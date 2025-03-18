@@ -50,7 +50,7 @@ export default function Cards() {
           </div>
         </div>
         <section
-          className="lg:w-1/2 xl:px-12 w-full"
+          className="lg:w-3/5 xl:px-12 w-full"
           aria-label="Pricing Cards"
         >
           <div

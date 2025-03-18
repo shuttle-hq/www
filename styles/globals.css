@@ -383,6 +383,7 @@ body.dark {
     background-color: #ffffff33;
   }
 }
+
 .custom-bg2 {
   background-image: url("/images/pages/pricing/custom-bg.jpg");
   /*background-size: cover;*/
@@ -391,6 +392,23 @@ body.dark {
   margin: 0 -16px 0px;
   padding: 40px 16px 180px;
 }
+
+.bg-img1 {
+  background-image: url("/images/pages/pricing/sections/chooseUs/web3.png");
+  background-repeat: no-repeat;
+}
+
+.bg-img2 {
+  background-image: url("/images/pages/pricing/sections/chooseUs/lidar.png");
+  background-repeat: no-repeat;
+}
+
+.bg-img3 {
+  background-image: url("/images/pages/pricing/sections/chooseUs/else.png");
+  background-repeat: no-repeat;
+}
+
+
 
 @media (min-width: 768px) {
   .custom-bg {
