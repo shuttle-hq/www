@@ -24,7 +24,7 @@ export const ComparisonCell: React.FC<CellProps> = ({
 
   return (
     <div className={`my-auto ${width} ${textColorClass} md:px-2 `}>
-      <div className="flex gap-2 lg:px-8 items-center self-stretch">
+      <div className="flex gap-2 lg:px-4 items-center self-stretch">
         <Icon className="object-contain shrink-0 self-stretch my-auto w-4 aspect-square" />
         <div className="flex flex-1 shrink gap-1 items-center self-stretch my-auto basis-0">
           {isCustom ? (

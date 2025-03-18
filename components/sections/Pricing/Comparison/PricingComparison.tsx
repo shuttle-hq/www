@@ -199,7 +199,7 @@ const computeSection = {
 };
 
 const storageSection = {
-  title: "Storage & Database",
+  title: "Database",
   icon: "/images/pages/pricing/sections/pricingComparison/storage-and-database.svg",
   rows: [
     {
@@ -281,7 +281,7 @@ const storageSection = {
 };
 
 const networkSection = {
-  title: "Network & Performance",
+  title: "Networking",
   icon: "/images/pages/pricing/sections/pricingComparison/network-and-performance.svg",
   rows: [
     {
@@ -314,17 +314,17 @@ const networkSection = {
         {
           icon: CheckIcon,
           primary: "1 GB",
-          secondary: "network egress included",
+          secondary: "network egress",
         },
         {
           icon: CheckIcon,
           primary: "1 GB",
-          secondary: "network egress included",
+          secondary: "network egress",
         },
         {
           icon: CheckIcon,
           primary: "1 GB",
-          secondary: "network egress included",
+          secondary: "network egress",
         },
         {
           icon: CheckIcon,
@@ -337,25 +337,25 @@ const networkSection = {
         {
           icon: CloseIcon,
           primary: "Additional",
-          secondary: "network egress",
+          secondary: "egress",
           isDisabled: true,
         },
         {
           icon: CheckIcon,
           primary: "Additional",
-          secondary: "network egress",
+          secondary: "egress",
           secondaryTooltip: "See usage based pricing below",
         },
         {
           icon: CheckIcon,
           primary: "Additional",
-          secondary: "network egress",
+          secondary: "egress",
           secondaryTooltip: "See usage based pricing below",
         },
         {
           icon: CheckIcon,
           primary: "Additional",
-          secondary: "network egress",
+          secondary: "egress",
           secondaryTooltip: "See usage based pricing below",
         },
       ],
@@ -364,7 +364,7 @@ const networkSection = {
 };
 
 const devopsSection = {
-  title: "DevOps & Tooling",
+  title: "Builds",
   icon: "/images/pages/pricing/sections/pricingComparison/dev-ops-and-tooling.svg",
   rows: [
     {
@@ -377,17 +377,17 @@ const devopsSection = {
         {
           icon: CheckIcon,
           primary: "100",
-          secondary: "monthly build minutes",
+          secondary: "build minutes",
         },
         {
           icon: CheckIcon,
           primary: "250",
-          secondary: "monthly build minutes",
+          secondary: "build minutes",
         },
         {
           icon: CheckIcon,
           primary: "Custom",
-          secondary: "monthly build minutes",
+          secondary: "build minutes",
         },
       ],
     },
@@ -485,26 +485,26 @@ const monitoringSection = {
       cells: [
         {
           icon: CloseIcon,
-          primary: "Custom app metrics & traces",
+          primary: "Custom metrics & traces",
           secondary: "",
           isDisabled: true,
         },
         {
           icon: CheckIcon,
           primary: "Custom",
-          secondary: "app metrics & traces",
+          secondary: "metrics & traces",
           secondaryTooltip: "Export everything",
         },
         {
           icon: CheckIcon,
           primary: "Custom",
-          secondary: "app metrics & traces",
+          secondary: "metrics & traces",
           secondaryTooltip: "Export everything",
         },
         {
           icon: CheckIcon,
           primary: "Custom",
-          secondary: "app metrics & traces",
+          secondary: "metrics & traces",
           secondaryTooltip: "Export everything",
         },
       ],

@@ -24,11 +24,12 @@ export const faqData: FaqItem[] = [
     question: "How does your usage-based pricing work?",
     answer: [
       "Our Pro and Growth tiers include generous base allocations of resources. If you need more, additional resources are available at the following rates:",
-      "Additional vCPU: from $0.06/vCPU hour",
-      "Database storage: $0.12/GB",
-      "Build minutes: $0.025/min",
-      "Network egress: $0.10/GB",
-      "Dedicated database (Pro tier): $20/month for 20GB storage",
+      "- Additional vCPU: from $0.06/vCPU hour",
+      "- Database storage: $0.12/GB",
+      "- Build minutes: $0.025/min",
+      "- Network egress: $0.10/GB",
+      "- Dedicated database (Pro tier): $20/month for 20GB storage",
+      "<li>Dedicated database (Pro tier): $20/month for 20GB storage</li>",
     ],
   },
   {
