@@ -29,7 +29,6 @@ export const faqData: FaqItem[] = [
       "- Build minutes: $0.025/min",
       "- Network egress: $0.10/GB",
       "- Dedicated database (Pro tier): $20/month for 20GB storage",
-      "<li>Dedicated database (Pro tier): $20/month for 20GB storage</li>",
     ],
   },
   {
