@@ -151,6 +151,7 @@ const Navigation = () => {
                 className="w-[140px] justify-center"
                 variant="primary"
                 invertOnDark
+                href="https://console.shuttle.dev/"
               >
                 Log in
               </CustomButton>
