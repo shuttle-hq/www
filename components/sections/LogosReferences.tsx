@@ -21,12 +21,12 @@ const LogosReferences = () => {
           <Link href="https://uber.com">
             <Uber />
           </Link>
-          <Link href="https://uber.com">
+          {/* <Link href="https://uber.com">
             <Cube />
           </Link>
           <Link href="https://uber.com">
             <Luminar />
-          </Link>
+          </Link> */}
           <Link href="https://github.com/">
             <Github />
           </Link>
