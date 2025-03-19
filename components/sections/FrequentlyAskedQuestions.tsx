@@ -33,8 +33,8 @@ const FrequentlyAskedQuestions: FC<FrequentlyAskedQuestionsProps> = ({
 
   return (
     <div className="mx-auto mt-24 w-full max-w-7xl px-5 sm:px-10 lg:mt-32 desktop:mt-48">
-      <h2 className="font-gradual text-5xl font-bold text-black dark:text-head lg:text-[3.5rem]">
-        FAQ
+      <h2 className="font-gradual text-5xl font-bold text-black dark:text-head lg:text-[3rem]">
+        Frequently Asked Questions
       </h2>
       <div
         className={clsx(

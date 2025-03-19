@@ -1,11 +1,13 @@
+"use client";
+
 import clsx from "clsx";
-import { Button, LoginButton } from "components/elements";
+import CustomButton from "../../elements/CustomButton";
 import { Hamburger, Logo } from "components/svgs";
 import { trackEvent } from "lib/posthog";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DISCORD_URL } from "../../../lib/constants";
 
 const ThemeSwitcher = dynamic(() => import("./ThemeSwitcher"), { ssr: false });
@@ -47,7 +49,8 @@ const LinkItem = ({
 const Navigation = () => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  useLayoutEffect(() => {
+
+  useEffect(() => {
     function updateMenu() {
       const isMobileAndOpen = window.innerWidth < 1280 && open;
       const isDesktopAndClosed = window.innerWidth >= 1280 && !open;
@@ -109,6 +112,12 @@ const Navigation = () => {
               text: "Shuttle AI",
               keyword: "ai",
             },
+            {
+              href: "/careers",
+              event: "homepage_careers",
+              text: "Careers",
+              keyword: "careers",
+            },
           ].map(({ event, href, text, keyword }) => (
             <LinkItem
               key={href}
@@ -122,7 +131,8 @@ const Navigation = () => {
         </div>
         <div className="mt-10 xl:ml-auto xl:mt-0 xl:flex xl:items-center xl:gap-5">
           <div className="mt-10 flex flex-wrap items-center gap-5 xl:mt-0">
-            <Button
+            <CustomButton
+              className="w-[140px] justify-center"
               variant="secondary"
               invertOnDark
               href={DISCORD_URL}
@@ -131,15 +141,19 @@ const Navigation = () => {
               }}
             >
               Join Discord
-            </Button>
+            </CustomButton>
             <div
               onClick={() => {
                 trackEvent("homepage_mainnav_login");
               }}
             >
-              <LoginButton variant="primary" invertOnDark>
+              <CustomButton
+                className="w-[140px] justify-center"
+                variant="primary"
+                invertOnDark
+              >
                 Log in
-              </LoginButton>
+              </CustomButton>
             </div>
           </div>
           <ThemeSwitcher className="mt-5 xl:-order-1 xl:mt-0" hidden />

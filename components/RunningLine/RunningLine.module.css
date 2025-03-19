@@ -1,0 +1,67 @@
+.linesContainer {
+  --duration: 150s;
+  overflow: hidden;
+  position: relative;
+}
+
+.linesContent {
+  display: flex;
+  flex-wrap: nowrap;
+  position: relative;
+  width: 80vw;
+}
+
+.line {
+  width: fit-content;
+  flex: none;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.lineWrapper {
+  transform: translate(0, 0);
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  flex: none;
+}
+
+.firstHalf,
+.secondHalf {
+  animation:
+    calc(var(--duration) / 2) initialTicker linear forwards,
+    var(--duration) ticker calc(var(--duration) / 2) infinite linear forwards;
+}
+
+.secondHalf {
+  transform: translate(100%, 0);
+  animation: var(--duration) ticker infinite linear forwards;
+}
+
+@keyframes initialTicker {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(-100%, 0);
+  }
+}
+
+@keyframes ticker {
+  0% {
+    transform: translate(100%, 0);
+  }
+
+  50% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(-100%, 0);
+  }
+}

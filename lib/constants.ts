@@ -18,7 +18,7 @@ export const BUTTONDOWN_API_KEY = process.env.NEXT_PUBLIC_BUTTONDOWN_API_KEY;
 export const GITHUB_EXAMPLES_URL =
   "https://github.com/shuttle-hq/shuttle-examples";
 
-export const CONTACT_US_URI = "https://shuttlerust.typeform.com/shuttle-pro";
+export const CONTACT_US_URI = "https://cal.com/team/shuttle/catch-up-founders";
 export const GET_STARTED_URI = "https://console.shuttle.dev/account/billing";
 
 export const DISCORD_URL = "https://discord.gg/shuttle";
