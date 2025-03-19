@@ -10,47 +10,20 @@ export const faqData: FaqItem[] = [
       "Not at all! You can begin building on Shuttle right away with our Community tier. Jump in and explore with a project, running with 512MB RAM and 0.25 vCPU. Perfect for learning experimenting with your ideas.",
   },
   {
-    question: "What's included in the Community tier? Is it really free?",
-    answer:
-      "Our Community tier gives you everything needed to build and learn. You'll get one project with dedicated resources, 100 monthly build minutes, and 1GB of data transfer. Community tier is completely free with no credit card required. It's ideal for prototyping, personal projects, and learning Rust.",
-  },
-  {
     question:
       "What is the difference between a Spot Instance and a Reserved Instance?",
     answer:
       "A Spot Instance is a flexible, cost-effective option available on the Community tier that may be interrupted or terminated based on system demand. These instances run on shared infrastructure and are ideal for development and testing. \n\n A Reserved Instance, available on Pro tier and above, provides dedicated, guaranteed computing resources that won't be interrupted. These instances offer consistent performance and reliability, making them suitable for production workloads and applications that require high availability.",
   },
   {
-    question: "How does your usage-based pricing work?",
-    answer: [
-      "Our Pro and Growth tiers include generous base allocations of resources. If you need more, additional resources are available at the following rates:",
-      "- Additional vCPU: from $0.06/vCPU hour",
-      "- Database storage: $0.12/GB",
-      "- Build minutes: $0.025/min",
-      "- Network egress: $0.10/GB",
-      "- Dedicated database (Pro tier): $20/month for 20GB storage",
-    ],
-  },
-  {
     question: "How many projects can I create with each tier?",
     answer:
       "Community tier includes 1 project. Pro tier includes 3 projects, and you can add more (up to 10 total) with a minimum size of 0.5 vCPU and 1GB of Memory for $0.06/vCPU hour. Growth tier includes 10 projects, scalable up to 50 projects. Each additional project comes with its own resources and custom domain.",
-  },
-
-  {
-    question: "How many Pro accounts can be registered at one organization?",
-    answer:
-      "Each organization is limited to a maximum of 3 Pro accounts. If your organization needs more than 3 accounts, we recommend upgrading to the Growth tier, which provides centralized account management and shared access to all deployments in a single unified workspace.",
   },
   {
     question: "Can I upgrade or downgrade my plan at any time?",
     answer:
       "Yes, you can change your plan at any time. When upgrading, you'll get immediate access to the new features. When downgrading, the changes will take effect at the start of your next billing cycle.",
-  },
-  {
-    question: "What happens if I exceed my plan's limits?",
-    answer:
-      "We use soft and hard limits for requests. You'll receive notifications when approaching soft limits, giving you time to upgrade. Hard limits are enforced to maintain service quality. Community tier has soft/hard limits of 5/10 requests per second, while Pro tier offers 25/50 requests per second. Growth tier uses load-balancing at 1000 RPS. For resource usage (vCPU, storage, build minutes, network), you'll be billed for additional usage at our standard rates.)",
   },
   {
     question: "How does custom domain support work?",
@@ -76,20 +49,5 @@ export const faqData: FaqItem[] = [
     question: "Can I bring my own cloud provider?",
     answer:
       "This option will be available for Enterprise customers. You will be able to use your existing cloud infrastructure while still benefiting from Shuttle's developer experience and tooling. Contact our team for more details.",
-  },
-  {
-    question: "What is community support?",
-    answer:
-      "Community support provides access to our public help threads where you can get assistance from both the community and the Shuttle team. The Shuttle team will help when available, making this tier best suited for developers who are comfortable with self-service and community-based troubleshooting.",
-  },
-  {
-    question: "What is priority support?",
-    answer:
-      "Priority support customers receive enhanced assistance, including white glove migration help when moving your applications to Shuttle. You'll get guaranteed response times of less than 1 business day, ensuring your questions and issues are addressed promptly.",
-  },
-  {
-    question: "What is dedicated support?",
-    answer:
-      "Dedicated support offers our highest level of service, combining all the benefits of priority support with access to a private support channel for direct communication with our team. You'll receive white glove migration assistance, response times under 1 business day, and Enterprise customers additionally benefit from an Uptime SLA.",
   },
 ];
