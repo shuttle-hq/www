@@ -14,6 +14,7 @@ interface CommonButtonProps
 
 interface ButtonProps extends CommonButtonProps {
   href?: string;
+	onClick?: VoidFunction;
 }
 
 const CustomButton: FC<ButtonProps> = ({
@@ -21,6 +22,7 @@ const CustomButton: FC<ButtonProps> = ({
   invertOnDark,
   className,
   children,
+	onClick,
   href,
 }) => {
   // Primary and secondary switch for dark mode
@@ -48,7 +50,7 @@ const CustomButton: FC<ButtonProps> = ({
   };
 
   children = (
-    <button className={classNames} style={variant === "tertiary" ? tertBg : {}}>
+    <button onClick={onClick} className={classNames} style={variant === "tertiary" ? tertBg : {}}>
       {children}
     </button>
   );
