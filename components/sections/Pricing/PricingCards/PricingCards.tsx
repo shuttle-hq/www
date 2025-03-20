@@ -89,7 +89,6 @@ const PricingCards = () => {
       top =
         section.getBoundingClientRect().top -
         document.body.getBoundingClientRect().top;
-      console.log("resize");
     };
     const onScroll = () => {
       const sign = top < 0 ? -1 : 1;
