@@ -7,6 +7,7 @@ interface PricingButtonProps {
   variant?: "default" | "highlight";
   collapsed?: boolean;
   href?: string;
+  onClick?: () => void;
 }
 
 export const PricingButton: React.FC<PricingButtonProps> = ({
@@ -14,6 +15,7 @@ export const PricingButton: React.FC<PricingButtonProps> = ({
   variant = "default",
   collapsed,
   href,
+  onClick,
 }) => {
   return (
     <CustomButton
@@ -23,6 +25,7 @@ export const PricingButton: React.FC<PricingButtonProps> = ({
         "xl:mt-4": collapsed,
         "xl:mt-8": !collapsed,
       })}
+      onClick={onClick}
     >
       {text}
     </CustomButton>
