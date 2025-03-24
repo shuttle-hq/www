@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
+import { trackEvent } from "lib/posthog";
 import { PricingCard, PricingCardProps } from "./PricingCard";
 import { CheckIcon } from "components/svgs/pricing-icons/CheckIcon";
 import { CONTACT_US_URI, GET_STARTED_URI } from "../../../../lib/constants";
@@ -21,6 +22,9 @@ const pricingTiers: PricingCardProps[] = [
     buttonVariant: "highlight",
     href: GET_STARTED_URI,
     icon: CheckIcon,
+    onClick: () => {
+      trackEvent("pricing_click_tier_community");
+    },
   },
   {
     title: "Pro",
@@ -37,6 +41,9 @@ const pricingTiers: PricingCardProps[] = [
     buttonVariant: "highlight",
     href: GET_STARTED_URI,
     icon: CheckIcon,
+    onClick: () => {
+      trackEvent("pricing_click_tier_pro");
+    },
   },
   {
     title: "Growth",
@@ -52,6 +59,9 @@ const pricingTiers: PricingCardProps[] = [
     buttonText: "Start 14 day trial",
     href: GET_STARTED_URI,
     icon: CheckIcon,
+    onClick: () => {
+      trackEvent("pricing_click_tier_growth");
+    },
   },
   {
     title: "Enterprise",
@@ -68,6 +78,9 @@ const pricingTiers: PricingCardProps[] = [
     buttonVariant: "highlight",
     href: CONTACT_US_URI,
     icon: CheckIcon,
+    onClick: () => {
+      trackEvent("pricing_click_tier_enterprise");
+    },
   },
 ];
 
@@ -102,11 +115,6 @@ const PricingCards = () => {
         ref={ref}
         className="absolute left-0 w-full h-[100px] opacity-0 -z-10 -translate-y-[10px]"
       />
-      {/*<BackgroundShape
-        style={{ transform: "translateY(75px)" }}
-        className="w-full top-auto left-0 hidden lg:block h-[200px]"
-        background="linear-gradient(62.43deg, rgba(252, 84, 12, 0.425) 54.71%, rgba(56, 212, 233, 0.325) 79.8%)"
-      />*/}
       <div className="h-2" />
       <div
         ref={priceSectionsRef}
