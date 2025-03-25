@@ -14,20 +14,20 @@ export default function WhatWereLookingFor() {
       </div>
 
       <div className="flex-1 flex flex-col py-7 mx-auto md:mx-0 order-2 lg:order-2">
-        <h2 className="font-gradual font-bold text-[40px] leading-[48px] tracking-[0%] text-[#E0E0E0] mb-6">
+        <h2 className="font-gradual font-bold text-4xl leading-tight tracking-normal text-[#E0E0E0] mb-6">
           What we&apos;re looking for
         </h2>
-        <p className="font-atkinson text-[20px] leading-[32px] tracking-[1%] text-[#A2A2A2]">
+        <p className="font-atkinson text-xl leading-8 tracking-wide text-[#A2A2A2]">
           We&apos;re a growth mindset company. We&apos;re honest, open-minded,
           driven, and ambitious and we are only looking for people who share
           these qualities with us.
         </p>
-        <p className="font-atkinson text-[20px] leading-[32px] tracking-[1%] text-[#A2A2A2] mt-6">
+        <p className="font-atkinson text-xl leading-8 tracking-wide text-[#A2A2A2] mt-6">
           We are building a culture that brings out the best in people and we
           truly believe that the company you work at should be the launch pad
           for unleashing your full potential.
         </p>
-        <p className="font-atkinson text-[20px] leading-[32px] tracking-[1%] text-[#A2A2A2] mt-6">
+        <p className="font-atkinson text-xl leading-8 tracking-wide text-[#A2A2A2] mt-6">
           We believe in ownership and responsibility. We&apos;re looking for people
           that propose ideas and then take them from start to finish.
         </p>

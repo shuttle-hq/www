@@ -3,14 +3,20 @@ import Image from "next/image";
 interface BenefitPointProps {
   title: string;
   description: string;
-  icon: any;
+  iconSrc: string;
 }
 
-const BenefitPoint = ({ title, description, icon }: BenefitPointProps) => {
+const BenefitPoint = ({ title, description, iconSrc }: BenefitPointProps) => {
   return (
     <div className="flex gap-5 mb-10 items-center">
       <div className="flex-shrink-0 w-10 h-10">
-        <div className="w-10 h-10 flex items-center justify-center">{icon}</div>
+        <img 
+          src={iconSrc} 
+          alt={`${title} icon`} 
+          className="w-10 h-10 object-contain"
+					width={40}
+					height={40}
+        />
       </div>
       <div>
         <h3 className="font-atkinson font-normal text-[20px] leading-[28px] tracking-[0.01em] text-[#D8D8D8] mb-1">{title}</h3>
@@ -24,17 +30,20 @@ const topBenefits = [
   {
     id: 1,
     title: "Work on exciting problems and have real impact",
-    description: "Join us in pushing the boundaries of what's possible at the intersection of cloud infrastructure and developer experience."
+    description: "Join us in pushing the boundaries of what's possible at the intersection of cloud infrastructure and developer experience.",
+    iconSrc: "/images/pages/careers/sections/rocket.svg"
   },
   {
     id: 2,
     title: "Growth opportunities in a fast-paced startup",
-    description: "Develop your skills and career in a rapidly evolving environment with plenty of challenges."
+    description: "Develop your skills and career in a rapidly evolving environment with plenty of challenges.",
+    iconSrc: "/images/pages/careers/sections/potted_plant.svg"
   },
   {
     id: 3,
     title: "Competitive compensation & stock options",
-    description: "Share in the company's success with a comprehensive package that values your contributions."
+    description: "Share in the company's success with a comprehensive package that values your contributions.",
+    iconSrc: "/images/pages/careers/sections/money_bag.svg"
   }
 ];
 
@@ -42,17 +51,20 @@ const bottomBenefits = [
   {
     id: 4,
     title: "Regular company off-sites",
-    description: "Connect with your teammates in person at our exciting global retreats."
+    description: "Connect with your teammates in person at our exciting global retreats.",
+    iconSrc: "/images/pages/careers/sections/airplane_ticket.svg"
   },
   {
     id: 5,
     title: "Flexible holidays and paid time off",
-    description: "We believe in work-life balance and trust you to manage your time effectively."
+    description: "We believe in work-life balance and trust you to manage your time effectively.",
+    iconSrc: "/images/pages/careers/sections/beach_access.svg"
   },
   {
     id: 6,
     title: "Remote-first & async-friendly environment",
-    description: "Work from anywhere in the world with a team that respects your timezone and schedule."
+    description: "Work from anywhere in the world with a team that respects your timezone and schedule.",
+    iconSrc: "/images/pages/careers/sections/public.svg"
   }
 ];
 
@@ -71,7 +83,7 @@ export default function WhyJoinShuttle() {
                 key={benefit.id}
                 title={benefit.title}
                 description={benefit.description}
-                icon={<div className="w-10 h-10 bg-gray-700 rounded-full"></div>}
+                iconSrc={benefit.iconSrc}
               />
             ))}
           </div>
@@ -98,7 +110,7 @@ export default function WhyJoinShuttle() {
                 key={benefit.id}
                 title={benefit.title}
                 description={benefit.description}
-                icon={<div className="w-10 h-10 bg-gray-700 rounded-full"></div>}
+                iconSrc={benefit.iconSrc}
               />
             ))}
           </div>

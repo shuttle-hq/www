@@ -1,6 +1,4 @@
 import * as React from "react";
-import { BackgroundShape } from "components/BackgroundShape";
-import PricingGrid from '../../../components/sections/Pricing/UsageBasedPricing/PricingGrid'
 
 interface ValueCardProps {
   emoji: string;
@@ -13,10 +11,10 @@ const ValueCard: React.FC<ValueCardProps> = ({ emoji, title, subtitle }) => {
     <article className="h-full w-full" role="listitem">
       <div className="flex flex-col h-full gap-2 p-6 bg-black border border-solid border-white border-opacity-30 rounded-[32px]">
         <div className="text-2xl">{emoji}</div>
-        <h4 className="font-atkinson font-normal text-[20px] leading-[32px] tracking-[1%] text-[#D8D8D8]">
+        <h4 className="font-atkinson font-normal text-xl leading-8 tracking-wide text-[#D8D8D8]">
           {title}
         </h4>
-        <p className="font-atkinson font-normal text-[16px] leading-[24px] tracking-[1%] text-[#A2A2A2]">
+        <p className="font-atkinson font-normal text-base leading-6 tracking-wide text-[#A2A2A2]">
           {subtitle}
         </p>
       </div>
@@ -53,7 +51,7 @@ export default function OurCultureAndValues() {
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="flex flex-col xl:flex-row xl:justify-between items-center gap-16">
           <div className="w-full xl:w-auto text-center xl:text-left">
-            <h3 className="text-[40px] md:text-5xl font-bold text-gray-300 font-gradual">
+            <h3 className="text-4xl md:text-5xl font-bold text-gray-300 font-gradual">
               Our culture <br /> and values
             </h3>
           </div>
