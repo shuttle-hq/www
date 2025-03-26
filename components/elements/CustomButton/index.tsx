@@ -1,20 +1,20 @@
-"use client";
+"use client"
 
-import clsx from "clsx";
-import Link from "next/link";
-import { FC, ReactNode } from "react";
-import styles from "./CustomButton.module.css";
+import clsx from "clsx"
+import Link from "next/link"
+import { FC, ReactNode } from "react"
+import styles from "./CustomButton.module.css"
 
 interface CommonButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant: "primary" | "secondary" | "tertiary" | "blackwhite";
-  children: ReactNode;
-  invertOnDark?: boolean;
+  variant: "primary" | "secondary" | "tertiary" | "blackwhite"
+  children: ReactNode
+  invertOnDark?: boolean
 }
 
 interface ButtonProps extends CommonButtonProps {
-  href?: string;
-	onClick?: VoidFunction;
+  href?: string
+  onClick?: VoidFunction
 }
 
 const CustomButton: FC<ButtonProps> = ({
@@ -22,7 +22,7 @@ const CustomButton: FC<ButtonProps> = ({
   invertOnDark,
   className,
   children,
-	onClick,
+  onClick,
   href,
 }) => {
   // Primary and secondary switch for dark mode
@@ -41,30 +41,34 @@ const CustomButton: FC<ButtonProps> = ({
       "${styles.buttonShadow} ${styles.shadowGradient} text-black",
     variant === "blackwhite" &&
       "border-[1px] border-solid border-[#ffffff40] px-6 py-3 font-gradual text-base text-white hover:bg-gradient-1",
-    className,
-  );
+    className
+  )
 
   const tertBg = {
     backgroundImage:
       "linear-gradient(73deg, #FC540C -7.95%, rgba(255, 215, 111, 0.72) 45.94%, #38D4E9 116.73%",
-  };
+  }
 
   children = (
-    <button onClick={onClick} className={classNames} style={variant === "tertiary" ? tertBg : {}}>
+    <button
+      onClick={onClick}
+      className={classNames}
+      style={variant === "tertiary" ? tertBg : {}}
+    >
       {children}
     </button>
-  );
+  )
 
   if (href)
-    if (href.startsWith("/")) children = <Link href={href}>{children}</Link>;
+    if (href.startsWith("/")) children = <Link href={href}>{children}</Link>
     else
       children = (
         <a href={href} target="_blank" rel="noreferrer">
           {children}
         </a>
-      );
+      )
 
-  return children;
-};
+  return children
+}
 
-export default CustomButton;
+export default CustomButton

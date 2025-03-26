@@ -1,0 +1,35 @@
+import CustomButton from "components/elements/CustomButton"
+
+export interface JobData {
+  jobTitle: string
+  jobDescription: string
+  jobLink: string
+}
+
+export default function JobListItem({
+  jobTitle,
+  jobDescription,
+  jobLink,
+}: JobData) {
+  return (
+    <li className="border-b border-grey700 last:border-b-0">
+      <div className="p-8 flex flex-wrap justify-between items-center gap-4">
+        <div className="flex-1 min-w-[250px] flex flex-col gap-2.5">
+          <h3 className="font-normal text-2xl leading-8 tracking-wide text-grey100">
+            {jobTitle}
+          </h3>
+          <p className="font-normal text-xl leading-7 tracking-wide text-body">
+            Description: {jobDescription}
+          </p>
+        </div>
+        <CustomButton
+          className="justify-center"
+          variant="secondary"
+          href={jobLink}
+        >
+          Apply now
+        </CustomButton>
+      </div>
+    </li>
+  )
+}
