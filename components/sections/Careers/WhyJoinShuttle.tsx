@@ -70,13 +70,13 @@ const bottomBenefits = [
 
 export default function WhyJoinShuttle() {
   return (
-    <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 mb-16 md:mb-24">
-      <h2 className="text-center font-gradual font-bold text-4xl md:text-5xl text-white mb-16">
+    <div className="max-w-[1280px] mx-auto px-4 mb-16 sm:px-6 md:mb-24 lg:px-8">
+      <h2 className="text-center font-gradual font-bold text-4xl text-white mb-16 md:text-5xl">
         Why Join Shuttle?
       </h2>
 
       <div className="flex flex-wrap justify-between gap-y-14">
-        <div className="w-full lg:w-[45%] order-1">
+        <div className="w-full order-1 sm:w-full md:w-full lg:w-[45%]">
           <div className="max-w-lg">
             {topBenefits.map((benefit) => (
               <BenefitPoint
@@ -89,7 +89,7 @@ export default function WhyJoinShuttle() {
           </div>
         </div>
 
-        <div className="w-full lg:w-[calc(50%-48px)] order-2 lg:order-2 mb-0">
+        <div className="w-full order-2 mb-0 sm:w-full md:w-full lg:w-[calc(50%-48px)] lg:order-2">
           <div className="rounded-3xl overflow-hidden h-[400px] w-full">
             <div className="bg-gray-700 w-full h-full">
               <Image 
@@ -103,7 +103,7 @@ export default function WhyJoinShuttle() {
           </div>
         </div>
 
-        <div className="w-full lg:w-[45%] order-3 lg:order-4">
+        <div className="w-full order-3 sm:w-full md:w-full lg:w-[45%] lg:order-4">
           <div className="max-w-lg ml-auto">
             {bottomBenefits.map((benefit) => (
               <BenefitPoint
@@ -116,7 +116,7 @@ export default function WhyJoinShuttle() {
           </div>
         </div>
 
-        <div className="w-full lg:w-[calc(50%-48px)] order-4 lg:order-3">
+        <div className="w-full order-4 sm:w-full md:w-full lg:w-[calc(50%-48px)] lg:order-3">
           <div className="rounded-3xl overflow-hidden h-[400px] w-full">
             <div className="bg-gray-700 w-full h-full">
               <Image 

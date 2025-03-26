@@ -9,10 +9,10 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative min-h-[600px] mb-16 md:mb-24 mt-16 md:mt-24  overflow-hidden custom-galaxy-bg bg-no-repeat bg-center">
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center gap-8 text-center lg:flex-row lg:justify-between lg:items-center lg:gap-12 md:text-left relative z-10">
-        <div className="flex flex-col gap-6 text-left w-full lg:max-w-[60%] order-1 lg:order-1">
-          <h1 className="font-gradual font-bold text-5xl md:text-6xl leading-tight md:leading-tight tracking-normal text-black dark:text-head">
+    <section className="relative min-h-[600px] overflow-hidden custom-galaxy-bg bg-no-repeat bg-center mb-16 mt-16 md:mb-24 md:mt-24">
+      <div className="max-w-[1280px] mx-auto px-4 flex flex-col items-center gap-8 text-center relative z-10 sm:px-6 md:text-left lg:px-8 lg:flex-row lg:justify-between lg:items-center lg:gap-12">
+        <div className="flex flex-col gap-6 text-left w-full order-1 lg:max-w-[60%] lg:order-1">
+          <h1 className="font-gradual font-bold text-5xl leading-tight tracking-normal text-black dark:text-head md:text-6xl md:leading-tight">
             Join Us. Re-invent developer experience. Simply.
           </h1>
           <CustomButton

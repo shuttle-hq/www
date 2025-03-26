@@ -43,10 +43,10 @@ const OpenPositions: React.FC<OpenPositionsProps> = ({ jobData }) => {
       id="open-positions" 
       className="relative min-h-[800px] custom-bg bg-no-repeat overflow-hidden mb-16 md:mb-24"
     >
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div className="max-w-[1280px] mx-auto px-4 relative sm:px-6 lg:px-8">
         <div className="w-full rounded-[32px] backdrop-blur-[20px] bg-[#000000CC] border border-[#FFFFFF4D] overflow-hidden">
           <div className="flex flex-col lg:flex-row">
-            <div className="lg:w-1/4 lg:min-w-[300px] lg:border-r lg:border-[#FFFFFF4D] border-b border-[#FFFFFF4D] lg:border-b-0">
+            <div className="border-b border-[#FFFFFF4D] lg:w-1/4 lg:min-w-[300px] lg:border-r lg:border-[#FFFFFF4D] lg:border-b-0">
               <div className="p-10 h-full flex items-left justify-center lg:justify-start">
                 <h2 className="font-gradual font-bold text-5xl leading-tight tracking-normal text-[#E0E0E0]">
                   Open<br />Positions

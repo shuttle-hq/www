@@ -2,8 +2,8 @@ import Image from "next/image";
 
 export default function WhatWereLookingFor() {
   return (
-    <section className="flex flex-col items-center gap-8 text-center lg:flex-row lg:justify-between lg:items-center lg:gap-[107px] lg:text-left md:text-left max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 mb-16 md:mb-24">
-      <div className="w-full max-w-[535px] h-auto flex items-center justify-center mx-auto order-1 lg:order-1">
+    <section className="flex flex-col items-center gap-8 text-center max-w-[1280px] mx-auto px-4 mb-16 sm:px-6 md:text-left md:mb-24 lg:flex-row lg:justify-between lg:items-center lg:gap-[107px] lg:text-left lg:px-8">
+      <div className="w-full max-w-[535px] h-auto flex items-center justify-center mx-auto order-1 sm:mx-auto md:mx-auto lg:order-1">
         <Image
           src="/images/pages/careers/sections/astronaut.png"
           alt="Astronaut on the moon"
@@ -13,7 +13,7 @@ export default function WhatWereLookingFor() {
         />
       </div>
 
-      <div className="flex-1 flex flex-col py-7 mx-auto md:mx-0 order-2 lg:order-2">
+      <div className="flex-1 flex flex-col py-7 mx-auto order-2 sm:mx-auto md:mx-0 lg:order-2">
         <h2 className="font-gradual font-bold text-4xl leading-tight tracking-normal text-[#E0E0E0] mb-6">
           What we&apos;re looking for
         </h2>
