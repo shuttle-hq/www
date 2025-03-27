@@ -38,15 +38,16 @@ export default function WhyJoinShuttle() {
 
         <div className="flex flex-col md:flex-row md:gap-12 md:items-center justify-between">
           <div className="w-full order-3 md:order-1 md:w-full md:max-w-[608px] flex md:items-center md:justify-start">
-            <div className="relative rounded-3xl overflow-hidden w-full h-auto md:h-[432px]">
-              <Image
-                src="/images/pages/careers/sections/team-2.jpg"
-                alt="Team photo"
-                width={608}
-                height={432}
-                className="w-full h-auto md:absolute md:inset-0 md:h-full md:w-full object-contain md:object-cover rounded-3xl"
-                priority
-              />
+            <div className="w-full order-3 md:order-1 md:w-full md:max-w-[608px] flex md:items-center md:justify-start">
+              <div className="relative rounded-3xl overflow-hidden w-full h-auto md:h-[432px]">
+                <Image
+                  src="/images/pages/careers/sections/team-2.jpg"
+                  alt="Team photo"
+                  width={608}
+                  height={432}
+                  className="w-full h-auto md:w-auto md:h-full object-contain md:object-cover rounded-3xl"
+                />
+              </div>
             </div>
           </div>
 
