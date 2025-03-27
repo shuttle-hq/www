@@ -112,12 +112,12 @@ const Navigation = () => {
               text: "Shuttle AI",
               keyword: "ai",
             },
-            // {
-            //   href: "/careers",
-            //   event: "homepage_careers",
-            //   text: "Careers",
-            //   keyword: "careers",
-            // },
+            {
+              href: "/careers",
+              event: "homepage_careers",
+              text: "Careers",
+              keyword: "careers",
+            },
           ].map(({ event, href, text, keyword }) => (
             <LinkItem
               key={href}
