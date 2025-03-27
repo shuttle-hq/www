@@ -4,8 +4,7 @@ import CompanyValueCard from "../CompanyValueCard"
 
 export default function OurCultureAndValues() {
   return (
-    // custom-culture-bg bg-no-repeat
-    <div className="relative flex flex-col justify-center">
+    <div className="relative flex flex-col custom-culture-bg bg-no-repeat justify-center">
       <div className="w-full max-w-[1344px] mx-auto px-5 mobileM:px-10">
         <div className="flex flex-col gap-14  laptop:flex-row laptop:justify-between items-center">
           <div className="w-full flex justify-center laptop:w-auto text-center laptop:text-left">

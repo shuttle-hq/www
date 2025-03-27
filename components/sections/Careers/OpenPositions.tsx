@@ -9,16 +9,15 @@ export default function OpenPositions({ jobData }: OpenPositionsProps) {
   return (
     <div
       id="open-positions"
-      // custom-open-positions-bg bg-no-repeat
-      className="relative  fle flex flex-col justify-center"
+      className="relative custom-open-positions-bg bg-no-repeat fle flex flex-col justify-center"
     >
-      <div className="max-w-[1344px] w-full mx-auto px-5 sm:px-10">
+      <div className="max-w-[1344px] w-full mx-auto px-5 mobileM:px-10">
         <div className="w-full rounded-[32px] backdrop-blur-[20px] bg-grey800 border border-grey700 overflow-hidden">
-          <div className="flex flex-col lg:flex-row">
-            <div className="border-b border-grey700 lg:w-1/4 lg:min-w-[300px] lg:border-r lg:border-grey700 lg:border-b-0">
-              <div className="p-12 h-full flex items-left justify-center lg:justify-start">
-                <h2 className="font-gradual font-bold text-5xl leading-64 tracking-normal text-grey500">
-                  Open Positions
+          <div className="flex flex-col tablet:flex-row">
+            <div className="border-b border-grey700 tablet:w-1/4 tablet:min-w-[300px] tablet:border-r tablet:border-grey700 tablet:border-b-0">
+              <div className="p-12 h-full flex items-left tablet:justify-start">
+                <h2 className="font-gradual font-bold text-5xl leading-64 text-grey500">
+                  Open <br /> Positions
                 </h2>
               </div>
             </div>

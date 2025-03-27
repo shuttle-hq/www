@@ -11,15 +11,17 @@ export default function HiringListItem({
 }: HiringStepProps) {
   return (
     <div className="border-b border-grey700 py-5">
-      <div className="flex flex-wrap gap-5 items-start mobileM:flex-nowrap">
-        <div className="font-normal text-xl leading-8 tracking-wide text-body">
+      <div className="flex gap-5 items-start">
+        <div className="text-base leading-6 font-normal mobileM:text-xl mobileM:leading-8 mobileM:tracking-1 text-body">
           {number}
         </div>
-        <div className="font-normal text-xl leading-8 tracking-wide text-grey100 w-full mobileM:w-[300px] mobileM:min-w-[300px] mobileM:flex-shrink-0">
-          {title}
-        </div>
-        <div className="font-normal text-xl leading-8 tracking-wide text-body w-full mobileM:w-auto">
-          {description}
+        <div className="flex gap-2 flex-col mobileM:flex-row mobileM:gap-5 w-full">
+          <h2 className="text-base leading-6 font-normal mobileM:text-xl mobileM:leading-8 mobileM:tracking-1 text-grey100 mobileM:w-[300px] mobileM:min-w-[300px] mobileM:flex-shrink-0">
+            {title}
+          </h2>
+          <p className="text-base leading-6 font-normal mobileM:text-xl mobileM:leading-8 mobileM:tracking-1 text-body w-full">
+            {description}
+          </p>
         </div>
       </div>
     </div>

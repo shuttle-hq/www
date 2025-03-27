@@ -414,6 +414,52 @@ body.dark {
     color: #494949;
   }
 
+  .custom-culture-bg {
+    position: relative;
+  }
+
+  .custom-culture-bg::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 850px;
+    transform: translateY(-50%);
+    background-image: url("/images/pages/pricing/custom-bg.jpg");
+    background-position: center 60%;
+    background-size: auto;
+    background-repeat: no-repeat;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .custom-open-positions-bg {
+    position: relative;
+  }
+
+  .custom-open-positions-bg::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 986px;
+    transform: translateY(-49%);
+    background-image: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0) 100%,
+        rgba(0, 0, 0, 1) 100%
+      ),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0) 80%, rgba(0, 0, 0, 1) 100%),
+      url("/images/pages/pricing/custom-bg.jpg");
+    background-size: auto 130%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    z-index: -1;
+    pointer-events: none;
+  }
+
   @media (max-width: 375px) {
     .custom-galaxy-bg {
       position: relative;
@@ -467,48 +513,6 @@ body.dark {
       background-image: url("/images/pages/pricing/custom-bg.jpg");
       background-position: 54% 9% !important;
       background-size: contain;
-    }
-
-    .custom-culture-bg {
-      background-image: url("/images/pages/careers/sections/bg-culture.png");
-      background-size: contain;
-      background-position: 54% 9% !important;
-      background-repeat: no-repeat;
-
-      -webkit-mask-image: radial-gradient(
-        circle,
-        rgba(0, 0, 0, 1) 80%,
-        rgba(0, 0, 0, 0) 100%
-      );
-      mask-image: radial-gradient(
-        circle,
-        rgba(0, 0, 0, 1) 80%,
-        rgba(0, 0, 0, 0) 100%
-      );
-    }
-
-    .custom-open-positions-bg {
-      background: linear-gradient(
-          to top,
-          rgba(0, 0, 0, 0) 100%,
-          rgba(0, 0, 0, 1) 100%
-        ),
-        linear-gradient(to bottom, rgba(0, 0, 0, 0) 80%, rgba(0, 0, 0, 1) 100%);
-      background-image: url("/images/pages/careers/sections/bg-open-positions.png");
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center center;
-
-      -webkit-mask-image: radial-gradient(
-        circle,
-        rgba(0, 0, 0, 1) 80%,
-        rgba(0, 0, 0, 0) 100%
-      );
-      mask-image: radial-gradient(
-        circle,
-        rgba(0, 0, 0, 1) 80%,
-        rgba(0, 0, 0, 0) 100%
-      );
     }
   }
 }

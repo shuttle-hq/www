@@ -15,10 +15,10 @@ export default function JobListItem({
     <li className="border-b border-grey700 last:border-b-0">
       <div className="p-8 flex flex-col mobileM:flex-row flex-wrap justify-between items-start mobileM:items-center gap-4">
         <div className="flex-1 min-w-[250px] flex flex-col gap-2.5">
-          <h3 className="font-normal text-2xl leading-8 tracking-wide text-grey100">
+          <h3 className="text-xl leading-8 font-normal mobileM:text-2xl mobileM:leading-8 mobileM:tracking-1 text-grey100">
             {jobTitle}
           </h3>
-          <p className="font-normal text-xl leading-7 tracking-wide text-body">
+          <p className="leading-6 text-base font-normal mobileM:text-xl mobileM:leading-7 mobileM:tracking-1 text-body">
             Description: {jobDescription}
           </p>
         </div>
