@@ -1,11 +1,11 @@
-import Image from "next/image"
+import Image from "next/image";
 
 export default function WhatWereLookingFor() {
   return (
     <section className="flex flex-col items-center text-center gap-8 md:flex-row md:text-left md:items-stretch md:justify-between lg:gap-16 xl:gap-24">
       <div className="w-full relative aspect-[580/458] order-1 md:flex-1 md:max-w-xl md:h-auto md:self-stretch md:order-1">
         <Image
-          src="/images/pages/careers/sections/astronaut.png"
+          src="/images/pages/careers/sections/astronaut.jpg"
           alt="Astronaut on the moon"
           fill
           sizes="(max-width: 767px) 100vw, 580px"
@@ -36,5 +36,5 @@ export default function WhatWereLookingFor() {
         </div>
       </div>
     </section>
-  )
+  );
 }

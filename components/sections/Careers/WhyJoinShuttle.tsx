@@ -1,6 +1,6 @@
-import Image from "next/image"
-import BenefitPoint from "../BenefitPoint"
-import { benefits } from "content/benefits"
+import Image from "next/image";
+import BenefitPoint from "../BenefitPoint";
+import { benefits } from "content/benefits";
 
 export default function WhyJoinShuttle() {
   return (
@@ -10,15 +10,15 @@ export default function WhyJoinShuttle() {
       </h2>
 
       <div className="flex flex-col gap-y-14">
-        <div className="flex flex-col md:flex-row md:gap-12 md:items-center justify-between">
-          <div className="w-full order-1 md:order-2 md:w-full md:max-w-[608px] flex md:items-center md:justify-end relative aspect-[608/432] md:flex-1 md:h-auto md:self-stretch">
-            <div className="rounded-3xl overflow-hidden w-full md:w-full max-w-none md:max-w-none md:max-w-[608px]">
+        <div className="flex flex-col md:flex-row md:gap-12 md:items-stretch justify-between">
+          <div className="w-full order-1 md:order-2 md:w-full md:max-w-[608px] flex md:items-stretch md:justify-end flex-1">
+            <div className="relative rounded-3xl overflow-hidden w-full h-auto md:h-full">
               <Image
-                src="/images/pages/careers/sections/team1.png"
+                src="/images/pages/careers/sections/team-1.jpg"
                 alt="Team photo"
-                fill
-                sizes="(max-width: 767px) 100vw, 580px"
-                className="rounded-4xl object-cover"
+                width={608}
+                height={432}
+                className="w-full h-auto md:absolute md:inset-0 md:h-full object-contain md:object-cover rounded-3xl"
                 priority
               />
             </div>
@@ -38,13 +38,13 @@ export default function WhyJoinShuttle() {
 
         <div className="flex flex-col md:flex-row md:gap-12 md:items-center justify-between">
           <div className="w-full order-3 md:order-1 md:w-full md:max-w-[608px] flex md:items-center md:justify-start">
-            <div className="rounded-3xl overflow-hidden w-full md:w-full max-w-none md:max-w-none md:max-w-[608px] sm:h-[432px]">
+            <div className="relative rounded-3xl overflow-hidden w-full h-auto md:h-[432px]">
               <Image
-                src="/images/pages/careers/sections/team2.png"
+                src="/images/pages/careers/sections/team-2.jpg"
                 alt="Team photo"
                 width={608}
                 height={432}
-                className="w-full object-contain sm:object-cover sm:h-full"
+                className="w-full h-auto md:absolute md:inset-0 md:h-full md:w-full object-contain md:object-cover rounded-3xl"
                 priority
               />
             </div>
@@ -65,5 +65,5 @@ export default function WhyJoinShuttle() {
         </div>
       </div>
     </div>
-  )
+  );
 }
