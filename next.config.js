@@ -18,6 +18,11 @@ const nextConfig = {
   redirects() {
     return [
       {
+        source: "/docs",
+        destination: "https://docs.shuttle.dev/",
+        permanent: true,
+      },
+      {
         source: "/blog",
         destination: "/blog/tags/all",
         permanent: true,
@@ -33,6 +38,19 @@ const nextConfig = {
         destination:
           "https://raw.githubusercontent.com/shuttle-hq/shuttle/main/install.ps1",
         permanent: false,
+      },
+      // redirect docs.shuttle.rs -> docs.shuttle.dev
+      // done here instead of in Mintlify since Mintlify can only host one custom domain for the site.
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "docs.shuttle.rs",
+          },
+        ],
+        permanent: true,
+        destination: "https://docs.shuttle.dev/:path*",
       },
     ];
   },

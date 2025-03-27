@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import clsx from "clsx"
-import CustomButton from "../../elements/CustomButton"
-import { Hamburger, Logo } from "components/svgs"
-import { trackEvent } from "lib/posthog"
-import dynamic from "next/dynamic"
-import Link from "next/link"
-import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
-import { DISCORD_URL } from "../../../lib/constants"
+import clsx from "clsx";
+import CustomButton from "../../elements/CustomButton";
+import { Hamburger, Logo } from "components/svgs";
+import { trackEvent } from "lib/posthog";
+import dynamic from "next/dynamic";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { DISCORD_URL } from "../../../lib/constants";
 
-const ThemeSwitcher = dynamic(() => import("./ThemeSwitcher"), { ssr: false })
+const ThemeSwitcher = dynamic(() => import("./ThemeSwitcher"), { ssr: false });
 
 const LinkItem = ({
   event,
@@ -19,11 +19,11 @@ const LinkItem = ({
   active,
   setOpen,
 }: {
-  event: string
-  href: string
-  text: string
-  active: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  event: string;
+  href: string;
+  text: string;
+  active: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   return (
     <div className="flex">
@@ -31,46 +31,46 @@ const LinkItem = ({
         <Link
           className={clsx(
             "nav-link-shadow transition-all dark:hover:text-white",
-            active && "font-bold text-white"
+            active && "font-bold text-white",
           )}
           href={href}
           onClick={({ ctrlKey, metaKey }) => {
-            trackEvent(event)
-            setOpen(ctrlKey || metaKey)
+            trackEvent(event);
+            setOpen(ctrlKey || metaKey);
           }}
         >
           {text}
         </Link>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const Navigation = () => {
-  const [open, setOpen] = useState(false)
-  const router = useRouter()
+  const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     function updateMenu() {
-      const isMobileAndOpen = window.innerWidth < 1280 && open
-      const isDesktopAndClosed = window.innerWidth >= 1280 && !open
+      const isMobileAndOpen = window.innerWidth < 1280 && open;
+      const isDesktopAndClosed = window.innerWidth >= 1280 && !open;
 
-      if (isMobileAndOpen || isDesktopAndClosed) return
+      if (isMobileAndOpen || isDesktopAndClosed) return;
 
-      setOpen(false)
+      setOpen(false);
     }
 
-    window.addEventListener("resize", updateMenu)
+    window.addEventListener("resize", updateMenu);
 
-    return () => window.removeEventListener("resize", updateMenu)
-  }, [open])
+    return () => window.removeEventListener("resize", updateMenu);
+  }, [open]);
 
   return (
-    <nav className="mx-auto flex h-[5.5rem] w-full max-w-[1440px] items-center px-5 sm:px-10 lg:px-20">
+    <nav className="mx-auto flex h-[5.5rem] w-full max-w-[1344px] items-center px-5 sm:px-10">
       <Link
         href="/"
         onClick={() => {
-          setOpen(false)
+          setOpen(false);
         }}
       >
         <Logo className="dark:text-head" />
@@ -78,7 +78,7 @@ const Navigation = () => {
       <div
         className={clsx(
           "absolute left-0 top-[4.375rem] z-20 h-[calc(100vh-4.375rem)] w-full overflow-y-auto bg-[#E9E9E9] p-5 dark:bg-black sm:px-10 xl:static xl:ml-10 xl:flex xl:h-auto xl:items-center xl:overflow-y-visible xl:bg-transparent xl:p-0 xl:dark:bg-transparent",
-          !open && "hidden"
+          !open && "hidden",
         )}
       >
         <div className="flex flex-col gap-4 xl:flex-row xl:gap-8">
@@ -112,12 +112,12 @@ const Navigation = () => {
               text: "Shuttle AI",
               keyword: "ai",
             },
-            {
-              href: "/careers",
-              event: "homepage_careers",
-              text: "Careers",
-              keyword: "careers",
-            },
+            // {
+            //   href: "/careers",
+            //   event: "homepage_careers",
+            //   text: "Careers",
+            //   keyword: "careers",
+            // },
           ].map(({ event, href, text, keyword }) => (
             <LinkItem
               key={href}
@@ -137,20 +137,21 @@ const Navigation = () => {
               invertOnDark
               href={DISCORD_URL}
               onClick={() => {
-                trackEvent("homepage_mainnav_discord")
+                trackEvent("homepage_mainnav_discord");
               }}
             >
               Join Discord
             </CustomButton>
             <div
               onClick={() => {
-                trackEvent("homepage_mainnav_login")
+                trackEvent("homepage_mainnav_login");
               }}
             >
               <CustomButton
                 className="w-[140px] justify-center"
                 variant="primary"
                 invertOnDark
+                href="https://console.shuttle.dev/"
               >
                 Log in
               </CustomButton>
@@ -167,7 +168,7 @@ const Navigation = () => {
         <Hamburger />
       </button>
     </nav>
-  )
-}
+  );
+};
 
-export default Navigation
+export default Navigation;

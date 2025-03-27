@@ -39,21 +39,25 @@ const computeSection = {
         {
           icon: CheckIcon,
           primary: "Spot",
+          primaryTooltip: "See FAQ for definition",
           secondary: "instance",
         },
         {
           icon: CheckIcon,
           primary: "Reserved",
+          primaryTooltip: "See FAQ for definition",
           secondary: "instance",
         },
         {
           icon: CheckIcon,
           primary: "Reserved",
+          primaryTooltip: "See FAQ for definition",
           secondary: "instance",
         },
         {
           icon: CheckIcon,
           primary: "Reserved",
+          primaryTooltip: "See FAQ for definition",
           secondary: "instance",
         },
       ],
@@ -136,26 +140,27 @@ const computeSection = {
       cells: [
         {
           icon: CloseIcon,
-          primary: "Scaleable",
+          primary: "Configurable",
           secondary: "instance",
           isDisabled: true,
         },
         {
           icon: CheckIcon,
-          primary: "Scaleable",
+          primary: "Configurable",
           primaryTooltip:
             "Scale up to 4vCPU and  8GB Memory - see usage based pricing below",
           secondary: "instance",
         },
         {
           icon: CheckIcon,
-          primary: "Scaleable",
-          primaryTooltip: "Scale up to TBC Memory and TBC",
+          primary: "Configurable",
+          primaryTooltip:
+            "Scale up to 8vCPU and  16GB Memory - see usage based pricing below",
           secondary: "instance",
         },
         {
           icon: CheckIcon,
-          primary: "Scaleable",
+          primary: "Custom",
           secondary: "instance",
         },
       ],
@@ -186,7 +191,7 @@ const computeSection = {
           primary: "Horizontal ",
           primaryTooltip:
             "Load balance across multiple instances, see usage based pricing",
-          secondary: "scaling",
+          secondary: "auto-scaling",
         },
       ],
     },
@@ -194,7 +199,7 @@ const computeSection = {
 };
 
 const storageSection = {
-  title: "Storage & Database",
+  title: "Database",
   icon: "/images/pages/pricing/sections/pricingComparison/storage-and-database.svg",
   rows: [
     {
@@ -249,24 +254,24 @@ const storageSection = {
         {
           icon: CloseIcon,
           isDisabled: true,
-          primary: "",
-          secondary: "More storage",
+          primary: "Additional ",
+          secondary: "storage",
         },
         {
           icon: CheckIcon,
-          primary: "More",
+          primary: "Additional",
           secondary: "storage",
           secondaryTooltip: "See usage based pricing below",
         },
         {
           icon: CheckIcon,
-          primary: "More",
+          primary: "Additional",
           secondary: "storage",
           secondaryTooltip: "See usage based pricing below",
         },
         {
           icon: CheckIcon,
-          primary: "More",
+          primary: "Additional",
           secondary: "storage",
           secondaryTooltip: "See usage based pricing below",
         },
@@ -276,7 +281,7 @@ const storageSection = {
 };
 
 const networkSection = {
-  title: "Network & Performance",
+  title: "Networking",
   icon: "/images/pages/pricing/sections/pricingComparison/network-and-performance.svg",
   rows: [
     {
@@ -309,17 +314,17 @@ const networkSection = {
         {
           icon: CheckIcon,
           primary: "1 GB",
-          secondary: "egress included",
+          secondary: "network egress",
         },
         {
           icon: CheckIcon,
           primary: "1 GB",
-          secondary: "egress included",
+          secondary: "network egress",
         },
         {
           icon: CheckIcon,
           primary: "1 GB",
-          secondary: "egress included",
+          secondary: "network egress",
         },
         {
           icon: CheckIcon,
@@ -331,25 +336,25 @@ const networkSection = {
       cells: [
         {
           icon: CloseIcon,
-          primary: "More",
+          primary: "Additional",
           secondary: "egress",
           isDisabled: true,
         },
         {
           icon: CheckIcon,
-          primary: "More",
+          primary: "Additional",
           secondary: "egress",
           secondaryTooltip: "See usage based pricing below",
         },
         {
           icon: CheckIcon,
-          primary: "More",
+          primary: "Additional",
           secondary: "egress",
           secondaryTooltip: "See usage based pricing below",
         },
         {
           icon: CheckIcon,
-          primary: "More",
+          primary: "Additional",
           secondary: "egress",
           secondaryTooltip: "See usage based pricing below",
         },
@@ -359,7 +364,7 @@ const networkSection = {
 };
 
 const devopsSection = {
-  title: "DevOps & Tooling",
+  title: "Builds",
   icon: "/images/pages/pricing/sections/pricingComparison/dev-ops-and-tooling.svg",
   rows: [
     {
@@ -372,17 +377,17 @@ const devopsSection = {
         {
           icon: CheckIcon,
           primary: "100",
-          secondary: "monthly build minutes",
+          secondary: "build minutes",
         },
         {
           icon: CheckIcon,
           primary: "250",
-          secondary: "monthly build minutes",
+          secondary: "build minutes",
         },
         {
           icon: CheckIcon,
           primary: "Custom",
-          secondary: "monthly build minutes",
+          secondary: "build minutes",
         },
       ],
     },
@@ -449,21 +454,29 @@ const monitoringSection = {
         {
           icon: CheckIcon,
           primary: "Basic",
+          primaryTooltip:
+            "Export CPU usage, Memory usage, Network I/O & Disk I/O",
           secondary: "usage metrics",
         },
         {
           icon: CheckIcon,
           primary: "Basic",
+          primaryTooltip:
+            "Export CPU usage, Memory usage, Network I/O & Disk I/O",
           secondary: "usage metrics",
         },
         {
           icon: CheckIcon,
           primary: "Basic",
+          primaryTooltip:
+            "Export CPU usage, Memory usage, Network I/O & Disk I/O",
           secondary: "usage metrics",
         },
         {
           icon: CheckIcon,
           primary: "Basic",
+          primaryTooltip:
+            "Export CPU usage, Memory usage, Network I/O & Disk I/O",
           secondary: "usage metrics",
         },
       ],
@@ -472,27 +485,27 @@ const monitoringSection = {
       cells: [
         {
           icon: CloseIcon,
-          primary: "Custom app metrics & traces",
+          primary: "Custom metrics & traces",
           secondary: "",
           isDisabled: true,
         },
         {
           icon: CheckIcon,
           primary: "Custom",
-          secondary: "app metrics & traces",
-          secondaryTooltip: "Metrics & traces",
+          secondary: "metrics & traces",
+          secondaryTooltip: "Export everything",
         },
         {
           icon: CheckIcon,
           primary: "Custom",
-          secondary: "app metrics & traces",
-          secondaryTooltip: "Metrics & traces",
+          secondary: "metrics & traces",
+          secondaryTooltip: "Export everything",
         },
         {
           icon: CheckIcon,
           primary: "Custom",
-          secondary: "app metrics & traces",
-          secondaryTooltip: "Metrics & traces",
+          secondary: "metrics & traces",
+          secondaryTooltip: "Export everything",
         },
       ],
     },
@@ -669,8 +682,8 @@ export function PricingComparison() {
         <ComparisonSection {...teamAccessSection} className="mt-12" />
         <ComparisonSection {...supportSection} className="mt-12 max-md:mt-10" />
       </article>
-      <article className="flex lg:hidden text-base leading-tight flex-col justify-center items-center mb-28">
-        <div className="w-full sticky lg:hidden top-4 resize z-10">
+      <article className="flex lg:hidden text-base leading-tight flex-col justify-center items-center mb-14 md:mb-28">
+        <div className="w-full sticky lg:hidden top-0 resize z-10">
           <Select
             className="mb-5"
             options={options}
@@ -689,20 +702,42 @@ export function PricingComparison() {
           rows={storageSection.rows.map((row) => ({
             cells: [row.cells[sectionIndex]],
           }))}
+          className="mt-10"
         />
         <ComparisonSection
           {...networkSection}
           rows={networkSection.rows.map((row) => ({
             cells: [row.cells[sectionIndex]],
           }))}
-          className="mt-6"
+          className="mt-10"
         />
         <ComparisonSection
           {...devopsSection}
           rows={devopsSection.rows.map((row) => ({
             cells: [row.cells[sectionIndex]],
           }))}
-          className="mt-14 max-md:mt-10"
+          className="mt-10"
+        />
+        <ComparisonSection
+          {...monitoringSection}
+          rows={monitoringSection.rows.map((row) => ({
+            cells: [row.cells[sectionIndex]],
+          }))}
+          className="mt-10"
+        />
+        <ComparisonSection
+          {...teamAccessSection}
+          rows={teamAccessSection.rows.map((row) => ({
+            cells: [row.cells[sectionIndex]],
+          }))}
+          className="mt-10"
+        />
+        <ComparisonSection
+          {...supportSection}
+          rows={supportSection.rows.map((row) => ({
+            cells: [row.cells[sectionIndex]],
+          }))}
+          className="mt-10"
         />
       </article>
     </>

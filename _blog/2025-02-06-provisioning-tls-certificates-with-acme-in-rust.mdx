@@ -1,0 +1,406 @@
+---
+title: "Provisioning TLS Certificates in Rust With ACME"
+description: "How we provision TLS certificates for custom domains in Rust using the `instant_acme`
+crate."
+author: oddgrd
+tags: [rust, acme, tls]
+thumb: tls-certs-acme-thumb.png
+cover: tls-certs-acme-thumb.png
+date: '2025-02-06T14:45:00'
+---
+
+## Introduction
+
+At Shuttle, we enable users to easily deploy their Rust backend applications to our platform. Each
+deployed application can receive HTTPS traffic at its default domain:
+`<project-name>-<nonce>.shuttle.app`. We use a wildcard certificate that automatically covers all
+subdomains of `shuttle.app`. However, users can use any custom domain they want, and we need an
+SSL/TLS certificate for each.
+
+To facilitate this, users can request a certificate for any domain they own through the
+[Shuttle CLI](https://docs.shuttle.dev/docs/domain-names#set-up-ssl-certificate), after setting a
+DNS record that points their domain to our public IP. To streamline this process, we needed a
+simple, automated way to provision multiple certificates from a trusted certificate authority.
+This is where the ACME protocol comes into play.
+
+![High level diagram showing the certificate provisioning process](/images/blog/provisioning-tls-certificates-with-acme/introduction-diagram.svg)
+
+## The ACME Protocol
+
+The ACME (Automated Certificate Management Environment,
+[RFC 8555](https://datatracker.ietf.org/doc/html/rfc8555)) protocol was developed by the
+[Internet Security Research Group](https://en.wikipedia.org/wiki/Internet_Security_Research_Group)
+for their Let's Encrypt service. It is an open standard that allows for the automated provisioning
+and renewal of certificates from a certificate authority. [Let's Encrypt](https://letsencrypt.org/)
+is the most popular certificate authority that implements ACME, and in fact the only way to get a
+certificate from them is with an ACME client. They’re a non-profit, with the express goal of making
+the internet more secure by allowing anyone to easily obtain certificates, free-of-charge. We use
+Let’s Encrypt at Shuttle, but there are other certificate authorities that implement the ACME
+protocol, for example [ZeroSSL](https://zerossl.com/) and
+[Google Trust Services](https://pki.goog/).
+
+Now we know a little bit at a high level about ACME, but how does it work in practice?
+
+## ACME Challenges
+
+The ACME protocol allows us to provision certificates from an ACME server programmatically. However,
+for us to be allowed to provision a certificate for a given domain, we must first prove that we
+control that domain. In the ACME paradigm that is done by completing a challenge, and in the current
+version of the ACME standard, there are three
+[challenge types](https://letsencrypt.org/docs/challenge-types/).
+
+### HTTP-01
+
+This is the simplest and most commonly used challenge, and the one we currently use to support
+custom domains on Shuttle. For this challenge, you need to start a server under the domain you are
+requesting a certificate for, that is reachable by the ACME server (e.g. Let’s Encrypt) on port 80.
+The ACME server will send an HTTP request to the endpoint
+`http://<YOUR_DOMAIN>/.well-known/acme-challenge/<TOKEN>`, and it will expect a specific value in
+the response, which we’ll go in depth on later.
+
+The main drawbacks to using this challenge type, is that it does not support provisioning
+certificates for wildcard domains. Furthermore, it requires you to serve the challenge response on
+port 80, which depending on your infrastructure setup can be challenging.
+
+For the practical part of this article, we’ll focus on this challenge type.
+
+### DNS-01
+
+This challenge requires you to prove that you control the DNS for a domain by putting a specific
+value under a TXT record in the DNS zone for that domain. The ACME server will then do an
+authoritative lookup for the record, and if it has the right value, you’ll be allowed to provision
+a certificate. This can be challenging to automate, since you’re reliant on your DNS provider to
+have an API you can call to set the TXT record.
+
+At Shuttle, we use this challenge internally when we provision a certificate for our default
+wildcard domain, `*.shuttle.app`. In the future, we will use it to allow users to request
+certificates for wildcard custom domains, as this is the only challenge type that can be used for
+wildcard certificates. We will then initiate the challenge on our end, before returning the value
+to the user, along with instructions on how to set it in a TXT record in their DNS.
+
+### TLS-ALPN-01
+
+Like the HTTP-01 challenge, this challenge, which is developed as a
+[separate standard](https://datatracker.ietf.org/doc/html/rfc8737), also requires you to run a
+server on your domain that is reachable by the ACME server. But unlike HTTP-01, you don’t need to
+serve it on port 80. You are required to start a TLS server on port 443, that responds to specific
+connection attempts using the ALPN extension with identifying information. To prove that you control
+the domain, when the ACME server makes a connection to an address that is resolved for your domain,
+you need to present a self-signed certificate with some identifying information, as well as a signed
+challenge token.
+
+## Using an ACME client in Rust with `instant_acme`
+
+It’s time to see how this all works in practice, in Rust! Thanks to the Rust open-source community,
+we don’t have to implement our ACME client from scratch. There are a couple of crates to choose
+from, but the most up-to-date and actively maintained is the
+[`instant_acme`](https://github.com/djc/instant-acme) crate, built on top of `tokio` and `rustls`.
+It supports all the ACME challenge types mentioned above.
+
+### Creating an ACME Account
+
+The first step in the ACME certificate provisioning flow is creating an
+[ACME account](https://datatracker.ietf.org/doc/html/rfc8555#section-7.1.2), which `instant_acme`
+makes very simple. When we call `Account::create`, the library sets up a Hyper client under the hood
+and creates an
+[ECDSA key pair](https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm), and
+there we have it, our ACME client! We’ll re-use this client and key pair throughout the provisioning
+process.
+
+The public key from the key pair will be included in the account creation request, and the request,
+as well as future requests using this client, will be signed using the private key. We’ll use the
+Let’s Encrypt staging environment for this example, since it’s
+[recommended for development and testing](https://letsencrypt.org/docs/staging-environment/).
+
+```rust
+use instant_acme::{LetsEncrypt, NewAccount, Account};
+use anyhow::Context;
+
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    let account = NewAccount {
+        // Optionally add a list of contact URIs (like mailto:info@your-domain.com).
+        contact: &[],
+        terms_of_service_agreed: true,
+        only_return_existing: false,
+    };
+
+    // We'll use methods on the returned account struct for future calls to the ACME server.
+    let (account, _credentials) = Account::create(&account, &LetsEncrypt::Staging.url(), None)
+        .await
+        .context("failed to create acme account")?;
+}
+```
+
+### Creating an ACME Order
+
+With our account set up, we’re ready to create an
+[order](https://datatracker.ietf.org/doc/html/rfc8555#section-7.1.3) for a certificate. The order
+struct is a simple state machine, in accordance with the ACME spec. It has a status, a list of
+authorizations and an optional certificate. We’ll go through the various steps of the order to drive
+the state to `Ready`, at which point we’ll be allowed to request a certificate.
+
+![Diagram showing the order state machine](/images/blog/provisioning-tls-certificates-with-acme/order-state-machine.svg)
+
+The order will have one authorization per domain we request a certificate for, that the ACME server
+requires the client to complete. For each authorization, we need to chose which challenge type we
+want to complete, e.g. HTTP-01 or DNS-01. For this example, we’ll use an HTTP-01 challenge.
+
+> The instant_acme repository provides an
+[example using a DNS-01 challenge](https://github.com/djc/instant-acme/blob/main/examples/provision.rs),
+which the example below using HTTP-01 is largely based on.
+
+```rust
+use instant_acme::{
+   AuthorizationStatus, ChallengeType, Identifier, NewOrder
+};
+use anyhow::{bail, Context};
+
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    [...]
+
+    let domain = "my-domain.com";
+
+		// Using the account we created earlier, create an order for our domain.
+    let mut order = account
+        .new_order(&NewOrder {
+            identifiers: &[Identifier::Dns(domain.to_string())],
+        })
+        .await
+        .context("failed to order certificate")?;
+
+		// Request authorizations for our order from the ACME server.
+    let authorizations = order
+        .authorizations()
+        .await
+        .context("failed to retrieve order authorizations")?;
+
+    // There should only be 1 authorization as we only provided 1 domain above.
+    let authorization = authorizations
+        .first()
+        .context("there should be one authorization")?;
+
+    if !matches!(authorization.status, AuthorizationStatus::Pending) {
+        bail!("order should be pending");
+    }
+
+		// We want to complete an HTTP-01 challenge for this example, so we
+		// extract it from the authorization. It holds the token we need to
+		// complete the challenge.
+    let challenge = authorization
+        .challenges
+        .iter()
+        .find(|c| c.r#type == ChallengeType::Http01)
+        .ok_or_else(|| anyhow::anyhow!("no http01 challenge found"))?;
+}
+```
+
+### Setting Up An HTTP-01 Challenge Server
+
+Now, as I mentioned earlier, to complete an HTTP-01 challenge we need to serve a specific value at
+the `http://my-domain.com/.well-known/acme-challenge/{*token}` endpoint. The token will be in the
+challenge we received from the ACME server with our order. For any request to this endpoint, we will
+return the same token, signed with the private key from our ACME account credentials, in the
+response body. This signed token is known as a
+[key authorization](https://datatracker.ietf.org/doc/html/rfc8555#section-8.1).
+
+Before we set the challenge to ready, we need to persist the challenge token and key authorization
+somewhere, so we can serve it in response to ACME server requests. At Shuttle, we use an external
+database for this, since there are many instances of our ACME client running at a given time,
+behind a load balancer, and they all need to be able to complete any challenge. But in the interest
+of keeping this example simple, we’ll just store them in a `HashMap`.
+
+![Diagram showing the flow of an ACME HTTP-01 challenge](/images/blog/provisioning-tls-certificates-with-acme/http-01-challenge.svg)
+
+To serve the challenge endpoint, we’ll set up a simple Axum server, but you could use any framework
+of your choosing, or even just a simple Hyper server if you want something bare-bones. We’ll start
+by creating some utility functions to set up our Axum server.
+
+```rust
+use axum::{
+    extract::{Path, State},
+    http::StatusCode,
+    routing::any,
+    Router,
+};
+use instant_acme::ChallengeType;
+
+/// Set up a simple acme server to respond to http01 challenges.
+pub fn acme_router(challenges: HashMap<String, String>) -> Router {
+    Router::new()
+        .route(
+            "/.well-known/acme-challenge/{*token}",
+            any(http01_challenge),
+        )
+        .with_state(challenges)
+}
+
+/// Respond to HTTP-01 challenges by extracting the token from the path of the request, and then
+/// using the token to look up the matching key authorization in our internal state.
+pub async fn http01_challenge(
+    State(challenges): State<HashMap<String, String>>,
+    Path(token): Path<String>,
+) -> Result<String, StatusCode> {
+    tracing::info!(%token, "received HTTP-01 ACME challenge");
+
+    if let Some(key_auth) = challenges.get(&token) {
+        Ok({
+            tracing::info!(%key_auth, "responding to ACME challenge");
+            key_auth.clone()
+        })
+    } else {
+        tracing::warn!(%token, "didn't find acme challenge");
+        Err(StatusCode::NOT_FOUND)
+    }
+}
+
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    [...]
+
+    let challenge = authorization
+        .challenges
+        .iter()
+        .find(|c| c.r#type == ChallengeType::Http01)
+        .ok_or_else(|| anyhow::anyhow!("no http01 challenge found"))?;
+
+    let challenges = HashMap::from([(
+        challenge.token.clone(),
+        order.key_authorization(challenge).as_str().to_string(),
+    )]);
+
+    tracing::info!("challenges: {:?}", challenges);
+
+    // We use the utility function we created below to configure our Axum router.
+    let acme_router = acme_router(challenges);
+
+    // NOTE: when the ACME server sends the challenge request to your domain, it will always
+    // connect on port 80, which is specified in the standard.
+    // At Shuttle we have a load balancer in front of the ACME client, which listens for ACME
+    // requests on port 80, and forwards them to the challenge server running on a different port.
+    let address = "0.0.0.0:5002";
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:5002").await.unwrap();
+
+    // Start the Axum server as a background task, so it's running while we complete the challenge
+    // in the next steps.
+    tokio::task::spawn(async move { axum::serve(listener, acme_router).await.unwrap() });
+
+    tracing::info!("serving HTTP-01 challenge server at: 0.0.0.0:5002");
+}
+```
+
+### Initiate The HTTP-01 Challenge
+
+Now that our HTTP-01 challenge server is up and running in the background, we can proceed with our
+order. The next step is to communicate to the ACME server that we are ready to complete the
+challenge.
+
+```rust
+use anyhow::{bail, Context};
+use instant_acme::OrderStatus;
+
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    [...]
+
+    // Notify the ACME server that we are ready to complete the challenge.
+    order
+        .set_challenge_ready(&challenge.url)
+        .await
+        .context("failed to notify ACME server that challenge is ready")?;
+
+    // We now need to wait until the order reaches an end-state. We refresh the order in a loop,
+    // with exponential backoff, until the order is either ready or invalid (for example if our
+    // challenge server responded with the wrong key authorization).
+    let mut tries = 1u8;
+    let mut delay = Duration::from_millis(250);
+    loop {
+        tokio::time::sleep(delay).await;
+        let state = order.refresh().await.unwrap();
+        if let OrderStatus::Ready | OrderStatus::Invalid = state.status {
+            tracing::info!("order state: {:#?}", state);
+            break;
+        }
+
+        delay *= 2;
+        tries += 1;
+        if tries < 15 {
+            tracing::info!(?state, tries, "order is not ready, waiting {delay:?}");
+        } else {
+            tracing::error!(
+                tries,
+                "timed out before order reached ready state: {state:#?}"
+            );
+            bail!("timed out before order reached ready state");
+        }
+    }
+
+    let state = order.state();
+    if state.status != OrderStatus::Ready {
+        bail!("unexpected order status: {:?}", state.status);
+    }
+
+    tracing::info!(?state, "challenge completed");
+```
+
+### Requesting a certificate with a CSR
+
+Now that the challenge is completed, we are ready to
+[finalize the order](https://datatracker.ietf.org/doc/html/rfc8555#section-7.1.4) and request the
+certificate. First, we’ll need to create a
+[certificate signing request](https://en.wikipedia.org/wiki/Certificate_signing_request) (CSR).
+Creating the CSR is outside the scope of the `instant_acme` crate, so we’ll need to use another
+library for that, [`rcgen`](https://github.com/rustls/rcgen).
+
+While requesting the certificate should be fast, it won’t be ready immediately, so here again we
+will poll until it’s ready.
+
+```rust
+use anyhow::{bail, Context};
+use rcgen::{CertificateParams, DistinguishedName, KeyPair};
+
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    [...]
+    // Create a CSR for our domain.
+	let mut params = CertificateParams::new(vec![domain.to_owned()])?;
+    params.distinguished_name = DistinguishedName::new();
+    let private_key = KeyPair::generate()?;
+    let signing_request = params.serialize_request(&private_key)?;
+
+    // DER encode the CSR and use it to request our certificate from the ACME server.
+    order
+        .finalize(signing_request.der())
+        .await
+        .context("failed to finalize order")?;
+
+    // Poll for certificate, do this for a few rounds.
+    let mut cert_chain_pem: Option<String> = None;
+    let mut retries = 5;
+    while cert_chain_pem.is_none() && retries > 0 {
+        cert_chain_pem = order
+            .certificate()
+            .await
+            .context("failed to get the certificate for order")?;
+        retries -= 1;
+        tokio::time::sleep(Duration::from_secs(1)).await;
+    }
+
+    let Some(chain) = cert_chain_pem else {
+        bail!("failed to get certificate for order before timeout");
+    };
+
+    tracing::info!("certificate chain:\n\n{}", chain);
+    tracing::info!("private key:\n\n{}", private_key.serialize_pem());
+    Ok(())
+}
+```
+
+And there we have it! A certificate we can serve for my-domain.com. At Shuttle, we store these
+certificates in a database, then serve them in the TLS handler of our Pingora based proxy.
+
+Note that the example in this article will fail if ran locally, since the HTTP-01 challenge server
+has to be served on port 80 on the IP that the domain DNS record points to. If you want to test it
+locally, you can use Pebble, a small and simple ACME test server. You can see an example of that,
+and the full source code for this article, in the [repository](https://github.com/oddgrd/acme-article).

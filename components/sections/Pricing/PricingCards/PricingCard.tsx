@@ -30,8 +30,8 @@ export const PricingCard: React.FC<PricingCardProps> = ({
   const featuresListClassName = collapsed ? "xl:max-h-0" : "xl:max-h-[300px]";
 
   return (
-    <article className="w-full sm:w-1/2 xl:w-1/4 px-4 pb-6 sm:px-2 md:pb-4 xl:pb-0">
-      <div className="overflow-hidden transition transition-500 p-8 bg-black border border-solid border-white/30 min-w-60 rounded-[32px] max-md:px-5 {/*box-shadow-design*/}">
+    <article className="w-full sm:w-1/2 xl:w-1/4 px-4 pb-4 sm:px-2 xl:pb-0">
+      <div className="overflow-hidden transition transition-500 p-8 bg-black border border-solid border-white/30 min-w-60 rounded-[32px]">
         <div className="w-full flex flex-col">
           <div className="flex flex-col gap-2">
             <header>

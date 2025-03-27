@@ -86,6 +86,7 @@ export default function BlogPage(props: Props): JSX.Element {
       />
 
       <FeaturedBlogPost {...headPost} />
+
       <Blog tags={tags} posts={tailPosts} />
     </>
   );

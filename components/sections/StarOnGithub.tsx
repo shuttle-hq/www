@@ -34,6 +34,7 @@ const StarOnGithub = () => {
         onClick={() => {
           trackEvent("github_star_cta");
         }}
+        className="underline"
       >
         give it a star on GitHub
       </a>
@@ -45,7 +46,7 @@ const StarOnGithub = () => {
         onClick={() => {
           trackEvent("twitter_follow_cta");
         }}
-        className="hidden sm:block"
+        className="hidden sm:block underline"
       >
         follow us on Twitter
       </a>

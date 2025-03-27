@@ -12,7 +12,6 @@ interface FooterProps {
 const SHUTTLE_LINKS = [
   { key: "features", name: "Features", href: "/#features" },
   { key: "starters", name: "Starters", href: "/starters" },
-  { key: "status", name: "Status", href: "https://status.shuttle.rs" },
   {
     key: "releases",
     name: "Releases",
@@ -161,7 +160,7 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
         </div>
         <div className="grid grid-cols-2 divide-x divide-black/10 dark:divide-white/10 lg:col-span-2">
           <div className="lg:grid lg:grid-cols-2 lg:divide-x lg:divide-black/10 dark:lg:divide-white/10">
-            <p className="px-8 pb-5 lg:px-16 lg:pb-9">© 2024 Shuttle</p>
+            <p className="px-8 pb-5 lg:px-16 lg:pb-9">© 2025 Shuttle</p>
             <div className="hidden lg:block" />
           </div>
           <div className="lg:grid lg:grid-cols-2 lg:divide-x lg:divide-black/10 dark:lg:divide-white/10">

@@ -91,7 +91,7 @@ module.exports = {
               },
             },
           },
-        }
+        };
 
         return {
           toc: {
@@ -124,7 +124,7 @@ module.exports = {
               },
             },
           },
-        }
+        };
       },
       backgroundImage: {
         "gradient-1":
@@ -137,7 +137,7 @@ module.exports = {
   plugins: [
     require("@tailwindcss/typography"),
     function ({ addVariant }) {
-      addVariant("children", "& > *")
+      addVariant("children", "& > *");
     },
   ],
-}
+};

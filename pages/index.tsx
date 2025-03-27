@@ -75,6 +75,7 @@ export default function Home({
           ],
         }}
       />
+      {/* <div className="w-full text-center p-2 bg-yellow-400 text-black">🚨 Beware of impersonators and scams! Never trust communication that are not from our official websites and socials.</div> */}
       <main className="text-body">
         <Hero />
         <GetStarted />

@@ -60,6 +60,13 @@ const authors: readonly Author[] = [
     author_image_url: "/images/authors/josh.jpg",
   },
   {
+    author_id: "oddgrd",
+    author: "Oddbjørn Grødem",
+    position: "",
+    author_url: "https://github.com/oddgrd",
+    author_image_url: "https://github.com/oddgrd.png",
+  },
+  {
     author_id: "matthias",
     author: "Matthias Endler",
     position: "Consultant at Corrode.dev",

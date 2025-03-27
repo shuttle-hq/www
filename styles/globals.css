@@ -384,6 +384,46 @@ body.dark {
   }
 }
 
+.custom-bg2 {
+  background-image: url("/images/pages/pricing/custom-bg.jpg");
+  /*background-size: cover;*/
+  background-position: center 7% !important;
+  background-repeat: no-repeat !important;
+  margin: 0 -16px 0px;
+  padding: 40px 16px 180px;
+}
+
+.bg-img1 {
+  background-image: url("/images/pages/pricing/sections/chooseUs/web3.png");
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+}
+
+.bg-img2 {
+  background-image: url("/images/pages/pricing/sections/chooseUs/lidar.png");
+  background-repeat: no-repeat;
+}
+
+.bg-img3 {
+  background-image: url("/images/pages/pricing/sections/chooseUs/else.png");
+  background-repeat: no-repeat;
+}
+
+
+
+@media (min-width: 768px) {
+  .custom-bg {
+    background-image: url("/images/pages/pricing/custom-bg.jpg");
+    background-size: 200% 19% !important;
+    background-position: center 7% !important;
+    background-repeat: no-repeat !important;
+  }
+
+  .custom-bg2 {
+    padding: 0 16px 40px!important;
+  }
+}
+
 @layer utilities {
   .box-shadow-design {
     /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#000000+0,ffffff+100&1+0,0+100 */
@@ -414,6 +454,10 @@ body.dark {
     color: #494949;
   }
 
+  @media (min-width: 768px) {
+    margin: 0 -16px 40px;
+    padding: 0 16px;
+  }
   .custom-culture-bg {
     position: relative;
   }
@@ -452,9 +496,9 @@ body.dark {
         to top,
         rgba(0, 0, 0, 0) 100%,
         rgba(0, 0, 0, 1) 100%
-      ),
-      linear-gradient(to bottom, rgba(0, 0, 0, 0) 80%, rgba(0, 0, 0, 1) 100%),
-      url("/images/pages/pricing/custom-bg.jpg");
+    ),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0) 80%, rgba(0, 0, 0, 1) 100%),
+    url("/images/pages/pricing/custom-bg.jpg");
     background-size: auto 130%;
     background-repeat: no-repeat;
     background-position: center center;
@@ -498,9 +542,9 @@ body.dark {
         to bottom,
         rgba(0, 0, 0, 1) 0%,
         rgba(0, 0, 0, 0) 15%
-      ),
-      linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 15%),
-      url("/images/pages/careers/sections/bg-img.jpg");
+    ),
+    linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 15%),
+    url("/images/pages/careers/sections/bg-img.jpg");
     background-position: center center;
     background-size: auto;
     background-repeat: no-repeat;
