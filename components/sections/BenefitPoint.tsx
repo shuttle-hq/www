@@ -1,3 +1,5 @@
+import Image from "next/image"
+
 interface BenefitPointProps {
   title: string
   description: string
@@ -12,7 +14,7 @@ export default function BenefitPoint({
   return (
     <div className="flex gap-5 py-8 items-center w-full">
       <div className="flex-shrink-0 w-10 h-10">
-        <img
+        <Image
           src={iconSrc}
           alt={`${title} icon`}
           className="object-contain"

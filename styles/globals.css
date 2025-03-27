@@ -422,10 +422,11 @@ body.dark {
     content: "";
     position: absolute;
     top: 50%;
-    left: 0;
-    width: 100%;
+    left: 50%;
+    width: auto;
+    aspect-ratio: 2.5;
     height: 850px;
-    transform: translateY(-50%);
+    transform: translate(-50%, -50%);
     background-image: url("/images/pages/pricing/custom-bg.jpg");
     background-position: center 60%;
     background-size: auto;
@@ -442,10 +443,11 @@ body.dark {
     content: "";
     position: absolute;
     top: 50%;
-    left: 0;
-    width: 100%;
+    left: 50%;
+    width: auto;
+    aspect-ratio: 2.5;
     height: 986px;
-    transform: translateY(-49%);
+    transform: translate(-50%, -50%);
     background-image: linear-gradient(
         to top,
         rgba(0, 0, 0, 0) 100%,
@@ -481,38 +483,36 @@ body.dark {
     }
   }
 
-  @media (max-width: 768px), (min-width: 1001px) {
-    .custom-galaxy-bg {
-      position: relative;
-    }
-
-    .custom-galaxy-bg::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: linear-gradient(
-          to bottom,
-          rgba(0, 0, 0, 1) 0%,
-          rgba(0, 0, 0, 0) 15%
-        ),
-        linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 15%),
-        url("/images/pages/careers/sections/bg-img.jpg");
-      background-position: center center;
-      background-size: auto;
-      background-repeat: no-repeat;
-      transform: translateY(100px);
-      z-index: -1;
-    }
+  .custom-galaxy-bg {
+    position: relative;
   }
 
-  @media (min-width: 768px) {
-    .custom-bg {
-      background-image: url("/images/pages/pricing/custom-bg.jpg");
-      background-position: 54% 9% !important;
-      background-size: contain;
-    }
+  .custom-galaxy-bg::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(0, 0, 0, 0) 15%
+      ),
+      linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 15%),
+      url("/images/pages/careers/sections/bg-img.jpg");
+    background-position: center center;
+    background-size: auto;
+    background-repeat: no-repeat;
+    transform: translateY(100px);
+    z-index: -1;
+  }
+}
+
+@media (min-width: 768px) {
+  .custom-bg {
+    background-image: url("/images/pages/pricing/custom-bg.jpg");
+    background-position: 54% 9% !important;
+    background-size: contain;
   }
 }
