@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import * as React from "react";
 
 interface LogoImageProps {
@@ -9,7 +10,7 @@ interface LogoImageProps {
 
 const LogoImage: React.FC<LogoImageProps> = ({ src, className = "" }) => {
   return (
-    <img
+    <Image
       src={src}
       alt="Company Logo"
       className={`object-contain shrink-0 self-stretch my-auto ${className}`}
