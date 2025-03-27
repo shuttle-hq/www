@@ -21,10 +21,10 @@ export default function BenefitPoint({
         />
       </div>
       <div>
-        <h3 className="font-normal text-xl leading-7 tracking-wide text-grey100 mb-1">
+        <h3 className="font-normal text-xl leading-7 tracking-1 text-grey100 mb-1">
           {title}
         </h3>
-        <p className="font-normal text-base leading-6 tracking-wide text-body">
+        <p className="font-normal tracking-1 text-base leading-6 text-body">
           {description}
         </p>
       </div>

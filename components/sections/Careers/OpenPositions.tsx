@@ -9,7 +9,8 @@ export default function OpenPositions({ jobData }: OpenPositionsProps) {
   return (
     <div
       id="open-positions"
-      className="relative h-screen custom-open-positions-bg bg-no-repeat fle flex flex-col justify-center"
+      // custom-open-positions-bg bg-no-repeat
+      className="relative  fle flex flex-col justify-center"
     >
       <div className="max-w-[1344px] w-full mx-auto px-5 sm:px-10">
         <div className="w-full rounded-[32px] backdrop-blur-[20px] bg-grey800 border border-grey700 overflow-hidden">

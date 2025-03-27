@@ -41,11 +41,9 @@ export default function CareersPage() {
   return (
     <div className="flex-grow overflow-x-clip">
       <Hero />
-      <div className="my-[110px]">
+      <div className="flex flex-col my-[120px] gap-[120px] mobileS:mb-32 mobileS:mt-[220px] mobileS:gap-[220px]">
         <CompanyMission />
-      </div>
-      <OurCultureAndValues />
-      <div className="flex flex-col mt-[110px] mb-[206px] gap-[220px]">
+        <OurCultureAndValues />
         <WhatWereLookingFor />
         <WhyJoinShuttle />
         <OpenPositions jobData={jobData} />
