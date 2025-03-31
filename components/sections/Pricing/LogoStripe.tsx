@@ -25,62 +25,74 @@ const LogoStrip: React.FC = () => {
             <LogoImage
               key="1"
               src="/images/pages/pricing/featuresList/uber.svg"
-              className="w-[56px] h-[20px]"
+              width={56}
+              height={20}
             />,
             <LogoImage
               key="2"
               src="/images/pages/pricing/featuresList/github.svg"
-              className="w-[70px] h-[18px]"
+              width={70}
+              height={18}
             />,
             <LogoImage
               key="3"
               src="/images/pages/pricing/featuresList/nike.svg"
-              className="w-[74px] h-[26px]"
+              width={74}
+              height={26}
             />,
             <LogoImage
               key="4"
               src="/images/pages/pricing/featuresList/meta.svg"
-              className="w-[87px] h-[17px]"
+              width={87}
+              height={17}
             />,
             <LogoImage
               key="5"
               src="/images/pages/pricing/featuresList/stellar.svg"
-              className="w-[96px] h-[20px]"
+              width={96}
+              height={20}
             />,
             <LogoImage
               key="6"
               src="/images/pages/pricing/featuresList/mongo.svg"
-              className="w-[106px] h-[29px]"
+              width={106}
+              height={29}
             />,
             <LogoImage
               key="7"
               src="/images/pages/pricing/featuresList/luminar.svg"
-              className="w-[96px] h-[19px]"
+              width={96}
+              height={19}
             />,
             <LogoImage
               key="8"
               src="/images/pages/pricing/featuresList/layers.png"
-              className="w-[34px] h-[27px]"
+              width={34}
+              height={27}
             />,
             <LogoImage
               key="9"
               src="/images/pages/pricing/featuresList/unwritten.svg"
-              className="w-[99px] h-[17px]"
+              width={99}
+              height={17}
             />,
             <LogoImage
               key="10"
               src="/images/pages/pricing/featuresList/stronghold.svg"
-              className="w-[103px] h-[24px]"
+              width={103}
+              height={24}
             />,
             <LogoImage
               key="11"
               src="/images/pages/pricing/featuresList/fortanix.svg"
-              className="w-[113px] h-[23px]"
+              width={113}
+              height={23}
             />,
             <LogoImage
               key="12"
               src="/images/pages/pricing/featuresList/hrmano.svg"
-              className="w-[126px] h-[27px]"
+              width={126}
+              height={27}
             />,
           ]}
         />

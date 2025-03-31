@@ -11,6 +11,8 @@ export const FeatureItem: React.FC<FeatureItemProps> = ({ iconUrl, text }) => {
     <article className="flex flex-col justify-center items-center self-stretch py-1 my-auto rounded-xl">
       <div className="flex gap-2 items-center">
         <Image
+          width={18}
+          height={18}
           src={iconUrl}
           alt=""
           className="object-contain shrink-0 self-stretch my-auto aspect-square w-[18px]"
