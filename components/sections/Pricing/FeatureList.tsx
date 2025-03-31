@@ -4,13 +4,11 @@ import { FeatureItem } from "./FeatureItem";
 
 const features = [
   {
-    iconUrl:
-      "https://cdn.builder.io/api/v1/image/assets/TEMP/4060918e5ff97e8bfc2661a8f6ec4837947e11979314e5925476bb010323439b?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+    iconUrl: "/images/checkmark.svg",
     text: "Production Ready",
   },
   {
-    iconUrl:
-      "https://cdn.builder.io/api/v1/image/assets/TEMP/4060918e5ff97e8bfc2661a8f6ec4837947e11979314e5925476bb010323439b?placeholderIfAbsent=true&apiKey=c8cd7228d5b149c59753a0e9d2f2b879",
+    iconUrl: "/images/checkmark.svg",
     text: "Rust Native",
   },
 ];
