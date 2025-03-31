@@ -1,9 +1,9 @@
-import CustomButton from "components/elements/CustomButton"
+import CustomButton from "components/elements/CustomButton";
 
 export interface JobData {
-  jobTitle: string
-  jobDescription: string
-  jobLink: string
+  jobTitle: string;
+  jobDescription: string;
+  jobLink: string;
 }
 
 export default function JobListItem({
@@ -19,11 +19,11 @@ export default function JobListItem({
             {jobTitle}
           </h3>
           <p className="leading-6 text-base font-normal sm:text-xl sm:leading-7 sm:tracking-1 text-body">
-            Description: {jobDescription}
+            {jobDescription}
           </p>
         </div>
         <CustomButton
-          className="justify-center w-full sm:w-auto"
+          className="justify-center w-full sm:w-auto px-12 py-1"
           variant="secondary"
           href={jobLink}
         >
@@ -31,5 +31,5 @@ export default function JobListItem({
         </CustomButton>
       </div>
     </li>
-  )
+  );
 }
