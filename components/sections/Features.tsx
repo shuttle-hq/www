@@ -1,6 +1,6 @@
 import { Compile, Database, Deploy, Free, Open, Skip } from "components/svgs";
 import Image from "next/image";
-import { LoginButton } from "../elements";
+import { LoginButton, SignupButton } from "../elements";
 
 const Features = () => {
   return (
@@ -68,7 +68,7 @@ const Features = () => {
             logging support, abundant documentation and supports all major Rust
             frameworks. Yes, even if you are coming from JS.
           </p>
-          <LoginButton variant="primary">Log in</LoginButton>
+          <SignupButton variant="primary">Sign up</SignupButton>
         </div>
         <div className="group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-body dark:bg-black sm:p-8 xl:row-[span_2]">
           <Image

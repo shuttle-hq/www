@@ -135,25 +135,25 @@ const Navigation = () => {
               className="w-[140px] justify-center"
               variant="secondary"
               invertOnDark
-              href={DISCORD_URL}
+              href="https://console.shuttle.dev/login"
               onClick={() => {
-                trackEvent("homepage_mainnav_discord");
+                trackEvent("homepage_mainnav_login");
               }}
             >
-              Join Discord
+              Log in
             </CustomButton>
             <div
               onClick={() => {
-                trackEvent("homepage_mainnav_login");
+                trackEvent("homepage_mainnav_signup");
               }}
             >
               <CustomButton
                 className="w-[140px] justify-center"
                 variant="primary"
                 invertOnDark
-                href="https://console.shuttle.dev/"
+                href="https://console.shuttle.dev/signup"
               >
-                Log in
+                Sign up
               </CustomButton>
             </div>
           </div>
