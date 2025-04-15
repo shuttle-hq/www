@@ -1,4 +1,4 @@
-import { Button, LoginButton, SignupButton } from "components/elements";
+import { Button, SignupButton } from "components/elements";
 import Image from "next/image";
 import { DISCORD_URL } from "../../lib/constants";
 import codeImage from "public/images/sections/hero/shuttle-axum-hello-world.png";

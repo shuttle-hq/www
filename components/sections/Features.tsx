@@ -1,6 +1,6 @@
 import { Compile, Database, Deploy, Free, Open, Skip } from "components/svgs";
 import Image from "next/image";
-import { LoginButton, SignupButton } from "../elements";
+import { SignupButton } from "../elements";
 
 const Features = () => {
   return (

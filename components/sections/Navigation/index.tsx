@@ -8,7 +8,6 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { DISCORD_URL } from "../../../lib/constants";
 
 const ThemeSwitcher = dynamic(() => import("./ThemeSwitcher"), { ssr: false });
 
