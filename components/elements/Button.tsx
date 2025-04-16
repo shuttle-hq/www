@@ -39,7 +39,7 @@ const Button: FC<ButtonProps> = ({
       : "",
     variant === "tertiary" && "button-shadow shadow-gradient text-black",
     variant === "blackwhite" &&
-      "rounded-[14px] border-[1px] border-solid border-[#ffffff40] px-6 py-3 font-gradual text-base text-white transition-all hover:bg-gradient-1",
+    "rounded-[14px] border-[1px] border-solid border-[#ffffff40] px-6 py-3 font-gradual text-base text-white transition-all hover:bg-gradient-1",
     className,
   );
 
@@ -68,7 +68,15 @@ const Button: FC<ButtonProps> = ({
 
 export const LoginButton: FC<CommonButtonProps> = ({ children, ...inner }) => {
   return (
-    <Button href="https://console.shuttle.dev/" {...inner}>
+    <Button href="https://console.shuttle.dev/login" {...inner}>
+      {children}
+    </Button>
+  );
+};
+
+export const SignupButton: FC<CommonButtonProps> = ({ children, ...inner }) => {
+  return (
+    <Button href="https://console.shuttle.dev/signup" {...inner}>
       {children}
     </Button>
   );
