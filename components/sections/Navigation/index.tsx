@@ -134,7 +134,7 @@ const Navigation = () => {
               className="w-[140px] justify-center"
               variant="secondary"
               invertOnDark
-              href="https://console.shuttle.dev/login"
+              href="https://console.shuttle.dev/"
               onClick={() => {
                 trackEvent("homepage_mainnav_login");
               }}
