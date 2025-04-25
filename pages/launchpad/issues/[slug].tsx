@@ -13,7 +13,7 @@ import rehypePrism from "@mapbox/rehype-prism";
 import { SITE_URL } from "lib/constants";
 import { GetStaticPropsContext, GetStaticPropsResult } from "next";
 import { ParsedUrlQuery } from "querystring";
-import Link from "next/link";
+import Link from "components/elements/Link";
 import clsx from "clsx";
 import { TwitterTweetEmbed } from "react-twitter-embed";
 import { Issue, getAllIssueSlugs, getIssueData } from "lib/launchpad/issues";

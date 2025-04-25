@@ -4,7 +4,7 @@ import {
   MDXRemoteProps,
   MDXRemoteSerializeResult,
 } from "next-mdx-remote";
-import Link from "next/link";
+import Link from "components/elements/Link";
 import { FC } from "react";
 
 interface BlogSidebarProps {

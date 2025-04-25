@@ -73,9 +73,7 @@ const CallToAction = ({ subtext }: CallToActionProps) => {
               href="https://github.com/shuttle-hq/shuttle"
               variant="primary"
               className="px-6 py-3 sm:px-8 sm:py-3.5 sm:text-lg"
-              onClick={() => {
-                trackEvent("homepage_buildthefuture_github");
-              }}
+              eventName="homepage_buildthefuture_github"
             >
               Github
             </Button>
@@ -83,9 +81,7 @@ const CallToAction = ({ subtext }: CallToActionProps) => {
               href="https://discord.gg/shuttle"
               variant="secondary"
               className="px-6 py-3 sm:px-8 sm:py-3.5 sm:text-lg"
-              onClick={() => {
-                trackEvent("homepage_buildthefuture_discord");
-              }}
+              eventName="homepage_buildthefuture_discord"
             >
               Discord
             </Button>
@@ -93,9 +89,7 @@ const CallToAction = ({ subtext }: CallToActionProps) => {
               href="https://twitter.com/shuttle_dev"
               variant="secondary"
               className="px-6 py-3 sm:px-8 sm:py-3.5 sm:text-lg"
-              onClick={() => {
-                trackEvent("homepage_buildthefuture_twitter");
-              }}
+              eventName="homepage_buildthefuture_twitter"
             >
               Twitter
             </Button>
