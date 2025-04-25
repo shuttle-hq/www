@@ -22,7 +22,7 @@ async function trackEventServer(event: string, properties?: Record<string, any>)
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        event: getEventName(event),
+        event: `${getEventName(event)}-server`,
         distinctId,
         properties
       })
