@@ -2,7 +2,7 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import clsx from "clsx";
 import { Button } from "components/elements";
 import { ReactElement, useState } from "react";
-import { CONTACT_US_URI, GET_STARTED_URI } from "lib/constants";
+import { CONTACT_US_URI, CONSOLE_BILLING_URI } from "lib/constants";
 import { trackEvent } from "lib/posthog";
 
 export type TierName = "community" | "pro" | "team";
@@ -36,7 +36,7 @@ const TIERS: PricingTier[] = [
     desc: "Raise limits and get access to custom domains, team features, and more.",
     cta: "Start 30-Day Trial",
     ctaPrimaryButton: true,
-    ctaLink: GET_STARTED_URI,
+    ctaLink: CONSOLE_BILLING_URI,
   },
   {
     name: "team",

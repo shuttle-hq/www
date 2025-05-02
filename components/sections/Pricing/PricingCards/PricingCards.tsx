@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { PricingCard, PricingCardProps } from "./PricingCard";
 import { CheckIcon } from "components/svgs/pricing-icons/CheckIcon";
-import { CONTACT_US_URI, GET_STARTED_URI } from "../../../../lib/constants";
+import { CONTACT_US_URI, CONSOLE_BILLING_URI } from "../../../../lib/constants";
 import { BackgroundShape } from "../../../BackgroundShape";
 
 const pricingTiers: PricingCardProps[] = [
@@ -19,7 +19,7 @@ const pricingTiers: PricingCardProps[] = [
     ],
     buttonText: "Start for free",
     buttonVariant: "highlight",
-    href: GET_STARTED_URI,
+    href: CONSOLE_BILLING_URI,
     icon: CheckIcon,
   },
   {
@@ -35,7 +35,7 @@ const pricingTiers: PricingCardProps[] = [
     ],
     buttonText: "Start 14 day trial",
     buttonVariant: "highlight",
-    href: GET_STARTED_URI,
+    href: CONSOLE_BILLING_URI,
     icon: CheckIcon,
   },
   {
@@ -50,7 +50,7 @@ const pricingTiers: PricingCardProps[] = [
       "Dedicated database",
     ],
     buttonText: "Start 14 day trial",
-    href: GET_STARTED_URI,
+    href: CONSOLE_BILLING_URI,
     icon: CheckIcon,
   },
   {

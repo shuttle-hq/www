@@ -1,5 +1,5 @@
 import { PlanProps } from "components/sections/Pricing/Plan";
-import { CONTACT_US_URI, GET_STARTED_URI } from "lib/constants";
+import { CONTACT_US_URI, CONSOLE_BILLING_URI } from "lib/constants";
 
 export const Plans: PlanProps[] = [
   {
@@ -80,7 +80,7 @@ export const Plans: PlanProps[] = [
         feature: "Book 1:1 support sessions",
       },
     ],
-    url: GET_STARTED_URI,
+    url: CONSOLE_BILLING_URI,
     textGradient:
       "linear-gradient(70deg, #FC540C -115.42%, rgba(255, 215, 111, 0.72) 61.13%, #38D4E9 291.19%)",
     cta: "Start 30-Day Trial",
