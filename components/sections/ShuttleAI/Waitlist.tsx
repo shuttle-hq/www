@@ -1,8 +1,8 @@
 import Image from "next/image";
-import Link from "next/link";
+import Link from "components/elements/Link";
 import { FC } from "react";
 
-interface WaitListProps {}
+interface WaitListProps { }
 
 export const Waitlist: FC<WaitListProps> = () => {
   return (
@@ -21,6 +21,7 @@ export const Waitlist: FC<WaitListProps> = () => {
             <Link
               href="https://shuttlerust.typeform.com/shuttle-ai"
               target="_blank"
+              eventName="shuttle_ai_waitlist_join"
               className="mt-4 flex h-[56px] cursor-pointer items-center rounded-[14px] bg-[#D8D8D8] px-11 text-lg text-black sm:mt-0"
             >
               Join the waitlist

@@ -20,7 +20,7 @@ import rehypePrism from "@mapbox/rehype-prism";
 import { DISCORD_URL, SITE_URL } from "lib/constants";
 import { GetStaticPropsContext, GetStaticPropsResult } from "next";
 import { ParsedUrlQuery } from "querystring";
-import Link from "next/link";
+import Link from "components/elements/Link";
 import clsx from "clsx";
 import {
   BlogHeader,

@@ -4,7 +4,7 @@ import { getAuthors } from "lib/blog/authors";
 import { Post } from "lib/blog/posts";
 import { trackEvent } from "lib/posthog";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "components/elements/Link";
 import { useRouter } from "next/router";
 import { FC, useState } from "react";
 
@@ -52,9 +52,7 @@ const Blog: FC<BlogProps> = ({ tags, posts }) => {
                 "p-2 transition-all lg:hover:pl-4",
                 tag === activeTag && "pl-4 text-transparent",
               )}
-              onClick={() => {
-                trackEvent(`blog_tag_${tag}`);
-              }}
+              eventName={`blog_tag_${tag}`}
             >
               {tag}
             </Link>

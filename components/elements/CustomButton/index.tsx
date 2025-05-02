@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import Link from "next/link";
+import Link from "components/elements/Link";
 import { FC, ReactNode } from "react";
 import styles from "./CustomButton.module.css";
 
@@ -36,9 +36,9 @@ const CustomButton: FC<ButtonProps> = ({
       ? `${styles.secondaryButton} ${styles.secondaryButtonShadow} ${styles.secondaryButtonBorderGradient} text-head`
       : "",
     variant === "tertiary" &&
-      "${styles.buttonShadow} ${styles.shadowGradient} text-black",
+    "${styles.buttonShadow} ${styles.shadowGradient} text-black",
     variant === "blackwhite" &&
-      "border-[1px] border-solid border-[#ffffff40] px-6 py-3 font-gradual text-base text-white hover:bg-gradient-1",
+    "border-[1px] border-solid border-[#ffffff40] px-6 py-3 font-gradual text-base text-white hover:bg-gradient-1",
     className,
   );
 

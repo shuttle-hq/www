@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { YCombinator } from "components/svgs";
 import { trackEvent } from "lib/posthog";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "components/elements/Link";
 import { FC } from "react";
 
 interface FooterProps {
@@ -94,9 +94,7 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
                   key={key}
                   href={href}
                   className="text-body transition duration-300 hover:text-black dark:hover:text-head"
-                  onClick={() => {
-                    trackEvent(`homepage_footer_site_${key}`);
-                  }}
+                  eventName={`homepage_footer_site_${key}`}
                 >
                   {name}
                 </Link>
@@ -111,9 +109,7 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
                   key={key}
                   href={href}
                   className="text-body transition duration-300 hover:text-black dark:hover:text-head"
-                  onClick={() => {
-                    trackEvent(`homepage_footer_site_${key}`);
-                  }}
+                  eventName={`homepage_footer_site_${key}`}
                 >
                   {name}
                 </Link>
@@ -130,9 +126,7 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
                   key={key}
                   href={href}
                   className="text-body transition duration-300 hover:text-black dark:hover:text-head"
-                  onClick={() => {
-                    trackEvent(`homepage_footer_site_${key}`);
-                  }}
+                  eventName={`homepage_footer_site_${key}`}
                 >
                   {name}
                 </Link>
@@ -148,9 +142,7 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
                   href={href}
                   target="_blank"
                   className="text-body transition duration-300 hover:text-black dark:hover:text-head"
-                  onClick={() => {
-                    trackEvent(`homepage_footer_site_${key}`);
-                  }}
+                  eventName={`homepage_footer_site_${key}`}
                 >
                   {name}
                 </Link>

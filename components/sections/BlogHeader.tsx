@@ -1,7 +1,7 @@
 import { getAuthors } from "lib/blog/authors";
 import { Post } from "lib/blog/posts";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "components/elements/Link";
 import { FC } from "react";
 
 interface BlogHeaderProps {

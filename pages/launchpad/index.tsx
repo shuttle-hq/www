@@ -4,7 +4,7 @@ import { getSortedIssues } from "lib/launchpad/issues";
 import { trackEvent } from "lib/posthog";
 import { GetStaticPropsResult } from "next";
 import { NextSeo } from "next-seo";
-import Link from "next/link";
+import Link from "components/elements/Link";
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
   const issues = getSortedIssues(0);
@@ -46,9 +46,7 @@ export default function Launchpad(props: Props) {
 
         <Link
           href="/launchpad/issues"
-          onClick={() => {
-            trackEvent("launchpad_seemore");
-          }}
+          eventName="launchpad_seemore"
         >
           <p className="mt-4 text-right text-body">
             See More <span className="ml-4">→</span>

@@ -1,6 +1,6 @@
 import { trackEvent } from "lib/posthog";
 import { DISCORD_URL } from "../../lib/constants";
-import Link from "next/link";
+import Link from "components/elements/Link";
 
 const CommunitySupportedNumbers = ({
   stargazersCount,
@@ -17,9 +17,7 @@ const CommunitySupportedNumbers = ({
           <Link
             href={DISCORD_URL}
             className="group mt-3 inline-flex items-center text-body dark:text-head"
-            onClick={() => {
-              trackEvent("homepage_poweredbyourcommunity_joinusnow");
-            }}
+            eventName="homepage_poweredbyourcommunity_joinusnow"
           >
             Join us now
             {/* Right Arrow */}
