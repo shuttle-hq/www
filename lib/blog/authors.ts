@@ -150,6 +150,13 @@ const authors: readonly Author[] = [
     author_url: "https://github.com/dcodesdev",
     author_image_url: "/images/authors/dcodes.png",
   },
+  {
+    author_id: "shaaz",
+    author: "Shaaz Ahmed",
+    position: "Head of Engineering @ Shuttle",
+    author_url: "https://github.com/shaaza",
+    author_image_url: "/images/authors/shaaz.png",
+  },
 ];
 
 export default authors;
