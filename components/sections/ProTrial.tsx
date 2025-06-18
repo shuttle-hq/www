@@ -4,13 +4,13 @@ import Image from "next/image";
 import { trackEvent } from "lib/posthog";
 
 export const ProTrial: React.FC = () => (
-  <div className="mt-24 sm:mt-28 lg:mt-36 sm:px-10 desktop:mt-40 w-full max-w-[1280px] mx-auto">
+  <div className="mt-24 sm:mt-28 lg:mt-36 px-5 sm:px-10 desktop:mt-40 w-full max-w-[1280px] mx-auto">
     <div className="relative bg-[#13292C] dark:bg-black rounded-2xl z-[1] overflow-hidden">
       <span className="pointer-events-none w-full h-full">
         <Image
           src="/images/sections/protrial/bg.png"
           alt="bg"
-          className="absolute left-0 top-0 -z-10 hidden aspect-[2/3] h-full w-full object-cover md:aspect-auto xl:block"
+          className="absolute left-0 top-0 -z-10 aspect-[2/3] h-full w-full object-cover md:aspect-auto"
           width={1179}
           height={584}
         />
@@ -19,7 +19,7 @@ export const ProTrial: React.FC = () => (
         <span className="bg-[#ffffff] uppercase rounded-4xl self-center text-[#000000] px-5 py-2">
           No credit card required
         </span>
-        <h3 className="text-center font-gradual text-[40px] md:text-5xl lg:text-[64px] font-bold text-black dark:text-head lg:leading-[72px]">
+        <h3 className="text-center font-gradual text-[40px] md:text-5xl lg:text-[64px] leading-[50px] lg:leading-[72px] font-bold text-black dark:text-head">
           Try{" "}
           <span className="text-gradient bg-clip-text text-transparent">
             Shuttle Pro Tier - 14 days free
