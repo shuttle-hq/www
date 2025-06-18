@@ -37,6 +37,7 @@ import HNLogo from "components/svgs/HNLogo";
 import { trackEvent } from "lib/posthog";
 import { TableOfContents } from "../../../../../components/blog/TableOfContents";
 import { Button } from "components/elements";
+import { BlogFAQ } from "../../../../../components/blog/BlogFAQ";
 
 export async function getStaticPaths() {
   const paths = getAllPostSlugs();
@@ -189,6 +190,9 @@ const mdxComponents: MDXRemoteProps["components"] = {
         </div>
       </blockquote>
     );
+  },
+  BlogFAQ: (props) => {
+    return <BlogFAQ {...props} />;
   },
 };
 
