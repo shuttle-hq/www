@@ -49,7 +49,7 @@ export const ProTrial: React.FC = () => (
         <Button
           variant="secondary"
           invertOnDark
-          href="https://docs.shuttle.dev/pricing/overview"
+          href="https://docs.shuttle.dev/pricing/pro-trial"
           className="w-full sm:w-auto text-lg md:px-8 md:py-4 font-normal"
           onClick={() => {
             trackEvent("pricing_protrial_learn_more_click");
