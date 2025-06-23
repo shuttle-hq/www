@@ -3,9 +3,9 @@ import { NextSeo } from "next-seo";
 import { GetStaticPropsResult } from "next";
 import { QuestionAttrs } from "../components/sections/FrequentlyAskedQuestions";
 import { pricingQuestions } from "../content";
+import { Button, SignupButton } from "components/elements";
 import { Page } from "components/templates";
 import FeatureList from "components/sections/Pricing/FeatureList";
-import { BackgroundShape } from "../components/BackgroundShape";
 import { ImageSection } from "../components/sections/Pricing/ImageSection";
 import PricingCards from "../components/sections/Pricing/PricingCards/PricingCards";
 import { PricingComparison } from "../components/sections/Pricing/Comparison/PricingComparison";
@@ -13,7 +13,10 @@ import PricingGrid from "../components/sections/Pricing/UsageBasedPricing/Pricin
 import BlogCards from "../components/sections/Pricing/BlogCards";
 import Faq from "../components/sections/Faq/Faq";
 import { faqData } from "../components/sections/Pricing/faqData";
+import Image from "next/image";
+import { trackEvent } from "lib/posthog";
 import "react-tooltip/dist/react-tooltip.css";
+import { ProTrial } from "components/sections/Pricing/ProTrial";
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
   return {
@@ -76,11 +79,10 @@ export default function PricingPage({ questions }: Props) {
 
       <div className="relative flex flex-col justify-center custom-bg2 bg-no-repeat sm:min-h-[1050px]">
         <PricingGrid />
-        {/*<BackgroundShape
-          style={{ transform: "none" }}
-          className="w-full h-[200px] top-auto left-0 hidden lg:block"
-          background="linear-gradient(67.02deg, rgba(252, 84, 12, 0.7) 36.9%, rgba(255, 215, 111, 0.7) 63.12%, rgba(56, 212, 233, 0.7) 81.59%)"
-        />*/}
+      </div>
+
+      <div className="flex flex-col justify-center items-center mb-24 md:mb-48 m-auto">
+        <ProTrial />
       </div>
 
       <div className="flex flex-col gap-6 max-w-7xl pb-16 m-auto">

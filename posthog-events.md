@@ -107,8 +107,18 @@ This document lists all PostHog events tracked in the Shuttle website repository
   - Location: `components/sections/Pricing/Plan.tsx`
 
 - `pricing_setupcall`
+
   - Triggered when setting up a call in the pricing calculator
   - Location: `components/sections/Pricing/Calculator.tsx`
+
+- `pricing_protrial_signup_click`
+
+  - Triggered upon clicking "Try Pro Free" in Pricing page
+  - Location: `components/sections/Pricing/ProTrial.tsx`
+
+- `pricing_protrial_learn_more_click`
+  - Triggered upon clicking "Learn more" in Pricing page
+  - Location: `components/sections/Pricing/ProTrial.tsx`
 
 ## Social & Community Events
 
