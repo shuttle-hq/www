@@ -146,7 +146,7 @@ const authors: readonly Author[] = [
   {
     author_id: "dcodes",
     author: "dcodes",
-    position: "",
+    position: "DevRel @ Shuttle",
     author_url: "https://github.com/dcodesdev",
     author_image_url: "/images/authors/dcodes.png",
   },

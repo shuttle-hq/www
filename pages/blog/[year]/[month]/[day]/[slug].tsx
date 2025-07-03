@@ -141,13 +141,19 @@ const mdxComponents: MDXRemoteProps["components"] = {
       return (
         <a
           {...props}
+          target="_blank"
+          rel="noopener noreferrer"
           className="relative bg-gradient-to-r from-[#FC540C] to-[#FFD76F] bg-clip-text text-transparent"
         ></a>
       );
     }
 
     return (
-      <Link {...(props as any)} className="my-0 text-body no-underline"></Link>
+      <Link
+        {...(props as any)}
+        className="my-0 text-body no-underline"
+        target="_blank"
+      ></Link>
     );
   },
   pre: (props) => {
