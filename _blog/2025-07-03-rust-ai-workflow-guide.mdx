@@ -9,8 +9,6 @@ cover: rust-ai-workflow-guide.png
 date: '2025-07-03'
 ---
 
-# Rust API in Minutes: MCP-Driven AI Workflow Guide
-
 Shipping Rust code used to mean wrestling with the borrow-checker, poring over docs, and SSH-ing into servers at 2 a.m. In 2025 that workflow feels prehistoric. With AI-first IDEs such as Cursor, tool-calling standards like [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction), and one-command cloud hosts such as [Shuttle](https://www.shuttle.dev), you can spin up, test, and deploy a secure CRUD API before your coffee cools.
 
 This guide shows you how to assemble an AI-assisted development environment tailored for Rust: code completion that understands your entire repo, agents that run migrations and push containers, and MCP plugins that read the latest docs instead of hallucinated snippets. We'll finish by launching a task-management API live to the cloud: hands-off coding, testing, and shipping in under five minutes.
@@ -31,13 +29,15 @@ In this section, we'll explore how to build an AI-powered Rust development envir
 
 We'll set up [MCP (Model Context Protocol) servers](https://modelcontextprotocol.io/introduction) that let AI assistants interact with external systems, explore Cursor's advanced features like codebase indexing and tab completion, and cover universal strategies for effective AI-assisted development. By the end, you'll have an environment where AI can autonomously write, test, and deploy your Rust applications. **(YES! Even deployments!)**
 
-### Use MCP servers to extend the capabilities of the AI assistant
+### MCP Servers: Extending AI Capabilities
 
-LLMs excel at generating text, but their fixed knowledge cut-off means they often lack your project’s freshest context. To bridge that gap, you need agents that can search databases, run shell commands, and pull live data from APIs. That's where MCP servers come in.
+#### What Are MCP Servers?
+
+LLMs excel at generating text, but their fixed knowledge cut-off means they often lack your project's freshest context. To bridge that gap, you need agents that can search databases, run shell commands, and pull live data from APIs. That's where MCP servers come in.
 
 MCP servers are specialized tools that dramatically extend your AI assistant's capabilities beyond simple code generation. Think of MCP servers as powerful plugins that give your AI assistant the ability to interact with external systems, access real-time data, execute commands, and perform complex operations that would otherwise require manual intervention.
 
-### What MCP Servers Can Do for You
+#### What MCP Servers Can Do for You
 
 MCP servers transform your AI assistant from a simple code generator into a comprehensive development partner. Instead of just writing code, your AI can now:
 
@@ -48,7 +48,7 @@ MCP servers transform your AI assistant from a simple code generator into a comp
 - **Monitor application logs** and debug production issues.
 - **Deploy applications directly** to cloud platforms like Shuttle.
 
-MCP servers aren’t confined to a single flavor: there’s an ecosystem of ready-made options to choose from, and you can even build your own to run fully custom logic.
+MCP servers aren't confined to a single flavor: there's an ecosystem of ready-made options to choose from, and you can even build your own to run fully custom logic.
 
 The screenshot below shows MCP servers in action. Notice how the AI assistant taps the specialized tool to deploy the Rust project to Shuttle.
 
@@ -58,10 +58,10 @@ Shuttle MCP server deploy tool call
 
 In this example, you can see the AI assistant using the `deploy` tool to deploy the application to the cloud, demonstrating how MCP servers extend the AI's capabilities beyond simple code generation.
 
-> Later in the article, we’ll walk through how to use the Shuttle MCP server.
+> Later in the article, we'll walk through how to use the Shuttle MCP server.
 > 
 
-### Recommended MCP Servers for Rust Development
+#### Recommended MCP Servers for Rust Development
 
 Here are the essential MCP servers that will supercharge your Rust development workflow:
 
@@ -71,13 +71,15 @@ Here are the essential MCP servers that will supercharge your Rust development w
 - [**GitHub MCP**](https://github.com/github/github-mcp-server) - Integrates version control operations directly into your AI workflow. Manages code repositories, handles pull requests, tracks issues, and coordinates collaborative development without switching contexts.
 - [**Playwright MCP**](https://github.com/microsoft/playwright-mcp) - Brings Microsoft's browser automation framework to your AI assistant. Enables cross-platform web testing across Chrome, Firefox, Safari, and Edge with enhanced reliability compared to traditional testing tools.
 
-### Enable Memories
+### Cursor Configuration
+
+#### Enable Memories
 
 Cursor provides a feature called **Memories**, this feature let's the AI agent to remember specific context about you and your project, using this feature for a while can make your AI agent more personalized and aware of your coding style, preferences and the projects you're working on.
 
 To enable this feature, navigate to **Settings** > **Rules** > **Memories** and tick the **Generate memories** option.
 
-### Cursor Docs: Add documentation context
+#### Add Documentation Context
 
 AI coding assistants are more powerful when they have a good understanding of the libraries and frameworks you're using, the more context, the better results you'll get. However, copy/pasting documentation in every chat is a tedious task and we don't wanna do that by hand.
 
@@ -130,7 +132,7 @@ This ensures the AI assistant understands the specific APIs, patterns, and best 
 
 Rules are yet another AI feature provided by Cursor that allows us to define custom rules that guide how the AI writes code for our specific project.
 
-Most developers skimp on documentation and pay for it later. **Cursor’s Rules** feature flips that script: You drop a markdown file at `.cursor/rules/my-rule.mdc` into your repo, and the AI treats those notes as living docs. No more “I’ll document it later” guilt 🙂 Your guidelines, style tips, and architectural clues are always in context, keeping the assistant (and your teammates) perfectly informed.
+Most developers skimp on documentation and pay for it later. **Cursor's Rules** feature flips that script: You drop a markdown file at `.cursor/rules/my-rule.mdc` into your repo, and the AI treats those notes as living docs. No more "I'll document it later" guilt 🙂 Your guidelines, style tips, and architectural clues are always in context, keeping the assistant (and your teammates) perfectly informed.
 
 For that reason, we have **Cursor Rules**, Cursor allows us to define a set of custom rules that sets some rules for the AI agent to follow when writing code for a specific project.
 
@@ -174,7 +176,7 @@ You are an expert Rust developer. Follow these rules when writing Rust code:
 > Important Note: These are generic rules for Rust development. You should customize these rules for your specific project. For example, if you're using a validation library like validator, write specific rules about how to handle validations. If you're using specific architectural patterns or frameworks, document them in your rules so the AI can follow your project's conventions consistently.
 > 
 
-### How does cursor read your specified rules?
+#### How Cursor Reads Your Specified Rules
 
 Cursor will read these rules based on a few conditions that we can manually specify:
 
@@ -193,7 +195,7 @@ The general principle of **garbage in, garbage out** applies in prompt engineeri
 
 Here are some best practices for AI prompting:
 
-### Use a Todo-Driven Approach
+#### Use a Todo-Driven Approach
 
 It's very common for the AI assistant to write some good code for a feature, only to delete, or modify it later and therefore breaking your code.
 
@@ -253,25 +255,25 @@ This API will be a simple task management API, it will have a few endpoints:
 
 ```
 
-### Provide Focused Context
+#### Provide Focused Context
 
 Give the AI only the necessary context for the task at hand. Too much context can cause the AI to lose focus or forget important details. Be selective about which files and information you include.
 
-### Know when to use MCP servers over CLIs
+#### Know When to Use MCP Servers vs CLIs
 
 MCP servers and CLIs are both great tools that your AI agent can use to interact with systems, both of them have their pros and cons and you should know when to use each of them.
 
-### When to use MCP servers?
+**When to use MCP servers:**
 
 MCP servers can be superior to CLIs because the AI understands how to use them properly. While the AI might struggle with lesser-known CLI tools, MCP servers provide structured interfaces that the AI can navigate confidently. AI agents might not have the proper context for the CLIs and how to use them, therefore it has a more potential for hallucinations and making errors.
 
-### When to use CLIs?
+**When to use CLIs:**
 
 If you're using a popular CLI tool like `git`, `docker`, `cargo`, etc. In that case, you won't need a MCP server for those actions, most LLMs have quite good knowledge on these tools and how they work.
 
 Another reason to choose CLIs over MCP servers is that CLIs can stream their output and you don't need to wait for the processes to finish, you can see the code execution in real time, this streaming capability isn't available in MCP servers, on the contrary, you'll have to wait for the execution to finish before you can see the results.
 
-### Build Custom MCP Servers
+#### Build Custom MCP Servers
 
 If you already have an app or API, you can spin up a custom MCP server with the official SDKs, available in Rust and several other languages. A quick look at the docs shows just how straightforward the process is.
 
@@ -289,6 +291,16 @@ We'll also deploy the API to the cloud, we'll do all this without writing any co
 > When building production applications, make sure you review all the AI generated code and make sure it's secure, performant and reliable.
 > 
 
+### Ready to Build Along?
+
+To follow along with this tutorial, use our pre-configured template that includes all the necessary tools and configurations:
+
+```bash
+shuttle init --from shuttle-hq/shuttle-examples --subfolder axum/ai-assisted
+```
+
+This template includes pre-configured MCP servers, Cursor rules, and everything you need to follow along with the tutorial.
+
 ### Prerequisites
 
 Before starting to code, there are a few tools that we need to install and configure.
@@ -298,7 +310,7 @@ Before starting to code, there are a few tools that we need to install and confi
 - **Shuttle MCP Server**: This is a MCP server that allows AI agents to look up the latest Shuttle documentation and gives proper context on how to interact with the Shuttle platform.
 - **Docker**: To run a local database in a container.
 
-### Install the Shuttle CLI
+#### Install the Shuttle CLI
 
 Install the shuttle CLI, for Linux/macOS:
 
@@ -312,7 +324,7 @@ For Windows:
 iwr https://www.shuttle.dev/install-win | iex
 ```
 
-### Install the SQLx CLI
+#### Install the SQLx CLI
 
 Install the SQLx CLI, for Postgres only:
 
@@ -321,15 +333,15 @@ Install the SQLx CLI, for Postgres only:
 cargo install sqlx-cli --no-default-features --features native-tls,postgres
 ```
 
-### Extending Capabilities with MCP Servers
+### Setting Up MCP Servers
 
 Before we start, let's set up a few MCP servers that are going to help us build and deploy our API much easier.
 
-### Shuttle MCP server
+#### Shuttle MCP Server
 
 The Shuttle MCP server enables AI agents to understand and execute Shuttle commands directly, including **deployments**, **fetching logs**, **searching through the latest Shuttle documentation** and **more**.
 
-### Configure Cursor for Shuttle MCP server
+#### Configure Cursor for Shuttle MCP Server
 
 Add the Shuttle MCP server to your Cursor configuration. On Linux/macOS, edit `~/.cursor/mcp.json`. On Windows, edit `%APPDATA%\\Cursor\\mcp.json`. Add the following to your MCP servers configuration:
 
@@ -344,7 +356,9 @@ Add the Shuttle MCP server to your Cursor configuration. On Linux/macOS, edit `~
 }
 ```
 
-### Step 1: Project Initialization
+### Implementation Steps
+
+#### Step 1: Project Initialization
 
 First, we'll need to be logged in to the Shuttle CLI, you can do this by running:
 
@@ -371,7 +385,7 @@ We just created a new project with the following options selected:
 - **Template and Framework**: A hello world template for **Axum**
 - **Create a project on Shuttle**: Yes (this creates a new project on the Shuttle platform)
 
-### Step 2: Writing tasks for AI Agents
+#### Step 2: Writing Tasks for AI Agents
 
 For our AI assistant to understand our intention on what we're trying to build, we'll need to write a `todo.md` file that contains all the necessary tasks and requirements that we want to build.
 
@@ -401,7 +415,7 @@ This API will be a simple task management API, it will have a few endpoints, we'
 - [ ] Run the tests and fix the errors if any
 ```
 
-### Prompting
+#### Step 3: AI-Assisted Development
 
 Let's tell Cursor to read the `todo.md` file and work through the tasks sequentially.
 
@@ -461,7 +475,7 @@ Rust tests passed against production API hosted on Shuttle
 
 Perfect, the tests are now passing, and the API is working as expected.
 
-## The Power of AI agents
+## The Power of AI Agents
 
 What we just accomplished is remarkable - we built, deployed, and tested a complete API with a single prompt. The AI agent:
 
@@ -478,7 +492,7 @@ Before we celebrate, remember: AI-generated code is far from infallible. The aut
 
 ## Precautions and Security Risks
 
-AI-assisted development can supercharge productivity, yet it also opens new security fronts developers can’t afford to ignore.
+AI-assisted development can supercharge productivity, yet it also opens new security fronts developers can't afford to ignore.
 
 ### Critical Security Awareness
 
@@ -509,7 +523,7 @@ The key to successful AI-assisted development is reviewing every bit of code tha
 - **Perform integration testing** with real data
 - **Load test** critical endpoints
 
-> Remember: AI may speed up development, but it doesn’t guarantee secure or reliable code. It’s up to you to review each change and ensure everything is secure, performant, and dependable.
+> Remember: AI may speed up development, but it doesn't guarantee secure or reliable code. It's up to you to review each change and ensure everything is secure, performant, and dependable.
 > 
 
 ## Conclusion
@@ -525,7 +539,3 @@ Develop the mentality of treating AI as a tool, not a replacement for human deve
 **Don't just build. Create at the speed of thought**
 
 Ready to experience a true 10x workflow? Our AI-assisted Rust template is your launchpad into the future of software development. See what you can create when AI is your copilot. [Start building now](https://github.com/shuttle-hq/shuttle-examples/tree/main/axum/ai-assisted).
-
-```bash
-shuttle init --from shuttle-hq/shuttle-examples --subfolder axum/ai-assisted
-```
