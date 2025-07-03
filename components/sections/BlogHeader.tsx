@@ -41,6 +41,11 @@ const BlogHeader: FC<BlogHeaderProps> = ({ post }) => {
                       <span className="font-normal text-body">
                         &nbsp;&nbsp;• {post.dateReadable}
                       </span>
+                      {post.updated_on_readable && (
+                        <span className="font-normal text-body">
+                          &nbsp;(Updated on {post.updated_on_readable})
+                        </span>
+                      )}
                     </div>
                   </div>
                 </Link>
