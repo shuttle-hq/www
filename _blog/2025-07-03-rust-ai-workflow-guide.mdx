@@ -52,9 +52,11 @@ MCP servers aren't confined to a single flavor: there's an ecosystem of ready-ma
 
 The screenshot below shows MCP servers in action. Notice how the AI assistant taps the specialized tool to deploy the Rust project to Shuttle.
 
-![Shuttle MCP server deploy tool call](/images/blog/rust-ai-workflow-guide/shuttle-deploy-tool-call.png)
-
-Shuttle MCP server deploy tool call
+<CaptionedImage 
+  src="/images/blog/rust-ai-workflow-guide/shuttle-deploy-tool-call.png" 
+  alt="AI assistant using Shuttle MCP server deploy tool call"
+  caption="Shuttle MCP server deploy tool call"
+/>
 
 In this example, you can see the AI assistant using the `deploy` tool to deploy the application to the cloud, demonstrating how MCP servers extend the AI's capabilities beyond simple code generation.
 
@@ -89,33 +91,43 @@ To add documentation context:
 
 Open the chat panel in Cursor and type `@Docs` in the chat.
 
-![Cursor docs](/images/blog/rust-ai-workflow-guide/cursor-docs.png)
-
-Cursor docs
+<CaptionedImage 
+  src="/images/blog/rust-ai-workflow-guide/cursor-docs.png" 
+  alt="Cursor chat panel showing the @Docs command"
+  caption="Cursor docs"
+/>
 
 Click "Add new doc".
 
-![Cursor docs new](/images/blog/rust-ai-workflow-guide/cursor-docs-new.png)
-
-Cursor docs new
+<CaptionedImage 
+  src="/images/blog/rust-ai-workflow-guide/cursor-docs-new.png" 
+  alt="Cursor docs interface showing the 'Add new doc' button"
+  caption="Cursor docs new"
+/>
 
 Paste the URL prefix of the documentation you want to add (e.g., `https://docs.shuttle.dev`).
 
-![Cursor docs new documentation](/images/blog/rust-ai-workflow-guide/cursor-docs-new-doc.png)
-
-Cursor docs new documentation
+<CaptionedImage 
+  src="/images/blog/rust-ai-workflow-guide/cursor-docs-new-doc.png" 
+  alt="Cursor docs interface showing URL input field for documentation"
+  caption="Cursor docs new documentation"
+/>
 
 Press **Enter**, this will bring us to the last step, which we can specify a **title** for our documentation, along with an **entrypoint URL** and **prefix URL** for the documentation we want to add.
 
-![Cursor docs new documentation add dialog](/images/blog/rust-ai-workflow-guide/cursor-docs-new-doc-dialog.png)
-
-Cursor docs new documentation add dialog
+<CaptionedImage 
+  src="/images/blog/rust-ai-workflow-guide/cursor-docs-new-doc-dialog.png" 
+  alt="Cursor docs configuration dialog showing title, entrypoint URL, and prefix URL fields"
+  caption="Cursor docs new documentation add dialog"
+/>
 
 Cursor will automatically index the page and any sub-pages with that URL prefix. We can then mention it using `@Docs` and select the specific documentation we want to use. Claude 4.0 is especially good at this due to its large context window.
 
-![Cursor docs mention in chat](/images/blog/rust-ai-workflow-guide/cursor-docs-mention-in-chat.png)
-
-Cursor docs mention in chat
+<CaptionedImage 
+  src="/images/blog/rust-ai-workflow-guide/cursor-docs-mention-in-chat.png" 
+  alt="Cursor chat interface showing how to mention docs using @Docs"
+  caption="Cursor docs mention in chat"
+/>
 
 Cursor will automatically fetch the relevant documents and feed it to the AI assistant, we'll get an answer almost immediately, this saves us a lot of time and effort to search through documentation manually.
 
@@ -185,9 +197,11 @@ Cursor will read these rules based on a few conditions that we can manually spec
 - **Agent Requested**: This gives us the option to add a description to the rules file, Cursor will automatically read these rules if it finds a description that matches the current chat.
 - **Manual**: This will read the rules only when we manually mention it in the chat by typing `@Cursor Rules` and selecting the rules that we defined.
 
-![Cursor rules example](/images/blog/rust-ai-workflow-guide/cursor-rules-example.png)
-
-Cursor rules example
+<CaptionedImage 
+  src="/images/blog/rust-ai-workflow-guide/cursor-rules-example.png" 
+  alt="Cursor rules configuration interface showing different rule attachment options"
+  caption="Cursor rules example"
+/>
 
 ### Best Practices for AI Prompting
 
@@ -374,9 +388,11 @@ Next, let's create a new project for our task management API.
 shuttle init
 ```
 
-![Shuttle init with axum](/images/blog/rust-ai-workflow-guide/shuttle-init-with-axum.png)
-
-Shuttle init with axum
+<CaptionedImage 
+  src="/images/blog/rust-ai-workflow-guide/shuttle-init-with-axum.png" 
+  alt="Shuttle CLI output showing project initialization with Axum template"
+  caption="Shuttle init with axum"
+/>
 
 We just created a new project with the following options selected:
 
@@ -419,43 +435,55 @@ This API will be a simple task management API, it will have a few endpoints, we'
 
 Let's tell Cursor to read the `todo.md` file and work through the tasks sequentially.
 
-![Shuttle MCP server documentation search_docs tool call](/images/blog/rust-ai-workflow-guide/shuttle-docs-search-tool-call.png)
-
-Shuttle MCP server documentation search_docs tool call
+<CaptionedImage 
+  src="/images/blog/rust-ai-workflow-guide/shuttle-docs-search-tool-call.png" 
+  alt="AI assistant using Shuttle MCP server to search documentation"
+  caption="Shuttle MCP server documentation search_docs tool call"
+/>
 
 The todo list system is a great approach to give the AI agent a clear understanding of what we're trying to build, giving the AI agent a clear context of the details about the project.
 
 The AI agent immediately ran the tool `search_docs` to search through the latest Shuttle documentation and find the relevant information needed for the the tasks.
 
-![Create tasks postgreSQL migration](/images/blog/rust-ai-workflow-guide/create-tasks-postgres-migration.png)
-
-Create tasks postgreSQL migration
+<CaptionedImage 
+  src="/images/blog/rust-ai-workflow-guide/create-tasks-postgres-migration.png" 
+  alt="AI agent creating PostgreSQL migration files for tasks table"
+  caption="Create tasks postgreSQL migration"
+/>
 
 The required migrations for the tasks have been created.
 
 Once the tasks are complete, the AI agent will commit the changes listed in `todo.md` and deploy the application to Shuttle.
 
-![Shuttle deploy tool call](/images/blog/rust-ai-workflow-guide/shuttle-deploy-tool-call.png)
-
-Shuttle deploy tool call
+<CaptionedImage 
+  src="/images/blog/rust-ai-workflow-guide/shuttle-deploy-tool-call.png" 
+  alt="AI agent deploying application to Shuttle using MCP server"
+  caption="Shuttle deploy tool call"
+/>
 
 The AI agent then proceeds to the next step which is writing the tests to make sure the API is working as expected.
 
-![AI agent tests generated](/images/blog/rust-ai-workflow-guide/ai-agent-tests-generated.png)
-
-AI agent tests generated
+<CaptionedImage 
+  src="/images/blog/rust-ai-workflow-guide/ai-agent-tests-generated.png" 
+  alt="AI agent generating comprehensive tests for the API endpoints"
+  caption="AI agent tests generated"
+/>
 
 When running the tests, we can see that all the tests are failing:
 
-![Failing tests](/images/blog/rust-ai-workflow-guide/failing-tests.png)
-
-Failing tests
+<CaptionedImage 
+  src="/images/blog/rust-ai-workflow-guide/failing-tests.png" 
+  alt="Terminal output showing failing test results"
+  caption="Failing tests"
+/>
 
 The AI agent begins by debugging, gathering all the details it needs to fix the failing tests. It can also call the `deployment_status` and `logs` tools to inspect the latest deployment, scan the logs, and pinpoint the root cause.
 
-![AI agent debugging Rust code using Shuttle MCP server](/images/blog/rust-ai-workflow-guide/ai-agent-fetching-logs.png)
-
-AI agent debugging Rust code using Shuttle MCP server
+<CaptionedImage 
+  src="/images/blog/rust-ai-workflow-guide/ai-agent-fetching-logs.png" 
+  alt="AI agent using Shuttle MCP server to fetch deployment logs for debugging"
+  caption="AI agent debugging Rust code using Shuttle MCP server"
+/>
 
 These two tool calls provide the AI agent with everything it needs. After reviewing the results, it understands the issue and fixes the failing tests.
 
@@ -463,15 +491,19 @@ The issue was that `axum@0.8` changed its path parameter syntax from `/:id` to `
 
 The AI agent then proceeds to fix the tests and run them again:
 
-![Fix error for axum 0.8](/images/blog/rust-ai-workflow-guide/fix-error-for-axum-0.8.png)
-
-Fix error for axum 0.8
+<CaptionedImage 
+  src="/images/blog/rust-ai-workflow-guide/fix-error-for-axum-0.8.png" 
+  alt="AI agent fixing path parameter syntax for Axum 0.8"
+  caption="Fix error for axum 0.8"
+/>
 
 Running the tests again:
 
-![Run tests passed against production API hosted on Shuttle](/images/blog/rust-ai-workflow-guide/run-tests-passed.png)
-
-Rust tests passed against production API hosted on Shuttle
+<CaptionedImage 
+  src="/images/blog/rust-ai-workflow-guide/run-tests-passed.png" 
+  alt="Terminal output showing all tests passing successfully"
+  caption="Run tests passed against production API hosted on Shuttle"
+/>
 
 Perfect, the tests are now passing, and the API is working as expected.
 

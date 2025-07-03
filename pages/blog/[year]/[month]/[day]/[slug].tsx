@@ -176,13 +176,14 @@ const mdxComponents: MDXRemoteProps["components"] = {
   },
   CaptionedImage: (props) => {
     return (
-      <div className="relative grid w-full grid-cols-1 justify-items-center">
+      <div className="relative flex w-full flex-col items-center">
         <Image
           src={props.src}
           alt={props.alt}
-          width={1000}
-          height={1}
-          className="overflow-hidden rounded-2xl object-contain"
+          width={0}
+          height={0}
+          sizes="100vw"
+          className="h-auto w-auto overflow-hidden rounded-md object-contain"
         />
         <span className="-mt-6 text-sm text-body">{props.caption}</span>
       </div>
