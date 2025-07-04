@@ -14,6 +14,7 @@ interface CommonButtonProps
 
 interface ButtonProps extends CommonButtonProps {
   href?: string;
+  onClick?: VoidFunction;
 }
 
 const CustomButton: FC<ButtonProps> = ({
@@ -22,11 +23,12 @@ const CustomButton: FC<ButtonProps> = ({
   className,
   children,
   href,
+  onClick,
 }) => {
   // Primary and secondary switch for dark mode
 
   const classNames = clsx(
-    `${styles.button} flex relative items-center gap-2 whitespace-nowrap px-6 py-3`,
+    `flex relative items-center gap-2 whitespace-nowrap px-6 py-3 ${styles.button} `,
     variant === "primary"
       ? invertOnDark
         ? `bg-black text-head dark:bg-[#D8D8D8] dark:text-black dark:hover:bg-gradient-to-r dark:hover:from-[#fc540c] dark:hover:to-[#f5c57a] dark:hover:text-white`
@@ -48,7 +50,11 @@ const CustomButton: FC<ButtonProps> = ({
   };
 
   children = (
-    <button className={classNames} style={variant === "tertiary" ? tertBg : {}}>
+    <button
+      className={classNames}
+      onClick={onClick}
+      style={variant === "tertiary" ? tertBg : {}}
+    >
       {children}
     </button>
   );
