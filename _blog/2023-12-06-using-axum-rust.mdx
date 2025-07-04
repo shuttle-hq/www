@@ -1,16 +1,37 @@
 ---
-title: "Getting Started with Axum - Rust's Most Popular Web Framework"
-description: This guide is a deep-dive on Axum, a Rust web backend framework. We look at using Axum to write a competent web service with middleware, routing, static files and more.
+title: "The Ultimate Guide to Axum: From Hello World to Production in Rust (2025)"
+description: "A deep-dive on Axum, a Rust web backend framework. We look at using Axum to write a competent web service with middleware, routing, state, testing, and more. Updated for Axum 0.8."
 author: josh
 tags: [rust, axum, tutorial, guide]
 thumb: axum-thumb.png
 cover: axum-thumb.png
 date: '2023-12-06T14:30:00'
+updated_on: '2025-07-04T10:00:00'
 ---
 
 With so many backend web frameworks in the Rust web ecosystem, it's difficult to know what to choose. Although much further in the past you might have seen Rocket shoot to the top of the leadeboard for popularity, nowadays it's typically Axum and Actix Web battling it out with Axum slowly coming on top. In this article, we are going to do a deep dive into Axum, a web framework for making Rust REST APIs backed by the Tokio team that's simple to use and has hyper-compatibility with Tower, a robust library of reusable, modular components for building network applications.
 
-In this article we'll take a comprehensive look at how to use Axum to write a web service. This will also include the [0.7 changes.](https://github.com/tokio-rs/axum/releases/tag/axum-v0.7.0)
+<TLDR>
+- **Routing & Handlers**: Define routes with `axum::Router` and write async handler functions.
+- **State Management**: Share state (like a database pool) safely using `axum::extract::State` with `std::sync::Arc`.
+- **Middleware**: Leverage the entire `tower` and `tower-http` ecosystem for powerful, reusable middleware.
+- **Testing**: Test your handlers directly and efficiently without a running server using `tower::ServiceExt`.
+- **Deployment**: Deploy easily with tools like Shuttle, abstracting away Docker and complex infrastructure.
+</TLDR>
+
+> **Want to try it yourself?**
+>
+> We've built **ShellCon**, a real-world Rust microservices onboarding challenge where you:
+>
+> - Debug and deploy 3 broken services (Axum + SQLx + async Rust)
+> - Connect them to a frontend that only works when everything is fixed
+> - Use **Shuttle** to provision, deploy, and manage the full stack: no YAML or Kubernetes needed
+>
+> 🎯 Perfect for Rust devs who want to learn by doing.
+>
+> 👉 [**Start the ShellCon Challenge**](https://github.com/shuttle-hq/shuttle-shellcon)
+
+In this article we'll take a comprehensive look at how to use Axum to write a web service. This article has been updated for Axum 0.8 and Tokio 1.0, reflecting the latest best practices.
 
 ## Routing in Axum
 Axum follows the style of REST-style APIs like Express where you can create handler functions and attach them to axum's `axum::Router` type. An example of a route might look like this:
@@ -88,28 +109,73 @@ async fn my_function() -> Result<ApiResponse, ApiError> {
 
 This allows us to differentiate between errors and successful requests when writing our Axum routing.
 
+## Structuring Your Application
+As your application grows, you'll want to split your routes into multiple files. Axum's `Router` makes this easy with the `merge` method. You can create separate routers for different parts of your application and then merge them into one main router.
+
+For example, you could have a `user_routes.rs` file:
+```rust
+// in user_routes.rs
+use axum::{Router, routing::get};
+
+async fn get_users() { /* ... */ }
+async fn get_user() { /* ... */ }
+
+pub fn users_router() -> Router {
+    Router::new()
+        .route("/users", get(get_users))
+        .route("/users/:id", get(get_user))
+}
+```
+
+And then merge it into your main router:
+```rust
+// in main.rs
+mod user_routes;
+
+fn init_router() -> Router {
+    Router::new()
+        .route("/", get(hello_world))
+        .merge(user_routes::users_router())
+    //... with_state, layers, etc.
+}
+```
+This approach helps keep your `main.rs` or `lib.rs` clean and organizes your application by feature.
+
 ## Adding a Database in Axum
 Normally when setting up a database, you might need to set up your database connection:
 ```rust
-use axum::{Router, routing::get};
-use sqlx::PgPoolOptions;
+use axum::{Router, routing::get, extract::State};
+use sqlx::{PgPool, PgPoolOptions};
+use std::sync::Arc;
 
-#[derive(Clone)]
+// AppState now uses Arc to hold the connection pool
 struct AppState {
-    db: PgPool
+    db: PgPool,
 }
 
 #[tokio::main]
 async fn main() {
+    let db_connection_str = std::env::var("DATABASE_URL")
+        .unwrap_or_else(|_| "postgres://user:password@localhost/database".to_string());
+
     let pool = PgPoolOptions::new()
         .max_connections(5)
-        .connect(<db-connection-string-here>).await;
+        .connect(&db_connection_str).await
+        .expect("can't connect to database");
 
-    let state = AppState { pool };
+    let app_state = Arc::new(AppState { db: pool });
 
-    let router = Router::new().route("/", get(hello_world)).with_state(state);
+    let app = Router::new()
+        .route("/", get(hello_world))
+        .with_state(app_state);
 
-    //... rest of your code
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
+    println!("listening on {}", listener.local_addr().unwrap());
+    axum::serve(listener, app).await.unwrap();
+}
+
+async fn hello_world() -> &'static str {
+    "Hello, world!"
 }
 ```
 
@@ -120,7 +186,7 @@ You would then need to provision your own Postgres instance, whether installed l
 async fn axum(
     #[shuttle_shared_db::Postgres] pool: PgPool,
 ) -> shuttle_axum::ShuttleAxum {
-    let state = AppState { pool };
+    let state = Arc::new(AppState { db: pool });
 
     // .. the rest of your code
 }
@@ -128,11 +194,14 @@ async fn axum(
 Locally this is done through Docker, but in deployment there is an overarching process that does this for you! No extra work is required. We also have an AWS RDS database offering that requires zero AWS knowledge to set up - visit [here](https://www.shuttle.dev/pricing) to find out more.
 
 ## App State in Axum
-Now you might be wondering, "how do I store my database pool and other state-wide variables? I don't want to initialise my connection pool every time I want to do something!" - which is a perfectly valid question and is easily answered! You may have noticed that before we used `axum::Extension` to store it - this is perfectly fine for some use cases, but comes with the disadvantage of not being entirely typesafe. In most Rust web frameworks, Axum included, we use what is called "app state" - a struct dedicated to holding all of your variables that you want to share across your routes on the app. The only requirement to do this in Axum is that the struct needs to implement `Clone`, which we can do like so. For example:
-```rust
-use sqlx::PgPool; // this is a Postgres connection pool
+Now you might be wondering, "how do I store my database pool and other state-wide variables? I don't want to initialise my connection pool every time I want to do something!" - which is a perfectly valid question and is easily answered! You may have noticed that before we used `axum::Extension` to store it - this is perfectly fine for some use cases, but comes with the disadvantage of not being entirely typesafe. In most Rust web frameworks, Axum included, we use what is called "app state" - a struct dedicated to holding all of your variables that you want to share across your routes on the app.
 
-#[derive(Clone)]
+The best practice for sharing state in Axum is to wrap it in an `Arc` (Atomic Reference Counter). This allows multiple parts of your application to safely access the state concurrently.
+
+```rust
+use sqlx::PgPool;
+use std::sync::Arc;
+
 struct AppState {
     pool: PgPool,
 }
@@ -141,18 +210,21 @@ struct AppState {
 async fn axum(
     #[shuttle_shared_db::Postgres] pool: PgPool,
 ) -> shuttle_axum::ShuttleAxum {
-    let state = AppState { pool };
+    let state = Arc::new(AppState { pool });
 
     // .. the rest of your code
 }
-
 ```
 
 To use this, we will insert it into our router and add the state into our functions by passing it as an parameter:
 ```rust
 use axum::{Router, routing::get, extract::State};
+use std::sync::Arc;
 
-fn init_router() -> Router {
+// This would be your AppState from before
+struct AppState { /* ... */ }
+
+fn init_router(state: Arc<AppState>) -> Router {
     Router::new()
         .route("/", get(hello_world))
         .route("/do_something", get(do_something))
@@ -165,20 +237,12 @@ async fn hello_world() -> &'static str {
 }
 
 async fn do_something(
-    State(state): State<AppState>
+    State(state): State<Arc<AppState>>
 ) -> Result<ApiResponse, ApiError> {
     // .. your code
 }
 ```
-It should also be noted that instead of using `#[derive(Clone)]`, you can also wrap the app state struct in an Atomic Reference Counter (`std::sync::Arc` for reference). Arcs are a form of garbage collection that keep track of how many clones there are and will only drop when there are no more copies left - and are a good type to know in Rust. This would be done like below:
-```rust
-use std::sync::Arc;
-
-let state = Arc::new(AppState { db });
-```
-When you add the state to your application now, you would need to make sure to refer to the State extractor type as `State<Arc<AppState>>` rather than `State<AppState>`.
-
-From personal observation, it does not seem to be clear which method is better. It is likely that `Arcs` are going to perform better in a micro-benchmark but whether this leads to real-world improvements will likely depend on your use case.
+You can also `#[derive(Clone)]` on your state struct. Axum's `with_state` will automatically wrap it in an `Arc` for you. However, being explicit with `Arc` often makes the code clearer about how state is being shared, which is why we recommend it.
 
 You can also derive sub-state from an application state! This is great for when we need some variables from the main state but want to limit access control on what a given route has access to. See below:
 ```rust
@@ -414,7 +478,6 @@ fn init_router() -> Router {
 
 If you need to add app state to your middleware, you can add it to your handler function then use `middleware::from_fn_with_state`:
 
-
 ```rust
 fn init_router() -> Router {
     let state = setup_state(); // app state initialisation goes here
@@ -425,7 +488,6 @@ fn init_router() -> Router {
         .with_state(state)
 }
 ```
-
 
 ## Serving Static Files in Axum
 Let's say you want to serve some static files using Axum - or that you have an application made using a frontend JavaScript framework like React, and you want to combine it with your Rust Axum backend to make one large application instead of having to host your frontend and backend separately. How would you do that?
@@ -459,12 +521,119 @@ fn init_router() -> Router {
 
 You can also use HTML templating with crates like [`askama`](https://github.com/djc/askama), [`tera`](https://github.com/Keats/tera) and [`maud`](https://maud.lambda.xyz/)! This can be combined with the power of lightweight JavaScript libraries like [`htmx`](https://htmx.org) to speed up time to production. You can read more about this on our other article about using HTMX with Rust which you can find [here.](https://www.shuttle.dev/blog/2023/10/25/htmx-with-rust). We also collaborated with [Stefan Baumgartner](https://fettblog.eu) on an article for [serving HTML with Askama!](https://www.shuttle.dev/launchpad/issues/2023-10-17-issue-10-Serving-HTML)
 
+## Testing Your Handlers
+A major advantage of Axum's design is that its components (`Router`, handlers) are `tower::Service`s. This means you can test them without running an actual HTTP server. The `tower::ServiceExt` trait provides a `oneshot` method that sends a single request to your service.
+
+Here's how you can test a handler:
+
+```rust
+use axum::{
+    body::Body,
+    http::{Request, StatusCode},
+    routing::get,
+    Router,
+};
+use http_body_util::BodyExt; // for `to_bytes`
+use tower::ServiceExt; // for `oneshot`
+
+// a router for testing
+fn app() -> Router {
+    Router::new().route("/", get(|| async { "Hello, World!" }))
+}
+
+#[tokio::test]
+async fn test_hello_world() {
+    let app = app();
+
+    // `Router` implements `tower::Service<Request<Body>>` so we can
+    // call it like any tower service, no need to run an HTTP server.
+    let response = app
+        .oneshot(Request::builder().uri("/").body(Body::empty()).unwrap())
+        .await
+        .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let body = response.into_body().collect().await.unwrap().to_bytes();
+    assert_eq!(&body[..], b"Hello, World!");
+}
+```
+This method is fast, reliable, and lets you test your application's logic directly. You can construct any `http::Request` to test different scenarios, including headers, request bodies, and more. For this to work, you'll need `http-body-util` with the `full` feature in your `[dev-dependencies]`.
+
+## Beyond REST: WebSockets and OpenAPI
+While Axum is excellent for REST APIs, its capabilities don't stop there.
+
+### WebSockets
+Axum has first-class support for WebSockets. You can add a WebSocket handler using the `axum::extract::ws::WebSocketUpgrade` extractor. This extractor will handle the WebSocket handshake and upgrade the connection, giving you a `WebSocket` stream to send and receive messages.
+
+```rust
+use axum::{
+    extract::ws::{WebSocket, WebSocketUpgrade},
+    response::IntoResponse,
+};
+
+async fn websocket_handler(ws: WebSocketUpgrade) -> impl IntoResponse {
+    ws.on_upgrade(handle_socket)
+}
+
+async fn handle_socket(mut socket: WebSocket) {
+    while let Some(msg) = socket.recv().await {
+        let msg = if let Ok(msg) = msg {
+            msg
+        } else {
+            // client disconnected
+            return;
+        };
+
+        if socket.send(msg).await.is_err() {
+            // client disconnected
+            return;
+        }
+    }
+}
+```
+
+### OpenAPI
+For building documented and maintainable APIs, OpenAPI (formerly Swagger) is the standard. While Axum doesn't have built-in OpenAPI generation, the `utoipa` crate provides excellent integration. It allows you to generate an OpenAPI specification from your Axum handlers and data types using procedural macros.
+
 ## How to Deploy Axum
 Deployment with Rust backend programs in general can be less than ideal due to having to use Dockerfiles, although if you are experienced with Docker already this may not be such an issue for you - particularly if you are using `cargo-chef`. However, if you're using Shuttle you can just use `shuttle deploy` and you're done already. No setup is required.
 
-## Finishing Up
-Thanks for reading! Axum is a great framework that has a strong team backing and is highly compatible with the Rust web ecosystem, and we believe now is a better time than ever to get started writing a REST API in Rust.
+## Ready to test your Axum skills?
+We've built **ShellCon**, a real-world Rust microservices onboarding challenge where you:
 
-Interested in more?
-- Check out how you can implement authentication in Axum [here!](https://www.shuttle.dev/blog/2022/08/11/authentication-tutorial)
-- Have a look at how you can get started with logging for your web application [here.](https://www.shuttle.dev/blog/2023/09/20/logging-in-rust)
+- 🐛 Debug and deploy 3 broken services (Axum + SQLx + async Rust)
+- 🔗 Connect them to a frontend that only works when everything is fixed
+- 🚀 Use Shuttle to provision, deploy, and manage the full stack: no YAML or Kubernetes needed
+
+🎯 Perfect for Rust devs who want to learn by doing.
+
+👉 [**Start the ShellCon Challenge**](https://github.com/shuttle-hq/shuttle-shellcon)
+
+------
+
+<BlogFAQ
+  title="Frequently Asked Questions"
+  items={[
+    {
+      question: "What is the difference between Axum and Actix Web?",
+      answer: "Axum is built by the Tokio team and integrates deeply with the Tower middleware ecosystem, focusing on modularity and composability. Actix Web uses the actor model and has its own mature middleware system. Both are fast and production-ready, but Axum's design philosophy is often preferred for its simplicity and tight integration with Tokio."
+    },
+    {
+      question: "Is Axum ready for production?",
+      answer: "Yes, absolutely. Axum is stable, widely used in the community, and backed by the Tokio team, making it a reliable choice for production workloads."
+    },
+    {
+      question: "How does Axum handle middleware?",
+      answer: "Axum uses `tower::Service` and `tower::Layer` for middleware. This means you can leverage the entire rich ecosystem of Tower and `tower-http` crates for things like tracing, compression, authentication, and rate-limiting without waiting for an Axum-specific implementation."
+    },
+    {
+      question: "What is the best way to handle errors in Axum?",
+      answer: "The best practice is to create a custom error enum for your application that implements Axum's `IntoResponse` trait. This allows you to map different error variants into specific HTTP status codes and responses, providing a clean and centralized error-handling mechanism."
+    },
+    {
+      question: "Can I use Axum with async-graphql?",
+      answer: "Yes. The `async-graphql` crate has excellent support for Axum. You can easily integrate a GraphQL endpoint into your Axum router, allowing you to build powerful GraphQL APIs alongside your REST endpoints."
+    }
+  ]}
+/>
