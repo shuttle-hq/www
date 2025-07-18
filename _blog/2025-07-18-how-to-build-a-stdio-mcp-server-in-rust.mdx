@@ -1,0 +1,255 @@
+---
+title: "How to Build a stdio MCP Server in Rust"
+pageTitle: "How to Build a stdio MCP Server in Rust"
+description: "Learn how to build a DNS lookup MCP server in Rust that extends AI capabilities with real-time data and custom tools."
+author: dcodes 
+tags: [rust, mcp, ai, dns, stdio, server]
+thumb: mcp-server-rust-guide.png
+cover: mcp-server-rust-guide.png
+date: '2025-07-18'
+---
+
+## Introduction
+
+AI agents are transforming how we work, but they're often limited by their training data. [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) servers bridge this gap by giving AI agents access to real-time data, external APIs, and custom tools.
+
+Building your own MCP server lets you extend AI capabilities with your specific tools and services. In this guide, we'll create a DNS lookup MCP server in **Rust** that demonstrates these concepts in action.
+
+Our MCP server will perform DNS lookups and provide real-time internet data to AI agents. Since AI models can't directly access external data sources, the server acts as a bridge, delivering live DNS information that extends the agent's capabilities beyond its training data.
+
+## What is MCP?
+
+**MCP** stands for **Model Context Protocol**, it's a protocol that allows AI models to securely access external tools and data sources. This is extremely useful, because the AI agents will not be limited to the data they were trained on, in fact they'll be able to access external data and resources plus the ability to use tools and make API calls to external services.
+
+Once you build an MCP server, it can be used by any MCP client, like **Cursor** and **Claude Code**, or any other MCP client that supports the MCP protocol like chatbots and conversational agents. The protocol is a standard, so you can use the same MCP server with different clients.
+
+### MCP Transport Types
+
+MCP servers use two transport mechanisms: **stdio** (standard input/output) and **SSE** (Server-Sent Events). The stdio transport communicates through standard input/output, similar to [LSP (Language Server Protocol)](https://microsoft.github.io/language-server-protocol/) servers, making it fast and efficient for local use. These servers are installed locally and have full access to your machine, for example they can interact with the file system, execute shell commands, access databases, or interact with any local services.
+
+SSE servers run externally in the cloud and connect via WebSockets. While they offer more scalability, they require network setup and don't have access to your local machine's resources.
+
+This tutorial focuses on building a **stdio MCP server** - the simpler approach that's perfect for local development and personal AI workflows.
+
+## Building stdio MCP Server in Rust
+
+In this tutorial, we're going to build a simple MCP server using the stdio transport that allows AI agents to perform DNS lookups.
+
+We'll use the **HackerTarget** API (a public service that provides DNS lookup capabilities) to perform the DNS lookups and return the results back to the AI agent.
+
+The workflow is as follows:
+
+1. AI agent asks the MCP server to perform a DNS lookup with a parameter: `domain`
+2. MCP server will use the **HackerTarget** API to perform the DNS lookup
+3. MCP server will return the results back to the AI agent
+4. The AI agent will read the real-time results, providing important context for the next steps
+
+### Setting Up the Project
+
+Now that we have laid out the plan and workflow, let's start building the **MCP server**.
+
+First, we need to create a new Rust project.
+
+```bash
+cargo new dns-lookup-mcp-server
+cd dns-lookup-mcp-server
+```
+
+Let's install the required dependencies for the project, the [Model Context Protocol](https://modelcontextprotocol.io/) provides an official SDK for **Rust** called `rmcp`. You can find the Rust SDK for MCP here: [github.com/modelcontextprotocol/rust-sdk](https://github.com/modelcontextprotocol/rust-sdk).
+
+Add the following dependencies to your `Cargo.toml`:
+
+```toml
+[package]
+name = "dns-lookup-mcp-server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+rmcp = { version = "0.3", features = ["server", "transport-io"] }
+serde = { version = "1", features = ["derive"] }
+reqwest = "0.12"
+anyhow = "1.0"
+schemars = "1.0"
+```
+
+- `serde` crate to serialize and deserialize JSON-RPC (JSON Remote Procedure Call) data for MCP protocol
+- `tokio` for async operations
+- `reqwest` to make HTTP requests to the DNS lookup API (HackerTarget)
+- `schemars` for JSON schema generation
+- `anyhow` for error handling
+
+The `rmcp` crate provides the MCP server implementation.
+
+## Building the DNS Service
+
+Let's create the DNS service module. First, create a new file `src/dns_mcp.rs` and add the following code:
+
+```rust
+use rmcp::{
+    handler::server::{router::tool::ToolRouter, tool::Parameters},
+    model::{ErrorData as McpError, *},
+    schemars, tool, tool_handler, tool_router, ServerHandler,
+};
+use serde::Deserialize;
+use std::{borrow::Cow, future::Future};
+
+#[derive(Debug, Clone)]
+pub struct DnsService {
+    tool_router: ToolRouter<DnsService>,
+}
+
+#[derive(Debug, Deserialize, schemars::JsonSchema)]
+pub struct DnsLookupRequest {
+    #[schemars(description = "The domain name to lookup")]
+    pub domain: String,
+}
+
+#[tool_router]
+impl DnsService {
+    pub fn new() -> Self {
+        Self {
+            tool_router: Self::tool_router(),
+        }
+    }
+
+    #[tool(description = "Perform DNS lookup for a domain name")]
+    async fn dns_lookup(
+        &self,
+        Parameters(request): Parameters<DnsLookupRequest>,
+    ) -> Result<CallToolResult, McpError> {
+        let response = reqwest::get(format!(
+            "https://api.hackertarget.com/dnslookup/?q={}",
+            request.domain
+        ))
+        .await
+        .map_err(|e| McpError {
+            code: ErrorCode(-32603),
+            message: Cow::from(format!("Request failed: {}", e)),
+            data: None,
+        })?;
+
+        let text = response.text().await.map_err(|e| McpError {
+            code: ErrorCode(-32603),
+            message: Cow::from(format!("Failed to read response: {}", e)),
+            data: None,
+        })?;
+
+        Ok(CallToolResult::success(vec![Content::text(text)]))
+    }
+}
+```
+
+The code uses several key attributes that handle MCP protocol integration:
+
+- `#[tool_router]` wires up the MCP protocol for any methods marked with `#[tool]`.
+- `#[tool(description = "...")]` exposes the function to AI models with a description for tool selection.
+- `Parameters<T>` provides type-safe parameter extraction.
+- `#[schemars(description = "...")]` adds schema documentation for AI parameter generation.
+
+## Server Configuration
+
+To configure your MCP server, implement `ServerHandler` for metadata and apply `#[tool_handler]` to auto-generate tool discovery.
+
+Add this to the end of `src/dns_mcp.rs`:
+
+```rust
+#[tool_handler]
+impl ServerHandler for DnsService {
+    fn get_info(&self) -> ServerInfo {
+        ServerInfo {
+            protocol_version: ProtocolVersion::V_2024_11_05,
+            capabilities: ServerCapabilities::builder().enable_tools().build(),
+            server_info: Implementation::from_build_env(),
+            instructions: Some("A DNS lookup service that queries domain information using the HackerTarget API. Use the dns_lookup tool to perform DNS lookups for any domain name.".to_string()),
+        }
+    }
+}
+```
+
+## Running the Server
+
+Then, set up `stdio` communication in `src/main.rs`:
+
+```rust
+use anyhow::Result;
+use dns_mcp::DnsService;
+use rmcp::{transport::stdio, ServiceExt};
+
+mod dns_mcp;
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    // Create an instance of our DNS service
+    let service = DnsService::new().serve(stdio()).await?;
+    service.waiting().await?;
+    Ok(())
+}
+```
+
+## Testing During Development
+
+To speed up your development and testing, you can run the MCP server directly from your project without building a release binary. In Cursor, enable this by creating a `.cursor/mcp.json` file in your project's root directory:
+
+```json
+{
+  "mcpServers": {
+    "DNS Lookup (Dev)": {
+      "command": "cargo",
+      "args": ["run"]
+    }
+  }
+}
+```
+
+> Note that configuration may vary depending on your MCP client. Check your client's documentation for the specific configuration format.
+
+## Building for Production
+
+To build and install the MCP server for production use:
+
+```bash
+# Build and install the binary to ~/.cargo/bin
+cargo install --path .
+```
+
+This installs the `dns-lookup-mcp-server` binary to your Cargo bin directory (typically `~/.cargo/bin`), making it available system-wide if this directory is in your PATH.
+
+## Using in Cursor
+
+To configure the MCP server globally for Cursor, edit the main settings file located at `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "DNS Lookup": {
+      "command": "dns-lookup-mcp-server"
+    }
+  }
+}
+```
+
+This uses the binary name directly, assuming you've installed it with `cargo install --path .` and `~/.cargo/bin` is in your PATH.
+
+## MCP Server in Action
+
+Time to put the MCP server to work. Let's have it check the DNS records for two domains and create a table of the results.
+
+![DNS Lookup MCP Server in Action](./images/dns-lookup-llm.png)
+
+In the above screenshot, we asked the AI agent to query the DNS records for a few domains and create a markdown table to display the results.
+
+The AI agent was able to use the `dns_lookup` tool to perform the DNS lookup and return the results back to the user.
+
+## Conclusion
+
+While AI can significantly improve your development workflow, LLMs are naturally limited by their training data, knowledge cutoffs, and sandbox environment. MCP servers bridge this gap by giving AI agents access to real-time data and tools they can use when needed.
+
+This feature is essential for data that changes too quickly for static training sets. For instance, to configure an application's networking, your AI agent needs direct access to the very latest DNS records, not outdated information. The same logic applies to other live sources, like querying a real-time database or checking an API's current status.
+
+Rust shines as a language for building MCP servers. Its type safety and performance characteristics make it ideal for creating reliable tools that AI models can use confidently. The `rmcp` crate's clean API combined with macros like `#[tool]` eliminates boilerplate, letting you focus on functionality rather than protocol details.
+
+In just a few dozen lines of code, we built a production-ready DNS lookup service that works with any MCP-compatible AI client. The standardized MCP protocol means your Rust server can integrate seamlessly across different AI platforms and tools.
+
+This is just the beginning - you can extend this pattern to build MCP servers for databases, APIs, file systems, or any external service your AI agents might need to interact with.
