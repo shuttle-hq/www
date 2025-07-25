@@ -156,7 +156,7 @@ export default function DecentLand() {
               The team&apos;s approach leveraged Shuttle&apos;s core
               capabilities for their off-chain infrastructure:
             </h2>
-            <ol className="self-stretch flex flex-col justify-start items-start gap-8">
+            <ol className="self-stretch flex flex-col justify-start items-start">
               <li className="self-stretch flex flex-col justify-start items-start">
                 <div className="self-stretch py-5 border-b border-white/30 inline-flex justify-start items-baseline gap-5">
                   <div className="justify-start text-neutral-400 text-xl font-normal">
