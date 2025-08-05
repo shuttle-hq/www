@@ -1,5 +1,45 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Accordion } from "components/elements/Accordion";
+
+const accordionItems = [
+  {
+    title: "Shuttle",
+    content: "for deployment and infrastructure management",
+  },
+  {
+    title: "Axum",
+    content: "for type-safe REST API endpoints",
+  },
+  {
+    title: "MongoDB",
+    content: "for database",
+  },
+  {
+    title: "Polars",
+    content: "for high-performance data transformations",
+  },
+  {
+    title: "Dagster",
+    content: "for data orchestration and ETL workflows",
+  },
+  {
+    title: "Databricks",
+    content: "for heavy computational workloads",
+  },
+  {
+    title: "PropelAuth",
+    content: "for authentication",
+  },
+  {
+    title: "Better Stack",
+    content: "for monitoring and observability",
+  },
+  {
+    title: "GitHub Actions",
+    content: "for CI/CD automation",
+  },
+];
 
 export default function Unwritten() {
   return (
@@ -282,6 +322,8 @@ export default function Unwritten() {
             Unwritten leverages Shuttle&apos;s ecosystem for their data
             processing platform:
           </p>
+
+          <Accordion accordionItems={accordionItems} />
           <p className="self-stretch justify-start text-zinc-400 text-xl font-normal">
             The combination provides stability and type safety paramount for
             data calculations where accuracy is critical. The team values
@@ -302,7 +344,7 @@ export default function Unwritten() {
             prefer to avoid infrastructure complexity.
           </p>
           <p className="self-stretch justify-start text-zinc-400 text-xl font-normal">
-            "From experience on previous projects with IaaS in public cloud
+            &quot;From experience on previous projects with IaaS in public cloud
             environments, it took ordinary developers days to weeks to set up
             production-ready infrastructure,&quot; the team notes.
           </p>
