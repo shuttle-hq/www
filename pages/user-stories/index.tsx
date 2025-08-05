@@ -4,33 +4,33 @@ import styles from "./UserStories.module.css"; // Adjust the path as necessary
 import Link from "next/link";
 
 const userStories = [
-  {
-    key: "decent-land",
-    title:
-      "Decent Land eliminated infrastructure complexity for Web3 development",
-    logo: "/path/to/logo.png", // Replace with actual logo path
-    link: "/user-stories/decent-land", // Replace with actual story link
-  },
-  {
-    key: "triacc",
-    title:
-      "How Triacc accelerated from concept to production in days, not weeks",
-    logo: "/path/to/logo.png", // Replace with actual logo path
-    link: "/user-stories/triacc", // Replace with actual story link
-  },
+  // {
+  //   key: "decent-land",
+  //   title:
+  //     "Decent Land eliminated infrastructure complexity for Web3 development",
+  //   logo: "/path/to/logo.png", // Replace with actual logo path
+  //   link: "/user-stories/decent-land", // Replace with actual story link
+  // },
+  // {
+  //   key: "triacc",
+  //   title:
+  //     "How Triacc accelerated from concept to production in days, not weeks",
+  //   logo: "/path/to/logo.png", // Replace with actual logo path
+  //   link: "/user-stories/triacc", // Replace with actual story link
+  // },
   {
     key: "unwritten",
     title:
       "How Unwritten powers climate risk modeling with zero infrastructure overhead",
-    logo: "/path/to/logo.png", // Replace with actual logo path
+    logo: "/images/user-stories/unwritten.png",
     link: "/user-stories/unwritten", // Replace with actual story link
   },
-  {
-    key: "weavevm",
-    title: "WeaveVM eliminated code refactoring and complex infra management",
-    logo: "/path/to/logo.png", // Replace with actual logo path
-    link: "/user-stories/weavevm", // Replace with actual story link
-  },
+  // {
+  //   key: "weavevm",
+  //   title: "WeaveVM eliminated code refactoring and complex infra management",
+  //   logo: "/path/to/logo.png", // Replace with actual logo path
+  //   link: "/user-stories/weavevm", // Replace with actual story link
+  // },
 ];
 
 export default function UserStories() {
@@ -54,14 +54,13 @@ export default function UserStories() {
             className={`flex flex-col items-start border border-solid border-white border-opacity-30 rounded-[32px] overflow-hidden ${styles["user-story-card"]}`}
           >
             <div className="flex flex-col p-10 gap-4 bg-[#0F0F0F]">
-              {/* <Image
-              src={story.logo}
-              alt={`${story.title} logo`}
-              width={64}
-              height={64}
-              className="mb-4"
-            /> */}
-              logo
+              <Image
+                src={story.logo}
+                alt={`${story.title} logo`}
+                width={120}
+                height={19}
+                className="mb-4"
+              />
               <Link href={story.link}>
                 <h2 className="text-3xl font-bold text-zinc-300 font-gradual">
                   {story.title}
