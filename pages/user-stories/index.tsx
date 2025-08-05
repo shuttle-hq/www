@@ -47,11 +47,11 @@ export default function UserStories() {
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="flex gap-6 justify-center">
         {userStories.map((story) => (
           <div
             key={story.key}
-            className={`flex flex-col items-start border border-solid border-white border-opacity-30 rounded-[32px] overflow-hidden ${styles["user-story-card"]}`}
+            className={`flex flex-col w-[50%] items-start border border-solid border-white border-opacity-30 rounded-[32px] overflow-hidden ${styles["user-story-card"]}`}
           >
             <div className="flex flex-col p-10 gap-4 bg-[#0F0F0F]">
               <Image
