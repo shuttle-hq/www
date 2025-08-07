@@ -9,6 +9,16 @@ export default function Unwritten() {
       <NextSeo
         title="User Stories | Unwritten"
         description="How Unwritten powers large-scale data processing with zero infrastructure overhead"
+        openGraph={{
+          images: [
+            {
+              url: "https://www.shuttle.dev/images/unwritten-og-image.png",
+              width: 2400,
+              height: 1350,
+              alt: "Shuttle x Unwritten: Powering large-scale data processing with zero infrastructure overhead",
+            },
+          ],
+        }}
       />
       <main className="flex flex-col mx-auto mt-24 gap-16 w-full max-w-[1280px] px-5 sm:px-10 lg:mt-28 items-center">
         <div className="inline-flex flex-col justify-start items-start gap-28">
