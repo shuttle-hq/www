@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Accordion } from "components/elements/Accordion";
 import { NextSeo } from "next-seo";
+import { TechnicalImplementationSection } from "./_TechnicalImplementationSection";
 
 const accordionItems = [
   {
@@ -322,22 +323,7 @@ export default function Unwritten() {
             </div>
           </div>
           <div className="w-[782px] flex flex-col justify-start items-start gap-10">
-            <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
-              Technical Implementation
-            </h2>
-            <p className="self-stretch justify-start text-zinc-400 text-xl font-normal">
-              Unwritten leverages Shuttle&apos;s ecosystem for their data
-              processing platform:
-            </p>
-
-            <Accordion accordionItems={accordionItems} />
-            <p className="self-stretch justify-start text-zinc-400 text-xl font-normal">
-              The combination provides stability and type safety paramount for
-              data calculations where accuracy is critical. The team values
-              Rust&apos;s compile-time guarantees and type safety as essential
-              safeguards for their data pipelines, ensuring production-grade
-              reliability standards.
-            </p>
+            <TechnicalImplementationSection />
           </div>
           <div className="w-[782px] flex flex-col justify-start items-start gap-10">
             <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
