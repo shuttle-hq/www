@@ -20,14 +20,14 @@ const userStories = [
   // },
   {
     key: "unwritten",
-    title:
-      "How Unwritten powers climate risk modeling with zero infrastructure overhead",
+    // title:
+    //   "How Unwritten powers climate risk modeling with zero infrastructure overhead",
     logo: "/images/user-stories/unwritten.png",
     link: "/customers/unwritten",
-    quoteText: `"What took days to weeks to set up with traditional
+    title: `"What took days to weeks to set up with traditional
                   infrastructure now takes minutes with Shuttle. It's like
                   Vercel for backend"`,
-    quoteAuthor: "Phillip Marks, CRO & CTO, Unwritten",
+    // quoteAuthor: "Phillip Marks, CRO & CTO, Unwritten",
   },
   // {
   //   key: "weavevm",
@@ -69,10 +69,10 @@ export default function UserStories() {
                 <h2 className="text-3xl font-bold text-zinc-300 font-gradual">
                   {story.title}
                 </h2>
-                <div className="flex flex-col gap-2">
+                {/* <div className="flex flex-col gap-2">
                   <p className="text-base text-zinc-300">{story.quoteText}</p>
                   <p className="text-base text-zinc-400">{story.quoteAuthor}</p>
-                </div>
+                </div> */}
               </Link>
             </div>
             <Link
