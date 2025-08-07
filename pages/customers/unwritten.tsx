@@ -3,45 +3,6 @@ import Image from "next/image";
 import { NextSeo } from "next-seo";
 import { TechnicalImplementationSection } from "../../components/sections/UserStories/TechnicalImplementationSection";
 
-const accordionItems = [
-  {
-    title: "Shuttle",
-    content: "for deployment and infrastructure management",
-  },
-  {
-    title: "Axum",
-    content: "for type-safe REST API endpoints",
-  },
-  {
-    title: "MongoDB",
-    content: "for database",
-  },
-  {
-    title: "Polars",
-    content: "for high-performance data transformations",
-  },
-  {
-    title: "Dagster",
-    content: "for data orchestration and ETL workflows",
-  },
-  {
-    title: "Databricks",
-    content: "for heavy computational workloads",
-  },
-  {
-    title: "PropelAuth",
-    content: "for authentication",
-  },
-  {
-    title: "Better Stack",
-    content: "for monitoring and observability",
-  },
-  {
-    title: "GitHub Actions",
-    content: "for CI/CD automation",
-  },
-];
-
 export default function Unwritten() {
   return (
     <>
@@ -61,17 +22,6 @@ export default function Unwritten() {
                 Using Shuttle&apos;s Rust deployment platform to accelerate
                 large-scale data processing without infrastructure complexity
               </p>
-              <div className="self-stretch flex flex-col items-start gap-2.5">
-                <p className="flex-1 justify-start text-neutral-200 text-2xl font-normal">
-                  &quot;What took days to weeks to set up with traditional
-                  infrastructure now takes minutes with Shuttle. It&apos;s like
-                  Vercel for backend.&quot;
-                </p>
-                <div className="flex flex-col gap-1">
-                  <p className="font-bold">Phillip Marks, CRO & CTO</p>
-                  <p>Unwritten</p>
-                </div>
-              </div>
             </div>
             <div className="self-stretch flex flex-col justify-start items-start">
               <span className="self-stretch justify-start text-zinc-400 text-base font-normal uppercase leading-normal tracking-wide">

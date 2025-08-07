@@ -102,6 +102,15 @@ export const TechnicalImplementationSection = () => {
           </p>
         </div>
       )}
+      {!expanded && (
+        <p
+          className="self-stretch justify-start text-zinc-400 text-xl font-normal cursor-pointer"
+          onClick={() => setExpanded((e) => !e)}
+        >
+          Click here to read more about the technical implementations of
+          Unwritten
+        </p>
+      )}
     </div>
   );
 };
