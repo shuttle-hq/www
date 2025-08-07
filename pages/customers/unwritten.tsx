@@ -12,7 +12,7 @@ export default function Unwritten() {
         openGraph={{
           images: [
             {
-              url: "https://www.shuttle.dev/images/unwritten-og-image.png",
+              url: "https://www.shuttle.dev/images/user-stories/unwritten-og-image.png",
               width: 2400,
               height: 1350,
               alt: "Shuttle x Unwritten: Powering large-scale data processing with zero infrastructure overhead",
