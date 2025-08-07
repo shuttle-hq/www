@@ -129,15 +129,17 @@ const Navigation = () => {
           ))}
         </div>
         <div className="mt-10 xl:ml-auto xl:mt-0 xl:flex xl:items-center xl:gap-5">
-          <div className="mt-10 flex flex-wrap items-center gap-5 xl:mt-0" onClick={() => {
-            trackEvent("homepage_mainnav_login");
-          }}>
+          <div
+            className="mt-10 flex flex-wrap items-center gap-5 xl:mt-0"
+            onClick={() => {
+              trackEvent("homepage_mainnav_login");
+            }}
+          >
             <CustomButton
               className="w-[140px] justify-center"
               variant="secondary"
               invertOnDark
               href="https://console.shuttle.dev/"
-
             >
               Log in
             </CustomButton>
