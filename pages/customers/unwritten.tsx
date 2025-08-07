@@ -7,7 +7,7 @@ export default function Unwritten() {
   return (
     <>
       <NextSeo
-        title="User Stories | Unwritten"
+        title="Customers | Unwritten"
         description="How Unwritten powers large-scale data processing with zero infrastructure overhead"
         openGraph={{
           images: [
