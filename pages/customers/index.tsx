@@ -9,27 +9,27 @@ const userStories = [
   //   title:
   //     "Decent Land eliminated infrastructure complexity for Web3 development",
   //   logo: "/path/to/logo.png", // Replace with actual logo path
-  //   link: "/user-stories/decent-land", // Replace with actual story link
+  //   link: "/customers/decent-land", // Replace with actual story link
   // },
   // {
   //   key: "triacc",
   //   title:
   //     "How Triacc accelerated from concept to production in days, not weeks",
   //   logo: "/path/to/logo.png", // Replace with actual logo path
-  //   link: "/user-stories/triacc", // Replace with actual story link
+  //   link: "/customers/triacc", // Replace with actual story link
   // },
   {
     key: "unwritten",
     title:
       "How Unwritten powers climate risk modeling with zero infrastructure overhead",
     logo: "/images/user-stories/unwritten.png",
-    link: "/user-stories/unwritten", // Replace with actual story link
+    link: "/customers/unwritten", // Replace with actual story link
   },
   // {
   //   key: "weavevm",
   //   title: "WeaveVM eliminated code refactoring and complex infra management",
   //   logo: "/path/to/logo.png", // Replace with actual logo path
-  //   link: "/user-stories/weavevm", // Replace with actual story link
+  //   link: "/customers/weavevm", // Replace with actual story link
   // },
 ];
 

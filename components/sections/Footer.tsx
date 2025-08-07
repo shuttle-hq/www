@@ -47,6 +47,7 @@ const DEVELOPERS_LINKS = [
     name: "Examples",
   },
   { key: "heroes", href: "/shuttle-heroes", name: "Shuttle Heroes" },
+  { key: "customers", href: "/customers", name: "Customers" },
   { key: "launchpad", href: "/launchpad", name: "Launchpad" },
   { key: "codehunt", href: "/cch", name: "Code Hunt" },
   { key: "ai", href: "/ai", name: "Shuttle AI" },
