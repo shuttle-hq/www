@@ -1,8 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Accordion } from "components/elements/Accordion";
 import { NextSeo } from "next-seo";
-import { TechnicalImplementationSection } from "./_TechnicalImplementationSection";
+import { TechnicalImplementationSection } from "../../components/sections/UserStories/TechnicalImplementationSection";
 
 const accordionItems = [
   {

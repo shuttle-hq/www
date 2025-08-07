@@ -39,7 +39,7 @@ const accordionItems = [
   },
 ];
 
-export function TechnicalImplementationSection() {
+export const TechnicalImplementationSection = () => {
   const [expanded, setExpanded] = useState(false);
   return (
     <div className="w-full flex flex-col justify-start items-start gap-6">
@@ -104,4 +104,4 @@ export function TechnicalImplementationSection() {
       )}
     </div>
   );
-}
+};
