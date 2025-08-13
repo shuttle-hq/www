@@ -1,0 +1,1148 @@
+---
+title: "How to Build and Deploy an SSE MCP Server with OAuth in Rust"
+description: "Build an SSE-based MCP server with OAuth 2 in Rust using rmcp and Axum and deploy to Shuttle with PostgreSQL/SQLx."
+author: dcodes 
+tags: [rust, mcp, sse, oauth, axum, shuttle, sqlx]
+thumb: sse-mcp-server-with-oauth-in-rust/cover.png
+cover: sse-mcp-server-with-oauth-in-rust/cover.png
+date: '2025-08-13'
+---
+
+AI agents have become integral to modern development workflows, transforming how we build and maintain software. While these tools are already powerful, they reach their full potential when enhanced with [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) servers that extend their capabilities through specialized tools and integrations.
+
+For developers running hosted applications or platforms, MCP servers offer a unique opportunity to provide users with natural language interfaces to your services. Consider a project management platform: instead of navigating through multiple screens, users could authorize an MCP server and then create tasks, update project statuses, or generate reports using simple conversational commands through their preferred AI client.
+
+Building secure MCP servers requires adherence to two critical standards: the Model Context Protocol specification and [OAuth 2.1](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-13). When implemented correctly, your MCP server becomes universally compatible with any MCP-enabled AI tool—whether users prefer [Cursor](https://cursor.sh/), [Claude Desktop](https://claude.ai/desktop), Windsurf, or other platforms.
+
+This tutorial provides a comprehensive guide to OAuth authentication patterns and walks through building a production-ready MCP server. We'll implement secure authentication flows that allow AI agents to safely interact with your hosted services, then deploy the complete solution using [Shuttle's](https://shuttle.dev/) streamlined cloud deployment.
+
+## MCP Transport Types
+
+MCP servers use two transport mechanisms: [**STDIO**](https://modelcontextprotocol.io/specification/2025-06-18/basic/transports#stdio) (standard input/output) and [**SSE**](https://modelcontextprotocol.io/specification/2025-06-18/basic/transports#http-with-sse) (Server-Sent Events). The stdio transport runs as a local subprocess and communicates through standard input/output streams, which we covered in detail in our [comprehensive guide to building stdio MCP servers in Rust](https://www.shuttle.dev/blog/2025/07/18/how-to-build-a-stdio-mcp-server-in-rust). SSE transport type servers, on the other hand, use HTTP-based communication with Server-Sent Events for real-time messaging.
+
+SSE servers operate as cloud-hosted services, making them accessible from anywhere with proper network connectivity. Users don't need to install anything locally—they can access your MCP server through a simple URL. SSE transport type servers integrate directly with your existing backend infrastructure and support robust authentication mechanisms like OAuth 2, enabling secure access control and user management.
+
+This tutorial focuses on building an **SSE MCP server with OAuth**—the cloud-based approach that connects to your backend application and provides authenticated access to your services.
+
+## Understanding OAuth 2 for MCP Servers
+
+In order for users to authorize their MCP clients and AI agents to perform actions on their behalf, MCP servers must implement OAuth 2 specifications. In this section, we'll dive deep into the OAuth 2 requirements, what MCP clients expect, and what the flow looks like.
+
+### OAuth Flow
+
+The OAuth flow consists of five key phases:
+
+1. **Discovery Phase**: Client discovers authorization server metadata
+2. **Registration Phase**: Client registers itself with the authorization server
+3. **Authorization Phase**: User consent and authorization code generation
+4. **Token Exchange**: MCP client exchanges the authorization code for an access token and refresh token
+5. **Authenticated Access**: Using access tokens to connect to the protected MCP SSE endpoints
+
+### OAuth 2 Flow Deep Dive
+
+OAuth might seem intimidating at first glance, but it's actually a straightforward flow once you understand the components. Let's dive into the OAuth flow.
+
+### Step 1: Discovery Phase (Metadata Endpoint)
+
+For MCP clients to discover your authorization server endpoints, we need to create a well-known route that MCP clients will always query before starting the authentication flow.
+
+MCP clients query the `/.well-known/oauth-authorization-server` endpoint to retrieve the **Authorization Server Metadata** (RFC 8414). This JSON document lists your OAuth 2.0 endpoints, grant types, and scopes. Implementing it is mandatory. Without it, MCP clients can't authenticate with your server.
+
+The metadata endpoint provides important information to the MCP client, such as:
+
+- **Registration endpoint**: The route where MCP clients can register themselves with your authorization server.
+- **Authorization endpoint**: The MCP client will redirect the user to this route so that the user can manually review the authorization request and approve or reject it.
+- **Token endpoint**: After the user approves the authorization request, the MCP client will exchange the authorization code (generated by the server in the previous step) for an access token, this token will be used for authenticated requests from the MCP client to the MCP server.
+
+### Step 2: Registration Phase
+
+During the initial connection setup, the MCP client first discovers the authorization server endpoints via the metadata endpoint, then makes a request to the **registration endpoint**, providing relevant information about itself. The server saves this information in the database and responds with a **client ID** and **client secret** for the MCP client.
+
+### Step 3: Authorization Phase (User Consent)
+
+The first time an MCP server is added to an MCP client, the server cannot be used until the user authenticates with it, here is an example of how the Notion MCP server looks in Cursor:
+
+<CaptionedImage 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/notion-mcp-server-in-cursor.png" 
+  alt="Notion MCP server in Cursor"
+  caption="Notion MCP server in Cursor"
+/>
+
+When the user clicks on the **Login** button through their MCP client, the MCP client will redirect the user to the **authorization endpoint** that was provided using the **metadata endpoint**.
+
+The user can then authenticate using their existing account and approve the authorization request. After successful authentication, the server redirects the user back to the MCP client with an **authorization code** in the URL.
+
+<CaptionedImage 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/notion-authorize-page.png" 
+  alt="Notion authorize page"
+  caption="Notion authorize page"
+/>
+
+### Step 4: Token Exchange
+
+After the user approves the authorization request, the MCP client immediately uses the **authorization code** to make a request to the **token endpoint**, exchanging the code for an **access token** and **refresh token**. The access token authenticates the MCP client to the MCP server, while the refresh token renews the access token when it expires.
+
+The MCP client will now be able to make authenticated requests and ready for use.
+
+### Step 5: Authenticated Access
+
+The MCP client with the use of the access token will now be able to connect to the MCP server and the MCP server will have the ability to identify the MCP client and the user that authorized it.
+
+### Refreshing the Access Token
+
+The refresh token is used to renew the access token when it expires. The token endpoint must be designed to support both the refresh token grant type and the authorization code grant type, which we'll implement later in the tutorial.
+
+## Building and Deploying an SSE MCP Server in Rust
+
+Now that we have a solid understanding of MCP servers and OAuth integration, we'll build a production-ready SSE MCP server that fully complies with both the MCP protocol and OAuth 2 specifications.
+
+After building and testing the MCP server, we'll then deploy it to the cloud using **Shuttle** with just a single command.
+
+You can find the complete code for this project in the [GitHub repository](https://github.com/shuttle-hq/shuttle-examples/tree/main/mcp/mcp-sse-oauth).
+
+### Prerequisites
+
+To follow along, you'll need:
+
+- Intermediate Rust familiarity (async/await, Axum, traits)
+- Basic OAuth concepts (auth codes, tokens, etc.)
+- Experience with PostgreSQL and SQLx
+
+This tutorial focuses on key patterns. For the complete, unabridged code, please refer to the accompanying [repository](https://github.com/shuttle-hq/shuttle-examples/tree/main/mcp/mcp-sse-oauth).
+
+### Using the MCP Inspector
+
+The MCP inspector is a tool provided by the MCP team to help you test and debug your MCP server. You need [Node.js](https://nodejs.org/en/download) and npm installed on your machine to run it. Execute the following command to install and run the MCP inspector in your terminal:
+
+```bash
+npx @modelcontextprotocol/inspector
+```
+
+<CaptionedImage 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-run.png" 
+  alt="Running the MCP inspector"
+  caption="Running the MCP inspector"
+/>
+
+
+This will automatically open the inspector in your default browser:
+
+<CaptionedImage 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-dashboard.png" 
+  alt="MCP inspector dashboard"
+  caption="MCP inspector dashboard"
+/>
+
+
+We'll use the MCP inspector to test our OAuth flow at each stage of the tutorial
+
+<CaptionedImage 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-open-auth-settings.png" 
+  alt="MCP inspector open Auth settings"
+  caption="MCP inspector open Auth settings"
+/>
+
+
+Click the "Open Auth Settings" button which will open the auth settings page that tests the OAuth steps.
+
+<CaptionedImage 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-auth-flow.png" 
+  alt="MCP inspector auth flow"
+  caption="MCP inspector auth flow"
+/>
+
+
+First, we'll implement the metadata endpoint. We'll build our server using the official `rmcp` crate and Axum, which are compatible out of the box.
+
+Add the `rmcp` crate to your `Cargo.toml` file:
+
+```toml
+[dependencies]
+rmcp = { version = "0.5", features = ["server", "transport-sse-server", "auth"] }
+```
+
+The feature flags are self-explanatory: we need the `server` flag to build an MCP server (not a client), `transport-sse-server` for SSE transport functionality, and `auth` for OAuth server utilities.
+
+In our `main.rs` file, we have **Shuttle** boilerplate code that provisions a [PostgreSQL database](https://docs.shuttle.dev/resources/shuttle-shared-db) in production and implements the Shuttle [Service Trait](https://docs.rs/shuttle-service/0.56.0/shuttle_service/trait.Service.html) to get the socket address and run the MCP server, The `Service` trait ensures that the code will work in both development and production environments. We'll write the rest of the code in the `init.rs` file as the entry point for our backend server which will serve the authentication APIs and the MCP server endpoints.
+
+```rust
+struct McpSseService {
+    pool: PgPool,
+    secrets: shuttle_runtime::SecretStore,
+}
+
+#[shuttle_runtime::async_trait]
+impl shuttle_runtime::Service for McpSseService {
+    async fn bind(self, addr: SocketAddr) -> Result<(), shuttle_runtime::Error> {
+        init::init(addr, self.pool, self.secrets).await
+    }
+}
+
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_shared_db::Postgres(
+        local_uri = "postgres://postgres:password@localhost:5432/mcp-sse-auth"
+    )]
+    pool: PgPool,
+    #[shuttle_runtime::Secrets] secrets: shuttle_runtime::SecretStore,
+) -> Result<McpSseService, shuttle_runtime::Error> {
+    Ok(McpSseService { pool, secrets })
+}
+
+```
+
+We use the `shuttle_shared_db::Postgres` macro to provision a PostgreSQL database in production and `local_uri` to connect to a local database for development purposes only. The `shuttle_runtime::Secrets` macro is used to access secrets from the `Secrets.toml` file for development as well as deployment, which we'll create in the next step.
+
+The `init()` function contains all the `rmcp` boilerplate required to spin up the SSE transport MCP server. You can view the [complete implementation here](https://github.com/shuttle-hq/shuttle-examples/blob/main/mcp/mcp-sse-oauth/src/init.rs).
+
+### Creating the Secrets File
+
+Shuttle uses `Secrets.toml` files to store project secrets. We'll create two files: `Secrets.toml` for production and `Secrets.dev.toml` for development in the project root. We'll use the `openssl` command to generate a random JWT secret key. Run the following command to generate a secure key:
+
+> Security Note: Never commit your Secrets.toml files to version control. Add them to your .gitignore file to prevent accidental exposure of sensitive information.
+> 
+
+```bash
+openssl rand -base64 32
+# Output: sQGnE/aD76G2TAJA6HqJk9shkmYwsmwZ3b+sJlQWBVE=
+```
+
+Update your `Secrets.dev.toml` file, e.g.
+
+```toml
+BASE_URL = "http://localhost:8000"
+JWT_SECRET = "sQGnE/aD76G2TAJA6HqJk9shkmYwsmwZ3b+sJlQWBVE=" # Replace with your own JWT secret key
+```
+
+You can get your production URL by navigating to the [Shuttle Console](https://console.shuttle.dev/) and bootstrap a new project. The URL will be displayed in the console.
+
+<CaptionedImage 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/shuttle-console-url.png" 
+  alt="Shuttle console project URL"
+  caption="Shuttle console project URL"
+/>
+
+
+Generate another random JWT secret key and update your `Secrets.toml` file as well, e.g.
+
+```toml
+BASE_URL = "https://your-project.shuttle.app" # Add your production URL here
+JWT_SECRET = "FgaRCPwUd86iRwQsAm9faAky59ghk0c3bhSijz9wbAM=" # Replace with your own JWT secret key
+```
+
+### Running the Development Server
+
+After **Shuttle** and **rmcp** boilerplate is set up, we can run the development server:
+
+```bash
+shuttle run --secrets Secrets.dev.toml
+```
+
+For an auto-reload development server, you can use [cargo-watch](https://crates.io/crates/cargo-watch) to run the following command:
+
+```bash
+cargo watch -x "shuttle run --secrets Secrets.dev.toml"
+```
+
+This automatically restarts the server when you make code changes. You'll need to install [cargo-watch](https://crates.io/crates/cargo-watch) first by running `cargo install cargo-watch --locked`.
+
+<CaptionedImage 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/shuttle-development-server-running.png" 
+  alt="Shuttle Development server running"
+  caption="Shuttle Development server running"
+/>
+
+Excellent! Our MCP server is now running on `http://127.0.0.1:8000` and we can test it using the MCP inspector.
+
+Update your MCP inspector to use the correct MCP server URL, in our case it's `http://127.0.0.1:8000/mcp/sse`:
+
+<CaptionedImage 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-server-url.png" 
+  alt="MCP inspector server URL"
+  caption="MCP inspector server URL"
+/>
+
+The reason our MCP server is running on `http://127.0.0.1:8000/mcp/sse` is because how we configured the the rmcp boilerplate code:
+
+```rust
+let sse_config = SseServerConfig {
+    bind: addr,
+    sse_path: "/mcp/sse".to_string(),
+    post_path: "/mcp/message".to_string(),
+    ct: CancellationToken::new(),
+    sse_keep_alive: Some(Duration::from_secs(15)),
+};
+```
+
+Using this configuration, we've specified the MCP server to run on `http://127.0.0.1:8000/mcp/sse`.
+
+### Setting Up the Metadata Endpoint
+
+Clients can connect to the server but can't authenticate yet. To fix this, we'll start with the discovery phase by implementing the **`/.well-known/oauth-authorization-server`** route. Clients use this endpoint to fetch auth metadata, and since `rmcp` is compatible with Axum, we can easily create this route to return a JSON response.
+
+According to the OAuth 2 specification, the metadata is expected to include the following fields:
+
+- `issuer`: The base URL of the authorization server. e.g. `https://my-app.shuttle.app`.
+- `registration_endpoint`: MCP clients can register themselves with the authorization server.
+- `authorization_endpoint`: MCP clients will redirect the user to this route so that the user can manually review the authorization request and approve or reject it.
+- `token_endpoint`: MCP clients will use this route to exchange the authorization code for an access token and refresh token, this route will be re-used for refreshing the access token when it expires.
+- `scopes_supported`: The scopes supported by the authorization server. e.g. `profile`, `email`, `mcp`.
+- `additional_fields`: Additional fields that can be used to customize the authorization server (according to the RFC 8414).
+- `jwks_uri`: The URL of the [JSON Web Key Set (JWKS)](https://datatracker.ietf.org/doc/html/rfc7517) endpoint, this is optional and can be omitted if not needed.
+
+Let's implement the metadata endpoint:
+
+```rust
+pub async fn oauth_authorization_server(State(state): State<Arc<AppState>>) -> impl IntoResponse {
+    let base_url = state
+        .secrets
+        .get("BASE_URL")
+        .expect("BASE_URL secret not found");
+
+    let mut additional_fields = HashMap::new();
+    additional_fields.insert(
+        "response_types_supported".into(),
+        Value::Array(vec![Value::String("code".into())]),
+    );
+    additional_fields.insert(
+        "code_challenge_methods_supported".into(),
+        Value::Array(vec![Value::String("S256".into())]),
+    );
+
+    let metadata = AuthorizationMetadata {
+        issuer: Some(base_url.clone()),
+        registration_endpoint: format!("{base_url}/oauth/register"),
+        authorization_endpoint: format!("{base_url}/oauth/authorize"),
+        token_endpoint: format!("{base_url}/oauth/token"),
+
+        scopes_supported: Some(vec!["profile".to_string(), "email".to_string()]),
+        jwks_uri: None,
+        additional_fields,
+    };
+
+    (StatusCode::OK, Json(metadata)).into_response()
+}
+```
+
+We've added the following fields to advertise our support for the Authorization Code grant with PKCE (S256), in compliance with RFC 8414.
+
+```rust
+let mut additional_fields = HashMap::new();
+additional_fields.insert(
+    "response_types_supported".into(),
+    Value::Array(vec![Value::String("code".into())]),
+);
+additional_fields.insert(
+    "code_challenge_methods_supported".into(),
+    Value::Array(vec![Value::String("S256".into())]),
+);
+```
+
+Let's test it with the MCP inspector:
+
+<CaptionedImage 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-metadata-endpoint-success.png" 
+  alt="MCP inspector metadata endpoint success"
+  caption="MCP inspector metadata endpoint success"
+/>
+
+Excellent! The metadata endpoint is working. Now let's implement the registration endpoint.
+
+### Setting Up the Registration Route
+
+After using the metadata endpoint, MCP clients register themselves by sending a request to the Register Route. The server saves the client's information to the database and responds with a `client_id` and `client_secret`.
+
+First, we need a helper function to generate secure client secrets:
+
+```rust
+fn generate_client_secret() -> String {
+    use std::fmt::Write;
+    let mut secret = String::new();
+    for _ in 0..32 {
+        let byte: u8 = rand::random();
+        write!(&mut secret, "{byte:02x}").unwrap();
+    }
+    secret
+}
+```
+
+Now the registration handler:
+
+```rust
+#[derive(Debug, Deserialize)]
+pub struct ClientRegistrationRequest {
+    pub client_name: Option<String>,
+    pub redirect_uris: Vec<String>,
+    pub scope: Option<String>,
+}
+
+pub async fn client_registration(
+    State(state): State<Arc<AppState>>,
+    Json(request): Json<ClientRegistrationRequest>,
+) -> impl IntoResponse {
+    // Validate redirect URIs
+    if request.redirect_uris.is_empty() {
+        return (StatusCode::BAD_REQUEST, Json(serde_json::json!({
+            "error": "invalid_request",
+            "error_description": "redirect_uris is required and must not be empty"
+        }))).into_response();
+    }
+
+    // Generate client credentials
+    let client_id = Uuid::new_v4().to_string();
+    let client_secret = generate_client_secret();
+    let client_name = request
+        .client_name
+        .unwrap_or_else(|| "MCP Client".to_string());
+    let issued_at = chrono::Utc::now().timestamp();
+    let expires_at = chrono::Utc::now() + chrono::Duration::days(90);
+
+    // Store client in database
+    let query_result = sqlx::query!(
+        r#"
+        INSERT INTO mcp_clients (client_id, client_secret, client_name, redirect_uris, client_secret_expires_at)
+        VALUES ($1, $2, $3, $4, $5)
+        "#,
+        client_id,
+        client_secret,
+        client_name,
+        &request.redirect_uris,
+        expires_at
+    )
+    .execute(&state.pool)
+    .await;
+
+    match query_result {
+        Ok(_) => {
+            let response = ClientRegistrationResponse {
+                client_id: client_id.clone(),
+                client_secret,
+                client_name,
+                redirect_uris: request.redirect_uris,
+                scope: "mcp".to_string(),
+                client_id_issued_at: issued_at,
+                client_secret_expires_at: expires_at.timestamp(),
+            };
+            (StatusCode::CREATED, Json(response)).into_response()
+        }
+        Err(e) => {
+            error!("Failed to register client: {}", e);
+            (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Json(serde_json::json!({
+                    "error": "server_error",
+                    "error_description": "Failed to register client"
+                })),
+            )
+                .into_response()
+        }
+    }
+}
+```
+
+Let's test our registration endpoint to make sure it's working correctly.
+
+<CaptionedImage 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-client-registration-endpoint-success.png" 
+  alt="MCP inspector client registration endpoint success"
+  caption="MCP inspector client registration endpoint success"
+/>
+
+The registration endpoint is working. Now let's implement the authorization endpoint.
+
+### Setting Up the Authorization Endpoint
+
+The authorization endpoint shows the user a consent screen with the requested scopes. When the user clicks "Allow," the server does three things:
+- Generates an authorization code.
+- Saves the code to the database.
+- Redirects the user back to the client with the code.
+Finally, the client exchanges this authorization code for an access token and a refresh token.
+
+> Note: In a real-world app, you would require users to be logged in before they see the consent screen, the `authorize_get` and `authorized_post` routes must be protected by your applications authentication mechanism i.e. a middleware.
+>
+
+> For simplicity in this tutorial, we're skipping that login step. We'll simply use the `client_id` as the user identifier to keep things simple
+
+For the frontend, we'll use the template engine [Askama](https://github.com/askama-rs/askama) to render the consent UI. We've already created an HTML template that you can find in the [repository](https://github.com/shuttle-hq/shuttle-examples/tree/main/mcp/mcp-sse-oauth/templates). Using the `askama` crate, we can create a struct for template rendering and then render the template using the `render` method.
+
+```rust
+#[derive(Template)]
+#[template(path = "authorize.html")]
+struct AuthorizeTemplate {
+    client_id: String,
+    client_name: String,
+    redirect_uri: String,
+    scope: String,
+    scopes: Vec<String>,
+    code_challenge: String,
+    code_challenge_method: String,
+    state: String,
+}
+```
+
+We need to use the derive macro `#[derive(Template)]` to register the template and the `#[template(path = "authorize.html")]` attribute to specify the template file path.
+
+After that, we can send the rendered template as an HTML response using the `axum::response::Html` type.
+
+```rust
+pub async fn authorize_get(
+    Query(params): Query<AuthorizeRequest>,
+    State(state): State<Arc<AppState>>,
+) -> impl IntoResponse {
+    // Validate required parameters
+    if params.response_type != "code" {
+        return (
+            StatusCode::BAD_REQUEST,
+            Html("Unsupported response type".to_string()),
+        )
+            .into_response();
+    }
+
+    // Look up client in database
+    let client_result = sqlx::query!(
+        "SELECT client_name FROM mcp_clients WHERE client_id = $1",
+        params.client_id
+    )
+    .fetch_optional(&state.pool)
+    .await;
+
+    let client = match client_result {
+        Ok(Some(client)) => client,
+        Ok(None) => {
+            return (StatusCode::BAD_REQUEST, Html("Invalid client".to_string())).into_response()
+        }
+        Err(e) => {
+            error!("Database error: {}", e);
+            return (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Html("Internal server error".to_string()),
+            )
+                .into_response();
+        }
+    };
+
+    let scope = params.scope.unwrap_or_else(|| "profile email".to_string());
+    let scopes: Vec<String> = scope.split_whitespace().map(|s| s.to_string()).collect();
+
+    let template = AuthorizeTemplate {
+        client_id: params.client_id,
+        client_name: client.client_name,
+        redirect_uri: params.redirect_uri,
+        scope: scope.clone(),
+        scopes,
+        code_challenge: params.code_challenge,
+        code_challenge_method: params.code_challenge_method,
+        state: params.state.unwrap_or_default(),
+    };
+
+    match template.render() {
+        Ok(html) => Html(html).into_response(),
+        Err(e) => {
+            error!("Template render error: {}", e);
+            (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Html("Template error".to_string()),
+            )
+                .into_response()
+        }
+    }
+}
+```
+
+Next, let's handle the authorization click. When a user approves the request, our server will:
+- Generate an **authorization code** and save it to the database.
+- Redirect the user back to the client using the provided `redirect_uri`.
+
+```rust
+pub async fn authorize_post(
+    State(state): State<Arc<AppState>>,
+    Form(form): Form<AuthorizeForm>,
+) -> impl IntoResponse {
+    if form.action == "deny" {
+        let mut redirect_url = format!("{}?error=access_denied", form.redirect_uri);
+        if let Some(state) = form.state {
+            redirect_url.push_str(&format!("&state={state}"));
+        }
+        return Redirect::to(&redirect_url).into_response();
+    }
+
+    // Generate authorization code
+    let auth_code = generate_authorization_code();
+    let expires_at = Utc::now() + Duration::minutes(10); // 10 minute expiration
+
+    // Store authorization code in database
+    let store_result = sqlx::query!(
+        r#"
+        INSERT INTO authorization_codes (code, client_id, redirect_uri, code_challenge, expires_at)
+        VALUES ($1, $2, $3, $4, $5)
+        "#,
+        auth_code,
+        form.client_id,
+        form.redirect_uri,
+        form.code_challenge,
+        expires_at
+    )
+    .execute(&state.pool)
+    .await;
+
+    match store_result {
+        Ok(_) => {
+            let mut redirect_url = format!("{}?code={}", form.redirect_uri, auth_code);
+            if let Some(state) = form.state {
+                redirect_url.push_str(&format!("&state={state}"));
+            }
+            Redirect::to(&redirect_url).into_response()
+        }
+        Err(e) => {
+            error!("Failed to store authorization code: {}", e);
+            let mut redirect_url = format!("{}?error=server_error", form.redirect_uri);
+            if let Some(state) = form.state {
+                redirect_url.push_str(&format!("&state={state}"));
+            }
+            Redirect::to(&redirect_url).into_response()
+        }
+    }
+}
+```
+
+Let's test our authorization endpoint with the MCP inspector:
+
+<CaptionedImage 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-authorization-endpoint-success.png" 
+  alt="MCP inspector authorization endpoint success"
+  caption="MCP inspector authorization endpoint success"
+/>
+
+The inspector displays the backend authorization URL we just created, which you can open in a browser to see the consent UI.
+
+<CaptionedImage 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/authorization-endpoint-consent-screen.png" 
+  alt="Authorization endpoint consent screen"
+  caption="Authorization endpoint consent screen"
+/>
+
+Click "Authorize"
+
+<CaptionedImage 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-displaying-authorization-code.png" 
+  alt="MCP inspector displaying authorization code"
+  caption="MCP inspector displaying authorization code"
+/>
+
+The inspector now **displays** the **authorization code** from the backend, which we'll use in the next step.
+
+<CaptionedImage 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-authorization-success.png" 
+  alt="MCP inspector authorization success"
+  caption="MCP inspector authorization success"
+/>
+
+All steps done for this phase, let's move on to the next step which is the token endpoint.
+
+### Implementing Token Exchange
+
+So far, the user has authorized the client and been redirected back with an authorization code.
+
+Next, the client must exchange that authorization code for an actual access token. It does this by making a POST request to our token endpoint.
+
+To be fully compliant with OAuth 2.0, this single endpoint needs to handle two different grant types:
+- Exchanging the initial authorization code for tokens.
+- Exchanging a refresh token for a new access token later on.
+
+To handle this, we'll build two main functions:
+- `handle_authorization_code_grant`: This function will validate the incoming authorization code and PKCE verifier from the database. If they are valid, it creates the first access token and refresh token.
+- `handle_refresh_token_grant`: This function validates an existing refresh token. If it's valid, it issues a new access token and implements token rotation. This is a security best practice where a new refresh token is also issued, invalidating the old one.
+
+```rust
+pub async fn token_post(
+    State(state): State<Arc<AppState>>,
+    Form(request): Form<TokenRequest>,
+) -> impl IntoResponse {
+    match request.grant_type.as_str() {
+        "authorization_code" => handle_authorization_code_grant(state, request)
+            .await
+            .into_response(),
+        "refresh_token" => handle_refresh_token_grant(state, request)
+            .await
+            .into_response(),
+        _ => {
+            let error = ErrorResponse {
+                error: "unsupported_grant_type".to_string(),
+                error_description: Some(
+                    "Only authorization_code and refresh_token grant types are supported"
+                        .to_string(),
+                ),
+            };
+            (StatusCode::BAD_REQUEST, Json(error)).into_response()
+        }
+    }
+}
+```
+
+See the [full implementation here](https://github.com/shuttle-hq/shuttle-examples/blob/main/mcp/mcp-sse-oauth/src/auth/token.rs).
+
+Let's test our token endpoint with the MCP inspector:
+
+<CaptionedImage 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-token-endpoint-success.png" 
+  alt="MCP inspector token endpoint success"
+  caption="MCP inspector token endpoint success"
+/>
+
+Perfect! All steps done for the OAuth 2.0 authentication, and we're ready to move on to the next step which is creating a middleware to protect the MCP endpoint.
+
+### Implementing JWT Authentication Middleware
+
+To secure our MCP service, we need to validate the JWT on every request made by a client. We'll use a middleware to handle this, ensuring only authenticated clients can access our MCP tools:
+
+### JWT Claims Structure
+
+The JWT we generated earlier contains the `client_id`. By decoding this token on every incoming request, we can extract the `client_id` to identify which client is making the call.
+
+First, we'll define a struct that mirrors the **JWT claims** we generated at the token endpoint:
+
+```rust
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Claims {
+    pub sub: String,   // client_id
+    pub iat: i64,      // issued at
+    pub exp: i64,      // expires at
+    pub scope: String, // granted scopes
+}
+```
+
+### Token Validation Middleware
+
+The middleware extracts and validates JWT tokens from the Authorization header:
+
+```rust
+pub async fn validate_token_middleware(
+    State(state): State<Arc<AppState>>,
+    mut request: Request<Body>,
+    next: Next,
+) -> Response {
+    // Extract the access token from the Authorization header
+    let auth_header = request.headers().get("Authorization");
+    let token = match auth_header {
+        Some(header) => {
+            let header_str = match header.to_str() {
+                Ok(s) => s,
+                Err(_) => {
+                    error!("Invalid Authorization header encoding");
+                    return StatusCode::UNAUTHORIZED.into_response();
+                }
+            };
+
+            if let Some(stripped) = header_str.strip_prefix("Bearer ") {
+                stripped.to_string()
+            } else {
+                error!("Authorization header missing Bearer prefix");
+                return StatusCode::UNAUTHORIZED.into_response();
+            }
+        }
+        None => {
+            error!("Missing Authorization header");
+            return StatusCode::UNAUTHORIZED.into_response();
+        }
+    };
+
+    // Get JWT secret from configuration
+    let jwt_secret = state
+        .secrets
+        .get("JWT_SECRET")
+        .expect("JWT_SECRET secret not found");
+
+    // Validate JWT token
+    let key = DecodingKey::from_secret(jwt_secret.as_bytes());
+    let validation = Validation::default();
+
+    match decode::<Claims>(&token, &key, &validation) {
+        Ok(token_data) => {
+            // Check if token is expired (JWT validation already handles this, but being explicit)
+            let now = chrono::Utc::now().timestamp();
+            if token_data.claims.exp < now {
+                error!("Token has expired");
+                return StatusCode::UNAUTHORIZED.into_response();
+            }
+
+            // Verify the client still exists in database
+            let client_exists = sqlx::query!(
+                "SELECT client_id FROM mcp_clients WHERE client_id = $1",
+                token_data.claims.sub
+            )
+            .fetch_optional(&state.pool)
+            .await;
+
+            match client_exists {
+                Ok(Some(_)) => {
+                    // Add client_id to request extensions for downstream handlers
+                    request.extensions_mut().insert(token_data.claims.sub);
+                    next.run(request).await
+                }
+                Ok(None) => {
+                    error!("Client no longer exists: {}", token_data.claims.sub);
+                    StatusCode::UNAUTHORIZED.into_response()
+                }
+                Err(e) => {
+                    error!("Database error validating client: {}", e);
+                    StatusCode::INTERNAL_SERVER_ERROR.into_response()
+                }
+            }
+        }
+        Err(e) => {
+            error!("Token validation failed: {}", e);
+            StatusCode::UNAUTHORIZED.into_response()
+        }
+    }
+}
+```
+
+In the middleware, we extract the Bearer token and verify it's valid and not expired. Then we extract the `client_id` from it and verify the client exists in the database.
+
+```rust
+request.extensions_mut().insert(token_data.claims.sub);
+```
+
+The above code snippet is a crucial part of the middleware, we add the `client_id` to the [request extensions](https://docs.rs/axum/latest/axum/middleware/index.html#passing-state-from-middleware-to-handlers) so it can be used by the next handlers and MCP tools.
+
+### Defining the service struct
+
+We will define our entire service within a central `struct`. This approach allows us to implement the necessary `rmcp` traits and macros, which will contain all of our MCP logic like [tools](https://modelcontextprotocol.io/specification/2025-06-18/server/tools), [resources](https://modelcontextprotocol.io/specification/2025-06-18/server/resources), [prompts](https://modelcontextprotocol.io/specification/2025-06-18/server/prompts), etc.
+
+```rust
+use tokio::sync::Mutex;
+use std::sync::Arc;
+
+#[derive(Clone)]
+pub struct TodoService {
+    db_pool: Arc<PgPool>,
+    tool_router: ToolRouter<TodoService>,
+    client_id: Arc<Mutex<Option<String>>>,
+}
+```
+
+The `client_id` here is key because it will be used to identify the client that made the request in every tool call.
+
+### Server Handler Implementation
+
+Next, we'll implement the `ServerHandler` trait. This trait handles core protocol logic and ensures our server is compliant without having to manage the low-level details.
+It has many methods, but most of them are optional.
+
+To get our server running, we only need to implement the following:
+
+- `initialize`: Handles the initial setup when a client connects.
+- `get_info`: Provides essential metadata about our service.
+
+We'll ignore the other optional methods like `ping`, `list_prompts`, and `list_resources` for the time being.
+
+### Implementing `get_info`
+
+The `get_info` method is used to provide metadata about our MCP service, MCP clients will fetch this metadata and the AI model will understand what this MCP server is used for.
+
+```rust
+#[tool_handler]
+impl ServerHandler for TodoService {
+    fn get_info(&self) -> ServerInfo {
+        ServerInfo {
+            protocol_version: ProtocolVersion::V_2024_11_05,
+            capabilities: ServerCapabilities::builder()
+                .enable_prompts()
+                .enable_resources()
+                .enable_tools()
+                .build(),
+            server_info: Implementation::from_build_env(),
+            instructions: Some("This server provides todo management tools. You can create, read, update, and delete todos. Each todo has an id, title, and completion status.".to_string()),
+        }
+    }
+}
+```
+
+### Implementing `initialize` method
+
+The `initialize` method executes on initial MCP client-server connection. Running post-JWT middleware, it extracts the `client_id` from middleware extensions and caches it for subsequent operations.
+
+```rust
+#[tool_handler]
+impl ServerHandler for TodoService {
+    ...
+
+    async fn initialize(
+        &self,
+        _request: InitializeRequestParam,
+        context: RequestContext<RoleServer>,
+    ) -> Result<InitializeResult, McpError> {
+        if let Some(http_request_part) = context.extensions.get::<axum::http::request::Parts>() {
+            if let Some(client_id) = http_request_part.extensions.get::<String>() {
+                let mut writer = self.client_id.lock().await;
+                *writer = Some(client_id.clone());
+            } else {
+                tracing::warn!("No client_id found in HTTP request extensions");
+            }
+        }
+        Ok(self.get_info())
+    }
+}
+```
+
+Authentication for persistent SSE connections works differently than for standard HTTP requests. We validate the JWT only once when the connection is first established via the `initialize` method. All subsequent messages on that same connection are then considered authenticated
+
+The `initialize` method's signature takes `&self` (an immutable reference), not `&mut self`. This presents a challenge: we're not allowed to directly change our service's state (like setting the `client_id`) from within the method.
+
+To work around this restriction, we use a pattern called interior mutability. We wrap our `client_id` in two special types that allow for safe modification even from an immutable context:
+
+- `Arc`: Allows the data to be safely owned and shared across multiple asynchronous tasks.
+- `tokio::sync::Mutex`: Acts as a lock that ensures only one task can access and change the data at a time.
+
+This combination lets us safely mutate the value from within a method that only has a `&self`
+
+### Building the MCP Todo Service
+
+Let's do a quick recap of how the connection is being handled so far:
+
+- The MCP client requests OAuth metadata.
+- User clicks the login button presented by the MCP client.
+- User is redirected to the authorization endpoint.
+- User **Authorizes** the MCP client.
+- Server redirects the user back to the MCP client with the authorization code.
+- MCP client exchanges the authorization code for the access token and refresh token.
+- MCP client establishes a persistent connection to the MCP endpoint (i.e `/mcp/sse`) using the access token as a Bearer token in the `Authorization` header.
+- The JWT middleware validates the access token and extract the `client_id` from it.
+- The `TodoService` has now access to the `client_id` and can use it to perform actions on behalf of the user.
+
+### Implementing the MCP tools
+
+MCP tools work like regular functions: they have names, input parameters, and outputs. When AI agents call these tools, they pass the required parameters and receive results back through the JSON-RPC 2.0 protocol.
+The `rmcp` crate simplifies schema generation by using `schemars` to create JSON-RPC 2.0 compatible schemas automatically. With the derive macro, we can implement the `JsonSchema` trait and generate tool schemas without manual work.
+For our todo creation tool, we need just a `title` field and an optional `completed` field. The tool returns a success message confirming the operation.
+
+```rust
+#[derive(Debug, Serialize, Deserialize, rmcp::schemars::JsonSchema)]
+pub struct CreateTodoInput {
+    pub title: String,
+    pub completed: Option<bool>,
+}
+```
+
+### Implementing MCP Tools
+
+The `rmcp` library provides powerful macros to automatically generate MCP tools. The `#[tool_router]` macro creates a router for all our tools, while `#[tool]` generates individual tool handlers:
+
+```rust
+#[tool_router]
+impl TodoService {
+    pub fn new(db_pool: Arc<PgPool>) -> Self {
+        Self {
+            db_pool,
+            tool_router: Self::tool_router(),
+            client_id: Arc::new(tokio::sync::Mutex::new(None)),
+        }
+    }
+
+    #[tool(description = "Create a new todo item")]
+    async fn create_todo(
+        &self,
+        Parameters(input): Parameters<CreateTodoInput>,
+    ) -> Result<CallToolResult, McpError> {
+        // Extract client_id for user-specific data operations
+        let client_id = {
+            let reader = self.client_id.lock().await;
+            reader.clone().ok_or_else(|| {
+                McpError::internal_error("Client not authenticated".to_string(), None)
+            })?
+        };
+
+        let request = CreateTodoRequest {
+            title: input.title,
+            completed: input.completed,
+        };
+
+        // Pass client_id to database operations for user isolation
+        match db::create_todo(&self.db_pool, request, &client_id).await {
+            Ok(todo) => {
+                let todo_json = serde_json::to_string_pretty(&todo).map_err(|e| {
+                    McpError::internal_error(format!("Serialization error: {e}"), None)
+                })?;
+                Ok(CallToolResult::success(vec![Content::text(format!(
+                    "Todo created successfully:\\n{todo_json}"
+                ))]))
+            }
+            Err(e) => Err(McpError::internal_error(
+                format!("Failed to create todo: {e}"),
+                None,
+            )),
+        }
+    }
+
+    // Other tools: get_todo, list_todos, update_todo, delete_todo...
+}
+```
+
+The database query for creating a todo item:
+
+```rust
+pub async fn create_todo(
+    pool: &PgPool,
+    request: CreateTodoRequest,
+    client_id: &str,
+) -> Result<Todo, sqlx::Error> {
+    let row = sqlx::query!(
+        r#"
+        INSERT INTO todos (title, completed, client_id)
+        VALUES ($1, COALESCE($2, FALSE), $3)
+        RETURNING id, title, completed
+        "#,
+        request.title,
+        request.completed,
+        client_id
+    )
+    .fetch_one(pool)
+    .await?;
+
+    Ok(Todo {
+        id: row.id,
+        title: row.title,
+        completed: row.completed,
+    })
+}
+```
+
+## Integrating the SSE Server
+
+So far, we've defined our `MCP` service `struct`, implemented the `ServerHandler` trait, and used the `#[tool_router]` macro to register our tools. Now, we need to integrate this service into an SSE server so it can be accessed from a URL.
+
+```rust
+pub async fn init(
+    addr: SocketAddr,
+    pool: PgPool,
+    secrets: shuttle_runtime::SecretStore,
+) -> Result<(), shuttle_runtime::Error> {
+    // ---- Other boilerplate code ----
+
+    // Create SSE server configuration for MCP
+    let sse_config = SseServerConfig {
+        bind: addr,
+        sse_path: "/mcp/sse".to_string(),
+        post_path: "/mcp/message".to_string(),
+        ct: CancellationToken::new(),
+        sse_keep_alive: Some(Duration::from_secs(15)),
+    };
+
+    // Create SSE server
+    let (sse_server, sse_router) = SseServer::new(sse_config);
+
+    // Create protected SSE routes (require authorization)
+    let protected_sse_router = sse_router.layer(middleware::from_fn_with_state(
+        app_state.clone(),
+        // Applying the middleware for authentication
+        validate_token_middleware,
+    ));
+
+    // Create HTTP router with auth routes (non-protected) and protected SSE router
+    let app = Router::new()
+        .merge(auth_router)
+        .with_state(app_state.clone())
+        .merge(protected_sse_router)
+        .layer(cors_layer);
+
+    // Add the `TodoService` we created to the SSE server
+    sse_server.with_service(move || TodoService::new(Arc::new(app_state.pool.clone())));
+
+    // ---- Other boilerplate code to start the server ----
+
+    Ok(())
+}
+```
+
+The middleware is applied to make sure only authenticated clients can access the MCP route:
+
+```rust
+let protected_sse_router = sse_router.layer(middleware::from_fn_with_state(
+    app_state.clone(),
+    // Applying the middleware for authentication
+    validate_token_middleware,
+));
+
+```
+
+We also used Axum's `with_service` method to attach our `TodoService` to the route. This makes our service available to any client that connects to the SSE server.
+
+```rust
+sse_server.with_service(move || TodoService::new(Arc::new(app_state.pool.clone())));
+```
+
+## Deployment and Testing
+
+Deploy to Shuttle with a single command:
+
+```bash
+shuttle deploy
+```
+
+### Adding to MCP Clients
+
+Follow the instructions below to connect your specific MCP client to the server:
+
+**Cursor Configuration:**
+
+```json
+{
+  "mcpServers": {
+    "Todo List": {
+      "url": "https://your-server.shuttle.app/mcp/sse"
+    }
+  }
+}
+```
+
+In Cursor, navigate to the Tools page within the Settings menu. Then click the **"Login"** button to authenticate with the MCP server.
+
+<CaptionedImage 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-server-requires-login.png" 
+  alt="MCP server requires login"
+  caption="MCP server requires login"
+/>
+
+This will redirect you to the authorization page that we created.
+
+<CaptionedImage 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-server-authorization-page.png" 
+  alt="MCP server authorization page"
+  caption="MCP server authorization page"
+/>
+
+After authorizing the client, you'll be redirected to Cursor, which will now have access to the MCP tools on your account.
+
+<CaptionedImage 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-server-connected.png" 
+  alt="MCP server connected"
+  caption="MCP server connected"
+/>
+
+Perfect! 🎉 Our MCP server is now hosted and ready to use by Cursor. The same process applies to any other MCP client, such as Claude Code or Windsurf.
+
+## Conclusion
+
+We've successfully built a production-ready MCP server with the SSE transport type that combines the power of Server-Sent Events with robust OAuth 2 authentication. This project demonstrates how to create secure, real-time AI tool access that goes far beyond a simple local setup.
+
+Our implementation delivers a complete OAuth 2 flow to secure all client interactions. The SSE-based protocol enables instant tool communication, while the authorization layer ensures that actions are performed securely on behalf of specific users. The entire system, backed by **PostgreSQL**, deploys seamlessly to **Shuttle**, providing a solid foundation for building any real-world MCP service.
+
+Pushing future updates is as simple as running `shuttle deploy`, and you can easily integrate this command into a [CI/CD pipeline](https://docs.shuttle.dev/integrations/ci-cd) to fully automate the process.
+
+The combination of Rust's performance, Shuttle's deployment simplicity, and MCP's standardized protocol creates a compelling stack for modern AI tooling infrastructure that scales from prototype to production without compromise.
+
+## Try it Yourself
+
+Ready to build your own SSE MCP server? Run the following command to clone the complete project and deploy with one command:
+
+```bash
+# Clone the project
+shuttle init --from shuttle-hq/shuttle-examples --subfolder mcp/mcp-sse-oauth
+
+# Navigate to the project directory
+cd mcp-sse-oauth
+
+# Deploy the project
+shuttle deploy
+```
+
+Read the [Shuttle documentation](https://docs.shuttle.dev) for more information. Happy coding!
