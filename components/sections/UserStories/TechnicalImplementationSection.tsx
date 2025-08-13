@@ -82,12 +82,15 @@ export const TechnicalImplementationSection = () => {
             {accordionItems.map((item, idx) => (
               <li
                 key={item.title}
-                className={`w-full px-2 py-4 flex flex-col sm:flex-row items-start sm:items-center gap-2 border-b border-white/20 ${idx === accordionItems.length - 1 ? "" : ""}`}
+                className={`w-full py-4 flex flex-col sm:flex-row items-start sm:items-center gap-2 border-b border-white/20 ${idx === accordionItems.length - 1 ? "" : ""}`}
               >
-                <span className="text-neutral-200 text-2xl font-bold">
+                <span className="text-xl bg-gradient-3 bg-clip-text text-transparent mr-4">
+                  {String(idx + 1).padStart(2, "0")}
+                </span>
+                <span className="text-neutral-200 text-xl font-bold">
                   {item.title}
                 </span>
-                <span className="text-zinc-400 text-xl font-normal">
+                <span className="text-neutral-200 text-xl font-normal">
                   {item.content}
                 </span>
               </li>
