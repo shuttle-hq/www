@@ -98,7 +98,7 @@ Now that we have a solid understanding of MCP servers and OAuth integration, we'
 
 After building and testing the MCP server, we'll then deploy it to the cloud using **Shuttle** with just a single command.
 
-You can find the complete code for this project in the [GitHub repository](https://github.com/dcodesdev/mcp-sse-oauth-shuttle).
+You can find the complete code for this project in the [GitHub repository](https://github.com/shuttle-hq/shuttle-examples/tree/main/mcp/mcp-sse-oauth).
 
 ### Prerequisites
 
@@ -107,7 +107,7 @@ To follow along, you'll need:
 • Basic OAuth concepts (auth codes, tokens, etc.).
 • Experience with PostgreSQL and SQLx.
 
-This tutorial focuses on key patterns. For the complete, unabridged code, please refer to the accompanying [repository](https://github.com/dcodesdev/mcp-sse-oauth-shuttle).
+This tutorial focuses on key patterns. For the complete, unabridged code, please refer to the accompanying [repository](https://github.com/shuttle-hq/shuttle-examples/tree/main/mcp/mcp-sse-oauth).
 
 ### Using the MCP Inspector
 
@@ -192,7 +192,7 @@ async fn main(
 
 We use the `shuttle_shared_db::Postgres` macro to provision a PostgreSQL database in production and `local_uri` to connect to a local database for development purposes only. The `shuttle_runtime::Secrets` macro is used to access secrets from the `Secrets.toml` file for development as well as deployment, which we'll create in the next step.
 
-The `init()` function contains all the `rmcp` boilerplate required to spin up the SSE transport MCP server. You can view the [complete implementation here](https://github.com/dcodesdev/mcp-sse-oauth-shuttle/blob/main/src/init.rs).
+The `init()` function contains all the `rmcp` boilerplate required to spin up the SSE transport MCP server. You can view the [complete implementation here](https://github.com/shuttle-hq/shuttle-examples/tree/main/mcp/mcp-sse-oauth/blob/main/src/init.rs).
 
 ### Creating the Secrets File
 
@@ -462,7 +462,7 @@ Finally, the client exchanges this authorization code for an access token and a 
 For simplicity in this tutorial, we're skipping that login step. We'll simply use the `client_id` as the user identifier to keep things simple
 > 
 
-For the frontend, we'll use the template engine [Askama](https://github.com/askama-rs/askama) to render the consent UI. We've already created an HTML template that you can find in the [repository](https://github.com/dcodesdev/mcp-sse-oauth-shuttle/tree/main/templates). Using the `askama` crate, we can create a struct for template rendering and then render the template using the `render` method.
+For the frontend, we'll use the template engine [Askama](https://github.com/askama-rs/askama) to render the consent UI. We've already created an HTML template that you can find in the [repository](https://github.com/shuttle-hq/shuttle-examples/tree/main/mcp/mcp-sse-oauth/tree/main/templates). Using the `askama` crate, we can create a struct for template rendering and then render the template using the `render` method.
 
 ```rust
 #[derive(Template)]
@@ -678,7 +678,7 @@ pub async fn token_post(
 }
 ```
 
-See the [full implementation here](https://github.com/dcodesdev/mcp-sse-oauth-shuttle/blob/main/src/auth/token.rs).
+See the [full implementation here](https://github.com/shuttle-hq/shuttle-examples/tree/main/mcp/mcp-sse-oauth/blob/main/src/auth/token.rs).
 
 ### Implementing JWT Authentication Middleware
 
@@ -1120,5 +1120,5 @@ The combination of Rust's performance, Shuttle's deployment simplicity, and MCP'
 Ready to build your own SSE MCP server? We've created a starter template that gets you up and running in minutes. The template is a simple counter app with boilerplate code ready to deploy immediately:
 
 ```bash
-shuttle init --from shuttle-hq/shuttle-examples --subfolder mcp/mcp-sse
+shuttle init --from shuttle-hq/shuttle-examples --subfolder mcp/mcp-sse-oauth
 ```
