@@ -42,11 +42,9 @@ const accordionItems = [
 export const TechnicalImplementationSection = () => {
   return (
     <div className="w-full flex flex-col justify-start items-start gap-6">
-      <button className="self-stretch flex items-center gap-3 rounded-xl transition text-left">
-        <span className="text-neutral-200 text-[40px] font-bold font-gradual leading-[48px] flex-1">
-          Technical Implementation
-        </span>
-      </button>
+      <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
+        Technical Implementation
+      </h2>
       <div className="w-full flex flex-col justify-start items-start gap-6">
         <p className="self-stretch justify-start text-zinc-400 text-xl font-normal">
           Unwritten leverages Shuttle&apos;s ecosystem for their data processing

@@ -345,9 +345,7 @@ export default function Unwritten() {
                         <span className="text-text-secondary text-xl font-normal">
                           Clients receive dedicated Shuttle instances, with
                           plans for isolated cloud deployments to meet strict
-                          security requirements. &quot;Shuttle allows us to
-                          focus on what we do best&quot; With Shuttle, they can
-                          deploy production-ready systems in minutes.
+                          security requirements.
                         </span>
                       </div>
                     </div>
@@ -365,12 +363,8 @@ export default function Unwritten() {
           </div>
 
           <UserQuote className="w-full max-w-[984px]">
-            <span className="flex flex-col gap-10 text-neutral-200 text-2xl font-normal">
-              &quot;Shuttle allows us to focus on what we do best&quot;
-              summarizes the team&apos;s experience.
-              <span className="text-neutral-200 text-2xl font-normal">
-                Phillip, CRO & CTO Unwritten
-              </span>
+            <span className="text-neutral-200 text-2xl font-normal">
+              &quot;Shuttle allows us to focus on what we do best&quot; - Unwritten team
             </span>
           </UserQuote>
 
