@@ -63,7 +63,7 @@ During the initial connection setup, the MCP client first discovers the authoriz
 The first time an MCP server is added to an MCP client, the server cannot be used until the user authenticates with it, here is an example of how the Notion MCP server looks in Cursor:
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth/notion-mcp-server-in-cursor.png" 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/notion-mcp-server-in-cursor.png" 
   alt="Notion MCP server in Cursor"
   caption="Notion MCP server in Cursor"
 />
@@ -73,7 +73,7 @@ When the user clicks on the **Login** button through their MCP client, the MCP c
 The user can then authenticate using their existing account and approve the authorization request. After successful authentication, the server redirects the user back to the MCP client with an **authorization code** in the URL.
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth/notion-authorize-page.png" 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/notion-authorize-page.png" 
   alt="Notion authorize page"
   caption="Notion authorize page"
 />
@@ -118,7 +118,7 @@ npx @modelcontextprotocol/inspector
 ```
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth/mcp-inspector.png" 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector.png" 
   alt="MCP inspector"
   caption="MCP inspector"
 />
@@ -127,7 +127,7 @@ npx @modelcontextprotocol/inspector
 This will automatically open the inspector in your default browser:
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth/mcp-inspector-auth-settings.png" 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-auth-settings.png" 
   alt="MCP inspector auth settings"
   caption="MCP inspector auth settings"
 />
@@ -136,7 +136,7 @@ This will automatically open the inspector in your default browser:
 We'll use the MCP inspector to test our OAuth flow at each stage of the tutorial
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth/mcp-inspector-auth-settings-open.png" 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-auth-settings-open.png" 
   alt="MCP inspector auth settings open"
   caption="MCP inspector authentication menu"
 />
@@ -145,7 +145,7 @@ We'll use the MCP inspector to test our OAuth flow at each stage of the tutorial
 Click the "Open Auth Settings" button which will open the auth settings page that tests the OAuth steps.
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth/mcp-inspector-auth-settings-open-auth-settings.png" 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-auth-settings-open-auth-settings.png" 
   alt="MCP inspector auth settings"
   caption="MCP inspector auth settings"
 />
@@ -216,7 +216,7 @@ JWT_SECRET = "sQGnE/aD76G2TAJA6HqJk9shkmYwsmwZ3b+sJlQWBVE=" # Replace with your 
 You can get your production URL by navigating to the [Shuttle Console](https://console.shuttle.dev/) and bootstrap a new project. The URL will be displayed in the console.
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth/shuttle-console-url.png" 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/shuttle-console-url.png" 
   alt="Shuttle console project URL"
   caption="Shuttle console project URL"
 />
@@ -246,7 +246,7 @@ cargo watch -x "shuttle run --secrets Secrets.dev.toml"
 This automatically restarts the server when you make code changes. You'll need to install [cargo-watch](https://crates.io/crates/cargo-watch) first by running `cargo install cargo-watch --locked`.
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth/development-server-running.png" 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/development-server-running.png" 
   alt="Development server running"
   caption="Development server running"
 />
@@ -256,7 +256,7 @@ Excellent! Our MCP server is now running on `http://127.0.0.1:8000` and we can t
 Update your MCP inspector to use the correct MCP server URL, in our case it's `http://127.0.0.1:8000/mcp/sse`:
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth/mcp-inspector-server-url.png" 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-server-url.png" 
   alt="MCP inspector server URL"
   caption="MCP inspector server URL"
 />
@@ -340,7 +340,7 @@ additional_fields.insert(
 Let's test it with the MCP inspector:
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth/mcp-inspector-metadata-endpoint.png" 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-metadata-endpoint.png" 
   alt="MCP inspector metadata endpoint"
   caption="MCP inspector metadata endpoint"
 />
@@ -442,7 +442,7 @@ pub async fn client_registration(
 Let's test our registration endpoint to make sure it's working correctly.
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth/mcp-inspector-client-registration-endpoint.png" 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-client-registration-endpoint.png" 
   alt="MCP inspector client registration endpoint"
   caption="MCP inspector client registration endpoint"
 />
@@ -607,7 +607,7 @@ pub async fn authorize_post(
 Let's test our authorization endpoint with the MCP inspector:
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth/mcp-inspector-authorization-endpoint.png" 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-authorization-endpoint.png" 
   alt="MCP inspector authorization endpoint"
   caption="MCP inspector authorization endpoint"
 />
@@ -615,7 +615,7 @@ Let's test our authorization endpoint with the MCP inspector:
 The inspector displays the backend authorization URL we just created, which you can open in a browser to see the consent UI.
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth/mcp-inspector-authorization-endpoint-consent-screen.png" 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-authorization-endpoint-consent-screen.png" 
   alt="MCP inspector authorization endpoint consent screen"
   caption="MCP inspector authorization endpoint consent screen"
 />
@@ -623,7 +623,7 @@ The inspector displays the backend authorization URL we just created, which you 
 Click "Authorize"
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth/mcp-inspector-authorization-endpoint-display-authorization-code.png" 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-authorization-endpoint-display-authorization-code.png" 
   alt="MCP inspector authorization endpoint display authorization code"
   caption="MCP inspector authorization endpoint display authorization code"
 />
@@ -631,7 +631,7 @@ Click "Authorize"
 The inspector now **displays** the **authorization code** from the backend, which we'll use in the next step.
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth/mcp-inspector-authorization-success.png" 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-authorization-success.png" 
   alt="MCP inspector authorization success"
   caption="MCP inspector authorization success"
 />
@@ -1082,7 +1082,7 @@ Follow the instructions below to connect your specific MCP client to the server:
 In Cursor, navigate to the Tools page within the Settings menu. Then click the **"Login"** button to authenticate with the MCP server.
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth/mcp-server-requires-login.png" 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-server-requires-login.png" 
   alt="MCP server requires login"
   caption="MCP server requires login"
 />
@@ -1090,7 +1090,7 @@ In Cursor, navigate to the Tools page within the Settings menu. Then click the *
 This will redirect you to the authorization page that we created.
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth/mcp-server-authorization-page.png" 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-server-authorization-page.png" 
   alt="MCP server authorization page"
   caption="MCP server authorization page"
 />
@@ -1098,7 +1098,7 @@ This will redirect you to the authorization page that we created.
 After authorizing the client, you'll be redirected to Cursor, which will now have access to the MCP tools on your account.
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth/mcp-server-connected.png" 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-server-connected.png" 
   alt="MCP server connected"
   caption="MCP server connected"
 />
