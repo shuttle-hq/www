@@ -180,14 +180,14 @@ export default function Unwritten() {
                     key={item.title}
                     className="self-stretch py-5 border-b border-white/30 inline-flex justify-start items-baseline gap-5"
                   >
-                    <div className="justify-start text-xl font-normal leading-loose tracking-tight bg-gradient-3 bg-clip-text text-transparent">
+                    <div className="justify-start text-xl font-normal leading-[32px] tracking-tight bg-gradient-3 bg-clip-text text-transparent">
                       {String(idx + 1).padStart(2, "0")}
                     </div>
                     <div className="flex-1 justify-start">
-                      <span className="text-neutral-200 text-xl font-bold leading-loose tracking-tight">
+                      <span className="text-neutral-200 text-xl font-bold leading-[32px] tracking-tight">
                         {item.title}
                       </span>
-                      <span className="text-neutral-200 text-xl font-normal leading-loose tracking-tight">
+                      <span className="text-neutral-200 text-xl font-normal leading-[32px] tracking-tight">
                         : {item.description}
                       </span>
                     </div>
