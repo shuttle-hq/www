@@ -301,9 +301,9 @@ export default function Unwritten() {
                         Accelerated Development Cycles
                       </h2>
                       <p className="self-stretch justify-start text-text-secondary text-xl font-normal">
-                        Clients receive dedicated Shuttle instances, with plans
-                        for isolated cloud deployments to meet strict security
-                        requirements.
+                        Fast-paced development with frequent pipeline
+                        improvements driven by weekly customer feedback, with
+                        reliable rollbacks.
                       </p>
                     </div>
                   </div>
@@ -345,7 +345,9 @@ export default function Unwritten() {
                         <span className="text-text-secondary text-xl font-normal">
                           Clients receive dedicated Shuttle instances, with
                           plans for isolated cloud deployments to meet strict
-                          security requirements.
+                          security requirements. &quot;Shuttle allows us to
+                          focus on what we do best&quot; With Shuttle, they can
+                          deploy production-ready systems in minutes.
                         </span>
                       </div>
                     </div>
@@ -363,10 +365,12 @@ export default function Unwritten() {
           </div>
 
           <UserQuote className="w-full max-w-[984px]">
-            <span className="text-neutral-200 text-2xl font-normal">
+            <span className="flex flex-col gap-10 text-neutral-200 text-2xl font-normal">
               &quot;Shuttle allows us to focus on what we do best&quot;
-              summarizes the team&apos;s experience.” - Phillip Marks, CRO & CTO
-              Unwritten
+              summarizes the team&apos;s experience.
+              <span className="text-neutral-200 text-2xl font-normal">
+                Phillip Marks, CRO & CTO Unwritten
+              </span>
             </span>
           </UserQuote>
 
