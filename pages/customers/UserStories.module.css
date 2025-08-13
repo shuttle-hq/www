@@ -18,3 +18,23 @@
   transform: translateX(10px);
   transition: transform 0.2s ease-in-out;
 }
+
+.bg-wide {
+  background: url(/images/user-stories/bg-wide.png) center no-repeat;
+  background-size: cover;
+}
+
+.bg-tile-1 {
+  background: url(/images/user-stories/bg-tile-1.png) center no-repeat;
+  background-size: cover;
+}
+
+.bg-tile-2 {
+  background: url(/images/user-stories/bg-tile-2.png) center no-repeat;
+  background-size: cover;
+}
+
+.bg-tile-3 {
+  background: url(/images/user-stories/bg-tile-3.png) center no-repeat;
+  background-size: cover;
+}
