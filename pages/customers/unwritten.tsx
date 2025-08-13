@@ -369,7 +369,7 @@ export default function Unwritten() {
               &quot;Shuttle allows us to focus on what we do best&quot;
               summarizes the team&apos;s experience.
               <span className="text-neutral-200 text-2xl font-normal">
-                Phillip Marks, CRO & CTO Unwritten
+                Phillip, CRO & CTO Unwritten
               </span>
             </span>
           </UserQuote>
@@ -402,7 +402,7 @@ export default function Unwritten() {
           </div>
           <div className="w-full max-w-[782px] mx-auto flex flex-col justify-start items-start gap-10">
             <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
-              Get Started with Shuttle
+              Unwritten&apos; Transformation
             </h2>
             <p className="self-stretch justify-start text-zinc-400 text-xl font-normal">
               Unwritten&apos;s success demonstrates how Shuttle enables
