@@ -1117,8 +1117,17 @@ The combination of Rust's performance, Shuttle's deployment simplicity, and MCP'
 
 ## Try Our SSE MCP Starter Template
 
-Ready to build your own SSE MCP server? We've created a starter template that gets you up and running in minutes. The template is a simple counter app with boilerplate code ready to deploy immediately:
+Ready to build your own SSE MCP server? Run the following command to clone the complete project and deploy with one command:
 
 ```bash
+# Clone the project
 shuttle init --from shuttle-hq/shuttle-examples --subfolder mcp/mcp-sse-oauth
+
+# Navigate to the project directory
+cd mcp-sse-oauth
+
+# Deploy the project
+shuttle deploy
 ```
+
+Read the [Shuttle documentation](https://docs.shuttle.dev) for more information. Happy coding!
