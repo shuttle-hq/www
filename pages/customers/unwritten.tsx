@@ -364,7 +364,8 @@ export default function Unwritten() {
 
           <UserQuote className="w-full max-w-[984px]">
             <span className="text-neutral-200 text-2xl font-normal">
-              &quot;Shuttle allows us to focus on what we do best&quot; - Unwritten team
+              &quot;Shuttle allows us to focus on what we do best&quot; -
+              Unwritten team
             </span>
           </UserQuote>
 
@@ -396,7 +397,7 @@ export default function Unwritten() {
           </div>
           <div className="w-full max-w-[782px] mx-auto flex flex-col justify-start items-start gap-10">
             <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
-              Unwritten&apos; Transformation
+              Unwritten&apos;s Transformation
             </h2>
             <p className="self-stretch justify-start text-zinc-400 text-xl font-normal">
               Unwritten&apos;s success demonstrates how Shuttle enables
