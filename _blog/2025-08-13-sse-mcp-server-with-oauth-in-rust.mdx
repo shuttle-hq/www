@@ -3,8 +3,8 @@ title: "How to Build and Deploy an SSE MCP Server with OAuth in Rust"
 description: "Build an SSE-based MCP server with OAuth 2 in Rust using rmcp and Axum and deploy to Shuttle with PostgreSQL/SQLx."
 author: dcodes 
 tags: [rust, mcp, sse, oauth, axum, shuttle, sqlx]
-thumb: sse-mcp-server-with-oauth.png
-cover: sse-mcp-server-with-oauth.png
+thumb: sse-mcp-server-with-oauth-in-rust/cover.png
+cover: sse-mcp-server-with-oauth-in-rust/cover.png
 date: '2025-08-13'
 ---
 
@@ -90,7 +90,7 @@ The MCP client with the use of the access token will now be able to connect to t
 
 ### Refreshing the Access Token
 
-The refresh token is used to renew the access token when it expires. The token endpoint must be designed to support both the refresh token ****grant type and the authorization code grant type, which we'll implement later in the tutorial
+The refresh token is used to renew the access token when it expires. The token endpoint must be designed to support both the refresh token grant type and the authorization code grant type, which we'll implement later in the tutorial.
 
 ## Building and Deploying an SSE MCP Server in Rust
 
@@ -103,9 +103,10 @@ You can find the complete code for this project in the [GitHub repository](https
 ### Prerequisites
 
 To follow along, you'll need:
-• Intermediate Rust familiarity (async/await, Axum, traits).
-• Basic OAuth concepts (auth codes, tokens, etc.).
-• Experience with PostgreSQL and SQLx.
+
+- Intermediate Rust familiarity (async/await, Axum, traits)
+- Basic OAuth concepts (auth codes, tokens, etc.)
+- Experience with PostgreSQL and SQLx
 
 This tutorial focuses on key patterns. For the complete, unabridged code, please refer to the accompanying [repository](https://github.com/shuttle-hq/shuttle-examples/tree/main/mcp/mcp-sse-oauth).
 
@@ -118,36 +119,36 @@ npx @modelcontextprotocol/inspector
 ```
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector.png" 
-  alt="MCP inspector"
-  caption="MCP inspector"
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-run.png" 
+  alt="Running the MCP inspector"
+  caption="Running the MCP inspector"
 />
 
 
 This will automatically open the inspector in your default browser:
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-auth-settings.png" 
-  alt="MCP inspector auth settings"
-  caption="MCP inspector auth settings"
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-dashboard.png" 
+  alt="MCP inspector dashboard"
+  caption="MCP inspector dashboard"
 />
 
 
 We'll use the MCP inspector to test our OAuth flow at each stage of the tutorial
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-auth-settings-open.png" 
-  alt="MCP inspector auth settings open"
-  caption="MCP inspector authentication menu"
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-open-auth-settings.png" 
+  alt="MCP inspector open Auth settings"
+  caption="MCP inspector open Auth settings"
 />
 
 
 Click the "Open Auth Settings" button which will open the auth settings page that tests the OAuth steps.
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-auth-settings-open-auth-settings.png" 
-  alt="MCP inspector auth settings"
-  caption="MCP inspector auth settings"
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-auth-flow.png" 
+  alt="MCP inspector auth flow"
+  caption="MCP inspector auth flow"
 />
 
 
@@ -162,7 +163,7 @@ rmcp = { version = "0.5", features = ["server", "transport-sse-server", "auth"] 
 
 The feature flags are self-explanatory: we need the `server` flag to build an MCP server (not a client), `transport-sse-server` for SSE transport functionality, and `auth` for OAuth server utilities.
 
-In our `main.rs` file, we have **Shuttle** boilerplate code that provisions a [PostgreSQL database](https://docs.shuttle.dev/resources/shuttle-shared-db) in production and runs our MCP server. We'll write the rest of the code in the `init.rs` file as the entry point for our backend server which will serve the authentication APIs and the MCP server endpoints.
+In our `main.rs` file, we have **Shuttle** boilerplate code that provisions a [PostgreSQL database](https://docs.shuttle.dev/resources/shuttle-shared-db) in production and implements the Shuttle [Service Trait](https://docs.rs/shuttle-service/0.56.0/shuttle_service/trait.Service.html) to get the socket address and run the MCP server, The `Service` trait ensures that the code will work in both development and production environments. We'll write the rest of the code in the `init.rs` file as the entry point for our backend server which will serve the authentication APIs and the MCP server endpoints.
 
 ```rust
 struct McpSseService {
@@ -192,7 +193,7 @@ async fn main(
 
 We use the `shuttle_shared_db::Postgres` macro to provision a PostgreSQL database in production and `local_uri` to connect to a local database for development purposes only. The `shuttle_runtime::Secrets` macro is used to access secrets from the `Secrets.toml` file for development as well as deployment, which we'll create in the next step.
 
-The `init()` function contains all the `rmcp` boilerplate required to spin up the SSE transport MCP server. You can view the [complete implementation here](https://github.com/shuttle-hq/shuttle-examples/tree/main/mcp/mcp-sse-oauth/blob/main/src/init.rs).
+The `init()` function contains all the `rmcp` boilerplate required to spin up the SSE transport MCP server. You can view the [complete implementation here](https://github.com/shuttle-hq/shuttle-examples/blob/main/mcp/mcp-sse-oauth/src/init.rs).
 
 ### Creating the Secrets File
 
@@ -246,9 +247,9 @@ cargo watch -x "shuttle run --secrets Secrets.dev.toml"
 This automatically restarts the server when you make code changes. You'll need to install [cargo-watch](https://crates.io/crates/cargo-watch) first by running `cargo install cargo-watch --locked`.
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth-in-rust/development-server-running.png" 
-  alt="Development server running"
-  caption="Development server running"
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/shuttle-development-server-running.png" 
+  alt="Shuttle Development server running"
+  caption="Shuttle Development server running"
 />
 
 Excellent! Our MCP server is now running on `http://127.0.0.1:8000` and we can test it using the MCP inspector.
@@ -340,9 +341,9 @@ additional_fields.insert(
 Let's test it with the MCP inspector:
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-metadata-endpoint.png" 
-  alt="MCP inspector metadata endpoint"
-  caption="MCP inspector metadata endpoint"
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-metadata-endpoint-success.png" 
+  alt="MCP inspector metadata endpoint success"
+  caption="MCP inspector metadata endpoint success"
 />
 
 Excellent! The metadata endpoint is working. Now let's implement the registration endpoint.
@@ -442,9 +443,9 @@ pub async fn client_registration(
 Let's test our registration endpoint to make sure it's working correctly.
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-client-registration-endpoint.png" 
-  alt="MCP inspector client registration endpoint"
-  caption="MCP inspector client registration endpoint"
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-client-registration-endpoint-success.png" 
+  alt="MCP inspector client registration endpoint success"
+  caption="MCP inspector client registration endpoint success"
 />
 
 The registration endpoint is working. Now let's implement the authorization endpoint.
@@ -458,11 +459,11 @@ The authorization endpoint shows the user a consent screen with the requested sc
 Finally, the client exchanges this authorization code for an access token and a refresh token.
 
 > Note: In a real-world app, you would require users to be logged in before they see the consent screen, the `authorize_get` and `authorized_post` routes must be protected by your applications authentication mechanism i.e. a middleware.
+>
 
-For simplicity in this tutorial, we're skipping that login step. We'll simply use the `client_id` as the user identifier to keep things simple
-> 
+> For simplicity in this tutorial, we're skipping that login step. We'll simply use the `client_id` as the user identifier to keep things simple
 
-For the frontend, we'll use the template engine [Askama](https://github.com/askama-rs/askama) to render the consent UI. We've already created an HTML template that you can find in the [repository](https://github.com/shuttle-hq/shuttle-examples/tree/main/mcp/mcp-sse-oauth/tree/main/templates). Using the `askama` crate, we can create a struct for template rendering and then render the template using the `render` method.
+For the frontend, we'll use the template engine [Askama](https://github.com/askama-rs/askama) to render the consent UI. We've already created an HTML template that you can find in the [repository](https://github.com/shuttle-hq/shuttle-examples/tree/main/mcp/mcp-sse-oauth/templates). Using the `askama` crate, we can create a struct for template rendering and then render the template using the `render` method.
 
 ```rust
 #[derive(Template)]
@@ -607,25 +608,25 @@ pub async fn authorize_post(
 Let's test our authorization endpoint with the MCP inspector:
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-authorization-endpoint.png" 
-  alt="MCP inspector authorization endpoint"
-  caption="MCP inspector authorization endpoint"
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-authorization-endpoint-success.png" 
+  alt="MCP inspector authorization endpoint success"
+  caption="MCP inspector authorization endpoint success"
 />
 
 The inspector displays the backend authorization URL we just created, which you can open in a browser to see the consent UI.
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-authorization-endpoint-consent-screen.png" 
-  alt="MCP inspector authorization endpoint consent screen"
-  caption="MCP inspector authorization endpoint consent screen"
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/authorization-endpoint-consent-screen.png" 
+  alt="Authorization endpoint consent screen"
+  caption="Authorization endpoint consent screen"
 />
 
 Click "Authorize"
 
 <CaptionedImage 
-  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-authorization-endpoint-display-authorization-code.png" 
-  alt="MCP inspector authorization endpoint display authorization code"
-  caption="MCP inspector authorization endpoint display authorization code"
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-displaying-authorization-code.png" 
+  alt="MCP inspector displaying authorization code"
+  caption="MCP inspector displaying authorization code"
 />
 
 The inspector now **displays** the **authorization code** from the backend, which we'll use in the next step.
@@ -678,7 +679,17 @@ pub async fn token_post(
 }
 ```
 
-See the [full implementation here](https://github.com/shuttle-hq/shuttle-examples/tree/main/mcp/mcp-sse-oauth/blob/main/src/auth/token.rs).
+See the [full implementation here](https://github.com/shuttle-hq/shuttle-examples/blob/main/mcp/mcp-sse-oauth/src/auth/token.rs).
+
+Let's test our token endpoint with the MCP inspector:
+
+<CaptionedImage 
+  src="/images/blog/sse-mcp-server-with-oauth-in-rust/mcp-inspector-token-endpoint-success.png" 
+  alt="MCP inspector token endpoint success"
+  caption="MCP inspector token endpoint success"
+/>
+
+Perfect! All steps done for the OAuth 2.0 authentication, and we're ready to move on to the next step which is creating a middleware to protect the MCP endpoint.
 
 ### Implementing JWT Authentication Middleware
 
@@ -815,9 +826,13 @@ The `client_id` here is key because it will be used to identify the client that 
 ### Server Handler Implementation
 
 Next, we'll implement the `ServerHandler` trait. This trait handles core protocol logic and ensures our server is compliant without having to manage the low-level details.
-It has many methods, but most of them are optional. To get our server running, we only need to implement the following:
-• `initialize`: Handles the initial setup when a client connects.
-• `get_info`: Provides essential metadata about our service.
+It has many methods, but most of them are optional.
+
+To get our server running, we only need to implement the following:
+
+- `initialize`: Handles the initial setup when a client connects.
+- `get_info`: Provides essential metadata about our service.
+
 We'll ignore the other optional methods like `ping`, `list_prompts`, and `list_resources` for the time being.
 
 ### Implementing `get_info`
@@ -871,14 +886,14 @@ impl ServerHandler for TodoService {
 
 Authentication for persistent SSE connections works differently than for standard HTTP requests. We validate the JWT only once when the connection is first established via the `initialize` method. All subsequent messages on that same connection are then considered authenticated
 
-> The `initialize` method's signature takes `&self` (an immutable reference), not `&mut self`. This presents a challenge: we're not allowed to directly change our service's state (like setting the `client_id`) from within the method.
+The `initialize` method's signature takes `&self` (an immutable reference), not `&mut self`. This presents a challenge: we're not allowed to directly change our service's state (like setting the `client_id`) from within the method.
 
 To work around this restriction, we use a pattern called interior mutability. We wrap our `client_id` in two special types that allow for safe modification even from an immutable context:
-• `Arc`: Allows the data to be safely owned and shared across multiple asynchronous tasks.
-• `tokio::sync::Mutex`: Acts as a lock that ensures only one task can access and change the data at a time.
+
+- `Arc`: Allows the data to be safely owned and shared across multiple asynchronous tasks.
+- `tokio::sync::Mutex`: Acts as a lock that ensures only one task can access and change the data at a time.
 
 This combination lets us safely mutate the value from within a method that only has a `&self`
-> 
 
 ### Building the MCP Todo Service
 
@@ -1115,7 +1130,7 @@ Pushing future updates is as simple as running `shuttle deploy`, and you can eas
 
 The combination of Rust's performance, Shuttle's deployment simplicity, and MCP's standardized protocol creates a compelling stack for modern AI tooling infrastructure that scales from prototype to production without compromise.
 
-## Try Our SSE MCP Starter Template
+## Try it Yourself
 
 Ready to build your own SSE MCP server? Run the following command to clone the complete project and deploy with one command:
 
