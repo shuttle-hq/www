@@ -100,6 +100,20 @@ export default function Unwritten() {
               </span>
             </div>
           </div>
+
+          <UserQuote className="w-full max-w-[984px]">
+            <div className="flex flex-col gap-10">
+              <span className="text-neutral-200 text-2xl font-normal">
+                &quot;What took days to weeks to set up with traditional
+                infrastructure now takes <em>minutes</em> with <em>Shuttle</em>.
+                It&apos;s like Vercel for backends.&quot;
+              </span>
+              <span className="text-neutral-200 text-2xl font-normal">
+                Phillip Marks, CRO & CTO Unwritten
+              </span>
+            </div>
+          </UserQuote>
+
           <div className="w-full max-w-[782px] mx-auto flex flex-col justify-start items-start gap-10">
             <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
               The Challenge: Infrastructure Complexity Blocking Core Development
@@ -202,19 +216,6 @@ export default function Unwritten() {
               rather than infrastructure concerns.
             </p>
           </div>
-
-          <UserQuote className="w-full max-w-[984px]">
-            <div className="flex flex-col gap-10">
-              <span className="text-neutral-200 text-2xl font-normal">
-                &quot;What took days to weeks to set up with traditional
-                infrastructure now takes <em>minutes</em> with <em>Shuttle</em>.
-                It&apos;s like Vercel for backends.&quot;
-              </span>
-              <span className="text-neutral-200 text-2xl font-normal">
-                Phillip Marks, CRO & CTO Unwritten
-              </span>
-            </div>
-          </UserQuote>
 
           <div className="w-full max-w-[782px] mx-auto flex flex-col justify-start items-start gap-10">
             <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
