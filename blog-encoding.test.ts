@@ -17,6 +17,7 @@ describe("Blog files encoding validation", () => {
       "\u201D": '"', // Right double quotation mark
       "\u2013": "-", // En dash
       "\u2026": "...", // Horizontal ellipsis
+      "\u00A0": " ", // Non-breaking space
     };
 
     files.forEach((filename) => {

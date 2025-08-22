@@ -67,7 +67,7 @@ So, I did it. I took the plunge and learned rust. I was apprehensive, because (a
 
 That more or less did away with any apprehension I felt about the compiler or the language itself. It almost felt like I'd made a deal with the compiler - "if you'll do what I say, make the changes I suggest, I promise I'll keep your feet safe from landmines and [footguns](https://matt-rickard.com/avoiding-footguns)". Coming from Python, it was just plain reassuring that the compiler wouldn't *let* me put code out into the world that was just going to throw an error at runtime. I mean, it's still gonna yell, but it's gonna yell *at me* and it's always gonna do it *before* I ship something, not halfway through a customer's once-a-night, business-critical reconciliation with our backend.
 
-That was **huge**. Even huger though might be the amount of just plain... *paranoia* or second-guessing code I could do away with. If you're a long-time, battle-seasoned Python programmer and you've ever had to deal with code that wants to deal with disparate remote systems (or even *one* remote system that grew -cough- *organically* vs. intentionally), I'll bet this looks familiar:
+That was **huge**. Even huger though might be the amount of just plain... *paranoia* or second-guessing code I could do away with. If you're a long-time, battle-seasoned Python programmer and you've ever had to deal with code that wants to deal with disparate remote systems (or even *one* remote system that grew -cough- *organically* vs. intentionally), I'll bet this looks familiar:
 
 ```python
 def convert(record):
