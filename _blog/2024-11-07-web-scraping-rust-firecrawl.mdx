@@ -8,7 +8,7 @@ cover: web-scraping-rust-firecrawl-thumb.png
 date: "2024-11-07T14:30:00"
 ---
 
-Building data aggregation pipelines can be tricky work. Having built some LLM-assisted services recently as well as a data scraping service, ironing out all of the edge cases can take a lot of time and effort (as well as selecting specifically what you want from the page!). In this article, we’ll check out Firecrawl - an API for scraping the web and getting back LLM-ready ingestion material - and how you can deploy it with Shuttle.
+Building data aggregation pipelines can be tricky work. Having built some LLM-assisted services recently as well as a data scraping service, ironing out all of the edge cases can take a lot of time and effort (as well as selecting specifically what you want from the page!). In this article, we'll check out Firecrawl - an API for scraping the web and getting back LLM-ready ingestion material - and how you can deploy it with Shuttle.
 
 Firecrawl can be immensely helpful for anyone looking to simplify their data pipeline. It is a self-hostable API that aims to make LLM-assisted website scraping data pipelines much simpler by allowing you to scrape websites then automatically convert it in a format that is LLM-ready. Website scraping, while not necessarily difficult, can often be a time-consuming and tricky task to get right. This is particularly relevant if the used data is part of an ingestion pipeline: for example, data aggregation services (or users who need to collect aggregate data) may use scraping for websites that do not have their own API.
 
@@ -33,7 +33,7 @@ To get started, you will need the following:
 - A Shuttle account (with `cargo-shuttle` installed)
 - The Rust programming language installed
 
-Once you’ve created your Firecrawl account, don’t forget to grab your API key! You will need it in a little bit.
+Once you've created your Firecrawl account, don't forget to grab your API key! You will need it in a little bit.
 
 ## Getting Started
 
@@ -42,9 +42,9 @@ To get started, create a new Shuttle web service using `shuttle init --template 
 This does the following:
 
 - Creates a new Hello World template with Axum and Tokio already added, as well as Shuttle-related dependencies (to enable deploying to Shuttle)
-- Initialises a new Shuttle project (if you’ve chosen to do so)
+- Initialises a new Shuttle project (if you've chosen to do so)
 
-Next, we’ll add our required dependencies with a one-line command:
+Next, we'll add our required dependencies with a one-line command:
 
 ```bash
 cargo add firecrawl serde -F serde/derive
@@ -67,7 +67,7 @@ async fn main(
 ) // ... rest of your code
 ```
 
-Now to get started on writing code. Before we do anything else, we’ll create a new `AppState` struct that will hold our Firecrawl client. This helps avoid overhead for creating the client each time we want to crawl or scrape a URL.
+Now to get started on writing code. Before we do anything else, we'll create a new `AppState` struct that will hold our Firecrawl client. This helps avoid overhead for creating the client each time we want to crawl or scrape a URL.
 
 ```rust
 use firecrawl::FirecrawlApp;
@@ -89,7 +89,7 @@ impl AppState {
 
 ## Scraping
 
-In this part, we’ll add a simple endpoint for scraping - which will take a POST request and a URL to be scraped (as part of the JSON body).
+In this part, we'll add a simple endpoint for scraping - which will take a POST request and a URL to be scraped (as part of the JSON body).
 
 ```rust
 use serde::Deserialize;
@@ -131,7 +131,7 @@ async fn scrape_url(
 
 ## Hooking it all back up
 
-Before we deploy, we need to hook everything back up to our main function! We’ll hook up the async function handler to our `axum::Router` as well as our application state, then return the router.
+Before we deploy, we need to hook everything back up to our main function! We'll hook up the async function handler to our `axum::Router` as well as our application state, then return the router.
 
 ```rust
 #[shuttle_runtime::main]
@@ -149,7 +149,7 @@ async fn main(
 }
 ```
 
-The `secrets` variable is provided as an immutable key-value store - so we can simply use the `get()`  function to try to grab our API key, erroring out if it doesn’t exist.
+The `secrets` variable is provided as an immutable key-value store - so we can simply use the `get()`  function to try to grab our API key, erroring out if it doesn't exist.
 
 ## Deploying
 

@@ -21,7 +21,7 @@ OpenTelemetry itself is focused on the creation and management of aforementioned
 
 Observability is the ability to understand the events of a program through its outputs. A simple example of this is logging: something happens, then we log to `stdout` or a log file what happened. This is observability at its most basic form (if you can call it that!).
 
-However, we can do much better. By “instrumenting” our application (augmenting it to emit metrics, traces and logs) and sending traces to a platform that we can then use to store and analyse them, we can provide a high level of observability into our application.
+However, we can do much better. By "instrumenting" our application (augmenting it to emit metrics, traces and logs) and sending traces to a platform that we can then use to store and analyse them, we can provide a high level of observability into our application.
 
 Why is this important?
 
@@ -30,7 +30,7 @@ Why is this important?
 
 ## How OpenTelemetry works
 
-OpenTelemetry relies upon the idea of combining logs, spans and traces all together to create a cohesive system. Let’s explore these concepts as they are vital to being able to understand how OpenTelemetry works.
+OpenTelemetry relies upon the idea of combining logs, spans and traces all together to create a cohesive system. Let's explore these concepts as they are vital to being able to understand how OpenTelemetry works.
 
 ### Logs
 
@@ -40,7 +40,7 @@ While logs can provide important context, by themselves they also typically miss
 
 ### Spans
 
-Spans can be described as a period of time over which operations or actions are recorded in a given context. If you’ve used the `tracing` libraries at all, you may be familiar with this concept. Spans typically have a given name, time-related data, structured logging messages as well as other related metadata (”attributes”). Spans typically wrap around logs so that the logs can be given context.
+Spans can be described as a period of time over which operations or actions are recorded in a given context. If you've used the `tracing` libraries at all, you may be familiar with this concept. Spans typically have a given name, time-related data, structured logging messages as well as other related metadata ("attributes"). Spans typically wrap around logs so that the logs can be given context.
 
 You can check out more about how spans work in relation to OpenTelemetry [here.](https://opentelemetry.io/docs/concepts/signals/traces/#spans)
 
@@ -94,7 +94,7 @@ subscriber
     .init();
 ```
 
-Once we start our app, we can start instrumenting our application! Because we’re using the `tracing` library, we can instrument our functions through the `#[tracing::instrument]` macro, which saves a lot of work setting up spans manually (though for more complex use cases, you may want to go more in-depth into customising your spans). A basic instrumented function may look something like this:
+Once we start our app, we can start instrumenting our application! Because we're using the `tracing` library, we can instrument our functions through the `#[tracing::instrument]` macro, which saves a lot of work setting up spans manually (though for more complex use cases, you may want to go more in-depth into customising your spans). A basic instrumented function may look something like this:
 
 ```rust
 #[tracing::instrument]
@@ -106,7 +106,7 @@ async fn hello_world() -> &'static str {
 
 ### Set up the OpenTelemetry collector
 
-So you’ve written your application - next you’ll want to start the collector.
+So you've written your application - next you'll want to start the collector.
 
 If you just want to get something going, you can use the shell snippet below that runs the collector in an attached terminal and outputs the collector
 
@@ -118,7 +118,7 @@ docker run \
   2>&1 | tee collector-output.txt # Optionally tee output for easier search later
 ```
 
-Note that the OpenTelemetry collector YAML file can be found at `/etc/<otel-directory>/config.yaml`.  This means we can create a Dockerfile that copies in an external YAML file into the config! Let’s have a look at what this would look like:
+Note that the OpenTelemetry collector YAML file can be found at `/etc/<otel-directory>/config.yaml`.  This means we can create a Dockerfile that copies in an external YAML file into the config! Let's have a look at what this would look like:
 
 ```docker
 ARG OTEL_TAG=

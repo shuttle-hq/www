@@ -8,7 +8,7 @@ cover: notification-service-rust-thumb.png
 date: '2024-03-20T15:30:00'
 ---
 
-Notifications are a very helpful tool for notifying services. This is particularly relevant if you’re using microservice architecture. One notification mechanism we can use is AWS SNS (Simple Notification Service), which lets us create topics, subscribe to them and push messages to topics. By the end of this article, you’ll have two fully functioning web services with the following overall functionality:
+Notifications are a very helpful tool for notifying services. This is particularly relevant if you're using microservice architecture. One notification mechanism we can use is AWS SNS (Simple Notification Service), which lets us create topics, subscribe to them and push messages to topics. By the end of this article, you'll have two fully functioning web services with the following overall functionality:
 
 - One web service will have a single endpoint that can receive a message from AWS SNS
 - One web service will handle the job of sending messages
@@ -26,9 +26,9 @@ To get started, you will need two keys from AWS:
 
 ## Receiving AWS SNS messages
 
-To start with, let’s have a look at how we can receive SNS messages. We can do this with `shuttle init`, picking Axum as our framework. This service will have a single endpoint that takes the SNS messages and prints the message out.
+To start with, let's have a look at how we can receive SNS messages. We can do this with `shuttle init`, picking Axum as our framework. This service will have a single endpoint that takes the SNS messages and prints the message out.
 
-To make this idiomatic, we’ll want to create a struct called `SnsMessage` that implements `axum::FromRequest`. This will allow us to use it as an extractor, rather than trying to parse the POST requests from SNS manually.
+To make this idiomatic, we'll want to create a struct called `SnsMessage` that implements `axum::FromRequest`. This will allow us to use it as an extractor, rather than trying to parse the POST requests from SNS manually.
 
 ```rust
 use axum::{routing::{get, post}, Router, response::{IntoResponse, Response},
@@ -78,7 +78,7 @@ impl<S> FromRequest<S> for SnsMessage {
 
 ```
 
-Note that this `FromRequest<S>` implementation is primarily to show the fundamentals. In production use cases, you would want to verify the signature sent from AWS to make sure it’s accurate. You can find out more about the basics of this [here.](https://docs.aws.amazon.com/sns/latest/dg/sns-verify-signature-of-message.html)
+Note that this `FromRequest<S>` implementation is primarily to show the fundamentals. In production use cases, you would want to verify the signature sent from AWS to make sure it's accurate. You can find out more about the basics of this [here.](https://docs.aws.amazon.com/sns/latest/dg/sns-verify-signature-of-message.html)
 
 To use our new struct, you can use `SnsMessage` as an extractor for a handler function like this:
 
@@ -93,7 +93,7 @@ async fn receive_sns(
 
 You can find out more about receiving POST requests from AWS SNS [here.](https://docs.aws.amazon.com/sns/latest/dg/sns-http-https-endpoint-as-subscriber.html) To extend this, you may want to think about verifying the signature sent by AWS [here.](https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html)
 
-We’ll tie this all together by adding the handler function to our router:
+We'll tie this all together by adding the handler function to our router:
 
 ```rust
 use axum::routing::post;
@@ -107,7 +107,7 @@ async fn axum() -> shuttle_axum::ShuttleAxum {
 }
 ```
 
-Now it’s complete!
+Now it's complete!
 
 ### Deploying
 
@@ -119,7 +119,7 @@ Now for the second part of our notification service: sending messages to our rec
 
 ### Setup
 
-We’ll get started by using `shuttle init` once again, picking Axum as our choice of framework. Make sure to follow the prompt until the end to finalise your project.
+We'll get started by using `shuttle init` once again, picking Axum as our choice of framework. Make sure to follow the prompt until the end to finalise your project.
 
 Once done, we can install our dependencies with this script:
 
@@ -133,7 +133,7 @@ cargo add serde-json@1.0.114
 cargo add thiserror@1.0.58
 ```
 
-Remember your AWS keys from earlier? We’ll add them to `Secrets.toml` file in the root of our project folder. It should look like this:
+Remember your AWS keys from earlier? We'll add them to `Secrets.toml` file in the root of our project folder. It should look like this:
 
 ```rust
 AWS_ACCESS_KEY_ID = "your-access-key-id-here"
@@ -142,7 +142,7 @@ AWS_SECRET_ACCESS_KEY = "your-secret-access-key-here"
 
 ## Setting up our AWS config
 
-To get started, we’ll want to add our resource annotations to our main function - which should look like this:
+To get started, we'll want to add our resource annotations to our main function - which should look like this:
 
 ```rust
 #[shuttle_runtime::main]
@@ -155,7 +155,7 @@ async fn main(
 
 When we use `shuttle run`, our secrets will now get provisioned to us without needing to do anything!
 
-Before we start adding more code, let’s write our `AppState` struct to hold Axum state. This will allow our handler functions to access our AWS SNS client whenever we want.
+Before we start adding more code, let's write our `AppState` struct to hold Axum state. This will allow our handler functions to access our AWS SNS client whenever we want.
 
 ```rust
 use aws_sdk_sns::Client;
@@ -167,7 +167,7 @@ pub struct AppState {
 }
 ```
 
-Next, we’ll want to add code to our main function that gets the secrets, creates `aws_credential_types::Credentials` and creates an AWS config from the credentials, as well as adding a region. We’ll use `eu-west-02` to reduce latency (because the Shuttle servers are hosted on `eu-west-02`). We then create a new client, initialize our app state and then add it to the `axum::Router`;
+Next, we'll want to add code to our main function that gets the secrets, creates `aws_credential_types::Credentials` and creates an AWS config from the credentials, as well as adding a region. We'll use `eu-west-02` to reduce latency (because the Shuttle servers are hosted on `eu-west-02`). We then create a new client, initialize our app state and then add it to the `axum::Router`;
 
 ```rust
 let access_key_id = secrets.get("AWS_ACCESS_KEY_ID").expect("AWS_ACCESS_KEY_ID not set in Secrets.toml");
@@ -196,11 +196,11 @@ let access_key_id = secrets.get("AWS_ACCESS_KEY_ID").expect("AWS_ACCESS_KEY_ID n
 
 ### Error handling for the ShuttleAxum type
 
-The `shuttle_axum::ShuttleAxum` return type defaults to `anyhow::Error` for user errors. This doesn’t affect handler functions. For functions used in the main function however, they will need to either be able to convert to `anyhow::Error` or be of the same type.
+The `shuttle_axum::ShuttleAxum` return type defaults to `anyhow::Error` for user errors. This doesn't affect handler functions. For functions used in the main function however, they will need to either be able to convert to `anyhow::Error` or be of the same type.
 
 ### Error handling for API route functions
 
-To create errors easily, we’ll use the `thiserror` crate we installed to generate `From<T>` implementations for our error type, as well as the error messages. Let’s have a look.
+To create errors easily, we'll use the `thiserror` crate we installed to generate `From<T>` implementations for our error type, as well as the error messages. Let's have a look.
 
 ```rust
 use thiserror::Error;
@@ -219,9 +219,9 @@ We use the `thiserror::Error` derive macro to enable the attribute macros. A few
 
 - The `#[from]` implementation automatically derives `From<T>` so that the given type will automatically turn into a given enum variant. Note however that if the error type is an enum, it will convert it regardless of the enum variant. If you want more custom error handling, you may want to implement `From<T>` manually.
 - `#[error("..")]` automatically generates the `std::fmt::Display` implementation for our error type. Note that we need to use this on every enum variant, otherwise we will receive compile-time errors.
-- Using `thiserror::Error` automatically implements `std::error::Error` for `ApiError` so there’s no need for us to re-implement it!
+- Using `thiserror::Error` automatically implements `std::error::Error` for `ApiError` so there's no need for us to re-implement it!
 
-Next, we’ll want to implement `axum::response::IntoResponse` so that we can return `ApiError` from our Axum handler functions.
+Next, we'll want to implement `axum::response::IntoResponse` so that we can return `ApiError` from our Axum handler functions.
 
 ```rust
 use axum::{
@@ -257,7 +257,7 @@ async fn create_topic(sns: &Client, name: &str) -> AnyhowResult<String> {
 
 The output from sending the topic will contain the ARN. We need to store this to be able to retrieve a topic later on. Note that attempting to create two topics with the same name will return the current ARN instead of creating a new resource.
 
-If you’re interested in customising this further, you can check out more about the `CreateTopicFluentBuilder` [here.](https://docs.rs/aws-sdk-sns/latest/aws_sdk_sns/operation/create_topic/builders/struct.CreateTopicFluentBuilder.html)
+If you're interested in customising this further, you can check out more about the `CreateTopicFluentBuilder` [here.](https://docs.rs/aws-sdk-sns/latest/aws_sdk_sns/operation/create_topic/builders/struct.CreateTopicFluentBuilder.html)
 
 ### Subscriptions
 
@@ -283,9 +283,9 @@ async fn subscribe_to_topic(sns: &Client, url: &str, arn: &str) -> AnyhowResult<
 }
 ```
 
-There is not much to talk about here as it’s primarily just setting it up and then sending it. If we wanted to, we could also create multiple subscriptions to the same topic ARN, giving us the benefit of being able to fan-out our notifications.
+There is not much to talk about here as it's primarily just setting it up and then sending it. If we wanted to, we could also create multiple subscriptions to the same topic ARN, giving us the benefit of being able to fan-out our notifications.
 
-Because we’re setting up an HTTPS endpoint, we need to confirm the subscription. When we create the subscription, SNS will send a subscription confirmation message to our receiver. This requires our receiver to already be deployed. Because we already print out the confirmation message in our logs, we can easily access and visit the URL to confirm the subscription. You can find out more about this [here.](https://docs.aws.amazon.com/sns/latest/dg/SendMessageToHttp.confirm.html)
+Because we're setting up an HTTPS endpoint, we need to confirm the subscription. When we create the subscription, SNS will send a subscription confirmation message to our receiver. This requires our receiver to already be deployed. Because we already print out the confirmation message in our logs, we can easily access and visit the URL to confirm the subscription. You can find out more about this [here.](https://docs.aws.amazon.com/sns/latest/dg/SendMessageToHttp.confirm.html)
 
 To check that the subscription exists, we can do this:
 
@@ -314,7 +314,7 @@ async fn subscription_exists(sns: &Client, url: &str, arn: &str) -> AnyhowResult
 
 ### Publishing messages
 
-To be able to publish messages, we’ll need the topic ARN we want to subscribe to, the message as well as the subject.
+To be able to publish messages, we'll need the topic ARN we want to subscribe to, the message as well as the subject.
 
 ```rust
 #[derive(Deserialize)]
@@ -343,7 +343,7 @@ Interested in customising this further? You can check out more about the `Publis
 
 ### Connecting it all together
 
-To connect it all, let’s revisit our main function and fill it in with the new functions:
+To connect it all, let's revisit our main function and fill it in with the new functions:
 
 ```rust
 #[shuttle_runtime::main]

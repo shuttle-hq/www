@@ -8,7 +8,7 @@ cover: write-rest-api-rust-thumb.png
 date: '2024-01-31T14:30:00'
 ---
 
-In this article, we’re going to talk about writing a REST API in Rust! Following on from our first [Shuttle Bytes](https://www.shuttle.dev/blog/2024/01/22/introducing-shuttlebytes) stream where we live-streamed a tutorial on this, we’ve created a text write-up to allow you to follow along in text.
+In this article, we're going to talk about writing a REST API in Rust! Following on from our first [Shuttle Bytes](https://www.shuttle.dev/blog/2024/01/22/introducing-shuttlebytes) stream where we live-streamed a tutorial on this, we've created a text write-up to allow you to follow along in text.
 
 Interested in checking out what the final code should look like? You can find it [here.](https://github.com/joshua-mo-143/shuttle-axum-example/tree/main)
 
@@ -16,7 +16,7 @@ Interested in checking out what the final code should look like? You can find it
 
 ### Project initialisation
 
-If you haven’t already, make sure you have Rust and Cargo installed! You can find install instructions [here.](https://www.rust-lang.org/tools/install)
+If you haven't already, make sure you have Rust and Cargo installed! You can find install instructions [here.](https://www.rust-lang.org/tools/install)
 
 We'll be initialising our project with `cargo-shuttle`, Shuttle's CLI. You can install it by running the following:
 ```bash
@@ -25,9 +25,9 @@ cargo install cargo-shuttle
 
 Installation via `cargo-binstall` is also supported, along with our other install scripts which you can find [here.](https://docs.shuttle.rs/getting-started/installation)
 
-First of all we’ll want to initialise our project with `shuttle init` (required `cargo-shuttle` to be installed). For the project name we’ll be using `shuttle-example-axum`.
+First of all we'll want to initialise our project with `shuttle init` (required `cargo-shuttle` to be installed). For the project name we'll be using `shuttle-example-axum`.
 
-Then we’ll want to set up our dependencies with the following shell snippet:
+Then we'll want to set up our dependencies with the following shell snippet:
 
 ```rust
 cargo add sqlx -F postgres,runtime-tokio-rustls
@@ -51,7 +51,7 @@ During deployment, Shuttle will automatically provision a database to our projec
 
 Interested in just getting the connection string? You can disable the `sqlx` feature of `shuttle-shared-db` and instead change the type to `String`, then connect to your PgPool. You can find more information about connecting to a PgPool [here.](https://docs.rs/sqlx/latest/sqlx/type.PgPool.html#method.connect)
 
-Since we’re using only a single migrations file, we can use `include_str!()` to include the whole file’s text content as a string. We can then execute the query with the database pool.
+Since we're using only a single migrations file, we can use `include_str!()` to include the whole file's text content as a string. We can then execute the query with the database pool.
 
 For the migrations, we can make a `migrations.sql` file in the project root:
 
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 ```
 
-Then when you’re finished and ready to run your migrations, you can add this snippet to your code:
+Then when you're finished and ready to run your migrations, you can add this snippet to your code:
 
 ```rust
 // this trait is required
@@ -88,7 +88,7 @@ pub struct AppState {
 }
 ```
 
-Note that if you’re using a struct that is unable to use Clone (for example because of generic trait bounds), you can wrap the type in a `std::sync::Arc`.
+Note that if you're using a struct that is unable to use Clone (for example because of generic trait bounds), you can wrap the type in a `std::sync::Arc`.
 
 Then we need to add it to our API:
 
@@ -102,7 +102,7 @@ let router = Router::new().route("/", get(hello_world)).with_state(state);
 
 When writing your routes, Axum will accept anything that implements the `IntoResponse` trait (which means the type can be turned into a HTTP response). Many primitives already have `IntoResponse` implemented so you can return things like `i32` or a `String` (or a `'static &str`) without being required to implement the trait.
 
-By using Axum’s `extractors`, we can extract information from the HTTP request and declare them as handler parameters: for example, adding a `State` extractor means we want to include the state that we added to our `axum::Router`. Then we want to implement `sqlx::FromRow` using a derive macro for our struct - doing this allows it to automatically be converted from a query:
+By using Axum's `extractors`, we can extract information from the HTTP request and declare them as handler parameters: for example, adding a `State` extractor means we want to include the state that we added to our `axum::Router`. Then we want to implement `sqlx::FromRow` using a derive macro for our struct - doing this allows it to automatically be converted from a query:
 
 ```rust
 #[derive(sqlx::FromRow)]
@@ -129,7 +129,7 @@ async fn retrieve_all_records(
 }
 ```
 
-After this, now that we’ve written our initial route for fetching all records, we can also write our other routes. For retrieving record by ID, we can use the `Path` extractor which extracts a dynamic URL slug (this will be shown later on):
+After this, now that we've written our initial route for fetching all records, we can also write our other routes. For retrieving record by ID, we can use the `Path` extractor which extracts a dynamic URL slug (this will be shown later on):
 
 ```rust
 async fn retrieve_record_by_id(
@@ -201,7 +201,7 @@ async fn delete_record_by_id(
 }
 ```
 
-If you’re looking to implement an update function, there are a couple of ways you could do it. Here, we use an `UpdateRecord` struct that holds option placeholder versions of the fields we want the user to be able to update. Then we write an SQL query that only changes the field if the bound value isn’t null:
+If you're looking to implement an update function, there are a couple of ways you could do it. Here, we use an `UpdateRecord` struct that holds option placeholder versions of the fields we want the user to be able to update. Then we write an SQL query that only changes the field if the bound value isn't null:
 
 ```rust
 #[derive(Deserialize)]
@@ -235,7 +235,7 @@ async fn update_record_by_id(
 }
 ```
 
-Now that we’ve written all of our routes, we can append them to the router like so. Note that the `:id` marks a dynamic route which will be used by the `Path` extractor:
+Now that we've written all of our routes, we can append them to the router like so. Note that the `:id` marks a dynamic route which will be used by the `Path` extractor:
 
 ```rust
 let router = Router::new()
@@ -256,11 +256,11 @@ Need to double check what the deployment code looks like? You can find it in [th
 
 ## Deployment
 
-Now that we’ve finished, the only thing left to do is deploying the Rust application. You can run `shuttle deploy` (with the `--allow-dirty` flag if working on a dirty Git branch) and deploy with one line!
+Now that we've finished, the only thing left to do is deploying the Rust application. You can run `shuttle deploy` (with the `--allow-dirty` flag if working on a dirty Git branch) and deploy with one line!
 
 ## Extending this example
 
-Looking to extend the project from this article? Here’s a couple of ways you can extend it:
+Looking to extend the project from this article? Here's a couple of ways you can extend it:
 
 - Add your own Error enum type and implement `axum::response::IntoResponse` for it! This allows you to propagate errors by implementing `From<T>` for your error type. Error handling is a huge part of Rust and propagating errors can help you clean up your application nicely.
 - Add tests! You can use `testcontainers` to spin up Docker containers for Postgres and other infrastructure which makes testing your database extremely easy. You can find more about this [here.](https://github.com/testcontainers/testcontainers-rs)

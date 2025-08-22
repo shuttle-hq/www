@@ -8,7 +8,7 @@ cover: wasm-rust-thumb.png
 date: '2024-02-29T15:30:00'
 ---
 
-Hello world! In today’s post we’re going to talk about how you can write a WebAssembly module in Rust. WebAssembly is a portable compilation target for programming languages to be able to conveniently inter-op with JavaScript on the web. Rust being able to take advantage of this has made it extremely useful for many use cases, such as:
+Hello world! In today's post we're going to talk about how you can write a WebAssembly module in Rust. WebAssembly is a portable compilation target for programming languages to be able to conveniently inter-op with JavaScript on the web. Rust being able to take advantage of this has made it extremely useful for many use cases, such as:
 
 - CPU intensive workloads (encryption)
 - GPU intensive workloads (image/video processing, image recognition)
@@ -17,9 +17,9 @@ This article will focus on writing a WASM module for image processing that can b
 
 ## Getting started
 
-To get started, you’ll need Rust installed. If you don’t, you can install it [here](https://www.rust-lang.org/tools/install).
+To get started, you'll need Rust installed. If you don't, you can install it [here](https://www.rust-lang.org/tools/install).
 
-We’ll be focusing on trying out writing a WASM module in three different ways:
+We'll be focusing on trying out writing a WASM module in three different ways:
 
 - Using the `wasm-bindgen` CLI
 - Using `wasm-pack`
@@ -27,19 +27,19 @@ We’ll be focusing on trying out writing a WASM module in three different ways:
 
 We will initially use `wasm-bindgen-cli` to create our application, then look at using `wasm-pack`. The focus of this article will be creating a simple module for image processing. Byte array manipulation and data processing is an area where Rust can significantly speed up your application.
 
-Before we start, make sure you have the `wasm32-unknown-unknown` target installed. If you don’t, you can add it like so:
+Before we start, make sure you have the `wasm32-unknown-unknown` target installed. If you don't, you can add it like so:
 
 ```bash
 rustup target add wasm32-unknown-unknown
 ```
 
-Note that for trying out our module, you’ll also additionally want `npm` (or any alternatives) installed.
+Note that for trying out our module, you'll also additionally want `npm` (or any alternatives) installed.
 
 ## Writing a WASM module
 
 ### The basics
 
-To set up our project, we’ll get started with using `cargo init --lib wasm-example` to create a new library project named `wasm-example`. We will then install our dependencies with a small shell snippet:
+To set up our project, we'll get started with using `cargo init --lib wasm-example` to create a new library project named `wasm-example`. We will then install our dependencies with a small shell snippet:
 
 ```bash
 cargo add wasm-bindgen@0.2.91
@@ -47,7 +47,7 @@ cargo add js-sys@0.3.68
 cargo add image@0.24.9
 ```
 
-We will also want to add the dynamic library flag to our `Cargo.toml` file. Normally, it lets Cargo know that we want to make a dynamic system library - but when using it with the WebAssembly target, it simply means “make a `*.wasm` file without a `start` function”. To do this, we can add this small snippet below:
+We will also want to add the dynamic library flag to our `Cargo.toml` file. Normally, it lets Cargo know that we want to make a dynamic system library - but when using it with the WebAssembly target, it simply means "make a `*.wasm` file without a `start` function". To do this, we can add this small snippet below:
 
 ```toml
 [lib]
@@ -103,7 +103,7 @@ extern "C" {
 
 Now when we write our WASM function, we can refer to the `Buffer` type directly!
 
-Let’s write our Rust function for converting our image file format. We’ll make it require our `Buffer` and then have it return `Vec<u8>` - when we compile it through `wasm-pack` or another compiler, it will automatically get converted to a `Uint8Array`.
+Let's write our Rust function for converting our image file format. We'll make it require our `Buffer` and then have it return `Vec<u8>` - when we compile it through `wasm-pack` or another compiler, it will automatically get converted to a `Uint8Array`.
 
 ```rust
 use js_sys::{ArrayBuffer, Uint8Array};
@@ -140,7 +140,7 @@ Here, we need to compile from Rust to WASM by building our package for the `wasm
 cargo build --target=wasm32-unknown-unknown
 ```
 
-Next, we need to use `wasm-bindgen` to generate the JS glue code to make it all work. We’ll use the `nodejs` target which will generate a CommonJS module and put it in the `./pkg` folder which we can then implant anywhere we want.
+Next, we need to use `wasm-bindgen` to generate the JS glue code to make it all work. We'll use the `nodejs` target which will generate a CommonJS module and put it in the `./pkg` folder which we can then implant anywhere we want.
 
 ```bash
 wasm-bindgen --target nodejs --out-dir ./pkg \
@@ -149,28 +149,28 @@ wasm-bindgen --target nodejs --out-dir ./pkg \
 
 Now we can either publish our WASM code as a package or implant it anywhere we want to use it!
 
-### I don’t want to use CommonJS!
+### I don't want to use CommonJS!
 
-If you don’t want to use CommonJS because you’re using ESM (EcmaScript modules, or ES6 modules), that’s cool! The CLI currently allows several targets:
+If you don't want to use CommonJS because you're using ESM (EcmaScript modules, or ES6 modules), that's cool! The CLI currently allows several targets:
 
 - `bundler` (produces code for usage with bundlers like Webpack)
 - `web` (directly loadable in a web browser)
 - `nodejs` (loadable via `require` as a CommonJS Node.js module)
 - `deno` (usable as a Deno module)
-- `no-modules` (like the `web` target but doesn’t use ES Modules).
+- `no-modules` (like the `web` target but doesn't use ES Modules).
 
-There are specific docs for usage with ES which you can check out [here.](https://rustwasm.github.io/wasm-bindgen/examples/hello-world.html?highlight=webpack#webpack-specific-files) The easiest way to do it in terms of what compiler to use is typically with Webpack as it’s the most compatible. There is also an additional guide you can use for compiling to ES6 modules without a bundler [here](https://rustwasm.github.io/wasm-bindgen/examples/without-a-bundler.html) - though it involves initializing the WASM module manually before running which adds some overhead.
+There are specific docs for usage with ES which you can check out [here.](https://rustwasm.github.io/wasm-bindgen/examples/hello-world.html?highlight=webpack#webpack-specific-files) The easiest way to do it in terms of what compiler to use is typically with Webpack as it's the most compatible. There is also an additional guide you can use for compiling to ES6 modules without a bundler [here](https://rustwasm.github.io/wasm-bindgen/examples/without-a-bundler.html) - though it involves initializing the WASM module manually before running which adds some overhead.
 
 ## Test driving our new module
 
-Now that we’ve written our code, let’s try it out! We will spin up a JavaScript backend server using Express.js. We will assume you’re running the following in the same folder as your Rust project (for convenience purposes). We’ll get started with the following shell snippet:
+Now that we've written our code, let's try it out! We will spin up a JavaScript backend server using Express.js. We will assume you're running the following in the same folder as your Rust project (for convenience purposes). We'll get started with the following shell snippet:
 
 ```bash
 npm init -y
 npm i express express-fileupload
 ```
 
-Next, we’ll create a `server.js` file in our root directory and insert the following code:
+Next, we'll create a `server.js` file in our root directory and insert the following code:
 
 ```jsx
 const fileUpload = require('express-fileupload');
@@ -217,7 +217,7 @@ Note that depending on the settings you are using for your image file format con
 
 ## Building our app with alternative CLIs
 
-While `wasm-bindgen-cli` is useful, it’s also the most low level CLI out of our options and you can run into spurious issues while using it such as `wasm-bindgen` version incompatibility issues. There are some additional quality of life changes that we could benefit from, such as automatic versioning and `wasm-opt` usage. Let’s take a quick look at some of these other options and see how they compare.
+While `wasm-bindgen-cli` is useful, it's also the most low level CLI out of our options and you can run into spurious issues while using it such as `wasm-bindgen` version incompatibility issues. There are some additional quality of life changes that we could benefit from, such as automatic versioning and `wasm-opt` usage. Let's take a quick look at some of these other options and see how they compare.
 
 ### Wasm-pack
 
@@ -238,7 +238,7 @@ npm install -g @napi-rs/cli
 
 Once done, you can then use `napi new wasm-example` to build your new NAPI project!
 
-`napi-rs` does come with some code changes, which you’ll be able to see below: we can finally get rid of the `extern C` block and instead use napi’s `bindgen_prelude` to include whatever we need.
+`napi-rs` does come with some code changes, which you'll be able to see below: we can finally get rid of the `extern C` block and instead use napi's `bindgen_prelude` to include whatever we need.
 
 ```rust
 use napi::bindgen_prelude::*;
@@ -265,7 +265,7 @@ pub fn convert_image(buffer: Buffer) -> Result<Buffer> {
 
 The advantages of this are clear:
 
-- We don’t need to manually import anything using `extern C`
+- We don't need to manually import anything using `extern C`
 - We can easily use Node.js internals without trouble
 
 Of course for all its advantages, `napi-rs` is only compatible with Node.js. If you want to write some WASM code for the browser, you would need to default to `wasm-pack` or `wasm-bindgen`. You additionally also need to use the Node ecosystem to keep your CLI updated, which from a Rust-first standpoint is a bit of a strange decision. Needless to say, `napi-rs` is a pretty easy way to start writing Node.js with Rust.
@@ -277,5 +277,5 @@ Thanks for reading! Rust has great inter-op with WASM, and there's no reason why
 Read more:
 
 - We wrote a list of [our top 8 Rust tools to speed up your productivity](https://www.shuttle.dev/blog/2024/02/15/best-rust-tooling)
-- Here’s our guide to [getting started with Axum, Rust's most popular framework](https://www.shuttle.dev/blog/2023/12/06/using-axum-rust)
+- Here's our guide to [getting started with Axum, Rust's most popular framework](https://www.shuttle.dev/blog/2023/12/06/using-axum-rust)
 - We wrote about our [top 8 tools to help you be more productive in Rust](https://www.shuttle.dev/blog/2024/02/15/best-rust-tooling)

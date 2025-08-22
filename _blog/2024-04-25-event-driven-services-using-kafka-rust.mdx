@@ -11,14 +11,14 @@ When it comes to real-time data handling, there are certain challenges that are 
 
 Interested in deploying or got stuck somewhere in the article? You can find the final repository [here.](https://github.com/joshua-mo-143/kafka-shuttle)
 
-## What does “event-driven” mean?
+## What does "event-driven" mean?
 
-The term “event-driven” simply means that the web service is not driven by HTTP requests, but consumes events from event sources and executes logic based on the event type. This is in contrast to HTTP request based interactions. In practicality, events may be driven by a message queue (like AMQP) or event store like Kafka where messages are sent and received by one or more services.
+The term "event-driven" simply means that the web service is not driven by HTTP requests, but consumes events from event sources and executes logic based on the event type. This is in contrast to HTTP request based interactions. In practicality, events may be driven by a message queue (like AMQP) or event store like Kafka where messages are sent and received by one or more services.
 
 Event-driven microservices are often used as part of an event-driven architecture, where the whole system is based on passing of published messages and using them as a source of truth. The advantages of event-driven architecture are clear:
 
 - Ideal for handling real time data in large quantities
-- Because event driven services don’t rely on synchronous HTTP calls, instead using events, there is less chance of a cascading failure across your architecture if something fails.
+- Because event driven services don't rely on synchronous HTTP calls, instead using events, there is less chance of a cascading failure across your architecture if something fails.
 - Using a message broker promotes loose component coupling, meaning you are not required to know the specific implementation of how your component works with other components.
 
 Of course, with advantages there are also new challenges that need to be overcome:
@@ -27,21 +27,21 @@ Of course, with advantages there are also new challenges that need to be overcom
 - How do you migrate functionality from a monolith to an event-driven microservice?
 - How do you test that your system actually works?
 
-We’ll be diving into all this and more in this article!
+We'll be diving into all this and more in this article!
 
 ## Getting started
 
 ### Pre-requisites
 
-If you want to connect locally to a Kafka instance, you’ll either need Apache Kafka and Zookeeper with both running, or Docker installed so that you can spin up Kafka and Zookeeper instances..
+If you want to connect locally to a Kafka instance, you'll either need Apache Kafka and Zookeeper with both running, or Docker installed so that you can spin up Kafka and Zookeeper instances..
 
-If you want to deploy this service to the web somewhere, you’ll also want to make use of a service that provides Kafka. Shuttle currently doesn’t provide it, but you can make use of services like Upstash to be able to provide it. You'll need to store your environment variables in the `Secrets.toml` file as described later on.
+If you want to deploy this service to the web somewhere, you'll also want to make use of a service that provides Kafka. Shuttle currently doesn't provide it, but you can make use of services like Upstash to be able to provide it. You'll need to store your environment variables in the `Secrets.toml` file as described later on.
 
 ### Project setup
 
-To get started, we’ll want to make a new project using `shuttle init` - don’t forget to select Axum as the framework! You will need `cargo-shuttle` installed for this. If you don’t have it installed, you can use `cargo install cargo-shuttle`.
+To get started, we'll want to make a new project using `shuttle init` - don't forget to select Axum as the framework! You will need `cargo-shuttle` installed for this. If you don't have it installed, you can use `cargo install cargo-shuttle`.
 
-We’ll then want to use the following shell snippet to install our project dependencies:
+We'll then want to use the following shell snippet to install our project dependencies:
 
 ```rust
 cargo add serde@1.0.198 -F derive
@@ -57,7 +57,7 @@ cargo add testcontainers@0.15.0 --dev
 cargo add testcontainers-modules@0.3.7 --dev -F kafka
 ```
 
-Then we’ll add our macro annotations to our application:
+Then we'll add our macro annotations to our application:
 
 ```rust
 #[shuttle_runtime::main]
@@ -70,15 +70,15 @@ async fn main(
 
 ```
 
-With only three lines, we’ve added a database (provisioned locally by Docker and provisioned by Shuttle servers in deployment!), our Secrets file and deployment metadata to the application!
+With only three lines, we've added a database (provisioned locally by Docker and provisioned by Shuttle servers in deployment!), our Secrets file and deployment metadata to the application!
 
-We will also be using `sqlx` to handle our database migrations and queries. This means we’ll also want to use `sqlx-cli` to help manage our migrations.  We’ll get started by installing it (the following command adds all features):
+We will also be using `sqlx` to handle our database migrations and queries. This means we'll also want to use `sqlx-cli` to help manage our migrations.  We'll get started by installing it (the following command adds all features):
 
 ```rust
 cargo install sqlx-cli
 ```
 
-Next, you can use `sqlx migrate add init` to generate a new migration file located in the `migrations` folder (a subfolder of your root project). We’ll generate a simple table:
+Next, you can use `sqlx migrate add init` to generate a new migration file located in the `migrations` folder (a subfolder of your root project). We'll generate a simple table:
 
 ```sql
 -- Add migration script here
@@ -90,11 +90,11 @@ create table if not exists messages (
 );
 ```
 
-We’ll be expanding on this later, but for the basics this is all we need.
+We'll be expanding on this later, but for the basics this is all we need.
 
-We’ll also be making use of SQLx’s macros to enable type-checked queries. For this, we’ll need to spin up a database, use `sqlx migrate run` to run the migrations against the database then use `cargo sqlx prepare` to generate our `.sqlx` folder. Once this folder gets checked into version control, we won’t need a database anymore when compiling our query macros.
+We'll also be making use of SQLx's macros to enable type-checked queries. For this, we'll need to spin up a database, use `sqlx migrate run` to run the migrations against the database then use `cargo sqlx prepare` to generate our `.sqlx` folder. Once this folder gets checked into version control, we won't need a database anymore when compiling our query macros.
 
-Here’s a shell snippet you can use to accomplish this quickly (requires Docker to be running):
+Here's a shell snippet you can use to accomplish this quickly (requires Docker to be running):
 
 ```rust
 docker run -d -t -p 8081:5432 --name kafka-shuttle-pg postgres
@@ -103,13 +103,13 @@ DATABASE_URL=postgres://postgres:postgres@localhost:8081/postgres cargo sqlx pre
 docker rm -f kafka-shuttle-pg
 ```
 
-You’ll want to make sure to keep your Kafka endpoint URL somewhere, as we’ll be putting this in a `Secrets.toml` file:
+You'll want to make sure to keep your Kafka endpoint URL somewhere, as we'll be putting this in a `Secrets.toml` file:
 
 ```rust
 KAFKA_URL = "<your-kafka-endpoint-url>"
 ```
 
-Because we’re deploying via Shuttle, we will be using Secrets rather than raw environment variables. When storing our environment variables later, you’ll want to iterate through the `SecretStore` type like in the snippet below:
+Because we're deploying via Shuttle, we will be using Secrets rather than raw environment variables. When storing our environment variables later, you'll want to iterate through the `SecretStore` type like in the snippet below:
 
 ```rust
 secret_store.into_iter().for_each(|x| std::env::set_var(x.0, x.1));
@@ -285,13 +285,13 @@ pub fn create_kafka_consumer(secrets: &SecretStore) -> StreamConsumer {
 
 These settings may be changed according to your liking. You can find a full list of configuration properties [here.](https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md)
 
-You may note that above, we’ve enabled auto commit while only enabling storing offset from the consumer. The reason for this is that it allows us to rely on the underlying Kafka logic to commit regularly while only allowing the consumer to commit a message after it’s been fully processed. This enables us to prevent any loss of messages! This is also called **At Least Once** delivery.
+You may note that above, we've enabled auto commit while only enabling storing offset from the consumer. The reason for this is that it allows us to rely on the underlying Kafka logic to commit regularly while only allowing the consumer to commit a message after it's been fully processed. This enables us to prevent any loss of messages! This is also called **At Least Once** delivery.
 
 Note that the producer has permissions to automatically create topics. In production, you may want to remove this and create topics manually. Allowing a producer to create topics freely may result in some unexpected behaviour!
 
 Additionally, some hosted Kafka services will require SASL or SSL authentication. You can find more about the dependencies in the `rdkafka-rust` repo [here.](https://github.com/fede1024/rust-rdkafka?tab=readme-ov-file#installation) Note that if you are unable to install dependencies, `rdkafka` also has feature flags for vendored versions of the required dependencies.
 
-Next, we’ll want to create our `AppState` which will hold the `FutureProducer` created by the `create_kafka_producer` function:
+Next, we'll want to create our `AppState` which will hold the `FutureProducer` created by the `create_kafka_producer` function:
 
 ```rust
 // src/state.rs
@@ -320,7 +320,7 @@ impl<'a> AppState {
 }
 ```
 
-To tie this all together, we’ll add it to our main function:
+To tie this all together, we'll add it to our main function:
 
 ```rust
 #[shuttle_runtime::main]
@@ -340,7 +340,7 @@ async fn main(
 
 ### Using a Kafka producer
 
-To use our producer, we’ll first need something to send. Let’s create a simple struct that will have an action, as well as a message ID, name and the message itself:
+To use our producer, we'll first need something to send. Let's create a simple struct that will have an action, as well as a message ID, name and the message itself:
 
 ```rust
 use serde::{Deserialize, Serialize};
@@ -400,7 +400,7 @@ If you use `shuttle run` to start your application (assuming Kafka is running) a
 		-d '{"action":"Create","message_id":4,"data":{"name":"Josh","message":"Hello world!"}}'
 ```
 
- You should see “Message sent!” as a response.
+ You should see "Message sent!" as a response.
 
 ### Using a Kafka consumer
 
@@ -450,7 +450,7 @@ pub async fn kafka_consumer_task(con: StreamConsumer, db: sqlx::PgPool) {
 
 Currently, we just get a message and do nothing with it. However, in production when your app is communicating with other applications you probably want your consumer to do something!
 
-Let’s do something with our message payloads by carrying out an SQL query for each action:
+Let's do something with our message payloads by carrying out an SQL query for each action:
 
 ```sql
 use crate::kafka::KafkaMessage;
@@ -523,16 +523,16 @@ Now whenever we receive a message, the following should happen:
 
 ### Introducing Change Data Capture
 
-If you’re considering migrating from a monolith to a microservice that uses a database, there are probably a few concerns that you have:
+If you're considering migrating from a monolith to a microservice that uses a database, there are probably a few concerns that you have:
 
 - How do I maintain data consistency?
 - How do I deal with out of order messages?
 
 To solve your issues, one idea that you can leverage is Change Data Capture (or CDC). CDC typically refers to the tracking of data in a data source - for example, a database or data warehouse - so it can be captured in destination systems.
 
-CDC is useful because it allows us to track changes across a database reliably: for example, let’s say you have a record that was updated, and then another event of the same type is sent and the same field gets updated again. We can track these changes such  that we’ll know which version of the record the field should actually be updated to!
+CDC is useful because it allows us to track changes across a database reliably: for example, let's say you have a record that was updated, and then another event of the same type is sent and the same field gets updated again. We can track these changes such  that we'll know which version of the record the field should actually be updated to!
 
-How you can do this typically depends on the database that you’re using. Since we’re using Postgres in our application, we’ll look at a great way you can carry out Change Data Capture using Postgres using triggers.
+How you can do this typically depends on the database that you're using. Since we're using Postgres in our application, we'll look at a great way you can carry out Change Data Capture using Postgres using triggers.
 
 ### Postgres Trigger-based Change Data Capture
 
@@ -551,7 +551,7 @@ create table if not exists messages_cdc (
 );
 ```
 
-Next, we’ll need to create an SQL function that returns a trigger.
+Next, we'll need to create an SQL function that returns a trigger.
 
 ```sql
 CREATE
@@ -607,9 +607,9 @@ FOR EACH ROW
 EXECUTE FUNCTION capture_changes();
 ```
 
-And we’re done! You can put this in a new migration file, start your application up and you’ll have added both the new function and trigger to your database.
+And we're done! You can put this in a new migration file, start your application up and you'll have added both the new function and trigger to your database.
 
-As you can see, there is a non-insignificant amount of code required to implement this and you’re also required to know some SQL beyond the fundamentals. However in exchange for this, Postgres triggers are very reliable, comprehensive and also enable instantaneous data capture. You can also create triggers for lots of different types of events! However, this also additionally puts extra strain onto the database. If you’re finding that your database table is starting to slow down, you may need to create a read-only replica to minimise resource usage.
+As you can see, there is a non-insignificant amount of code required to implement this and you're also required to know some SQL beyond the fundamentals. However in exchange for this, Postgres triggers are very reliable, comprehensive and also enable instantaneous data capture. You can also create triggers for lots of different types of events! However, this also additionally puts extra strain onto the database. If you're finding that your database table is starting to slow down, you may need to create a read-only replica to minimise resource usage.
 
 ### Telemetry
 
@@ -658,17 +658,17 @@ pub async fn kafka_consumer_task(con: StreamConsumer, db: sqlx::PgPool) {
 
 ```
 
-Note that we skip adding the consumer to our traces. In order for something to be logged in traces, it needs to implement `std::fmt::Debug` - which the consumer doesn’t.
+Note that we skip adding the consumer to our traces. In order for something to be logged in traces, it needs to implement `std::fmt::Debug` - which the consumer doesn't.
 
 ### Rate limiting
 
-As mentioned previously, event-driven architecture may be considered naturally more resilient than other types of microservice architectures. Because the message queue acts as a natural barrier between microservices, event-driven service won’t immediately fall over in the event of a failed message. This is in comparison to HTTP request driven services, which can fail almost immediately if a request fails for any reason (without re-try code).
+As mentioned previously, event-driven architecture may be considered naturally more resilient than other types of microservice architectures. Because the message queue acts as a natural barrier between microservices, event-driven service won't immediately fall over in the event of a failed message. This is in comparison to HTTP request driven services, which can fail almost immediately if a request fails for any reason (without re-try code).
 
-However, this doesn’t make it invincible. Naturally, we should make every effort possible to avoid load peaks and causing services to fall over. A few different things can cause a Kafka consumer to lag, which can cause eventually falling-over of services:
+However, this doesn't make it invincible. Naturally, we should make every effort possible to avoid load peaks and causing services to fall over. A few different things can cause a Kafka consumer to lag, which can cause eventually falling-over of services:
 
 - A producer starts producing much more number of messages than the consumer can handle
 - Slow consumer processing
-- Consumer doesn’t have high enough capacity
+- Consumer doesn't have high enough capacity
 
 One way to solve these issues is through rate limiting. In event-driven services, generally speaking rate limiting can be effectively implemented using backpressure: a mechanism that signals to the upstream system to either slow down, or stop producing messages. One way to implement this may be controlling the polling interval (`max.poll.interval.ms`) disabling auto-commits (the `enable.auto.commit` property) so that we only commit on processing completion. This slows down the consumer, but allows Kafka much better control over how much is being processed and alleviates memory load.
 
@@ -695,11 +695,11 @@ The address will link directly to the Kafka node which we can connect to and cre
 
 ## Deploying
 
-To deploy, simply write `shuttle deploy --ad` and watch the magic happen! Once you’ve compiled the first time, you’ll benefit from incremental deployment compilations.
+To deploy, simply write `shuttle deploy --ad` and watch the magic happen! Once you've compiled the first time, you'll benefit from incremental deployment compilations.
 
 ## Finishing up
 
-Thanks for reading! Hopefully with this article, you’ve gained a better understanding of how to use Kafka and when it would be useful to do so in an application.
+Thanks for reading! Hopefully with this article, you've gained a better understanding of how to use Kafka and when it would be useful to do so in an application.
 
 Read more:
 

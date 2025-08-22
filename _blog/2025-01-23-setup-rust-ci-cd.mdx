@@ -23,7 +23,7 @@ The average Rust project might have the following things carried out in CI:
 - Automatic website deployment
 - Dependabot
 
-Below is an example of a CI/CD workflow using YAML that you might find for a Rust project. For this file to be usable by Github Actions, it needs to be in the `.github/workflows` folder (relative to your project root). We’ll call our file `workflow.yml` for the purpose of simplicity.  Let's go through the steps:
+Below is an example of a CI/CD workflow using YAML that you might find for a Rust project. For this file to be usable by Github Actions, it needs to be in the `.github/workflows` folder (relative to your project root). We'll call our file `workflow.yml` for the purpose of simplicity.  Let's go through the steps:
 
 - Our workflow will only run on a pull request to `main`. Before we merge to main we need to ensure that the code compiles on a pull request - once the code's been pushed to main, it's a bit too late to make any changes by then and we'll have to push another PR to fix it!
 - We check out the code and install our required dependencies (meaning the Rust toolchain and `cargo-nextest`). Note that for external dependencies, using pure binary downloads is often far faster than trying to use `cargo install`.

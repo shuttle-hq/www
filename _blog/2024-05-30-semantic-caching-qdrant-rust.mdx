@@ -63,7 +63,7 @@ QDRANT_API_KEY = ""
 
 ### Creating collections
 
-Now that we can get started, we will add some more general methods for creating a regular collection as well as a cache collection, to simulate a real-world scenario (as well as a `new()` function to make creating the `RAGSystem` struct itself). We’ll create the struct first: Note here that although we're using vectors with 1536 dimensions, the number of dimensions you'll need may depend on the model you are using.
+Now that we can get started, we will add some more general methods for creating a regular collection as well as a cache collection, to simulate a real-world scenario (as well as a `new()` function to make creating the `RAGSystem` struct itself). We'll create the struct first: Note here that although we're using vectors with 1536 dimensions, the number of dimensions you'll need may depend on the model you are using.
 
 ```rust
 use qdrant_client::prelude::QdrantClient;
@@ -95,7 +95,7 @@ impl RAGSystem {
 }
 ```
 
-Now we’ll create the methods for initialising our regular collection. Note that we’ll only need to use these once. After the collections have already been created, if we try to initialise them again we’ll get an error.
+Now we'll create the methods for initialising our regular collection. Note that we'll only need to use these once. After the collections have already been created, if we try to initialise them again we'll get an error.
 
 ```rust
 use qdrant_client::prelude::CreateCollection;
@@ -125,10 +125,10 @@ impl RagSystem {
 }
 ```
 
-Next, we’ll create our cache collection. When creating this collection, note that we use `Distance::Euclid` instead of `Distance::Cosine`. Both of these can be defined as follows:
+Next, we'll create our cache collection. When creating this collection, note that we use `Distance::Euclid` instead of `Distance::Cosine`. Both of these can be defined as follows:
 
-- `Distance::Cosine` (or “cosine similarity”) measures how closely two vectors are pointing in the same direction. If we plot two vectors on a graph, for example, a vector located at [2,1] would be much closer to [1,1] than it would be [-1, -2]. Cosine similarity is overwhelmingly used in measuring document similarity in text analysis.
-- `Distance::Euclid` (or “Euclidean distance”) measures how closely two vectors are from each other - i.e., the distance from A to B where A and B are two points on a graph. Rather than trying to determine similarity, here we want to determine whether something is mostly or exactly the same.
+- `Distance::Cosine` (or "cosine similarity") measures how closely two vectors are pointing in the same direction. If we plot two vectors on a graph, for example, a vector located at [2,1] would be much closer to [1,1] than it would be [-1, -2]. Cosine similarity is overwhelmingly used in measuring document similarity in text analysis.
+- `Distance::Euclid` (or "Euclidean distance") measures how closely two vectors are from each other - i.e., the distance from A to B where A and B are two points on a graph. Rather than trying to determine similarity, here we want to determine whether something is mostly or exactly the same.
 
 ```rust
 impl RagSystem {
@@ -243,7 +243,7 @@ impl RagSystem {
 
 ### Upserting embeddings
 
-Once we've created our embeddings, we’ll create a method for adding embeddings into Qdrant called `upsert_embedding`. This will deal with creating the payload for our embedding and insert it into the database. Once added to the collection, we can search our collection later on and get the associated JSON payload alongside the embedding!
+Once we've created our embeddings, we'll create a method for adding embeddings into Qdrant called `upsert_embedding`. This will deal with creating the payload for our embedding and insert it into the database. Once added to the collection, we can search our collection later on and get the associated JSON payload alongside the embedding!
 
 The function will look like this:
 
@@ -443,7 +443,7 @@ impl RagSystem {
 
 ### Using Qdrant in a Rust web service
 
-Let's have a quick look at a real world example. Below is a HTTP endpoint for the Axum framework that  takes our `RAGSystem` as application state. It’ll embed the prompt and attempt to search the cache. If there’s no result, it searches in the regular collection for a match. The resulting document payload is added to an augmented prompt, and the question and answer are added to the cache. Finally, a response is returned from the endpoint.
+Let's have a quick look at a real world example. Below is a HTTP endpoint for the Axum framework that  takes our `RAGSystem` as application state. It'll embed the prompt and attempt to search the cache. If there's no result, it searches in the regular collection for a match. The resulting document payload is added to an augmented prompt, and the question and answer are added to the cache. Finally, a response is returned from the endpoint.
 
 ```rust
 use axum::{Json, extract::State, response::IntoResponse, http::StatusCode};

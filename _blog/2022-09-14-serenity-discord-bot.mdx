@@ -44,7 +44,7 @@ We now have a bot on our server:
 
 ![](/images/blog/discord-bot-screenshots/bot-is-offline.png)
 
-Oh, they’re offline 😢
+Oh, they're offline 😢
 
 ## Getting a bot online
 
@@ -54,7 +54,7 @@ At this moment, our bot is not running because there is no code. We will have to
 
 Serenity is a library for writing Discord bots (and communicating with the Discord API). We can create a new Serenity project which is readily deployable on shuttle with: `shuttle init --serenity`
 
-If you don’t have shuttle yet, you can install it with `cargo install cargo-shuttle`. Afterwards, run the following in an empty directory:
+If you don't have shuttle yet, you can install it with `cargo install cargo-shuttle`. Afterwards, run the following in an empty directory:
 
 ```
 shuttle init --serenity
@@ -123,7 +123,7 @@ You can copy the guild ID by right-clicking here on the server name and click `c
 
 Now that we have the information for setup, we can start writing our bot and its commands.
 
-We will first get rid of the `async fn message` hook as we won’t be using it in this example. In the `ready` hook we will call `set_application_commands` with a `GuildId` to register a command with Discord. Here we register a `hello` command with a description and no parameters (Discord refers to these as options).
+We will first get rid of the `async fn message` hook as we won't be using it in this example. In the `ready` hook we will call `set_application_commands` with a `GuildId` to register a command with Discord. Here we register a `hello` command with a description and no parameters (Discord refers to these as options).
 
 ```rust
 #[async_trait]
@@ -200,7 +200,7 @@ Our bot should respond with "hello" to our command:
 
 ![](/images/blog/discord-bot-screenshots/command-result.png)
 
-Wow! Let’s make our bot do something a little more useful.
+Wow! Let's make our bot do something a little more useful.
 
 ### Making the bot do something
 
@@ -445,11 +445,11 @@ While typing, we should see our command come up with the options/parameters:
 
 ![](/images/blog/discord-bot-screenshots/weather-input.png)
 
-Entering “Paris” as the place we get a result with a forecast:
+Entering "Paris" as the place we get a result with a forecast:
 
 ![](/images/blog/discord-bot-screenshots/weather-forecast.png)
 
-And entering a location that isn’t registered returns an error, thanks to the error handling we added to the `get_forecast` function:
+And entering a location that isn't registered returns an error, thanks to the error handling we added to the `get_forecast` function:
 
 ![](/images/blog/discord-bot-screenshots/weather-error.png)
 

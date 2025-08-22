@@ -12,13 +12,13 @@ date: '2024-12-20T14:00:00'
 
 Observability forms a huge part of being able to debug and resolve production incidents quickly. One way to improve observability is application monitoring and using telemetry to send your logs to an observability backend that also allows you view and analyse your logs. BetterStack (formerly known as Logtail) is a great way to do this, as they offer both a package for simple application monitoring and telemetry.
 
-In this tutorial, we’ll get into how you can add a status page for your web service using BetterStack, which by default supports status history, incident reporting and maintenance notices:
+In this tutorial, we'll get into how you can add a status page for your web service using BetterStack, which by default supports status history, incident reporting and maintenance notices:
 
 ![image.png](/images/blog/betterstack-status-page/result.png)
 
 ## Why use status pages at all?
 
-While status pages are a commonly used solution to improve user experience, it’s also important to talk about *why* you should set up a status page. Status pages are a commonly used convention by a lot of different types of companies and although the reasons may seem relatively obvious, there are benefits for any company with a website to set up a status page for your users.
+While status pages are a commonly used solution to improve user experience, it's also important to talk about *why* you should set up a status page. Status pages are a commonly used convention by a lot of different types of companies and although the reasons may seem relatively obvious, there are benefits for any company with a website to set up a status page for your users.
 
 Although companies and professional teams often additionally opt for an internal status page (for internal services), we will primarily be discussing external-facing status pages below.
 
@@ -34,33 +34,33 @@ Similarly, once user trust has been built they may more inclined to simply wait 
 
 ### Set up Status Monitoring
 
-For the most part, application monitoring with BetterStack is quite easy. Once you’ve signed into your account (and finished the onboarding), you’ll need to make sure you’re on the “Uptime” section and then click on “Create monitor” (see below):
+For the most part, application monitoring with BetterStack is quite easy. Once you've signed into your account (and finished the onboarding), you'll need to make sure you're on the "Uptime" section and then click on "Create monitor" (see below):
 
 ![image.png](/images/blog/betterstack-status-page/connect-first-monitor.png)
 
-Next, you’ll be brought to this menu. There’s a drop-down list you can use to select different kinds of events for what should trigger a notification (non-exhaustive list below):
+Next, you'll be brought to this menu. There's a drop-down list you can use to select different kinds of events for what should trigger a notification (non-exhaustive list below):
 
 - URL becomes unavailable
-- URL doesn’t contain keyword
+- URL doesn't contain keyword
 - URL contains keyword
 - URL returns a status other than a given HTTP status
-- Host doesn’t respond to ping
+- Host doesn't respond to ping
 
-You can also see that we’ve used [`https://shuttle.dev`](https://shuttle.dev) as the URL below - you can use whatever URL you want here, but if you have a Shuttle project in mind that you need to monitor, add the URL in here! You may want to dedicate a specific health check route for this - it’s common convention to use `/healthz` or `/health` for this.
+You can also see that we've used [`https://shuttle.dev`](https://shuttle.dev) as the URL below - you can use whatever URL you want here, but if you have a Shuttle project in mind that you need to monitor, add the URL in here! You may want to dedicate a specific health check route for this - it's common convention to use `/healthz` or `/health` for this.
 
 ![image.png](/images/blog/betterstack-status-page/create-monitor-menu.png)
 
-Once done, you should get to a menu that looks like image below. Now whenever your web service goes down, BetterStack should automatically let you know through email (or another method, if you’re on one of the paid tiers) when the alert gets triggered.
+Once done, you should get to a menu that looks like image below. Now whenever your web service goes down, BetterStack should automatically let you know through email (or another method, if you're on one of the paid tiers) when the alert gets triggered.
 
 ![image.png](/images/blog/betterstack-status-page/view-monitor-menu.png)
 
 ### Setting up a status page
 
-Now for the easy part! Head over to the Status Page tab then select “Create status page” like below.
+Now for the easy part! Head over to the Status Page tab then select "Create status page" like below.
 
 ![2024-12-16_10-40.png](/images/blog/betterstack-status-page/create-status-page-directions.png)
 
-Next, you should be greeted by a series of tabs with an initial Settings menu. Fill it out, then proceed to the Structure tab where we’ll be adding our monitor that we created from earlier. If you click “Search to add resources”, you’ll be able to search for your monitor from there and add it in. Note that you can add an explanation as well as the widget type if you want to experiment.
+Next, you should be greeted by a series of tabs with an initial Settings menu. Fill it out, then proceed to the Structure tab where we'll be adding our monitor that we created from earlier. If you click "Search to add resources", you'll be able to search for your monitor from there and add it in. Note that you can add an explanation as well as the widget type if you want to experiment.
 
 ![image.png](/images/blog/betterstack-status-page/create-status-page-menu.png)
 
@@ -70,13 +70,13 @@ Once done, you should now be able to head over to your status page and see it in
 
 ### Use a subdomain for the status page
 
-This is an easy one to get right, but an important one nonetheless. If you’re running a web service in production and have users, your users being able to check service uptime themselves can improve user experience significantly during downtime.
+This is an easy one to get right, but an important one nonetheless. If you're running a web service in production and have users, your users being able to check service uptime themselves can improve user experience significantly during downtime.
 
 Typically, the subdomain used would be `status`. So in our example we would use `status.shuttle.dev` as the subdomain.
 
 ### Ensure coverage of your whole service
 
-Status pages are great because they ensure that at least *one* part (typically the health check route) is available form your status page. However, this does not guarantee a high degree of availability over your whole service - availability here meaning whether or not your service returns `2xx` or a `5xx` code). In this case, you likely want to use BetterStack’s Playwright monitors to be able to use much more custom scenarios. By setting the What to Monitor option to `Playwright scenario fails`, we can now use the `playwright` JavaScript library to be able to set up tests! An example can be found below:
+Status pages are great because they ensure that at least *one* part (typically the health check route) is available form your status page. However, this does not guarantee a high degree of availability over your whole service - availability here meaning whether or not your service returns `2xx` or a `5xx` code). In this case, you likely want to use BetterStack's Playwright monitors to be able to use much more custom scenarios. By setting the What to Monitor option to `Playwright scenario fails`, we can now use the `playwright` JavaScript library to be able to set up tests! An example can be found below:
 
 ```rust
 const { test, expect } = require('@playwright/test');
@@ -91,19 +91,19 @@ test('mobile page contains Sign up', async ({ page }) => {
 
 While this might be something you might not want to put on a user-facing status page, it is a great way to protect yourself from regressions and breaking code changes. The [Playwright codegen tool](https://playwright.dev/docs/codegen) is a great way to spin some tests up quickly.
 
-### Status pages & health checks aren’t a full view of observability
+### Status pages & health checks aren't a full view of observability
 
-Status pages based on external monitoring probes or health checks do not provide a full view of observability as they only represent a small sample of the total traffic to your service. Monitoring probes are similar to network pings, answering the question “is the service reachable?” Different types of metrics and application monitoring, such as total traffic, errors, response latency and resource usage, are required to get a complete picture of your service health. However, monitoring probes are an excellent and essential first line of defence, especially when hosted externally because the uptime of the monitoring tool is not correlated to the uptime of the service.
+Status pages based on external monitoring probes or health checks do not provide a full view of observability as they only represent a small sample of the total traffic to your service. Monitoring probes are similar to network pings, answering the question "is the service reachable?" Different types of metrics and application monitoring, such as total traffic, errors, response latency and resource usage, are required to get a complete picture of your service health. However, monitoring probes are an excellent and essential first line of defence, especially when hosted externally because the uptime of the monitoring tool is not correlated to the uptime of the service.
 
 ### Status pages cannot replace customer service
 
 While status pages are helpful, they should not be the final answer to user-facing observability improvements. Particularly if your users are building a business on top of your platform, they should also receive notifications through proper channels for severe outages. This ensures a clear, professional line of communication with your customers which in most cases should improve customer service.
 
-As a first step for this, a good communication channel is typically wherever your users are - be it Discord, Slack or Telegram (or even on X!). Email is also additionally another good channel to use as even when your most critical users are not on the same social media platforms you’re on, there is an extremely high chance they have an email address you can send to.
+As a first step for this, a good communication channel is typically wherever your users are - be it Discord, Slack or Telegram (or even on X!). Email is also additionally another good channel to use as even when your most critical users are not on the same social media platforms you're on, there is an extremely high chance they have an email address you can send to.
 
 ### Use honest, concise language for incident reports
 
-It might seem a little bit daunting to be completely honest about what went wrong in an incident. That being said, it is important to be honest and use concise language in incident reports as it is a good way to enforce the transparency aspect of a status page and potentially reap reputational benefits. It’s also extremely important that the post mortems are also blameless: while a single person may have triggered it, the root cause is typically always systemic and it’s important to keep this in mind. It also looks somewhat unprofessional to place the blame on a single person and can cause a witch hunt.
+It might seem a little bit daunting to be completely honest about what went wrong in an incident. That being said, it is important to be honest and use concise language in incident reports as it is a good way to enforce the transparency aspect of a status page and potentially reap reputational benefits. It's also extremely important that the post mortems are also blameless: while a single person may have triggered it, the root cause is typically always systemic and it's important to keep this in mind. It also looks somewhat unprofessional to place the blame on a single person and can cause a witch hunt.
 
 Understanding what exactly went wrong and communicating it publicly as well as how to fix it for the future is often much more important than hiding it, causing reputational risk. Often while incidents can seem huge at the time, eventually enough time passes that they become learning experiences and can be good educational material for the future members of your team.
 

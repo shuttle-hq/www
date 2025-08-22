@@ -11,7 +11,7 @@ date: '2025-06-18'
 
 Microservices promise speed, scale, and team autonomy. But once you deploy more than a handful, the complexity creeps in. Teams suddenly face config sprawl, CI duplication, secret management, and fractured environments.
 
-In this article, we’ll explore the hidden operational costs of microservices, especially for Rust developers. You’ll see how Shuttle’s dev-first approach simplifies the provisioning and deployment journey, and we’ll even give you a real microservices challenge to try yourself.
+In this article, we'll explore the hidden operational costs of microservices, especially for Rust developers. You'll see how Shuttle's dev-first approach simplifies the provisioning and deployment journey, and we'll even give you a real microservices challenge to try yourself.
 
 > **Want to try it yourself?**
 >
@@ -32,7 +32,7 @@ We'll end the blog post with a special challenge for Rust developers for buildin
 ### What is a monolith?
 
 Modern applications often evolve from monoliths to microservices, and for good reason.
-A **monolith** is a single, tightly coupled codebase running as one process. It’s simple to start but becomes harder to scale as teams and features grow. Every small change risks affecting the entire system.
+A **monolith** is a single, tightly coupled codebase running as one process. It's simple to start but becomes harder to scale as teams and features grow. Every small change risks affecting the entire system.
 
 **Microservices**, by contrast, are small, independently deployable services. They offer:
 
@@ -99,7 +99,7 @@ The more services you have, the more secrets and configurations you need to mana
 
 > **Ready to experience these challenges for yourself?**
 >
-> We’ve built an interactive onboarding challenge using **Rust** and **Shuttle** called **ShellCon**. You’ll debug and optimize 3 microservices to make the frontend app work,  including async Rust code, Axum HTTP routes, and SQL queries.
+> We've built an interactive onboarding challenge using **Rust** and **Shuttle** called **ShellCon**. You'll debug and optimize 3 microservices to make the frontend app work,  including async Rust code, Axum HTTP routes, and SQL queries.
 >
 > 👉 [Start the ShellCon Challenge](https://github.com/shuttle-hq/shuttle-shellcon)
 
@@ -398,7 +398,7 @@ Connecting to a database using Shuttle is as simple as adding a macro to your `m
 
 For managing secrets, we have used the `#[shuttle_runtime::Secrets]` attribute provided by Shuttle that will automatically load the secrets from the `Secrets.toml`. Shuttle will automatically push the secrets to the cloud in a secure manner when running `shuttle deploy`.
 
-Let’s build a middleware function to authenticate requests using the `ANALYTICS_API_KEY` from the `Secrets.toml` file. This way, only our blog service can send analytics events to the analytics service.
+Let's build a middleware function to authenticate requests using the `ANALYTICS_API_KEY` from the `Secrets.toml` file. This way, only our blog service can send analytics events to the analytics service.
 
 ```rust
 async fn auth_middleware(
@@ -516,7 +516,7 @@ ANALYTICS_SERVICE_URL = "https://analytics-service-m7iz.shuttle.app" # Replace w
 ANALYTICS_API_KEY = "your-super-secret-api-key-here"
 ```
 
-Now let's implement our blog service with analytics tracking. We’re going to implement a few routes: Create a post, get a post and get a list of all posts. See the [source code here](https://github.com/dcodesdev/shuttle-microservice-demo).
+Now let's implement our blog service with analytics tracking. We're going to implement a few routes: Create a post, get a post and get a list of all posts. See the [source code here](https://github.com/dcodesdev/shuttle-microservice-demo).
 
 ```rust
 async fn create_post(
@@ -540,7 +540,7 @@ async fn get_post(
 
 ### Service to service secure communication
 
-To send events to the analytics services, we’ll need to create a new function to send analytics events to the analytics service, this function is used to communicate with the analytics service using secure `HTTP` requests.
+To send events to the analytics services, we'll need to create a new function to send analytics events to the analytics service, this function is used to communicate with the analytics service using secure `HTTP` requests.
 
 ```rust
 async fn send_analytics_event(state: &AppState, event: AnalyticsEvent) -> Result<(), reqwest::Error> {
@@ -675,7 +675,7 @@ This makes development easier and much faster, putting you ahead of the curve. Y
       answer: "Shuttle handles provisioning, secret management, and deployment automatically. You define infrastructure with macros in your Rust code and deploy using the Shuttle CLI."
     },
     {
-      question: "What’s the best way to manage secrets across microservices?",
+      question: "What's the best way to manage secrets across microservices?",
       answer: "Use a secure secret management system. Shuttle simplifies this by letting you define secrets in a Secrets.toml file and injecting them into your app with the shuttle_runtime::Secrets macro."
     },
     {
