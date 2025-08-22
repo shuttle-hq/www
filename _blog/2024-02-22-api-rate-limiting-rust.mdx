@@ -8,24 +8,24 @@ cover: rate-limiting-rust-thumb.png
 date: '2024-02-22T15:00:00'
 ---
 
-Hello world! We’re going to talk about implementing rate limiting for your API in Rust. When it comes to services in production, you want to ensure that bad actors aren’t abusing your APIs - this is where API rate limiting comes in.
+Hello world! We're going to talk about implementing rate limiting for your API in Rust. When it comes to services in production, you want to ensure that bad actors aren't abusing your APIs - this is where API rate limiting comes in.
 
-For this tutorial we will be implementing the “sliding window” algorithm by having a dynamic period to check request histories over as well, using a basic in-memory hashmap to store users and their request times. We will also look at using `tower-governor` to configure rate limiting for you.
+For this tutorial we will be implementing the "sliding window" algorithm by having a dynamic period to check request histories over as well, using a basic in-memory hashmap to store users and their request times. We will also look at using `tower-governor` to configure rate limiting for you.
 
 ## Implementing a naive sliding window rate limiter
 
-To figure out how we can do this from the ground up, let’s write a naive sliding window IP based rate limiter from scratch.
+To figure out how we can do this from the ground up, let's write a naive sliding window IP based rate limiter from scratch.
 
-To get started, we’re going to initialise a regular project using `cargo init` and follow the prompt, picking Axum as our framework of choice.
+To get started, we're going to initialise a regular project using `cargo init` and follow the prompt, picking Axum as our framework of choice.
 
-We’re going to need some extra dependencies, so let’s install them with this shell snippet:
+We're going to need some extra dependencies, so let's install them with this shell snippet:
 
 ```bash
 cargo add serde@1.0.196 -F derive
 cargo add chrono@0.4.34 -F serde,clock
 ```
 
-We’ll declare a new struct that holds a `HashMap` of `IpAddr` keys with the values being `Vec<DateTime<Utc>>` (a Vector of UTC-timezone timestamps).
+We'll declare a new struct that holds a `HashMap` of `IpAddr` keys with the values being `Vec<DateTime<Utc>>` (a Vector of UTC-timezone timestamps).
 
 ```rust
 use std::sync::{Arc, Mutex};
@@ -43,7 +43,7 @@ pub struct RateLimiter {
 }
 ```
 
- To get started, we’ll want to lock our hashmap by using `.lock()` which gives us write access. Then we’ll want to check whether or not the hashmap contains a key containing the IP address we want to check for with the `.entry()` function, then modify it by retaining valid timestamps and pushing a new entry depending on whether or not the length is under the request limit. We then check if the entry length is a higher length than the request limit - if so, return an error; if not, return `Ok(())`.
+ To get started, we'll want to lock our hashmap by using `.lock()` which gives us write access. Then we'll want to check whether or not the hashmap contains a key containing the IP address we want to check for with the `.entry()` function, then modify it by retaining valid timestamps and pushing a new entry depending on whether or not the length is under the request limit. We then check if the entry length is a higher length than the request limit - if so, return an error; if not, return `Ok(())`.
 
 ```rust
 impl RateLimiter {
@@ -104,7 +104,7 @@ let rate_limiter = RateLimiter::default();
 }
 ```
 
-From here if we wanted to extend this to work with Axum, we could. However, production-ready rate-limiting systems are typically much more advanced than this. We’ll be discussing how you can utilize crates for rate limiting below, including usage of user-based rate limiting.
+From here if we wanted to extend this to work with Axum, we could. However, production-ready rate-limiting systems are typically much more advanced than this. We'll be discussing how you can utilize crates for rate limiting below, including usage of user-based rate limiting.
 
 ## Implementing user-based rate limiting
 
@@ -118,13 +118,13 @@ Working with user-based rate limiting allows us to solve these issues. While use
 ## Getting started
 To initialise our web service we'll use `shuttle init` (requires `cargo-shuttle` installed) to create our project, making sure to pick Axum as the framework.
 
-Before adding the rate limiter itself, we’re going to create a custom header key! This will be used in routes where we require user authentication. We can also use the header when implementing our custom key extractor for the rate limiter later on. We’ll want to start by adding `axum-extra` with the `typed-header` feature:
+Before adding the rate limiter itself, we're going to create a custom header key! This will be used in routes where we require user authentication. We can also use the header when implementing our custom key extractor for the rate limiter later on. We'll want to start by adding `axum-extra` with the `typed-header` feature:
 
 ```rust
 cargo add axum-extra -F typed-header
 ```
 
-Next we’ll want to create a struct that will hold a String and implement the `axum_extra` re-export of `headers::Header`. You can see the `Header` implementation below, where it decodes the value by iterating over `HeaderValue` and creates the `CustomHeader` struct.
+Next we'll want to create a struct that will hold a String and implement the `axum_extra` re-export of `headers::Header`. You can see the `Header` implementation below, where it decodes the value by iterating over `HeaderValue` and creates the `CustomHeader` struct.
 
 We can start by defining a `HeaderName`:
 
@@ -141,7 +141,7 @@ impl CustomHeader {
 }
 ```
 
-Now that we’ve defined our custom header name (which will be used as the header key), we can implement `axum_extra::headers::Header` for `CustomHeader`:
+Now that we've defined our custom header name (which will be used as the header key), we can implement `axum_extra::headers::Header` for `CustomHeader`:
 
 ```rust
 
@@ -188,13 +188,13 @@ This is all well and good, but how does this relate to rate limiting?
 
 While we can use this in middleware, a better alternative solution would be to use `tower_governor`. This crate is a Tower service backed by the `governor` crate (a crate for regulating data with rate limiting) and makes it much easier to implement rate limiting, The crate uses the Generic Cell Rate Algorithm (GCRA) which is a much more sophisticated version of a leaky bucket. You can read much more about GCRA [here.](https://en.wikipedia.org/wiki/Generic_cell_rate_algorithm)
 
-To get started, we’ll add the crate to our Rust program:
+To get started, we'll add the crate to our Rust program:
 
 ```bash
 cargo add tower-governor
 ```
 
-When we want to add it to our main function, we can do it by using `GovernorConfigBuilder` and then adding it into `GovernorLayer`. Note that while `GovernorConfigBuilder` doesn’t implement `Clone`, adding a Tower service layer requires it to implement `Clone`. This means that we need to box the config builder and then later on, we can use `Box::leak` to leak the box to get a `&'static` lifetime `GovernorConfig` for usage with our `axum::Router`:
+When we want to add it to our main function, we can do it by using `GovernorConfigBuilder` and then adding it into `GovernorLayer`. Note that while `GovernorConfigBuilder` doesn't implement `Clone`, adding a Tower service layer requires it to implement `Clone`. This means that we need to box the config builder and then later on, we can use `Box::leak` to leak the box to get a `&'static` lifetime `GovernorConfig` for usage with our `axum::Router`:
 
 ```rust
 use auxm::{Router, routing::get};
@@ -221,7 +221,7 @@ async fn main() -> shuttle_axum::ShuttleAxum {
 }
 ```
 
-By default, `GovernorConfigBuilder` uses a type called `PeerIpKeyExtractor` which attempts to grab the IP key of a connecting client. However, to use our header as the extracted key we can implement `tower_governor::key_extractor::KeyExtractor`. To do this, we’ll use a unit struct as when we add it to `GovernorConfigBuilder` later on, there aren’t currently any extra variables we need:
+By default, `GovernorConfigBuilder` uses a type called `PeerIpKeyExtractor` which attempts to grab the IP key of a connecting client. However, to use our header as the extracted key we can implement `tower_governor::key_extractor::KeyExtractor`. To do this, we'll use a unit struct as when we add it to `GovernorConfigBuilder` later on, there aren't currently any extra variables we need:
 
 ```rust
 use tower_governor::GovernorError;
@@ -262,13 +262,13 @@ let governor_conf = Box::new(
 );
 ```
 
-When a user attempts to access any route that is layered with the `GovernorLayer`, now it’ll attempt to get a header with the header name `x-custom-key` - if it’s not present, the route will return an error. Here we have set the limit to allow users to send 5 requests every 2 seconds.
+When a user attempts to access any route that is layered with the `GovernorLayer`, now it'll attempt to get a header with the header name `x-custom-key` - if it's not present, the route will return an error. Here we have set the limit to allow users to send 5 requests every 2 seconds.
 
 Note that in the builder, the `per_second()` function tells us exactly how many seconds the interval will be between replenishing the quota and `burst_size` tells us what the quota is before `tower-governor` will start blocking requests from a given IP address (or API key, in our case). We can also additionally set `per_millisecond()` and `per_nanosecond()` parameters so that if you want to replenish the quota every half a second for example, you can use `per_millisecond(500)` in the builder.
 
 ## Deploying
 
-Now that we’re done, you can deploy using `shuttle deploy` (add `--ad` if on a dirty Git branch) and watch the magic happen. Once finished, Shuttle will output the details of your deployment in the terminal.
+Now that we're done, you can deploy using `shuttle deploy` (add `--ad` if on a dirty Git branch) and watch the magic happen. Once finished, Shuttle will output the details of your deployment in the terminal.
 
 ## Finishing Up
 

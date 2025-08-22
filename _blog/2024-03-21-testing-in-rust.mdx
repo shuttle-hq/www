@@ -8,7 +8,7 @@ cover: testing-rust-thumb.png
 date: '2024-03-21T15:30:00'
 ---
 
-Testing is an important tool. It cuts down on production errors and allows us to check for regressions. It’s easy to see the value of testing - it saves time (and money!) trying to find regressions later on. By the end of this article, you’ll have a comprehensive understanding of implementing different types of testing in Rust.
+Testing is an important tool. It cuts down on production errors and allows us to check for regressions. It's easy to see the value of testing - it saves time (and money!) trying to find regressions later on. By the end of this article, you'll have a comprehensive understanding of implementing different types of testing in Rust.
 
 ## Rust unit testing
 
@@ -68,7 +68,7 @@ hyper = { version = "1.2.0", features = ["client"] }
 
 Some unit tests may want to share common functions. For example, setting up required functionality across a bunch of tests. As a starting point, this can be done by including the function in the same module as your test, or in a different module.
 
-However, this can get quite messy. Typically the best way to organise this is to put shared functionality in a parent mod. If you have quite a lot of setup for your application testing, a more idiomatic way to do this would be to have a local unpublished crate that has all the testing utilities you need. Then import the local crate as a dev dependency and work from there. For example, let’s say you have a crate called `test_utilities` with the following code:
+However, this can get quite messy. Typically the best way to organise this is to put shared functionality in a parent mod. If you have quite a lot of setup for your application testing, a more idiomatic way to do this would be to have a local unpublished crate that has all the testing utilities you need. Then import the local crate as a dev dependency and work from there. For example, let's say you have a crate called `test_utilities` with the following code:
 
 ```rust
 // src/lib.rs
@@ -78,7 +78,7 @@ async fn do_a_thing() {
 }
 ```
 
-Let’s say you have a project folder that looks like this:
+Let's say you have a project folder that looks like this:
 
 ```
 ├── Cargo.toml
@@ -101,7 +101,7 @@ utilities = { path = "utilities" }
 
 ## Rust integration testing
 
-To set up integration tests, create a new folder in your project root called `tests`. You can then create a `.rs` file named anything you like. We’ll call our example file `integration_tests.rs`.
+To set up integration tests, create a new folder in your project root called `tests`. You can then create a `.rs` file named anything you like. We'll call our example file `integration_tests.rs`.
 
 Imagine you have a function called `return_one()` in your main Rust application called `returner` that simply returns the number 1 as an `i32`.
 
@@ -122,7 +122,7 @@ fn test_returns_one() {
 }
 ```
 
-The tests folder isn’t purely for tests, however! As mentioned before, we can create a module folder in our tests to add extra utility functions. We’ll create a folder called `common` that should have two files: a `mod.rs` file and a `postgres.rs` file. The contents of these files should be as follows.
+The tests folder isn't purely for tests, however! As mentioned before, we can create a module folder in our tests to add extra utility functions. We'll create a folder called `common` that should have two files: a `mod.rs` file and a `postgres.rs` file. The contents of these files should be as follows.
 
 ```rust
 // tests/common/mod.rs
@@ -157,7 +157,7 @@ fn test_add() {
 }
 ```
 
-It’s generally suggested to group similar tests together. This allows you to be able to find tests easily.
+It's generally suggested to group similar tests together. This allows you to be able to find tests easily.
 
 ## Rust testing library crates
 
@@ -204,7 +204,7 @@ fn run() {
 }
 ```
 
-This is quite useful for situations that require filesystem handling (for example, if you’re downloading or generating files somewhere). You can find out more [here.](https://docs.rs/tempdir/latest/tempdir/)
+This is quite useful for situations that require filesystem handling (for example, if you're downloading or generating files somewhere). You can find out more [here.](https://docs.rs/tempdir/latest/tempdir/)
 
 ### rstest
 
@@ -241,7 +241,7 @@ As you can see here, the second variable is an async function that requires a fu
 
 ### proptest
 
-Property testing is as important a facet in Rust as any other. Simply put: it’s testing against the properties of an object or function until it crashes (or the input finishes). For example, consider an enum with a non-standard `to_string()` implementation (granted from the `std::fmt::Display` trait), the property testing library may try to use non-UTF8 strings. This can fail the test depending on whether or not you’ve accounted for non-UTF8 strings.
+Property testing is as important a facet in Rust as any other. Simply put: it's testing against the properties of an object or function until it crashes (or the input finishes). For example, consider an enum with a non-standard `to_string()` implementation (granted from the `std::fmt::Display` trait), the property testing library may try to use non-UTF8 strings. This can fail the test depending on whether or not you've accounted for non-UTF8 strings.
 
 [proptest](https://docs.rs/proptest/latest/proptest/) allows us to carry out property testing by matching random inputs against a test function. Check out the snippet below:
 
@@ -345,7 +345,7 @@ static TEST_CONTAINER: Lazy<PgPool> = Lazy::new(|| {
 
 ### cargo-fuzz
 
-`cargo-fuzz` is a crate designed to help you carry out fuzz testing on Rust projects. Fuzzing is an automated testing method that tries to find function inputs that fail and then finds the minimal version of the test case that can fail. Fuzzing is also often coupled with property-based testing, as they complement each other very well. While the crate itself isn’t a fuzzer and actually invokes a fuzzer, it’s still a very useful tool to have. It supports `libFuzzer` and can be extended to support others.
+`cargo-fuzz` is a crate designed to help you carry out fuzz testing on Rust projects. Fuzzing is an automated testing method that tries to find function inputs that fail and then finds the minimal version of the test case that can fail. Fuzzing is also often coupled with property-based testing, as they complement each other very well. While the crate itself isn't a fuzzer and actually invokes a fuzzer, it's still a very useful tool to have. It supports `libFuzzer` and can be extended to support others.
 
 Running `cargo fuzz init` will create a directory called `fuzz_targets` which contains a list of fuzzing targets.
 
@@ -377,7 +377,7 @@ Interested in more? You can find a tutorial for using `cargo-fuzz` and `afl` (an
 
 Finally: mutation testing! Mutation testing allows you to test your code coverage by scanning your code, then changing some variables and expecting some tests to fail or succeed depending on what has been changed. With [cargo-mutants](https://mutants.rs/), this can be done easily.
 
-To get started, you’ll need to install it:
+To get started, you'll need to install it:
 
 ```bash
 cargo install cargo-mutants
@@ -407,7 +407,7 @@ generate better mutants, or at least not generate unviable mutants.
 for a long time, until it was eventually killed. You might want to
 investigate the cause and potentially mark the function to be skipped.
 
-Interested? You can find their docs [here](https://mutants.rs/welcome.html) - they’re quite comprehensive!
+Interested? You can find their docs [here](https://mutants.rs/welcome.html) - they're quite comprehensive!
 
 The main thing to take into account here is that mutation testing in Rust can be somewhat expensive. If you change one line of code, you need to scan and re-compile your program again which can be very expensive in terms of time. If you need to use `cargo-mutants` with CI, this can result in a very expensive CI bill.
 
@@ -433,7 +433,7 @@ Once you've done the captures, you can use `cargo insta review` to review your s
 
 If you're interested in learning more, you can find the crate docs [here.](https://insta.rs/docs/)
 ## Finishing up
-Thanks for reading! Hopefully you’ve gotten a better understanding of how to test within a Rust context. With so many types of testing being available to us, it’s never been easier to ensure our Rust applications are working as intended.
+Thanks for reading! Hopefully you've gotten a better understanding of how to test within a Rust context. With so many types of testing being available to us, it's never been easier to ensure our Rust applications are working as intended.
 
 Read more:
 - Check out our guide for [getting started with Tracing](https://www.shuttle.dev/blog/2024/01/09/getting-started-tracing-rust)

@@ -7,23 +7,23 @@ thumb: llm-chain-langchain-rust-thumb.png
 cover: llm-chain-langchain-rust-thumb.png
 date: '2024-06-06T15:30:00'
 ---
-LLM orchestration is an important part of creating AI powered applications. Particularly in business use cases, AI agents and RAG pipelines are commonly utilised for refined LLM responses. Although Langchain is currently the most popular LLM orchestration suite, there are also similar crates in Rust that we can use. In this article, we’ll be diving into one of them - `llm-chain`.
+LLM orchestration is an important part of creating AI powered applications. Particularly in business use cases, AI agents and RAG pipelines are commonly utilised for refined LLM responses. Although Langchain is currently the most popular LLM orchestration suite, there are also similar crates in Rust that we can use. In this article, we'll be diving into one of them - `llm-chain`.
 
 ## What is llm-chain?
 
-`llm-chain` is a collection of crates that describes itself as “the ultimate toolbox” for working with Large Language Models (LLMs) to create AI-powered applications and other tooling.
+`llm-chain` is a collection of crates that describes itself as "the ultimate toolbox" for working with Large Language Models (LLMs) to create AI-powered applications and other tooling.
 
-You can find the crate’s GitHub repository [here.](https://github.com/sobelio/llm-chain)
+You can find the crate's GitHub repository [here.](https://github.com/sobelio/llm-chain)
 
 ### Comparison to other LLM orchestration crates
 
-If you’ve looked around for different crates, you probably noticed that there are a few crates for LLM orchestration in Rust:
+If you've looked around for different crates, you probably noticed that there are a few crates for LLM orchestration in Rust:
 
 - `llm-chain` (this one!)
 - `langchain-rust`
 - `anchor-chain`
 
-In comparison to the others, `llm-chain` is somewhat macro heavy. However, it is also the most developed in terms of having extra data processing utilities. If you’re looking for an all-in-one package, `llm-chain` is the crate that’s most likely to help you get over the line. They also have [their own docs.](https://docs.llm-chain.xyz/docs/introduction)
+In comparison to the others, `llm-chain` is somewhat macro heavy. However, it is also the most developed in terms of having extra data processing utilities. If you're looking for an all-in-one package, `llm-chain` is the crate that's most likely to help you get over the line. They also have [their own docs.](https://docs.llm-chain.xyz/docs/introduction)
 
 ## Getting Started
 
@@ -305,7 +305,7 @@ First, let's define a couple of passages that we want to insert into our Qdrant 
 ```rust
     const DOC_DOG_DEF: &str = r#"The dog (Canis familiaris[4][5] or Canis lupus familiaris[5]) is a domesticated descendant of the wolf. Also called the domestic dog, it is derived from the extinct Pleistocene wolf,[6][7] and the modern wolf is the dog's nearest living relative.[8] Dogs were the first species to be domesticated[9][8] by hunter-gatherers over 15,000 years ago[7] before the development of agriculture.[1] Due to their long association with humans, dogs have expanded to a large number of domestic individuals[10] and gained the ability to thrive on a starch-rich diet that would be inadequate for other canids.[11]
 
-    The dog has been selectively bred over millennia for various behaviors, sensory capabilities, and physical attributes.[12] Dog breeds vary widely in shape, size, and color. They perform many roles for humans, such as hunting, herding, pulling loads, protection, assisting police and the military, companionship, therapy, and aiding disabled people. Over the millennia, dogs became uniquely adapted to human behavior, and the human–canine bond has been a topic of frequent study.[13] This influence on human society has given them the sobriquet of "man's best friend"."#;
+    The dog has been selectively bred over millennia for various behaviors, sensory capabilities, and physical attributes.[12] Dog breeds vary widely in shape, size, and color. They perform many roles for humans, such as hunting, herding, pulling loads, protection, assisting police and the military, companionship, therapy, and aiding disabled people. Over the millennia, dogs became uniquely adapted to human behavior, and the human-canine bond has been a topic of frequent study.[13] This influence on human society has given them the sobriquet of "man's best friend"."#;
 
     const DOC_WOODSTOCK_SOUND: &str = r#"Sound for the concert was engineered by sound engineer Bill Hanley. "It worked very well", he says of the event. "I built special speaker columns on the hills and had 16 loudspeaker arrays in a square platform going up to the hill on 70-foot [21 m] towers. We set it up for 150,000 to 200,000 people. Of course, 500,000 showed up."[48] ALTEC designed marine plywood cabinets that weighed half a ton apiece and stood 6 feet (1.8 m) tall, almost 4 feet (1.2 m) deep, and 3 feet (0.91 m) wide. Each of these enclosures carried four 15-inch (380 mm) JBL D140 loudspeakers. The tweeters consisted of 4×2-Cell & 2×10-Cell Altec Horns. Behind the stage were three transformers providing 2,000 amperes of current to power the amplification setup.[49][page needed] For many years this system was collectively referred to as the Woodstock Bins.[50] The live performances were captured on two 8-track Scully recorders in a tractor trailer back stage by Edwin Kramer and Lee Osbourne on 1-inch Scotch recording tape at 15 ips, then mixed at the Record Plant studio in New York.[51]"#;
 
@@ -317,7 +317,7 @@ The `Qdrant` struct will automatically assume you have your collection set up an
 - Insert the embeddings into Qdrant
 - Conduct a similarity search using the prompt
 
-Firstly, we’ll want to define a method for creating our `Qdrant` struct so that we can re-use it later on:
+Firstly, we'll want to define a method for creating our `Qdrant` struct so that we can re-use it later on:
 
 ```rust
 use llm_chain_openai::embeddings::Embeddings;
@@ -350,7 +350,7 @@ async fn create_qdrant_struct(qdrant_client: QdrantClient, collection_name: Stri
 }
 ```
 
-Next, we can use the `Qdrant` struct to carry out a similarity search! We’ll add our documents to our collection, then conduct a similarity search and print out the stored documents:
+Next, we can use the `Qdrant` struct to carry out a similarity search! We'll add our documents to our collection, then conduct a similarity search and print out the stored documents:
 
 ```rust
 async fn similarity_search_qdrant(qdrant: Qdrant) -> Result<(), Box<dyn Error>> {

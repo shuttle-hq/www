@@ -8,50 +8,50 @@ cover: deploy-rust-thumb.png
 date: '2024-02-07T16:30:00'
 ---
 
-Recently, Rust has started to become more and more popular as a choice for writing web services with. Although Rust deployments are typically not given first-class support, there are still a variety of platforms that you can deploy Rust to. In this article, we’ll be going over what your options are and the (dis)advantages of each of them - as well as the best way to deploy Rust for your use case.
+Recently, Rust has started to become more and more popular as a choice for writing web services with. Although Rust deployments are typically not given first-class support, there are still a variety of platforms that you can deploy Rust to. In this article, we'll be going over what your options are and the (dis)advantages of each of them - as well as the best way to deploy Rust for your use case.
 
 ## How do you deploy Rust?
 
 When you compile Rust, it gets compiled to an executable. You can then run the binary from anywhere - including your own self-hosted server! 
 
-The compiled nature of Rust programs means that they are normally best ran in containers or alternatively a VPS. You can also run them as serverless functions through supported platforms like AWS Lambda. Each of these deployment methods have their own tradeoffs - which we’ll be looking at below. Interested in writing a Rust API? We also have a guide to writing and deploying with the Axum framework, which you can find [here.](https://www.shuttle.dev/blog/2024/01/31/write-a-rest-api-rust)
+The compiled nature of Rust programs means that they are normally best ran in containers or alternatively a VPS. You can also run them as serverless functions through supported platforms like AWS Lambda. Each of these deployment methods have their own tradeoffs - which we'll be looking at below. Interested in writing a Rust API? We also have a guide to writing and deploying with the Axum framework, which you can find [here.](https://www.shuttle.dev/blog/2024/01/31/write-a-rest-api-rust)
 
 ## Different types of hosting
 
 ### VPS
 
-VPS (Virtual Private Servers) deployments allow you to deploy to a machine that you have full control over. By SSHing into it, you can add or remove any software on the VPS that you want (or don’t want!) to use. 
+VPS (Virtual Private Servers) deployments allow you to deploy to a machine that you have full control over. By SSHing into it, you can add or remove any software on the VPS that you want (or don't want!) to use. 
 
 The basic process involves mostly setting up Nginx or Apache (or a similar proxy), then grabbing the files you need from GitHub or GitLab and compiling the program itself. You can then set the web service up as a systemd service and it will automatically start up whenever the machine starts.
 
-Unfortunately, there are a couple of issues that come along with this: you need to handle all issues yourself (unless the VPS itself has an outage), and typically it’s less scalable than other deployment options. VPS machines typically have a given hard maximum for resource usage and you pay for a set amount - so if you’re not making full usage of the given resources, you may be overpaying. This is especially relevant to Rust, as Rust web applications are typically quite low memory footprint. Most applications are around 50-150mb of usage depending on what your application does.
+Unfortunately, there are a couple of issues that come along with this: you need to handle all issues yourself (unless the VPS itself has an outage), and typically it's less scalable than other deployment options. VPS machines typically have a given hard maximum for resource usage and you pay for a set amount - so if you're not making full usage of the given resources, you may be overpaying. This is especially relevant to Rust, as Rust web applications are typically quite low memory footprint. Most applications are around 50-150mb of usage depending on what your application does.
 
-Here’s a list of advantages and disadvantages for using a VPS:
+Here's a list of advantages and disadvantages for using a VPS:
 
 | Advantage | Disadvantage |
 | --- | --- |
 | Total control over all aspects of the machine | If anything goes wrong you need to fix it yourself |
-| You know what you’re getting | Less scalable than serverless - machines typically have a hard limit |
-| Once you learn how to do it, it’s not too hard to do it again | You need to set everything up (Nginx, HTTPS, etc…) |
-| You can run whatever you want (NixOS, Ubuntu, Red Hat Enterprise Linux, etc…) | More expensive than other forms of deployment |
+| You know what you're getting | Less scalable than serverless - machines typically have a hard limit |
+| Once you learn how to do it, it's not too hard to do it again | You need to set everything up (Nginx, HTTPS, etc...) |
+| You can run whatever you want (NixOS, Ubuntu, Red Hat Enterprise Linux, etc...) | More expensive than other forms of deployment |
 |  | Not reproducible (Infra as Code setup required to reproduce) |
 
 ### Serverless
 
-Serverless deployments nowadays are quite popular and a great way to host functions that see usage but aren’t run all the time. Typically when developers talk about “serverless”, it is normally referring to serverless functions - code that gets run on servers when a given endpoint is hit and otherwise isn’t run.
+Serverless deployments nowadays are quite popular and a great way to host functions that see usage but aren't run all the time. Typically when developers talk about "serverless", it is normally referring to serverless functions - code that gets run on servers when a given endpoint is hit and otherwise isn't run.
 
-Serverless is typically used to solve the “scale-to-zero” problem. Sometimes, you may have an endpoint that isn’t used often - but it’s still consuming memory because it’s in a deployed application. By using serverless, we can move the endpoint to a separate function that doesn’t consume memory while not serving HTTP traffic. Services like Cloudflare and AWS both have their own version of “serverless functions” (Cloudflare workers and AWS Lambda, respectively) that simply get run when a HTTP request gets made to a given endpoint. This allows companies to save money by only running the code when required to do so, and is reflected in their pricing - AWS lambda gives you up to 1 million serverless function invocations per month for free!
+Serverless is typically used to solve the "scale-to-zero" problem. Sometimes, you may have an endpoint that isn't used often - but it's still consuming memory because it's in a deployed application. By using serverless, we can move the endpoint to a separate function that doesn't consume memory while not serving HTTP traffic. Services like Cloudflare and AWS both have their own version of "serverless functions" (Cloudflare workers and AWS Lambda, respectively) that simply get run when a HTTP request gets made to a given endpoint. This allows companies to save money by only running the code when required to do so, and is reflected in their pricing - AWS lambda gives you up to 1 million serverless function invocations per month for free!
 
-However, there are some caveats. You often need to adapt your code to the platform so that it can serve your serverless functions. When it comes to Rust, this can typically mean you need to write multiple binaries. You will also be unable to use regular Rust backend frameworks - though given that one serverless function equates to an endpoint, it’s not too much of a loss. Additionally, cold starts can cause your functions to initially function slower while the machine is “warming up”. This can cause a huge problem with applications that require low latency.
+However, there are some caveats. You often need to adapt your code to the platform so that it can serve your serverless functions. When it comes to Rust, this can typically mean you need to write multiple binaries. You will also be unable to use regular Rust backend frameworks - though given that one serverless function equates to an endpoint, it's not too much of a loss. Additionally, cold starts can cause your functions to initially function slower while the machine is "warming up". This can cause a huge problem with applications that require low latency.
 
 There is also the potential issue of over-engineering your functions - by creating several serverless functions when you only need one. Coupled with cold starts, this can be quite a performance (and wallet) drain while also hurting maintainability of said functions. This can be mitigated with good engineering practices.
 
-Here’s a list of advantages and disadvantages for deploying via serverless:
+Here's a list of advantages and disadvantages for deploying via serverless:
 
 | Advantage | Disadvantage |
 | --- | --- |
 | Much cheaper than hosting a VPS (you only pay for what you use!) | Cold starts |
-| You don’t need to worry about any of the hosting | Vendor lock-in due to needing to adapt your code to fit the platform |
+| You don't need to worry about any of the hosting | Vendor lock-in due to needing to adapt your code to fit the platform |
 | Very economically friendly | Unpredictable billing - can become expensive very quickly without a price cap if you get a traffic spike |
 | Often has integrations to other parts of the platform ecosystem that you can leverage | Extremely difficult to debug |
 |  | Over-engineering |
@@ -62,7 +62,7 @@ While VPS has a maximum hard limit on resources and serverless forces you to ada
 
 This has the huge advantage of being able to deploy whatever will fit in a Docker container - which allows you to ship software quickly and efficiently without delay. A lot of managed serverless platforms also have database integrations as well as other kinds of infrastructure which saves time in needing to find other services that you can use with your code. 
 
-On the other hand, there are certain disadvantages inherited from both VPS and Serverless. The web host itself typically uses AWS, GCP or one of the larger cloud computing platforms and service outages can cause a domino effect of outages. Some companies have found ways around this, but otherwise you’re still at the mercy of whatever provider is being used in the hood. However, this also comes with an advantage in that said services can also leverage their provider’s infrastructure. 
+On the other hand, there are certain disadvantages inherited from both VPS and Serverless. The web host itself typically uses AWS, GCP or one of the larger cloud computing platforms and service outages can cause a domino effect of outages. Some companies have found ways around this, but otherwise you're still at the mercy of whatever provider is being used in the hood. However, this also comes with an advantage in that said services can also leverage their provider's infrastructure. 
 
 See this short list of advantages of disadvantages for managed serverless below:
 
@@ -82,8 +82,8 @@ Shuttle uses AWS under the hood and aims to reduce the amount of work you need t
 - No docker knowledge required
 - No config files
 
-Of course, we *are* talking about our own product here - we’re biased. Our product is also somewhat early-stage when it comes to provisioning resources and various use cases. However, if you’re looking to deploy quickly in Rust (for example, an MVP or POC), we believe Shuttle is a great fit for you!
+Of course, we *are* talking about our own product here - we're biased. Our product is also somewhat early-stage when it comes to provisioning resources and various use cases. However, if you're looking to deploy quickly in Rust (for example, an MVP or POC), we believe Shuttle is a great fit for you!
 
 ## Finishing up
 
-Thanks for reading! I hope you enjoyed this guide on how to deploy a Rust web application. Rust is easier to use and deploy than ever, and with so many options it’s difficult to figure out what the best one is.
+Thanks for reading! I hope you enjoyed this guide on how to deploy a Rust web application. Rust is easier to use and deploy than ever, and with so many options it's difficult to figure out what the best one is.

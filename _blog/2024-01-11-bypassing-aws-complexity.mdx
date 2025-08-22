@@ -9,7 +9,7 @@ date: '2024-01-11T14:30:00'
 
 ..is to empower Rust developers by providing tooling that bypasses the need to interact with complicated AWS infrastructure or infrastructure files when the requirement is to move fast.
 
-When you're self-hosting, using a VPS, or on the cloud, you have control over everything. It can also be very complex: anything related to AWS, Terraform files, Dockerfiles... the list goes on. If you’re also playing the part as a Software Engineer, this can use up quite a lot of time, especially in cases where moving fast is a higher priority than having control over everything. What you end up with is:
+When you're self-hosting, using a VPS, or on the cloud, you have control over everything. It can also be very complex: anything related to AWS, Terraform files, Dockerfiles... the list goes on. If you're also playing the part as a Software Engineer, this can use up quite a lot of time, especially in cases where moving fast is a higher priority than having control over everything. What you end up with is:
 
 - Spending time context-switching which interrupts your flow.
 - Ending up with responsibilities that you may not specialize in, potentially spending more time debugging your work.
@@ -17,7 +17,7 @@ When you're self-hosting, using a VPS, or on the cloud, you have control over ev
 
 ![Old man yelling at cloud](/images/blog/bypass-aws-complexity-article/old-man-yelling-at-cloud.jpeg)
 
-Other solutions aim to solve this problem by dockerizing your applications for you. However, on those platforms Rust is typically treated as a second-class citizen, requiring you to write your own Dockerfile to deploy on the platform. You may also hit errors that you normally wouldn’t with other languages.
+Other solutions aim to solve this problem by dockerizing your applications for you. However, on those platforms Rust is typically treated as a second-class citizen, requiring you to write your own Dockerfile to deploy on the platform. You may also hit errors that you normally wouldn't with other languages.
 
 Our aim is to enhance the Rust development experience. We've built our open-source platform with Rust, and we strive to use Rust for our internal tools wherever feasible. Our goal is to provide Rust developers with a smooth and efficient deployment process comparable to what JavaScript developers enjoy with platforms like [Vercel](https://vercel.com), emphasizing ease-of-use with minimal setup.
 
@@ -35,14 +35,14 @@ Check the video below for a short example:
 </video>
 ### 2. Making resource provisioning as easy as possible
 
-You shouldn’t need to set up YAML files just to get your application going. When using our runtime, you can simply pass in annotation macros that [provision resources](https://docs.shuttle.rs/resources/overview) for you. Whether you need a database, key-value store, or some metadata about your project, we can provide that! By doing this, it allows a seamless experience between getting the infra stuff that you want and then going straight back to writing good code.
+You shouldn't need to set up YAML files just to get your application going. When using our runtime, you can simply pass in annotation macros that [provision resources](https://docs.shuttle.rs/resources/overview) for you. Whether you need a database, key-value store, or some metadata about your project, we can provide that! By doing this, it allows a seamless experience between getting the infra stuff that you want and then going straight back to writing good code.
 
 <video width="700" height="500" loop autoPlay muted>
     <source src="/videos/blog/htmx-with-rust.mp4" type="video/mp4"></source>
     Your browser does not support the video tag.
 </video>
-### What we’re doing in 2024
+### What we're doing in 2024
 
-There are several updates we’re looking forward to announcing this year. Most notably, our upcoming builder service which will allow many more use cases and bring additional platform stability. We are also planning on adding more integrations like Redis, S3 object storage, and more so keep an eye out for our 2024 product roadmap which will have more information!
+There are several updates we're looking forward to announcing this year. Most notably, our upcoming builder service which will allow many more use cases and bring additional platform stability. We are also planning on adding more integrations like Redis, S3 object storage, and more so keep an eye out for our 2024 product roadmap which will have more information!
 
-Feedback is always welcome at hello@shuttle.rs if there’s anything you’d like us to know!
+Feedback is always welcome at hello@shuttle.rs if there's anything you'd like us to know!

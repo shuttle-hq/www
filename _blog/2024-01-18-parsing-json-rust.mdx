@@ -7,13 +7,13 @@ thumb: parsing-json-rust-thumb.png
 cover: parsing-json-rust-thumb.png 
 date: '2024-01-18T14:30:00'
 ---
-In this article we’re going to talk about how to use JSON parsing libraries in Rust, as well as a comparison of the most popular libraries and how they perform.
+In this article we're going to talk about how to use JSON parsing libraries in Rust, as well as a comparison of the most popular libraries and how they perform.
 
 ## JSON Parsing Basics
 
 ### Parsing JSON manually
 
-To get started with working with JSON in Rust, you’ll want to install a library that lets you manipulate JSON easily. One of the popular crates currently available to use is `serde-json`. You can install it by running the following:
+To get started with working with JSON in Rust, you'll want to install a library that lets you manipulate JSON easily. One of the popular crates currently available to use is `serde-json`. You can install it by running the following:
 
 ```rust
 cargo add serde-json
@@ -46,11 +46,11 @@ fn untyped_example() -> Result<()> {
 }
 ```
 
-However, we can do much better than this. For example, we can serialize JSON to and from structs, which has many applications. We can use it in JSON templating, web services, CLI arguments and more. Let’s have a look at this in the next section.
+However, we can do much better than this. For example, we can serialize JSON to and from structs, which has many applications. We can use it in JSON templating, web services, CLI arguments and more. Let's have a look at this in the next section.
 
 ### Parsing JSON with Serde
 
-Serde is a crate that helps you serialize and deserialize data to and from various formats, with one popular use of this being for JSON. If you write web services in Rust, Serde is your friend as you’ll be dealing quite often with JSON data that you may need to either send or receive. Serde provides two main traits to help you with this: `Serialize` and `Deserialize` . For convenience, a derive macro implementation has been added to help with this. See below for how you can carry this out:
+Serde is a crate that helps you serialize and deserialize data to and from various formats, with one popular use of this being for JSON. If you write web services in Rust, Serde is your friend as you'll be dealing quite often with JSON data that you may need to either send or receive. Serde provides two main traits to help you with this: `Serialize` and `Deserialize` . For convenience, a derive macro implementation has been added to help with this. See below for how you can carry this out:
 
 ```rust
 use serde::{Deserialize, Serialize};
@@ -160,7 +160,7 @@ fn main() {
 }
 ```
 
-Doing it this way allows you to deserialize from the stream directly instead of adding buffering in memory. If you’re receiving a lot of JSON-based data, this can help you quite a bit!
+Doing it this way allows you to deserialize from the stream directly instead of adding buffering in memory. If you're receiving a lot of JSON-based data, this can help you quite a bit!
 
 ## Comparing Rust JSON crates
 
@@ -184,15 +184,15 @@ It is mentioned in the documentation that `simd-json` can be used at full capaci
 rustc -C target-cpu=native
 ```
 
-However, if you’re like most people using Cargo you probably want to use `cargo run`. As in the example, you can create a config at `.cargo/config` and then add the following:
+However, if you're like most people using Cargo you probably want to use `cargo run`. As in the example, you can create a config at `.cargo/config` and then add the following:
 
 ```rust
 [build]
 rustflags = ["-C", "target-cpu=native"]
 ```
-Generally speaking, although this library is quite fast, it should be noted that there is quite a lot of **unsafe** code in this crate due to it being a port of a C++ crate. This is not to say that you shouldn’t use it, but rather to use it with caution (as the crate says). In spite of this, there’s a section on safety that details how best practices (like unit testing) are upheld to make sure the crate is as safe to use as possible.
+Generally speaking, although this library is quite fast, it should be noted that there is quite a lot of **unsafe** code in this crate due to it being a port of a C++ crate. This is not to say that you shouldn't use it, but rather to use it with caution (as the crate says). In spite of this, there's a section on safety that details how best practices (like unit testing) are upheld to make sure the crate is as safe to use as possible.
 
-It should also be mentioned that for best performance, it’s typically best to enable the `jemalloc` or `mimalloc` features to be able to make the most of the library. 
+It should also be mentioned that for best performance, it's typically best to enable the `jemalloc` or `mimalloc` features to be able to make the most of the library. 
 
 Generally, the API for `simd-json` is the same as `serde-json`, so if you want to switch at any point then generally you should not have any problems doing so.
 
@@ -217,7 +217,7 @@ This allows you to build for SIMD without needing to do anything else!
 
 Like `simd-json`, there is a fair amount of `unsafe` code being used. However, if you search for unsafe code within the library you will find probably even more `unsafe` code than in the previous library. There is also not much documentation as to how unsafe guarantees are upheld, so although this library may be even faster than `simd-json` you will want to double-check that there is no undefined behavior!
 
-`sonic-rs` additionally has some extra methods for lazy evaluation and additional speed. For example, if you want a JSON string literal, you can use the `LazyValue` type when deserializing to convert it to a JSON string value that still has the forward slashes. There are also quite a few `unchecked` methods you can use if you are either not afraid of unsafe behavior or are sure it won’t error out.
+`sonic-rs` additionally has some extra methods for lazy evaluation and additional speed. For example, if you want a JSON string literal, you can use the `LazyValue` type when deserializing to convert it to a JSON string value that still has the forward slashes. There are also quite a few `unchecked` methods you can use if you are either not afraid of unsafe behavior or are sure it won't error out.
 
 Although `sonic-rs` is a pretty fast library, it is also a more recent crate and therefore there are some methods like `from_reader` (to allow reading from an IO stream) missing from the crate. This has been raised as a GitHub issue already, so hopefully it will get implemented sooner rather than later.
 
@@ -233,5 +233,5 @@ Thanks for reading! I hope this article has helped you gain an understanding of 
 
 Interested in more?
 
-- Check out our guide for Axum, Rust’s most popular framework [here.](https://www.shuttle.dev/blog/2023/12/06/using-axum-rust)
+- Check out our guide for Axum, Rust's most popular framework [here.](https://www.shuttle.dev/blog/2023/12/06/using-axum-rust)
 - Check out our guide for using raw SQL in Rust with [SQLx.](https://www.shuttle.dev/blog/2023/10/04/sql-in-rust)

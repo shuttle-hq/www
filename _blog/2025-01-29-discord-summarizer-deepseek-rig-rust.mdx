@@ -10,9 +10,9 @@ date: '2025-01-29T14:45:00'
 
 ## Introduction
 
-Whether you’re a community manager or part of a collaborative team, staying on top of conversations can be challenging. What if you could automate the process and generate concise, Markdown-based summaries of your server’s activity every day? That’s exactly what we’re going to build in this tutorial!
+Whether you're a community manager or part of a collaborative team, staying on top of conversations can be challenging. What if you could automate the process and generate concise, Markdown-based summaries of your server's activity every day? That's exactly what we're going to build in this tutorial!
 
-In this guide, we’ll create a Discord bot that listens to your server, collects messages from the previous day, and generates a neatly formatted Markdown summary. The summary will highlight key points and group messages by topics and authors. This bot will save time, improve organisation, and make it easier to follow conversations. We'll also be using the new DeepSeek R1 model to generate our summaries with [Hyperbolic,](https://hyperbolic.xyz/) an AI cloud provider that provides GPU renting services as well as an AI inference API.
+In this guide, we'll create a Discord bot that listens to your server, collects messages from the previous day, and generates a neatly formatted Markdown summary. The summary will highlight key points and group messages by topics and authors. This bot will save time, improve organisation, and make it easier to follow conversations. We'll also be using the new DeepSeek R1 model to generate our summaries with [Hyperbolic,](https://hyperbolic.xyz/) an AI cloud provider that provides GPU renting services as well as an AI inference API.
 
 Interested in checking out the full example? Find it [here.](https://github.com/joshua-mo-143/discord-message-summarizer-bot)
 
@@ -23,13 +23,13 @@ Before we get started, you'll need to make sure you have the following installed
 - the Rust programming language
 - The `cargo-shuttle` CLI tool (for deploying to Shuttle & project initialisation)
 - You will also additionally need a Hyperbolic API key. To get one, follow the instructions below:
-    - You’ll need to [make a Hyperbolic account](https://app.hyperbolic.xyz/) from the application.
+    - You'll need to [make a Hyperbolic account](https://app.hyperbolic.xyz/) from the application.
     - Once registered, navigate to the [Settings](https://app.hyperbolic.xyz/settings) page on the dashboard.
-    - You'll be able to view and copy your Hyperbolic API Key from there. Keep ahold of your API key as we’ll be using it later.
-- A Discord API key is also required. If you don’t already have one, follow the instructions to get one (it’s totally free!):
+    - You'll be able to view and copy your Hyperbolic API Key from there. Keep ahold of your API key as we'll be using it later.
+- A Discord API key is also required. If you don't already have one, follow the instructions to get one (it's totally free!):
     - Click the New Application button, name your application and click Create.
     - Navigate to the Bot tab in the lefthand menu, and add a new bot.
-    - On the bot page click the Reset Token button to reveal your token. Keep ahold of this token as we’ll be using it later.
+    - On the bot page click the Reset Token button to reveal your token. Keep ahold of this token as we'll be using it later.
     - For the sake of this example, you also need to scroll down on the
     bot page to the Message Content Intent section and enable that option.
 - You will also need `sqlx-cli` installed (the SQLx CLI tool) which will allow you to easily manage SQL migrations versions.
@@ -48,7 +48,7 @@ This will create a template with the following:
 - A `Bot` unit struct that has a basic `EventHandler` implementation
 - A `main` function that sets up a `serenity` client for automatic deployment to Shuttle
 
-You’ll also notice that a `Secrets.toml` file has been created. We’ll extend it to include the Hyperbolic API key & Discord we obtained before. Note that you will also need a Discord channel ID where you want your bot to send the reports to - you can select a channel by simply right clicking it and getting the channel ID.
+You'll also notice that a `Secrets.toml` file has been created. We'll extend it to include the Hyperbolic API key & Discord we obtained before. Note that you will also need a Discord channel ID where you want your bot to send the reports to - you can select a channel by simply right clicking it and getting the channel ID.
 
 ```toml
 # Secrets.toml
@@ -75,7 +75,7 @@ Let's closely examine what our new dependencies are for:
 - **chrono:** A crate for dealing with time.
 - **serde-json:** A crate for (de)serializing to and from JSON.
 
-## Let’s Build!
+## Let's Build!
 
 ### Migrations
 

@@ -43,7 +43,7 @@ What starts life as physical machines in a data center gets split up into tens, 
 
 Then came along containers. Building on top of the Linux kernel's namespacing features, they made images smaller and runtimes more efficient than VMs. The genius of it is to move the virtualization layer from the hardware - where the kernel itself runs virtualized - to the software - where only processes run "virtualized". With containers, virtualized processes run natively in the host kernel, like any other. Except that their I/Os are carefully kept segregated from others in the host system. Any bit of compiled code that is executable on the host can be run in a container. And you can run processes in a container without a separate boot sequence and a full-fledged virtualized operating system with its own heavy machinery like a scheduler and dedicated virtualized hardware.
 
-Containers are actually much older than a lot of people realise, going as far as 2008 with LXC in Linux’s case (even more in the case of FreeBSD). Their popularity, however, really took off with the arrival of Docker. The execution of Docker as a platform-as-a-service product was so good it took over software engineering practices for the following decade. And it is still the gold standard today in terms of usage.
+Containers are actually much older than a lot of people realise, going as far as 2008 with LXC in Linux's case (even more in the case of FreeBSD). Their popularity, however, really took off with the arrival of Docker. The execution of Docker as a platform-as-a-service product was so good it took over software engineering practices for the following decade. And it is still the gold standard today in terms of usage.
 
 Of course, companies were quick to build products on top of containers. They basically pass through the benefits of containers to their paying customers. Heroku is one of the most notable example. And while containers delivered most of us, directly or indirectly, from having to deal with VMs as a unit of deployment, they certainly have their issues. The biggest one being their size.
 
@@ -59,7 +59,7 @@ You're probably thinking: it's nice and optimistic to say containers are too hea
 
 Well first, as an open-source company, you avoid making the same mistake Docker made. If you make the scope of virtualization too broad, you will end up with the same result as containers. The root cause behind the heavy weight of containers is that they have been built for too many usecases. They layer virtualization on top of _all_ the I/Os of a native Linux process: their usecase is just about anything that runs.
 
-We’re concerned with the backend services most people write. These are HTTP request/response handlers, with or without state. And for that specific usecase, most projects just end up worse off by handing over backend services as container images to their deployment platform of choice.
+We're concerned with the backend services most people write. These are HTTP request/response handlers, with or without state. And for that specific usecase, most projects just end up worse off by handing over backend services as container images to their deployment platform of choice.
 
 So we need to restrict the scope of virtualization to something more specific to web app backends. This is a trade-off of course, like most things in software engineering. By restricting the scope of a tool, you lose the ability to do certain things. But like most of these trade-offs, you usually are better served by erring on the side of simplicity unless you have specific needs that require extra complexity. In other words: use heavy machinery when you actually have a need for it, not before.
 
@@ -90,7 +90,7 @@ The really powerful thing about WASM is that it is a very common compilation tar
 	caption='A simple "Hello, World!" endpoint.'
 />
 
-When we launched [shuttle](https://www.shuttle.dev/) for its early alpha, back in March 2022, our purpose was to address the issues people face when building and deploying web app backends. So we created an open-source infrastructure-from-code platform with which you don’t need to write Containerfiles and orchestrate images, starting with support for Rust.
+When we launched [shuttle](https://www.shuttle.dev/) for its early alpha, back in March 2022, our purpose was to address the issues people face when building and deploying web app backends. So we created an open-source infrastructure-from-code platform with which you don't need to write Containerfiles and orchestrate images, starting with support for Rust.
 
 Since then, more than 1.2k people starred the [shuttle repo](https://github.com/shuttle-hq/shuttle) and hundreds joined our discord community. And we've seen more than 2000 deployments and hundreds of users! From which we received a ton of feedback.
 
@@ -166,7 +166,7 @@ We believe that scoping down virtualization to the level of service components w
 
 We are launching shuttle-next as part of our closed beta for shuttle later this month, with the public release coming soon after.
 
-In the meantime, check out [shuttle's GitHub repo](https://github.com/shuttle-hq/shuttle) and [Twitter](https://twitter.com/shuttle_dev) for updates. If you’d like to support us, please star the repo and/or join the [shuttle Discord community](https://discord.gg/shuttle)!
+In the meantime, check out [shuttle's GitHub repo](https://github.com/shuttle-hq/shuttle) and [Twitter](https://twitter.com/shuttle_dev) for updates. If you'd like to support us, please star the repo and/or join the [shuttle Discord community](https://discord.gg/shuttle)!
 
 [webassembly]: http://webassembly.org/
 [wasi]: https://wasi.dev

@@ -7,13 +7,13 @@ thumb: posthog-rust-thumb.png
 cover: posthog-rust-thumb.png
 date: '2024-03-14T15:30:00'
 ---
-Hello world! In this article, we’re going to talk about how you can use Posthog with Rust to be able to track user behavior across an application. Analytics are more important than ever to be able to improve your product; Posthog makes it easy to do exactly that.
+Hello world! In this article, we're going to talk about how you can use Posthog with Rust to be able to track user behavior across an application. Analytics are more important than ever to be able to improve your product; Posthog makes it easy to do exactly that.
 
 ## How does PostHog work?
 
-Posthog works by allowing you to capture events and then convert those events into “insights” by aggregating the data. PostHog allows you to then query the data using HogQL (a DSL made by PostHog for querying data,, similar to SQL). Alhough there isn’t an officially supported Rust SDK for PostHog, they do have a community-supported one (`posthog-rs`) that can capture events in your application.
+Posthog works by allowing you to capture events and then convert those events into "insights" by aggregating the data. PostHog allows you to then query the data using HogQL (a DSL made by PostHog for querying data,, similar to SQL). Alhough there isn't an officially supported Rust SDK for PostHog, they do have a community-supported one (`posthog-rs`) that can capture events in your application.
 
-We’ll also look at using `reqwest` to set up our own custom client for sending requests to the PostHog API!
+We'll also look at using `reqwest` to set up our own custom client for sending requests to the PostHog API!
 
 ## Capturing events
 
@@ -29,7 +29,7 @@ let client = client(posthog_api_key);
 
 The event essentially allows us to add anything we want - for example, we can add user IDs, user cookies or timestamps and whatever else we need.
 
-Next, we’ll want to make a function for sending an event to the PostHog API:
+Next, we'll want to make a function for sending an event to the PostHog API:
 
 ```rust
 fn send_posthog_event(client: &posthog::Client) {
@@ -85,7 +85,7 @@ async fn my_example_axum_handler(
 }
 ```
 
-Alternatively, Shuttle has a fork of a fork of `posthog-rs` that contains an async client. You can find out more [here.](https://github.com/shuttle-hq/posthog-rs) Due to being a fork it’s not an officially published crate, but you can add it to your Rust project with this shell snippet:
+Alternatively, Shuttle has a fork of a fork of `posthog-rs` that contains an async client. You can find out more [here.](https://github.com/shuttle-hq/posthog-rs) Due to being a fork it's not an officially published crate, but you can add it to your Rust project with this shell snippet:
 
 ```bash
 cargo add posthog-async --git https://github.com/shuttle-hq/posthog-rs.git --branch main
@@ -95,13 +95,13 @@ Now when you refer to it in your Rust files, you can use `posthog_async` as the 
 
 ## Using a custom client
 
-In this section, we’re going to create a custom client for working with Posthog. We’ll get started by installing `reqwest`, which is a library for writing HTTP requests and is async by default (requiring a feature to be blocking):
+In this section, we're going to create a custom client for working with Posthog. We'll get started by installing `reqwest`, which is a library for writing HTTP requests and is async by default (requiring a feature to be blocking):
 
 ```bash
 cargo add reqwest
 ```
 
-Next, we will want to write a function that we can use to make our request client easily. We’ll need to add bearer authorization on the header, which we can do like so:
+Next, we will want to write a function that we can use to make our request client easily. We'll need to add bearer authorization on the header, which we can do like so:
 
 ```bash
 let posthog_api_key = std::env::var("POSTHOG_API_KEY")
@@ -118,7 +118,7 @@ Now whenever we use `client`, it will always have the appropriate header attache
 
 ### Creating insights
 
-Insights in Posthog are the main building blocks of dashboards and allow you to visualise how users use your product. To create insights, we can use our `reqwest::Client` to send an API key manually. There’s quite a few endpoints - we’ll be making POST requests to `/api/projects/:project_id/insights/` for this example.
+Insights in Posthog are the main building blocks of dashboards and allow you to visualise how users use your product. To create insights, we can use our `reqwest::Client` to send an API key manually. There's quite a few endpoints - we'll be making POST requests to `/api/projects/:project_id/insights/` for this example.
 
 To be able to set the JSON body, we will need to make use of the `serde_json` crate which we can install with this shell snippet:
 
@@ -126,7 +126,7 @@ To be able to set the JSON body, we will need to make use of the `serde_json` cr
 cargo add serde_json
 ```
 
-Next, we’ll want to make a JSON map - which we can do below with the `serde_json::json!()` macro:
+Next, we'll want to make a JSON map - which we can do below with the `serde_json::json!()` macro:
 
 ```rust
 use serde_json::json;
@@ -138,7 +138,7 @@ fn my_json_body() -> serde_json::Value {
 }
 ```
 
-You can find a more extensive list of request body parameters [here.](https://posthog.com/docs/api/insights#post-api-projects-project_id-insights) Once you’re finished creating the request body you want to send to Posthog, you can then create the request using the client we created.
+You can find a more extensive list of request body parameters [here.](https://posthog.com/docs/api/insights#post-api-projects-project_id-insights) Once you're finished creating the request body you want to send to Posthog, you can then create the request using the client we created.
 
 ```rust
 async fn create_insight(
@@ -154,7 +154,7 @@ async fn create_insight(
 }
 ```
 
-However, this is just the start of insight creation. To make our insight do anything, we need to add a funnel to it. Similarly to the last API endpoint where we attached some basic values, we’ll create a new JSON body using the `json!()` macro and then send it:
+However, this is just the start of insight creation. To make our insight do anything, we need to add a funnel to it. Similarly to the last API endpoint where we attached some basic values, we'll create a new JSON body using the `json!()` macro and then send it:
 
 ```rust
 async fn create_insight_funnel(
@@ -173,11 +173,11 @@ async fn create_insight_funnel(
 }
 ```
 
-Here, we’ve specified in the JSON body we want to get events from up to a month ago and the name of the event we want to get is `my_database_event`, which we created earlier. Note that the `$pageview` event signifies any time a user views a page that PostHog is added to.
+Here, we've specified in the JSON body we want to get events from up to a month ago and the name of the event we want to get is `my_database_event`, which we created earlier. Note that the `$pageview` event signifies any time a user views a page that PostHog is added to.
 
 ### Retrieving an insight
 
-Once you have some events and insights built up, it’s time to retrieve them! You can do this by making a GET request to the insights URL. See below:
+Once you have some events and insights built up, it's time to retrieve them! You can do this by making a GET request to the insights URL. See below:
 
 ```rust
 async fn get_insights(
@@ -192,7 +192,7 @@ async fn get_insights(
 }
 ```
 
-When you get the response, you will need to turn it into a struct that implements `Deserialize`. Thankfully, `reqwest` provides a method for turning the response into JSON-compatible structs. Let’s make a struct that represents some of the properties of the JSON response from PostHog.  `serde` completely ignores undeclared fields by default, allowing us to only take what we need.
+When you get the response, you will need to turn it into a struct that implements `Deserialize`. Thankfully, `reqwest` provides a method for turning the response into JSON-compatible structs. Let's make a struct that represents some of the properties of the JSON response from PostHog.  `serde` completely ignores undeclared fields by default, allowing us to only take what we need.
 
 ```rust
 #[derive(Deserialize, Debug)]
@@ -232,7 +232,7 @@ async fn get_insights(
 
 ## Finishing Up
 
-Posthog makes it easy to track how users are using your application and find easy wins. While the Rust SDK is not complete, hopefully you’ve found some clarity in communicating with the Posthog API with Rust!
+Posthog makes it easy to track how users are using your application and find easy wins. While the Rust SDK is not complete, hopefully you've found some clarity in communicating with the Posthog API with Rust!
 
 Read more:
 - Get started with using Rust's most popular framework [here](https://www.shuttle.dev/blog/2023/12/06/using-axum-rust)

@@ -14,7 +14,7 @@ This article covers the Rust backend, and the [second part](https://www.shuttle.
 
 Here is the [source code](https://github.com/sourabpramanik/issue-tracker) of the complete project if you want to follow along, and a link to the [demo](https://issue-tracker.shuttleapp.rs/).
 
-To start this project we will use the Clerk template from Shuttle’s [example repository](https://github.com/shuttle-hq/shuttle-examples) that has a barebone setup of Shuttle, Actix Web, Vite (React), and Clerk.
+To start this project we will use the Clerk template from Shuttle's [example repository](https://github.com/shuttle-hq/shuttle-examples) that has a barebone setup of Shuttle, Actix Web, Vite (React), and Clerk.
 
 The backend uses the [clerk-rs](https://github.com/DarrenBaldwin07/clerk-rs) community crate to create a connection between the backend application and Clerk project. This crate has many different APIs for different use cases. In the template there is an endpoint to fetch all user records using the `clerk-rs` user API. We can easily verify a user's identity when trying to access protected routes using the `ClerkMiddleware` from the crate.
 
@@ -23,7 +23,7 @@ We will use Postgres for the database which will run in a docker container so ma
 
 ## Let's get started
 
-First, we need to clone the template from the Shuttle’s example repository using Shuttle CLI:
+First, we need to clone the template from the Shuttle's example repository using Shuttle CLI:
 
 ```bash
 cargo shuttle init --from shuttle-hq/shuttle-examples --subfolder actix-web/clerk
@@ -35,7 +35,7 @@ After that, `cd` into the project directory.
 
 ## Setup a new application in Clerk
 
-Head on to Clerk’s official website, sign in or sign up if you don’t have an account, and create a new project in the dashboard. Give a name to your project and select the providers using which users can sign-in or sign-up in your application.
+Head on to Clerk's official website, sign in or sign up if you don't have an account, and create a new project in the dashboard. Give a name to your project and select the providers using which users can sign-in or sign-up in your application.
 
 After that, you will get a **Publishable Key** and a **Secret key** which we will use later in our application.
 
@@ -89,7 +89,7 @@ cargo add shuttle-shared-db -F shuttle-shared-db/postgres -F shuttle-shared-db/s
 
 ### Connect to the shared Postgres DB
 
-Let’s edit the `main.rs` file.
+Let's edit the `main.rs` file.
 
 First, we need to bring SQLX into the scope:
 
@@ -460,7 +460,7 @@ async fn get_user_by_id(state: web::Data<AppState>, path: web::Path<String>) -> 
 }
 ```
 
-Now, let’s add all these endpoints to our `main` function under the `/api` scope which is wrapped by Clerk middleware for protecting our endpoint routes and only allowing authenticated users to access these routes. After adding all the endpoints the `main` function you should have something like [this](https://github.com/sourabpramanik/issue-tracker/blob/main/backend/src/main.rs).
+Now, let's add all these endpoints to our `main` function under the `/api` scope which is wrapped by Clerk middleware for protecting our endpoint routes and only allowing authenticated users to access these routes. After adding all the endpoints the `main` function you should have something like [this](https://github.com/sourabpramanik/issue-tracker/blob/main/backend/src/main.rs).
 
 ## Building the frontend and deploying
 

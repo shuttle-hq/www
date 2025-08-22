@@ -11,9 +11,9 @@ Remember The Matrix? Yes, that Matrix, the one with leather trenchcoats, bullet-
 
 It was something special at the time - and it also had one of the coolest representations of a computer virus: the infamous Agent Smith, the self-replicating virus embodying the consciousness of a single agent, duplicating itself over and over again, chasing our heroes across the simulation. His superpower lied in his ability to create new instances of himself at any moment, creating and dispatching them to do whatever task needed to be done.
 
-And in this new era of Generative AI, there is one pattern that has consistently proved itself as a core primitive of the LLM world - the Agent. If you haven’t heard of the Agent pattern yet, you can think of it just like you’d think of Agent Smith - it’s an embodied instance of your LLM - specialising in whatever task you need it to perform, be it writing code, translating inputs, invoking functions or writing haikus about Rust. The Agent pattern allows us to perform more accurate LLM calls, parallelise work and even more important - orchestrate agents by letting one "main" agent dispatch work to others.
+And in this new era of Generative AI, there is one pattern that has consistently proved itself as a core primitive of the LLM world - the Agent. If you haven't heard of the Agent pattern yet, you can think of it just like you'd think of Agent Smith - it's an embodied instance of your LLM - specialising in whatever task you need it to perform, be it writing code, translating inputs, invoking functions or writing haikus about Rust. The Agent pattern allows us to perform more accurate LLM calls, parallelise work and even more important - orchestrate agents by letting one "main" agent dispatch work to others.
 
-So let’s take a dive and look at how we can harness the power of LLMs and build agents of our own using Rust.
+So let's take a dive and look at how we can harness the power of LLMs and build agents of our own using Rust.
 
 
 ## Why build them in Rust?
@@ -30,11 +30,11 @@ All of this, when combined with the powerful trait & macro abilities, allows us 
 
 While Agents might sound like some super complex thing, especially with multiple frameworks and libraries offering similar abstractions, building them is quite simple - they usually consist of a few things:
 
-* The System message - system message is in a way the “core” of your agent, defining its purpose and behaviour. It primes your LLM with instructions on how to behave and answer to your messages.
+* The System message - system message is in a way the "core" of your agent, defining its purpose and behaviour. It primes your LLM with instructions on how to behave and answer to your messages.
 * The model definition - usually agents also contain reference to the model used, allowing us to switch between more powerful models for accuracy or smaller and faster models for efficiency.
-* The supported functions - especially useful if you want to allow your agents to invoke functions from your code, using tools like OpenAPI’s function calling to invoke different functions depending on the data provided.
+* The supported functions - especially useful if you want to allow your agents to invoke functions from your code, using tools like OpenAPI's function calling to invoke different functions depending on the data provided.
 
-So let's create some agents of our own. Start up your favorite editor, create a Rust project and let’s go and define a simple `Agent` struct that will take care of these things for us:
+So let's create some agents of our own. Start up your favorite editor, create a Rust project and let's go and define a simple `Agent` struct that will take care of these things for us:
 
 ```rust
 pub(crate) struct Agent {
@@ -43,8 +43,8 @@ pub(crate) struct Agent {
 }
 ```
 
-Now, we also need a way to actually use our agents, so let’s add some extras to the struct.
-First off, we need to be able to prompt the agent and give it a task to perform. For this, we’ll create a `prompt` method that simply takes in a string and returns a string. So let's create our prompt function:
+Now, we also need a way to actually use our agents, so let's add some extras to the struct.
+First off, we need to be able to prompt the agent and give it a task to perform. For this, we'll create a `prompt` method that simply takes in a string and returns a string. So let's create our prompt function:
 
 ```rust
 impl Agent {
@@ -53,8 +53,8 @@ impl Agent {
 ```
 
 
-Usually, to make these agents even more useful, we'd also want them to be able to remember their conversation history, allowing us to build some kind of context through the conversation. So let’s also add a `history` field that will contain the list of messages. Messages can be created either by the agent itself or by the user, so we’ll create an enum to differentiate between them - we’ll also add an enum for the `System` message, since that is the first message all agents will receive.
-To make them future-proof, we’ll also expose the `history` to the outside world, so we can imbue our agents with predetermined messages or fork new agents from existing ones.
+Usually, to make these agents even more useful, we'd also want them to be able to remember their conversation history, allowing us to build some kind of context through the conversation. So let's also add a `history` field that will contain the list of messages. Messages can be created either by the agent itself or by the user, so we'll create an enum to differentiate between them - we'll also add an enum for the `System` message, since that is the first message all agents will receive.
+To make them future-proof, we'll also expose the `history` to the outside world, so we can imbue our agents with predetermined messages or fork new agents from existing ones.
 
 While for our example usecase this won't be relevant, in larger and more complex usecases you will probably encounter the need to use message history to remember the context of the previous executions. So let's add those bits of code too:
 
@@ -83,29 +83,29 @@ And that is it - the basic building blocks for our agents are in place. Now, how
 
 To actually use our agents, we need to give them a purpose, otherwise they will only be acting like generic LLM models - okay, but not great. By giving them a proper purpose through the system message, we prime them to act a certain way, giving us increased accuracy on tasks.
 
-So for this article, we’ll make two simple agents that can be used both together or independently:
-* First, we’ll create one Agent that will receive a YouTube video and summarise the main talking points for us.
-* Then, we’ll create another agent that will take that summary and actually make it usable, by translating it to JSON we’ll consume inside our code.
+So for this article, we'll make two simple agents that can be used both together or independently:
+* First, we'll create one Agent that will receive a YouTube video and summarise the main talking points for us.
+* Then, we'll create another agent that will take that summary and actually make it usable, by translating it to JSON we'll consume inside our code.
 
 ![Diagram of how AI agents work](/images/blog/ai-agent-diagram.png)
 
 Now, you might be wondering why use two separate agents when this could be rolled into one?
 
-Well, while LLM’s are quite capable, they’re also quite fickle machines - their outputs are quite non-deterministic, so every time we provide the same input, we might get a different output. By trying to squeeze both tasks into a single agent, we increase the chance of having erroneous, inaccurate and unwanted results. For example, if we can achieve 80% accuracy on one task, then accuracy for two tasks could fall to 64% (80% x 80%) - but since these are LLM’s, the accuracy can fall even more due to the first task priming the LLM into a specific local minima, i.e. it being more focused on the first task. That is why when developing with LLM agents, the best philosophy to follow is the UNIX philosophy:
+Well, while LLM's are quite capable, they're also quite fickle machines - their outputs are quite non-deterministic, so every time we provide the same input, we might get a different output. By trying to squeeze both tasks into a single agent, we increase the chance of having erroneous, inaccurate and unwanted results. For example, if we can achieve 80% accuracy on one task, then accuracy for two tasks could fall to 64% (80% x 80%) - but since these are LLM's, the accuracy can fall even more due to the first task priming the LLM into a specific local minima, i.e. it being more focused on the first task. That is why when developing with LLM agents, the best philosophy to follow is the UNIX philosophy:
 
 >Write programs that do one thing and do it well. Write programs to work together. Write programs to handle text streams, because that is a universal interface.
 
 Incredibly, this nearly 50-year old philosophy serves us well even today and fits perfectly with the LLM world.
-So let’s create our two agents by following it. First, we’ll create our Summarising agent.
+So let's create our two agents by following it. First, we'll create our Summarising agent.
 
-To do that, we need to implement our Agent trait. For this, we’ll be using the most popular of the LLM providers - OpenAI - and we’ll access it using the `async-openai` crate, giving us some simple abstractions over it. So pop open your terminal and add the dependency:
+To do that, we need to implement our Agent trait. For this, we'll be using the most popular of the LLM providers - OpenAI - and we'll access it using the `async-openai` crate, giving us some simple abstractions over it. So pop open your terminal and add the dependency:
 
 `cargo add async-openai`
 
 To be able to use the `async-openai` crate, we also need an API key from OpenAI - you can find it [here](https://platform.openai.com/api-keys). To use it, just add it to your environment variables or open your terminal and hit:
 `export OPENAI_API_KEY='your-key-here'`
 
-Now, let’s create an implementation of the prompt method - it’s quite simple, we’ll just add the OpenAI `Client` to our agent and map the prompt method to the `async_openai`’s prompt:
+Now, let's create an implementation of the prompt method - it's quite simple, we'll just add the OpenAI `Client` to our agent and map the prompt method to the `async_openai`'s prompt:
 
 
 ```rust
@@ -156,7 +156,7 @@ impl Agent {
 
 
 
-With that out of the way, we can create the actual first instance of our agent by defining its system prompt and passing it in. So let’s write down some instructions that will go in the system prompt.
+With that out of the way, we can create the actual first instance of our agent by defining its system prompt and passing it in. So let's write down some instructions that will go in the system prompt.
 
 ```rust
 
@@ -175,7 +175,7 @@ Summary of the transcript
 "#
 ```
 
-But first - we need the transcript. To fetch the transcript itself, we’ll be using the `youtube-captions` crate. While getting the transcript can be quite straightforward using the API, we’ll do it the lazy way and let the crate do the job for us. To do the HTTP request, we'll also need the famous `reqwest` crate, together with `serde` and `serde-json` to deserialize the JSON into a struct. So head on to your Cargo.toml or terminal and add the crates:
+But first - we need the transcript. To fetch the transcript itself, we'll be using the `youtube-captions` crate. While getting the transcript can be quite straightforward using the API, we'll do it the lazy way and let the crate do the job for us. To do the HTTP request, we'll also need the famous `reqwest` crate, together with `serde` and `serde-json` to deserialize the JSON into a struct. So head on to your Cargo.toml or terminal and add the crates:
 
 ```toml
 
@@ -244,7 +244,7 @@ async fn get_transcript(video: &str) -> String {
 ```
 
 Now, we're ready to build our agents and put them to work!
-Let’s create a `summarize_video` function that will wrap it all up - take in the video ID and return us a nice summary of the text. First, we’ll use the `get_transcript` method to get the video’s transcript, then we'll pass it on to our agent to summarise it for us.
+Let's create a `summarize_video` function that will wrap it all up - take in the video ID and return us a nice summary of the text. First, we'll use the `get_transcript` method to get the video's transcript, then we'll pass it on to our agent to summarise it for us.
 
 ```rust
 async fn summarize_video(video: &str) -> String {
@@ -267,7 +267,7 @@ async fn summarize_video(video: &str) -> String {
 }
 ```
 
-Next, we’ll create another agent - one that will take the summary and translate it into the JSON format of our choice. So let’s write a new system message for our Agent. To make sure it follows a specific format, it’s best to include the format example and some basic rules:
+Next, we'll create another agent - one that will take the summary and translate it into the JSON format of our choice. So let's write a new system message for our Agent. To make sure it follows a specific format, it's best to include the format example and some basic rules:
 
 ```rust
 static SUMMARY_TO_JSON_PROMPT = r#"You are an agent dedicated to translating text to JSON. You will receive the text and return it in JSON format.
@@ -276,11 +276,11 @@ The format is as follows:
 
 {
 
-    “summary”: “Whole video summary goes here”,
-   “talking_points”: [
+    "summary": "Whole video summary goes here",
+   "talking_points": [
 {
-   “title” : “Title of the point”,
-   “description: “Talking point summary”
+   "title" : "Title of the point",
+   "description: "Talking point summary"
  },
 ...
 ]
@@ -310,7 +310,7 @@ And now we can wrap it all together:
 
 ```
 
-But hold on, we're not done yet - here’s the thing - since LLM’s can be fickle, we cannot be certain that the output will contain only the JSON, so we’ll add an extra utility method that will extract the codeblock from the response.
+But hold on, we're not done yet - here's the thing - since LLM's can be fickle, we cannot be certain that the output will contain only the JSON, so we'll add an extra utility method that will extract the codeblock from the response.
 
 ```rust
 fn extract_codeblock(text: &str) -> String {
@@ -346,10 +346,10 @@ We can use this on the received response and extract the codeblock if it exists 
 
 ## Bringing the agents live
 
-Finally, we’re ready to use our agents. But uhhh wait, how do we actually use them? If we plan to use them from a frontend, we’ll need to create an API around that. Luckily, we can use [Shuttle and Axum together](https://docs.shuttle.rs/examples/axum) to get an API up and running quickly.
+Finally, we're ready to use our agents. But uhhh wait, how do we actually use them? If we plan to use them from a frontend, we'll need to create an API around that. Luckily, we can use [Shuttle and Axum together](https://docs.shuttle.rs/examples/axum) to get an API up and running quickly.
 First, you need to [install Shuttle](https://docs.shuttle.rs/getting-started/installation) - just hit `cargo binstall cargo-shuttle` and it should install in no time.
 
- So let’s open up that Cargo.toml and add the required dependencies - we'll add `axum` and `shuttle-axum` to build the server, `tokio` for async work and the `shuttle-runtime` to run in Shuttle's cloud.
+ So let's open up that Cargo.toml and add the required dependencies - we'll add `axum` and `shuttle-axum` to build the server, `tokio` for async work and the `shuttle-runtime` to run in Shuttle's cloud.
 
 ```
 axum = "0.7.3"
@@ -358,7 +358,7 @@ shuttle-runtime = "0.44.0"
 tokio = "1.28.2"
 ```
 
-Now, pop open the main.rs and let’s create a simple server we can deploy to Shuttle:
+Now, pop open the main.rs and let's create a simple server we can deploy to Shuttle:
 
 
 ```rust

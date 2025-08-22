@@ -8,7 +8,7 @@ cover: openapi-rust-thumb.png
 date: '2024-04-04T15:30:00'
 ---
 
-Hello world! In this article we’re going to talk about how you can make the most of OpenAPI with Rust, by learning all the different ways we can use OpenAPI in a Rust context. By the end of this article, you'll learn the following:
+Hello world! In this article we're going to talk about how you can make the most of OpenAPI with Rust, by learning all the different ways we can use OpenAPI in a Rust context. By the end of this article, you'll learn the following:
 - Adding OpenAPI to a Rust web service
 - How to generate API client libraries from OpenAPI specifications
 - Working with the OpenAPI spec directly
@@ -19,7 +19,7 @@ From Swagger.io:
 
 > The OpenAPI specification (OAS) defines a standard, language-agnostic interface to HTTP APIs which allows both humans and computers to discover and understand the capabilities of the service without access to source code.
 
-No matter what language you’re using, OpenAPI allows you to easily read the specification and understand how to use an API without needing specific documentation.
+No matter what language you're using, OpenAPI allows you to easily read the specification and understand how to use an API without needing specific documentation.
 
 Here is a simple example of what an OpenAPI specification file may look like:
 
@@ -51,8 +51,8 @@ There are several benefits of using OpenAPI:
 
 - You can improve cross-team collaboration by allowing teammates to quickly experiment with endpoints by providing a frontend
 - You can quickly get an understanding of endpoints that your teammates have made
-- It’s widely used, so you can get an understanding of official APIs that utilise it much faster
-- We can generate code from it as it’s machine parseable!
+- It's widely used, so you can get an understanding of official APIs that utilise it much faster
+- We can generate code from it as it's machine parseable!
 
 ## Adding OpenAPI to a Rust API
 
@@ -97,11 +97,11 @@ async fn main() {
 }
 ```
 
-Let’s break this down. We have the following:
+Let's break this down. We have the following:
 
 - An `ApiDoc` struct that takes the `OpenApi` derive macro and sets all the attributes required to serve the OpenAPI specification from your API.
 - We have an attribute macro above our function handler. This macro will document the given information about a handler endpoint and show it in the OpenAPI spec when we open it.
-- We have a “list” of responses in the macro. Note that because we have no exact type to give to OpenAPI, we leave the body as `()`.
+- We have a "list" of responses in the macro. Note that because we have no exact type to give to OpenAPI, we leave the body as `()`.
 
 Interested in checking out what attributes the `utoipa::path` macro can take? Have a look [here.](https://docs.rs/utoipa/latest/utoipa/attr.path.html)
 
@@ -115,7 +115,7 @@ let app = Router::new().merge(
 );
 ```
 
-If you run your code again and go to `localhost:8080/swagger-ui`, you’ll get a Swagger UI menu that should look something like this:
+If you run your code again and go to `localhost:8080/swagger-ui`, you'll get a Swagger UI menu that should look something like this:
 
 ![Swagger UI tab unexpanded](/images/blog/openapi-rust-article/utoipa-1.png)
 
@@ -125,9 +125,9 @@ If we then expand this section by clicking on the route, it will allow us to the
 
 ![Swagger UI tab expanded](/images/blog/openapi-rust-article/utoipa-2.png)
 
-The `utoipa` crate is quite comprehensive, so you can be assured that it will support mostly everything you want to do. If you’d like to check out their documentation, you can do so [here.](https://docs.rs/utoipa/latest/utoipa/)
+The `utoipa` crate is quite comprehensive, so you can be assured that it will support mostly everything you want to do. If you'd like to check out their documentation, you can do so [here.](https://docs.rs/utoipa/latest/utoipa/)
 
-When it comes to having an API with hundreds or thousands of endpoints though, this may not be entirely ergonomic. You’ll be spending quite a lot of time writing macros which can bloat your files. To that end, you can also use the [utoipauto](https://github.com/ProbablyClem/utoipauto) crate which lets you automate all of the work with only one macro. However, this adds additional compilation time. Whether you’ll want to use it depends on your use case.
+When it comes to having an API with hundreds or thousands of endpoints though, this may not be entirely ergonomic. You'll be spending quite a lot of time writing macros which can bloat your files. To that end, you can also use the [utoipauto](https://github.com/ProbablyClem/utoipauto) crate which lets you automate all of the work with only one macro. However, this adds additional compilation time. Whether you'll want to use it depends on your use case.
 
 ### poem-openapi
 
@@ -167,7 +167,7 @@ Running this code will also generate a Swagger UI GUI as above, but at a differe
 
 ## Generating Rust from OpenAPI specifications
 
-Now let’s talk about generating Rust code from OpenAPI specifications. The OpenAPI collective have made a tool to generate a server client library - Rust support included! We’ll be using `npm` to install the OpenAPI generator. You can install it with the following shell snippet:
+Now let's talk about generating Rust code from OpenAPI specifications. The OpenAPI collective have made a tool to generate a server client library - Rust support included! We'll be using `npm` to install the OpenAPI generator. You can install it with the following shell snippet:
 
 ```bash
 npm install @openapitools/openapi-generator-cli -g
@@ -175,19 +175,19 @@ npm install @openapitools/openapi-generator-cli -g
 
 There are also alternative ways to install the OpenAPI generator, which you can check out [here.](https://openapi-generator.tech/docs/installation/)
 
-Next, we’ll need a specification to generate a client library from. The generator takes YAML or JSON files as input.  Thankfully for us, we already have a JSON filefrom the OpenAPI service we just built. If we head to `localhost:8080/api-docs/openapi.json`,  we can select the Raw Text option, prettify it and then put it all into a JSON file for input. Our file name will be `utoipa-client.json`.
+Next, we'll need a specification to generate a client library from. The generator takes YAML or JSON files as input.  Thankfully for us, we already have a JSON filefrom the OpenAPI service we just built. If we head to `localhost:8080/api-docs/openapi.json`,  we can select the Raw Text option, prettify it and then put it all into a JSON file for input. Our file name will be `utoipa-client.json`.
 
-Next, we’ll actually generate the client code. This can be done with the following shell snippet:
+Next, we'll actually generate the client code. This can be done with the following shell snippet:
 
 ```bash
 npx @openapitools/openapi-generator-cli generate -i utoipa-client.json -g rust -o ./utoipa-client
 ```
 
-This looks like quite a long command! What’s happening here?
+This looks like quite a long command! What's happening here?
 
 - The `-i` flag is our input file
 - The `-g` flag is for the generator we should use (in this case, the `rust` one). Generators are not necessarily one-per-language, hence the flag convention.
-- The `-o` flag is for the output directory. If the directory doesn’t exist, the generator will attempt to create it.
+- The `-o` flag is for the output directory. If the directory doesn't exist, the generator will attempt to create it.
 
 Once done, you should see a new Rust crate in the automatically generated `utoipa-client` folder. At this point in time, the generator is mostly correct. However, your generated code can have syntactical errors if your OpenAPI specification input is malformed. You can find out more about this [here.](https://docs.rs/openapi_lib_generator/latest/openapi_lib_generator/)
 
@@ -195,7 +195,7 @@ Interested in further customization? You can check out more OpenAPI generator co
 
 ## Working with OpenAPI specifications directly in Rust
 
-Interested in building tools that use the OpenAPI specification? There’s a crate for that! Using the `openapiv3` crate, you can also deserialize (and serialize) to and from the OpenAPI spec format. Below, we deserialize it from a JSON string - you would additionally need `serde_json` installed:
+Interested in building tools that use the OpenAPI specification? There's a crate for that! Using the `openapiv3` crate, you can also deserialize (and serialize) to and from the OpenAPI spec format. Below, we deserialize it from a JSON string - you would additionally need `serde_json` installed:
 
 ```rust
 use serde_json;
