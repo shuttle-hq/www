@@ -42,7 +42,7 @@ const BlogSidebar: FC<BlogSidebarProps> = ({
         </div>
         {relatedPosts.length > 0 ? (
           <div className="rounded-3xl border border-black/10 px-6 py-4 dark:border-white/10">
-            <div className="mb-4 dark:text-head">Related articles</div>
+            <div className="mb-4 dark:text-head">Recent articles</div>
 
             <div className="relative flex flex-col gap-2 space-y-3">
               {relatedPosts.map((post, index) => (
