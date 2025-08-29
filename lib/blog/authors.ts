@@ -157,6 +157,13 @@ const authors: readonly Author[] = [
     author_url: "https://github.com/shaaza",
     author_image_url: "/images/authors/shaaz.png",
   },
+  {
+    author_id: "archie",
+    author: "Archie Croft",
+    position: "Founder Associate @ Shuttle",
+    author_url: "https://github.com/archiecroft",
+    author_image_url: "/images/authors/archie.png",
+  },
 ];
 
 export default authors;
