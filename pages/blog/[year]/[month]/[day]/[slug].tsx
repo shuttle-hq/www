@@ -35,9 +35,8 @@ import { Pre } from "components/blog/Pre";
 import MastodonLogo from "components/svgs/MastodonLogo";
 import HNLogo from "components/svgs/HNLogo";
 import { trackEvent } from "lib/posthog";
-import { TableOfContents } from "../../../../../components/blog/TableOfContents";
-import { Button } from "components/elements";
 import { BlogFAQ } from "../../../../../components/blog/BlogFAQ";
+import { NewConsoleCTA } from "../../../../../components/blog/NewConsoleCTA";
 
 export async function getStaticPaths() {
   const paths = getAllPostSlugs();
@@ -205,6 +204,9 @@ const mdxComponents: MDXRemoteProps["components"] = {
   },
   BlogFAQ: (props) => {
     return <BlogFAQ {...props} />;
+  },
+  NewConsoleCTA: (props) => {
+    return <NewConsoleCTA {...props} />;
   },
 };
 
