@@ -20,7 +20,7 @@ export const NewConsoleCTA = () => {
           className="w-full sm:w-[180px] lg:w-full h-[56px] justify-center"
           variant="primary"
           invertOnDark
-          href="https://console.shuttle.dev/signup"
+          href="https://console.shuttle.dev"
           onClick={() => {
             trackEvent("blog_new_console_cta_get_started");
           }}
