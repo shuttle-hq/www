@@ -160,7 +160,7 @@ const authors: readonly Author[] = [
   {
     author_id: "archie",
     author: "Archie Croft",
-    position: "Founder Associate @ Shuttle",
+    position: "Product Manager - Console @ Shuttle",
     author_url: "https://github.com/archiecroft",
     author_image_url: "/images/authors/archie.png",
   },
