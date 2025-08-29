@@ -299,7 +299,7 @@ export default function BlogPostPage(props: Props) {
               </article>
             )}
             {/* Powered By */}
-            <CallToActionNewsletter bg={true} />
+            {/* <CallToActionNewsletter bg={true} /> */}
             {/* <Socials /> */}
             <div className="mb-20 mt-14 flex items-center space-x-4">
               <span className="text-head">Share article</span>
