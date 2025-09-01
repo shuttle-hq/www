@@ -35,9 +35,8 @@ import { Pre } from "components/blog/Pre";
 import MastodonLogo from "components/svgs/MastodonLogo";
 import HNLogo from "components/svgs/HNLogo";
 import { trackEvent } from "lib/posthog";
-import { TableOfContents } from "../../../../../components/blog/TableOfContents";
-import { Button } from "components/elements";
 import { BlogFAQ } from "../../../../../components/blog/BlogFAQ";
+import { NewConsoleCTA } from "../../../../../components/blog/NewConsoleCTA";
 
 export async function getStaticPaths() {
   const paths = getAllPostSlugs();
@@ -206,6 +205,9 @@ const mdxComponents: MDXRemoteProps["components"] = {
   BlogFAQ: (props) => {
     return <BlogFAQ {...props} />;
   },
+  NewConsoleCTA: (props) => {
+    return <NewConsoleCTA {...props} />;
+  },
 };
 
 interface Props {
@@ -275,10 +277,10 @@ export default function BlogPostPage(props: Props) {
                 )}
               </div>
             )}
-            <CallToActionNewsletter bg={false} />
+            {/* <CallToActionNewsletter bg={false} />
             {props.blog.contentTOC.json.length > 0 ? (
               <TableOfContents toc={props.blog.contentTOC.json} />
-            ) : null}
+            ) : null} */}
 
             {props.blog.content && (
               <article
@@ -297,7 +299,7 @@ export default function BlogPostPage(props: Props) {
               </article>
             )}
             {/* Powered By */}
-            <CallToActionNewsletter bg={true} />
+            {/* <CallToActionNewsletter bg={true} /> */}
             {/* <Socials /> */}
             <div className="mb-20 mt-14 flex items-center space-x-4">
               <span className="text-head">Share article</span>
