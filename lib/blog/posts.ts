@@ -40,6 +40,7 @@ export interface Post {
   readonly logo?: string;
   readonly hideAuthor?: boolean;
   readonly contentTOC?: any;
+  readonly takeaways?: string[];
 }
 
 export function getSortedPosts(

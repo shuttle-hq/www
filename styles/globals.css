@@ -409,8 +409,6 @@ body.dark {
   background-repeat: no-repeat;
 }
 
-
-
 @media (min-width: 768px) {
   .custom-bg {
     background-image: url("/images/pages/pricing/custom-bg.jpg");
@@ -420,7 +418,7 @@ body.dark {
   }
 
   .custom-bg2 {
-    padding: 0 16px 40px!important;
+    padding: 0 16px 40px !important;
   }
 }
 @layer utilities {
@@ -451,6 +449,119 @@ body.dark {
   }
   .text-neutral-5000 {
     color: #494949;
+  }
+
+  /* Custom Shuttle-themed scrollbars for code blocks */
+  .shuttle-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .shuttle-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 4px;
+  }
+
+  .shuttle-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      73deg,
+      rgba(252, 84, 12, 0.4) -7.95%,
+      rgba(255, 215, 111, 0.3) 45.94%,
+      rgba(56, 212, 233, 0.4) 116.73%
+    );
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .shuttle-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+      70deg,
+      rgba(252, 84, 12, 0.6) 34.41%,
+      rgba(255, 215, 111, 0.5) 93.53%,
+      rgba(56, 212, 233, 0.6) 118.82%
+    );
+  }
+
+  .shuttle-scrollbar::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  /* Firefox scrollbar styling */
+  .shuttle-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(252, 84, 12, 0.4) transparent;
+  }
+
+  /* Safari and older webkit browsers fallback */
+  @supports not (scrollbar-width: thin) {
+    .shuttle-scrollbar::-webkit-scrollbar {
+      -webkit-appearance: none;
+      width: 8px;
+      height: 8px;
+    }
+  }
+
+  /* Dark mode scrollbar variations */
+  .dark .shuttle-scrollbar::-webkit-scrollbar-thumb {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Apply to code blocks specifically */
+  pre.shuttle-scrollbar,
+  pre.shuttle-scrollbar > code,
+  .shuttle-scrollbar pre,
+  .shuttle-scrollbar code {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(252, 84, 12, 0.4) transparent;
+  }
+
+  pre.shuttle-scrollbar::-webkit-scrollbar,
+  pre.shuttle-scrollbar > code::-webkit-scrollbar,
+  .shuttle-scrollbar pre::-webkit-scrollbar,
+  .shuttle-scrollbar code::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  pre.shuttle-scrollbar::-webkit-scrollbar-track,
+  pre.shuttle-scrollbar > code::-webkit-scrollbar-track,
+  .shuttle-scrollbar pre::-webkit-scrollbar-track,
+  .shuttle-scrollbar code::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 4px;
+  }
+
+  pre.shuttle-scrollbar::-webkit-scrollbar-thumb,
+  pre.shuttle-scrollbar > code::-webkit-scrollbar-thumb,
+  .shuttle-scrollbar pre::-webkit-scrollbar-thumb,
+  .shuttle-scrollbar code::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      73deg,
+      rgba(252, 84, 12, 0.4) -7.95%,
+      rgba(255, 215, 111, 0.3) 45.94%,
+      rgba(56, 212, 233, 0.4) 116.73%
+    );
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  pre.shuttle-scrollbar::-webkit-scrollbar-thumb:hover,
+  pre.shuttle-scrollbar > code::-webkit-scrollbar-thumb:hover,
+  .shuttle-scrollbar pre::-webkit-scrollbar-thumb:hover,
+  .shuttle-scrollbar code::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+      70deg,
+      rgba(252, 84, 12, 0.6) 34.41%,
+      rgba(255, 215, 111, 0.5) 93.53%,
+      rgba(56, 212, 233, 0.6) 118.82%
+    );
+  }
+
+  .dark pre.shuttle-scrollbar::-webkit-scrollbar-thumb,
+  .dark pre.shuttle-scrollbar > code::-webkit-scrollbar-thumb,
+  .dark .shuttle-scrollbar pre::-webkit-scrollbar-thumb,
+  .dark .shuttle-scrollbar code::-webkit-scrollbar-thumb {
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   @media (min-width: 768px) {

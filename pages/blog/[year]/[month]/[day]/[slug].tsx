@@ -37,6 +37,8 @@ import HNLogo from "components/svgs/HNLogo";
 import { trackEvent } from "lib/posthog";
 import { BlogFAQ } from "../../../../../components/blog/BlogFAQ";
 import { NewConsoleCTA } from "../../../../../components/blog/NewConsoleCTA";
+import { MainTakeaways } from "../../../../../components/blog/MainTakeaways";
+import { ExpandableImage } from "../../../../../components/blog/ExpandableImage";
 
 export async function getStaticPaths() {
   const paths = getAllPostSlugs();
@@ -140,6 +142,27 @@ export async function getStaticProps({
 }
 
 const mdxComponents: MDXRemoteProps["components"] = {
+  code(props) {
+    // Only style inline code (code not inside pre tags)
+    if (!props.className?.includes("language-")) {
+      return (
+        <code
+          {...props}
+          className="bg-gray-100 text-gray-800 px-1 py-0.5 rounded text-sm font-mono font-normal not-italic dark:bg-gray-800 dark:text-gray-200"
+          style={{
+            backgroundColor: "#f3f4f6",
+            color: "#374151",
+            padding: "0.125rem 0.25rem",
+            borderRadius: "0.25rem",
+            fontSize: "0.875rem",
+            fontFamily: "Fira Mono, monospace",
+          }}
+        />
+      );
+    }
+    // Return unchanged for code blocks
+    return <code {...props} />;
+  },
   a(props) {
     if (props?.href?.match(/^https?:\/\//)) {
       return (
@@ -172,30 +195,34 @@ const mdxComponents: MDXRemoteProps["components"] = {
   },
   TLDR: (props) => {
     return (
-      <div className="mb-24 text-left text-xl">
+      <div className="mb-24 text-left text-lg">
         <span className="font-bold text-black dark:text-head">TLDR;</span>
         <span className="prose-p:!my-2 dark:text-body">{props.children}</span>
       </div>
     );
   },
+  img: (props) => {
+    return (
+      <ExpandableImage
+        src={props.src || ""}
+        alt={props.alt || ""}
+        className="h-auto w-auto overflow-hidden rounded-md object-contain"
+      />
+    );
+  },
   CaptionedImage: (props) => {
     return (
-      <div className="relative flex w-full flex-col items-center">
-        <Image
-          src={props.src}
-          alt={props.alt}
-          width={0}
-          height={0}
-          sizes="100vw"
-          className="h-auto w-auto overflow-hidden rounded-md object-contain"
-        />
-        <span className="-mt-6 text-sm text-body">{props.caption}</span>
-      </div>
+      <ExpandableImage
+        src={props.src}
+        alt={props.alt}
+        caption={props.caption}
+        className="h-auto w-auto overflow-hidden rounded-md object-contain"
+      />
     );
   },
   blockquote(props) {
     return (
-      <blockquote className="border-none bg-[linear-gradient(180deg,_#FC540C_25.63%,_rgba(255,_215,_111,_0.72)_60.67%,_#38D4E9_88.15%)] pl-2 text-left text-2xl font-normal not-italic text-body">
+      <blockquote className="border-none bg-[linear-gradient(180deg,_#FC540C_25.63%,_rgba(255,_215,_111,_0.72)_60.67%,_#38D4E9_88.15%)] pl-1 text-left text-lg font-normal not-italic text-body">
         <div className="bg-[#E9E9E9] py-1 pl-8 prose-p:!my-0 dark:bg-black">
           {props.children}
         </div>
@@ -207,6 +234,9 @@ const mdxComponents: MDXRemoteProps["components"] = {
   },
   NewConsoleCTA: (props) => {
     return <NewConsoleCTA {...props} />;
+  },
+  MainTakeaways: (props) => {
+    return <MainTakeaways {...props} />;
   },
 };
 
@@ -292,9 +322,13 @@ export default function BlogPostPage(props: Props) {
                   "prose-headings:before:pt-36",
                   "prose-headings:lg:before:-mt-20",
                   "prose-headings:before:lg:pt-20",
-                  "text-xl text-body prose-h2:text-5xl prose-h3:text-4xl prose-h4:text-3xl prose-h5:text-2xl",
+                  "text-xl text-body prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl prose-h5:text-lg prose-h6:text-base",
+                  "[&_code:not(pre_code)]:before:content-none [&_code:not(pre_code)]:after:content-none",
                 )}
               >
+                {props.blog.takeaways && props.blog.takeaways.length > 0 && (
+                  <MainTakeaways takeaways={props.blog.takeaways} />
+                )}
                 <MDXRemote {...props.blog.content} components={mdxComponents} />
               </article>
             )}
@@ -320,7 +354,7 @@ export default function BlogPostPage(props: Props) {
                 href={`https://twitter.com/share?text=${encodeURIComponent(
                   props.blog.title,
                 )}&url=${SITE_URL}blog/${props.blog.slug}`}
-                className="flex items-center rounded-xl border border border-black/10 bg-black p-3 dark:border-white/10"
+                className="flex items-center rounded-xl border border-black/10 bg-black p-3 dark:border-white/10"
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => {
@@ -331,7 +365,7 @@ export default function BlogPostPage(props: Props) {
               </a>
               <a
                 href={`https://www.linkedin.com/shareArticle?url=${SITE_URL}blog/${props.blog.slug}&title=${props.blog.title}`}
-                className="flex items-center rounded-xl border border border-black/10 bg-black p-3 dark:border-white/10"
+                className="flex items-center rounded-xl border border-black/10 bg-black p-3 dark:border-white/10"
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => {
