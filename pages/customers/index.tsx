@@ -5,37 +5,26 @@ import Link from "next/link";
 import { NextSeo } from "next-seo";
 
 const userStories = [
-  // {
-  //   key: "decent-land",
-  //   title:
-  //     "Decent Land eliminated infrastructure complexity for Web3 development",
-  //   logo: "/path/to/logo.png", // Replace with actual logo path
-  //   link: "/customers/decent-land", // Replace with actual story link
-  // },
   {
     key: "triacc",
-    title:
-      "How TriAcc accelerated from concept to production in days, not weeks",
-    logo: "/path/to/logo.png", // Replace with actual logo path
-    link: "/customers/triacc", // Replace with actual story link
+    title: `"With Shuttle, I had our service deployed in 15 minutes. What would have taken us 2 weeks of infrastructure setup was done in half a day."`,
+    logo: "/images/user-stories/triacc.png",
+    logoWidth: 96,
+    logoHeight: 30,
+    link: "/customers/triacc",
+    quoteAuthor: "Soren Bradley, Lead Developer, TriAcc",
   },
   {
     key: "unwritten",
-    // title:
-    //   "How Unwritten powers climate risk modeling with zero infrastructure overhead",
     logo: "/images/user-stories/unwritten.png",
+    logoWidth: 120,
+    logoHeight: 19,
     link: "/customers/unwritten",
     title: `"What took days to weeks to set up with traditional
                   infrastructure now takes minutes with Shuttle. It's like
                   Vercel for backend"`,
     quoteAuthor: "Phillip Marks, CRO & CTO, Unwritten",
   },
-  // {
-  //   key: "weavevm",
-  //   title: "WeaveVM eliminated code refactoring and complex infra management",
-  //   logo: "/path/to/logo.png", // Replace with actual logo path
-  //   link: "/customers/weavevm", // Replace with actual story link
-  // },
 ];
 
 export default function UserStories() {
@@ -63,12 +52,12 @@ export default function UserStories() {
               key={story.key}
               className={`flex flex-col w-[50%] items-start border border-solid border-white border-opacity-30 rounded-[32px] overflow-hidden ${styles["user-story-card"]}`}
             >
-              <div className="flex flex-col p-10 gap-4 bg-[#0F0F0F]">
+              <div className="flex flex-1 flex-col p-10 gap-4 bg-[#0F0F0F]">
                 <Image
                   src={story.logo}
                   alt={`${story.title} logo`}
-                  width={120}
-                  height={19}
+                  width={story.logoWidth}
+                  height={story.logoHeight}
                   className="mb-4"
                 />
                 <Link href={story.link} className="flex flex-col gap-6">
@@ -85,7 +74,7 @@ export default function UserStories() {
               </div>
               <Link
                 href={story.link}
-                className="flex justify-between items-center w-full px-10 py-5 border-t border-solid border-white border-opacity-30"
+                className="flex justify-between items-center w-full px-10 py-5 border-t border-solid border-white border-opacity-30 mt-auto"
               >
                 <span className={styles["gradient-link"]}>Read story</span>
                 <svg
