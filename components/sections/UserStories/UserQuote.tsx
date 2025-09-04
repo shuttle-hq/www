@@ -9,7 +9,7 @@ export const UserQuote = ({
 }) => {
   return (
     <blockquote
-      className={`w-full mx-auto px-16 py-14 rounded-3xl ${userStoriesStyles["bg-wide"]} ${className}`}
+      className={`w-full mx-auto px-16 py-8 rounded-3xl ${userStoriesStyles["bg-wide"]} ${className}`}
     >
       {children}
     </blockquote>

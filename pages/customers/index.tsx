@@ -10,15 +10,15 @@ const userStories = [
     title:
       "How TriAcc accelerated from concept to production in days, not weeks",
     logo: "/images/user-stories/triacc.png",
-    logoWidth: 72,
-    logoHeight: 22,
+    logoWidth: 110,
+    logoHeight: 34,
     link: "/customers/triacc",
   },
   {
     key: "unwritten",
     logo: "/images/user-stories/unwritten.png",
-    logoWidth: 120,
-    logoHeight: 19,
+    logoWidth: 160,
+    logoHeight: 25,
     link: "/customers/unwritten",
     title: `"What took days to weeks to set up with traditional
                   infrastructure now takes minutes with Shuttle. It's like
@@ -61,7 +61,7 @@ export default function UserStories() {
                   className="mb-4"
                 />
                 <Link href={story.link} className="flex flex-col gap-6">
-                  <h2 className="text-3xl font-bold text-zinc-300 font-gradual">
+                  <h2 className="text-2xl font-bold text-zinc-300 font-gradual">
                     {story.title}
                   </h2>
                   <div className="flex flex-col gap-2">
