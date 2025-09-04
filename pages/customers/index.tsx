@@ -12,13 +12,13 @@ const userStories = [
   //   logo: "/path/to/logo.png", // Replace with actual logo path
   //   link: "/customers/decent-land", // Replace with actual story link
   // },
-  // {
-  //   key: "triacc",
-  //   title:
-  //     "How Triacc accelerated from concept to production in days, not weeks",
-  //   logo: "/path/to/logo.png", // Replace with actual logo path
-  //   link: "/customers/triacc", // Replace with actual story link
-  // },
+  {
+    key: "triacc",
+    title:
+      "How TriAcc accelerated from concept to production in days, not weeks",
+    logo: "/path/to/logo.png", // Replace with actual logo path
+    link: "/customers/triacc", // Replace with actual story link
+  },
   {
     key: "unwritten",
     // title:
