@@ -16,8 +16,8 @@ export interface Post {
   readonly pageTitle?: string;
   readonly date: string;
   readonly dateReadable: string;
-  readonly updated_on?: string;
-  readonly updated_on_readable?: string;
+  readonly updated_at?: string;
+  readonly updated_at_readable?: string;
   readonly modified: string;
   readonly modifiedReadable: string;
   readonly cover?: string;

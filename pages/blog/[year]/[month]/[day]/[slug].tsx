@@ -110,8 +110,8 @@ export async function getStaticProps({
   const formattedModifiedDate = new Date(
     data.modified ?? data.date,
   ).toLocaleDateString("en-IN", options);
-  const formattedUpdatedDate = data.updated_on
-    ? new Date(data.updated_on).toLocaleDateString("en-IN", options)
+  const formattedUpdatedDate = data.updated_at
+    ? new Date(data.updated_at).toLocaleDateString("en-IN", options)
     : null;
   const pageTitle = data.pageTitle ?? data.title;
 
@@ -130,8 +130,8 @@ export async function getStaticProps({
         readingTime,
         date: data.date,
         dateReadable: formattedPublishDate,
-        updated_on: data.updated_on ?? null,
-        updated_on_readable: formattedUpdatedDate,
+        updated_at: data.updated_at ?? null,
+        updated_at_readable: formattedUpdatedDate,
         modified: data.modified ?? data.date,
         modifiedReadable: formattedModifiedDate,
       } as Post,
@@ -237,7 +237,7 @@ export default function BlogPostPage(props: Props) {
             // TODO: add expiration and modified dates
             // https://github.com/garmeeh/next-seo#article
             publishedTime: props.blog.date,
-            modifiedTime: props.blog.updated_on ?? props.blog.modified,
+            modifiedTime: props.blog.updated_at ?? props.blog.modified,
             //
             // TODO: author urls should be internal in future
             // currently we have external links to github profiles
