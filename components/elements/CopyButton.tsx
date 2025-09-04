@@ -1,3 +1,5 @@
+'use client';
+
 import { FC, useState, useEffect } from "react";
 import { Copy } from "components/svgs";
 import { CheckIcon } from "components/svgs/pricing-icons/CheckIcon";

@@ -2,7 +2,6 @@ import matter from "gray-matter";
 import { serialize } from "next-mdx-remote/serialize";
 import { NextSeo } from "next-seo";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import { generateReadingTime } from "lib/helpers";
 import {
   getAllPostSlugs,
@@ -14,12 +13,10 @@ import { MDXRemote, MDXRemoteProps } from "next-mdx-remote";
 import gfm from "remark-gfm";
 import slug from "rehype-slug";
 
-// @ts-ignore
-import toc from "markdown-toc";
+// Dynamic import for markdown-toc to handle server-side compatibility
+const toc = require("markdown-toc");
 import rehypePrism from "@mapbox/rehype-prism";
 import { DISCORD_URL, SITE_URL } from "lib/constants";
-import { GetStaticPropsContext, GetStaticPropsResult } from "next";
-import { ParsedUrlQuery } from "querystring";
 import Link from "components/elements/Link";
 import clsx from "clsx";
 import {
@@ -34,31 +31,32 @@ import { TwitterTweetEmbed } from "react-twitter-embed";
 import { Pre } from "components/blog/Pre";
 import MastodonLogo from "components/svgs/MastodonLogo";
 import HNLogo from "components/svgs/HNLogo";
-import { trackEvent } from "lib/posthog";
-import { BlogFAQ } from "../../../../../components/blog/BlogFAQ";
-import { NewConsoleCTA } from "../../../../../components/blog/NewConsoleCTA";
+import { BlogFAQ } from "../../../../../../components/blog/BlogFAQ";
+import { NewConsoleCTA } from "../../../../../../components/blog/NewConsoleCTA";
+import { Metadata } from "next";
+import { SocialShareButtons } from "./SocialShareButtons";
 
-export async function getStaticPaths() {
+export async function generateStaticParams() {
   const paths = getAllPostSlugs();
 
-  return {
-    paths: paths,
-    fallback: false,
+  return paths.map((path) => ({
+    year: path.params.year,
+    month: path.params.month,
+    day: path.params.day,
+    slug: path.params.slug,
+  }));
+}
+
+interface Props {
+  params: {
+    year: string;
+    month: string;
+    day: string;
+    slug: string;
   };
 }
 
-interface Params extends ParsedUrlQuery {
-  readonly year: string;
-  readonly month: string;
-  readonly day: string;
-  readonly slug: string;
-}
-
-export async function getStaticProps({
-  params,
-}: GetStaticPropsContext<Params>): Promise<GetStaticPropsResult<Props>> {
-  if (!params) throw new Error("No params found");
-
+async function getBlogPostData(params: Props["params"]) {
   const filePath = `${params.year}-${params.month}-${params.day}-${params.slug}`;
   const postContent = await getPostData(filePath);
   const readingTime = generateReadingTime(postContent);
@@ -116,25 +114,50 @@ export async function getStaticProps({
   const pageTitle = data.pageTitle ?? data.title;
 
   return {
-    props: {
-      prevPost,
-      nextPost,
-      relatedPosts,
-      blog: {
-        slug: `${params.year}/${params.month}/${params.day}/${params.slug}`,
-        content: mdxPost,
-        pageTitle,
-        contentTOC,
-        ...data,
-        toc: mdxTOC,
-        readingTime,
-        date: data.date,
-        dateReadable: formattedPublishDate,
-        updated_on: data.updated_on ?? null,
-        updated_on_readable: formattedUpdatedDate,
-        modified: data.modified ?? data.date,
-        modifiedReadable: formattedModifiedDate,
-      } as Post,
+    prevPost,
+    nextPost,
+    relatedPosts,
+    blog: {
+      slug: `${params.year}/${params.month}/${params.day}/${params.slug}`,
+      content: mdxPost,
+      pageTitle,
+      contentTOC,
+      ...data,
+      toc: mdxTOC,
+      readingTime,
+      date: data.date,
+      dateReadable: formattedPublishDate,
+      updated_on: data.updated_on ?? null,
+      updated_on_readable: formattedUpdatedDate,
+      modified: data.modified ?? data.date,
+      modifiedReadable: formattedModifiedDate,
+    } as Post,
+  };
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { blog } = await getBlogPostData(params);
+  const title = blog.pageTitle ?? blog.title;
+
+  return {
+    title: `${title} | Shuttle`,
+    description: blog.description,
+    openGraph: {
+      title: `${title} | Shuttle`,
+      description: blog.description,
+      url: `${SITE_URL}blog/${blog.slug}`,
+      type: "article",
+      publishedTime: blog.date,
+      modifiedTime: blog.updated_on ?? blog.modified,
+      authors: [blog.author_url || ""],
+      tags: (blog.tags || []).map((cat: string) => {
+        return cat;
+      }),
+      images: [
+        {
+          url: `${SITE_URL}/images/blog/${blog.thumb}`,
+        },
+      ],
     },
   };
 }
@@ -210,45 +233,38 @@ const mdxComponents: MDXRemoteProps["components"] = {
   },
 };
 
-interface Props {
-  readonly prevPost?: Post;
-  readonly nextPost?: Post;
-  readonly relatedPosts: Post[];
-  readonly blog: Post;
-}
+export default async function BlogPostPage({ params }: Props) {
+  const { prevPost, nextPost, relatedPosts, blog } = await getBlogPostData(params);
 
-export default function BlogPostPage(props: Props) {
-  const { basePath } = useRouter();
-
-  const title = props.blog.pageTitle ?? props.blog.title;
+  const title = blog.pageTitle ?? blog.title;
 
   return (
     <>
       <NextSeo
         title={`${title} | Shuttle`}
-        description={props.blog.description}
+        description={blog.description}
         openGraph={{
           title: `${title} | Shuttle`,
-          description: props.blog.description,
-          url: `${SITE_URL}blog/${props.blog.slug}`,
+          description: blog.description,
+          url: `${SITE_URL}blog/${blog.slug}`,
           type: "article",
           article: {
             //
             // TODO: add expiration and modified dates
             // https://github.com/garmeeh/next-seo#article
-            publishedTime: props.blog.date,
-            modifiedTime: props.blog.updated_on ?? props.blog.modified,
+            publishedTime: blog.date,
+            modifiedTime: blog.updated_on ?? blog.modified,
             //
             // TODO: author urls should be internal in future
             // currently we have external links to github profiles
-            authors: [props.blog.author_url || ""],
-            tags: (props.blog.tags || []).map((cat: string) => {
+            authors: [blog.author_url || ""],
+            tags: (blog.tags || []).map((cat: string) => {
               return cat;
             }),
           },
           images: [
             {
-              url: `${SITE_URL}${basePath}/images/blog/${props.blog.thumb}`,
+              url: `${SITE_URL}/images/blog/${blog.thumb}`,
             },
           ],
         }}
@@ -257,32 +273,32 @@ export default function BlogPostPage(props: Props) {
         <div className="grid grid-cols-1 gap-6 gap-y-12 lg:grid-cols-4">
           {/* Content */}
           <div className="lg:col-span-3">
-            <BlogHeader post={props.blog} />
+            <BlogHeader post={blog} />
           </div>
           <div className="hidden lg:block" />
           <div className="lg:col-span-3">
-            {(props.blog.thumb ?? props.blog.cover) && (
+            {(blog.thumb ?? blog.cover) && (
               <div className="mb-8 grid grid-cols-1 justify-items-center">
                 <Image
-                  src={"/images/blog/" + (props.blog.cover ?? props.blog.thumb)}
+                  src={"/images/blog/" + (blog.cover ?? blog.thumb)}
                   alt="Cover image"
                   width={810}
                   height={424}
                   className="w-full rounded-[2rem] object-contain"
                 />
-                {props.blog.caption && (
+                {blog.caption && (
                   <span className="mt-2 text-center text-sm text-body">
-                    {props.blog.caption}
+                    {blog.caption}
                   </span>
                 )}
               </div>
             )}
             {/* <CallToActionNewsletter bg={false} />
-            {props.blog.contentTOC.json.length > 0 ? (
-              <TableOfContents toc={props.blog.contentTOC.json} />
+            {blog.contentTOC.json.length > 0 ? (
+              <TableOfContents toc={blog.contentTOC.json} />
             ) : null} */}
 
-            {props.blog.content && (
+            {blog.content && (
               <article
                 className={clsx(
                   "prose dark:prose-invert",
@@ -295,81 +311,20 @@ export default function BlogPostPage(props: Props) {
                   "text-xl text-body prose-h2:text-5xl prose-h3:text-4xl prose-h4:text-3xl prose-h5:text-2xl",
                 )}
               >
-                <MDXRemote {...props.blog.content} components={mdxComponents} />
+                <MDXRemote {...blog.content} components={mdxComponents} />
               </article>
             )}
             {/* Powered By */}
             {/* <CallToActionNewsletter bg={true} /> */}
             {/* <Socials /> */}
-            <div className="mb-20 mt-14 flex items-center space-x-4">
-              <span className="text-head">Share article</span>
-              <a
-                href={`https://news.ycombinator.com/submitlink?u=${encodeURIComponent(
-                  `${SITE_URL}blog/${props.blog.slug}`,
-                )}&t=${encodeURIComponent(props.blog.title)}`}
-                className="flex items-center rounded-xl border border-black/10 bg-black p-3 dark:border-white/10"
-                target="_blank"
-                rel="noreferrer"
-                onClick={() => {
-                  trackEvent(`blog_article_${props.blog.title}_hackernews`);
-                }}
-              >
-                <HNLogo />
-              </a>
-              <a
-                href={`https://twitter.com/share?text=${encodeURIComponent(
-                  props.blog.title,
-                )}&url=${SITE_URL}blog/${props.blog.slug}`}
-                className="flex items-center rounded-xl border border border-black/10 bg-black p-3 dark:border-white/10"
-                target="_blank"
-                rel="noreferrer"
-                onClick={() => {
-                  trackEvent(`blog_article_${props.blog.title}_twitter`);
-                }}
-              >
-                <TwitterLogo />
-              </a>
-              <a
-                href={`https://www.linkedin.com/shareArticle?url=${SITE_URL}blog/${props.blog.slug}&title=${props.blog.title}`}
-                className="flex items-center rounded-xl border border border-black/10 bg-black p-3 dark:border-white/10"
-                target="_blank"
-                rel="noreferrer"
-                onClick={() => {
-                  trackEvent(`blog_article_${props.blog.title}_linkedin`);
-                }}
-              >
-                <LinkedInLogo />
-              </a>
-              <a
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-
-                  trackEvent(`blog_article_${props.blog.title}_mastodon`);
-
-                  const instance = window.prompt(
-                    "Enter your Mastodon instance (ex. mastodon.social):",
-                  );
-                  if (instance) {
-                    window.location.href = `https://${instance}/share?text=${encodeURIComponent(
-                      `${props.blog.title} ${SITE_URL}blog/${props.blog.slug}`,
-                    )}`;
-                  }
-                }}
-                className="flex items-center rounded-xl border border-black/10 bg-black p-3 dark:border-white/10"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <MastodonLogo />
-              </a>
-            </div>
-            <BlogPrevNext prevPost={props.prevPost} nextPost={props.nextPost} />
+            <SocialShareButtons blog={blog} />
+            <BlogPrevNext prevPost={prevPost} nextPost={nextPost} />
           </div>
           {/* Sidebar */}
           <BlogSidebar
-            tags={props.blog.tags || []}
-            relatedPosts={props.relatedPosts || []}
-            toc={props.blog.toc}
+            tags={blog.tags || []}
+            relatedPosts={relatedPosts || []}
+            toc={blog.toc}
             mdxComponents={mdxComponents}
           />
         </div>

@@ -1,3 +1,5 @@
+'use client';
+
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import clsx from "clsx";
 import { getAuthors } from "lib/blog/authors";
@@ -5,7 +7,7 @@ import { Post } from "lib/blog/posts";
 import { trackEvent } from "lib/posthog";
 import Image from "next/image";
 import Link from "components/elements/Link";
-import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
 import { FC, useState } from "react";
 
 interface BlogProps {
@@ -14,9 +16,9 @@ interface BlogProps {
 }
 
 const Blog: FC<BlogProps> = ({ tags, posts }) => {
-  const router = useRouter();
+  const params = useParams();
 
-  const activeTag = router.query.tag;
+  const activeTag = params?.tag;
 
   return (
     <div className="mt-16 w-full lg:mx-auto lg:mt-20 lg:grid lg:max-w-7xl lg:grid-cols-[1fr_200px] lg:gap-7 lg:px-10">

@@ -1,4 +1,6 @@
-import { useRouter } from "next/router";
+'use client';
+
+import { usePathname } from "next/navigation";
 import { ReactElement, useEffect } from "react";
 
 // declare Intercom for typescript
@@ -17,7 +19,7 @@ export default function IntercomProvider({
 }: {
   children: ReactElement;
 }) {
-  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     (function () {
@@ -58,20 +60,11 @@ export default function IntercomProvider({
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    const handleRouteChange = () => {
-      if (typeof window !== "undefined") {
-        window?.Intercom("update", { app_id: APP_ID });
-      }
-    };
-
-    router.events.on("routeChangeStart", handleRouteChange);
-
-    // If the component is unmounted, unsubscribe
-    // from the event with the `off` method:
-    return () => {
-      router.events.off("routeChangeStart", handleRouteChange);
-    };
-  }, [router.events]);
+    // Update Intercom when pathname changes
+    if (typeof window !== "undefined") {
+      window?.Intercom("update", { app_id: APP_ID });
+    }
+  }, [pathname]);
 
   return children;
 }

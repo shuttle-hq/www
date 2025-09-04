@@ -1,3 +1,5 @@
+'use client';
+
 import { Splide, SplideSlide, SplideTrack } from "@splidejs/react-splide";
 import { Grid } from "@splidejs/splide-extension-grid";
 import { Button } from "components/elements";

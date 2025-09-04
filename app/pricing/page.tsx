@@ -1,52 +1,39 @@
-import React, { ReactNode } from "react";
-import { NextSeo } from "next-seo";
-import { GetStaticPropsResult } from "next";
-import { QuestionAttrs } from "../components/sections/FrequentlyAskedQuestions";
-import { pricingQuestions } from "../content";
+import React from "react";
+import { Metadata } from "next";
+import { pricingQuestions } from "../../content";
 import { Button, SignupButton } from "components/elements";
-import { Page } from "components/templates";
 import FeatureList from "components/sections/Pricing/FeatureList";
-import { ImageSection } from "../components/sections/Pricing/ImageSection";
-import PricingCards from "../components/sections/Pricing/PricingCards/PricingCards";
-import { PricingComparison } from "../components/sections/Pricing/Comparison/PricingComparison";
-import PricingGrid from "../components/sections/Pricing/UsageBasedPricing/PricingGrid";
-import BlogCards from "../components/sections/Pricing/BlogCards";
-import Faq from "../components/sections/Faq/Faq";
-import { faqData } from "../components/sections/Pricing/faqData";
+import { ImageSection } from "../../components/sections/Pricing/ImageSection";
+import PricingCards from "../../components/sections/Pricing/PricingCards/PricingCards";
+import { PricingComparison } from "../../components/sections/Pricing/Comparison/PricingComparison";
+import PricingGrid from "../../components/sections/Pricing/UsageBasedPricing/PricingGrid";
+import BlogCards from "../../components/sections/Pricing/BlogCards";
+import Faq from "../../components/sections/Faq/Faq";
+import { faqData } from "../../components/sections/Pricing/faqData";
 import Image from "next/image";
-import { trackEvent } from "lib/posthog";
 import "react-tooltip/dist/react-tooltip.css";
 import { ProTrial } from "components/sections/Pricing/ProTrial";
 
-export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
-  return {
-    props: {
-      questions: pricingQuestions,
-    },
-  };
-}
+export const metadata: Metadata = {
+  title: "Pricing | Shuttle",
+  description: "Learn more about the Shuttle pricing structure and our offering.",
+  openGraph: {
+    images: [
+      {
+        url: "https://www.shuttle.dev/images/og-image.png",
+        width: 3516,
+        height: 1432,
+        alt: "Shuttle.dev - Build Backends Fast",
+      },
+    ],
+  },
+};
 
-interface Props {
-  readonly questions: QuestionAttrs[];
-}
+export default function PricingPage() {
+  const questions = pricingQuestions;
 
-export default function PricingPage({ questions }: Props) {
   return (
     <div className="relative flex-grow bg-center bg-no-repeat px-4 custom-bg overflow-x-clip">
-      <NextSeo
-        title="Pricing | Shuttle"
-        description="Learn more about the Shuttle pricing structure and our offering."
-        openGraph={{
-          images: [
-            {
-              url: "https://www.shuttle.dev/images/og-image.png",
-              width: 3516,
-              height: 1432,
-              alt: "Shuttle.dev - Build Backends Fast",
-            },
-          ],
-        }}
-      />
       {/*<Hero />*/}
       <div className="flex flex-col items-center justify-between gap-8 pt-8 md:p-16 md:pt-28">
         <div className="flex flex-col items-center gap-4 md:gap-8">
@@ -102,7 +89,3 @@ export default function PricingPage({ questions }: Props) {
     </div>
   );
 }
-
-PricingPage.getLayout = (children: ReactNode) => (
-  <Page background={""}>{children}</Page>
-);
