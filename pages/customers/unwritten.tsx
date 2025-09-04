@@ -34,7 +34,7 @@ export default function Unwritten() {
                 width={140}
                 height={22}
               />
-              <h2 className="self-stretch justify-start text-neutral-200 text-5xl font-bold font-gradual leading-[57.60px]">
+              <h2 className="self-stretch justify-start text-neutral-200 text-3xl md:text-5xl font-bold font-gradual leading-tight md:leading-[57.60px]">
                 How Unwritten powers large-scale data processing with zero
                 infrastructure overhead
               </h2>
@@ -44,11 +44,11 @@ export default function Unwritten() {
               </p>
             </div>
             <div className="w-full max-w-[984px] self-stretch flex flex-col justify-start items-start my-24">
-              <ul className="grid grid-cols-3 rounded-[20px] gap-6">
+              <ul className="grid grid-cols-1 md:grid-cols-3 rounded-[20px] gap-6">
                 <li
-                  className={`self-stretch p-10 flex flex-col justify-start items-start gap-2 rounded-[20px] ${userStoriesStyles["bg-tile-1"]}`}
+                  className={`self-stretch p-6 md:p-10 flex flex-col justify-start items-start gap-2 rounded-[20px] ${userStoriesStyles["bg-tile-1"]}`}
                 >
-                  <div className="justify-start text-neutral-200 text-2xl font-normal">
+                  <div className="justify-start text-neutral-200 text-lg md:text-2xl font-normal">
                     Up to 3x faster data processing
                   </div>
                   <div className="justify-start text-text-secondary text-base font-normal leading-normal">
@@ -57,9 +57,9 @@ export default function Unwritten() {
                   </div>
                 </li>
                 <li
-                  className={`self-stretch p-10 flex flex-col justify-start items-start gap-2 rounded-[20px] ${userStoriesStyles["bg-tile-2"]}`}
+                  className={`self-stretch p-6 md:p-10 flex flex-col justify-start items-start gap-2 rounded-[20px] ${userStoriesStyles["bg-tile-2"]}`}
                 >
-                  <div className="justify-start text-neutral-200 text-2xl font-normal">
+                  <div className="justify-start text-neutral-200 text-lg md:text-2xl font-normal">
                     Days to minutes deployment
                   </div>
                   <div className="justify-start text-text-secondary text-base font-normal leading-normal">
@@ -68,9 +68,9 @@ export default function Unwritten() {
                   </div>
                 </li>
                 <li
-                  className={`self-stretch p-10 flex flex-col justify-start items-start gap-2 rounded-[20px] ${userStoriesStyles["bg-tile-3"]}`}
+                  className={`self-stretch p-6 md:p-10 flex flex-col justify-start items-start gap-2 rounded-[20px] ${userStoriesStyles["bg-tile-3"]}`}
                 >
-                  <div className="justify-start text-neutral-200 text-2xl font-normal">
+                  <div className="justify-start text-neutral-200 text-lg md:text-2xl font-normal">
                     Team focused on core expertise
                   </div>
                   <div className="flex-1 justify-start text-text-secondary text-base font-normal leading-normal">
@@ -103,19 +103,19 @@ export default function Unwritten() {
 
           <UserQuote className="w-full max-w-[984px]">
             <div className="flex flex-col gap-10">
-              <span className="text-neutral-200 text-2xl font-normal">
+              <span className="text-neutral-200 text-lg md:text-2xl font-normal">
                 &quot;What took days to weeks to set up with traditional
                 infrastructure now takes <em>minutes</em> with <em>Shuttle</em>.
                 It&apos;s like Vercel for backends.&quot;
               </span>
-              <span className="text-neutral-200 text-2xl font-normal">
+              <span className="text-neutral-200 text-lg md:text-2xl font-normal">
                 Phillip Marks, CRO & CTO Unwritten
               </span>
             </div>
           </UserQuote>
 
           <div className="w-full max-w-[782px] mx-auto flex flex-col justify-start items-start gap-10">
-            <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
+            <h2 className="self-stretch justify-start text-neutral-200 text-2xl md:text-[40px] font-bold font-gradual leading-tight md:leading-[48px]">
               The Challenge: Infrastructure Complexity Blocking Core Development
             </h2>
             <p className="self-stretch justify-start text-text-secondary text-xl font-normal">
@@ -155,7 +155,7 @@ export default function Unwritten() {
             </p>
           </div>
           <div className="w-full max-w-[782px] mx-auto flex flex-col justify-start items-start gap-10">
-            <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
+            <h2 className="self-stretch justify-start text-neutral-200 text-2xl md:text-[40px] font-bold font-gradual leading-tight md:leading-[48px]">
               Choosing Shuttle to Eliminate Infrastructure Overhead
             </h2>
             <p className="self-stretch justify-start text-text-secondary text-xl font-normal">
@@ -218,7 +218,7 @@ export default function Unwritten() {
           </div>
 
           <div className="w-full max-w-[782px] mx-auto flex flex-col justify-start items-start gap-10">
-            <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
+            <h2 className="self-stretch justify-start text-neutral-200 text-2xl md:text-[40px] font-bold font-gradual leading-tight md:leading-[48px]">
               Focusing on Data Processing Over Infrastructure Management
             </h2>
             <div className="self-stretch flex flex-col justify-start items-start gap-8">
@@ -364,7 +364,7 @@ export default function Unwritten() {
           </div>
 
           <UserQuote className="w-full max-w-[984px]">
-            <span className="text-neutral-200 text-2xl font-normal">
+            <span className="text-neutral-200 text-lg md:text-2xl font-normal">
               &quot;Shuttle allows us to focus on what we do best&quot; -
               Unwritten team
             </span>
@@ -372,7 +372,7 @@ export default function Unwritten() {
 
           <div className="w-full max-w-[782px] mx-auto flex flex-col justify-start items-start gap-10">
             <div className="w-full flex flex-col justify-start items-start gap-6">
-              <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
+              <h2 className="self-stretch justify-start text-neutral-200 text-2xl md:text-[40px] font-bold font-gradual leading-tight md:leading-[48px]">
                 Technical Implementation
               </h2>
               <div className="w-full flex flex-col justify-start items-start gap-6">
@@ -431,7 +431,7 @@ export default function Unwritten() {
             </div>
           </div>
           <div className="w-full max-w-[782px] mx-auto flex flex-col justify-start items-start gap-10">
-            <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
+            <h2 className="self-stretch justify-start text-neutral-200 text-2xl md:text-[40px] font-bold font-gradual leading-tight md:leading-[48px]">
               Impact on Team and Workflow
             </h2>
             <p className="self-stretch justify-start text-zinc-400 text-xl font-normal">
@@ -454,7 +454,7 @@ export default function Unwritten() {
             </p>
           </div>
           <div className="w-full max-w-[782px] mx-auto flex flex-col justify-start items-start gap-10">
-            <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
+            <h2 className="self-stretch justify-start text-neutral-200 text-2xl md:text-[40px] font-bold font-gradual leading-tight md:leading-[48px]">
               Unwritten&apos;s Transformation
             </h2>
             <p className="self-stretch justify-start text-zinc-400 text-xl font-normal">
