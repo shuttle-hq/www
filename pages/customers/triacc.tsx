@@ -31,10 +31,10 @@ export default function Triacc() {
                 width={96}
                 height={30}
               />
-              <h2 className="self-stretch justify-start text-neutral-200 text-5xl font-bold font-gradual leading-[57.60px]">
+              <h1 className="self-stretch justify-start text-neutral-200 text-5xl font-bold font-gradual leading-[57.60px]">
                 How TriAcc accelerated from concept to production in days, not
                 weeks
-              </h2>
+              </h1>
               <p className="self-stretch justify-start text-text-secondary text-xl font-normal">
                 Using Rust and Shuttle to build a contractor marketplace without
                 infrastructure complexity

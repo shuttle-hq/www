@@ -7,12 +7,12 @@ import { NextSeo } from "next-seo";
 const userStories = [
   {
     key: "triacc",
-    title: `"With Shuttle, I had our service deployed in 15 minutes. What would have taken us 2 weeks of infrastructure setup was done in half a day."`,
+    title:
+      "How TriAcc accelerated from concept to production in days, not weeks",
     logo: "/images/user-stories/triacc.png",
-    logoWidth: 96,
-    logoHeight: 30,
+    logoWidth: 72,
+    logoHeight: 22,
     link: "/customers/triacc",
-    quoteAuthor: "Soren Bradley, Lead Developer, TriAcc",
   },
   {
     key: "unwritten",
