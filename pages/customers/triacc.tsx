@@ -13,7 +13,7 @@ export default function Triacc() {
         openGraph={{
           images: [
             {
-              url: "https://www.shuttle.dev/images/user-stories/unwritten-og-image.png",
+              url: "https://www.shuttle.dev/images/user-stories/triacc-og-image.png",
               width: 2400,
               height: 1350,
               alt: "Shuttle x TriAcc: Accelerating from concept to production in days, not weeks",
