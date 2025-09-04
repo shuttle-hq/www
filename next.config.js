@@ -83,6 +83,14 @@ const nextConfig = {
   },
   reactStrictMode: true,
   swcMinify: true,
+  webpack: (config, { isServer }) => {
+    // Handle markdown-toc for server-side rendering
+    if (isServer) {
+      config.externals = config.externals || [];
+      config.externals.push('markdown-toc');
+    }
+    return config;
+  },
 };
 
 module.exports = nextConfig;
