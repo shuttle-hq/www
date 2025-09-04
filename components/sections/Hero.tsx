@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, SignupButton } from "components/elements";
 import Image from "next/image";
 import { DISCORD_URL } from "../../lib/constants";

@@ -1,3 +1,5 @@
+"use client";
+
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import clsx from "clsx";
 import { Button } from "components/elements";

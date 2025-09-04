@@ -1,4 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
+"use client";
+
 import Image from "next/image";
 import Link from "components/elements/Link";
 import { DISCORD_URL } from "../../lib/constants";

@@ -1,6 +1,9 @@
+"use client";
+
 import { Splide, SplideSlide, SplideTrack } from "@splidejs/react-splide";
 import { Grid } from "@splidejs/splide-extension-grid";
 import { Button } from "components/elements";
+
 import { getAuthors } from "lib/blog/authors";
 import { Post } from "lib/blog/posts";
 import Image from "next/image";

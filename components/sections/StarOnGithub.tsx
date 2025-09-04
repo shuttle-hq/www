@@ -1,12 +1,14 @@
+"use client";
+
 import { trackEvent } from "lib/posthog";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const StarOnGithub = () => {
   const [starOpen, setStarOpen] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
 
-  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (localStorage.getItem("starred")) setStarOpen(false);
@@ -15,7 +17,7 @@ const StarOnGithub = () => {
     setMounted(true);
   }, []);
 
-  if (router.pathname === "/cch") return null;
+  if (pathname === "/cch") return null;
 
   return (
     <div

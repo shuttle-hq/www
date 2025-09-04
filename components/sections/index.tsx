@@ -29,3 +29,4 @@ export { default as TrustedBy } from "./TrustedBy";
 export { default as Mission } from "./Mission";
 export { default as WorkingWithUs } from "./WorkingWithUs";
 export { default as CallToActionNewsletter } from "./CallToActionNewsletter";
+export { ProTrial } from "./ProTrial";

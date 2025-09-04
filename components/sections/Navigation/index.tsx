@@ -6,7 +6,7 @@ import { Hamburger, Logo } from "components/svgs";
 import { trackEvent } from "lib/posthog";
 import dynamic from "next/dynamic";
 import Link from "components/elements/Link";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const ThemeSwitcher = dynamic(() => import("./ThemeSwitcher"), { ssr: false });
@@ -47,7 +47,7 @@ const LinkItem = ({
 
 const Navigation = () => {
   const [open, setOpen] = useState(false);
-  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     function updateMenu() {
@@ -130,7 +130,7 @@ const Navigation = () => {
               href={href}
               text={text}
               setOpen={setOpen}
-              active={router.pathname.includes(keyword)}
+              active={(pathname || "").includes(keyword)}
             />
           ))}
         </div>
