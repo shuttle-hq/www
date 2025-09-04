@@ -5,37 +5,26 @@ import Link from "next/link";
 import { NextSeo } from "next-seo";
 
 const userStories = [
-  // {
-  //   key: "decent-land",
-  //   title:
-  //     "Decent Land eliminated infrastructure complexity for Web3 development",
-  //   logo: "/path/to/logo.png", // Replace with actual logo path
-  //   link: "/customers/decent-land", // Replace with actual story link
-  // },
-  // {
-  //   key: "triacc",
-  //   title:
-  //     "How Triacc accelerated from concept to production in days, not weeks",
-  //   logo: "/path/to/logo.png", // Replace with actual logo path
-  //   link: "/customers/triacc", // Replace with actual story link
-  // },
+  {
+    key: "triacc",
+    title:
+      "How TriAcc accelerated from concept to production in days, not weeks",
+    logo: "/images/user-stories/triacc.png",
+    logoWidth: 110,
+    logoHeight: 34,
+    link: "/customers/triacc",
+  },
   {
     key: "unwritten",
-    // title:
-    //   "How Unwritten powers climate risk modeling with zero infrastructure overhead",
     logo: "/images/user-stories/unwritten.png",
+    logoWidth: 160,
+    logoHeight: 25,
     link: "/customers/unwritten",
     title: `"What took days to weeks to set up with traditional
                   infrastructure now takes minutes with Shuttle. It's like
                   Vercel for backend"`,
     quoteAuthor: "Phillip Marks, CRO & CTO, Unwritten",
   },
-  // {
-  //   key: "weavevm",
-  //   title: "WeaveVM eliminated code refactoring and complex infra management",
-  //   logo: "/path/to/logo.png", // Replace with actual logo path
-  //   link: "/customers/weavevm", // Replace with actual story link
-  // },
 ];
 
 export default function UserStories() {
@@ -57,22 +46,22 @@ export default function UserStories() {
           </p>
         </div>
 
-        <div className="flex gap-6 justify-center">
+        <div className="flex flex-col md:flex-row gap-6 justify-center">
           {userStories.map((story) => (
             <div
               key={story.key}
-              className={`flex flex-col w-[50%] items-start border border-solid border-white border-opacity-30 rounded-[32px] overflow-hidden ${styles["user-story-card"]}`}
+              className={`flex flex-col w-full md:w-[50%] items-start border border-solid border-white border-opacity-30 rounded-[32px] overflow-hidden ${styles["user-story-card"]}`}
             >
-              <div className="flex flex-col p-10 gap-4 bg-[#0F0F0F]">
+              <div className="flex flex-1 flex-col p-6 md:p-10 gap-4 bg-[#0F0F0F]">
                 <Image
                   src={story.logo}
                   alt={`${story.title} logo`}
-                  width={120}
-                  height={19}
+                  width={story.logoWidth}
+                  height={story.logoHeight}
                   className="mb-4"
                 />
                 <Link href={story.link} className="flex flex-col gap-6">
-                  <h2 className="text-3xl font-bold text-zinc-300 font-gradual">
+                  <h2 className="text-xl md:text-2xl font-bold text-zinc-300 font-gradual">
                     {story.title}
                   </h2>
                   <div className="flex flex-col gap-2">
@@ -85,7 +74,7 @@ export default function UserStories() {
               </div>
               <Link
                 href={story.link}
-                className="flex justify-between items-center w-full px-10 py-5 border-t border-solid border-white border-opacity-30"
+                className="flex justify-between items-center w-full px-6 md:px-10 py-5 border-t border-solid border-white border-opacity-30 mt-auto"
               >
                 <span className={styles["gradient-link"]}>Read story</span>
                 <svg
