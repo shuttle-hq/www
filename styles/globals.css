@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import "prism-themes/themes/prism-one-dark.css";
+@import "./rehype-prism.css";
 
 html {
   scroll-behavior: smooth;
