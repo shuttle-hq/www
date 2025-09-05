@@ -14,6 +14,11 @@ module.exports = {
         orange: "#F09050",
         grey100: "#D8D8D8",
         grey300: "#7A7A7A",
+        shuttle: {
+          orange: "#FC540C",
+          yellow: "#FFD76F",
+          cyan: "#38D4E9",
+        },
       },
       fontFamily: {
         gradual: "BwGradual, sans-serif",

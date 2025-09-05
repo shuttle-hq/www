@@ -30,7 +30,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Project Structure
 
-```
+```txt
 /pages/           # Next.js pages and API routes
   /blog/          # Dynamic blog routing by year/month/slug
   /api/           # API endpoints (RSS feed generation)
@@ -63,6 +63,24 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Table of contents and reading time calculated automatically
 - RSS feed generated at `/api/rss`
 
+### Blog CTA Components
+
+Reusable call-to-action components for blog posts located in `/components/blog/cta/`:
+
+- **TryItYourself**: Encourages hands-on experimentation with Shuttle
+- **ReadyToShipFaster**: Focuses on deployment and production readiness
+- **ViewImplementation**: Links to source code and complete tutorials
+- **DatabaseCTA**: Promotes Shuttle's database services with PostgreSQL, MongoDB, and Redis. Uses brand gradient background for visibility.
+- **NewConsoleCTA**: Promotes the redesigned Shuttle Console experience
+
+All CTA components:
+
+- Accept customizable props (title, subtitle, buttonText, href, eventName)
+- Include PostHog analytics tracking
+- Use consistent Tailwind CSS styling with brand gradients
+- Are exported from `@components/blog/cta/index.ts` for easy import
+- **Must be registered** in `/pages/blog/[year]/[month]/[day]/[slug].tsx` mdxComponents object to be usable in MDX files
+
 ### Styling System
 
 - Custom Tailwind theme with gradients and brand colors
@@ -70,6 +88,27 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Custom CSS modules for specific components
 - Responsive design with mobile-first approach
 - Brand fonts: BwGradual (headings), Fira Mono (code), Atkinson (accessibility)
+
+### Brand Colors
+
+Shuttle's brand gradient colors:
+
+- **Primary Orange**: `#FC540C` (252, 84, 12)
+- **Middle Yellow**: `rgba(255, 215, 111, 0.72)` (255, 215, 111 with 72% opacity)
+- **Secondary Cyan**: `#38D4E9` (56, 212, 233)
+
+Primary gradient definition:
+
+```css
+linear-gradient(71.78deg, #FC540C 27.87%, rgba(255, 215, 111, 0.72) 52.56%, #38D4E9 74.58%)
+```
+
+For subtle brand-colored backgrounds with transparency, use:
+
+```css
+/* Tailwind classes for brand gradient with transparency */
+bg-gradient-to-br from-[#FC540C]/20 via-[rgba(255,215,111,0.15)] to-[#38D4E9]/20 backdrop-blur-sm border border-[#FC540C]/30
+```
 
 ### Environment Setup
 

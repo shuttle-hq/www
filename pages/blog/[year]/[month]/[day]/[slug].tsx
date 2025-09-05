@@ -39,6 +39,12 @@ import { BlogFAQ } from "../../../../../components/blog/BlogFAQ";
 import { NewConsoleCTA } from "../../../../../components/blog/NewConsoleCTA";
 import { MainTakeaways } from "../../../../../components/blog/MainTakeaways";
 import { ExpandableImage } from "../../../../../components/blog/ExpandableImage";
+import {
+  GenericCTA,
+  ReadyToShipFaster,
+  ViewImplementation,
+  DatabaseCTA,
+} from "../../../../../components/blog/cta";
 
 export async function getStaticPaths() {
   const paths = getAllPostSlugs();
@@ -237,6 +243,18 @@ const mdxComponents: MDXRemoteProps["components"] = {
   },
   MainTakeaways: (props) => {
     return <MainTakeaways {...props} />;
+  },
+  TryItYourself: (props) => {
+    return <GenericCTA {...props} />;
+  },
+  ReadyToShipFaster: (props) => {
+    return <ReadyToShipFaster {...props} />;
+  },
+  ViewImplementation: (props) => {
+    return <ViewImplementation {...props} />;
+  },
+  DatabaseCTA: (props) => {
+    return <DatabaseCTA {...props} />;
   },
 };
 
