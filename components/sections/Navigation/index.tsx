@@ -106,12 +106,6 @@ const Navigation = () => {
               keyword: "docs",
             },
             {
-              href: "/ai",
-              event: "homepage_mainnav_ai",
-              text: "Shuttle AI",
-              keyword: "ai",
-            },
-            {
               href: "/customers",
               event: "homepage_mainnav_customers",
               text: "Customers",
