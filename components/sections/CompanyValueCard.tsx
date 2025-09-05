@@ -16,7 +16,7 @@ export default function CompanyValueCard({
         <h4 className="font-normal text-xl leading-6 tracking-1 text-grey100">
           {title}
         </h4>
-        <p className="font-normal text-base leading-6 tracking-1 text-body">
+        <p className="font-normal text-base leading-6 tracking-1 text-body whitespace-pre-line">
           {subtitle}
         </p>
       </div>

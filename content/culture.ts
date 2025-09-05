@@ -1,28 +1,29 @@
 interface ICulture {
-  emoji: string
-  title: string
-  subtitle: string
+  emoji: string;
+  title: string;
+  subtitle: string;
 }
 
 export const culture: ICulture[] = [
   {
-    emoji: "😊",
-    title: "Simplicity, ease and joy",
-    subtitle: "At the heart of our platform and core of everything we do.",
+    emoji: "✨",
+    title: "Simplicity",
+    subtitle:
+      "Simplicity is the ultimate sophistication. \n— Leonardo da Vinci",
   },
   {
-    emoji: "👩‍💻",
-    title: "Developer-first approach",
-    subtitle: "We build tools that we'd love to use.",
+    emoji: "🌊",
+    title: "Ease",
+    subtitle: "Flow over force. Grace over grind.",
   },
   {
-    emoji: "🔧",
-    title: "Be your best self",
-    subtitle: "We encourage curiosity, experimentation and development",
+    emoji: "🏄‍♀️",
+    title: "Joy",
+    subtitle: "Building should feel like play, not pain.",
   },
   {
-    emoji: "🔑",
-    title: "Ownership",
-    subtitle: "Lead projects end-end. Big responsibilities, real impact.",
+    emoji: "🔥",
+    title: "Intensity",
+    subtitle: "The art of showing up fully, no matter what.",
   },
-]
+];

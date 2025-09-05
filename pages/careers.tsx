@@ -1,14 +1,13 @@
-import { PropsWithChildren } from "react"
-import { Page } from "components/templates"
-import { ReactNode } from "react"
-import Hero from "components/sections/Careers/Hero"
-import CompanyMission from "components/sections/Careers/CompanyMission"
-import OurCultureAndValues from "components/sections/Careers/OurCultureAndValues"
-import WhatWereLookingFor from "components/sections/Careers/WhatWereLookingFor"
-import WhyJoinShuttle from "components/sections/Careers/WhyJoinShuttle"
-import OpenPositions from "components/sections/Careers/OpenPositions"
-import HiringProcess from "components/sections/Careers/OurHiringProcess"
-import { jobData } from "content/positions"
+import { Page } from "components/templates";
+import { ReactNode } from "react";
+import Hero from "components/sections/Careers/Hero";
+import CompanyMission from "components/sections/Careers/CompanyMission";
+import OurCultureAndValues from "components/sections/Careers/OurCultureAndValues";
+import WhatWereLookingFor from "components/sections/Careers/WhatWereLookingFor";
+import WhyJoinShuttle from "components/sections/Careers/WhyJoinShuttle";
+import OpenPositions from "components/sections/Careers/OpenPositions";
+import HiringProcess from "components/sections/Careers/OurHiringProcess";
+import { jobData } from "content/positions";
 
 export default function CareersPage() {
   return (
@@ -23,7 +22,7 @@ export default function CareersPage() {
         <HiringProcess />
       </div>
     </div>
-  )
+  );
 }
 
-CareersPage.getLayout = (children: ReactNode) => <Page>{children}</Page>
+CareersPage.getLayout = (children: ReactNode) => <Page>{children}</Page>;

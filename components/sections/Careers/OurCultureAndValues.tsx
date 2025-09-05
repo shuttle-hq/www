@@ -1,6 +1,6 @@
-import * as React from "react"
-import { culture } from "content/culture"
-import CompanyValueCard from "../CompanyValueCard"
+import * as React from "react";
+import { culture } from "content/culture";
+import CompanyValueCard from "../CompanyValueCard";
 
 export default function OurCultureAndValues() {
   return (
@@ -12,6 +12,9 @@ export default function OurCultureAndValues() {
               <h3 className="text-5xl leading-52 sm:text-56 sm:leading-64 font-bold text-gray-300 font-gradual">
                 Our culture <br /> and values
               </h3>
+              <p className="mt-6 text-base leading-6 tracking-1 sm:text-xl sm:leading-8 md:text-xl md:leading-8">
+                Designed to bring out the best in people.
+              </p>
             </div>
           </div>
 
@@ -28,5 +31,5 @@ export default function OurCultureAndValues() {
         </div>
       </div>
     </div>
-  )
+  );
 }
