@@ -1,3 +1,5 @@
+"use client";
+
 import clsx from "clsx";
 import { YCombinator } from "components/svgs";
 import { trackEvent } from "lib/posthog";

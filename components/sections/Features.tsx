@@ -1,3 +1,5 @@
+"use client";
+
 import { Compile, Database, Deploy, Free, Open, Skip } from "components/svgs";
 import Image from "next/image";
 import { SignupButton } from "../elements";

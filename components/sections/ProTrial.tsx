@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Button, SignupButton } from "components/elements";
 import Image from "next/image";

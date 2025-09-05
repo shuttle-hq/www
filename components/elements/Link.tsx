@@ -1,3 +1,5 @@
+"use client";
+
 import { trackEvent } from "lib/posthog";
 import NextLink, { LinkProps } from "next/link";
 import { ReactNode } from "react";

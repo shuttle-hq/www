@@ -1,3 +1,5 @@
+"use client";
+
 import { getAuthors } from "lib/blog/authors";
 import { Post } from "lib/blog/posts";
 import Image from "next/image";

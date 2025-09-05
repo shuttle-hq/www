@@ -1,3 +1,5 @@
+"use client";
+
 import clsx from "clsx";
 import { Button } from "components/elements";
 import Image from "next/image";

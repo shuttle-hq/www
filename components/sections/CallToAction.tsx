@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "components/elements";
 import { trackEvent } from "lib/posthog";
 import Image from "next/image";
