@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "./Link";
 import { FC, ReactNode } from "react";
 import Button from "./Button";
 
@@ -44,7 +44,7 @@ export interface StarterXProps {
   templateKey: number;
 }
 
-export interface StarterProps extends StarterXProps, StarterAttrs {}
+export interface StarterProps extends StarterXProps, StarterAttrs { }
 
 const Starter: FC<StarterProps> = ({
   icon,
@@ -83,9 +83,7 @@ const Starter: FC<StarterProps> = ({
               <Link
                 href={sourceLink}
                 className="hover:underline"
-                onClick={() => {
-                  trackEvent(`homepage_starters_${templateKey}_source`);
-                }}
+                eventName={`homepage_starters_${templateKey}_source`}
               >
                 Source
               </Link>
@@ -93,9 +91,7 @@ const Starter: FC<StarterProps> = ({
               <Link
                 href={postLink || "/blog"}
                 className="hover:underline"
-                onClick={() => {
-                  trackEvent(`homepage_starters_${templateKey}_post`);
-                }}
+                eventName={`homepage_starters_${templateKey}_post`}
               >
                 Post
               </Link>
@@ -103,9 +99,7 @@ const Starter: FC<StarterProps> = ({
             <Button
               variant="primary"
               href={deployLink || "https://console.shuttle.dev/"}
-              onClick={() => {
-                trackEvent(`homepage_starters_${templateKey}_deploy`);
-              }}
+              eventName={`homepage_starters_${templateKey}_deploy`}
             >
               Deploy
             </Button>

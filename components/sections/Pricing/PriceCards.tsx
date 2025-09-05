@@ -1,6 +1,6 @@
 import { Information } from "components/svgs";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "components/elements/Link";
 import { Tooltip } from "react-tooltip";
 
 const PriceCards = () => (

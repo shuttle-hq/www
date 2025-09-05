@@ -7,17 +7,17 @@ thumb: rayon-rust-thumb.png
 cover: rayon-rust-thumb.png
 date: '2024-04-11T14:30:00'
 ---
-Hello world! Today we’ll be talking about using the [Rayon](https://github.com/rayon-rs/rayon) crate to speed up synchronous data processing. Rayon is a library crate that allows you to ergonomically parallelize your computations with high-level methods. You can also use the more low level API to divide the work up yourself!
+Hello world! Today we'll be talking about using the [Rayon](https://github.com/rayon-rs/rayon) crate to speed up synchronous data processing. Rayon is a library crate that allows you to ergonomically parallelize your computations with high-level methods. You can also use the more low level API to divide the work up yourself!
 
 ## What makes rayon good?
 
-Parallel execution is hard. When writing a library that can carry out parallel execution, you are likely to induce a significantly difficult-to-fix bug or a data race. Rayon’s APIs guarantee data race freedom and use an ergonomic API via traits that means if your code compiles normally, it will still do mostly the same thing as it did before. If your iterators have side effects however, they may occur in a different order.
+Parallel execution is hard. When writing a library that can carry out parallel execution, you are likely to induce a significantly difficult-to-fix bug or a data race. Rayon's APIs guarantee data race freedom and use an ergonomic API via traits that means if your code compiles normally, it will still do mostly the same thing as it did before. If your iterators have side effects however, they may occur in a different order.
 
-Rayon’s core primitive is called `join`, which essentially just “joins” two functions in `FnOnce` closures that may or may not run in parallel, depending on if there is an idle core available. This approach of potential parallelism rather than forced parallelism can also provide an upside to performance as there are times when sequential work can be more value. It is also difficult to predict when parallelism is a good thing, which adds to the complexity.
+Rayon's core primitive is called `join`, which essentially just "joins" two functions in `FnOnce` closures that may or may not run in parallel, depending on if there is an idle core available. This approach of potential parallelism rather than forced parallelism can also provide an upside to performance as there are times when sequential work can be more value. It is also difficult to predict when parallelism is a good thing, which adds to the complexity.
 
-The `join` function is implemented using work stealing (like the Tokio async runtime). Rayon uses a global thread pool to be able to take advantage of this. Essentially this means that if you have a thread doing work that finishes, it will then look for other units of work. For example, let’s have task A and task B. A thread might execute task A, while adding B to a local queue of work to be done. Threads from the thread pool will actively look for work to execute - so another idle thread from the thread pool might try to execute task B.
+The `join` function is implemented using work stealing (like the Tokio async runtime). Rayon uses a global thread pool to be able to take advantage of this. Essentially this means that if you have a thread doing work that finishes, it will then look for other units of work. For example, let's have task A and task B. A thread might execute task A, while adding B to a local queue of work to be done. Threads from the thread pool will actively look for work to execute - so another idle thread from the thread pool might try to execute task B.
 
-The great thing about `join` is that the way it is set up is inherently safe. Let’s take a look at the below code which doesn’t compile and if it did, would cause bad things to happen:
+The great thing about `join` is that the way it is set up is inherently safe. Let's take a look at the below code which doesn't compile and if it did, would cause bad things to happen:
 
 ```rust
 fn share_rc<T:PartialOrd+Send>(rc: Rc<i32>) {
@@ -29,7 +29,7 @@ fn share_rc<T:PartialOrd+Send>(rc: Rc<i32>) {
 }
 ```
 
-You can’t have two closures that are simultaneously in scope and access the same `&mut` data. `&mut` types themselves can only be borrowed once; by trying to use it over both closures, we’ve violated this rule. Additionally, the `Rc` type doesn’t actually implement the `Send` marker trait - which is required to send values across threads!
+You can't have two closures that are simultaneously in scope and access the same `&mut` data. `&mut` types themselves can only be borrowed once; by trying to use it over both closures, we've violated this rule. Additionally, the `Rc` type doesn't actually implement the `Send` marker trait - which is required to send values across threads!
 
 ## Using Rayon
 
@@ -43,7 +43,7 @@ cargo add rayon
 
 ### Parallelizing array work
 
-The simplest way to use [Rayon](https://github.com/rayon-rs/rayon) is to convert your iterators into parallel iterators. If you’re using `.iter()`, you simply change the method to `.par_iter()` and you’re done! No change required.
+The simplest way to use [Rayon](https://github.com/rayon-rs/rayon) is to convert your iterators into parallel iterators. If you're using `.iter()`, you simply change the method to `.par_iter()` and you're done! No change required.
 
 ```rust
 use rayon::prelude::*;
@@ -110,7 +110,7 @@ Interested in learning more? You can find more about the `ThreadPool` type [here
 
 ### Log analysis
 
-Text processing is a great area where [Rayon](https://github.com/rayon-rs/rayon) can provide a big performance bonus! Here we can analyse a log file that has been extracted from somewhere by filtering for any lines that contain the word “ERROR” in uppercase.
+Text processing is a great area where [Rayon](https://github.com/rayon-rs/rayon) can provide a big performance bonus! Here we can analyse a log file that has been extracted from somewhere by filtering for any lines that contain the word "ERROR" in uppercase.
 
 ```rust
 use std::fs::read_to_string;
@@ -135,7 +135,7 @@ fn main() {
 
 ### CSV processing
 
-Of course, where there’s mountains of data, data parallelism will always be a good thing. You can parse a file, split it then parallelise the reading. In the below example, we parse a CSV file and turn every value into a “Hello world!” string:
+Of course, where there's mountains of data, data parallelism will always be a good thing. You can parse a file, split it then parallelise the reading. In the below example, we parse a CSV file and turn every value into a "Hello world!" string:
 
 ```rust
 use rayon::iter::{IntoParallelIterator, IntoParallelRefIterator, ParallelIterator};
@@ -171,15 +171,15 @@ fn main() {
 }
 ```
 
-For many use cases, the more sensible option here most of the time would be to use the `csv` crate. However, that doesn’t stop us from implementing our own CSV parser - particularly if we’re not using the `serde` crate to deserialize and serialize our CSV records.
+For many use cases, the more sensible option here most of the time would be to use the `csv` crate. However, that doesn't stop us from implementing our own CSV parser - particularly if we're not using the `serde` crate to deserialize and serialize our CSV records.
 
 ## Pitfalls
 
-Rayon is a very powerful crate. However, there are some pitfalls that can happen while using it if you’re not careful.
+Rayon is a very powerful crate. However, there are some pitfalls that can happen while using it if you're not careful.
 
 ### Blocking rayon threads (deadlocks)
 
-Work done in parallel rayon threads that block each others’ threads are something you absolutely want to avoid here. One example of this may be a mutex that gets locked on every iteration.
+Work done in parallel rayon threads that block each others' threads are something you absolutely want to avoid here. One example of this may be a mutex that gets locked on every iteration.
 
 ```rust
 fn main() {
@@ -194,7 +194,7 @@ println!("{res}");
 }
 ```
 
-Here, you can see that the mutex gets locked on every iteration! That’s a terrible way to do it. Clearly, we need a better way. We can avoid this totally by simply collecting the parallelized work, and **then** adding it to our wrapped number:
+Here, you can see that the mutex gets locked on every iteration! That's a terrible way to do it. Clearly, we need a better way. We can avoid this totally by simply collecting the parallelized work, and **then** adding it to our wrapped number:
 
 ```rust
 fn main() {

@@ -8,9 +8,9 @@ thumb: tursoapi.png
 date: '2023-07-28T18:18:00'
 ---
 
-In this article, we are showcasing our latest integration, and that's Turso! Turso is a service that describes itself as “SQLite for the edge”, taking the power of SQLite to the extreme by hosting it on the cloud and using replicas to allow you to get a local replica of your database wherever you need it, saving time and money on read data. This is hugely useful for web applications where you might need to generate a lot of reports using read data from your SQL database as reads using SQLite are extremely cheap, or web services where most of the traffic will be GET requests for information.
+In this article, we are showcasing our latest integration, and that's Turso! Turso is a service that describes itself as "SQLite for the edge", taking the power of SQLite to the extreme by hosting it on the cloud and using replicas to allow you to get a local replica of your database wherever you need it, saving time and money on read data. This is hugely useful for web applications where you might need to generate a lot of reports using read data from your SQL database as reads using SQLite are extremely cheap, or web services where most of the traffic will be GET requests for information.
 
-We’ll be writing a web service in the form of a Cat Facts API service that utilises a Turso instance. We’ll want the following functionality by the time our API is done:
+We'll be writing a web service in the form of a Cat Facts API service that utilises a Turso instance. We'll want the following functionality by the time our API is done:
 
 -   Grab a single cat fact
 -   Users can submit their own cat facts
@@ -20,7 +20,7 @@ Looking for the final example codebase? You can check it out here: https://githu
 
 ## Getting Started
 
-Before anything else, you’ll probably want to install Turso so you can use Turso instances. You can do this with a scripted install, like so:
+Before anything else, you'll probably want to install Turso so you can use Turso instances. You can do this with a scripted install, like so:
 
 ```rust
 curl -sSfL https://get.tur.so/install.sh | bash
@@ -34,9 +34,9 @@ brew install chiselstrike/tap/turso
 
 You can verify your installation of Turso by using `turso --version`.
 
-Next you’ll want to use `turso auth signup` to sign up to Turso’s service, which will ask you to log in via GitHub and request some permissions to your GitHub account in order for the service to work. A token will then be generated in your Turso install location which is used to grant access to Turso (make sure to not share this, as it will allow others to use Turso while pretending to be you!). This token will also expire after 7 days.
+Next you'll want to use `turso auth signup` to sign up to Turso's service, which will ask you to log in via GitHub and request some permissions to your GitHub account in order for the service to work. A token will then be generated in your Turso install location which is used to grant access to Turso (make sure to not share this, as it will allow others to use Turso while pretending to be you!). This token will also expire after 7 days.
 
-To create a database using Turso, we’ll want to use the following:
+To create a database using Turso, we'll want to use the following:
 
 ```rust
 turso create my-db
@@ -44,11 +44,11 @@ turso create my-db
 
 This will generate a database for you that you can explore by using `turso db shell my-db`. It will also provide a URL that we will want to note down for later - ideally somewhere safe, as others will be able to use your Turso database if they know what the token is.
 
-Then you’ll want to create an API token for your database that we’ll be using in our Shuttle app. To do that, you’ll want to use `turso db tokens create my-db`, which will generate a token. We’ll want to make sure to keep this token somewhere safe for later, as this allows people to work with your database if they know what the database URL is.
+Then you'll want to create an API token for your database that we'll be using in our Shuttle app. To do that, you'll want to use `turso db tokens create my-db`, which will generate a token. We'll want to make sure to keep this token somewhere safe for later, as this allows people to work with your database if they know what the database URL is.
 
 Feeling stuck? You can find the Turso docs here: https://docs.turso.tech/tutorials/get-started-turso-cli/step-01-installation
 
-Next, let’s install `cargo-shuttle` (Shuttle’s CLI) if you haven’t already by running the following:
+Next, let's install `cargo-shuttle` (Shuttle's CLI) if you haven't already by running the following:
 
 ```rust
 // run if using regular install
@@ -57,21 +57,21 @@ cargo install cargo-shuttle
 cargo binstall cargo-shuttle
 ```
 
-After that, let’s initiate our app:
+After that, let's initiate our app:
 
 ```rust
 shuttle init
 ```
 
-We can then follow the prompt to the end to create our app. This guide will assume you’re using the Axum starter template.
+We can then follow the prompt to the end to create our app. This guide will assume you're using the Axum starter template.
 
-Once you’re done with the initial prompt, we’ll want to install our initial libraries. You can either use this one-liner or examine the crate dependencies below:
+Once you're done with the initial prompt, we'll want to install our initial libraries. You can either use this one-liner or examine the crate dependencies below:
 
 ```rust
 cargo add anyhow chrono libsql-client@0.30.1 reqwest serde shuttle-secrets shuttle-turso --features serde/derive
 ```
 
-Here is a list of the dependencies, which you’ll be able to find in Cargo.toml after adding everything:
+Here is a list of the dependencies, which you'll be able to find in Cargo.toml after adding everything:
 
 ```toml
 [dependencies]
@@ -88,7 +88,7 @@ shuttle-turso = "0.21.0" # required to use turso with shuttle
 tokio = "1.28.2" # async runtime
 ```
 
-Remember the Turso database URL and API token you got earlier? You’ll want to store it in a `Secrets.toml` file at the root of your project. We’ll also be using Gmail SMTP for sending emails through `lettre`, although the crate will work with pretty much any SMTP server as long as you have the credentials and the relay server information! The `Secrets.toml` file should look like this:
+Remember the Turso database URL and API token you got earlier? You'll want to store it in a `Secrets.toml` file at the root of your project. We'll also be using Gmail SMTP for sending emails through `lettre`, although the crate will work with pretty much any SMTP server as long as you have the credentials and the relay server information! The `Secrets.toml` file should look like this:
 
 ```toml
 TURSO_ADDR = "YOUR_TURSO_URL_HERE"
@@ -97,16 +97,16 @@ GMAIL_USER = "YOUR_GMAIL_ADDRESS_HERE"
 GMAIL_PASSWORD = "YOUR_GMAIL_PASSWORD_HERE"
 ```
 
-Now that we’ve set up everything we need, we can get started!
+Now that we've set up everything we need, we can get started!
 
 ## Backend
 
 Our service will be split into two parts:
 
 -   A web service
--   A background task that will check the time and if it matches what the time is, it’ll send out a load of subscription emails to our subscribers
+-   A background task that will check the time and if it matches what the time is, it'll send out a load of subscription emails to our subscribers
 
-Natively, Shuttle will give you types that you can use for easily supporting your web services. However, we don’t want that - we want to run our web service and background task concurrently, which means we need to return a type that implements `shuttle_runtime::Service`. See below:
+Natively, Shuttle will give you types that you can use for easily supporting your web services. However, we don't want that - we want to run our web service and background task concurrently, which means we need to return a type that implements `shuttle_runtime::Service`. See below:
 
 ```rust
 // main.rs
@@ -153,11 +153,11 @@ impl shuttle_runtime::Service for CustomService {
 }
 ```
 
-Although we’ve successfully implemented the trait, our `bind` function is actually empty because we haven’t written anything yet. We’ll be filling this function out once we’ve implemented all the functionality we need.
+Although we've successfully implemented the trait, our `bind` function is actually empty because we haven't written anything yet. We'll be filling this function out once we've implemented all the functionality we need.
 
-You might also have noticed that we’ve wrapped our database client connection in `Arc<Mutex>`. This is because although we want our database connection to be shared across the web service and background task, it doesn’t implement `Clone` - fortunately, `Arc<Mutex>` is a great workaround for this in a web service use case and is a common pattern for situations like this (where we want more than one thread to have access to a variable, but it needs to be thread-safe). You can read more about Arcs and Mutexes from Mara Bos’ book, Rust Atomics & Locks which does a great deep dive on this: https://marabos.nl/atomics/
+You might also have noticed that we've wrapped our database client connection in `Arc<Mutex>`. This is because although we want our database connection to be shared across the web service and background task, it doesn't implement `Clone` - fortunately, `Arc<Mutex>` is a great workaround for this in a web service use case and is a common pattern for situations like this (where we want more than one thread to have access to a variable, but it needs to be thread-safe). You can read more about Arcs and Mutexes from Mara Bos' book, Rust Atomics & Locks which does a great deep dive on this: https://marabos.nl/atomics/
 
-Let’s talk about our CRUD API routes and migrations before anything else. We will probably want to set up our migrations like so in the main function:
+Let's talk about our CRUD API routes and migrations before anything else. We will probably want to set up our migrations like so in the main function:
 
 ```rust
 
@@ -190,9 +190,9 @@ async fn axum(
  }
 ```
 
-This pair of statements will create the tables in the database that currently don’t exist yet - and if they do exist, do nothing. This means that if we want to run our app more than once, it won’t randomly cause our tables to reset (though you may wish to consider commenting this part of the function out once your migrations are set up!).
+This pair of statements will create the tables in the database that currently don't exist yet - and if they do exist, do nothing. This means that if we want to run our app more than once, it won't randomly cause our tables to reset (though you may wish to consider commenting this part of the function out once your migrations are set up!).
 
-We will want to set up our state-wide variables struct for our Axum web service by using an `AppState` struct that we’ll inject into our Axum web service so that our API routes can also access the database connection (we’ll be expanding this with secret keys and our backend router as required):
+We will want to set up our state-wide variables struct for our Axum web service by using an `AppState` struct that we'll inject into our Axum web service so that our API routes can also access the database connection (we'll be expanding this with secret keys and our backend router as required):
 
 ```rust
 pub struct AppState {
@@ -202,7 +202,7 @@ pub struct AppState {
 
 As you can see, we re-use the `Arc<Mutex>` pattern to be able to implement the client from `libsql_client` in the app.
 
-Next we’ll want to implement our API routes. We’ll want a health check route and an initial route to welcome users to our web service and to let them easily use our web service:
+Next we'll want to implement our API routes. We'll want a health check route and an initial route to welcome users to our web service and to let them easily use our web service:
 
 ```rust
 // main.rs
@@ -230,9 +230,9 @@ When we load our API home page route up on the browser, our front page will look
 
 ![Preview of the cat facts API front page](/images/blog/cat-facts-frontpage.png)
 
-It’s quite simple, but as this is intentionally meant to be an API for other developers to pull from, we really only need to add what routes are available and write about for other developers to pull from, we really only need to add what routes are available and write about how to use them.how to use them.
+It's quite simple, but as this is intentionally meant to be an API for other developers to pull from, we really only need to add what routes are available and write about for other developers to pull from, we really only need to add what routes are available and write about how to use them.how to use them.
 
-Now that we’ve written our health check route and our initial homepage route, we can move onto our routes for submitting and getting single cat facts. We’ll initially want to make sure that we declare a struct that can be serialized to JSON, as well as being deserialized from JSON - thankfully, `serde` makes it really easy to do so by declaring the macros above the struct, like so:
+Now that we've written our health check route and our initial homepage route, we can move onto our routes for submitting and getting single cat facts. We'll initially want to make sure that we declare a struct that can be serialized to JSON, as well as being deserialized from JSON - thankfully, `serde` makes it really easy to do so by declaring the macros above the struct, like so:
 
 ```rust
 // using derive macros from Serde allows us to easily
@@ -245,7 +245,7 @@ pub struct CatFact {
 
 You can find more about the Serde derive macros here:
 
-We can then write our routes - we’ll need one for getting a fact and one for users to be able to submit their own facts:
+We can then write our routes - we'll need one for getting a fact and one for users to be able to submit their own facts:
 
 ```rust
 // main.rs
@@ -356,7 +356,7 @@ async fn axum(
 }
 ```
 
-After this, we’ll want to write a route for adding subscribers. It’s functionally the same as our `create_record` function with regards to executing a database query then returning either the error or a `StatusCode::CREATED`, but instead of inserting into the `CatFacts` table we’re inserting into the `Subscribers` table, like so:
+After this, we'll want to write a route for adding subscribers. It's functionally the same as our `create_record` function with regards to executing a database query then returning either the error or a `StatusCode::CREATED`, but instead of inserting into the `CatFacts` table we're inserting into the `Subscribers` table, like so:
 
 ```rust
 // main.rs
@@ -382,9 +382,9 @@ pub async fn subscribe(
 }
 ```
 
-Once this is done, that’s pretty much it for our web service! We can now move onto our background task, which will be the main meat of our service.
+Once this is done, that's pretty much it for our web service! We can now move onto our background task, which will be the main meat of our service.
 
-Logically speaking, all we need to do is write a function that will loop every second, and check what the time is. If it’s a given time, then we can try to start sending out emails to our subscribers. The function would look like this at a basic level:
+Logically speaking, all we need to do is write a function that will loop every second, and check what the time is. If it's a given time, then we can try to start sending out emails to our subscribers. The function would look like this at a basic level:
 
 ```rust
 // main.rs
@@ -433,7 +433,7 @@ pub async fn scheduled_tasks(
 }
 ```
 
-At the moment, you can see we’re defining the time for when we want to run the task (every day at midnight - we get the local time, convert it to a `NaiveDate` then add our hours, minutes and seconds). As you may have noticed, we’re also using a function called `calculate_time_diff` to get the difference between when we want to run the function and now - firstly to calculate whether or not we should run the task, then secondly so we can tell the program to make the thread sleep until when the time between midnight and the current time is zero, which would look like this:
+At the moment, you can see we're defining the time for when we want to run the task (every day at midnight - we get the local time, convert it to a `NaiveDate` then add our hours, minutes and seconds). As you may have noticed, we're also using a function called `calculate_time_diff` to get the difference between when we want to run the function and now - firstly to calculate whether or not we should run the task, then secondly so we can tell the program to make the thread sleep until when the time between midnight and the current time is zero, which would look like this:
 
 ```rust
 // main.rs
@@ -490,7 +490,7 @@ let rows = match db.execute("SELECT email FROM subscribers").await {
 }
 ```
 
-Now that we’ve written all of the functions we need, we can now combine everything together in our `bind` function! We’ll want to create the Axum router and bind it to our given server address, then run it together in a `tokio::select!` macro with our background task. It’d look something like this below:
+Now that we've written all of the functions we need, we can now combine everything together in our `bind` function! We'll want to create the Axum router and bind it to our given server address, then run it together in a `tokio::select!` macro with our background task. It'd look something like this below:
 
 ```rust
 // main.rs
@@ -521,15 +521,15 @@ impl shuttle_runtime::Service for CustomService {
 
 ## Deployment
 
-Now that we’ve written everything, all you need to do is to use `shuttle deploy` (add `--allow-dirty` if on a Git branch with uncommitted changes) and if there are no problems, you’ll be able to visit your web service at the provided URL in the terminal! The deployment at the end should look like something similar to this:
+Now that we've written everything, all you need to do is to use `shuttle deploy` (add `--allow-dirty` if on a Git branch with uncommitted changes) and if there are no problems, you'll be able to visit your web service at the provided URL in the terminal! The deployment at the end should look like something similar to this:
 
 ![Preview of the cat facts API deployment](/images/blog/cat-facts-deployed.png)
 
 ## Conclusion
 
-Thank you for reading! Hopefully this has given you a good high-level insight into what is and what isn’t possible with Rust on the web. Writing Rust has become easier than ever with the addition of crates like Axum that make it easy to write code with easily readable syntax that allows you to get up and running quicker, and Turso is another step in that direction.
+Thank you for reading! Hopefully this has given you a good high-level insight into what is and what isn't possible with Rust on the web. Writing Rust has become easier than ever with the addition of crates like Axum that make it easy to write code with easily readable syntax that allows you to get up and running quicker, and Turso is another step in that direction.
 
-If you’d like to extend this example, here are a few suggestions:
+If you'd like to extend this example, here are a few suggestions:
 
 -   Email validation for adding subscribers
 -   Make the subscriber email background task a job queue

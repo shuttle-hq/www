@@ -8,19 +8,19 @@ cover: jwt-auth-rust-thumb.png
 date: '2024-02-21T15:00:00'
 ---
 
-Hey there! Following on from our ShuttleBytes talk which we held on Tuesday, we’re going to talk about how you can implement authentication using JSON Web Tokens (JWTs) in Rust.
+Hey there! Following on from our ShuttleBytes talk which we held on Tuesday, we're going to talk about how you can implement authentication using JSON Web Tokens (JWTs) in Rust.
 
 ## What is a JWT?
 
-A JSON Web Token (JWT) is a compact, URL-safe way to transfer data (”claims”) between two parties over the Web. The data is typically encoded using a JSON Web Signature or as part of a JSON Web Encryption (JWE) structure, and can be encrypted (and signed!).
+A JSON Web Token (JWT) is a compact, URL-safe way to transfer data ("claims") between two parties over the Web. The data is typically encoded using a JSON Web Signature or as part of a JSON Web Encryption (JWE) structure, and can be encrypted (and signed!).
 
 JWTs are a popular option when deciding on an auth strategy. The client stores all the information via the JWT, allowing for a stateless API. This can make user authentication much easier in some cases. While unencrypted and unsigned JWTs can be manipulated, it is simple for the server to be able to disregard manipulated JWTs as long as the secret key used to create them remains secret.
 
 ## Getting started
 
-To get started, let’s initialise a project using `shuttle init`, making sure to pick Axum as the framework.
+To get started, let's initialise a project using `shuttle init`, making sure to pick Axum as the framework.
 
-Then we’ll add our dependencies:
+Then we'll add our dependencies:
 
 ```bash
 cargo add axum-extra@0.9.2 -F typed-header
@@ -35,7 +35,7 @@ cargo add serde-json@1.0.113
 
 ### Setting up keys
 
-To start with, we’ll need to declare a struct that holds decoding and encoding key, with a method that can take a `&[u8]` (u8 slice) to generate the struct:
+To start with, we'll need to declare a struct that holds decoding and encoding key, with a method that can take a `&[u8]` (u8 slice) to generate the struct:
 
 ```rust
 use jsonwebtoken::{DecodingKey, EncodingKey};
@@ -55,7 +55,7 @@ impl Keys {
 }
 ```
 
-This struct needs to be generated from a secret key as it’s what we will use to generate the JWTs from. For this example, we’ll be randomly generating our bytes from a String and then turning it into bytes. It will then be stored in a `once_cell::LazyCell` that can be accessed globally in our application:
+This struct needs to be generated from a secret key as it's what we will use to generate the JWTs from. For this example, we'll be randomly generating our bytes from a String and then turning it into bytes. It will then be stored in a `once_cell::LazyCell` that can be accessed globally in our application:
 
 ```rust
 use once_cell::sync::Lazy;
@@ -66,7 +66,7 @@ static KEYS: Lazy<Keys> = Lazy::new(|| {
 });
 ```
 
-Note that there’s many different sources you can use to generate the byte array from for this - generating a random string and turning it into bytes is just one of them. For production usage, you may also want to use a cryptographically safe algorithm.
+Note that there's many different sources you can use to generate the byte array from for this - generating a random string and turning it into bytes is just one of them. For production usage, you may also want to use a cryptographically safe algorithm.
 
 ### Writing our JWT Claim
 
@@ -102,7 +102,7 @@ impl IntoResponse for AuthError {
 }
 ```
 
-Implementing `IntoResponse` for `AuthError` allows it to be used as the `Rejection` type in the `FromRequestParts` trait. Note that to be able to return `AuthError` in the `FromPartsRequest` trait, we use `map_err` to turn the error type into `AuthError` so that it can be propagated. We also use de-structuring here to extract the bearer struct from the `TypedHeader<Authorization<Bearer>>` type as it’s much easier to access.
+Implementing `IntoResponse` for `AuthError` allows it to be used as the `Rejection` type in the `FromRequestParts` trait. Note that to be able to return `AuthError` in the `FromPartsRequest` trait, we use `map_err` to turn the error type into `AuthError` so that it can be propagated. We also use de-structuring here to extract the bearer struct from the `TypedHeader<Authorization<Bearer>>` type as it's much easier to access.
 
 ```rust
 use serde::{ Serialize, Deserialize };
@@ -135,11 +135,11 @@ impl<S> FromRequestParts<S> for Claims where S: Send + Sync {
 }
 ```
 
-Now that we’re done setting up our boilerplate for how the JWT should work, we can move onto creating our routes!
+Now that we're done setting up our boilerplate for how the JWT should work, we can move onto creating our routes!
 
 ### Creating routes
 
-The next step is to write our endpoint when authorizing a user - when returning the token, we’ll create a new `AuthBody` with the token in it and the type of token it is. We’ll be using this later on:
+The next step is to write our endpoint when authorizing a user - when returning the token, we'll create a new `AuthBody` with the token in it and the type of token it is. We'll be using this later on:
 
 ```rust
 #[derive(Debug, Serialize)]
@@ -158,7 +158,7 @@ impl AuthBody {
 }
 ```
 
-Now that we’ve created our `AuthBody`, we can create an endpoint that will take a client ID and secret and verify it. Then it will create a claim, encode it and return it as JSON.
+Now that we've created our `AuthBody`, we can create an endpoint that will take a client ID and secret and verify it. Then it will create a claim, encode it and return it as JSON.
 
 ```rust
 use axum::Json;
@@ -226,7 +226,7 @@ async fn main() -> shuttle_axum::ShuttleAxum {
 
 To test that the API works, we can use `shuttle run` to serve the API locally.
 
-To test our `/login` endpoint, we’ll send a cURL request to it with the data:
+To test our `/login` endpoint, we'll send a cURL request to it with the data:
 
 ```bash
 curl localhost:8000/login -H 'Content-Type: application/json/' \
@@ -249,15 +249,15 @@ Welcome to the protected area, foo!
 
 ## Deploying
 
-Now that we’ve written our whole project, we can deploy! Type in `shuttle deploy` and press enter (add `--ad` flag if on a dirty Git branch to allow dirty deploys). When finished, our terminal should print out all of the data about our deployment and project and a link to the live project!
+Now that we've written our whole project, we can deploy! Type in `shuttle deploy` and press enter (add `--ad` flag if on a dirty Git branch to allow dirty deploys). When finished, our terminal should print out all of the data about our deployment and project and a link to the live project!
 
 ## Extending this project
 
-Interested in extending this project? Here’s a couple ideas:
+Interested in extending this project? Here's a couple ideas:
 
 - Use Postgres to store user logins.
 - Try using encryption and signing to strengthen your JWTs, as well as storing them in a cookie.
-- Try adding integration tests so you don’t need manual testing!
+- Try adding integration tests so you don't need manual testing!
 
 ## Finishing up
 

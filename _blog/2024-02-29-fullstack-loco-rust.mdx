@@ -9,7 +9,7 @@ date: '2024-02-29T15:30:00'
 ---
 Loco is a Rust framework that aims to do it all - authentication, tasks, migrations and more. While initially being more complex to use than using pure Axum, it can save a lot of time setting up boilerplate and provides a great platform to build on.
 
-In this guide, we’ll deploying Loco on Shuttle via a fullstack template that also additionally includes SaaS subscription payments. By using their SaaS starter, we can leverage their pre-built authentication features to build payments out quickly and easily.  Interested in deploying or trying out the final repo? You can check it out [here.](https://github.com/joshua-mo-143/shuttle-stripe-ex)
+In this guide, we'll deploying Loco on Shuttle via a fullstack template that also additionally includes SaaS subscription payments. By using their SaaS starter, we can leverage their pre-built authentication features to build payments out quickly and easily.  Interested in deploying or trying out the final repo? You can check it out [here.](https://github.com/joshua-mo-143/shuttle-stripe-ex)
 
 Steps to deploy from cloning:
 - Run `shuttle init --from joshua-mo-143/shuttle-stripe-ex` and follow the prompt (requires `cargo-shuttle` installed)
@@ -18,9 +18,9 @@ Steps to deploy from cloning:
 
 ## Prerequisites
 
-Before we get started, you will need a Stripe API key. It’s free to sign up with Stripe and you can turn on Test Mode before you do anything in production. Stripe also has docs on this if you need assistance [here.](https://support.stripe.com/questions/locate-api-keys-in-the-dashboard)
+Before we get started, you will need a Stripe API key. It's free to sign up with Stripe and you can turn on Test Mode before you do anything in production. Stripe also has docs on this if you need assistance [here.](https://support.stripe.com/questions/locate-api-keys-in-the-dashboard)
 
-Once you’ve created your project, make sure you create a `Secrets.toml` file in the root of your project and add it like so:
+Once you've created your project, make sure you create a `Secrets.toml` file in the root of your project and add it like so:
 
 ```rust
 STRIPE_API_KEY = "<YOUR-STRIPE-KEY-HERE>"
@@ -28,7 +28,7 @@ STRIPE_API_KEY = "<YOUR-STRIPE-KEY-HERE>"
 
 ### Getting started
 
-We’re going to use the following command to initialise our project (requires `cargo-shuttle` installed), following the prompt to initialise a project with our name. The `--from` flag allows us to take the starter from
+We're going to use the following command to initialise our project (requires `cargo-shuttle` installed), following the prompt to initialise a project with our name. The `--from` flag allows us to take the starter from
 
 ```bash
 shuttle init --from loco-rs/loco --subfolder starters/saas
@@ -36,9 +36,9 @@ shuttle init --from loco-rs/loco --subfolder starters/saas
 
 We will then use `cargo loco generate deployment` to generate a Shuttle deployment for our Loco project!
 
-While we’re here, make sure you’re using the latest version of `cargo-shuttle` and Shuttle dependencies in your project. We released v0.40.0 today!
+While we're here, make sure you're using the latest version of `cargo-shuttle` and Shuttle dependencies in your project. We released v0.40.0 today!
 
-We’ll also add the following dependencies with a shell snippet:
+We'll also add the following dependencies with a shell snippet:
 
 ```bash
 cargo add async-stripe@0.34.1 -F runtime-tokio-hyper-rustls
@@ -46,7 +46,7 @@ cargo add shuttle-shared-db -F postgres
 cargo add shuttle-secrets
 ```
 
-Note that you will get a blank Shuttle deployment with no database installed. To remedy this, we’ll adjust the main function to provide our database annotation and make sure that the `Migrator` (from the migrations folder) is added:
+Note that you will get a blank Shuttle deployment with no database installed. To remedy this, we'll adjust the main function to provide our database annotation and make sure that the `Migrator` (from the migrations folder) is added:
 
 ```rust
 use migrations::Migrator;
@@ -79,31 +79,31 @@ async fn main(
 
 In the regular `src/bin/main.rs`, you may also need to adjust the app so that `Migrator` is also included.
 
-Once done, you can use `shuttle run` and it should just automatically work! You’ll get a database connection URL (save this for later!).
+Once done, you can use `shuttle run` and it should just automatically work! You'll get a database connection URL (save this for later!).
 
 ### Migrations
 
-To get started, we’ll make some migrations that we can then reference later on in the program. You can do this like so:
+To get started, we'll make some migrations that we can then reference later on in the program. You can do this like so:
 
 ```bash
 cargo loco generate model --migration-only subscription_tiers tier:string! stripe_item_id:string! stripe_price_id:string!
 cargo loco generate model --migration-only user_subscriptions user:references stripe_customer_id:string! stripe_subscription_id:string! user_tier:string!
 ```
 
-Then we’ll use the following to migrate your database and generate entities:
+Then we'll use the following to migrate your database and generate entities:
 
 ```bash
 DATABASE_URL=<DB_URL_HERE> cargo loco db migrate
 DATABASE_URL=<DB_URL_HERE> cargo loco db entities
 ```
 
- Note that you will need a database URL for this. If you don’t have one yet, you can use `shuttle run` to automatically spin up a Postgres container with a provided connection string or spin up your own Docker container.
+ Note that you will need a database URL for this. If you don't have one yet, you can use `shuttle run` to automatically spin up a Postgres container with a provided connection string or spin up your own Docker container.
 
-These two commands will generate some files in the `migrations` folder as well as in `src/models`, which we’ll be making heavy use of as they are the main way to interface with the database when using Loco.
+These two commands will generate some files in the `migrations` folder as well as in `src/models`, which we'll be making heavy use of as they are the main way to interface with the database when using Loco.
 
 ## Frontend
 
-We won’t be covering the frontend in this tutorial as there’s a lot of different ways you can do it - however, if you’d like to look at the way that we’ve done it, feel free to check out the repo here! We use React as provided by Loco with `react-router-dom` for routing and `zustand` for state management, with vanilla CSS.
+We won't be covering the frontend in this tutorial as there's a lot of different ways you can do it - however, if you'd like to look at the way that we've done it, feel free to check out the repo here! We use React as provided by Loco with `react-router-dom` for routing and `zustand` for state management, with vanilla CSS.
 
 The following pages in the repo have been provided:
 
@@ -115,12 +115,12 @@ The following pages in the repo have been provided:
 
 ## Error handling
 
-Loco by default uses `anyhow` to be able to provide easy error handling. However, for our purposes, let’s create our own error type. This will allow us a couple of things:
+Loco by default uses `anyhow` to be able to provide easy error handling. However, for our purposes, let's create our own error type. This will allow us a couple of things:
 
 - We know exactly what error is happening and where
 - We can customise the behavior of our error handling
 
-Let’s start by using the `thiserror` crate we added earlier to add macros for automatically implementing `std::fmt::DIsplay` and `std::error::Error`. The `thiserror::Error` derive macro also allows us to add attribute macros to our struct for automatic `From<T>` implementations, which saves a lot of time! That being said, you can also implement `From<T>` manually if you want to create more than one enum variant for an error based on what the reason of the error is.
+Let's start by using the `thiserror` crate we added earlier to add macros for automatically implementing `std::fmt::DIsplay` and `std::error::Error`. The `thiserror::Error` derive macro also allows us to add attribute macros to our struct for automatic `From<T>` implementations, which saves a lot of time! That being said, you can also implement `From<T>` manually if you want to create more than one enum variant for an error based on what the reason of the error is.
 
 ```rust
 use thiserror::Error;
@@ -161,11 +161,11 @@ impl IntoResponse for ApiError {
 
 ## Using Stripe
 
-To get started with using Stripe, we’ll want to create a new loco controller file that will hold all of our routes. We can do this with `cargo loco generate controller stripe`, which will generate a new controller route at `src/controllers/stripe.rs` and inject some code into `src/app.rs` to make sure the controller gets automatically included.
+To get started with using Stripe, we'll want to create a new loco controller file that will hold all of our routes. We can do this with `cargo loco generate controller stripe`, which will generate a new controller route at `src/controllers/stripe.rs` and inject some code into `src/app.rs` to make sure the controller gets automatically included.
 
-Looking inside `src/controllers/stripe.rs` should give you a function that returns `Routes` (a struct that builds on `axum::Router`) and a couple of routes for returning “Hello, world!” and the contents of a given request.
+Looking inside `src/controllers/stripe.rs` should give you a function that returns `Routes` (a struct that builds on `axum::Router`) and a couple of routes for returning "Hello, world!" and the contents of a given request.
 
-Let’s start first by defining what our user tiers are. Let’s say we have the Pro tier, and the Team tier. We can write an enum with relevant impls like so:
+Let's start first by defining what our user tiers are. Let's say we have the Pro tier, and the Team tier. We can write an enum with relevant impls like so:
 
 ```rust
 use std::fmt;
@@ -212,7 +212,7 @@ Note that the macros we are importing from `sea_orm` will let the enum be stored
 
 ### Creating Stripe products and prices
 
-Before we do anything else, we will want to create a Stripe product that has some prices attached to it. To do that, we can create two functions; one for creating the Product item, and then one for adding a price (as products on Stripe can have multiple prices). Creating a price requires a product. To keep it simple, we’ll keep one price attached to one item. Both functions will be used as part of other functions.
+Before we do anything else, we will want to create a Stripe product that has some prices attached to it. To do that, we can create two functions; one for creating the Product item, and then one for adding a price (as products on Stripe can have multiple prices). Creating a price requires a product. To keep it simple, we'll keep one price attached to one item. Both functions will be used as part of other functions.
 
 ```rust
 use stripe::{Client, Product, Price, CreatePrice, CreateProduct, IdOrCreate,
@@ -313,7 +313,7 @@ async fn retrieve_product(
 
 Later on, when we run the web service, the API should automatically be able to know if it is required to remake the Stripe product or not.
 
-Let’s write a function for creating a subscription. To get started, we will define what the JSON input should look like when the API receives a request:
+Let's write a function for creating a subscription. To get started, we will define what the JSON input should look like when the API receives a request:
 
 ```rust
 #[derive(Deserialize, Clone)]
@@ -331,7 +331,7 @@ pub struct UserSubscription {
 
 Note that when sending the request, the variables must be in camel case and not snake case.
 
-To make things a little bit easier for ourselves later, we will add an `impl` for `UserSubscription` which will allow us to automatically turn it into some structs that we’ll be using later on to create the customer and `CardDetailsParams`.
+To make things a little bit easier for ourselves later, we will add an `impl` for `UserSubscription` which will allow us to automatically turn it into some structs that we'll be using later on to create the customer and `CardDetailsParams`.
 
 ```rust
 impl UserSubscription {
@@ -365,7 +365,7 @@ impl UserSubscription {
 
 ### Creating subscriptions
 
-Next, we’ll want to get started on writing an endpoint for creating user subscriptions! We’ll create a `stripe::Client` here from the API key that we stored earlier.
+Next, we'll want to get started on writing an endpoint for creating user subscriptions! We'll create a `stripe::Client` here from the API key that we stored earlier.
 
 ```rust
 use crate::models::_entities::user_subscriptions;
@@ -386,7 +386,7 @@ pub async fn create_subscription(
 
 Here, note that we specifically use the `JWTWithUser` middleware to extract a Bearer JWT from the Authorization header and return a user model.
 
-Next, we want to create a customer and add it to our Stripe account. We will also create the payment method and attach it to the customer. Note here that while we’re using card payments as it’s a very common form of payment, Stripe also has quite a few other types of payments you can try.
+Next, we want to create a customer and add it to our Stripe account. We will also create the payment method and attach it to the customer. Note here that while we're using card payments as it's a very common form of payment, Stripe also has quite a few other types of payments you can try.
 
 ```rust
 use stripe::{Customer, PaymentMethod, PaymentMethodTypeFilter,
@@ -409,7 +409,7 @@ let payment_method = {
 };
 ```
 
-Next, we’ll want to add the part that creates the subscription. This part is relatively simple as there’s only one item in our subscription list we want - which is the base price for our SaaS subscription (although if you want to extend it, there are options for adding more too!):
+Next, we'll want to add the part that creates the subscription. This part is relatively simple as there's only one item in our subscription list we want - which is the base price for our SaaS subscription (although if you want to extend it, there are options for adding more too!):
 
 ```rust
 use stripe::{CreateSubscription, CreateSubscriptionItems, Subscription,
@@ -444,9 +444,9 @@ If you get stuck on errors while writing this function, you can find the functio
 
 ### Cancelling Stripe Subscriptions
 
-Okay, now let’s say you want your users to be able to use self-service to cancel the SaaS subscription. This primarily involves canceling the subscription and then making sure to update the database. In this case, we are choosing to outright delete the record from the database on successful cancellation.
+Okay, now let's say you want your users to be able to use self-service to cancel the SaaS subscription. This primarily involves canceling the subscription and then making sure to update the database. In this case, we are choosing to outright delete the record from the database on successful cancellation.
 
-Firstly, we’ll create the Stripe client again by grabbing our API key:
+Firstly, we'll create the Stripe client again by grabbing our API key:
 
 ```rust
 pub async fn cancel_subscription(
@@ -462,7 +462,7 @@ pub async fn cancel_subscription(
 }
 ```
 
-Next, we’ll find our user subscription from the `user_subscriptions` table based on the user ID foreign key. We will then use the Stripe subscription ID to cancel the subscription.
+Next, we'll find our user subscription from the `user_subscriptions` table based on the user ID foreign key. We will then use the Stripe subscription ID to cancel the subscription.
 
 ```rust
 let subscription = user_subscriptions::Entity
@@ -482,7 +482,7 @@ let _ = Subscription::cancel(
 ).await?;
 ```
 
-Once the subscription has been successfully canceled and there’s nothing else we need to do with Stripe, we can go back and update our database to delete the record:
+Once the subscription has been successfully canceled and there's nothing else we need to do with Stripe, we can go back and update our database to delete the record:
 
 ```rust
 let subscription_to_delete = user_subscriptions::Entity
@@ -496,13 +496,13 @@ subscription_to_delete.delete(&ctx.db).await?;
 Ok(StatusCode::OK);
 ```
 
-Note that there are quite a few different ways to handle this. You may find that you want to explicitly mark a customer’s subscription as “expired” rather than outright deleting it from the database if you want users to be able to check their subscription history and other such details.
+Note that there are quite a few different ways to handle this. You may find that you want to explicitly mark a customer's subscription as "expired" rather than outright deleting it from the database if you want users to be able to check their subscription history and other such details.
 
 ### Upgrading/Downgrading Subscription Tiers
 
-Finally, we will add the ability to upgrade and downgrade subscription tiers. In Stripe terms, we’re grabbing information about a user’s subscription and updating the price ID of an existing item on the subscription.
+Finally, we will add the ability to upgrade and downgrade subscription tiers. In Stripe terms, we're grabbing information about a user's subscription and updating the price ID of an existing item on the subscription.
 
-As before, we’ll start with creating the `stripe::Client`:
+As before, we'll start with creating the `stripe::Client`:
 
 ```rust
 pub async fn update_subscription_tier(
@@ -519,7 +519,7 @@ pub async fn update_subscription_tier(
 }
 ```
 
-After that, we will find the `user_subscription` based on the user ID. We will then retrieve the subscription data from Stripe and get the first item on the subscription list. Note that while we are using a vector index which can technically panic, there should always be at least one item so it is safe to use index 0. We will also return an error if the user’s current tier is the same as the requested tier.
+After that, we will find the `user_subscription` based on the user ID. We will then retrieve the subscription data from Stripe and get the first item on the subscription list. Note that while we are using a vector index which can technically panic, there should always be at least one item so it is safe to use index 0. We will also return an error if the user's current tier is the same as the requested tier.
 
 ```rust
 let user_subscription = user_subscriptions::Entity
@@ -541,7 +541,7 @@ if new_user_tier.user_tier == user_subscription.user_tier {
 }
 ```
 
-Once done, we can then find the subscription tier data from our database according to the requested tier change and update the subscription using the new tier’s Stripe price object ID.
+Once done, we can then find the subscription tier data from our database according to the requested tier change and update the subscription using the new tier's Stripe price object ID.
 
 ```rust
 let new_subscription = subscription_tiers::Entity
@@ -584,9 +584,9 @@ let _ = updated_user_subscription.update(&ctx.db).await?;
 Ok(StatusCode::OK);
 ```
 
-### Grabbing a user’s product tier
+### Grabbing a user's product tier
 
-Of course, for the frontend you’ll probably want a quick way to be able to grab the user’s product tier. You can do this like so:
+Of course, for the frontend you'll probably want a quick way to be able to grab the user's product tier. You can do this like so:
 
 ```rust
 pub async fn get_current_tier(
@@ -608,7 +608,7 @@ pub async fn get_current_tier(
 
 ### Hooking it all up
 
-Now that we’re done, we can add it back to our router file for the controller. We can add it back in, like so:
+Now that we're done, we can add it back to our router file for the controller. We can add it back in, like so:
 
 ```rust
 pub fn routes() -> Routes {
@@ -623,11 +623,11 @@ pub fn routes() -> Routes {
 
 ## Deployment
 
-To deploy, you just need to run `shuttle deploy --allow-dirty` and let Shuttle make the magic happen! Once done, you’ll see information about your service.
+To deploy, you just need to run `shuttle deploy --allow-dirty` and let Shuttle make the magic happen! Once done, you'll see information about your service.
 
 ## Finishing up
 
-Loco is a really strong framework to get started with, and by implementing subscription payments we’ve managed to slot in the final piece of the puzzle for a potential SaaS in the making.
+Loco is a really strong framework to get started with, and by implementing subscription payments we've managed to slot in the final piece of the puzzle for a potential SaaS in the making.
 
 Interested in reading more?
 

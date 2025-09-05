@@ -1,15 +1,16 @@
 "use client";
 
 import clsx from "clsx";
-import Link from "next/link";
+import Link from "components/elements/Link";
 import { FC, ReactNode } from "react";
 import { CONTACT_US_URI } from "../../lib/constants";
-
+import { trackEvent } from "../../lib/posthog";
 interface CommonButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant: "primary" | "secondary" | "tertiary" | "blackwhite";
   children: ReactNode;
   invertOnDark?: boolean;
+  eventName?: string;
 }
 
 interface ButtonProps extends CommonButtonProps {
@@ -22,6 +23,7 @@ const Button: FC<ButtonProps> = ({
   className,
   children,
   href,
+  eventName,
 }) => {
   // Primary and secondary switch for dark mode
 
@@ -39,7 +41,7 @@ const Button: FC<ButtonProps> = ({
       : "",
     variant === "tertiary" && "button-shadow shadow-gradient text-black",
     variant === "blackwhite" &&
-      "rounded-[14px] border-[1px] border-solid border-[#ffffff40] px-6 py-3 font-gradual text-base text-white transition-all hover:bg-gradient-1",
+    "rounded-[14px] border-[1px] border-solid border-[#ffffff40] px-6 py-3 font-gradual text-base text-white transition-all hover:bg-gradient-1",
     className,
   );
 
@@ -49,9 +51,13 @@ const Button: FC<ButtonProps> = ({
   };
 
   children = (
-    <button className={classNames} style={variant === "tertiary" ? tertBg : {}}>
-      {children}
-    </button>
+    <div onClick={() => {
+      if (eventName) trackEvent(eventName);
+    }}>
+      <button className={classNames} style={variant === "tertiary" ? tertBg : {}}>
+        {children}
+      </button>
+    </div>
   );
 
   if (href)
@@ -68,7 +74,15 @@ const Button: FC<ButtonProps> = ({
 
 export const LoginButton: FC<CommonButtonProps> = ({ children, ...inner }) => {
   return (
-    <Button href="https://console.shuttle.dev/" {...inner}>
+    <Button href="https://console.shuttle.dev/login" {...inner}>
+      {children}
+    </Button>
+  );
+};
+
+export const SignupButton: FC<CommonButtonProps> = ({ children, ...inner }) => {
+  return (
+    <Button href="https://console.shuttle.dev/signup" {...inner}>
       {children}
     </Button>
   );

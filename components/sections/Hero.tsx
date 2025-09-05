@@ -1,4 +1,4 @@
-import { Button, LoginButton } from "components/elements";
+import { Button, SignupButton } from "components/elements";
 import Image from "next/image";
 import { DISCORD_URL } from "../../lib/constants";
 import codeImage from "public/images/sections/hero/shuttle-axum-hello-world.png";
@@ -21,7 +21,7 @@ const Hero = () => {
             signatures and annotations.
           </p>
           <div className="mt-5 flex flex-wrap items-center gap-5 sm:mt-10 lg:mt-12 xl:mt-16">
-            <LoginButton
+            <SignupButton
               variant="primary"
               invertOnDark
               onClick={() => {
@@ -29,7 +29,7 @@ const Hero = () => {
               }}
             >
               Start Building
-            </LoginButton>
+            </SignupButton>
             <Button
               variant="secondary"
               invertOnDark

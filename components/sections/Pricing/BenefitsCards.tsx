@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import Link from "components/elements/Link";
 
 const BenefitCards = () => (
   <div className="relative hidden sm:block">

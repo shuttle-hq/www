@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import Image from "next/image";
-import Link from "next/link";
+import Link from "components/elements/Link";
 import { DISCORD_URL } from "../../lib/constants";
 
 const Testimonials = () => {

@@ -8,7 +8,7 @@ cover: rag-llm-rust-thumb.png
 date: '2024-02-28T15:00:00'
 ---
 
-Hey there! Today, we’re going to talk about creating a web application that utilises Retrieval Augmented Generation (RAG). By the end of this, you’ll have a web service that can parse markdown files to create a small knowledge base that you can query.
+Hey there! Today, we're going to talk about creating a web application that utilises Retrieval Augmented Generation (RAG). By the end of this, you'll have a web service that can parse markdown files to create a small knowledge base that you can query.
 
 Interested in deploying or wanting to fiddle around with the code yourself? You can find the repo [here](https://github.com/joshua-mo-143/shuttle-qdrant-template). You can deploy it in three steps:
 
@@ -18,7 +18,7 @@ Interested in deploying or wanting to fiddle around with the code yourself? You 
 
 ## What is Retrieval Augmented Generation?
 
-Retrieval Augmented Generation is an AI framework for improving the quality of LLM responses. This is done by providing documents or other kinds of data (for example, images) that improve the LLM’s internal representation of information.
+Retrieval Augmented Generation is an AI framework for improving the quality of LLM responses. This is done by providing documents or other kinds of data (for example, images) that improve the LLM's internal representation of information.
 
 This has a few benefits:
 
@@ -31,15 +31,15 @@ RAG has recently gained a lot of popularity in use cases that require knowledge 
 - Support ticket work (being able to automate answering common questions)
 - Searching a database of business documents to generate a report/analysis
 
-Without further ado, let’s get started!
+Without further ado, let's get started!
 
 ## Getting started
 
 ### Pre-requisites
 
-Before we start, you need an OpenAI API key. You’ll also need to sign up for Qdrant to get an API key and database URL.
+Before we start, you need an OpenAI API key. You'll also need to sign up for Qdrant to get an API key and database URL.
 
-After initialising your project, you’ll want to create a file named `Secrets.toml` in the root of your project with the following keys:
+After initialising your project, you'll want to create a file named `Secrets.toml` in the root of your project with the following keys:
 
 ```rust
 OPENAI_API_KEY = "YOUR_OPENAI_API_KEY"
@@ -47,7 +47,7 @@ QDRANT_URL = "YOUR_QDRANT_DATABASE_URL"
 QDRANT_TOKEN = "YOUR_QDRANT_API_KEY"
 ```
 
-You’ll also want to add the following to `Shuttle.toml` (again, create this file in the root of your project):
+You'll also want to add the following to `Shuttle.toml` (again, create this file in the root of your project):
 
 ```rust
 assets = ["docs/*"]
@@ -55,9 +55,9 @@ assets = ["docs/*"]
 
 ### Installing and project initialisation
 
-To get started, we’ll generate a new application using `shuttle init` (requires `cargo-shuttle` installed). Make sure to pick Axum as the framework!
+To get started, we'll generate a new application using `shuttle init` (requires `cargo-shuttle` installed). Make sure to pick Axum as the framework!
 
-We’ll need to add some dependencies, which we can do with the following shell snippet:
+We'll need to add some dependencies, which we can do with the following shell snippet:
 
 ```bash
 cargo add anyhow@1.0.71
@@ -74,7 +74,7 @@ cargo add tower-http@0.5.0 -F fs
 cargo add uuid@1.3.3
 ```
 
-To start, we’ll create a new struct called `File` that will hold the contents of a file, the pathname as well as individual sentences from the contents (as a `Vec<String>`). Our shared application state will hold a `Vec<File>` so that when we prompt our API, it will be able to easily load and search the file contents as it’s already in memory.
+To start, we'll create a new struct called `File` that will hold the contents of a file, the pathname as well as individual sentences from the contents (as a `Vec<String>`). Our shared application state will hold a `Vec<File>` so that when we prompt our API, it will be able to easily load and search the file contents as it's already in memory.
 
 ```rust
 // src/contents.rs
@@ -104,7 +104,7 @@ impl VectorDB {
 }
 ```
 
-To finish setting up, we’ll add our macro annotations to our main function. On a local or deployment run, the Shuttle runtime will automatically provision any things we need from the macros.
+To finish setting up, we'll add our macro annotations to our main function. On a local or deployment run, the Shuttle runtime will automatically provision any things we need from the macros.
 
 ```rust
 // src/main.rs
@@ -141,7 +141,7 @@ async fn axum(
 
 ### Setup
 
-Before we start, we’ll need to set up a struct for dealing with errors while setting up. We can put this in a new `[error.rs](http://error.rs)` file and will be referencing this struct later on.
+Before we start, we'll need to set up a struct for dealing with errors while setting up. We can put this in a new `[error.rs](http://error.rs)` file and will be referencing this struct later on.
 
 ```rust
 // src/errors.rs
@@ -156,7 +156,7 @@ impl std::fmt::Display for SetupError {
 }
 ```
 
-Next, we’ll want to set up a function that will globally set the OpenAI key for all of the `openai` crate functions. This will take the `SecretStore` provided to us from our secrets annotation macro.
+Next, we'll want to set up a function that will globally set the OpenAI key for all of the `openai` crate functions. This will take the `SecretStore` provided to us from our secrets annotation macro.
 
 ```rust
 // src/open_ai.rs
@@ -174,9 +174,9 @@ pub fn setup(secrets: &SecretStore) -> Result<()> {
 
 ### Embedding
 
-To get started, we need to find some files to embed! For our example we’ll be using the Shuttle docs website, but you can use whatever you want. In this section, we’ll be creating embeddings using an OpenAI-provided LLM and inserting/updating them in Qdrant as required.
+To get started, we need to find some files to embed! For our example we'll be using the Shuttle docs website, but you can use whatever you want. In this section, we'll be creating embeddings using an OpenAI-provided LLM and inserting/updating them in Qdrant as required.
 
-Before we start embedding, we’ll want to quickly define some error types that will represent possible errors that can happen while doing this. Our first error type, `EmbeddingError`, will represent embedding errors that can happen while creating an embedding. Our second error type, `NotAvailableError`, will represent errors while trying to load file paths from the file directory we want to use for our knowledge base.
+Before we start embedding, we'll want to quickly define some error types that will represent possible errors that can happen while doing this. Our first error type, `EmbeddingError`, will represent embedding errors that can happen while creating an embedding. Our second error type, `NotAvailableError`, will represent errors while trying to load file paths from the file directory we want to use for our knowledge base.
 
 ```rust
 // src/errors.rs
@@ -208,7 +208,7 @@ impl std::fmt::Display for NotAvailableError {
 }
 ```
 
-To use `File`, we’ll write a function called `load_files_from_dir` that will return `Result<Vec<File>>`. Note that while `sub_files` calls the function recursively, the recursion depth is based on the folder depth of the document base you are embedding. Some `PathBuf` manipulation is done here to ensure that the paths are sanitized.
+To use `File`, we'll write a function called `load_files_from_dir` that will return `Result<Vec<File>>`. Note that while `sub_files` calls the function recursively, the recursion depth is based on the folder depth of the document base you are embedding. Some `PathBuf` manipulation is done here to ensure that the paths are sanitized.
 
 ```rust
 // src/contents.rs
@@ -260,7 +260,7 @@ pub async fn embed_sentence(prompt: &str) -> Result<Embedding> {
 }
 ```
 
-To be able to move the embedding to Qdrant easily, we’ll create a method for `VectorDB` that allows us to easily upsert (”insert or update”, depending on whether the point already exists or not) the points into the Qdrant database. We map the `Embedding` into a `Vec<f32>` and then upsert the points into the collection. We then increase the `VectorDB` ID by 1 to show that an embedding has been upserted.
+To be able to move the embedding to Qdrant easily, we'll create a method for `VectorDB` that allows us to easily upsert ("insert or update", depending on whether the point already exists or not) the points into the Qdrant database. We map the `Embedding` into a `Vec<f32>` and then upsert the points into the collection. We then increase the `VectorDB` ID by 1 to show that an embedding has been upserted.
 
 ```rust
 // src/vector.rs
@@ -290,7 +290,7 @@ impl VectorDB {
 }
 ```
 
-Next, we need to embed the documentation by passing it into GPT, retrieving the embedding data, and upserting it into Qdrant. We’ll use a function to embed the file and get a series of embeddings, then upsert the embeddings into Qdrant.
+Next, we need to embed the documentation by passing it into GPT, retrieving the embedding data, and upserting it into Qdrant. We'll use a function to embed the file and get a series of embeddings, then upsert the embeddings into Qdrant.
 
 ```rust
 // src/main.rs
@@ -314,11 +314,11 @@ async fn embed_documentation(vector_db: &mut VectorDB, files: &Vec<File>) -> any
 }
 ```
 
-Now that we’re done, we can move onto our next part: prompting our model!
+Now that we're done, we can move onto our next part: prompting our model!
 
 ### Prompting
 
-To get started, we’ll need to create a chat stream. Receiving the chat as a streamed response allows us to output the stream to a webpage or CLI as it’s being received. This decreases the amount of time a user needs to wait. We use the GPT `ChatCompletionBuilder` to create the prompt, using `gpt-3.5-turbo` as the model. We set a temperature of 0.0 so that we only get exactly what we want, as any higher may cause LLM hallucinations.
+To get started, we'll need to create a chat stream. Receiving the chat as a streamed response allows us to output the stream to a webpage or CLI as it's being received. This decreases the amount of time a user needs to wait. We use the GPT `ChatCompletionBuilder` to create the prompt, using `gpt-3.5-turbo` as the model. We set a temperature of 0.0 so that we only get exactly what we want, as any higher may cause LLM hallucinations.
 
 ```rust
 // src/open_ai.rs
@@ -389,7 +389,7 @@ impl VectorDB {
 }
 ```
 
-We can then write a function that includes getting the contents of the embedding and searches the database for similar embeddings and grabs the contents of the `File` from the `Vec<File>` in our shared application state. To make it easier for us, let’s implement a trait called `Finder` that helps us to find the embedding from the `ScoredPoint` struct.
+We can then write a function that includes getting the contents of the embedding and searches the database for similar embeddings and grabs the contents of the `File` from the `Vec<File>` in our shared application state. To make it easier for us, let's implement a trait called `Finder` that helps us to find the embedding from the `ScoredPoint` struct.
 
 ```rust
 // src/finder.rs
@@ -424,7 +424,7 @@ impl Finder for Vec<File> {
 }
 ```
 
-Now that we’ve written all of this up, we can write our final `get_contents()` function that gives us the final chat stream:
+Now that we've written all of this up, we can write our final `get_contents()` function that gives us the final chat stream:
 
 ```rust
 // src/main.rs
@@ -480,7 +480,7 @@ async fn prompt(
 
 ## Hooking it all up
 
-Now that everything’s been written up, we can funnel it back into our main function!
+Now that everything's been written up, we can funnel it back into our main function!
 
 ```rust
 // src/main.rs
@@ -519,17 +519,17 @@ Note that every time you spin this up, it will attempt to embed the documentatio
 
 ## Deploying
 
-Now that we’re at the end, we can deploy! Run `shuttle deploy` (with `--allow-dirty` attached) and `cargo-shuttle` will automatically make the magic happen. When finished, you’ll receive some data about your deployment and a link to your deployed project.
+Now that we're at the end, we can deploy! Run `shuttle deploy` (with `--allow-dirty` attached) and `cargo-shuttle` will automatically make the magic happen. When finished, you'll receive some data about your deployment and a link to your deployed project.
 
 ## Finishing up
 
-Thanks for reading! Interested in extending this example? Here’s a couple of ways you can extend this example:
+Thanks for reading! Interested in extending this example? Here's a couple of ways you can extend this example:
 
-- Try using Candle as the LLM instead of OpenAI’s GPT to reduce your costs.
+- Try using Candle as the LLM instead of OpenAI's GPT to reduce your costs.
 - Try parsing other types of files!
 - Add a frontend to your service (see the repo at the start for guidance on this)
 
-Here’s a few suggestions for other articles you may be interested in:
+Here's a few suggestions for other articles you may be interested in:
 
 - Learn about implementing authentication for your application [here.](https://www.shuttle.dev/blog/2024/02/21/using-jwt-auth-rust)
 - Learn about rate limiting your API [here.](https://www.shuttle.dev/blog/2024/02/22/api-rate-limiting-rust)

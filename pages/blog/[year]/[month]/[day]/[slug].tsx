@@ -20,7 +20,7 @@ import rehypePrism from "@mapbox/rehype-prism";
 import { DISCORD_URL, SITE_URL } from "lib/constants";
 import { GetStaticPropsContext, GetStaticPropsResult } from "next";
 import { ParsedUrlQuery } from "querystring";
-import Link from "next/link";
+import Link from "components/elements/Link";
 import clsx from "clsx";
 import {
   BlogHeader,
@@ -35,8 +35,8 @@ import { Pre } from "components/blog/Pre";
 import MastodonLogo from "components/svgs/MastodonLogo";
 import HNLogo from "components/svgs/HNLogo";
 import { trackEvent } from "lib/posthog";
-import { TableOfContents } from "../../../../../components/blog/TableOfContents";
-import { Button } from "components/elements";
+import { BlogFAQ } from "../../../../../components/blog/BlogFAQ";
+import { NewConsoleCTA } from "../../../../../components/blog/NewConsoleCTA";
 
 export async function getStaticPaths() {
   const paths = getAllPostSlugs();
@@ -110,6 +110,9 @@ export async function getStaticProps({
   const formattedModifiedDate = new Date(
     data.modified ?? data.date,
   ).toLocaleDateString("en-IN", options);
+  const formattedUpdatedDate = data.updated_on
+    ? new Date(data.updated_on).toLocaleDateString("en-IN", options)
+    : null;
   const pageTitle = data.pageTitle ?? data.title;
 
   return {
@@ -127,6 +130,8 @@ export async function getStaticProps({
         readingTime,
         date: data.date,
         dateReadable: formattedPublishDate,
+        updated_on: data.updated_on ?? null,
+        updated_on_readable: formattedUpdatedDate,
         modified: data.modified ?? data.date,
         modifiedReadable: formattedModifiedDate,
       } as Post,
@@ -140,13 +145,19 @@ const mdxComponents: MDXRemoteProps["components"] = {
       return (
         <a
           {...props}
+          target="_blank"
+          rel="noopener noreferrer"
           className="relative bg-gradient-to-r from-[#FC540C] to-[#FFD76F] bg-clip-text text-transparent"
         ></a>
       );
     }
 
     return (
-      <Link {...(props as any)} className="my-0 text-body no-underline"></Link>
+      <Link
+        {...(props as any)}
+        className="my-0 text-body no-underline"
+        target="_blank"
+      ></Link>
     );
   },
   pre: (props) => {
@@ -169,13 +180,14 @@ const mdxComponents: MDXRemoteProps["components"] = {
   },
   CaptionedImage: (props) => {
     return (
-      <div className="relative grid w-full grid-cols-1 justify-items-center">
+      <div className="relative flex w-full flex-col items-center">
         <Image
           src={props.src}
           alt={props.alt}
-          width={1000}
-          height={1}
-          className="overflow-hidden rounded-2xl object-contain"
+          width={0}
+          height={0}
+          sizes="100vw"
+          className="h-auto w-auto overflow-hidden rounded-md object-contain"
         />
         <span className="-mt-6 text-sm text-body">{props.caption}</span>
       </div>
@@ -189,6 +201,12 @@ const mdxComponents: MDXRemoteProps["components"] = {
         </div>
       </blockquote>
     );
+  },
+  BlogFAQ: (props) => {
+    return <BlogFAQ {...props} />;
+  },
+  NewConsoleCTA: (props) => {
+    return <NewConsoleCTA {...props} />;
   },
 };
 
@@ -219,7 +237,7 @@ export default function BlogPostPage(props: Props) {
             // TODO: add expiration and modified dates
             // https://github.com/garmeeh/next-seo#article
             publishedTime: props.blog.date,
-            modifiedTime: props.blog.modified,
+            modifiedTime: props.blog.updated_on ?? props.blog.modified,
             //
             // TODO: author urls should be internal in future
             // currently we have external links to github profiles
@@ -259,10 +277,10 @@ export default function BlogPostPage(props: Props) {
                 )}
               </div>
             )}
-            <CallToActionNewsletter bg={false} />
+            {/* <CallToActionNewsletter bg={false} />
             {props.blog.contentTOC.json.length > 0 ? (
               <TableOfContents toc={props.blog.contentTOC.json} />
-            ) : null}
+            ) : null} */}
 
             {props.blog.content && (
               <article
@@ -281,7 +299,7 @@ export default function BlogPostPage(props: Props) {
               </article>
             )}
             {/* Powered By */}
-            <CallToActionNewsletter bg={true} />
+            {/* <CallToActionNewsletter bg={true} /> */}
             {/* <Socials /> */}
             <div className="mb-20 mt-14 flex items-center space-x-4">
               <span className="text-head">Share article</span>

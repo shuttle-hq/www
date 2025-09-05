@@ -1,6 +1,5 @@
-import { Issue } from "lib/launchpad/issues";
-import { trackEvent } from "lib/posthog";
-import Link from "next/link";
+import type { Issue } from "lib/launchpad/issues";
+import Link from "components/elements/Link";
 import { FC } from "react";
 
 interface IssueProps {
@@ -35,7 +34,7 @@ export function Issue({ issue, idx }: { idx: number; issue: Issue }) {
       <div className="flex gap-4">
         <Link
           href={`/launchpad/issues/${issue.url}`}
-          onClick={() => [trackEvent(`launchpad_issue_${issue.title}`)]}
+          eventName={`launchpad_issue_${issue.title}`}
         >
           <h2 className="text-xl text-head">{issue.title}</h2>
         </Link>

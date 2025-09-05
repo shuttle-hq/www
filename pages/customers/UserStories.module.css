@@ -1,0 +1,40 @@
+.gradient-link {
+  background: linear-gradient(90deg,
+        #fc540c 0%,
+        rgba(255, 215, 111, 0.72) 70%,
+        #38d4e9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    font-weight: bold;
+}
+
+.arrow-icon {
+  transition: transform 0.2s ease-in-out;
+}
+
+.user-story-card:hover .arrow-icon {
+  transform: translateX(10px);
+  transition: transform 0.2s ease-in-out;
+}
+
+.bg-wide {
+  background: url(/images/user-stories/bg-wide.png) center no-repeat;
+  background-size: cover;
+}
+
+.bg-tile-1 {
+  background: url(/images/user-stories/bg-tile-1.png) center no-repeat;
+  background-size: cover;
+}
+
+.bg-tile-2 {
+  background: url(/images/user-stories/bg-tile-2.png) center no-repeat;
+  background-size: cover;
+}
+
+.bg-tile-3 {
+  background: url(/images/user-stories/bg-tile-3.png) center no-repeat;
+  background-size: cover;
+}

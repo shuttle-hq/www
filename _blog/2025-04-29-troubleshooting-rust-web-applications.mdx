@@ -1,0 +1,688 @@
+---
+title: "Troubleshooting Rust Web Applications"
+description: A guide to troubleshooting Rust web applications
+author: dcodes
+tags: [rust, web, debugging, monitoring, tracing, logging]
+thumb: troubleshooting-guide.png
+cover: troubleshooting-guide.png
+date: '2025-04-29T14:30:00'
+---
+
+## Introduction
+
+Rust can save you from a lot of programming pitfalls that other languages can't, but it's not immune to bugs and issues, there are
+situations that you'll need to follow best practices and use the right tools to troubleshoot your application.
+
+Bugs are inevitable, but we can make them easier to find and fix. In this guide, we'll explore how to troubleshoot Rust applications using a
+variety of approaches and tools.
+
+## Structured Logging
+
+For backend services, logging is crucial for getting and idea how your application is performing and what's happening behind the scenes.
+However, there are better ways to log than just using a simple `println!`.
+
+Without visibility into your application's behavior, debugging becomes a frustrating guessing game. Let's explore how to implement a robust
+logging system. Rust offers excellent crates for logging that go beyond stdout and stderr.
+
+The [tracing](https://crates.io/crates/tracing) crate has become the gold standard for modern Rust applications:
+
+```rust
+fn process_request(user_id: u64) {
+    // Bad: just text
+    println!("Processing request for user {}", user_id);
+
+    // Good: structured event with context
+    tracing::info!(user_id, request_type = "login", "Processing request");
+}
+```
+
+Output:
+
+```bash
+2025-03-21T07:55:26.540+00:00 [app] Processing request for user 999
+2025-03-21T07:55:26.540+00:00 [app]  INFO shuttle_telemetry: Processing request user_id=999 request_type="login"
+```
+
+While the older `log` crate remains popular, `tracing` offers richer context through its span system and structured event data. For existing
+applications using `log`, the `tracing_log` adapter provides compatibility, you
+can [read more about it here](https://crates.io/crates/tracing-log).
+
+### Log Levels and When to Use Them
+
+For better clarity of your application's behavior, it's important that you use the right log level for the right situation.
+
+Choose appropriate log levels to balance information density with signal-to-noise ratio:
+
+- **ERROR**: Unexpected failures requiring immediate attention
+- **WARN**: Concerning events that don't prevent operation but might indicate problems
+- **INFO**: Normal operational events useful for tracking application flow
+- **DEBUG**: Detailed information primarily useful during development
+- **TRACE**: Ultra-verbose information about internal state
+
+In production, **ERROR** and **WARN** logs should be rare and actionable. **INFO** logs should provide a clear picture of normal operation
+without overwhelming storage.
+
+For development purposes, you can use **DEBUG** and **TRACE** to get more detailed logs, you can turn these off in production environment to
+avoid overwhelming the logs.
+
+### Using Spans to Track Request Context
+
+A route handler might go through a few steps before ultimately returning a response to the client, during that process, multiple logs might
+be emitted to the console, it would be great to see which logs belong to which request.
+
+Without spans, if two different clients hit the same endpoint, you'd have no way to know which logs belong to which request, making it
+impossible identify the request you are looking for.
+
+```rust
+async fn handle_request(req: Request) -> Response {
+    // Create a span for the entire request lifetime
+    let request_span = tracing::span!(
+        Level::INFO,
+        "http_request",
+        method = %req.method(),
+        path = %req.uri().path(),
+        request_id = %Uuid::new_v4(),
+    );
+
+    // Enter the span for this async task
+    let _guard = request_span.enter();
+
+    // logs in this function now have the request context
+    tracing::info!("Starting request processing");
+
+    let result = process_data(&req).await;
+
+    if let Err(ref e) = result {
+        // Error logs automatically include request context
+        tracing::error!(error.msg = %e, "Request processing failed");
+    }
+
+    tracing::info!("Completed request processing");
+    generate_response(result)
+}
+```
+
+Spans create a hierarchy of contexts, making it easy to correlate logs from the same request even across thread or task boundaries. When
+troubleshooting in production, this context can come in handy for following the execution path that led to a failure.
+
+## Effective Error Handling
+
+Rust offers a great way to handle errors, error propagation is one of the best developer experience features that Rust offers, but there's a
+catch, if overused it can be a mess, you'll find yourself propagating everything to the bottom of the stack, without any context about what
+went wrong.
+
+In this section, we'll explore a few libraries that can help you handle errors in a more effective way, giving you proper context to
+understand what went wrong.
+
+### Error handling with `anyhow`
+
+`anyhow` is an error handling library that provides a single error type (`anyhow::Error`) to represent all possible errors, making it easy
+to propagate errors without worrying about custom enums or boilerplate.
+
+It also provides the `Context` trait that is pre-implemented for any type that implements the `Error` trait, this allows you to add extra
+context to errors, making them easier to debug.
+
+Here's a quick example:
+
+```rust
+use anyhow::Context;
+
+fn read_file(path: &str) -> anyhow::Result<String> {
+    let content = std::fs::read_to_string(path)
+        .with_context(|| format!("Failed to read file at path: {}", path))?;
+    Ok(content)
+}
+
+fn main() -> anyhow::Result<()> {
+    let data = read_file("example.txt")?;
+    println!("File content: {}", data);
+    Ok(())
+}
+```
+
+- `Result<T>` is a type alias for `std::result::Result<T, anyhow::Error>`.
+- The `with_context` method is used to provide more context to the error.
+
+```log
+Error: Failed to read file at path: example.txt
+
+Caused by:
+    No such file or directory (os error 2)
+```
+
+The error output shows both the error message and the source error, it's a great way to understand the root cause of the error. `anyhow` is
+a great library for error handling in Rust applications, used with the `Context` trait, it's a great way to add extra context to errors,
+making them easier to debug.
+
+### Error handling with `eyre`
+
+`eyre` is a fork of `anyhow` that gives you the same great error handling features but with additional features including custom error types
+and better error messages.
+
+Let's re-write the previous example using `eyre`:
+
+```rust
+use eyre::{Result, WrapErr};
+
+fn read_file(path: &str) -> Result<String> {
+    let content = std::fs::read_to_string(path)
+        .wrap_err_with(|| format!("Failed to read file at path: {}", path))?;
+    Ok(content)
+}
+
+fn main() -> Result<()> {
+    let data = read_file("example.txt")?;
+    println!("File content: {}", data);
+    Ok(())
+}
+```
+
+Output:
+
+```log
+Error: Failed to read file at path: example.txt
+
+Caused by:
+    No such file or directory (os error 2)
+
+Location:
+    examples/eyre-ex/main.rs:5:10
+```
+
+The error output shows both the error message and the source error including the line of code where the error occurred, this can be
+extremely helpful when you're debugging giving you an exact location of the error that you can quickly jump to. [Read more about
+`eyre` here](https://github.com/eyre-rs/eyre).
+
+### Custom Error Types
+
+Internal libraries require custom error types, if your application uses some other internal libraries (common in workspaces), you'll need to
+create your own custom error types to handle the errors. This can be a pain, but luckily there are libraries that can help you with this.
+
+For a better understanding of your application's behavior, you'll need more than just the dynamic error types provided by the Rust standard
+library. You can create your own custom error types per operation, you can implement the `std::error::Error` trait in your custom error
+types to get a better error message.
+
+Here's a quick implementation of the `Error` trait:
+
+```rust
+use std::error::Error;
+
+#[derive(Debug)]
+pub enum AppError {
+    ParseError(String),
+    SystemError(String),
+    Unknown,
+}
+
+impl Error for AppError {}
+
+impl Display for AppError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            AppError::ParseError(e) => write!(f, "Parse error: {}", e),
+            AppError::SystemError(e) => write!(f, "System error: {}", e),
+            AppError::Unknown => write!(f, "Unknown error"),
+        }
+    }
+}
+```
+
+You'll also need to implement the `Display` trait for your custom error types, while this is useful, it can be too verbose and repetitive to
+implement, let's have a look at a library that can give use some macros to make this easier.
+
+#### Using `thiserror` to implement the `Error` trait
+
+The `thiserror` crate helps you implement the `Error` trait for your error types in a less verbose way, it provides a derive macro that can
+implement the `Error` trait with minimal code.
+
+Here's how the code above will look like if implemented using `thiserror`:
+
+```rust
+use thiserror::Error;
+
+#[derive(Error, Debug)]
+pub enum AppError {
+    #[error("Parse error: {0}")]
+    ParseError(String),
+
+    #[error("System error: {0}")]
+    SystemError(String),
+
+    #[error("Unknown error")]
+    Unknown,
+}
+```
+
+The `error` attribute takes an argument that will be used as the error message, placeholders can be used to include the error details.
+
+This will automatically implement the `Error` and `Display` traits for your custom error types, so you'll no longer need to implement them
+manually. Making your code much more concise and at the same time gives you precise control over the error messages making it easier to
+debug your application.
+
+`thiserror` also defines the `source()` method automatically for your error types, the `source()` method's job is to return the source error
+if any, it's return type is `Option<&dyn Error>`, which can help you track down the root cause of the error. [Read more about the
+`source()` method here](https://doc.rust-lang.org/std/error/trait.Error.html#method.source).
+
+By combining these techniques, you'll have a better error handling system that can give you the context you need to debug your application,
+use `eyre` and `anyhow` for application code and `thiserror` for internal libraries, while `anyhow` gives you a simple way to handle errors,
+`eyre` gives you even more detailed error messages.
+
+## Debugging with Rust-GDB
+
+Sometimes you'll need more granular control over your application's execution, for that, you can use **Rust-GDB** to debug your application.
+**Rust-GDB** comes in with the **Rust** toolchain, so you don't need to install it separately.
+
+**Rust-GDB** stops the execution of the application at the breakpoint and allows you to inspect the variables and the state of the
+application.
+
+Let's have a simple example to demonstrate how to use **Rust-GDB** to debug a Rust application.
+
+Here's a simple Rust code that calculates the area of a rectangle:
+
+```rust
+fn main() {
+    let width = 10.0;
+    let height = 20.0;
+
+    let area = calculate_area(width, height);
+
+    println!("The area of the rectangle is {}", area);
+}
+
+fn calculate_area(width: f64, height: f64) -> f64 {
+    width * height
+}
+```
+
+Before starting **Rust-GDB**, we need to build the application in **Debug mode** with the following command:
+
+```bash
+cargo build
+```
+
+Now, we can start **Rust-GDB** with the following command:
+
+```bash
+rust-gdb target/debug/<binary-name>
+```
+
+You can create a breakpoint by using the following command:
+
+```bash
+b test.rs:4
+```
+
+`test.rs` is the name of the file and `4` is the line number where we want to set the breakpoint.
+
+![Rust-GDB Breakpoint](/images/blog/troubleshooting-guide/rust-gdb-breakpoint.png)
+
+This will set a breakpoint at the line 4 of the `test.rs` file.
+
+Now, we can start the application by running `run` or `r`:
+
+```bash
+run
+```
+
+This will start the application and pause execution at the breakpoint.
+
+You can inspect the variables and the state of the application by using the `print` command:
+
+```bash
+print width
+```
+
+![Rust-GDB Print](/images/blog/troubleshooting-guide/rust-gdb-print-var.png)
+
+You can also inspect the state of the application by using the `info` command:
+
+```bash
+info locals
+```
+
+![Rust-GDB Info](/images/blog/troubleshooting-guide/rust-gdb-info-locals.png)
+
+If you want to continue execution, you can type `continue` or `c` and if you want to step over the next line, you can type `next` or `n`.
+See the [GDB Documentation](https://www.sourceware.org/gdb/documentation/) for more information about the commands.
+
+Rust-GDB can come in handy when you're working with complex systems, and you need to have a better look at the execution flow of your
+application.
+
+## Telemetry
+
+Another invaluable tool for troubleshooting Rust applications is telemetry, it's the process of collecting **metrics**, **logs**, and **traces** that help developers understand what's really going on with their applications. It answers the big questions: Is the app running
+like it should? Are requests being handled quickly? Where's the slowdown?
+
+Telemetry is a great predictor of issues, you can catch problems days before they happen, having proper telemetry setup is key to building
+reliable and performant applications so that you can build with confidence, a proactive approach rather than a reactive one and solve
+problems before they arise.
+
+Telemetry and [Structured Logging](#structured-logging) can be used together to build a great monitoring system for your Rust applications.
+You'll have a dashboard to monitor all your logs, metrics and resources usage all in one place.
+
+This birds-eye view can save you from problems before they arise, in this section, we'll explore what telemetry is, and we'll set up a
+simple Rust application with telemetry enabled along with a dashboard to visualize the data in only a few steps.
+
+By the end, you'll have a basic overview of how to use telemetry to monitor your Rust applications and improve their performance and a
+dashboard like the one below, by then you'll have the knowledge you need to build your own custom telemetry system for your specific needs.
+
+Let's dive in!
+
+![BetterStack finished dashboard](/images/blog/troubleshooting-guide/better-stack-finished-dashboard.png)
+
+### Examples of Telemetry Data
+
+Telemetry can be collected from a variety of sources, here are some examples:
+
+- **Tracing**: Tracks the flow of requests across services, helping identify bottlenecks or failures in distributed systems.
+- **System Metrics**: CPU usage, RAM usage, disk I/O, network traffic.
+- **App Metrics**: Request latency, error rates, throughput, database query times.
+- **User Behavior**: Session duration, feature usage, crash reports.
+- **Infrastructure**: Container health, service uptime, load balancer stats.
+- **Security**: Failed logins, unusual traffic, access logs.
+
+Collecting and processing telemetry data is a complex process, but luckily there are open source tools like **OpenTelemetry** that make the
+whole process easier. However, self-hosting and maintaining **OpenTelemetry** can also be complex and resource-intensive, especially for
+smaller teams.
+
+When using **Shuttle**, we don't need to do any of that as everything is already set up for us.
+
+### Building a Simple Web Application with Shuttle
+
+To demonstrate telemetry in action, we'll first need to deploy a simple Rust web application to **Shuttle**. To do that, we'll need to
+follow a few steps.
+
+#### Setting up a new Shuttle project
+
+To set up a new shuttle project, you'll have to have a Shuttle account, if you don't have one already, make sure to create one
+at [shuttle.dev](https://www.shuttle.dev).
+
+The easiest way to create a new Shuttle project is to use the Shuttle CLI. Run the following command to install the CLI:
+
+```bash
+curl -sSfL https://www.shuttle.dev/install | bash
+```
+
+This will detect your operating system and install the appropriate binary.
+
+Once installed, you'll need to log in to your Shuttle account by running:
+
+```bash
+shuttle login
+```
+
+This will redirect you to a browser where you can log in to your Shuttle account.
+
+Once you're logged in, you can create a new project by running:
+
+```bash
+shuttle init
+```
+
+This will prompt you to select a template for your project. For this guide, we'll use the `axum` template.
+
+![Shuttle Init](/images/blog/troubleshooting-guide/shuttle-init-frameworks.png)
+
+This will also ask you to create a new shuttle project (In the Shuttle console), it's important to create the shuttle project so that we can
+deploy the application to Shuttle Cloud later.
+
+![Shuttle Init Project](/images/blog/troubleshooting-guide/shuttle-init-project.png)
+
+After the template selection, you can move into the project directory with:
+
+```bash
+cd my-project
+```
+
+For now, we'll keep the current _code_ as is, (which is a simple Hello World application using Axum), but we'll need to add `tracing` as a
+dependency (so we can emit logs, metrics, and traces from our application), and activate the `shuttle-runtime` crate's `setup-otel-exporter`
+feature (so that the emitted logs, metrics, and traces will be exported to BetterStack). We can do both easily with:
+
+```bash
+cargo add -F shuttle-runtime/setup-otel-exporter shuttle-runtime tracing
+```
+
+For reference, the application code should look like this:
+
+```rust
+use axum::{routing::get, Router};
+
+async fn hello_world() -> &'static str {
+    "Hello, world!"
+}
+
+#[shuttle_runtime::main]
+async fn main() -> shuttle_axum::ShuttleAxum {
+    let router = Router::new().route("/", get(hello_world));
+
+    Ok(router.into())
+}
+```
+
+#### Deploying the application to Shuttle
+
+To deploy the application to **Shuttle**, you can use the following command:
+
+```bash
+shuttle deploy
+```
+
+![Shuttle Deploy](/images/blog/troubleshooting-guide/shuttle-deploy.png)
+
+This will deploy the application to **Shuttle** and make it available at a URL.
+
+![Shuttle Deploy Success](/images/blog/troubleshooting-guide/hello-world-deployment.png)
+
+On the Shuttle dashboard, you should see the application deployed successfully.
+
+![Shuttle Dashboard](/images/blog/troubleshooting-guide/shuttle-dashboard-deploy.png)
+
+That's it! Our application is now deployed to **Shuttle**, and we can now enable telemetry.
+
+#### Setting up Telemetry for Shuttle
+
+We'll need to export the telemetry data of the application to **BetterStack** which will collect the data and will let you build dashboards
+and visualize the data.
+
+**Shuttle** uses **Open Telemetry** behind the scenes to collect telemetry and **BetterStack** has support for it, so the integration is a
+seamless process.
+
+You'll need to create a **BetterStack** account, if you don't have one already, make sure to create one
+at [betterstack.com](https://betterstack.com/).
+
+Once you have a **BetterStack** account, you can add a new source for telemetry in **BetterStack**. In the **Sources** tab, click the **Connect Source** button.
+
+![BetterStack Sources](/images/blog/troubleshooting-guide/better-stack-connect-source.png)
+
+This will give you a list of options to choose from, choose the **OpenTelemetry** option.
+
+Give your source a name and select the **OpenTelemetry** option.
+
+![BetterStack OpenTelemetry](/images/blog/troubleshooting-guide/better-stack-otel-select.png)
+
+After that, you can scroll down and press the **Connect Source** button, or you can press enter when focusing on the source name input.
+
+This will create your source and give you the necessary credentials to connect BetterStack to Shuttle.
+
+![BetterStack Source Created](/images/blog/troubleshooting-guide/better-stack-source-create-success.png)
+
+Now that your BetterStack source is created, you can go back to the Shuttle project page and enable telemetry for your application.
+
+This will prompt you to enter your BetterStack credentials, source token and the ingesting host that was provided in the previous step.
+
+![Shuttle Telemetry Enable](/images/blog/troubleshooting-guide/shuttle-telemetry-enable.png)
+
+You should now see the telemetry status as **Enabled** on the Shuttle project page.
+
+![Shuttle Telemetry Enabled](/images/blog/troubleshooting-guide/shuttle-telemetry-enabled.png)
+
+> Note: If you have already deployed your application before enabling telemetry, you'll need to redeploy your application to start
+> collecting telemetry data. Simply navigate to the **Deployments** tab and select the latest deployment and click **Redeploy**.
+
+Telemetry collection happens automatically (as long as the `shuttle-runtime` crate's `setup-otel-exporter` feature is enabled), so you don't
+need to do anything else. To see which telemetry data is being
+collected, [see the Shuttle telemetry docs](https://docs.shuttle.dev/docs/telemetry/overview).
+
+The telemetry data available to you depends on your Shuttle tier. The Community tier provides essential system metrics including CPU usage, memory usage, network I/O, and disk I/O. For full access to all telemetry data including application metrics, logs, and traces without export limits, you'll need a Pro or Growth tier subscription. The good news is that Shuttle offers a free trial of both the Pro and Growth tier, giving you an opportunity to explore all the telemetry features before committing to a subscription. You can set up your trial by visiting the [billing page](https://console.shuttle.dev/account/billing) in your Shuttle account.
+
+In the next step, we'll explore BetterStack to build dashboards and visualize our telemetry data.
+
+#### Building Dashboards with BetterStack
+
+Telemetry data is only useful when visualized, **BetterStack** allows you to build custom dashboards and graphs based on the data you
+collect.
+
+When we first created the source, a default dashboard was automatically created for us. We can navigate to the **Dashboards** page and
+configure it to our liking.
+
+![BetterStack navigate to dashboards](/images/blog/troubleshooting-guide/better-stack-navigate-otel-dashboard.png)
+
+This will take you to the default dashboard that was created for us.
+
+![BetterStack Default Dashboard](/images/blog/troubleshooting-guide/better-stack-default-dashboard.png)
+
+As you can see, the default dashboard is created with a default layout, but there is no data to be displayed yet, we need to do a few
+adjustments to get the data to be displayed the way we want.
+
+Let's start by adding a **CPU Usage** widget, Shuttle exports the vCPU usage for each project, let's see how much is being used for our
+project.
+
+Click on **Configure** to the right of the widget.
+
+![BetterStack Configure CPU Usage](/images/blog/troubleshooting-guide/better-stack-cpu-widget-configure.png)
+
+On the configuration page, select the **Drag and Drop** option, this will allow us to customize the widget with a more user-friendly
+interface.
+
+Search for **vCPU** and click on the `cpu.usage.vcpu` option.
+
+![BetterStack CPU Usage](/images/blog/troubleshooting-guide/better-stack-configure-vcpu.png)
+
+The default configuration will measure in percentage, we need to update the Y-axis to measure in virtual CPUs (vCPUs).
+
+Change the Y-axis unit to **vCPUs** and click on the **Save** button.
+
+![BetterStack CPU Usage Configured](/images/blog/troubleshooting-guide/better-stack-y-axis-unit.png)
+
+Now we can see the vCPU usage for our project.
+
+![BetterStack CPU Usage](/images/blog/troubleshooting-guide/better-stack-vcpu-configured.png)
+
+Going back to the dashboard, you should see the widget updated with the correct data.
+
+![BetterStack dashboard updated 1](/images/blog/troubleshooting-guide/better-stack-dashboard-updated-1.png)
+
+You can add more widgets with other metrics to get a better understanding of your data.
+See [this page](https://docs.shuttle.dev/docs/telemetry/overview) to see all the exported metrics by Shuttle.
+
+![BetterStack finished dashboard](/images/blog/troubleshooting-guide/better-stack-finished-dashboard.png)
+
+That's it! We have a basic dashboard showing vCPU usage for our project, which is key for spotting issues like resource exhaustion or
+performance bottlenecks. Telemetry tools help you catch problems early—whether it's high CPU usage, memory leaks, or slow response times.
+
+#### Exporting Tracing Data to BetterStack
+
+In the previous section [Structured Logging](#structured-logging), we went over how to use the `tracing` crate effectively to structure logs and track request context using spans. When using Shuttle with the `shuttle-runtime/setup-otel-exporter` feature enabled, these structured logs and spans are automatically collected and exported via OpenTelemetry.
+
+This means your `tracing::info!`, `tracing::warn!`, etc., events, along with their associated spans and key-value pairs, will appear in **BetterStack** without extra configuration.
+
+You can [read more](https://docs.shuttle.dev/docs/telemetry/custom-metrics) about the custom events you can emit using the `tracing` crate.
+
+Let's dive in with some real life examples.
+
+We need to have the feature `setup-otel-exporter` enabled for the `shuttle-runtime` crate in our `Cargo.toml` file.
+
+```toml
+[dependencies]
+shuttle-runtime = { version = "0.53", features = ["setup-otel-exporter"] }
+```
+
+This is important for exporting the traces to **BetterStack**.
+
+##### 1. Tracking User Signups (Monotonic Counter)
+
+It's common for most businesses to want to track the number of users who have signed up over time, this is a great use case for a monotonic counter.
+
+To track the total number of users who have signed up over time, you can use a monotonic counter. This counter only ever increases. Emit a tracing event with a field prefixed by `monotonic_counter.` whenever a signup occurs.
+
+```rust
+use rand::Rng;
+
+async fn user_signup() -> &'static str {
+    let mut rng = rand::rng();
+    let user_email = format!("user{}@example.com", rng.random_range(1000..9999));
+    tracing::info!(monotonic_counter.user_signups = 1, %user_email, "New user signed up");
+    "User signup recorded"
+}
+```
+
+In BetterStack, you can then create a graph for the metric `user_signups` (or similar, depending on collector naming) to visualize the signup trend. The `email` field will be attached as an attribute to the log event itself.
+
+##### 2. Tracking Active Users (Up/Down Counter)
+
+To monitor the number of currently logged-in users, you can use an up/down counter (gauge). Increment the counter on login and decrement it on logout. Emit tracing events with fields prefixed by `counter.`
+
+```rust
+use uuid::Uuid;
+
+async fn user_login() -> &'static str {
+    let user_id = Uuid::new_v4();
+    tracing::info!(counter.active_users = 1, %user_id, "User logged in");
+    "User login recorded"
+}
+
+async fn user_logout() -> &'static str {
+    let user_id = Uuid::new_v4(); // In reality, you'd get this from session/token
+    tracing::info!(counter.active_users = -1, %user_id, "User logged out");
+    "User logout recorded"
+}
+```
+
+This allows you to visualize the `active_users` metric in BetterStack, showing the real-time count of users currently using the application.
+
+These simple metric conventions within `tracing` provide a convenient way to gain insights into specific application events directly alongside your logs and traces in your observability platform.
+
+##### Visualizing Custom Metrics in BetterStack
+
+Let's visualize the data that we've been tracking in the previous sections.
+
+We need to add a **Custom Metric** in **BetterStack** to be able to visualize the `user_signups` and `active_users` metrics. Let's create both metrics.
+
+Navigate to the create chart page and click on the **Create Metric** button.
+
+![BetterStack Create Metric](/images/blog/troubleshooting-guide/better-stack-create-metric-button.png)
+
+On the next page, click on the button **+ Metric** to add a new metric.
+
+![BetterStack Add Metric](/images/blog/troubleshooting-guide/better-stack-add-metric-button.png)
+
+Give your metric a name, for example `user_signups` and for the **JSON dot notation** field, enter `monotonic_counter.user_signups` this is the name of the metric that we used using the `tracing::info!` macro.
+
+![BetterStack User Signups Metric](/images/blog/troubleshooting-guide/better-stack-fill-metric-form.png)
+
+You can press the **Preview** button to see if **BetterStack** hsa received those events from **Shuttle**, if you have triggered those events, you should see the data in the preview.
+
+![BetterStack Preview](/images/blog/troubleshooting-guide/better-stack-preview-button.png)
+
+If you see the correct data, you can then press **Create Metric** to save the metric.
+
+We'll do the same for the `counter.active_users` metric as well.
+
+##### Creating charts to visualize the metrics
+
+Now that we've introduced the details to BetterStack about our metrics, we can create charts to visualize the data. The process is the same as we did earlier for the vCPU usage widget, we'll create a new chart and add a new widget.
+
+![BetterStack Sum Active Users Chart](/images/blog/troubleshooting-guide/better-stack-metrics-charts.png)
+
+We can now see how many active users we have at any given time and also the number of signups over time. This data is always updated in real-time based on the events that are being emitted from our application.
+
+## Conclusion
+
+Troubleshooting Rust web applications can be challenging, but with the right tools and techniques, it becomes a manageable and even
+insightful process. From structured logging with `tracing` to robust error handling using `anyhow`, `eyre` and `thiserror`, `rust-gdb` for
+debugging, and leveraging telemetry for real-time insights, Rust provides a rich ecosystem to help you identify and resolve issues
+effectively.
+
+By combining these approaches, you can build applications that are not only performant and reliable but also easier to debug and maintain,
+you'll catch errors before they happen, have a birds-eye view of your application's performance and resources usage, and you'll be able to
+troubleshoot issues faster and more effectively.

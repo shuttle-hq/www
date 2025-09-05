@@ -131,6 +131,7 @@ module.exports = {
           "linear-gradient(73deg, #FC540C -7.95%, rgba(255, 215, 111, 0.72) 45.94%, #38D4E9 116.73%)",
         "gradient-2":
           "linear-gradient(70deg, #FC540C 34.41%, rgba(255, 215, 111, 0.72) 93.53%, #38D4E9 118.82%)",
+        "gradient-3": "linear-gradient(to right, #FC540C 0%, #FFD76F 100%)",
       },
     },
   },

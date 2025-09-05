@@ -1,0 +1,694 @@
+---
+title: "The Hidden Costs of Deploying Rust Microservices"
+pageTitle: "The Hidden Costs of Deploying Rust Microservices"
+description: "Discover the hidden costs of microservices deployment at scale. Learn practical solutions to infrastructure complexity with Rust and Shuttle examples."
+author: dcodes 
+tags: [rust microservices, rust async, rust sqlx, axum framework, devops best practices]
+thumb: rust-microservices-deployment-costs.png
+cover: rust-microservices-deployment-costs.png
+date: '2025-06-18'
+---
+
+Microservices promise speed, scale, and team autonomy. But once you deploy more than a handful, the complexity creeps in. Teams suddenly face config sprawl, CI duplication, secret management, and fractured environments.
+
+In this article, we'll explore the hidden operational costs of microservices, especially for Rust developers. You'll see how Shuttle's dev-first approach simplifies the provisioning and deployment journey, and we'll even give you a real microservices challenge to try yourself.
+
+> **Want to try it yourself?**
+>
+> We've built **ShellCon**, a real-world Rust microservices onboarding challenge where you:
+>
+> - Debug and deploy 3 broken services (Axum + SQLx + async Rust)
+> - Connect them to a frontend that only works when everything is fixed
+> - Use **Shuttle** to provision, deploy, and manage the full stack: no YAML or Kubernetes needed
+>
+> 🎯 Perfect for Rust devs who want to learn by doing.
+>
+> 👉 [Start the ShellCon Challenge](https://github.com/shuttle-hq/shuttle-shellcon)
+
+We'll end the blog post with a special challenge for Rust developers for building Rust microservices at scale with ease. The challenge is designed to be fun and at the same time demonstrate microservice provisioning and deploying multiple microservices while using best practices.
+
+## Monolith vs Microservices
+
+### What is a monolith?
+
+Modern applications often evolve from monoliths to microservices, and for good reason.
+A **monolith** is a single, tightly coupled codebase running as one process. It's simple to start but becomes harder to scale as teams and features grow. Every small change risks affecting the entire system.
+
+**Microservices**, by contrast, are small, independently deployable services. They offer:
+
+- **Faster development:** Teams can ship features without waiting on others.
+- **Scalable infrastructure**: Only the services that need more resources get scaled.
+- **Tech flexibility**: Use Rust for performance-critical services, and Python or Go where it fits.
+- **Resilience**: One service can fail without taking the whole app down.
+- **Team autonomy**: Squads own, deploy, and monitor their own services.
+- **Cost-effective scaling**: Scale only the services that need resources, not the entire application stack.
+
+*Example: A Netflix clone might break into services like Recommendations, Streaming, Billing, and Users. With a monolith, they share the same release cycle. With microservices, each evolves and scales independently.*
+
+<CaptionedImage 
+  src="/images/blog/typical-microservices-architecture.png" 
+  alt="Diagram of a typical microservices architecture with independently scalable services like billing, user, and recommendation services" 
+  caption="Microservices scaling architecture diagram showing independent service scaling capabilities"
+/>
+
+Microservices give you the ability to scale only the services that need the additional resources.
+
+But while microservices sound ideal, they introduce operational complexity, especially as your system grows.
+
+## Hidden Costs of Deploying Rust Microservices
+
+While these benefits are compelling, microservices aren't without challenges. Behind these benefits are unexpected problems that can slow you down, add extra work, and confuse your team. Managing and deploying many small services often gets messy, takes more time, and brings surprises you did not plan for.
+
+Infrastructure management quickly becomes complex with configuration files, CI/CD pipelines, and service dependencies. The theoretical advantages of independent deployments and technology flexibility become overshadowed by infrastructure demands.
+
+### Common pitfalls of microservices
+
+Let's dive into some of the common pitfalls of microservices. By the end of this blog post, we'll have a good understanding of the challenges and we'll talk about **tools that can help us overcome these challenges**.
+
+### Infrastructure as Code Complexity
+
+Managing infrastructure with tools like **Terraform** becomes challenging when scaling to dozens of configuration files across multiple environments. Each service requires its own configuration files for networking, security, compute resources, and storage.
+
+### CI/CD Pipeline Proliferation
+
+Each microservice typically requires its own CI/CD pipeline, leading to increased maintenance overhead. Teams must dedicate resources to maintaining build configurations across numerous services.
+
+### Observability Challenges
+
+Implementing a well set up monitoring system requires integrating **logging**, **metrics**, and **tracing** across all services. Organizations frequently end up with disconnected monitoring tools, making incident investigation difficult when problems occur.
+
+### Domains and Certificate Management
+
+Managing domains and SSL certificates across multiple microservices creates significant operational overhead. Each service and environment typically requires its own subdomain (**api.company.com**, **auth.company.com**, **payments.company.com**), and each subdomain needs SSL certificates for secure communication. They also need to be renewed periodically. Without proper tooling, this becomes extremely difficult to manage, with surprises of expired certificates.
+
+### Environment Management Complexity
+
+Microservices multiply environment management challenges. Where a monolith might have three environments (**development**, **staging**, **production**), microservices often require environment parity across dozens of services.
+
+Each service needs its own environment-specific configurations, database connections, and service discovery settings. Maintaining consistency across environments becomes extremely difficult when services have different deployment schedules and dependency requirements.
+
+### Database Proliferation and Management
+
+Each microservice typically requires its own database to maintain data isolation and independence. This database-per-service pattern creates operational complexity that teams often underestimate.
+
+Database provisioning, backup strategies, monitoring, and maintenance must be replicated across dozens of database instances. Each database needs its own connection pooling, and performance tuning.
+
+### Secrets and Configuration
+
+The more services you have, the more secrets and configurations you need to manage. Without proper tooling for managing secrets and configurations, this becomes extremely difficult to manage.
+
+> **Ready to experience these challenges for yourself?**
+>
+> We've built an interactive onboarding challenge using **Rust** and **Shuttle** called **ShellCon**. You'll debug and optimize 3 microservices to make the frontend app work,  including async Rust code, Axum HTTP routes, and SQL queries.
+>
+> 👉 [Start the ShellCon Challenge](https://github.com/shuttle-hq/shuttle-shellcon)
+
+## How Microservices Are Typically Deployed
+
+In conventional microservices architectures, each service typically requires its own microservice deployment pipeline and infrastructure configuration. Let's examine what this traditionally looks like and understand the complexity involved.
+
+### Docker and Container Management
+
+Most microservice deployments start with Docker. Each service needs its own `Dockerfile` and typically a `docker-compose.yml` file for local development. Here's an example of what a traditional setup might look like:
+
+```yaml
+# docker-compose.yml
+version: "3.8"
+services:
+  blog-api:
+    build: ./blog-service
+    ports:
+      - "3001:3000"
+    environment:
+      - DATABASE_URL=postgresql://user:password@postgres:5432/blog_db
+      - ANALYTICS_SERVICE_URL=http://analytics-service:3000
+      - ANALYTICS_API_KEY=your-super-secret-api-key-here
+    depends_on:
+      - postgres
+      - analytics-service
+
+  analytics-service:
+    build: ./analytics-service
+    ports:
+      - "3002:3000"
+    environment:
+      - DATABASE_URL=postgresql://user:password@postgres:5432/analytics_db
+      - ANALYTICS_API_KEY=your-super-secret-api-key-here
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=blog_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
+```
+
+Each service will have its own `Dockerfile` as well. Managing these needs careful attention - you'll need to make sure that the services are compatible with each other, and that the services are compatible with the infrastructure you're using.
+
+This is for a simple setup, however, when it comes to production environments with high traffic, you'll need multi node deployments and things get complex quickly, and you'll need to manage a lot of additional complexity:
+
+- Kubernetes manifests
+- Load balancer configurations with SSL termination
+- Service meshes like Istio
+- Auto-scaling groups
+- Network security
+- Database clusters
+
+The list goes on, and the complexity increases.
+
+Secret management also becomes extremely complex with rotation strategies, encrypted storage systems like Vault, access control policies, and certificate management across all environments.
+
+You'll also need comprehensive monitoring and observability, once you have multiple containers across multiple nodes, this becomes extremely difficult to manage.
+
+This traditional approach, while powerful and battle-tested, creates significant operational overhead where teams often spend most of their time managing infrastructure, Kubernetes configurations, and deployment pipelines instead of building features.
+
+## Simplify Rust Microservice Deployment with Shuttle
+
+Luckily, we're not going to have to do all of that. With **Shuttle**, we can focus on building our application logic instead of wrestling with infrastructure complexity. Shuttle handles microservice provisioning, secret management, and deployment orchestration automatically, letting us deploy production-ready Rust microservices with just a few commands.
+
+### Introducing a Developer-First Approach to Infrastructure
+
+Instead of managing infrastructure separately, we can manage it directly in our application code, using the same tools and languages we already know.
+
+**Shuttle** embodies this approach by removing the complexity of managing infrastructure and deployment. Rather than dealing with Terraform or cloud consoles, you define resources like **databases and secrets** using straightforward Rust attributes.
+
+In this tutorial, we'll build multiple interconnected Rust microservices with **Axum** and then deploy them to the cloud with **Shuttle**. We'll create a **Blog API service** and an **Analytics service** that communicate with each other, demonstrating true microservices architecture with service-to-service communication.
+
+### Building Multiple Microservices with Shuttle
+
+For this example, we'll build two interconnected services:
+
+1. **Analytics Service** - Tracks and processes blog post views and interactions
+2. **Blog API Service** - Manages blog posts and sends analytics events
+
+Let's start by installing the **Shuttle CLI**:
+
+### Linux and macOS
+
+```bash
+curl -sSfL https://www.shuttle.dev/install | bash
+```
+
+### Windows (PowerShell)
+```bash
+iwr https://www.shuttle.dev/install-win | iex
+```
+
+Login to the **Shuttle CLI**:
+
+```bash
+shuttle login
+```
+
+### Install the sqlx-cli
+
+To be able to use `sqlx` and interact with the database, we'll need to install the `sqlx-cli` tool. This particular command sets it up for postgres only.
+
+```bash
+# Install sqlx-cli (if not already installed)
+cargo install sqlx-cli --no-default-features --features native-tls,postgres
+```
+
+### Source Code
+
+The complete source code for the microservices we'll build is available on GitHub: [Shuttle Microservices Demo](https://github.com/dcodesdev/shuttle-microservice-demo) You can clone the repository to follow along or reference the final implementation.
+
+### Creating the Analytics Service
+
+Create the first project for our analytics service:
+
+```bash
+shuttle init --template axum
+```
+
+<CaptionedImage 
+  src="/images/blog/axum-template.png" 
+  alt="Shuttle CLI terminal output showing initialization of a Rust microservice using the Axum template"
+  caption="Shuttle CLI initializing analytics microservice with Axum template"
+/>
+
+Add dependencies for the analytics service:
+
+```bash
+cargo add shuttle-shared-db serde sqlx serde_json \
+    --features shuttle-shared-db/postgres,shuttle-shared-db/sqlx \
+    --features serde/derive
+```
+
+To use `sqlx` properly to interact with the database, we'll need to set up a local database and set the `DATABASE_URL` environment variable in the `.env` file.
+
+To create a database, the easiest way to do it is by using Docker, you'll need to have docker installed on your machine, if you haven't already, make sure you [install it here](https://docs.docker.com/get-docker/) for your specific operating system.
+
+Once you have docker installed, you can run the following command to create a database:
+
+```bash
+docker run -d --name postgres --restart=always -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -p 5432:5432 postgres
+```
+
+Once your database is ready to accept connections, you can set up the analytics database:
+
+<CaptionedImage 
+  src="/images/blog/sqlx-create-db.png" 
+  alt="Terminal showing SQLx CLI creating a PostgreSQL database for a Rust analytics microservice"
+  caption="SQLx CLI creating PostgreSQL database for analytics microservice"
+/>
+
+Make sure you add `.env` to your `.gitignore` file.
+
+```bash
+echo ".env" >> .gitignore
+```
+
+Update the migration file:
+
+```sql
+-- migrations/<timestamp>_create_events.sql
+CREATE TABLE events (
+    id SERIAL PRIMARY KEY,
+    event_type VARCHAR NOT NULL,
+    post_id INTEGER,
+    data JSONB,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+Run the migration:
+
+```bash
+cargo sqlx migrate run
+```
+
+### Securing service communication
+
+In order to secure the communication between the analytics service and the blog service, we'll need a way to verify the identity of the requester. To do that, we'll have a **secret key** that only the two services know about. If the requester has the correct secret key, the request will be allowed to proceed, otherwise it will be rejected.
+
+### Secret management with Shuttle
+
+The **secret key** must be kept secret, therefore it **must not** be committed to version control and must be handled securely using proper tooling. For that, Shuttle provides us a way to define secrets in a secure manner, by giving us a macro that we can use directly in our application code. To define the secrets, **Shuttle** expects a `Secrets.toml` file in the root of the project.
+
+The `Secrets.toml` file is a simple configuration file that contains the secrets for the project. It's a **TOML** file, which is a simple configuration file format that is easy to read and write.
+
+Create the `Secrets.toml` file:
+
+```toml
+# Secrets.toml
+ANALYTICS_API_KEY = "your-super-secret-api-key-here"
+```
+
+We can use the `ANALYTICS_API_KEY` secret in the code with the `#[shuttle_runtime::Secrets]` macro:
+
+```rust
+#[shuttle_runtime::main]
+async fn main( #[shuttle_runtime::Secrets] secrets: SecretStore) -> shuttle_axum::ShuttleAxum {
+    let api_key = secrets.get("ANALYTICS_API_KEY").expect("ANALYTICS_API_KEY must be set");
+
+    // Use the api_key anywhere in your code...
+
+    Ok(router.into())
+}
+```
+
+### Database provisioning with Shuttle
+
+Shuttle provides an easy way to provision databases, just by adding a macro to your `main.rs` file, you'll have a database set up and connected to after you deploy to Shuttle.
+
+```rust
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_shared_db::Postgres] pool: PgPool,
+) -> shuttle_axum::ShuttleAxum {
+    ...
+}
+```
+
+To make development easier, you can set your own `local_uri` to connect to your local database.
+
+```rust
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_shared_db::Postgres(
+        local_uri = "postgres://postgres:password@localhost:5432/analytics_db"
+    )] pool: PgPool,
+) -> shuttle_axum::ShuttleAxum {
+    ...
+}
+```
+
+Now, let's implement the routes for the service, we'll have two routes, one for receiving events and one for getting statistics.
+
+For the full version of the code, see the [GitHub repository here](https://github.com/dcodesdev/shuttle-microservice-demo).
+
+```rust
+async fn receive_event(
+    State(state): State<AppState>,
+    Json(event): Json<AnalyticsEvent>,
+) -> StatusCode {
+    let result = sqlx::query!(
+        "INSERT INTO events (event_type, post_id, data) VALUES ($1, $2, $3)",
+        event.event_type,
+        event.post_id,
+        event.data
+    )
+    .execute(&state.db)
+    .await;
+
+    match result {
+        Ok(_) => StatusCode::CREATED,
+        Err(_) => StatusCode::INTERNAL_SERVER_ERROR,
+    }
+}
+
+async fn get_stats(State(state): State<AppState>) -> Json<Vec<EventStats>> {
+    let stats = sqlx::query_as!(
+        EventStats,
+        "SELECT event_type, COUNT(*) as count FROM events GROUP BY event_type"
+    )
+    .fetch_all(&state.db)
+    .await
+    .unwrap_or_default();
+
+    Json(stats)
+}
+```
+
+Having a look at this snippet in the code:
+
+```rust
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_shared_db::Postgres(
+        local_uri = "postgres://postgres:password@localhost:5432/analytics_db"
+    )] pool: PgPool,
+    #[shuttle_runtime::Secrets] secrets: SecretStore,
+) -> shuttle_axum::ShuttleAxum {
+    ...
+}
+```
+
+Connecting to a database using Shuttle is as simple as adding a macro to your `main.rs` file. This macro will automatically provision a database for you. The `local_uri` is used to connect to your local database for development purposes.
+
+For managing secrets, we have used the `#[shuttle_runtime::Secrets]` attribute provided by Shuttle that will automatically load the secrets from the `Secrets.toml`. Shuttle will automatically push the secrets to the cloud in a secure manner when running `shuttle deploy`.
+
+Let's build a middleware function to authenticate requests using the `ANALYTICS_API_KEY` from the `Secrets.toml` file. This way, only our blog service can send analytics events to the analytics service.
+
+```rust
+async fn auth_middleware(
+    headers: HeaderMap,
+    State(state): State<AppState>,
+    request: axum::extract::Request,
+    next: axum::middleware::Next,
+) -> Result<axum::response::Response, StatusCode> {
+    let auth_header = headers
+        .get("Authorization")
+        .and_then(|header| header.to_str().ok())
+        .and_then(|header| header.strip_prefix("Bearer "));
+
+    match auth_header {
+        Some(token) if token == state.api_key => Ok(next.run(request).await),
+        _ => Err(StatusCode::UNAUTHORIZED),
+    }
+}
+```
+
+### Deploying the Analytics Service
+
+Before we deploy the service, we'll need to follow another step that is specific to [sqlx](https://github.com/launchbadge/sqlx/), we'll need to prepare the SQL queries for production so that the code can compile without the need for an active database connection, you can read more about [how sqlx works here](https://github.com/launchbadge/sqlx/).
+
+### Prepare the SQL queries for production
+
+```bash
+cargo sqlx prepare
+```
+
+Make sure you commit the generated metadata by SQLx.
+
+```bash
+# Commit the generated metadata by SQLx
+git add .
+git commit -m "Prepare SQL queries for production"
+```
+
+### Deploy the service
+
+Deploying services with **Shuttle** is as simple as running `shuttle deploy` in the root of the project.
+
+```bash
+shuttle deploy
+```
+
+This will deploy the service to the cloud, you'll see the deployed URL in the console, we'll use this URL in our blog service to send analytics events to the analytics service.
+
+<CaptionedImage 
+  src="/images/blog/shuttle-deploy-analytics.png" 
+  alt="Terminal output showing successful deployment of the analytics microservice to the Shuttle cloud platform"
+  caption="Analytics microservice successfully deployed to Shuttle cloud platform"
+/>
+
+### Creating the Blog API Service
+
+Now let's create our blog service that will depend on the analytics service:
+
+```bash
+shuttle init --template axum
+```
+
+Add the required dependencies for our blog service:
+
+```bash
+cargo add shuttle-shared-db serde reqwest tokio sqlx serde_json \
+    --features shuttle-shared-db/postgres,shuttle-shared-db/sqlx \
+    --features serde/derive \
+    --features reqwest/json \
+    --features tokio/full
+```
+
+Set up the database environment:
+
+```bash
+# Create .env file for local development
+echo "DATABASE_URL=postgres://postgres:password@localhost:5432/blog_db" > .env
+
+# Create the database
+cargo sqlx database create
+
+# Create migration
+cargo sqlx migrate add create_posts
+```
+
+Add `.env` to your `.gitignore` file.
+
+```bash
+echo ".env" >> .gitignore
+```
+
+Update the migration file:
+
+```sql
+-- migrations/<timestamp>_create_posts.sql
+CREATE TABLE posts (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+Run the migration:
+
+```bash
+cargo sqlx migrate run
+```
+
+Create a `Secrets.toml` file for configuration:
+
+```toml
+# Secrets.toml
+ANALYTICS_SERVICE_URL = "https://analytics-service-m7iz.shuttle.app" # Replace with your analytics service URL
+ANALYTICS_API_KEY = "your-super-secret-api-key-here"
+```
+
+Now let's implement our blog service with analytics tracking. We're going to implement a few routes: Create a post, get a post and get a list of all posts. See the [source code here](https://github.com/dcodesdev/shuttle-microservice-demo).
+
+```rust
+async fn create_post(
+    State(state): State<AppState>,
+    Json(payload): Json<CreatePost>,
+) -> Result<Json<Post>, StatusCode> {
+		...
+}
+
+async fn get_posts(State(state): State<AppState>) -> Json<Vec<Post>> {
+		...
+}
+
+async fn get_post(
+    Path(id): Path<i32>,
+    State(state): State<AppState>,
+) -> Result<Json<Post>, StatusCode> {
+    ...
+}
+```
+
+### Service to service secure communication
+
+To send events to the analytics services, we'll need to create a new function to send analytics events to the analytics service, this function is used to communicate with the analytics service using secure `HTTP` requests.
+
+```rust
+async fn send_analytics_event(state: &AppState, event: AnalyticsEvent) -> Result<(), reqwest::Error> {
+    let client = reqwest::Client::new();
+    let _response = client
+        .post(&format!("{}/events", state.analytics_url))
+        .header("Authorization", format!("Bearer {}", state.analytics_api_key))
+        .json(&event)
+        .send()
+        .await?;
+
+    Ok(())
+}
+```
+
+We have used the `ANALYTICS_SERVICE_URL` and `ANALYTICS_API_KEY` from the `Secrets.toml` file to send the analytics event to the analytics service. This way both services are independent of each other, they have their own databases and can be deployed independently.
+
+To make this communication secure, we have used the `ANALYTICS_API_KEY` to authenticate the request to the analytics service.
+
+### Deploy the blog service
+
+The process is similar to the analytics service, we'll need to prepare the SQL queries for production and deploy the service.
+
+```bash
+cargo sqlx prepare
+```
+
+Commit the generated metadata by SQLx.
+
+```bash
+git add .
+git commit -m "Prepare SQL queries for production"
+```
+
+Deploy the service using **Shuttle**:
+
+```bash
+shuttle deploy
+```
+
+<CaptionedImage 
+  src="/images/blog/shuttle-deploy-blog-api.png" 
+  alt="Terminal showing Shuttle deployment output with the live URL of the Blog API microservice"
+  caption="Blog API microservice deployed with Shuttle showing service URL"
+/>
+
+
+🎉 Great! Now both of our services are deployed and ready to use.
+
+### Testing the services
+
+Let's test the services and make sure they're working as expected:
+
+```bash
+# Create a blog post (this will trigger an analytics event)
+curl -X POST https://blog-service-3hhs.shuttle.app/posts \
+  -H "Content-Type: application/json" \
+  -d '{"title": "My First Post", "content": "Hello microservices!"}'
+
+# Response
+{"id":1,"title":"My First Post","content":"Hello microservices!"}
+
+# View the post (this will trigger another analytics event)
+curl https://blog-service-3hhs.shuttle.app/posts/1
+
+# Response
+{"id":1,"title":"My First Post","content":"Hello microservices!"}
+
+# Check analytics stats
+curl -s https://analytics-service-m7iz.shuttle.app/stats | jq
+[
+  {
+    "event_type": "post_viewed",
+    "count": 2
+  },
+  {
+    "event_type": "post_created",
+    "count": 1
+  }
+]
+```
+
+Great! Our services are working as expected, we have a blog service that can create and view posts, and an analytics service that can track analytics events.
+
+### Traditional vs Shuttle: Microservice Deployment Complexity Comparison
+
+Comparing this approach with the traditional approach, we can see that we no longer need to manage multiple configuration files and orchestration tools - we can focus on building our application logic instead. With this approach, teams can focus on building smaller Rust microservices without worrying about the infrastructure, secrets management, and observability tools. This makes microservice deployment much faster and easier.
+
+| Aspect | Traditional Setup (Docker/Kubernetes/Terraform) | Shuttle Setup |
+| --- | --- | --- |
+| **Infrastructure Management** | Manual configuration of Dockerfiles, docker-compose.yml, Kubernetes manifests, and Terraform files | Automated infrastructure provisioning through Shuttle |
+| **Database Provisioning** | Manual setup of PostgreSQL containers, volumes, and Terraform database resources | Automatic database provisioning with Shuttle's shared database feature |
+| **Secret Management** | Environment variables in docker-compose.yml, Kubernetes secrets, or external tools like Vault | Integrated secret management using Shuttle's Secrets.toml |
+| **Deployment Complexity** | Requires manual deployment steps, CI/CD pipeline configuration, and Kubernetes/Terraform orchestration | Simple deployment with `shuttle deploy` command |
+| **Scalability** | Manual configuration of Kubernetes HPA, scaling policies, and load balancers | Built-in scalability features with Shuttle |
+| **Monitoring** | Requires additional monitoring tools, Prometheus setup, and configuration | Integrated monitoring capabilities with Shuttle |
+| **Development Experience** | Complex setup for local development with Docker, minikube, or kind clusters | Simplified development experience with Shuttle's local development features |
+
+## Ready to Try It Yourself? Build Microservices with Rust & Shuttle
+
+Now that you have everything you need to build Rust microservices with **Shuttle**, **we have a challenge for you**, in this challenge we put everything we learned together to build a simple microservices architecture application.
+
+The challenge is designed to be fun and at the same time improve your skills and knowledge of building Rust microservices.
+
+The challenge is available on [GitHub](https://github.com/shuttle-hq/shuttle-shellcon), you can clone the repository and follow the instructions to complete the challenge.
+
+## Conclusion
+
+Microservices provide a variety of benefits - isolating different parts of your application makes deployment easier, enhances security and scalability. This way you can scale only the services that need the additional resources.
+
+However, this doesn't come without a cost. Adding more microservices means more complexity and infrastructure management, which makes development slower and more difficult.
+
+Using **Shuttle** can make microservice deployment easier. Without having to deal with the complexity of managing infrastructure, you can focus on building your application. You no longer have to worry about microservice provisioning, managing secrets, or managing your CI/CD pipeline. Learn more about [building Rust web applications with Shuttle](https://docs.shuttle.dev/getting-started/quick-start).
+
+This makes development easier and much faster, putting you ahead of the curve. You can focus on **shipping** rather than **managing infrastructure**.
+
+------
+
+<BlogFAQ
+  title="Frequently Asked Questions"
+  items={[
+    {
+      question: "Is Rust a good choice for building microservices?",
+      answer: "Yes. Rust offers high performance, memory safety, and a powerful async ecosystem, making it ideal for backend services that require speed and reliability."
+    },
+    {
+      question: "How do microservices communicate with each other in Rust?",
+      answer: "Most Rust microservices use HTTP APIs (via frameworks like Axum) or gRPC. Communication is typically secured with SSL/TLS and authorization tokens."
+    },
+    {
+      question: "How does Shuttle simplify Rust microservice deployment?",
+      answer: "Shuttle handles provisioning, secret management, and deployment automatically. You define infrastructure with macros in your Rust code and deploy using the Shuttle CLI."
+    },
+    {
+      question: "What's the best way to manage secrets across microservices?",
+      answer: "Use a secure secret management system. Shuttle simplifies this by letting you define secrets in a Secrets.toml file and injecting them into your app with the shuttle_runtime::Secrets macro."
+    },
+    {
+      question: "How can I practice deploying and debugging Rust microservices?",
+      answer: "Try the <a href='https://github.com/shuttle-hq/shuttle-shellcon' target='_blank'>ShellCon Challenge</a>. It's a hands-on Rust app with multiple services (Axum, SQLx, async) that you fix and deploy using Shuttle."
+    },
+    {
+      question: "What happens if one microservice fails?",
+      answer: "In a well-designed system, other services continue running. You should implement retry logic, circuit breakers, and graceful degradation to improve overall system resilience."
+    },
+    {
+      question: "Should I start with microservices or a monolith?",
+      answer: "Start with a well-structured monolith and break it into microservices as scaling or modularity becomes a bottleneck. Premature microservice adoption adds unnecessary complexity."
+    }
+  ]}
+/>

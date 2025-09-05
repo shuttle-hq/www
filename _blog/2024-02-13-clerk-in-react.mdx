@@ -16,7 +16,7 @@ Here is the [source code](https://github.com/sourabpramanik/issue-tracker) of th
 
 ## Overview
 
-In the `frontend` directory of the template we've been building from in [Part 1](https://www.shuttle.dev/blog/2024/02/13/clerk-in-rust), let’s explore some of the React libraries that the template has provided us.
+In the `frontend` directory of the template we've been building from in [Part 1](https://www.shuttle.dev/blog/2024/02/13/clerk-in-rust), let's explore some of the React libraries that the template has provided us.
 
 **[Shadcn UI](https://ui.shadcn.com/docs)**
 
@@ -143,7 +143,7 @@ export const useGetUser = (user_id: string | undefined) => {
 
 **Get issues hook**
 
-Fetches all the issues for the issues table, consuming get issues API, the response of this API on success will be an array of issues, that’s why we have passed `IssuesSchema[]` to the `Fetcher` type:
+Fetches all the issues for the issues table, consuming get issues API, the response of this API on success will be an array of issues, that's why we have passed `IssuesSchema[]` to the `Fetcher` type:
 
 ```tsx
 export const useGetIssues = () => {

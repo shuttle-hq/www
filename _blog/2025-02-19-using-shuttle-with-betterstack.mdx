@@ -9,28 +9,28 @@ date: '2025-02-19T15:30:00'
 ---
 
 ## Introduction
-We're excited to announce the official integration of Better Stack with Shuttle! This new integration makes it easier than ever to export your metrics from Shuttle to Better Stack, allowing you to gain real-time insights into the performance of your applications. Whether you're monitoring system health, analyzing traffic patterns, or troubleshooting issues, Better Stack's powerful visualization tools combined with Shuttle’s seamless metrics export will empower you to stay on top of your project’s observability like never before. In this article, we'll guide you through the simple setup process to start leveraging this integration today.
+We're excited to announce the official integration of Better Stack with Shuttle! This new integration makes it easier than ever to export your metrics from Shuttle to Better Stack, allowing you to gain real-time insights into the performance of your applications. Whether you're monitoring system health, analyzing traffic patterns, or troubleshooting issues, Better Stack's powerful visualization tools combined with Shuttle's seamless metrics export will empower you to stay on top of your project's observability like never before. In this article, we'll guide you through the simple setup process to start leveraging this integration today.
 
 ## Getting set up
 
-To get started, you’ll need two things:
+To get started, you'll need two things:
 
-1. A BetterStack account. If you don’t have one, you can sign up [here.](https://betterstack.com/)
-2. A Shuttle project you’d like to add telemetry to (or a new project).
+1. A BetterStack account. If you don't have one, you can sign up [here.](https://betterstack.com/)
+2. A Shuttle project you'd like to add telemetry to (or a new project).
 
-Note that once you add the BetterStack integration, you’ll need to re-deploy your project. If you haven’t deployed your project before, you can just deploy it and it’ll have BetterStack telemetry (if you’ve enabled the BetterStack integration *prior* to deploying for the first time).
+Note that once you add the BetterStack integration, you'll need to re-deploy your project. If you haven't deployed your project before, you can just deploy it and it'll have BetterStack telemetry (if you've enabled the BetterStack integration *prior* to deploying for the first time).
 
 ## Adding a new telemetry source
 
-The first thing you’ll need to do once you’ve logged into BetterStack is to click onto the Sources section, then go to Connect Source which will allow you to add a new telemetry source for BetterStack.
+The first thing you'll need to do once you've logged into BetterStack is to click onto the Sources section, then go to Connect Source which will allow you to add a new telemetry source for BetterStack.
 
 ![image.png](/images/blog/betterstack-integration/1.png)
 
-Once you’ve chosen a name for your new telemetry source (we *generally* use the project name, but you’re free to use any name you’d like), click the OpenTelemetry option in the “platform” section:
+Once you've chosen a name for your new telemetry source (we *generally* use the project name, but you're free to use any name you'd like), click the OpenTelemetry option in the "platform" section:
 
 ![image.png](/images/blog/betterstack-integration/2.png)
 
-Once done, scroll *all the way* to the bottom of the page and hit the “connect source” button:
+Once done, scroll *all the way* to the bottom of the page and hit the "connect source" button:
 
 ![image.png](/images/blog/betterstack-integration/3.png)
 
@@ -38,18 +38,18 @@ Next, grab the source token from the new menu (note that if you just click on th
 
 ![image.png](/images/blog/betterstack-integration/4.png)
 
-Next, you’ll need to navigate to the project you want to enable telemetry for in your Shuttle console by clicking on it on the left hand side (or from the projects menu), clicking on the Settings tab, then clicking to enable BetterStack. Paste your source token in, then press Apply.
+Next, you'll need to navigate to the project you want to enable telemetry for in your Shuttle console by clicking on it on the left hand side (or from the projects menu), clicking on the Settings tab, then clicking to enable BetterStack. Paste your source token in, then press Apply.
 
 ![image.png](/images/blog/betterstack-integration/5.png)
 
-> **Reminder**: if your project was already running when you clicked “Apply”, you’ll need to redeploy it before telemetry will start to flow. If you haven’t deployed your project for the first time yet, telemetry will start flowing immediately when you do.
+> **Reminder**: if your project was already running when you clicked "Apply", you'll need to redeploy it before telemetry will start to flow. If you haven't deployed your project for the first time yet, telemetry will start flowing immediately when you do.
 >
 
-Done! Now let’s talk about how to use the telemetry export.
+Done! Now let's talk about how to use the telemetry export.
 
 ## How to use the telemetry export
 
-Shuttle by default sets up a `tracing_subscriber` that will automatically log information to stdout. Now that you’ve set up BetterStack, we’ll need to tell it to also send telemetry data to BetterStack. To get started, you’ll need to add the `setup-otel-exporter`  feature to `shuttle-runtime` . You can do this by running the following command:
+Shuttle by default sets up a `tracing_subscriber` that will automatically log information to stdout. Now that you've set up BetterStack, we'll need to tell it to also send telemetry data to BetterStack. To get started, you'll need to add the `setup-otel-exporter`  feature to `shuttle-runtime` . You can do this by running the following command:
 
 ```bash
 cargo add shuttle-runtime -F setup-otel-exporter
@@ -61,7 +61,7 @@ Optionally, you can manually adjust the dependency in your `Cargo.toml` if you p
 shuttle-runtime = { version = "0.52.0", features = ["setup-otel-exporter"] }
 ```
 
-Next, you’ll need to ensure your project has `tracing` as a dependency as well. As before, you can add it with `cargo`:
+Next, you'll need to ensure your project has `tracing` as a dependency as well. As before, you can add it with `cargo`:
 
 ```markdown
 cargo add tracing
@@ -69,7 +69,7 @@ cargo add tracing
 
 Optionally, you can manually add it as well, just be sure to check [crates.io](https://crates.io/crates/tracing) for the most recent version.
 
-Once you *have* `tracing` available in your project, all you need to do is add some tracing to the functions you’re using. Like so:
+Once you *have* `tracing` available in your project, all you need to do is add some tracing to the functions you're using. Like so:
 
 ```rust
 async fn hello_world() -> &'static str {
@@ -113,11 +113,11 @@ You can additionally see here that we have added a counter - because we use `tra
 
 ## Creating Betterstack dashboards from OTel data
 
-Now that we’ve done the hard part, we can create some dashboards from the data. If you go back to the telemetry section of the BetterStack dashboard, you can check out Dashboards where a new dashboard will have been created for you automatically. You can check out the dashboards like so:
+Now that we've done the hard part, we can create some dashboards from the data. If you go back to the telemetry section of the BetterStack dashboard, you can check out Dashboards where a new dashboard will have been created for you automatically. You can check out the dashboards like so:
 
 ![image.png](/images/blog/betterstack-integration/6.png)
 
-Next, you’ll see some dashboard widgets that have been automatically created but will likely show “empty” (they’re generic and assume the metrics being visualized are actually the *internal* metrics of an OpenTelemetry collector instance, which your project is obviously not 😅).
+Next, you'll see some dashboard widgets that have been automatically created but will likely show "empty" (they're generic and assume the metrics being visualized are actually the *internal* metrics of an OpenTelemetry collector instance, which your project is obviously not 😅).
 
 The default view for configuring widgets is [SQL](https://betterstack.com/docs/logs/dashboards/sql-queries/), but BetterStack also offers:
 
@@ -125,10 +125,10 @@ The default view for configuring widgets is [SQL](https://betterstack.com/docs/l
 - [promql (beta)](https://betterstack.com/docs/logs/using-logtail/simplified-promql/)
 - a visual drag-and-drop interface
 
-> **Note:** Naturally, you’re free to use the method that suits you best, but we generally recommend the drag-and-drop interface.
+> **Note:** Naturally, you're free to use the method that suits you best, but we generally recommend the drag-and-drop interface.
 >
 
-Check out how we created our own graph to measure CPU usage by adding in `cpu_usage_vcpu` against our project name. We’ve also set the Y axis to use vCPU units.
+Check out how we created our own graph to measure CPU usage by adding in `cpu_usage_vcpu` against our project name. We've also set the Y axis to use vCPU units.
 
 ![image.png](/images/blog/betterstack-integration/7.png)
 

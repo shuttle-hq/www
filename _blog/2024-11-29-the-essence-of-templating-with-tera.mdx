@@ -131,8 +131,7 @@ static COMPILED_TEMPLATE: OnceLock<Tera> = OnceLock::new();
 
 // function to create the tera template, handling any errors and returning them to the caller
 fn create_template() -> Result<Tera, Error> {
-    let mut base_template = Tera::new("templates/**/*")?;
-    base_template.add_template_file("templates/base.html", Some("base"))?;
+    let base_template = Tera::new("templates/**/*")?;
     Ok(base_template)
 }
 
@@ -174,6 +173,8 @@ There's a lot here, and I've handled errors. What changed and how is this better
 - We declare a static variable to hold our compiled template, it's initialized with an empty value by using the `OnceLock::new()` constructor
 - We need a separate function which gets our Tera instance started and adds in the base template we created in the `templates/` directory
   - Errors could happen in this process, so to handle them, we use the `?` operator to propagate any errors back to the caller
+  - note that, if you use the "glob" import approach, as done here, this brings all the templates in one go
+  - if you have templates in a different location that you want to use, you'll need to use the `.add_template_file()` for singles or the `.add_template_files()` method for multiples (see the Tera docs for more information)
 - We have a function which `get_template()` which leverages the function we just created, any errors are propagated back to the caller
   - You'll see that the `get_or_init()` method accepts a closure, we pass in our template that we just created
   - The closure here wants to work with an actual good value, meaning we can't handle errors effectively inside the closure without an `.unwrap()`. I like to try to show how to handle errors, rather than not.

@@ -3,7 +3,7 @@ import { Information } from "components/svgs";
 import { FC, useState } from "react";
 import Image from "next/image";
 import { Tooltip } from "react-tooltip";
-import Link from "next/link";
+import Link from "components/elements/Link";
 import { TierName } from "../Pricing";
 import { trackEvent } from "lib/posthog";
 
@@ -140,7 +140,7 @@ const Plan: FC<PlanProps> = ({
         style={{
           background:
             (name === "Pro" && !buttonHovered) ||
-            (name !== "Pro" && buttonHovered)
+              (name !== "Pro" && buttonHovered)
               ? "linear-gradient(73deg, #FC540C -7.95%, rgba(255, 215, 111, 0.72) 45.94%, #38D4E9 116.73%)"
               : name === "Pro" && buttonHovered
                 ? "linear-gradient(70deg, #FC540C 34.41%, rgba(255, 215, 111, 0.72) 93.53%, #38D4E9 118.82%)"
@@ -151,9 +151,7 @@ const Plan: FC<PlanProps> = ({
           href={url}
           target="_blank"
           className="inline-block h-full w-full"
-          onClick={() => {
-            trackEvent(`pricing_tiers_${name.toLowerCase()}`);
-          }}
+          eventName={`pricing_tiers_${name.toLowerCase()}`}
         >
           {cta}
         </Link>
@@ -167,9 +165,7 @@ const Plan: FC<PlanProps> = ({
             href="https://shuttlerust.typeform.com/featureideas"
             target="_blank"
             className="inline-block h-full w-full py-3"
-            onClick={() => {
-              trackEvent(`pricing_tiers_suggest_feature`);
-            }}
+            eventName="pricing_tiers_suggest_feature"
           >
             Interested in Pro but missing a feature?
           </Link>

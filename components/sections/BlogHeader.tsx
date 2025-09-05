@@ -1,7 +1,7 @@
 import { getAuthors } from "lib/blog/authors";
 import { Post } from "lib/blog/posts";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "components/elements/Link";
 import { FC } from "react";
 
 interface BlogHeaderProps {
@@ -41,6 +41,11 @@ const BlogHeader: FC<BlogHeaderProps> = ({ post }) => {
                       <span className="font-normal text-body">
                         &nbsp;&nbsp;• {post.dateReadable}
                       </span>
+                      {post.updated_on_readable && (
+                        <span className="font-normal text-body">
+                          &nbsp;(Updated on {post.updated_on_readable})
+                        </span>
+                      )}
                     </div>
                   </div>
                 </Link>

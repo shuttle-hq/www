@@ -8,41 +8,41 @@ cover: cronjobs-rust-thumb.png
 date: '2024-01-23T14:30:00'
 ---
 
-In this article we’re going to talk about how you can write your own cron jobs as a web service using Shuttle!
+In this article we're going to talk about how you can write your own cron jobs as a web service using Shuttle!
 
-Cron jobs (or “scheduled tasks”) are useful for many things. They allow you to automatically do things like:
+Cron jobs (or "scheduled tasks") are useful for many things. They allow you to automatically do things like:
 
 - Automate data back-ups.
-- Adding daily reminders (for example to customers who are signed up to a service you own but haven’t started using it yet).
+- Adding daily reminders (for example to customers who are signed up to a service you own but haven't started using it yet).
 - Creating/writing reports.
 
-If you’re interested in the final code and want to deploy quickly, you can find the repo [here.](https://github.com/shuttle-hq/shuttle-examples/tree/main/shuttle-cron) You can deploy it with two simple steps:
+If you're interested in the final code and want to deploy quickly, you can find the repo [here.](https://github.com/shuttle-hq/shuttle-examples/tree/main/shuttle-cron) You can deploy it with two simple steps:
 
 1) Run `shuttle init --from shuttle-hq/shuttle-examples --subfolder shuttle-cron` and follow the prompt (requires `cargo-shuttle` installed)
 
-2) Run `shuttle deploy`. That’s it!
+2) Run `shuttle deploy`. That's it!
 
 ## Getting Started
 
-If you don’t have `cargo-shuttle` installed, you can install it by running the command below (requires Rust + Cargo installed):
+If you don't have `cargo-shuttle` installed, you can install it by running the command below (requires Rust + Cargo installed):
 
 ```bash
 cargo install cargo-shuttle
 ```
 
-To get started, you’ll want to initialise a project with `cargo-shuttle`:
+To get started, you'll want to initialise a project with `cargo-shuttle`:
 
 ```bash
 shuttle init
 ```
 
-You’ll want to make sure to follow the prompt and choose `None` when the framework options come up. This will spawn a custom service that you can use with Shuttle. For this article, we will be using the project name `shuttle-example-cron`.
+You'll want to make sure to follow the prompt and choose `None` when the framework options come up. This will spawn a custom service that you can use with Shuttle. For this article, we will be using the project name `shuttle-example-cron`.
 
-Once done, we’ll want to install the following dependencies:
+Once done, we'll want to install the following dependencies:
 
 - `serde` - Allows us to de/serialize tasks
 - `chrono` - Allows us to use timestamps
-- `apalis` - The task queue framework we’ll be using
+- `apalis` - The task queue framework we'll be using
 - `sqlx` - Allows you to interact with your provisioned database
 - `shuttle-shared-db` - Provisions database for you from Shuttle (locally via Docker, via the runtime in deployment)
 - `tower` - Used with apalis so that the cron job can be hosted.
@@ -58,13 +58,13 @@ cargo add sqlx -F runtime-tokio-native-tls,postgres
 cargo add tower
 ```
 
-Now that everything is installed, it’s time to get coding!
+Now that everything is installed, it's time to get coding!
 
 ## Writing our first cron job
 
 ### Adding a database
 
-Before we do anything else, let’s provision a database using the Shuttle runtime. You’ll want to add the `shuttle-shared-db` annotation to your main function like so and set up our Postgres connection pool:
+Before we do anything else, let's provision a database using the Shuttle runtime. You'll want to add the `shuttle-shared-db` annotation to your main function like so and set up our Postgres connection pool:
 
 ```rust
 use sqlx::{PgPool, postgres::PgPoolOptions};
@@ -96,7 +96,7 @@ Then we need to implement a few new things:
 - A struct that can be added as a shared data extension to our cron service with a function that will do the actual work we want
 - A function that gets called by `apalis` when work is required to be done (according to the cronjob schedule)
 
-Let’s start with implementing our job struct. Note that when using `apalis` jobs in a cronjob context, they must also implement `From<chrono::DateTime<chrono::Utc>>` (essentially this means they can’t hold any other fields):
+Let's start with implementing our job struct. Note that when using `apalis` jobs in a cronjob context, they must also implement `From<chrono::DateTime<chrono::Utc>>` (essentially this means they can't hold any other fields):
 
 ```rust
 use chrono::{DateTime, Utc};
@@ -118,7 +118,7 @@ impl Job for Reminder {
 }
 ```
 
-Now we want to implement the function that will do the actual work when called by `apalis`. We can set this up so that it just says “Hello world from `say_hello_world()`!”:
+Now we want to implement the function that will do the actual work when called by `apalis`. We can set this up so that it just says "Hello world from `say_hello_world()`!":
 
 ```rust
 use apalis::prelude::JobContext;
@@ -128,7 +128,7 @@ async fn say_hello_world(job: Reminder, ctx: JobContext) {
 }
 ```
 
-However, if you want to add extra variables (for example, a database connection pool) you need to add an extension layer in your service to be able to access them. Let’s have a look at what this struct might look like:
+However, if you want to add extra variables (for example, a database connection pool) you need to add an extension layer in your service to be able to access them. Let's have a look at what this struct might look like:
 
 ```rust
 #[derive(Clone)]
@@ -158,7 +158,7 @@ The variables for the `CronjobData` struct come from instantiating the struct an
 
 ### Hooking it all up
 
-Now we’re going to hook the structs we made previously into our main app!
+Now we're going to hook the structs we made previously into our main app!
 
 To start with, we need to set up the `PostgresStorage` type so that we can use Postgres for durable job queues. Without durable job queues, our jobs would disappear if our web service has any outages! We can convert this directly from the `PgPool` type stored in our main struct and run the migrations for it like so:
 
@@ -199,7 +199,7 @@ let service = ServiceBuilder::new()
     .service(job_fn(say_hello_world));
 ```
 
-Now that we’ve built the service, we need to build the worker and then finally create an `apalis::Monitor` process that will carry the work out:
+Now that we've built the service, we need to build the worker and then finally create an `apalis::Monitor` process that will carry the work out:
 
 ```rust
 use apalis::prelude::timer::TokioTimer;
@@ -271,13 +271,13 @@ impl shuttle_runtime::Service for MyService {
 
 ## Deploying
 
-Now that we’ve written everything, all you need to do is `shuttle deploy` (with the `--allow-dirty` flag if working on a dirty Git branch). When the deployment is finished, you’ll get the deployment information as well as the deployment database URL string.
+Now that we've written everything, all you need to do is `shuttle deploy` (with the `--allow-dirty` flag if working on a dirty Git branch). When the deployment is finished, you'll get the deployment information as well as the deployment database URL string.
 
 ## Extending
 
-Now that we’ve finished our new cron service, here’s a few ideas you can use to extend it:
+Now that we've finished our new cron service, here's a few ideas you can use to extend it:
 
-- Add more cron jobs! You can also abstract creating the scheduler, worker, etc into a new struct (or enum) so that you don’t need to manually instantiate everything as you may want to use the same defaults over many if not all of your jobs.
+- Add more cron jobs! You can also abstract creating the scheduler, worker, etc into a new struct (or enum) so that you don't need to manually instantiate everything as you may want to use the same defaults over many if not all of your jobs.
 - Augment the service to use Axum (or another web framework!) instead of purely `tower`. You can find out more about this from [this GitHub example.](https://github.com/geofmureithi/apalis/blob/master/examples/axum/src/main.rs)
 
 ## Finishing Up

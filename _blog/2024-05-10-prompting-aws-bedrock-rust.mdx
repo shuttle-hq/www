@@ -7,7 +7,7 @@ thumb: prompting-aws-bedrock-rust-thumb.png
 cover: prompting-aws-bedrock-rust-thumb.png
 date: '2024-05-10T15:30:00'
 ---
-Hey there! In this article we're going to talk about using AWS Bedrock with Rust. At the end of this article, you’ll have a API that can take a JSON prompt from a HTTP request and return an answer from AWS Bedrock that can be streamed or returned as a full response.
+Hey there! In this article we're going to talk about using AWS Bedrock with Rust. At the end of this article, you'll have a API that can take a JSON prompt from a HTTP request and return an answer from AWS Bedrock that can be streamed or returned as a full response.
 
 Interested in the full code? You can find the repository [here.](https://github.com/joshua-mo-143/shuttle-bedrock-ex)
 
@@ -21,7 +21,7 @@ Compared to other AWS offerings like SageMaker, you only pay for each API call. 
 
 ### Setting up your foundational model
 
-Before we get started, you’ll need to set up access to the foundational model you want to use and an IAM user. We'll use the Titan Text G1 Express model as an example.
+Before we get started, you'll need to set up access to the foundational model you want to use and an IAM user. We'll use the Titan Text G1 Express model as an example.
 
 To request access to a model, do the following:
 
@@ -36,18 +36,18 @@ You can find the endpoint URL you need [here,](https://docs.aws.amazon.com/gener
 
 ### Setting up an IAM user
 
-You’ll also need an access key ID and secret access key from an IAM user:
+You'll also need an access key ID and secret access key from an IAM user:
 
 - `AWS_ACCESS_KEY_ID` (your Access Key)
 - `AWS_SECRET_ACCESS_KEY` (your Secret Access Key)
 
-Both can be found in your IAM user credentials if you’ve already set a user up. If you don’t have an appropriate user with policies, you can get started quickly by doing the following:
+Both can be found in your IAM user credentials if you've already set a user up. If you don't have an appropriate user with policies, you can get started quickly by doing the following:
 
 - Go to the Users menu
-- Start creating a user and go to the “Attach policies” section (then search “Bedrock”)
-- Here you can either use the “AmazonBedrockFullAccess” policy which gives you full access to Bedrock on that user, or you can create a custom policy. Select one and finish creating your user. **Access to Bedrock is required**, as otherwise you won’t be able to use it!
+- Start creating a user and go to the "Attach policies" section (then search "Bedrock")
+- Here you can either use the "AmazonBedrockFullAccess" policy which gives you full access to Bedrock on that user, or you can create a custom policy. Select one and finish creating your user. **Access to Bedrock is required**, as otherwise you won't be able to use it!
 - Go back to the Users menu and click on your newly created user
-- Go to “Access keys” and follow the prompt (clicking “Application outside of AWS”). Don’t forget to store your Access Key ID and Secret Access Key!
+- Go to "Access keys" and follow the prompt (clicking "Application outside of AWS"). Don't forget to store your Access Key ID and Secret Access Key!
 
 In production, you may want to go a step further and create a Group that you can then attach policies and users to.
 
@@ -65,7 +65,7 @@ cargo add serde -F derive
 cargo add serde-json
 ```
 
-You’ll also want to store your secrets in a `Secrets.toml` file (in the root of your project) like so:
+You'll also want to store your secrets in a `Secrets.toml` file (in the root of your project) like so:
 
 ```rust
 AWS_ACCESS_KEY_ID = "your-access-key-id"
@@ -380,7 +380,7 @@ If you want to serve your response from a HTTP webpage, you need to set up a new
 
 ```
 
-If you want to add this file to your Axum service, you’ll want to install `tower-http` with the `fs` flag enabled:
+If you want to add this file to your Axum service, you'll want to install `tower-http` with the `fs` flag enabled:
 
 ```bash
 cargo add tower-http -F fs
@@ -408,7 +408,7 @@ let router = Router::new()
 
 ## Wrapping it all up
 
-Now it’s time to hook it all up! We’ll change our `axum::Router` so that it should only have the prompt routes, as well as including the static assets we talked about earlier (you can remove this if you’re not using them).
+Now it's time to hook it all up! We'll change our `axum::Router` so that it should only have the prompt routes, as well as including the static assets we talked about earlier (you can remove this if you're not using them).
 
 Your Shuttle main function should look like this:
 
@@ -433,9 +433,9 @@ async fn main(
 
 ## Deployment
 
-To deploy, all you need to do is `shuttle deploy` (with the `--allow-dirty` flag if working from a Git branch with uncommitted changes) and watch the magic happen! Once finished, you’ll get a message containing information about your deployment as well as where you can reach the deployment URL.
+To deploy, all you need to do is `shuttle deploy` (with the `--allow-dirty` flag if working from a Git branch with uncommitted changes) and watch the magic happen! Once finished, you'll get a message containing information about your deployment as well as where you can reach the deployment URL.
 
-Shuttle will also cache your dependencies, so if you need to re-deploy you won’t have to worry about waiting to re-compile!
+Shuttle will also cache your dependencies, so if you need to re-deploy you won't have to worry about waiting to re-compile!
 
 ## Finishing up
 

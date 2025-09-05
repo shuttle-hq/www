@@ -2,7 +2,7 @@ import Image from "next/image";
 import Slider from "rc-slider";
 import { useState } from "react";
 import "rc-slider/assets/index.css";
-import Link from "next/link";
+import Link from "components/elements/Link";
 import { CONTACT_US_URI } from "lib/constants";
 import { trackEvent } from "lib/posthog";
 
@@ -85,9 +85,7 @@ const Calculator = () => {
             <Link
               href={CONTACT_US_URI}
               target="_blank"
-              onClick={() => {
-                trackEvent("pricing_setupcall");
-              }}
+              eventName="pricing_setupcall"
             >
               <p className="cursor-pointer text-head underline sm:text-xl">
                 Set up a call with our team

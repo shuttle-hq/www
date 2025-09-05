@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { YCombinator } from "components/svgs";
 import { trackEvent } from "lib/posthog";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "components/elements/Link";
 import { FC } from "react";
 
 interface FooterProps {
@@ -47,6 +47,7 @@ const DEVELOPERS_LINKS = [
     name: "Examples",
   },
   { key: "heroes", href: "/shuttle-heroes", name: "Shuttle Heroes" },
+  { key: "customers", href: "/customers", name: "Customers" },
   { key: "launchpad", href: "/launchpad", name: "Launchpad" },
   { key: "codehunt", href: "/cch", name: "Code Hunt" },
   { key: "ai", href: "/ai", name: "Shuttle AI" },
@@ -94,9 +95,7 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
                   key={key}
                   href={href}
                   className="text-body transition duration-300 hover:text-black dark:hover:text-head"
-                  onClick={() => {
-                    trackEvent(`homepage_footer_site_${key}`);
-                  }}
+                  eventName={`homepage_footer_site_${key}`}
                 >
                   {name}
                 </Link>
@@ -111,9 +110,7 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
                   key={key}
                   href={href}
                   className="text-body transition duration-300 hover:text-black dark:hover:text-head"
-                  onClick={() => {
-                    trackEvent(`homepage_footer_site_${key}`);
-                  }}
+                  eventName={`homepage_footer_site_${key}`}
                 >
                   {name}
                 </Link>
@@ -130,9 +127,7 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
                   key={key}
                   href={href}
                   className="text-body transition duration-300 hover:text-black dark:hover:text-head"
-                  onClick={() => {
-                    trackEvent(`homepage_footer_site_${key}`);
-                  }}
+                  eventName={`homepage_footer_site_${key}`}
                 >
                   {name}
                 </Link>
@@ -148,9 +143,7 @@ const Footer: FC<FooterProps> = ({ disableMargin }) => {
                   href={href}
                   target="_blank"
                   className="text-body transition duration-300 hover:text-black dark:hover:text-head"
-                  onClick={() => {
-                    trackEvent(`homepage_footer_site_${key}`);
-                  }}
+                  eventName={`homepage_footer_site_${key}`}
                 >
                   {name}
                 </Link>

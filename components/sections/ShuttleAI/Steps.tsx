@@ -1,7 +1,7 @@
 import Image from "next/image";
 import StepsDesktop from "./StepsDesktop";
 import StepsMobile from "./StepsMobile";
-import Link from "next/link";
+import Link from "components/elements/Link";
 
 const Steps = () => {
   return (

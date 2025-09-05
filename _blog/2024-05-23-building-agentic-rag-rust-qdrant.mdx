@@ -206,9 +206,9 @@ pub async fn embed_document(&self, file: File) -> Result<()> {
 
 ### Document searching
 
-Now that we’ve embedded our document, we’ll want a way to check whether our embeddings are contextually relevant to whatever prompt the user gives us. For this, we’ll create a `search_document` function that does the following:
+Now that we've embedded our document, we'll want a way to check whether our embeddings are contextually relevant to whatever prompt the user gives us. For this, we'll create a `search_document` function that does the following:
 
-- Embed the prompt using `CreateEmbeddingRequest` and get the embedding from the results. We’ll be using this embedding in our document search. Because we’ve only added one sentence to embed here (the prompt), it will only return one sentence - so we can create an iterator from the vector and attempt to find the first result.
+- Embed the prompt using `CreateEmbeddingRequest` and get the embedding from the results. We'll be using this embedding in our document search. Because we've only added one sentence to embed here (the prompt), it will only return one sentence - so we can create an iterator from the vector and attempt to find the first result.
 - Create a parameter list for our document search through the `SearchPoints` struct (see below). Here we need to set the collection name, the vector that we want to search against (ie the input), how many results we want to be returned if there are any matches, as well as the payload selector.
 - Search the database for results - if there are no results, return an an error; if there is a result, then return the result back.
 

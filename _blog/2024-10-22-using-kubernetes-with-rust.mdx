@@ -8,9 +8,9 @@ cover: using-kubernetes-with-rust-thumb.png
 date: "2024-10-22T15:00:00"
 ---
 
-If you have ever tried to deploy a service in the last three to four years, there’s a good chance someone has suggested using Kubernetes; however, if this is your first time hearing of Kubernetes, welcome. Kubernetes is an orchestrator that makes it easy to run large-scale containerized applications.
+If you have ever tried to deploy a service in the last three to four years, there's a good chance someone has suggested using Kubernetes; however, if this is your first time hearing of Kubernetes, welcome. Kubernetes is an orchestrator that makes it easy to run large-scale containerized applications.
 
-What makes Kubernetes really great is its extensibility, by using the API users are able to create custom applications that don’t ship with Kubernetes out of the box, It's how we have great tools like [ArgoCD](https://argo-cd.readthedocs.io/en/stable/).
+What makes Kubernetes really great is its extensibility, by using the API users are able to create custom applications that don't ship with Kubernetes out of the box, It's how we have great tools like [ArgoCD](https://argo-cd.readthedocs.io/en/stable/).
 
 If you clicked on this post, you are likely familiar with Kubernetes and looking to take things a step further, regardless of why you are here. In this article, we will look at a bunch of useful operations for interacting with Kubernetes using the planet's most loved crab language, Rust.
 
@@ -18,7 +18,7 @@ If you clicked on this post, you are likely familiar with Kubernetes and looking
 
 To create a local Kubernetes cluster, we will use [KinD](https://kind.sigs.k8s.io/),  a tool that allows you to run Kubernetes in Docker, hence the name KinD. Don't forget to have Docker installed!
 
-If you’re on Mac, you can install kind using brew:
+If you're on Mac, you can install kind using brew:
 
 ```bash
 brew install kind
@@ -56,7 +56,7 @@ Otherwise, take a look at [this section](https://kubernetes.io/docs/tasks/tools/
 
 ## Kube-rs?
 
-To interact with the Kubernetes API we will need a client library. As described in the project’s readme, `kube-rs` is:
+To interact with the Kubernetes API we will need a client library. As described in the project's readme, `kube-rs` is:
 
 | A [Rust](https://rust-lang.org/) client for [Kubernetes](http://kubernetes.io/) in the style of a more generic [client-go](https://github.com/kubernetes/client-go), a runtime abstraction inspired by [controller-runtime](https://github.com/kubernetes-sigs/controller-runtime), and a derive macro for [CRDs](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/) inspired by K[ubebuilder](https://book.kubebuilder.io/reference/generating-crd.html)
 
@@ -90,9 +90,9 @@ yaml-rust2 = "0.8"
 
 ## Connecting to Your Cluster
 
-We’ll begin by looking at how to connect to the cluster we created earlier. By default, your connection information is stored in `~/.kube/config`. To use this in Rust, we can use the following code:
+We'll begin by looking at how to connect to the cluster we created earlier. By default, your connection information is stored in `~/.kube/config`. To use this in Rust, we can use the following code:
 
-We’ll begin by looking at how to connect to the cluster we created earlier:
+We'll begin by looking at how to connect to the cluster we created earlier:
 
 ```rust
 use kube::{Config};
@@ -113,7 +113,7 @@ Using `Config::infer()`  `kube-rs` will attempt to connect to the cluster using 
 
 ## Creating a Client
 
-Using the config is great for printing out cluster information, but we can’t use it to interact with it. To create a new cluster, we can use `Client::try_default()`, which calls  `Client::infer()` under the hood and returns a new client:
+Using the config is great for printing out cluster information, but we can't use it to interact with it. To create a new cluster, we can use `Client::try_default()`, which calls  `Client::infer()` under the hood and returns a new client:
 
 ```rust
 use kube::{Client};
@@ -334,7 +334,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ## Interacting with running Pods
 
-Switching gears a little, let’s explore how to interact with running pods.
+Switching gears a little, let's explore how to interact with running pods.
 
 **Fetching logs from a Pod**
 
@@ -529,7 +529,7 @@ async fn forward_connection(
 
 ## Working with Custom Resources
 
-Kubernetes has an interesting concept called custom resources. These allow you to extend the Kubernetes API and add new resources. This by itself isn’t very descriptive, so let’s take things a step further with an example.
+Kubernetes has an interesting concept called custom resources. These allow you to extend the Kubernetes API and add new resources. This by itself isn't very descriptive, so let's take things a step further with an example.
 
 Say you wanted to inform Kubernetes about a new resource called `crustacean`. By default if you run `kubectl get crustacean`, you will get an error saying `error: the server doesn't have a resource type "crustacean."`. To create the resource, start out by defining a new custom resource:
 
@@ -815,18 +815,18 @@ Sure enough, Larry should be there.
 
 ## Summary
 
-If you made it to this part, you probably are really interested in `kube-rs`. While the library is pretty neat, Kubernetes has a LOT of API’s and can quickly get confusing. When working with `kube-rs` or Kubernetes in general, here are some things to keep in mind.
+If you made it to this part, you probably are really interested in `kube-rs`. While the library is pretty neat, Kubernetes has a LOT of API's and can quickly get confusing. When working with `kube-rs` or Kubernetes in general, here are some things to keep in mind.
 
 ### Know when to use a controller or an operator.
 
-These concepts have some overlap and can be very confusing, which is why I avoided mentioning so as not to blow this out of scope. Luckily, people far smarter than me have written on this topic. Check out Ivan Velichko’s guide on [Kubernetes operators.](https://iximiuz.com/en/posts/kubernetes-operator-pattern/) Looking for something with more Rust? The folks at Metalbear have an entire guide on [creating an operator using kube-rs](https://metalbear.co/blog/writing-a-kubernetes-operator/).
+These concepts have some overlap and can be very confusing, which is why I avoided mentioning so as not to blow this out of scope. Luckily, people far smarter than me have written on this topic. Check out Ivan Velichko's guide on [Kubernetes operators.](https://iximiuz.com/en/posts/kubernetes-operator-pattern/) Looking for something with more Rust? The folks at Metalbear have an entire guide on [creating an operator using kube-rs](https://metalbear.co/blog/writing-a-kubernetes-operator/).
 
-### Examples don’t bite
+### Examples don't bite
 
 The maintainers of `kube-rs` did an amazing job of creating several examples of using the crate. This guide is not an exhaustive list of all its features; some of the [examples used here](https://github.com/kube-rs/kube/tree/main/examples) were adapted from the repo.
 
-Using Rust to interact with Kubernetes can be quite refreshing, especially if you come from the [Kubebuilder](https://github.com/kubernetes-sigs/kubebuilder) world. Creating a CRD by adding a [macro](https://www.shuttle.dev/blog/2022/12/23/procedural-macros) is extremely powerful, and in my experience thus far, I have written less code to achieve common functionality. If you’re curious about admission controllers, check out the guide I wrote [here](https://www.civo.com/learn/kubernetes-admission-controllers-for-beginners?ref=shuttle.dev).
+Using Rust to interact with Kubernetes can be quite refreshing, especially if you come from the [Kubebuilder](https://github.com/kubernetes-sigs/kubebuilder) world. Creating a CRD by adding a [macro](https://www.shuttle.dev/blog/2022/12/23/procedural-macros) is extremely powerful, and in my experience thus far, I have written less code to achieve common functionality. If you're curious about admission controllers, check out the guide I wrote [here](https://www.civo.com/learn/kubernetes-admission-controllers-for-beginners?ref=shuttle.dev).
 
 ## Conclusion
 
-Of course, you don’t need Kubernetes for everything. If you’re interested in something more simple, Shuttle is your one-stop shop for easy Rust deployments. Create (or migrate) your project, use `shuttle deploy`, and watch the magic happen!
+Of course, you don't need Kubernetes for everything. If you're interested in something more simple, Shuttle is your one-stop shop for easy Rust deployments. Create (or migrate) your project, use `shuttle deploy`, and watch the magic happen!

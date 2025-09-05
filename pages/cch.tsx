@@ -6,7 +6,7 @@ import {
   shuttleCchPageview,
 } from "lib/useTwitter";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "components/elements/Link";
 import { ReactNode } from "react";
 import React from "react";
 import { NextSeo } from "next-seo";
@@ -110,9 +110,7 @@ export default function CCHPage() {
               href="https://console.shuttle.dev/shuttlings/cch24"
               target="_blank"
               className="text-orange"
-              onClick={() => {
-                trackEvent("cch_go_to_console");
-              }}
+              eventName="cch_go_to_console"
             >
               Shuttle Console
             </Link>

@@ -10,7 +10,7 @@ import {
   Uber,
   UiPath,
 } from "components/svgs";
-import Link from "next/link";
+import Link from "components/elements/Link";
 
 const LogosReferences = () => {
   return (

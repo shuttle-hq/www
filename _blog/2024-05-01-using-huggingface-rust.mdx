@@ -7,7 +7,7 @@ thumb: using-huggingface-rust-thumb.png
 cover: using-huggingface-rust-thumb.png
 date: '2024-05-01T18:30:00'
 ---
-Hello world! Today, we’re going to talk about Huggingface with Rust. We’re going to cover the following:
+Hello world! Today, we're going to talk about Huggingface with Rust. We're going to cover the following:
 
 - Downloading a repo from Huggingface
 - Tokenizing input and outputting tokens using Huggingface via Candle
@@ -25,8 +25,8 @@ Huggingface describes itself simply as:
 
 Huggingface is both a company, as well as a platform that contributes heavily to the AI and NLP fields through open source and open science. A couple of examples of how they do this:
 
-- Offering a free platform for free to upload AI models, try other peoples’ AI models and gain a lot of insight generally about how LLMs work
-- They have an in-depth NLP course teaching you how to create and use transformers, datasets and tokenizers (although it’s using Python)
+- Offering a free platform for free to upload AI models, try other peoples' AI models and gain a lot of insight generally about how LLMs work
+- They have an in-depth NLP course teaching you how to create and use transformers, datasets and tokenizers (although it's using Python)
 - Giving back to the community by creating frameworks like Candle (Rust)
 
 Huggingface is a huge driving force within the AI community. As you can see, their platform is a great way to be able to start using AI at home, without paying for anything (initially).
@@ -46,9 +46,9 @@ You'll also want the following dependencies which you can grab from this shell s
 cargo add anyhow candle-core candle-nn candle-transformers serde serde_json tokenizers -F serde/derive
 ```
 
-Before we start initialising the model, let’s talk about models. Models typically have a weights map, which determine the strength of connections within your neural network. For example if we were to go to [a HuggingFace repo](https://huggingface.co/mistralai/Mistral-7B-v0.1) (assuming we’re logged in and have been granted access), you might see a bunch of files regarding tensors (see below), a JSON file containing model weights as well as some other stuff.
+Before we start initialising the model, let's talk about models. Models typically have a weights map, which determine the strength of connections within your neural network. For example if we were to go to [a HuggingFace repo](https://huggingface.co/mistralai/Mistral-7B-v0.1) (assuming we're logged in and have been granted access), you might see a bunch of files regarding tensors (see below), a JSON file containing model weights as well as some other stuff.
 
-But first before we continue, let’s have a quick look at what tensors actually are - as they’re quite important to know about!
+But first before we continue, let's have a quick look at what tensors actually are - as they're quite important to know about!
 
 From Wikipedia:
 
@@ -57,7 +57,7 @@ From Wikipedia:
 
 Practically speaking for us, this just means multidimensional arrays of numbers (an array with multiple indexes, if you will). We can manipulate tensors and shape them to get output. A real-world example of using a tensor might be a picture. A picture can have height, width and color - which we can model as a 3D tensor. If we feed this into a model by turning it into a data representation, the model can find similar photos by comparing values from its training data and output a relevant response.
 
-To deserialize the weight map file, we’ll want to implement a custom deserialization function as the file can contain an unknown amount of keys and values. meaning that we should deserialize it to a `serde_json::Value` first. If you try to just deserialize it directly, will simply tell you that it got a sequence but expected a map (or something similar).
+To deserialize the weight map file, we'll want to implement a custom deserialization function as the file can contain an unknown amount of keys and values. meaning that we should deserialize it to a `serde_json::Value` first. If you try to just deserialize it directly, will simply tell you that it got a sequence but expected a map (or something similar).
 
 ```rust
 #[derive(Debug, Deserialize)]
@@ -84,7 +84,7 @@ where
 }
 ```
 
-Next, we’ll write a function to load tensors from a file in the “safetensors” format into our program. Safetensors is a data serialization format for storing tensors safely. Created by Hugging Face, it was made to replace the pickle format. In Python, you may have a PyTorch weight model that gets saved (or “pickled”) into a `.bin` file with the Python pickle utility. However, this is unsafe and said files may hold malicious code to be executed on un-pickling. Note that `repo.get()` returns `Result<PathBuf>`:
+Next, we'll write a function to load tensors from a file in the "safetensors" format into our program. Safetensors is a data serialization format for storing tensors safely. Created by Hugging Face, it was made to replace the pickle format. In Python, you may have a PyTorch weight model that gets saved (or "pickled") into a `.bin` file with the Python pickle utility. However, this is unsafe and said files may hold malicious code to be executed on un-pickling. Note that `repo.get()` returns `Result<PathBuf>`:
 
 ```rust
 pub fn hub_load_safetensors(
@@ -105,9 +105,9 @@ pub fn hub_load_safetensors(
 }
 ```
 
-Next, we’ll add some code to our program for downloading a `mistral-7b` model with the current latest revision at the time of writing. Note that the repository download is quite large, clocking in at around 13.4gb! If you’re running this locally, you will want some space to store the model on. You can find the latest version of a repository by going to the repo, clicking on Files and Versions and then going to the commit history. The Mistral-7B-v0.1 repo can be found [here](https://huggingface.co/mistralai/Mistral-7B-v0.1).
+Next, we'll add some code to our program for downloading a `mistral-7b` model with the current latest revision at the time of writing. Note that the repository download is quite large, clocking in at around 13.4gb! If you're running this locally, you will want some space to store the model on. You can find the latest version of a repository by going to the repo, clicking on Files and Versions and then going to the commit history. The Mistral-7B-v0.1 repo can be found [here](https://huggingface.co/mistralai/Mistral-7B-v0.1).
 
-To make this easier to follow, we’ll first write a function that initialises the `ApiRepo` for us to download files from. We can do this like so, by creating an `ApiBuilder` that takes our token.
+To make this easier to follow, we'll first write a function that initialises the `ApiRepo` for us to download files from. We can do this like so, by creating an `ApiBuilder` that takes our token.
 
 ```rust
 fn get_repo(token: String) -> Result<ApiRepo> {
@@ -123,7 +123,7 @@ fn get_repo(token: String) -> Result<ApiRepo> {
 }
 ```
 
-Next, we’ll need to set up our tokenizer. This function will use `repo.get()` to download the tokenizer file (returning a path) and then we use `Tokenizer::from_file` to create it:
+Next, we'll need to set up our tokenizer. This function will use `repo.get()` to download the tokenizer file (returning a path) and then we use `Tokenizer::from_file` to create it:
 
 ```rust
 fn get_tokenizer(repo: &ApiRepo) -> Result<Tokenizer> {
@@ -133,7 +133,7 @@ fn get_tokenizer(repo: &ApiRepo) -> Result<Tokenizer> {
 }
 ```
 
-Finally, we’ll create the model itself:
+Finally, we'll create the model itself:
 
 ```rust
 fn initialise_model(token: String) -> Result<AppState> {
@@ -159,7 +159,7 @@ fn initialise_model(token: String) -> Result<AppState> {
 
 ### Creating a Token Output Stream
 
-So we’ve downloaded our model, loaded the weight map files, loaded them all in and created our model. But how do we use it?
+So we've downloaded our model, loaded the weight map files, loaded them all in and created our model. But how do we use it?
 
 Internally, when you feed an input to a model, it encodes the input into tokens. Tokens can represent words, characters, data - anything. The main idea is that by converting the data to tokens, it allows a model to parse the data more easily. Most of the more popular pretrained models will often have billions, if not trillions of tokens in training data that allow it to produce sophisticated answers. The training data gives words meaning and allows the model to produce an answer according to the input by comparing the input to its training data.
 
@@ -185,7 +185,7 @@ impl TokenOutputStream {
 }
 ```
 
-Next, we’ll implement some methods to do the following:
+Next, we'll implement some methods to do the following:
 
 - Decode tokens into UTF-8 strings
 - Advance the internal index and return a string if there is any text
@@ -224,7 +224,7 @@ impl TokenOutputStream {
 }
 ```
 
-We’ll also need some auxiliary methods on this struct which we’ll call later on when generating our response text. Some comments have been added below to show what these are used for:
+We'll also need some auxiliary methods on this struct which we'll call later on when generating our response text. Some comments have been added below to show what these are used for:
 
 ```rust
 impl TokenOutputStream {
@@ -250,13 +250,13 @@ impl TokenOutputStream {
 
 ### Generating text from tokens
 
-As the final piece of the puzzle, we’ll create a struct for generating text from our tokens. This is arguably the most important part. There is some terminology here that you may want to be acquainted here before we continue, as otherwise you may be confused:
+As the final piece of the puzzle, we'll create a struct for generating text from our tokens. This is arguably the most important part. There is some terminology here that you may want to be acquainted here before we continue, as otherwise you may be confused:
 
 - `temp` (or temperature) - lets the model know how accurate we want it to be. The lower the temperature, the less likely the model will hallucinate.
-- `top_k` - This argument allows the model to only sample from the “top K tokens”, then samples based on probability. A lower K value makes the model more predictable and consistent.
+- `top_k` - This argument allows the model to only sample from the "top K tokens", then samples based on probability. A lower K value makes the model more predictable and consistent.
 - `top_p` - This allows the model to choose from a subset of tokens whose combined probability reaches or exceeds a threshold `p`. This allows you to create diverse responses while still having relevant context.
 - `repeat_penalty` - We can decide how much we want to punish repetitive or redundant output here.
-- `repeat_last_n` - This allows us to choose the size of the context window that we want for our repeat penalty. Note that a token can be anywhere between 1 to 4 words, so don’t make your context window size too large!
+- `repeat_last_n` - This allows us to choose the size of the context window that we want for our repeat penalty. Note that a token can be anywhere between 1 to 4 words, so don't make your context window size too large!
 
 To start with generating tokens from text, we can declare our text generator below, like so.
 
@@ -300,10 +300,10 @@ impl TextGeneration {
 Next, we need to write a `run` function to actually run our simple pipeline. This will do the following:
 
 - Turn a prompt into encoded tokens
-- Ensures that the `</s>` token exists (a sort of “end of tokens” marker)
+- Ensures that the `</s>` token exists (a sort of "end of tokens" marker)
 - Loops over the sample length, creates a tensor, applies a repeat penalty and attempts to get the next token
 
-To start with, let’s set up our function - we’ll start by clearing the tokenizer of any leftover tokens from previous prompts, then take the prompt and encode it. We then turn the tokens into a vector so that we can process it later on:
+To start with, let's set up our function - we'll start by clearing the tokenizer of any leftover tokens from previous prompts, then take the prompt and encode it. We then turn the tokens into a vector so that we can process it later on:
 
 ```rust
 impl TextGeneration {
@@ -323,7 +323,7 @@ impl TextGeneration {
 }
 ```
 
-Next, we need to check whether or not the tokenizer has a `</s>` token - this signals the end of the output. If this isn’t present, the model might try to run infinitely! Definitely not good. Let’s add it in:
+Next, we need to check whether or not the tokenizer has a `</s>` token - this signals the end of the output. If this isn't present, the model might try to run infinitely! Definitely not good. Let's add it in:
 
 ```rust
 let eos_token = match self.tokenizer.get_token("</s>") {
@@ -353,7 +353,7 @@ We then perform a forward pass to get the value of the output layer from the inp
 let logits = self.model.forward(&input, start_pos).unwrap();
 ```
 
-Next, we squeeze the logits. This decreases the number of dimensions in a tensor and allows us to grab the value we want. However, if the repeat penalty is over `1.0`, we need to make sure to apply it! (Note here that we haven’t accounted for repeat penalty values under `1.0`).
+Next, we squeeze the logits. This decreases the number of dimensions in a tensor and allows us to grab the value we want. However, if the repeat penalty is over `1.0`, we need to make sure to apply it! (Note here that we haven't accounted for repeat penalty values under `1.0`).
 
 ```rust
 let logits = logits.squeeze(0).unwrap().squeeze(0).unwrap().to_dtype(DType::F32).unwrap();
@@ -367,7 +367,7 @@ let logits = if self.repeat_penalty == 1.0 {
 };
 ```
 
-We then get our next token by sampling the logits, pushing it to our tokens list and checking if it’s the end-of-input token: if it is, break the loop immediately. If not, we add our converted String to the final output! Then we return the output.
+We then get our next token by sampling the logits, pushing it to our tokens list and checking if it's the end-of-input token: if it is, break the loop immediately. If not, we add our converted String to the final output! Then we return the output.
 
 ```rust
 fn run(mut self, prompt: String, sample_len: usize) -> Result<String, Box<dyn Error>> {
@@ -450,14 +450,14 @@ impl TextGeneration {
 
 ## Using Candle with a web service
 
-Using the previous functions we’ve made, we can create a web service using `axum` and `tokio`  with an endpoint to run our prompt! No local work required.
+Using the previous functions we've made, we can create a web service using `axum` and `tokio`  with an endpoint to run our prompt! No local work required.
 
 To install Axum and Tokio you can use this shell snippet:
 ```bash
 cargo add axum tokio -F tokio/macros,tokio/rt-multi-thread
 ```
 
-To get started, we’ll create an `AppState` that implements `Clone` and some helper methods to shorten down code in application-related functions:
+To get started, we'll create an `AppState` that implements `Clone` and some helper methods to shorten down code in application-related functions:
 
 ```rust
 #[derive(Clone)]
@@ -490,7 +490,7 @@ impl From<AppState> for TextGeneration {
 }
 ```
 
-Next, we’ll create a `Prompt` struct that can be deserialized from JSON, then an Axum function endpoint:
+Next, we'll create a `Prompt` struct that can be deserialized from JSON, then an Axum function endpoint:
 
 ```rust
 #[derive(Deserialize)]
@@ -507,7 +507,7 @@ async fn run_pipeline(
 }
 ```
 
-Then we add the endpoint to our main function and it’s done:
+Then we add the endpoint to our main function and it's done:
 
 ```rust
 #[tokio::main]
@@ -534,10 +534,10 @@ async fn main() -> Result<()> {
 
 Of course, when you try to run this locally you may notice that CPU performance is somewhat sub-optimal compared to using a high-performance GPU. Generally speaking, while optimal performance can be attained on a GPU, there are times where this is infeasible.
 
-GPU usage is gated by the use of the “CUDA” - Compute Unified Device Architecture - toolkit (and is a feature flag of `candle_core`). However, this would be difficult to use on the web unless you can have CUDA preinstalled. Nevertheless, it unlocks performance enhancing features outside of just your GPU. For example, Flash Attention, a technique that improves inference speeds with better parallelism and work partitioning. You can find the Arvix paper [here.](https://tridao.me/publications/flash2/flash2.pdf)
+GPU usage is gated by the use of the "CUDA" - Compute Unified Device Architecture - toolkit (and is a feature flag of `candle_core`). However, this would be difficult to use on the web unless you can have CUDA preinstalled. Nevertheless, it unlocks performance enhancing features outside of just your GPU. For example, Flash Attention, a technique that improves inference speeds with better parallelism and work partitioning. You can find the Arvix paper [here.](https://tridao.me/publications/flash2/flash2.pdf)
 
-This is even more noticeable when you’re running in debug mode. To alleviate this, you can run in release mode using `shuttle run --release` (or without Shuttle: `cargo run --release`). This will run the release profile of your application, which is much more optimised.
+This is even more noticeable when you're running in debug mode. To alleviate this, you can run in release mode using `shuttle run --release` (or without Shuttle: `cargo run --release`). This will run the release profile of your application, which is much more optimised.
 
 ## Finishing up
 
-Thanks for reading! Huggingface makes it much easier to deploy your own and other peoples’ models for absolutely free (disregarding electricity usage). Taking advantage of AI is becoming easier than ever!
+Thanks for reading! Huggingface makes it much easier to deploy your own and other peoples' models for absolutely free (disregarding electricity usage). Taking advantage of AI is becoming easier than ever!

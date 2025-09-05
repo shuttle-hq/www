@@ -7,7 +7,7 @@ thumb: traits-generics-rust-thumb.png
 cover: traits-generics-rust-thumb.png
 date: '2024-04-18T15:30:00'
 ---
-Hello world! In this post we’re going to give a quick refresher course on Rust traits and generics, as well as implementing some more advanced trait bounds and type signatures.
+Hello world! In this post we're going to give a quick refresher course on Rust traits and generics, as well as implementing some more advanced trait bounds and type signatures.
 
 ## A quick refresher on Rust traits
 
@@ -31,7 +31,7 @@ impl MyTrait for MyStruct {
 }
 ```
 
-You can also implement traits you don’t own on types you do own, or traits you do own on a type you don’t own - but not both! The reason you can’t do this is because of trait coherence. We want to make sure that we don’t accidentally have conflicting trait implementations:
+You can also implement traits you don't own on types you do own, or traits you do own on a type you don't own - but not both! The reason you can't do this is because of trait coherence. We want to make sure that we don't accidentally have conflicting trait implementations:
 
 ```rust
 // implementing Into<T>, a trait we don't own, on MyStruct
@@ -76,7 +76,7 @@ fn main() {
 }
 ```
 
-If you have multiple traits that have the same method name, you need to manually declare what trait implementation you’re calling the type from:
+If you have multiple traits that have the same method name, you need to manually declare what trait implementation you're calling the type from:
 
 ```rust
 pub trait MyTraitTwo {
@@ -117,23 +117,23 @@ Here, we explicitly tell the compiler that our type must implement both `Debug` 
 
 ## An introduction to marker traits
 
-Marker traits are used as a “marker” for the compiler to understand that when a marker trait is implemented for a type, certain guarantees can be upheld. They have no methods or specific properties but are often used to ensure certain behaviors by the compiler.
+Marker traits are used as a "marker" for the compiler to understand that when a marker trait is implemented for a type, certain guarantees can be upheld. They have no methods or specific properties but are often used to ensure certain behaviors by the compiler.
 
-There’s a couple of reasons why you would want marker traits:
+There's a couple of reasons why you would want marker traits:
 
 - The compiler needs to know if something can be guaranteed to do something
-- They’re an implementation-level detail that you can also implement manually
+- They're an implementation-level detail that you can also implement manually
 
 Two marker traits in particular, in conjunction with other lesser-used marker traits, are quite important to us: `Send` and `Sync`.  `Send` and `Sync` are unsafe to implement manually - this is typically because you need to manually ensure that it is implemented safely. `Unpin` is also another example of this. You can find more about why it's unsafe to manually implement these traits [here.](https://doc.rust-lang.org/nomicon/send-and-sync.html)
 
 In addition to this, marker traits are also (generally speaking) auto traits. If a struct has fields that all implement an auto trait, the struct itself will also implement the auto trait. For example:
 
 - If all field types within a struct are `Send`, the struct is now automatically marked `Send` by the compiler with no input required from the user.
-- If all but one of your struct fields implement `Clone` but one doesn’t, your struct now cannot derive `Clone` anymore. You can get around this by wrapping the relevant type in an `Arc` or `Rc` - but this depends on your use case. In certain cases, this is not possible and you may need to think about an alternative solution.
+- If all but one of your struct fields implement `Clone` but one doesn't, your struct now cannot derive `Clone` anymore. You can get around this by wrapping the relevant type in an `Arc` or `Rc` - but this depends on your use case. In certain cases, this is not possible and you may need to think about an alternative solution.
 
 ## Why do marker traits matter in Rust?
 
-Marker traits in Rust form the core of the ecosystem and allows us to provide garuantees that may not be possible in other languages. For example, Java has marker interfaces which are analogous to Rust’s marker traits. However, marker traits in Rust are not just for behavior like `Cloneable` or `Serializable`; they also ensure that types can be sent across threads, for example. This is a subtle but far-reaching difference within the Rust ecosystem. With `Send` types for example, we can ensure that it's always safe to send the type across a thread. This makes the problem of concurrency much easier to handle. Marker traits can also affect other things:
+Marker traits in Rust form the core of the ecosystem and allows us to provide garuantees that may not be possible in other languages. For example, Java has marker interfaces which are analogous to Rust's marker traits. However, marker traits in Rust are not just for behavior like `Cloneable` or `Serializable`; they also ensure that types can be sent across threads, for example. This is a subtle but far-reaching difference within the Rust ecosystem. With `Send` types for example, we can ensure that it's always safe to send the type across a thread. This makes the problem of concurrency much easier to handle. Marker traits can also affect other things:
 
 - The `Copy` trait is required to duplicate things by performing a bitwise copy (although this requires Clone). Attempting to copy a pointer bitwise only returns the address! This is also the same reason why String is unable to be copied and must be cloned: Strings in Rust are smart pointers.
 - The `Pin` trait which allows us to "pin" a value to a static place in memory
@@ -151,7 +151,7 @@ Marker traits can also improve the ergonomics of library crates. For example, le
 
 In addition to all of the above, traits can also make use of dynamic dispatch. Dynamic dispatch is essentially moving the process of selecting which implementation of a polymorphic function to use at runtime. While Rust does favour static dispatch for performance reasons, there are benefits to using dynamic dispatch through trait objects.
 
-The most common pattern for using trait objects would be `Box<dyn MyTrait>`, where we are required to wrap the trait object in `Box` to make it implement the `Sized` trait. Because we’re moving the polymorphism process to runtime, the compiler can’t know what size the type is. Wrapping the type in a pointer (or "boxing" it) puts it on the heap instead of the stack.
+The most common pattern for using trait objects would be `Box<dyn MyTrait>`, where we are required to wrap the trait object in `Box` to make it implement the `Sized` trait. Because we're moving the polymorphism process to runtime, the compiler can't know what size the type is. Wrapping the type in a pointer (or "boxing" it) puts it on the heap instead of the stack.
 
 ```rust
 // a struct with your object trait in it
@@ -185,12 +185,12 @@ struct MyStruct {
 
 The object type will then be computed during runtime, as opposed to generics which use compile-time.
 
-The main advantages of dynamic dispatch are that your function doesn’t need to know the concrete type; as long as the type implements the trait, you can use it as a trait object (as long as it’s trait object safe). This is similar to the concept of duck-typing in other languages, where the functions and properties available to an object determine the typing. Typically from a user standpoint, the compiler doesn't care what the underlying concrete type is - just that it implements the trait. There are cases however where it *does* matter - in which case Rust offers ways to determine concrete type, although tricky to use. You also save some code bloat, which depending on your use can be a good thing.
+The main advantages of dynamic dispatch are that your function doesn't need to know the concrete type; as long as the type implements the trait, you can use it as a trait object (as long as it's trait object safe). This is similar to the concept of duck-typing in other languages, where the functions and properties available to an object determine the typing. Typically from a user standpoint, the compiler doesn't care what the underlying concrete type is - just that it implements the trait. There are cases however where it *does* matter - in which case Rust offers ways to determine concrete type, although tricky to use. You also save some code bloat, which depending on your use can be a good thing.
 
-Errors are also easier to understand from a library user perspective. From a library developer’s point of view this is not such an issue, but if you need to use a generics-heavy library, you can get some very confusing errors! Axum and Diesel are two libraries that can sometimes be guilty of this and have workarounds for this (Axum’s `#[debug_handler]` macro and Diesel’s documentation, respectively). Because you’re moving the dispatch process to runtime, you also save compilation time.
+Errors are also easier to understand from a library user perspective. From a library developer's point of view this is not such an issue, but if you need to use a generics-heavy library, you can get some very confusing errors! Axum and Diesel are two libraries that can sometimes be guilty of this and have workarounds for this (Axum's `#[debug_handler]` macro and Diesel's documentation, respectively). Because you're moving the dispatch process to runtime, you also save compilation time.
 
 The downsides are that you need to ensure object trait safety. The conditions you need to satisfy for object safety include:
-- your type doesn’t require `Self: Sized`
+- your type doesn't require `Self: Sized`
 - your type must use some type of "self" in function arguments (whether it's `&self`, `self`, `mut self` etc...)
 - your type must not return Self
 
@@ -198,7 +198,7 @@ Find out more [here.](https://doc.rust-lang.org/reference/items/traits.html#obje
 
 Note that if you have a trait that doesn't require `Self: Sized` but the trait has a method that requires it, you can't call that method on a `dyn` object.
 
-This stems from the fact that by moving dispatch to runtime, the compiler can’t guess the size of your type - object traits don’t have a constant size at compile-time. This is also why we need to box dynamically dispatched objects and put them on the heap as mentioned earlier. Because of this, your application also takes a performance hit - although of course this depends on how many dynamically dispatched objects you’re using and how large they are!
+This stems from the fact that by moving dispatch to runtime, the compiler can't guess the size of your type - object traits don't have a constant size at compile-time. This is also why we need to box dynamically dispatched objects and put them on the heap as mentioned earlier. Because of this, your application also takes a performance hit - although of course this depends on how many dynamically dispatched objects you're using and how large they are!
 
 To illustrate these points further, there are two HTML templating libraries that come to mind:
 
@@ -244,7 +244,7 @@ trait FromRequest<S>
 }
 ```
 
-Here we can also add trait bounds by using the `where` clause. This trait simply tells us that `S` implements `State`. However, `State` also requires the inner object to be `Clone`. By using complex trait bounds, we can create framework systems that make heavy use of traits to be able to do what some might refer to as “trait magic”. Take a look at this trait bound, for example:
+Here we can also add trait bounds by using the `where` clause. This trait simply tells us that `S` implements `State`. However, `State` also requires the inner object to be `Clone`. By using complex trait bounds, we can create framework systems that make heavy use of traits to be able to do what some might refer to as "trait magic". Take a look at this trait bound, for example:
 
 ```rust
 use std::future::Future;
@@ -283,7 +283,7 @@ pub trait Handler<Args>: Clone + 'static {
 }
 ```
 
-This then allows us to extend this trait to a handler function. We can tell the web service that we have a function that has an inner function, some arguments and implements `Responder` (Actix Web’s HTTP response trait):
+This then allows us to extend this trait to a handler function. We can tell the web service that we have a function that has an inner function, some arguments and implements `Responder` (Actix Web's HTTP response trait):
 
 ```rust
 pub fn to<F, Args>(handler: F) -> Route where

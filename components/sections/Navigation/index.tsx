@@ -5,10 +5,9 @@ import CustomButton from "../../elements/CustomButton";
 import { Hamburger, Logo } from "components/svgs";
 import { trackEvent } from "lib/posthog";
 import dynamic from "next/dynamic";
-import Link from "next/link";
+import Link from "components/elements/Link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { DISCORD_URL } from "../../../lib/constants";
 
 const ThemeSwitcher = dynamic(() => import("./ThemeSwitcher"), { ssr: false });
 
@@ -34,8 +33,8 @@ const LinkItem = ({
             active && "font-bold text-white",
           )}
           href={href}
+          eventName={event}
           onClick={({ ctrlKey, metaKey }) => {
-            trackEvent(event);
             setOpen(ctrlKey || metaKey);
           }}
         >
@@ -113,6 +112,12 @@ const Navigation = () => {
               keyword: "ai",
             },
             {
+              href: "/customers",
+              event: "homepage_mainnav_customers",
+              text: "Customers",
+              keyword: "customers",
+            },
+            {
               href: "/careers",
               event: "homepage_careers",
               text: "Careers",
@@ -130,30 +135,32 @@ const Navigation = () => {
           ))}
         </div>
         <div className="mt-10 xl:ml-auto xl:mt-0 xl:flex xl:items-center xl:gap-5">
-          <div className="mt-10 flex flex-wrap items-center gap-5 xl:mt-0">
+          <div
+            className="mt-10 flex flex-wrap items-center gap-5 xl:mt-0"
+            onClick={() => {
+              trackEvent("homepage_mainnav_login");
+            }}
+          >
             <CustomButton
               className="w-[140px] justify-center"
               variant="secondary"
               invertOnDark
-              href={DISCORD_URL}
-              onClick={() => {
-                trackEvent("homepage_mainnav_discord");
-              }}
+              href="https://console.shuttle.dev/"
             >
-              Join Discord
+              Log in
             </CustomButton>
             <div
               onClick={() => {
-                trackEvent("homepage_mainnav_login");
+                trackEvent("homepage_mainnav_signup");
               }}
             >
               <CustomButton
                 className="w-[140px] justify-center"
                 variant="primary"
                 invertOnDark
-                href="https://console.shuttle.dev/"
+                href="https://console.shuttle.dev/signup"
               >
-                Log in
+                Sign up
               </CustomButton>
             </div>
           </div>
