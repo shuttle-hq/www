@@ -16,7 +16,7 @@ import slug from "rehype-slug";
 
 // @ts-ignore
 import toc from "markdown-toc";
-import rehypePrism from "rehype-prism-plus";
+import rehypePrism from "@mapbox/rehype-prism";
 import { DISCORD_URL, SITE_URL } from "lib/constants";
 import { GetStaticPropsContext, GetStaticPropsResult } from "next";
 import { ParsedUrlQuery } from "querystring";

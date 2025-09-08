@@ -19,6 +19,10 @@ module.exports = {
           yellow: "#FFD76F",
           cyan: "#38D4E9",
         },
+        grey500: "#E0E0E0",
+        grey600: "#A2A2A2",
+        grey700: "#FFFFFF4D",
+        grey800: "#000000CC",
       },
       fontFamily: {
         gradual: "BwGradual, sans-serif",
@@ -30,12 +34,21 @@ module.exports = {
         "4xl": "2rem",
         button: "0.875rem",
       },
+      lineHeight: {
+        72: "72px",
+        64: "64px",
+        52: "52px",
+        48: "48px",
+      },
       fontSize: {
         4.5: "2.5rem",
         6.5: "4rem",
+        40: "40px",
+        56: "56px",
+        64: "64px",
       },
-      screens: {
-        desktop: "1440px",
+      letterSpacing: {
+        1: "0.01em", // 1%
       },
       gridTemplateColumns: {
         "50/50": "50% 50%",

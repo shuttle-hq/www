@@ -111,12 +111,12 @@ const Navigation = () => {
               text: "Customers",
               keyword: "customers",
             },
-            // {
-            //   href: "/careers",
-            //   event: "homepage_careers",
-            //   text: "Careers",
-            //   keyword: "careers",
-            // },
+            {
+              href: "/careers",
+              event: "homepage_careers",
+              text: "Careers",
+              keyword: "careers",
+            },
           ].map(({ event, href, text, keyword }) => (
             <LinkItem
               key={href}

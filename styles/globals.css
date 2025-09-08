@@ -422,6 +422,7 @@ body.dark {
     padding: 0 16px 40px !important;
   }
 }
+
 @layer utilities {
   .box-shadow-design {
     /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#000000+0,ffffff+100&1+0,0+100 */
@@ -566,7 +567,110 @@ body.dark {
   }
 
   @media (min-width: 768px) {
+  /* @media (min-width: 768px) {
     margin: 0 -16px 40px;
     padding: 0 16px;
+  } */
+
+  .custom-culture-bg {
+    position: relative;
+  }
+
+  .custom-culture-bg::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    aspect-ratio: 2.5;
+    height: 850px;
+    transform: translate(-50%, -50%);
+    background-image: url("/images/pages/pricing/custom-bg.jpg");
+    background-position: center 60%;
+    background-size: auto;
+    background-repeat: no-repeat;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .custom-open-positions-bg {
+    position: relative;
+  }
+
+  .custom-open-positions-bg::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    aspect-ratio: 2.5;
+    height: 986px;
+    transform: translate(-50%, -50%);
+    background-image: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0) 100%,
+        rgba(0, 0, 0, 1) 100%
+      ),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0) 80%, rgba(0, 0, 0, 1) 100%),
+      url("/images/pages/pricing/custom-bg.jpg");
+    background-size: auto 130%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  @media (max-width: 375px) {
+    .custom-galaxy-bg {
+      position: relative;
+    }
+
+    .custom-galaxy-bg::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("/images/pages/careers/sections/bg-img.jpg");
+      background-size: auto;
+      background-repeat: no-repeat;
+      background-position: calc(100% + 385px) center;
+      transform: translateY(30px);
+      z-index: -1;
+    }
+  }
+
+  .custom-galaxy-bg {
+    position: relative;
+  }
+
+  .custom-galaxy-bg::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(0, 0, 0, 0) 15%
+      ),
+      linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 15%),
+      url("/images/pages/careers/sections/bg-img.jpg");
+    background-position: center center;
+    background-size: auto;
+    background-repeat: no-repeat;
+    transform: translateY(100px);
+    z-index: -1;
+  }
+}
+
+@media (min-width: 768px) {
+  .custom-bg {
+    background-image: url("/images/pages/pricing/custom-bg.jpg");
+    background-position: 54% 9% !important;
+    background-size: contain;
   }
 }
