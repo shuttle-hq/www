@@ -9,7 +9,7 @@ import slug from "rehype-slug";
 
 // @ts-ignore
 import toc from "markdown-toc";
-import rehypePrism from "@mapbox/rehype-prism";
+import rehypePrism from "rehype-prism-plus";
 import { SITE_URL } from "lib/constants";
 import { GetStaticPropsContext, GetStaticPropsResult } from "next";
 import { ParsedUrlQuery } from "querystring";

@@ -13,7 +13,6 @@
     "fix-blogs": "bun run scripts/fix-blogs.ts"
   },
   "dependencies": {
-    "@mapbox/rehype-prism": "^0.8.0",
     "@next/third-parties": "^14.1.4",
     "@splidejs/react-splide": "^0.7.12",
     "@splidejs/splide-extension-auto-scroll": "^0.5.3",
@@ -46,6 +45,7 @@
     "react-tooltip": "^5.21.4",
     "react-twitter-embed": "^4.0.4",
     "react-use": "^17.4.0",
+    "rehype-prism-plus": "^2.0.1",
     "rehype-slug": "^5.1.0",
     "remark-gfm": "3.0.1",
     "remark-gfm-4": "npm:remark-gfm@4.0.0",
