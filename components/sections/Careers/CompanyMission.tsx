@@ -16,7 +16,7 @@ export default function CompanyMission() {
 
       <div className="flex-1 flex flex-col justify-center gap-6 items-center text-left order-2 md:items-start md:mx-0 md:order-2">
         <h2 className="font-gradual font-bold text-40 leading-48 tracking-normal text-grey500">
-          Shape the next generation of backend development
+          Our mission
         </h2>
         <div className="flex flex-col gap-6">
           <p className="text-base leading-6 tracking-1 sm:text-xl sm:leading-8 md:text-xl md:leading-8">

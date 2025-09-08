@@ -13,12 +13,7 @@ export default function Hero() {
       <div>
         <div className="flex flex-col gap-8 text-left">
           <h1 className="font-gradual font-bold text-5xl leading-52 sm:text-64 sm:leading-72 text-black dark:text-head">
-            Join Us.{" "}
-            <span className="block sm:inline">Re-invent developer</span>{" "}
-            <span className="hidden lg:inline">
-              <br />
-            </span>{" "}
-            experience. Simply.
+            Join us shaping the future of cloud development
           </h1>
           <div>
             <CustomButton

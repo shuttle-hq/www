@@ -8,20 +8,27 @@ import WhyJoinShuttle from "components/sections/Careers/WhyJoinShuttle";
 import OpenPositions from "components/sections/Careers/OpenPositions";
 import HiringProcess from "components/sections/Careers/OurHiringProcess";
 import { jobData } from "content/positions";
+import { NextSeo } from "next-seo";
 
 export default function CareersPage() {
   return (
-    <div className="flex-grow overflow-x-clip">
-      <Hero />
-      <div className="max-w-[1440px] px-5 sm:px-10 lg:px-20 mx-auto flex flex-col my-28 gap-28 sm:mt-52 sm:mb-32 sm:gap-52">
-        <CompanyMission />
-        <OurCultureAndValues />
-        <WhatWereLookingFor />
-        <WhyJoinShuttle />
-        <OpenPositions jobData={jobData} />
-        <HiringProcess />
+    <>
+      <NextSeo
+        title="Careers | Shuttle"
+        description="Join us shaping the future of cloud development"
+      />
+      <div className="flex-grow overflow-x-clip">
+        <Hero />
+        <div className="max-w-[1440px] px-5 sm:px-10 lg:px-20 mx-auto flex flex-col my-28 gap-28 sm:mt-52 sm:mb-32 sm:gap-52">
+          <CompanyMission />
+          <OurCultureAndValues />
+          <WhatWereLookingFor />
+          <WhyJoinShuttle />
+          <OpenPositions jobData={jobData} />
+          <HiringProcess />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

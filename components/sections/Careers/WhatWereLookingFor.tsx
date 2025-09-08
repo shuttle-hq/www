@@ -20,18 +20,22 @@ export default function WhatWereLookingFor() {
         </h2>
         <div className="flex flex-col gap-6">
           <p className="text-base leading-6 tracking-1 sm:text-xl sm:leading-8 md:text-xl md:leading-8">
-            We&apos;re a growth mindset company. We&apos;re honest, open-minded,
-            driven, and ambitious and we are only looking for people who share
-            these qualities with us.
+            At Shuttle, we’re a growth mindset company. We value honesty,
+            openness, drive, and ambition. We’re looking for people who share
+            those qualities.
           </p>
           <p className="text-base leading-6 tracking-1 sm:text-xl sm:leading-8 md:text-xl md:leading-8">
-            We are building a culture that brings out the best in people and we
-            truly believe that the company you work at should be the launch pad
-            for unleashing your full potential.
+            We’re building a culture that brings out the best in people. We
+            believe the company you work at should be the launch pad for your
+            full potential.
           </p>
           <p className="text-base leading-6 tracking-1 sm:text-xl sm:leading-8 md:text-xl md:leading-8">
-            We believe in ownership and responsibility. We&apos;re looking for
-            people that propose ideas and then take them from start to finish.
+            We value ownership and responsibility. We want people who propose
+            ideas and take them from start to finish.
+          </p>
+          <p className="text-base leading-6 tracking-1 sm:text-xl sm:leading-8 md:text-xl md:leading-8">
+            Above all, we want you to be your best self, curious, experimental,
+            and always learning.
           </p>
         </div>
       </div>

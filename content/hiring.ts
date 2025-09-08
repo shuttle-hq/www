@@ -1,4 +1,4 @@
-import { HiringStepProps } from "components/sections/HiringListItem"
+import { HiringStepProps } from "components/sections/HiringListItem";
 
 export const hiringSteps: HiringStepProps[] = [
   {
@@ -18,7 +18,7 @@ export const hiringSteps: HiringStepProps[] = [
   },
   {
     number: "04",
-    title: "Shuttle Docking Trial",
+    title: "Shuttle Super Day",
     description:
       "Spend a (fully-paid) day working alongside our team on a real task.",
   },
@@ -27,4 +27,4 @@ export const hiringSteps: HiringStepProps[] = [
     title: "Offer & Onboarding",
     description: "Welcome aboard!",
   },
-]
+];
