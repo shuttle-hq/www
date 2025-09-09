@@ -19,7 +19,7 @@ export const Pre = ({ children, ...props }: any) => {
   const code = getChildren(children.props.children).join("");
 
   return (
-    <div className={clsx("relative")}>
+    <div className={clsx("relative shuttle-scrollbar")}>
       <CopyButton
         code={code}
         className="absolute right-2 top-2 inline-flex items-center"
@@ -27,7 +27,7 @@ export const Pre = ({ children, ...props }: any) => {
       <pre
         {...props}
         className={clsx(
-          "!border !border-black/10 !bg-white !pr-16 !text-sm dark:!border-white/10 dark:!bg-black dark:text-body [&>*]:!bg-white dark:[&>*]:!bg-black",
+          "shuttle-scrollbar !border !border-black/10 !bg-white !pr-16 !text-sm dark:!border-white/10 dark:!bg-black dark:text-body [&>*]:!bg-white dark:[&>*]:!bg-black",
           props.className ?? "language-",
         )}
       >

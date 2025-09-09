@@ -1,0 +1,98 @@
+.blogTakeaways {
+  /* Force dark theme and ensure proper background visibility */
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(251, 146, 60, 0.05) 35%, rgba(34, 197, 194, 0.1) 100%) !important;
+  border: 1px solid rgba(249, 115, 22, 0.2) !important;
+  color-scheme: dark;
+}
+
+/* Override any global styles that might interfere */
+.blogTakeaways,
+.blogTakeaways * {
+  box-sizing: border-box;
+}
+
+/* Ensure proper dark theme styling regardless of global theme */
+.blogTakeaways .title {
+  color: white !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.blogTakeaways .description {
+  color: rgb(209 213 219) !important; /* text-gray-300 */
+  line-height: 1.6 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.blogTakeaways .iconContainer {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(34, 197, 194, 0.2)) !important;
+  border: 1px solid rgba(249, 115, 22, 0.3) !important;
+  transition: all 0.2s ease !important;
+}
+
+.blogTakeaways .iconContainer:hover {
+  border-color: rgba(251, 146, 60, 0.5) !important;
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.3), rgba(34, 197, 194, 0.3)) !important;
+}
+
+.blogTakeaways .icon {
+  color: rgb(251 146 60) !important; /* text-orange-400 */
+  transition: color 0.2s ease !important;
+}
+
+.blogTakeaways .iconContainer:hover .icon {
+  color: rgb(253 186 116) !important; /* text-orange-300 */
+}
+
+/* Fix alignment issues */
+.blogTakeaways .itemContainer {
+  display: flex !important;
+  align-items: center !important;
+  gap: 1rem !important;
+  margin-bottom: 0.5rem !important;
+  margin-top: 0 !important;
+  padding: 0 !important;
+}
+
+.blogTakeaways .itemContainer:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Override any global spacing */
+.blogTakeaways .itemContainer + .itemContainer {
+  margin-top: 0 !important;
+}
+
+.blogTakeaways .itemContent {
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+/* Enhance the header styling */
+.blogTakeaways .headerContainer {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.blogTakeaways .headerIcon {
+  background: linear-gradient(135deg, rgb(249, 115, 22), rgb(34, 197, 194)) !important;
+  padding: 0.125rem !important;
+  border-radius: 50% !important;
+}
+
+.blogTakeaways .headerIconInner {
+  background: rgb(17 24 39) !important; /* bg-gray-900 */
+  border-radius: 50% !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}

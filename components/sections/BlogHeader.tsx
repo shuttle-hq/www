@@ -21,34 +21,55 @@ const BlogHeader: FC<BlogHeaderProps> = ({ post }) => {
           {author.map((author, index) => {
             return (
               <div className="mt-6 lg:mt-8" key={index}>
-                <Link
-                  className={author.author_url ? "cursor-pointer" : ""}
-                  href={author.author_url}
-                >
-                  <div className="flex items-center gap-2">
-                    {author.author_image_url && (
-                      <Image
-                        src={author?.author_image_url || "/images/logo.png"}
-                        className="rounded-full border"
-                        width={24}
-                        height={24}
-                        alt=""
-                      />
-                    )}
-                    <div className="flex font-bold text-head">
+                <div className="flex items-center gap-2">
+                  {author.author_image_url && (
+                    <Image
+                      src={author?.author_image_url || "/images/logo.png"}
+                      className="rounded-full border"
+                      width={24}
+                      height={24}
+                      alt=""
+                    />
+                  )}
+                  <div className="flex font-bold text-head">
+                    <Link
+                      className={author.author_url ? "cursor-pointer" : ""}
+                      href={author.author_url}
+                      target="_blank"
+                    >
                       {author?.author || "Shuttle"}
                       {author?.position ? ` - ${author.position}` : ""}
+                    </Link>
+                    <span className="font-normal text-body">
+                      &nbsp;&nbsp;•{" "}
+                      <time dateTime={new Date(post.date).toISOString()}>
+                        {new Date(post.date).toLocaleDateString("en-GB", {
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </time>
+                    </span>
+                    {post.updated_at && (
                       <span className="font-normal text-body">
-                        &nbsp;&nbsp;• {post.dateReadable}
+                        &nbsp;(Updated on{" "}
+                        <time
+                          dateTime={new Date(post.updated_at).toISOString()}
+                        >
+                          {new Date(post.updated_at).toLocaleDateString(
+                            "en-GB",
+                            {
+                              month: "long",
+                              day: "numeric",
+                              year: "numeric",
+                            },
+                          )}
+                        </time>
+                        )
                       </span>
-                      {post.updated_on_readable && (
-                        <span className="font-normal text-body">
-                          &nbsp;(Updated on {post.updated_on_readable})
-                        </span>
-                      )}
-                    </div>
+                    )}
                   </div>
-                </Link>
+                </div>
               </div>
             );
           })}

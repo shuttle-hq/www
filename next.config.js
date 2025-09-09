@@ -71,7 +71,10 @@ const nextConfig = {
     return [
       {
         // Apply these headers to all routes in your application.
-        source: "/(.*)",
+        // Note: since i18n has been configured, the path matching rules are altered,
+        // see: https://nextjs.org/docs/app/api-reference/config/next-config-js/headers#headers-with-i18n-support
+        // That's why "/(.*)" won't match the `/`, but "/:path*" will.
+        source: "/:path*",
         headers: [
           {
             key: "X-Frame-Options",
