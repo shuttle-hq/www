@@ -266,14 +266,13 @@ Now it's time to put these tools to the test by building a task management API i
 
 We opened a folder `rust-tasks-cursor`in Cursor, launched the **AI chat panel** (Cmd/Ctrl + L) and entered the baseline prompt:
 
-```text
+```
 Create a new Rust project for a task management API using Axum
 ```
 
 Cursor created a new Rust project structure that includes a `Cargo.toml` file with the required dependencies:
 
-```text
-
+```toml
 [package]
 name = "task_manager_api"
 version = "0.1.0"
@@ -290,12 +289,12 @@ tower-http = "0.6.6"
 
 It also generated a `main.rs` file with the API entry point.
 
-```text
-
+```rust
 use axum::{Json, Router, routing::get, serve};
 use serde_json::json;
 use std::net::SocketAddr;
 use tokio::net::TcpListener;
+
 async fn health_check() -> Json {
     Json(json!({ "status": "ok" }))
 }
@@ -312,7 +311,7 @@ async fn main() {
 
 Next, we refined the prompt in the chat panel to flesh out the endpoints:
 
-```text
+```
 Implement the complete task API with models, handlers, and main server setup
 ```
 
@@ -461,7 +460,7 @@ Add the Shuttle MCP server to your tool of choice. For example, in Windsurf:
 
 Now, ask your AI coding tool to deploy the API through the Shuttle MCP server. For example:
 
-```text
+```
 Deploy the API to Shuttle.
 
 Use the Shuttle MCP server.
