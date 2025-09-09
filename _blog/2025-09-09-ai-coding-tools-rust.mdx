@@ -60,6 +60,8 @@ Key features include:
 - Real-Time Code Generation: Code gets written as you type.
 - Smart Autocomplete: Smarter, context-aware autocomplete.
 
+<CaptionedImage src="/images/blog/ai-coding-tools-rust/cursor-ide.png" alt="Cursor IDE" caption="Cursor IDE" />
+
 **Windsurf (formerly Codeium):**
 
 Windsurf, rebranded from Codeium, is an AI-powered IDE forked from VS Code and designed to weave AI assistance throughout the entire code development process. Compared to Cursor, Windsurf leans toward a more polished and minimal aesthetic. You can think of it as Apple-like refinement compared to Microsoft's functionality-first approach.
@@ -75,6 +77,12 @@ Key features include:
 - Code Quality Insights: Instant feedback on clarity, maintainability, and best practices.
 - Deep Static Analysis Integration: Catch hidden bugs, security risks, and performance issues early.
 
+<CaptionedImage 
+  src="/images/blog/ai-coding-tools-rust/windsurf-ide.png" 
+  alt="Windsurf IDE"
+  caption="Windsurf IDE"
+/>
+
 **VS Code + GitHub Copilot:**
 
 GitHub Copilot is one of the most widely used AI coding assistants. It integrates directly into VS Code as well as other popular IDEs and works in real time to suggest code, generate functions from natural language prompts, and explain existing code. Whether you're writing in JavaScript, Python, Go, or working across multiple languages, Copilot blends seamlessly into your environment while tying neatly into the broader GitHub ecosystem.
@@ -89,6 +97,12 @@ Key features include:
 - Multi-Language and Framework Support: Works across dozens of languages and frameworks.
 - Integration with GitHub Ecosystem: Easily connects with repos, PRs, and Actions.
 
+<CaptionedImage 
+  src="/images/blog/ai-coding-tools-rust/vscode.png" 
+  alt="VS Code + GitHub Copilot"
+  caption="VS Code + GitHub Copilot"
+/>
+
 **Kiro by AWS:**
 
 Kiro is an AI-native IDE built by AWS and launched in 2025. It was designed to solve the challenges of "vibe coding" by introducing structured, spec-driven development. With this approach, Kiro generates a requirements document that includes user stories, mermaid diagrams, acceptance criteria, and more about what you want to build. You can review the spec, tweak it, and customize it to your needs before writing a single line of code. This way, you don't have to keep prompting over and over to get what you're looking for.
@@ -101,6 +115,12 @@ Key features include:
 - Multimodal Chat Interface: Collaborate with AI through text, code, and other formats. Get natural help with debugging, explanations, and brainstorming.
 - Agentic Programming: Let AI agents handle multi-step tasks. They can plan projects, update specs, and keep changes synced across your codebase.
 - AWS Integration: Connect seamlessly with AWS services for deployment, monitoring, and scaling so your projects move smoothly into production.
+
+<CaptionedImage 
+  src="/images/blog/ai-coding-tools-rust/kiro-ide.png" 
+  alt="Kiro IDE"
+  caption="Kiro IDE"
+/>
 
 The key difference between IDE-based AI coding tools is in their approach. Cursor, Windsurf, and Copilot focus on real-time code suggestions and inline assistance for quick iteration. Kiro, on the other hand, takes a different path with agentic, spec-driven workflows that emphasize production readiness and cut down on ad-hoc "vibe coding" chaos. This makes it more agent-led and customizable, giving teams the guardrails and automations they need instead of just editor-centric features.
 
@@ -136,6 +156,12 @@ Key features include:
 - Conversational Debugging: Debug interactively with step-by-step guidance.
 - Code Explanation and Documentation: Turn complex code into clear explanations and documentation.
 
+<CaptionedImage 
+  src="/images/blog/ai-coding-tools-rust/claude-code.png" 
+  alt="Claude Code"
+  caption="Claude Code"
+/>
+
 **Aider:**
 
 Aider is an open-source AI pair programming assistant built to work hand-in-hand with Git. Unlike other coding tools that simply suggest snippets, Aider operates inside your version control workflow, making it especially powerful for collaborative and production-grade projects. It uses large language models to understand your codebase, propose intelligent changes, and keep everything neatly tracked in commits.&nbsp;
@@ -147,6 +173,12 @@ Key features include:
 - Automatic Commit Messages: Generate clear, descriptive commits automatically.
 - Support for Multiple AI Models: Choose the AI model that fits your project and workflow.
 - Real-Time Collaboration: Get live, pair-programmer-style coding suggestions.
+
+<CaptionedImage 
+  src="/images/blog/ai-coding-tools-rust/aider.png" 
+  alt="Aider"
+  caption="Aider"
+/>
 
 **Gemini CLI:**
 
@@ -160,6 +192,12 @@ Key features include:
 - Generous Free Tier: Get 60 requests per minute and 1,000 requests per day for free with just a personal Google account.
 - Security and Sandboxing: Runs in a secure, sandboxed environment with network restrictions, ensuring safe code execution.
 
+<CaptionedImage 
+  src="/images/blog/ai-coding-tools-rust/gemini-cli.png" 
+  alt="Gemini CLI"
+  caption="Gemini CLI"
+/>
+
 **OpenAI Codex CLI:**
 
 OpenAI Codex CLI is an open-source, lightweight coding agent that brings ChatGPT-level reasoning to your terminal. Powered by OpenAI's o3 and o4-mini models, it emphasizes local execution, privacy, and multimodal input, letting you handle tasks like code generation, file manipulation, and test execution directly from the terminal.
@@ -171,6 +209,13 @@ Key features include:
 - Flexible Approval Modes: Choose from Suggest, Auto-Edit, and Full Auto modes for different levels of control over code changes and command execution.
 - Open-Source and Community-Driven: Encourages community contributions and supports multiple AI providers like Gemini and OpenRouter via the Chat Completion API.
 - Sandbox Security: Executes commands in secure, sandboxed environments using Docker on Linux and Apple Seatbelt on macOS to ensure safe operations.
+
+<CaptionedImage 
+  src="/images/blog/ai-coding-tools-rust/openai-codex-cli.png" 
+  alt="OpenAI Codex CLI"
+  caption="OpenAI Codex CLI"
+/>
+
 With the details of both IDE-based and terminal-based AI coding tools covered, let's now explore why they behave differently when you put them to work on a Rust project.
 
 ### What Makes These Categories Behave Differently in Rust?
@@ -384,9 +429,9 @@ In short, enforce guardrails, define clear rules, and think like a PM. With that
 Each tool got us to a working Rust API, but in different ways. Some needed a bit of re-prompting, while others were more direct. Instead of setting up separate Dockerfiles, CI pipelines, or custom cloud configs for each tool, we kept things simple with a single deployment workflow powered by Shuttle's [Model Context Protocol](https://docs.shuttle.dev/integrations/mcp-server) (MCP). Here's how you can do the same:
 
 1. Set up Shuttle
-  Create a [free Shuttle account](https://console.shuttle.dev/signup).
-2. Install the [Shuttle CLI](https://docs.shuttle.dev/getting-started/installation), which lets you deploy straight from your machine.
-3. Configure the CLI by running:&nbsp;
+  - Create a [free Shuttle account](https://console.shuttle.dev/signup).
+  - Install the [Shuttle CLI](https://docs.shuttle.dev/getting-started/installation), which lets you deploy straight from your machine.
+  - Configure the CLI by running:&nbsp;
 
 ```bash
 Shuttle login
@@ -394,27 +439,26 @@ Shuttle login
 
 This will open a browser where you can log in with your credentials.
 
-1. Connect your AI Coding Tool to Shuttle MCP
+2. Connect your AI Coding Tool to Shuttle MCP
 
 Add the Shuttle MCP server to your tool of choice. For example, in Windsurf:
-
-Go to Settings → Windsurf Settings → Manage MCPs → View raw config.
-2. Paste the server configuration below into the config file:
-
-```json
-{
-  "mcpServers": {
-    "Shuttle": {
-      "command": "shuttle",
-      "args": ["mcp", "start"]
+  - Go to Settings → Windsurf Settings → Manage MCPs → View raw config.
+  - Paste the server configuration below into the config file:
+    ```json
+    {
+      "mcpServers": {
+        "Shuttle": {
+          "command": "shuttle",
+          "args": ["mcp", "start"]
+        }
+      }
     }
-  }
-}
-```
+    ```
 
-Check [Shuttle's documentation](https://docs.shuttle.dev/integrations/mcp-server) for the full list of MCP configurations.
+    Check [Shuttle's documentation](https://docs.shuttle.dev/integrations/mcp-server) for the full list of MCP configurations.
 
-1. Prompt the Tool to Deploy
+3. Prompt the Tool to Deploy
+
 Now, ask your AI coding tool to deploy the API through the Shuttle MCP server. For example:
 
 ```text
@@ -425,18 +469,18 @@ Use the Shuttle MCP server.
 
 > _As a rule of thumb, always include the phrase _`Use the Shuttle MCP server.`_ when deploying through the Shuttle MCP server so it can reference the documentation during deployment._
 
-1. Let the Tool Update your Project
+4. Let the Tool Update your Project
+
 When you run the prompt, the tool will update your project for deployment on Shuttle. This includes updating `Cargo.toml` to add the required dependencies:
 
-```text
+```toml
 shuttle-axum = "0.56.0"
 shuttle-runtime = "0.56.0"
 ```
 
 It will also update the `main` function to use the Shuttle runtime:
 
-```text
-
+```rust
 #[shuttle_runtime::main]
 async fn main() -> shuttle_axum::ShuttleAxum {
     let app_state = AppState::new();
@@ -450,18 +494,19 @@ async fn main() -> shuttle_axum::ShuttleAxum {
 }
 ```
 
-1. View your Deployment
+5. View your Deployment
+
 Finally, open your [Shuttle console](https://console.shuttle.dev/) to grab your API URL and other deployment artifacts.
 
 ### Beyond Deployment with Shuttle
 
 Shuttle goes further than just deployment. It provides tools and resources that make day-to-day development smoother and more productive:
 
-- Ready-to-deploy resources like databases and built-in secrets for managing environment variables.
-- Low-effort prototyping and framework support, so you can spin up projects quickly with Axum, Actix, Rocket, and more.
-- Community-driven development and support, with an active open-source community, Discord, and programs to support your workflow.&nbsp;
-- Fast redeploys and local iteration, making it easy to test changes without waiting on long build times.
-- Infrastructure as Code (IaC) powered by Rust macros, which means your infrastructure lives directly inside your Rust code instead of separate config files.
+- **Ready-to-deploy resources** like databases and built-in secrets for managing environment variables.
+- **Low-effort prototyping and framework support**, so you can spin up projects quickly with Axum, Actix, Rocket, and more.
+- **Community-driven development and support**, with an active open-source community, Discord, and programs to support your workflow.&nbsp;
+- **Fast redeploys and local iteration**, making it easy to test changes without waiting on long build times.
+- **Infrastructure as Code (IaC)** powered by Rust macros, which means your infrastructure lives directly inside your Rust code instead of separate config files.
 
 ## Wrapping Up
 
