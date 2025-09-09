@@ -319,10 +319,12 @@ Cursor then updated the `main.rs` file with the API models, handlers, and expose
 - Multi-file editing kept models, routes, and main in sync.
 - Inline fixes suggested after compiler errors.
 - Excellent for scaffolding large chunks of code fast.
+
 **What didn't:**
 
 - Sometimes hallucinated crate versions.
 - Needed a re-prompt to get the right crates and correct some logic.
+
 **Verdict:** Great for **rapid prototyping and multi-file Rust projects**, especially for developers comfortable with VS Code-style workflows.
 
 ### **Building with Windsurf**
@@ -334,10 +336,12 @@ We created a `rust-tasks-windsurf` folder in Windsurf and used the same prompt. 
 - Architecture-aware suggestions (modularized better than Cursor).
 - Helpful explanations for async/await and error handling.
 - Strong static analysis integration caught subtle mistakes.
+
 **What didn't:**
 
 - Generation was slower (20-30s per major step).
 - Occasionally over-engineered (extra traits not needed for in-memory scope).
+
 **Verdict:** Great for **planning long-lived Rust projects** where architecture matters.
 
 ### **Building with VS Code + GitHub Copilot**
@@ -355,10 +359,12 @@ Copilot helped fill in dependencies, models, and handler boilerplate as we typed
 - Excellent line-by-line and function-level completions.
 - Copilot Chat explained compiler errors clearly.
 - Fastest at suggesting snippets.
+
 **What didn't:**
 
 - Weak at cross-file consistency (needed manual edits to sync model types).
 - Less effective at scaffolding entire APIs in one shot.
+
 **Verdict:** Great for **incremental coding and filling gaps** rather than full project generation.
 
 ### **Building with Claude Code**
@@ -372,6 +378,7 @@ In Claude, we entered the same prompt in the terminal. Claude generated a projec
 - Strong at explaining lifetimes and error messages.
 
 **What didn't:**
+
 - Slower to reach a runnable version (lots of intermediate narration).
 - Sometimes verbose in generated comments, cluttering code.
 
@@ -386,10 +393,12 @@ For this, we initialized Git and prompted Aider. It scaffolded a Cargo project, 
 - Excellent Git integration (perfect history for each change).
 - Multi-file updates stayed consistent.
 - Easy rollback when things went wrong.
+
 **What didn't:**
 
 - Required more prompt iteration than Cursor/Windsurf.
 - Less context than IDE-native tools (sometimes needed manual cargo fixes).
+
 **Verdict:** Great for **collaborative, Git-driven workflows** in Rust.
 
 If you're weighing up any of the AI coding tools against each other, here's a quick reference to help decide which fits best in different contexts:
