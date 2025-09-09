@@ -566,7 +566,6 @@ body.dark {
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  @media (min-width: 768px) {
   /* @media (min-width: 768px) {
     margin: 0 -16px 40px;
     padding: 0 16px;
@@ -606,11 +605,8 @@ body.dark {
     aspect-ratio: 2.5;
     height: 986px;
     transform: translate(-50%, -50%);
-    background-image: linear-gradient(
-        to top,
-        rgba(0, 0, 0, 0) 100%,
-        rgba(0, 0, 0, 1) 100%
-      ),
+    background-image:
+      linear-gradient(to top, rgba(0, 0, 0, 0) 100%, rgba(0, 0, 0, 1) 100%),
       linear-gradient(to bottom, rgba(0, 0, 0, 0) 80%, rgba(0, 0, 0, 1) 100%),
       url("/images/pages/pricing/custom-bg.jpg");
     background-size: auto 130%;
@@ -652,11 +648,8 @@ body.dark {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 1) 0%,
-        rgba(0, 0, 0, 0) 15%
-      ),
+    background-image:
+      linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 15%),
       linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 15%),
       url("/images/pages/careers/sections/bg-img.jpg");
     background-position: center center;
