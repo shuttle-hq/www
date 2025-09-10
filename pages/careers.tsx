@@ -16,6 +16,16 @@ export default function CareersPage() {
       <NextSeo
         title="Careers | Shuttle"
         description="Join us shaping the future of cloud development"
+        openGraph={{
+          images: [
+            {
+              url: "https://www.shuttle.dev/images/careers-og-image.png",
+              width: 2400,
+              height: 1347,
+              alt: "Shuttle Careers: Join us in shaping the future of cloud development",
+            },
+          ],
+        }}
       />
       <div className="flex-grow overflow-x-clip">
         <Hero />
