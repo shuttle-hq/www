@@ -10,7 +10,7 @@ export default function DecentLand() {
     <>
       <NextSeo
         title="Customers | Decent Land"
-        description="How TriAcc accelerated from concept to production in days, not weeks"
+        description="How Decent Land eliminated infrastructure complexity for Web3 development"
         openGraph={{
           images: [
             {
