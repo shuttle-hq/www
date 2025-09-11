@@ -8,7 +8,7 @@ export default function DecentLand() {
   return (
     <main className="flex flex-col mx-auto mt-24 gap-16 w-full max-w-[1280px] px-5 sm:px-10 lg:mt-28 items-center">
       <div className="inline-flex flex-col justify-start items-center gap-10">
-        <div className="w-[782px] flex flex-col justify-start items-start gap-10">
+        <div className="w-full max-w-[782px] flex flex-col justify-start items-start gap-10">
           <div className="self-stretch flex flex-col justify-start items-start gap-6">
             <Image
               src="/images/user-stories/weavevm.png"
@@ -40,7 +40,7 @@ export default function DecentLand() {
           </div>
         </UserQuote>
 
-        <div className="w-[782px] flex flex-col justify-start items-start gap-10">
+        <div className="w-full max-w-[782px] flex flex-col justify-start items-start gap-10">
           <div className="self-stretch justify-start">
             <span className="text-text-secondary text-xl font-normal">
               Decent Land
@@ -100,7 +100,7 @@ export default function DecentLand() {
           </ul>
         </div>
 
-        <div className="w-[782px] flex flex-col justify-start items-start gap-10">
+        <div className="w-full max-w-[782px] flex flex-col justify-start items-start gap-10">
           <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
             The Challenge: Infrastructure Overhead Distracting from Core Mission
           </h2>
@@ -144,7 +144,7 @@ export default function DecentLand() {
             significant barrier to their development velocity.
           </p>
         </div>
-        <div className="w-[782px] flex flex-col justify-start items-start gap-10">
+        <div className="w-full max-w-[782px] flex flex-col justify-start items-start gap-10">
           <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
             Choosing Shuttle for Rust-Native Off-Chain Infrastructure
           </h2>
@@ -192,7 +192,7 @@ export default function DecentLand() {
             experienced with other platforms.
           </p>
         </div>
-        <div className="w-[782px] flex flex-col justify-start items-start gap-10">
+        <div className="w-full max-w-[782px] flex flex-col justify-start items-start gap-10">
           <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
             Achieving Streamlined Development and Deployment
           </h2>
@@ -352,7 +352,7 @@ export default function DecentLand() {
           </div>
         </UserQuote>
 
-        <div className="w-[782px] flex flex-col justify-start items-start gap-10">
+        <div className="w-full max-w-[782px] flex flex-col justify-start items-start gap-10">
           <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
             Technical Implementation
           </h2>
@@ -372,7 +372,7 @@ export default function DecentLand() {
             their supporting services.
           </p>
         </div>
-        <div className="w-[782px] flex flex-col justify-start items-start gap-10">
+        <div className="w-full max-w-[782px] flex flex-col justify-start items-start gap-10">
           <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
             Get Started with Shuttle
           </h2>
