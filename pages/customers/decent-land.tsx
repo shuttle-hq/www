@@ -16,7 +16,7 @@ export default function DecentLand() {
               width={140}
               height={30}
             />
-            <h2 className="self-stretch justify-start text-neutral-200 text-5xl font-bold font-gradual leading-[57.60px]">
+            <h2 className="self-stretch justify-start text-neutral-200 text-3xl md:text-5xl font-bold font-gradual leading-tight md:leading-[57.60px]">
               How Decent Land eliminated infrastructure complexity for Web3
               development
             </h2>
@@ -101,7 +101,7 @@ export default function DecentLand() {
         </div>
 
         <div className="w-full max-w-[782px] flex flex-col justify-start items-start gap-10">
-          <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
+          <h2 className="self-stretch justify-start text-neutral-200 text-3xl md:text-5xl font-bold font-gradual leading-tight md:leading-[57.60px]">
             The Challenge: Infrastructure Overhead Distracting from Core Mission
           </h2>
           <p className="self-stretch justify-start text-text-secondary text-xl font-normal">
@@ -145,7 +145,7 @@ export default function DecentLand() {
           </p>
         </div>
         <div className="w-full max-w-[782px] flex flex-col justify-start items-start gap-10">
-          <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
+          <h2 className="self-stretch justify-start text-neutral-200 text-3xl md:text-5xl font-bold font-gradual leading-tight md:leading-[57.60px]">
             Choosing Shuttle for Rust-Native Off-Chain Infrastructure
           </h2>
           <p className="self-stretch justify-start text-text-secondary text-xl font-normal">
@@ -193,7 +193,7 @@ export default function DecentLand() {
           </p>
         </div>
         <div className="w-full max-w-[782px] flex flex-col justify-start items-start gap-10">
-          <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
+          <h2 className="self-stretch justify-start text-neutral-200 text-3xl md:text-5xl font-bold font-gradual leading-tight md:leading-[57.60px]">
             Achieving Streamlined Development and Deployment
           </h2>
           <div className="self-stretch flex flex-col justify-start items-start gap-8">
@@ -353,7 +353,7 @@ export default function DecentLand() {
         </UserQuote>
 
         <div className="w-full max-w-[782px] flex flex-col justify-start items-start gap-10">
-          <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
+          <h2 className="self-stretch justify-start text-neutral-200 text-3xl md:text-5xl font-bold font-gradual leading-tight md:leading-[57.60px]">
             Technical Implementation
           </h2>
           <p className="self-stretch justify-start text-zinc-400 text-xl font-normal">
@@ -373,7 +373,7 @@ export default function DecentLand() {
           </p>
         </div>
         <div className="w-full max-w-[782px] flex flex-col justify-start items-start gap-10">
-          <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
+          <h2 className="self-stretch justify-start text-neutral-200 text-3xl md:text-5xl font-bold font-gradual leading-tight md:leading-[57.60px]">
             Get Started with Shuttle
           </h2>
           <p className="self-stretch justify-start text-zinc-400 text-xl font-normal">
