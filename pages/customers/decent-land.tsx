@@ -143,14 +143,6 @@ export default function DecentLand() {
             on-chain protocols. This infrastructure complexity was becoming a
             significant barrier to their development velocity.
           </p>
-          <div className="self-stretch p-8 inline-flex justify-center items-center gap-2.5">
-            <div className="flex-1 text-center justify-start text-neutral-200 text-2xl font-normal">
-              &quot;We were spending precious dev time on infrastructure instead
-              of building features that actually mattered,&quot; the team
-              shared. &quot;Then we found Shuttle, and it won on every single
-              DevOps point.&quot;
-            </div>
-          </div>
         </div>
         <div className="w-[782px] flex flex-col justify-start items-start gap-10">
           <h2 className="self-stretch justify-start text-neutral-200 text-[40px] font-bold font-gradual leading-[48px]">
