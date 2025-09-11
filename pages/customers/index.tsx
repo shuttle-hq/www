@@ -25,6 +25,14 @@ const userStories = [
                   Vercel for backend"`,
     quoteAuthor: "Phillip Marks, CRO & CTO, Unwritten",
   },
+  {
+    key: "decent-land",
+    logo: "/images/user-stories/weavevm.png",
+    logoWidth: 140,
+    logoHeight: 30,
+    link: "/customers/decent-land",
+    title: `"How Decent Land eliminated infrastructure complexity for Web3 development"`,
+  },
 ];
 
 export default function UserStories() {
@@ -46,11 +54,11 @@ export default function UserStories() {
           </p>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-6 justify-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 justify-center">
           {userStories.map((story) => (
             <div
               key={story.key}
-              className={`flex flex-col w-full md:w-[50%] items-start border border-solid border-white border-opacity-30 rounded-[32px] overflow-hidden ${styles["user-story-card"]}`}
+              className={`flex flex-col w-full items-start border border-solid border-white border-opacity-30 rounded-[32px] overflow-hidden ${styles["user-story-card"]}`}
             >
               <div className="flex flex-1 flex-col p-6 md:p-10 gap-4 bg-[#0F0F0F]">
                 <Image
