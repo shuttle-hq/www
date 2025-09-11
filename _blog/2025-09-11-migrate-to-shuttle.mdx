@@ -41,13 +41,13 @@ shuttle login
 
 This command will redirect you to the Shuttle console in your browser. Click "Authorize" to login.
 
-![Shuttle Authorize Page](/videos/how-to-use-cursor-shuttle/authorize.png)
+![Shuttle Authorize Page](/images/blog/migrate-to-shuttle/authorize.png)
 
 ## Installing the Shuttle MCP Server in Cursor
 
 Installing the Shuttle MCP Server is quite easy to do, you can add it just by clicking the "Add to Cursor" button in the the [Shuttle documentation page](https://docs.shuttle.dev/integrations/mcp-server), it will automatically configure the MCP server in your Cursor settings.
 
-![Add to Cursor](/videos/how-to-use-cursor-shuttle/add-to-cursor.png)
+![Add to Cursor](/images/blog/migrate-to-shuttle/add-to-cursor.png)
 
 If not using Cursor no problem, you can manually update your `mcp.json` file to add it to your MCP client. Example:
 
@@ -62,7 +62,7 @@ If not using Cursor no problem, you can manually update your `mcp.json` file to 
 }
 ```
 
-![Verify Installation](/videos/how-to-use-cursor-shuttle/verify-shuttle-mcp-working.png)
+![Verify Installation](/images/blog/migrate-to-shuttle/verify-shuttle-mcp-working.png)
 
 The green status indicates that the MCP server is working and all tools ready for your AI agent to use.
 
@@ -129,7 +129,7 @@ After completing the migration, inform about these remaining manual steps:
 
 Paste the prompt to your AI agent and let it do the work for you.
 
-![Shuttle search tool call](/videos/how-to-use-cursor-shuttle/shuttle-search-tool-call.png)
+![Shuttle search tool call](/images/blog/migrate-to-shuttle/shuttle-search-tool-call.png)
 
 As you can see, the AI agent is using the Shuttle MCP server to search the documentation and get the latest information about the Shuttle platform.
 
@@ -180,19 +180,19 @@ Once your project is migrated, the AI agent will attempt to create and deploy a 
 Deploy the project to Shuttle
 ```
 
-![Shuttle deploy](/videos/how-to-use-cursor-shuttle/deploy-shuttle.png)
+![Shuttle deploy](/images/blog/migrate-to-shuttle/deploy-shuttle.png)
 
 Cursor will call the `deploy` tool to deploy the project to Shuttle and Shuttle will start building your project.
 
-![Shuttle building](/videos/how-to-use-cursor-shuttle/deployments.png)
+![Shuttle building](/images/blog/migrate-to-shuttle/deployments.png)
 
 After building is done, you can see the project URL in your Shuttle console and visit the website.
 
-![Shuttle console](/videos/how-to-use-cursor-shuttle/shuttle-console-url.png)
+![Shuttle console](/images/blog/migrate-to-shuttle/shuttle-console-url.png)
 
 Opening the project URL in the browser, you can see the website is working.
 
-![Todo app hosted working](/videos/how-to-use-cursor-shuttle/todo-app-hosted-working.png)
+![Todo app hosted working](/images/blog/migrate-to-shuttle/todo-app-hosted-working.png)
 
 Perfect! 🎉 We've successfully migrated our Axum todo application to Shuttle and deployed it to production.
 
