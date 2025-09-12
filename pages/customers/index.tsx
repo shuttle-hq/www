@@ -20,10 +20,7 @@ const userStories = [
     logoWidth: 160,
     logoHeight: 25,
     link: "/customers/unwritten",
-    title: `"What took days to weeks to set up with traditional
-                  infrastructure now takes minutes with Shuttle. It's like
-                  Vercel for backend"`,
-    quoteAuthor: "Phillip Marks, CRO & CTO, Unwritten",
+    title: `How Unwritten powers large-scale data processing with zero infrastructure overhead`,
   },
   {
     key: "decent-land",
@@ -31,7 +28,7 @@ const userStories = [
     logoWidth: 260,
     logoHeight: 30,
     link: "/customers/decent-land",
-    title: `"How Decent Land eliminated infrastructure complexity for Web3 development"`,
+    title: `How Decent Land eliminated infrastructure complexity for Web3 development`,
   },
 ];
 
