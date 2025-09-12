@@ -25,6 +25,13 @@ const nextConfig = {
         source: "/ingest/decide",
         destination: "https://eu.i.posthog.com/decide",
       },
+      {
+        source: "/:path*",
+        has: [
+          { type: "header", "key": "Host", "value": "docs.cobra.shuttle.dev" },
+        ],
+        destination: "https://shuttle-1.gitbook.io/shuttle-cobra/:path*"
+      },
     ];
   },
   skipTrailingSlashRedirect: true,
