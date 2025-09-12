@@ -329,7 +329,6 @@ export default function BlogPostPage(props: Props) {
             {props.blog.contentTOC.json.length > 0 ? (
               <TableOfContents toc={props.blog.contentTOC.json} />
             ) : null} */}
-
             {props.blog.content && (
               <article
                 className={clsx(
@@ -415,7 +414,10 @@ export default function BlogPostPage(props: Props) {
                 <MastodonLogo />
               </a>
             </div>
+
             <BlogPrevNext prevPost={props.prevPost} nextPost={props.nextPost} />
+
+            <CallToActionNewsletter bg={true} />
           </div>
           {/* Sidebar */}
           <BlogSidebar
