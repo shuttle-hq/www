@@ -69,12 +69,6 @@ export default function UserStories() {
                   <h2 className="text-xl md:text-2xl font-bold text-zinc-300 font-gradual">
                     {story.title}
                   </h2>
-                  <div className="flex flex-col gap-2">
-                    {/* <p className="text-base text-zinc-300">{story.quoteText}</p> */}
-                    <p className="text-base text-zinc-400">
-                      {story.quoteAuthor}
-                    </p>
-                  </div>
                 </Link>
               </div>
               <Link
