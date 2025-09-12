@@ -39,6 +39,7 @@ With IDE-based tools, you can expect:
 - Context-Based Suggestions: Get completions and refactoring ideas based on the IDE's deep understanding of your codebase.
 - Deep Integration: Leverage the IDE's ecosystem, including project navigation, file management, and version control, all enhanced by AI.
 - Higher Resource Usage: Keep in mind that graphical interfaces and IDE overhead usually demand more system resources.
+
 Some of the most popular IDE-based AI coding tools are:
   - Cursor
   - Windsurf (formerly Codeium)
@@ -133,7 +134,9 @@ With terminal-based tools, you can expect:
 - Direct LLM Access: Connect directly to large language models (LLMs) like Claude, GPT, or Gemini, with support for multiple providers.
 - Git Integration: Streamline version control workflows by automatically committing changes to Git.
 - Automation-Focused: Excel at automating repetitive tasks, running tests, and executing commands without leaving the terminal.
-- Steeper Learning Curve: Requires comfort with command-line workflows and provides less visual feedback compared to IDE-based tools. Popular terminal-based AI coding tools include:
+- Steeper Learning Curve: Requires comfort with command-line workflows and provides less visual feedback compared to IDE-based tools.
+
+Popular terminal-based AI coding tools include:
   - Claude Code
   - Aider
   - Gemini CLI
@@ -233,6 +236,7 @@ While the visuals make it ideal for building and debugging large-scale projects,
 
 - Reliance on a GUI makes them less ideal for headless or remote Rust environments, such as servers.
 - Higher resource consumption, which can slow things down on lower-spec machines during Rust compilations.
+
 In contrast to IDE-based tools, **terminal-based tools** such as Claude Code and Aider lean on command-line interactions and external commands like `cargo check` or `cargo build` for validation. Instead of inline suggestions, they generate suggestions on-demand through prompts, which takes an agentic approach of planning and applying multi-file changes or automations in one go. This makes them powerful for strategic code generation or bulk edits, though you'll likely need more manual builds to catch errors. They're lightweight and well-suited for server-side or low-resource development environments, but can feel less intuitive when dealing with Rust's more intricate ownership and lifetime rules without visual aids.
 
 #### Pros and Cons of Terminal-Based AI Tools in Rust Projects
@@ -422,6 +426,7 @@ Next, build **testing discipline** into your workflow. AI is excellent at TDD, b
 - Run unit tests after every code step.
 - Run end-to-end tests after major milestones.
 - Avoid mocks and stubs unless absolutely necessary.
+
 These practices help reduce **subtle errors** that AI tools can introduce. Keep in mind that IDE-based tools such as **Cursor, Copilot, and Windsurf** sometimes ignore context-loaded rule files. CLI-based tools combined with dotfiles tend to respect them more consistently. That is why CLI workflows can be especially valuable for large or complex Rust projects.
 
 **Security and permissions** are another important consideration. CLI tools usually give you fine-grained control. You can grant permissions per command, or opt in to full access with flags like `--dangerously-skip-permissions` in Claude CLI. IDEs, by contrast, often require broader access and provide fewer safeguards.
