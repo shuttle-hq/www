@@ -106,33 +106,33 @@ export default function DecentLand() {
                 className={`self-stretch p-6 md:p-10 flex flex-col justify-start items-start gap-2 rounded-[20px] ${userStoriesStyles["bg-tile-1"]}`}
               >
                 <div className="justify-start text-neutral-200 text-lg md:text-2xl font-normal">
-                  30-minute migration
+                  30-minute Migration
                 </div>
                 <div className="justify-start text-text-secondary text-base font-normal leading-normal">
-                  Moved from Heroku to Shuttle with minimal deployment
-                  complexity
+                  Migration from Heroku to Shuttle with minimal complexity in
+                  only <strong>30 minutes</strong>
                 </div>
               </li>
               <li
                 className={`self-stretch p-6 md:p-10 flex flex-col justify-start items-start gap-2 rounded-[20px] ${userStoriesStyles["bg-tile-2"]}`}
               >
                 <div className="justify-start text-neutral-200 text-lg md:text-2xl font-normal">
-                  100k daily transactions
+                  Zero Infrastructure Management
                 </div>
                 <div className="justify-start text-text-secondary text-base font-normal leading-normal">
-                  Processing high-throughput data availability for blockchain
-                  networks
+                  No SSL certificates, secret management, database provisioning,
+                  or infra costs
                 </div>
               </li>
               <li
                 className={`self-stretch p-6 md:p-10 flex flex-col justify-start items-start gap-2 rounded-[20px] ${userStoriesStyles["bg-tile-3"]}`}
               >
                 <div className="justify-start text-neutral-200 text-lg md:text-2xl font-normal">
-                  $1.5B total value secured
+                  Focus Shifted to Core Mission
                 </div>
                 <div className="flex-1 justify-start text-text-secondary text-base font-normal leading-normal">
-                  Providing infrastructure across networks like Metis, Humanode,
-                  Avalanche, and Dymension
+                  Development team can focus on building features that actually
+                  matter
                 </div>
               </li>
             </ul>
