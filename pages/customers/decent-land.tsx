@@ -14,7 +14,7 @@ export default function DecentLand() {
         openGraph={{
           images: [
             {
-              url: "https://www.shuttle.dev/images/user-stories/weavevm-og-image.png",
+              url: "https://www.shuttle.dev/images/user-stories/decent-land-og-image.png",
               width: 2400,
               height: 1350,
               alt: "How Decent Land eliminated infrastructure complexity for Web3 development",
@@ -28,7 +28,7 @@ export default function DecentLand() {
             <div className="self-stretch flex flex-col justify-start items-start gap-6">
               <Image
                 src="/images/user-stories/decent-land.png"
-                alt="WeaveVM logo"
+                alt="Decent Land logo"
                 width={260}
                 height={30}
               />
@@ -59,21 +59,41 @@ export default function DecentLand() {
           <div className="w-full max-w-[782px] flex flex-col justify-start items-start gap-10">
             <div className="self-stretch justify-start">
               <span className="text-text-secondary text-xl font-normal">
-                Decent Land
-              </span>
-              <span className="text-text-secondary text-xl font-normal">
+                <Link
+                  href="https://www.decent.land/"
+                  target="_blank"
+                  className="text-text-secondary text-xl font-normal underline hover:no-underline"
+                >
+                  Decent Land
+                </Link>
                 &apos;s flagship product{" "}
-              </span>
-              <span className="text-text-secondary text-xl font-normal">
-                WeaveVM
-              </span>
-              <span className="text-text-secondary text-xl font-normal">
-                {" "}
+                <Link
+                  href="https://www.wvm.dev/"
+                  target="_blank"
+                  className="text-text-secondary text-xl font-normal underline hover:no-underline"
+                >
+                  WeaveVM
+                </Link>{" "}
                 provides permanent data storage and high-throughput data
                 availability for blockchain networks, settling 100k daily
                 transactions and securing over $1.5B in total value across
-                networks like Metis, Humanode, Avalanche, and Dymension. As a
-                Web3 infrastructure company, Decent Land needed reliable
+                networks like{" "}
+                <span className="text-text-secondary text-xl font-bold">
+                  Metis
+                </span>
+                ,{" "}
+                <span className="text-text-secondary text-xl font-bold">
+                  Humanode
+                </span>
+                ,{" "}
+                <span className="text-text-secondary text-xl font-bold">
+                  Avalanche
+                </span>
+                , and{" "}
+                <span className="text-text-secondary text-xl font-bold">
+                  Dymension
+                </span>
+                . As a Web3 infrastructure company, Decent Land needed reliable
                 off-chain auxiliary services to support their on-chain protocol
                 - and that&apos;s where Shuttle comes in.
               </span>
@@ -100,8 +120,8 @@ export default function DecentLand() {
                   100k daily transactions
                 </div>
                 <div className="justify-start text-text-secondary text-base font-normal leading-normal">
-                  Moved from Heroku to Shuttle with minimal deployment
-                  complexity
+                  Processing high-throughput data availability for blockchain
+                  networks
                 </div>
               </li>
               <li
@@ -125,16 +145,31 @@ export default function DecentLand() {
             </h2>
             <p className="self-stretch justify-start text-text-secondary text-xl font-normal">
               While WeaveVM (their on-chain product) was performing well, Decent
-              Land needed supporting off-chain infrastructure - indexers, APIs,
-              ETL pipelines, and data availability layers. They started with
-              Heroku for deploying these auxiliary services, but over time this
-              grew into more of a headache than they asked for. The team was
-              facing several critical problems:
+              Land needed supporting off-chain infrastructure -{" "}
+              <span className="text-text-secondary text-xl font-bold">
+                indexers
+              </span>
+              ,{" "}
+              <span className="text-text-secondary text-xl font-bold">
+                APIs
+              </span>
+              ,{" "}
+              <span className="text-text-secondary text-xl font-bold">
+                ETL pipelines
+              </span>
+              , and{" "}
+              <span className="text-text-secondary text-xl font-bold">
+                data availability layers
+              </span>
+              . They started with Heroku for deploying these auxiliary services,
+              but as their needs scaled, the platform became a significant
+              bottleneck to their growth. The team was facing several critical
+              problems:
             </p>
             <div className="self-stretch flex flex-col justify-start items-start">
               <div className="self-stretch inline-flex flex-col justify-start items-start">
                 {[
-                  "Unnecessarily complex deployment flows that slowed development velocity",
+                  "Constant friction in the deployment process, killing development momentum",
                   "Dependency mismatches causing version conflicts and compatibility issues",
                   "SSL certificate management that absorbed valuable development time",
                   "Infrastructure complexity that distracted from building features that actually mattered",
@@ -225,7 +260,7 @@ export default function DecentLand() {
               <div className="self-stretch inline-flex flex-col justify-start items-start">
                 {[
                   {
-                    title: "Development velocity",
+                    title: "Development Velocity",
                     description: `The backend team now ships off-chain Rust microservices —
                       APIs, ETL pipelines, cron jobs — without breaking a sweat.
                       Their supporting services scale seamlessly alongside their
@@ -259,7 +294,7 @@ export default function DecentLand() {
                     ),
                   },
                   {
-                    title: "Rapid experimentation",
+                    title: "Rapid Experimentation",
                     description: `The team can quickly spin up new off-chain services across
                       dev, staging, and production environments, enabling faster
                       iteration and testing of their Web3 infrastructure.`,
