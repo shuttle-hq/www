@@ -26,7 +26,7 @@ const nextConfig = {
         destination: "https://eu.i.posthog.com/decide",
       },
       {
-        source: "/:path*",
+        source: ":path*",
         has: [
           { type: "host", "value": "docs.cobra.shuttle.dev" },
         ],
