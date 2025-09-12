@@ -27,9 +27,9 @@ export default function DecentLand() {
           <div className="w-full max-w-[782px] flex flex-col justify-start items-start gap-10">
             <div className="self-stretch flex flex-col justify-start items-start gap-6">
               <Image
-                src="/images/user-stories/weavevm.png"
+                src="/images/user-stories/decent-land.png"
                 alt="WeaveVM logo"
-                width={140}
+                width={260}
                 height={30}
               />
               <h2 className="self-stretch justify-start text-neutral-200 text-3xl md:text-5xl font-bold font-gradual leading-tight md:leading-[57.60px]">

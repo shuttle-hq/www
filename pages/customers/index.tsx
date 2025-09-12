@@ -27,8 +27,8 @@ const userStories = [
   },
   {
     key: "decent-land",
-    logo: "/images/user-stories/weavevm.png",
-    logoWidth: 140,
+    logo: "/images/user-stories/decent-land.png",
+    logoWidth: 260,
     logoHeight: 30,
     link: "/customers/decent-land",
     title: `"How Decent Land eliminated infrastructure complexity for Web3 development"`,
