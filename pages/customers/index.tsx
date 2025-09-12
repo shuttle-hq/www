@@ -20,10 +20,15 @@ const userStories = [
     logoWidth: 160,
     logoHeight: 25,
     link: "/customers/unwritten",
-    title: `"What took days to weeks to set up with traditional
-                  infrastructure now takes minutes with Shuttle. It's like
-                  Vercel for backend"`,
-    quoteAuthor: "Phillip Marks, CRO & CTO, Unwritten",
+    title: `How Unwritten powers large-scale data processing with zero infrastructure overhead`,
+  },
+  {
+    key: "decent-land",
+    logo: "/images/user-stories/decent-land.png",
+    logoWidth: 260,
+    logoHeight: 30,
+    link: "/customers/decent-land",
+    title: `How Decent Land eliminated infrastructure complexity for Web3 development`,
   },
 ];
 
@@ -46,11 +51,11 @@ export default function UserStories() {
           </p>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-6 justify-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 justify-center">
           {userStories.map((story) => (
             <div
               key={story.key}
-              className={`flex flex-col w-full md:w-[50%] items-start border border-solid border-white border-opacity-30 rounded-[32px] overflow-hidden ${styles["user-story-card"]}`}
+              className={`flex flex-col w-full items-start border border-solid border-white border-opacity-30 rounded-[32px] overflow-hidden ${styles["user-story-card"]}`}
             >
               <div className="flex flex-1 flex-col p-6 md:p-10 gap-4 bg-[#0F0F0F]">
                 <Image
@@ -64,12 +69,6 @@ export default function UserStories() {
                   <h2 className="text-xl md:text-2xl font-bold text-zinc-300 font-gradual">
                     {story.title}
                   </h2>
-                  <div className="flex flex-col gap-2">
-                    {/* <p className="text-base text-zinc-300">{story.quoteText}</p> */}
-                    <p className="text-base text-zinc-400">
-                      {story.quoteAuthor}
-                    </p>
-                  </div>
                 </Link>
               </div>
               <Link

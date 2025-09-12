@@ -8,24 +8,44 @@ const nextConfig = {
     domains: ["github.com", "cdn.discordapp.com", "endler.dev"],
   },
   async rewrites() {
-    return [
-      {
-        source: "/rss.xml",
-        destination: "/api/rss",
-      },
-      {
-        source: "/ingest/static/:path*",
-        destination: "https://eu-assets.i.posthog.com/static/:path*",
-      },
-      {
-        source: "/ingest/:path*",
-        destination: "https://eu.i.posthog.com/:path*",
-      },
-      {
-        source: "/ingest/decide",
-        destination: "https://eu.i.posthog.com/decide",
-      },
-    ];
+    return {
+      beforeFiles: [
+        // These rewrites are checked after headers/redirects
+        // and before all files including _next/public files which
+        // allows overriding page files
+        {
+          source: "/ingest/static/:path*",
+          destination: "https://eu-assets.i.posthog.com/static/:path*",
+        },
+        {
+          source: "/ingest/:path*",
+          destination: "https://eu.i.posthog.com/:path*",
+        },
+        {
+          source: "/ingest/decide",
+          destination: "https://eu.i.posthog.com/decide",
+        },
+        {
+          source: "/:path*",
+          has: [
+            { type: "host", "value": "docs.cobra.shuttle.dev" },
+          ],
+          destination: "https://shuttle-1.gitbook.io/shuttle-cobra/:path*",
+        },
+      ],
+      afterFiles: [
+        // These rewrites are checked after pages/public files
+        // are checked but before dynamic routes
+        {
+          source: "/rss.xml",
+          destination: "/api/rss",
+        },
+      ],
+      fallback: [
+        // These rewrites are checked after both pages/public files
+        // and dynamic routes are checked
+      ],
+    }
   },
   skipTrailingSlashRedirect: true,
   redirects() {
@@ -64,6 +84,14 @@ const nextConfig = {
         ],
         permanent: true,
         destination: "https://docs.shuttle.dev/:path*",
+      },
+      {
+        source: "/shuttle-cobra/:path*",
+        has: [
+          { type: "host", "value": "docs.cobra.shuttle.dev" },
+        ],
+        permanent: false,
+        destination: "/:path*",
       },
     ];
   },

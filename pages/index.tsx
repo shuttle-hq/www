@@ -24,17 +24,29 @@ export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
   const starters = FeaturedStartersContent;
 
   // Fetch stargazers count from GitHub API
+  let stargazersCount = 6000; // Default fallback
+
   const githubToken = process.env.GITHUB_ACCESS_TOKEN;
-  const githubResponse = await fetch(
-    "https://api.github.com/repos/shuttle-hq/shuttle",
-    {
-      headers: {
-        Authorization: `token ${githubToken}`,
-      },
-    }
-  );
-  const repoData = await githubResponse.json();
-  const stargazersCount = repoData.stargazers_count ?? 6000;
+  await fetch("https://api.github.com/repos/shuttle-hq/shuttle", {
+    headers: githubToken
+      ? {
+          Authorization: `token ${githubToken}`,
+        }
+      : {},
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error("GitHub API request failed");
+    })
+    .then((repoData) => {
+      stargazersCount = repoData.stargazers_count ?? 6600;
+    })
+    .catch((error) => {
+      console.warn("Failed to fetch GitHub stars, using fallback:", error);
+      // Keep default value
+    });
 
   return {
     props: {
