@@ -28,9 +28,9 @@ const nextConfig = {
       {
         source: "/:path*",
         has: [
-          { type: "header", "key": "Host", "value": "docs.cobra.shuttle.dev" },
+          { type: "host", "value": "docs.cobra.shuttle.dev" },
         ],
-        destination: "https://shuttle-1.gitbook.io/shuttle-cobra/:path*"
+        destination: "https://shuttle-1.gitbook.io/shuttle-cobra/:path*",
       },
     ];
   },
@@ -71,6 +71,13 @@ const nextConfig = {
         ],
         permanent: true,
         destination: "https://docs.shuttle.dev/:path*",
+      },
+      {
+        source: "/shuttle-cobra/:path*",
+        has: [
+          { type: "host", "value": "docs.cobra.shuttle.dev" },
+        ],
+        destination: "/:path*",
       },
     ];
   },
