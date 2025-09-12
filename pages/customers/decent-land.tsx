@@ -14,7 +14,7 @@ export default function DecentLand() {
         openGraph={{
           images: [
             {
-              url: "https://www.shuttle.dev/images/user-stories/weavevm-og-image.png",
+              url: "https://www.shuttle.dev/images/user-stories/decent-land-og-image.png",
               width: 2400,
               height: 1350,
               alt: "How Decent Land eliminated infrastructure complexity for Web3 development",
