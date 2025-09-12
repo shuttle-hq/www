@@ -77,6 +77,7 @@ const nextConfig = {
         has: [
           { type: "host", "value": "docs.cobra.shuttle.dev" },
         ],
+        permanent: false,
         destination: "/:path*",
       },
     ];
