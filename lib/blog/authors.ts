@@ -167,9 +167,16 @@ const authors: readonly Author[] = [
   {
     author_id: "demola",
     author: "Demola Malomo",
-    position: "Software Developer & Technical Writer",
+    position: "Software Developer",
     author_url: "https://github.com/Mr-Malomz",
     author_image_url: "/images/authors/demola.jpeg",
+  },
+  {
+    author_id: "adetokunbo",
+    author: "Adetokunbo Ige",
+    position: "Platform Engineer",
+    author_url: "https://github.com/ExitoLab",
+    author_image_url: "/images/authors/adetokunbo.jpeg",
   },
 ];
 
