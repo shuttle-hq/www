@@ -174,7 +174,7 @@ const authors: readonly Author[] = [
   {
     author_id: "adetokunbo",
     author: "Adetokunbo Ige",
-    position: "Platform Engineer",
+    position: "Software Engineer",
     author_url: "https://github.com/ExitoLab",
     author_image_url: "/images/authors/adetokunbo.jpg",
   },
