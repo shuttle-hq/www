@@ -107,9 +107,7 @@ When working with multiple MCP servers, there is always the possibility that the
 To ensure you get the most out of these MCPs while still maintaining top performance in your Rust projects, here are a few best practices to follow:
 
 -   **Monitor and limit resource usage:** Carefully track CPU and memory usage and limit the number of active MCPs to prevent overload.
-    
 -   **Allocate CPU and memory per MCP:** Assign specific resources to each MCP server to ensure no single server dominates system resources.
-    
 
 ### **Security and Authentication Complexity**
 
@@ -118,15 +116,10 @@ As a developer, when I want to use an MCP server, each server requires its own a
 To make multiple MCPs safe for use, you can do the following:
 
 -   **Implement strict isolation** between servers to prevent a compromised MCP from affecting others. This can be achieved by:
-    
     -   Running each MCP on its own container or virtual machine.
-        
     -   Storing secrets or API Keys in a dedicated, secure vault with a separate namespace, so that if one secret is compromised, it does not affect others.
-        
 -   **Perform regular secret rotation**, for example, yearly or quarterly, to minimize the risk of leaked credentials.
-    
 -   **Continuously monitor the environment** for any suspicious activity.
-    
 
 The real challenge arises when developers need to use multiple MCP servers simultaneously, such as Docker and GitHub. Each server has its own authentication, logs, and configuration, which can quickly turn into an overwhelming experience. Without a unifying layer, developers end up spending more time managing connections than actually building.
 
@@ -137,11 +130,8 @@ As a developer, I want a solution that enables me to leverage multiple MCP serve
 Here is how MCP aggregators help: 
 
 -   **Unified logging:** Developers can view a stream of logs from multiple MCP servers, which is more helpful in debugging than viewing logs from a single MCP server.
-    
 -   **Security monitoring and access control:** Aggregators provide fine-grained access control, making it easier to identify which permissions are granted to a specific developer.
-    
 -   **Performance optimization and caching:** Frequently accessed or requested results can be cached at the aggregator level, reducing latency, improving response times for developers, and ultimately saving time.
-    
 
 Rust developers can increase their productivity by integrating AI-assisted workflows into their ecosystem. These aggregators add tremendous value by simplifying integration, reducing overhead, and maintaining a secure and performant development environment, allowing engineers to focus on building code.
 
@@ -154,11 +144,8 @@ You may have generated clean Axum handlers, written comprehensive tests, and eve
 The current deployment workflows for Rust applications require developers to:
 
 -   Set up cloud infrastructure
-    
 -   Set up monitoring and logging
-    
 -   Handle SSL certificates and domain configuration
-    
 
 There should be a workflow that allows developer to deploy their Rust project directly from their IDE.
 
@@ -169,20 +156,15 @@ Unlike other solutions that requires complex scripts or Infrastructure as a Code
 You can ask your AI assistant to:
 
 -   Deploy your Axum API to the live environment
-    
 -   Check the logs of the deployed service
-    
 
 ## **Hands-on Example: Build and Deploy a Snippet Sharing API with Shuttle**
 
 In this hands-on section, we'll build a Rust + Axum API that powers a simple code snippet sharing service (similar to Pastebin) and deploy it with Shuttle MCP. The API will include:
 
 -   Endpoints to create and retrieve snippets
-    
 -   Filtering snippets by programming language
-    
 -   Clean, shareable URLs with 8-character IDs
-    
 
 #### **API Endpoints**
 
@@ -199,15 +181,13 @@ In this hands-on section, we'll build a Rust + Axum API that powers a simple cod
 Firstly, ensure you have the following software running:
 
 1.  **Rust and Cargo:** For local development and testing.
-    
 2.  **Shuttle CLI:** For deployment into a live environment. You can install it via Cargo, or use the installation script by following this link: [Shuttle CLI Installation.](https://docs.shuttle.dev/getting-started/installation)
-    
 
 #### **Step 2: Setting Up Our Project**
 
 Next, we will create our Rust project. Below is an example of the Cargo.toml configuration:
 
-```javascript
+```toml
 [package]
 name = "code-snippet-share"
 version = "0.1.0"
@@ -229,15 +209,15 @@ nanoid = "0.4"
 
 Build the Rust code by running this command below to build the Rust project to confirm that there are no errors:
 
-```javascript
-Cargo build
+```bash
+cargo build
 ```
 
 #### **Step 4: Run the Rust Code Locally**
 
 Run the Rust code by running this command below:
 
-```javascript
+```bash
 cargo shuttle run
 ```
 
@@ -245,7 +225,7 @@ cargo shuttle run
 
 Add a `Shuttle.toml` at your project root to configure your Shuttle app.
 
-```javascript
+```toml
 name = "code-snippet-share"
 ```
 
@@ -253,7 +233,7 @@ name = "code-snippet-share"
 
 Authenticate your Shuttle account:
 
-```javascript
+```bash
 shuttle login
 ```
 
@@ -288,7 +268,6 @@ Shuttle will:
 -   Provision infrastructure
 -   Manage SSL certificate
 -   Deploy your app to a live environment
-    
 
 #### **Step 8: Test Your App Deployed Using Shuttle: Health Endpoint**
 
@@ -354,9 +333,7 @@ Shuttle simplifies deployment, letting you build features, test ideas, and ship 
 Ready to try this out for yourself?
 
 -   [**Sign up for Shuttle**](https://shuttle.dev/) to start building with Shuttle.
-    
 -   [Clone the repository](https://github.com/ExitoLab/code_snippet_sharing_service_shuttle) used in this article to explore how to build with Shuttle.
-    
 -   [Learn more about Shuttle](https://docs.shuttle.dev/getting-started/installation) to get started quickly.
     
 
