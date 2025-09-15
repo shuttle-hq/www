@@ -1,11 +1,11 @@
 ---
-title: "How to Migrate to Shuttle Using Cursor and the Shuttle MCP Server"
-description: "Learn how to migrate your existing Axum application to Shuttle using Cursor and the Shuttle MCP server for seamless deployment."
-author: dcodes 
-tags: [shuttle, cursor, mcp, migration, axum, rust]
-thumb: migrate-to-shuttle/cover.png
-cover: migrate-to-shuttle/cover.png
-date: '2025-09-11'
+title: "A Hands-on Comparison of Best MCP Servers for Rust Developers"
+description: "Compare the best MCP servers for Rust development - from Docker and GitHub to Shuttle MCP. Learn how to deploy Rust applications directly from your IDE."
+author: dcodes
+tags: [shuttle, mcp, rust, docker, github, deployment, axum]
+thumb: mcp-servers-rust/cover.png
+cover: mcp-servers-rust/cover.png
+date: '2025-09-15'
 ---
 
 # A Hands-on Comparison of Best MCP Servers for Rust Developers
@@ -58,7 +58,7 @@ When evaluating an MCP server for Rust development, it is essential to keep a fe
 
 Here is a list of popular MCP servers that are particularly useful for Rust development.
 
-### 1\. Docker MCP Server
+### 1. Docker MCP Server
 
 Docker MCP Server is ideal for Rust developers managing complex dependencies or building applications that require isolated environments. By running a Rust project inside a Docker container, the AI assistant can conveniently perform builds, run tests, and refactor code in a secure and reproducible way. Developers can easily reproduce builds and dependencies consistently without affecting the other parts of the codebase.
 
@@ -66,31 +66,31 @@ Developers can also run commands inside the Docker container, such as **cargo bu
 
 Rust developers can leverage pairing Docker MCP with File system MCP to streamline their day-to-day coding activities and automate a smooth workflow. Docker MCP is best used for integration testing, Continuous Integration workflow, or sandbox experimentation.
 
-### 2\. GitHub MCP Server
+### 2. GitHub MCP Server
 
 Rust developers derive the most benefits from using the GitHub MCP server when their code repository is hosted on GitHub. This MCP server automates workflows such as setting up Continuous Integration (CI) pipelines with GitHub Actions and managing releases. Developers can ask their AI assistant to handle tasks such as bumping crate versions, generating and maintaining changelog files, and other routine repository management tasks.
 
 The GitHub MCP Server is tightly coupled to GitHub, which means that its full capabilities are only available within the GitHub ecosystem. Teams hosting their code on GitLab, Bitbucket, or other platforms may not find the GitHub MCP server as useful. The GitHub MCP Server is best used when paired with Docker MCP to provide a complete workflow from development to deployment.
 
-### 3\. File System MCP Server
+### 3. File System MCP Server
 
 The File System MCP Server provides the AI assistant with direct access to read, write, and modify Rust project files. This allows Rust developers to perform tasks such as refactoring code, automatically fixing errors in the codebase, creating new features, and updating Rust files accordingly.
 
 When using the MCP server, developers should have measures in place to track which files that have been modified by the assistant. Combined with GitHub MCP server, version control can be implemented, making it easier to track the changes introduced by File system MCP. For example, an AI assistant could create a new feature, test it within a Docker container, and then set up a CI workflow using GitHub's MCP; this demonstrates how Docker, GitHub, and File System MCP can all work together.
 
-### 4\. Memory MCP
+### 4. Memory MCP
 
 Memory MCP stores project-specific knowledge across sessions, making it easier for an AI assistant to remember naming conventions, coding standards, and recurring compiler errors. For Rust developers working across different teams or modules, this helps to enforce consistency and maintain project wide standards.
 
 The main limitation is that the MCP is bound to a single context, which may restrict productivity in large projects that demand switching between multiple contexts. However, when paired with File System or Docker MCP, it can guide developers or an AI assistant during editing or refactoring, ensuring modifications align with the project standard.
 
-### 5\. Browsing MCP
+### 5. Browsing MCP
 
 Browsing MCP gives the AI assistant realtime access to external information such as crates documentation, Rust official documentation, or usage examples. This MCP is beneficial when working on a task and needing to look up an example implementation or consult documentation without leaving the development workflow.
 
 The main limitation is that Browsing MCP can not modify the file system directly. When combined with other MCPs, such as File System or Docker MCP, the AI assistant can utilize the information it discovers to apply it to the project by creating code, updating files, or testing changes.
 
-### 6\. Shuttle MCP
+### 6. Shuttle MCP
 
 Shuttle MCP is tailored for deploying Rust applications, such as Axum, Actix, or Rocket. For a development team focused on rapid iteration, this MCP allows developers to deploy the application quickly from code to a live environment. Developers can concentrate on writing code while Shuttle handles server setup, SSL certificate management and deployment.
 
@@ -267,11 +267,15 @@ _Note: The URLs used in the following steps are examples. When you deploy your o
 
 From your project root, run:
 
-```javascript
+```bash
 shuttle deploy
 ```
 
-![Shuttle console](https://s3.eu-west-2.amazonaws.com/hmb-shuttle-kxdg/1757575550980-shuttle.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4IBKNRD4QFSY4YSO%2F20250911%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250911T072551Z&X-Amz-Expires=604800&X-Amz-Signature=d6e7f166b4af7fba2112f7a817c0b3ee35a6492b1d7697c2a1a2acf5100cd1d3&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+<CaptionedImage
+  src="/images/blog/mcp-servers-rust-comparison/shuttle-deploy.png"
+  alt="Shuttle deployment console showing successful deployment with generated URL"
+  caption="Shuttle deployment console showing successful deployment with generated URL"
+/>
 
 After running the command **Shuttle deploy**, your application will be deployed, and a link will be generated. You can access your application with the provided link. 
 
@@ -280,13 +284,9 @@ For instance, in this case, the link is [https://code-snippet-share-ow2x.shuttle
 Shuttle will:
 
 -   Package your code
-    
 -   Compile it in the cloud
-    
 -   Provision infrastructure
-    
 -   Manage SSL certificate
-    
 -   Deploy your app to a live environment
     
 
@@ -298,15 +298,23 @@ Let's test the application we deployed with Shuttle to ensure all the endpoints 
 
 You can use curl from the command line or a tool like Postman. In this example, we will use Postman.
 
-![postman request to test the health endpoint](https://s3.eu-west-2.amazonaws.com/hmb-shuttle-kxdg/1756905479506-postman-shuttle-health.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4IBKNRD4QFSY4YSO%2F20250903%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250903T131800Z&X-Amz-Expires=604800&X-Amz-Signature=05d1ca43d6ba92d8bf89ff6a3b0f7d3f792a1e6b74bc4a2e5124b5c0def6e652&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+<CaptionedImage
+  src="/images/blog/mcp-servers-rust-comparison/postman-test-health-endpoint.png"
+  alt="Postman request testing the health endpoint showing successful response"
+  caption="Testing the health endpoint with Postman - successful response from deployed application"
+/>
 
 #### **Step 9: Test Your App Deployed Using Shuttle: POST Snippet Endpoint**
 
 Send a POST request to [https://code-snippet-share-ow2x.shuttle.app/snippets](https://code-snippet-share-ow2x.shuttle.app/snippets) with a JSON payload to create a new snippet record.
 
-![postman request for send a POST request ](https://s3.eu-west-2.amazonaws.com/hmb-shuttle-kxdg/1756911941650-postman-shuttle-post.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4IBKNRD4QFSY4YSO%2F20250903%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250903T150542Z&X-Amz-Expires=604800&X-Amz-Signature=4e47cb8632084a9b334e718f69224ff2ec9b86ce030db6933e8a15f2eae7117d&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+<CaptionedImage
+  src="/images/blog/mcp-servers-rust-comparison/postman-post-request.png"
+  alt="Postman POST request creating a new code snippet with JSON payload"
+  caption="Creating a new code snippet via POST request - Postman showing successful creation"
+/>
 
-```javascript
+```json
 {
   "content": "A Hands-on Comparison of Best MCP Servers for Rust Developers",
   "language": "Rust",
@@ -321,13 +329,21 @@ Send a POST request to [https://code-snippet-share-ow2x.shuttle.app/snippets](ht
 
 Send a GET request to [https://code-snippet-share-ow2x.shuttle.app](https://code-snippet-share-ow2x.shuttle.app/snippets)[/snippets](http://127.0.0.1:8000/snippets) to retrieve all snippets.
 
-![postman request to retrieve all snippet](https://s3.eu-west-2.amazonaws.com/hmb-shuttle-kxdg/1756905441629-postman-shuttle-single-all.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4IBKNRD4QFSY4YSO%2F20250903%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250903T131722Z&X-Amz-Expires=604800&X-Amz-Signature=0e55c206a10546111dc8d229694721f75b0978f5f028358be5fc54b727972604&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+<CaptionedImage
+  src="/images/blog/mcp-servers-rust-comparison/postman-get-all-snippets.png"
+  alt="Postman GET request retrieving all code snippets from the API"
+  caption="Retrieving all snippets with GET request - showing list of created code snippets"
+/>
 
 #### **Step 11: Test Your App Deployed Using Shuttle: GET a Single Snippet Endpoint**
 
 Send a GET request to [https://code-snippet-share-ow2x.shuttle.app](https://code-snippet-share-ow2x.shuttle.app/snippets/qjs0BzAq)[/snippets/{id}](http://127.0.0.1:8000/snippets/%7Bid%7D) to retrieve a specific snippet by its ID.
 
-![postman request to retrieve a single snippet](https://s3.eu-west-2.amazonaws.com/hmb-shuttle-kxdg/1756905407170-postman-request-single-snippet.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4IBKNRD4QFSY4YSO%2F20250903%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250903T131647Z&X-Amz-Expires=604800&X-Amz-Signature=709bb61b97126ba2fc8da973b74d867670601fd55ee87fda7f323ab8c13acabf&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+<CaptionedImage
+  src="/images/blog/mcp-servers-rust-comparison/postman-get-all-snippets.png"
+  alt="Postman GET request retrieving a specific code snippet by ID"
+  caption="Retrieving a single snippet by ID - Postman showing individual snippet details"
+/>
 
 ## Wrapping Up
 
