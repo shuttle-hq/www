@@ -251,7 +251,7 @@ shuttle deploy
 
 After running the command **Shuttle deploy**, your application will be deployed, and a link will be generated. You can access your application with the provided link. 
 
-For instance, in this case, the link is [https://code-snippet-share-ow2x.shuttle.app](https://code-snippet-share-ow2x.shuttle.app). 
+For instance, in this case, the link is `https://code-snippet-share-ow2x.shuttle.app`. 
 
 Shuttle will:
 
@@ -265,7 +265,7 @@ Shuttle will:
 
 Let's test the application we deployed with Shuttle to ensure all the endpoints are working correctly.
 
-**Health Endpoint:** [https://code-snippet-share-ow2x.shuttle.app/health](https://code-snippet-share-ow2x.shuttle.app/health)
+**Health Endpoint:** `https://code-snippet-share-ow2x.shuttle.app/health`
 
 You can use curl from the command line or a tool like Postman. In this example, we will use Postman.
 
@@ -277,7 +277,7 @@ You can use curl from the command line or a tool like Postman. In this example, 
 
 #### Step 9: Test Your App Deployed Using Shuttle: POST Snippet Endpoint
 
-Send a POST request to [https://code-snippet-share-ow2x.shuttle.app/snippets](https://code-snippet-share-ow2x.shuttle.app/snippets) with a JSON payload to create a new snippet record.
+Send a POST request to `https://code-snippet-share-ow2x.shuttle.app/snippets` with a JSON payload to create a new snippet record.
 
 <CaptionedImage
   src="/images/blog/mcp-servers-rust-comparison/postman-post-request.png"
@@ -298,7 +298,7 @@ Send a POST request to [https://code-snippet-share-ow2x.shuttle.app/snippets](ht
 
 #### Step 10: Test Your App Deployed Using Shuttle: GET APl Snippet Endpoint
 
-Send a GET request to [https://code-snippet-share-ow2x.shuttle.app](https://code-snippet-share-ow2x.shuttle.app/snippets)[/snippets](http://127.0.0.1:8000/snippets) to retrieve all snippets.
+Send a GET request to `https://code-snippet-share-ow2x.shuttle.app/snippets` to retrieve all snippets.
 
 <CaptionedImage
   src="/images/blog/mcp-servers-rust-comparison/postman-get-all-snippets.png"
@@ -308,7 +308,7 @@ Send a GET request to [https://code-snippet-share-ow2x.shuttle.app](https://code
 
 #### Step 11: Test Your App Deployed Using Shuttle: GET a Single Snippet Endpoint
 
-Send a GET request to [https://code-snippet-share-ow2x.shuttle.app](https://code-snippet-share-ow2x.shuttle.app/snippets/qjs0BzAq)[/snippets/\{id\}](http://127.0.0.1:8000/snippets/%7Bid%7D) to retrieve a specific snippet by its ID.
+Send a GET request to `https://code-snippet-share-ow2x.shuttle.app/snippets/{id}` to retrieve a specific snippet by its ID.
 
 <CaptionedImage
   src="/images/blog/mcp-servers-rust-comparison/postman-get-all-snippets.png"
