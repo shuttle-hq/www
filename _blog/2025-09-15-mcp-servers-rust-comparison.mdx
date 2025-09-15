@@ -165,8 +165,8 @@ In this hands-on section, we'll build a Rust + Axum API that powers a simple cod
 | GET | /health | Health check endpoint |
 | POST | /snippets | Create a new code snippet |
 | GET | /snippets | List all snippets |
-| GET | /snippets/{id} | Get a single snippet |
-| DELETE | /snippets/{id} | Delete a snippet |
+| GET | /snippets/\{id\} | Get a single snippet |
+| DELETE | /snippets/\{id\} | Delete a snippet |
 
 #### Step 1: Setting Up Your Environment: Install Rust and Shuttle CLI
 
@@ -308,7 +308,7 @@ Send a GET request to [https://code-snippet-share-ow2x.shuttle.app](https://code
 
 #### Step 11: Test Your App Deployed Using Shuttle: GET a Single Snippet Endpoint
 
-Send a GET request to [https://code-snippet-share-ow2x.shuttle.app](https://code-snippet-share-ow2x.shuttle.app/snippets/qjs0BzAq)[/snippets/{id}](http://127.0.0.1:8000/snippets/%7Bid%7D) to retrieve a specific snippet by its ID.
+Send a GET request to [https://code-snippet-share-ow2x.shuttle.app](https://code-snippet-share-ow2x.shuttle.app/snippets/qjs0BzAq)[/snippets/\{id\}](http://127.0.0.1:8000/snippets/%7Bid%7D) to retrieve a specific snippet by its ID.
 
 <CaptionedImage
   src="/images/blog/mcp-servers-rust-comparison/postman-get-all-snippets.png"
