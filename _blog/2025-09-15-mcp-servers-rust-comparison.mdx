@@ -1,0 +1,347 @@
+---
+title: "How to Migrate to Shuttle Using Cursor and the Shuttle MCP Server"
+description: "Learn how to migrate your existing Axum application to Shuttle using Cursor and the Shuttle MCP server for seamless deployment."
+author: dcodes 
+tags: [shuttle, cursor, mcp, migration, axum, rust]
+thumb: migrate-to-shuttle/cover.png
+cover: migrate-to-shuttle/cover.png
+date: '2025-09-11'
+---
+
+# A Hands-on Comparison of Best MCP Servers for Rust Developers
+
+# **A Hands-on Comparison of Best MCP Servers for Rust Developers**
+
+Model Context Protocol (MCP) servers are enhancing developer productivity by working collectively with AI coding assistants like GitHub Copilot, Cursor, and Claude. With MCP having full access to the Rust project, the AI assistants are no longer limited to the currently open file; they can now follow instructions to execute commands, analyze the entire codebase, run tests, and automate workflows, making development faster.
+
+Most developers don't rely on a single MCP; instead, they use multiple servers, depending on their task. Each MCP comes with its own strengths and limitations.
+
+In this article, we'll walk through the best MCP servers for Rust developers. We will also compare the most popular MCP servers to break down what each server does best, and show you how to deploy your Rust applications directly from your IDE.
+
+Here is a quick overview of the comparison between the best MCP Servers
+
+| MCP Server | Rust Integration | AI Compatibility | Security Setup | Deployment Support | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Docker MCP | Good for developing containerized Rust applications. | AI assistance can issue Docker commands through MCP | Requires elevated privileges for certain operations, which can pose risks if not isolated | Can build, package, and push Rust apps to a Docker Registry | Suitable for those interested in or running Rust applications in Docker containers |
+| GitHub Server MCP | Integrates with Rust code repositories and supports CI/CD workflows (GitHub Actions) | The AI assistant can raise PRs, manage issues, and interact with GitHub workflows | Requires GitHub auth token access with limited or supervised privileges | Works effectively with GitHub Actions workflow | Great for managing repositories and automating workflows |
+| File System MCP Servers | Provide direct access to Rust source code including Cargo.toml | AI assistance has complete visibility of the Rust project | Risky. AI assistant can read and modify project files. Sandbox is recommended | Requires a custom script for deployment | Useful for testing workflows that rely on code modifications |
+| Memory MCP Servers | No direct Rust project support | Helpful in maintaining conversational context across tasks | Low risk since it operates only in memory | None | It is used in combination with other MCPs or systems |
+| Browsing MCP Servers | No direct Rust integration. This is useful for fetching Rust documentation and creating crates.io packages | AI assistant can read and retrieve information from Rust documentation | None | None | Great for referencing external Rust documentation and libraries |
+| Shuttle MCP | Built specifically for Rust. It integrates perfectly into the Rust ecosystem | It works well with AI assistants to manage and deploy Rust applications | It handles secrets and other sensitive details securely on the Shuttle Platform | It can deploy Rust applications directly from a developer's IDE | It is helpful for Rust deployment |
+
+Before we deploy our Rust applications directly from the IDE, let's understand what Model Context Protocol (MCP) is and what makes a good MCP for Rust developers.
+
+### What is the Model Context Protocol (MCP)?
+
+Large Language Models (LLMs) such as GPT, Claude, and Gemini are powerful tools that significantly increase developer productivity. However, they share a fundamental limitation: their knowledge is restricted to the time of their training. For example, an LLM trained in early 2024 will not be aware of new frameworks, events, libraries, or any new information that emerges in 2025 or beyond unless it is updated. MCP was designed to close a critical gap in the AI coding assistant ecosystem. It allows AI assistants to go beyond code generation.
+
+MCP is an open standard that was introduced by Anthropic in November 2024. It enables LLMs to connect to various data sources, tools, and APIs, thereby fetching realtime information or performing tasks that exceed their built-in knowledge.
+
+### **What Makes a Good MCP for Rust Developers?**
+
+When evaluating an MCP server for Rust development, it is essential to keep a few key criteria in mind:
+
+1.  **Rust-Native Workflows:** Does the MCP work smoothly with Cargo and popular frameworks like Axum, Actix-Web, or Rocket? The best servers will integrate effectively with the existing Rust ecosystem.
+    
+2.  **AI Assistant Compatibility:** Can your AI assistant access the MCP server, either through LLMs or a developer IDE? Developers should consider how the MCP will fit into their current workflow. Ideally, the MCP should support both IDE and LLM integrations.
+    
+3.  **Security and Access:** Security is a crucial factor when choosing the right MCP. Developers need to be confident that their secrets are kept safe and that the MCP server avoids unnecessary privilege escalation.
+    
+4.  **Setup Complexity:** A good MCP server should be simple to configure and use. It shouldn't require complex installation steps, whether in an IDE or through an LLM.
+    
+5.  **Deployment Capability:** Can the MCP server assist with end-to-end deployment, beyond just code generation? The best MCPs should be able to generate code, build, test, package, and even deploy Rust applications directly from an IDE.
+    
+    With these criteria in mind, let's look at the six most common MCP servers Rust developers actually use.
+    
+
+## The 6 Most Common MCP Servers for Rust Developers
+
+Here is a list of popular MCP servers that are particularly useful for Rust development.
+
+### 1\. Docker MCP Server
+
+Docker MCP Server is ideal for Rust developers managing complex dependencies or building applications that require isolated environments. By running a Rust project inside a Docker container, the AI assistant can conveniently perform builds, run tests, and refactor code in a secure and reproducible way. Developers can easily reproduce builds and dependencies consistently without affecting the other parts of the codebase.
+
+Developers can also run commands inside the Docker container, such as **cargo build**, with confidence that the results will be identical in both production and non-production environments. This consistency is helpful when resolving dependency-related build problems.
+
+Rust developers can leverage pairing Docker MCP with File system MCP to streamline their day-to-day coding activities and automate a smooth workflow. Docker MCP is best used for integration testing, Continuous Integration workflow, or sandbox experimentation.
+
+### 2\. GitHub MCP Server
+
+Rust developers derive the most benefits from using the GitHub MCP server when their code repository is hosted on GitHub. This MCP server automates workflows such as setting up Continuous Integration (CI) pipelines with GitHub Actions and managing releases. Developers can ask their AI assistant to handle tasks such as bumping crate versions, generating and maintaining changelog files, and other routine repository management tasks.
+
+The GitHub MCP Server is tightly coupled to GitHub, which means that its full capabilities are only available within the GitHub ecosystem. Teams hosting their code on GitLab, Bitbucket, or other platforms may not find the GitHub MCP server as useful. The GitHub MCP Server is best used when paired with Docker MCP to provide a complete workflow from development to deployment.
+
+### 3\. File System MCP Server
+
+The File System MCP Server provides the AI assistant with direct access to read, write, and modify Rust project files. This allows Rust developers to perform tasks such as refactoring code, automatically fixing errors in the codebase, creating new features, and updating Rust files accordingly.
+
+When using the MCP server, developers should have measures in place to track which files that have been modified by the assistant. Combined with GitHub MCP server, version control can be implemented, making it easier to track the changes introduced by File system MCP. For example, an AI assistant could create a new feature, test it within a Docker container, and then set up a CI workflow using GitHub's MCP; this demonstrates how Docker, GitHub, and File System MCP can all work together.
+
+### 4\. Memory MCP
+
+Memory MCP stores project-specific knowledge across sessions, making it easier for an AI assistant to remember naming conventions, coding standards, and recurring compiler errors. For Rust developers working across different teams or modules, this helps to enforce consistency and maintain project wide standards.
+
+The main limitation is that the MCP is bound to a single context, which may restrict productivity in large projects that demand switching between multiple contexts. However, when paired with File System or Docker MCP, it can guide developers or an AI assistant during editing or refactoring, ensuring modifications align with the project standard.
+
+### 5\. Browsing MCP
+
+Browsing MCP gives the AI assistant realtime access to external information such as crates documentation, Rust official documentation, or usage examples. This MCP is beneficial when working on a task and needing to look up an example implementation or consult documentation without leaving the development workflow.
+
+The main limitation is that Browsing MCP can not modify the file system directly. When combined with other MCPs, such as File System or Docker MCP, the AI assistant can utilize the information it discovers to apply it to the project by creating code, updating files, or testing changes.
+
+### 6\. Shuttle MCP
+
+Shuttle MCP is tailored for deploying Rust applications, such as Axum, Actix, or Rocket. For a development team focused on rapid iteration, this MCP allows developers to deploy the application quickly from code to a live environment. Developers can concentrate on writing code while Shuttle handles server setup, SSL certificate management and deployment.
+
+Shuttle focuses on Rust projects and it integrates smoothly with Rust ecosystem. When combined with Docker and File System MCPs, developers can build and test their Rust projects locally. Then deploy to live environment with Shuttle, providing a smooth and end to end workflow
+
+## The Challenges of Managing Multiple MCPs
+
+Using individual MCPs can help accelerate developer productivity, but managing multiple MCPs simultaneously introduces additional complexity. Here are some of the challenges I have encountered while working with various MCPs.
+
+### **Resource Management and Performance**
+
+When working with multiple MCP servers, there is always the possibility that they will compete for system resources such as CPU and memory. In large Rust projects, this competition can negatively impact IDE performance. It becomes a significant bottleneck when projects rely heavily on multiple MCP servers.
+
+To ensure you get the most out of these MCPs while still maintaining top performance in your Rust projects, here are a few best practices to follow:
+
+-   **Monitor and limit resource usage:** Carefully track CPU and memory usage and limit the number of active MCPs to prevent overload.
+    
+-   **Allocate CPU and memory per MCP:** Assign specific resources to each MCP server to ensure no single server dominates system resources.
+    
+
+### **Security and Authentication Complexity**
+
+As a developer, when I want to use an MCP server, each server requires its own authentication and security setup. When multiple MCP servers, such as Docker, GitHub, file system, and browsing MCPs, are running simultaneously, managing all the secrets, API keys, access tokens, and security configurations can become challenging. If one MCP is compromised or becomes vulnerable, it could put the entire MCP setup at risk.
+
+To make multiple MCPs safe for use, you can do the following:
+
+-   **Implement strict isolation** between servers to prevent a compromised MCP from affecting others. This can be achieved by:
+    
+    -   Running each MCP on its own container or virtual machine.
+        
+    -   Storing secrets or API Keys in a dedicated, secure vault with a separate namespace, so that if one secret is compromised, it does not affect others.
+        
+-   **Perform regular secret rotation**, for example, yearly or quarterly, to minimize the risk of leaked credentials.
+    
+-   **Continuously monitor the environment** for any suspicious activity.
+    
+
+The real challenge arises when developers need to use multiple MCP servers simultaneously, such as Docker and GitHub. Each server has its own authentication, logs, and configuration, which can quickly turn into an overwhelming experience. Without a unifying layer, developers end up spending more time managing connections than actually building.
+
+## **How MCP Aggregators and API Gateways Solve These Problems**
+
+As a developer, I want a solution that enables me to leverage multiple MCP servers with my AI assistant, unifying different tools and data sources into a single, seamless workflow. Platforms like [**Lunar.dev**](http://Lunar.dev), along with other MCP aggregators such as [**Solo.io**](http://Solo.io) and **MCP Bridge**, help tackle the complexity of managing multiple MCP servers. These platforms act as middleware, allowing you to configure various MCPs through a single interface.
+
+Here is how MCP aggregators help: 
+
+-   **Unified logging:** Developers can view a stream of logs from multiple MCP servers, which is more helpful in debugging than viewing logs from a single MCP server.
+    
+-   **Security monitoring and access control:** Aggregators provide fine-grained access control, making it easier to identify which permissions are granted to a specific developer.
+    
+-   **Performance optimization and caching:** Frequently accessed or requested results can be cached at the aggregator level, reducing latency, improving response times for developers, and ultimately saving time.
+    
+
+Rust developers can increase their productivity by integrating AI-assisted workflows into their ecosystem. These aggregators add tremendous value by simplifying integration, reducing overhead, and maintaining a secure and performant development environment, allowing engineers to focus on building code.
+
+### How Shuttle Solves the Deployment Problem
+
+Rust developers are currently facing a significant challenge with deployment. With the assistance of AI in accelerating the generation of code, deploying Rust projects to live environments often requires extra steps compared to other languages like Python or Node JS, which benefits from a mature Platform as a Service (PaaS) solutions, strong community support and extensive resources. On the other hand, Rust ecosystem is still evolving with fewer tutorials, deployment focused tools and best practices available.
+
+You may have generated clean Axum handlers, written comprehensive tests, and even have users waiting for your feature. Yet the moment you are ready to deploy, you are forced into manual deployment processes.
+
+The current deployment workflows for Rust applications require developers to:
+
+-   Set up cloud infrastructure
+    
+-   Set up monitoring and logging
+    
+-   Handle SSL certificates and domain configuration
+    
+
+There should be a workflow that allows developer to deploy their Rust project directly from their IDE.
+
+Shuttle MCP enables Rust developers to deploy applications directly from their IDE by integrating with Shuttle CLI, which requires a separate installation. This approach boosts productivity by removing the manual steps involved in traditional deployment. Shuttle packages, compiles, and deploys your application automatically, so that you can stay focused on building.
+
+Unlike other solutions that requires complex scripts or Infrastructure as a Code (IaC) configurations which rely on YAML files or provider specific configuration. Shuttle follows an Infrastructure from Code (IfC) approach, which means that your infrastructure is defined directly in your Rust codebase alongside with the application logic.
+
+You can ask your AI assistant to:
+
+-   Deploy your Axum API to the live environment
+    
+-   Check the logs of the deployed service
+    
+
+## **Hands-on Example: Build and Deploy a Snippet Sharing API with Shuttle**
+
+In this hands-on section, we'll build a Rust + Axum API that powers a simple code snippet sharing service (similar to Pastebin) and deploy it with Shuttle MCP. The API will include:
+
+-   Endpoints to create and retrieve snippets
+    
+-   Filtering snippets by programming language
+    
+-   Clean, shareable URLs with 8-character IDs
+    
+
+#### **API Endpoints**
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| GET | /health | Health check endpoint |
+| POST | /snippets | Create a new code snippet |
+| GET | /snippets | List all snippets |
+| GET | /snippets/{id} | Get a single snippet |
+| DELETE | /snippets/{id} | Delete a snippet |
+
+#### **Step 1: Setting Up Your Environment: Install Rust and Shuttle CLI**
+
+Firstly, ensure you have the following software running:
+
+1.  **Rust and Cargo:** For local development and testing.
+    
+2.  **Shuttle CLI:** For deployment into a live environment. You can install it via Cargo, or use the installation script by following this link: [Shuttle CLI Installation.](https://docs.shuttle.dev/getting-started/installation)
+    
+
+#### **Step 2: Setting Up Our Project**
+
+Next, we will create our Rust project. Below is an example of the Cargo.toml configuration:
+
+```javascript
+[package]
+name = "code-snippet-share"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = "0.7"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+shuttle-axum = "0.56.0"
+shuttle-runtime = "0.56.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+uuid = { version = "1.0", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+nanoid = "0.4"
+```
+
+#### **Step 3: Build the Rust Code Locally**
+
+Build the Rust code by running this command below to build the Rust project to confirm that there are no errors:
+
+```javascript
+Cargo build
+```
+
+#### **Step 4: Run the Rust Code Locally**
+
+Run the Rust code by running this command below:
+
+```javascript
+cargo shuttle run
+```
+
+#### **Step 5: Create** `Shuttle.toml`
+
+Add a `Shuttle.toml` at your project root to configure your Shuttle app.
+
+```javascript
+name = "code-snippet-share"
+```
+
+#### **Step 6: Log in to Shuttle**
+
+Authenticate your Shuttle account:
+
+```javascript
+shuttle login
+```
+
+This connects your CLI to your Shuttle account, enabling authorized deployments.
+
+#### **Step 7: Deploy your app**
+
+Now, let's deploy your application using Shuttle and see how it makes deployment easier by handling all the heavy lifting for you.
+
+_Note: The URLs used in the following steps are examples. When you deploy your own application, Shuttle will provide you with a unique URL._
+
+From your project root, run:
+
+```javascript
+shuttle deploy
+```
+
+![Shuttle console](https://s3.eu-west-2.amazonaws.com/hmb-shuttle-kxdg/1757575550980-shuttle.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4IBKNRD4QFSY4YSO%2F20250911%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250911T072551Z&X-Amz-Expires=604800&X-Amz-Signature=d6e7f166b4af7fba2112f7a817c0b3ee35a6492b1d7697c2a1a2acf5100cd1d3&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+
+After running the command **Shuttle deploy**, your application will be deployed, and a link will be generated. You can access your application with the provided link. 
+
+For instance, in this case, the link is [https://code-snippet-share-ow2x.shuttle.app](https://code-snippet-share-ow2x.shuttle.app). 
+
+Shuttle will:
+
+-   Package your code
+    
+-   Compile it in the cloud
+    
+-   Provision infrastructure
+    
+-   Manage SSL certificate
+    
+-   Deploy your app to a live environment
+    
+
+#### **Step 8: Test Your App Deployed Using Shuttle: Health Endpoint**
+
+Let's test the application we deployed with Shuttle to ensure all the endpoints are working correctly.
+
+**Health Endpoint:** [https://code-snippet-share-ow2x.shuttle.app/health](https://code-snippet-share-ow2x.shuttle.app/health)
+
+You can use curl from the command line or a tool like Postman. In this example, we will use Postman.
+
+![postman request to test the health endpoint](https://s3.eu-west-2.amazonaws.com/hmb-shuttle-kxdg/1756905479506-postman-shuttle-health.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4IBKNRD4QFSY4YSO%2F20250903%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250903T131800Z&X-Amz-Expires=604800&X-Amz-Signature=05d1ca43d6ba92d8bf89ff6a3b0f7d3f792a1e6b74bc4a2e5124b5c0def6e652&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+
+#### **Step 9: Test Your App Deployed Using Shuttle: POST Snippet Endpoint**
+
+Send a POST request to [https://code-snippet-share-ow2x.shuttle.app/snippets](https://code-snippet-share-ow2x.shuttle.app/snippets) with a JSON payload to create a new snippet record.
+
+![postman request for send a POST request ](https://s3.eu-west-2.amazonaws.com/hmb-shuttle-kxdg/1756911941650-postman-shuttle-post.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4IBKNRD4QFSY4YSO%2F20250903%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250903T150542Z&X-Amz-Expires=604800&X-Amz-Signature=4e47cb8632084a9b334e718f69224ff2ec9b86ce030db6933e8a15f2eae7117d&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+
+```javascript
+{
+  "content": "A Hands-on Comparison of Best MCP Servers for Rust Developers",
+  "language": "Rust",
+  "title": "Shuttle MCP",
+  "description": "Explore Shuttle MCP",
+  "expires_in_hours": 24,
+  "is_public": true
+}
+```
+
+#### **Step 10: Test Your App Deployed Using Shuttle: GET APl Snippet Endpoint**
+
+Send a GET request to [https://code-snippet-share-ow2x.shuttle.app](https://code-snippet-share-ow2x.shuttle.app/snippets)[/snippets](http://127.0.0.1:8000/snippets) to retrieve all snippets.
+
+![postman request to retrieve all snippet](https://s3.eu-west-2.amazonaws.com/hmb-shuttle-kxdg/1756905441629-postman-shuttle-single-all.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4IBKNRD4QFSY4YSO%2F20250903%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250903T131722Z&X-Amz-Expires=604800&X-Amz-Signature=0e55c206a10546111dc8d229694721f75b0978f5f028358be5fc54b727972604&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+
+#### **Step 11: Test Your App Deployed Using Shuttle: GET a Single Snippet Endpoint**
+
+Send a GET request to [https://code-snippet-share-ow2x.shuttle.app](https://code-snippet-share-ow2x.shuttle.app/snippets/qjs0BzAq)[/snippets/{id}](http://127.0.0.1:8000/snippets/%7Bid%7D) to retrieve a specific snippet by its ID.
+
+![postman request to retrieve a single snippet](https://s3.eu-west-2.amazonaws.com/hmb-shuttle-kxdg/1756905407170-postman-request-single-snippet.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4IBKNRD4QFSY4YSO%2F20250903%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250903T131647Z&X-Amz-Expires=604800&X-Amz-Signature=709bb61b97126ba2fc8da973b74d867670601fd55ee87fda7f323ab8c13acabf&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+
+## Wrapping Up
+
+The MCP ecosystem is opening new possibilities for Rust developers. Whether you are managing repositories with GitHub MCP, restructuring projects through the Filesystem MCP, or streamlining research with the Browser MCP, each option reduces friction in its own way. By combining multiple MCP servers, AI assistants can support the entire application lifecycle, allowing developers to focus on writing Rust instead of wrestling with complex infrastructure tools.
+
+Shuttle simplifies deployment, letting you build features, test ideas, and ship production-ready applications in minutes.
+
+Ready to try this out for yourself?
+
+-   [**Sign up for Shuttle**](https://shuttle.dev/) to start building with Shuttle.
+    
+-   [Clone the repository](https://github.com/ExitoLab/code_snippet_sharing_service_shuttle) used in this article to explore how to build with Shuttle.
+    
+-   [Learn more about Shuttle](https://docs.shuttle.dev/getting-started/installation) to get started quickly.
+    
+
+Whichever MCP fits your workflow, **Shuttle** makes deploying Rust applications effortless.
