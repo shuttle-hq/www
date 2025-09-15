@@ -190,20 +190,27 @@ Next, we will create our Rust project. Below is an example of the Cargo.toml con
 
 ```toml
 [package]
-name = "code-snippet-share"
+name = "code-snippet-sharing-app"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-axum = "0.7"
+axum = "0.8"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
-shuttle-axum = "0.56.0"
-shuttle-runtime = "0.56.0"
+shuttle-axum = "0.57.0"
+shuttle-runtime = "0.57.0"
+shuttle-shared-db = { version = "0.57.0", features = ["postgres", "sqlx"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 uuid = { version = "1.0", features = ["v4", "serde"] }
 chrono = { version = "0.4", features = ["serde"] }
 nanoid = "0.4"
+sqlx = { version = "0.8", features = [
+  "runtime-tokio-rustls",
+  "postgres",
+  "chrono",
+  "uuid",
+] }
 ```
 
 #### Step 3: Build the Rust Code Locally
@@ -222,15 +229,7 @@ Run the Rust code by running this command below:
 cargo shuttle run
 ```
 
-#### Step 5: Create `Shuttle.toml`
-
-Add a `Shuttle.toml` at your project root to configure your Shuttle app.
-
-```toml
-name = "code-snippet-share"
-```
-
-#### Step 6: Log in to Shuttle
+#### Step 5: Log in to Shuttle
 
 Authenticate your Shuttle account:
 
@@ -240,7 +239,7 @@ shuttle login
 
 This connects your CLI to your Shuttle account, enabling authorized deployments.
 
-#### Step 7: Deploy your app
+#### Step 6: Deploy your app
 
 Now, let's deploy your application using Shuttle and see how it makes deployment easier by handling all the heavy lifting for you.
 
@@ -270,7 +269,7 @@ Shuttle will:
 - Manage SSL certificate
 - Deploy your app to a live environment
 
-#### Step 8: Test Your App Deployed Using Shuttle: Health Endpoint
+#### Step 7: Test Your App Deployed Using Shuttle: Health Endpoint
 
 Let's test the application we deployed with Shuttle to ensure all the endpoints are working correctly.
 
@@ -284,7 +283,7 @@ You can use curl from the command line or a tool like Postman. In this example, 
   caption="Testing the health endpoint with Postman - successful response from deployed application"
 />
 
-#### Step 9: Test Your App Deployed Using Shuttle: POST Snippet Endpoint
+#### Step 8: Test Your App Deployed Using Shuttle: POST Snippet Endpoint
 
 Send a POST request to `https://code-snippet-share-ow2x.shuttle.app/snippets` with a JSON payload to create a new snippet record.
 
@@ -305,7 +304,7 @@ Send a POST request to `https://code-snippet-share-ow2x.shuttle.app/snippets` wi
 }
 ```
 
-#### Step 10: Test Your App Deployed Using Shuttle: GET APl Snippet Endpoint
+#### Step 9: Test Your App Deployed Using Shuttle: GET API Snippet Endpoint
 
 Send a GET request to `https://code-snippet-share-ow2x.shuttle.app/snippets` to retrieve all snippets.
 
@@ -315,7 +314,7 @@ Send a GET request to `https://code-snippet-share-ow2x.shuttle.app/snippets` to 
   caption="Retrieving all snippets with GET request - showing list of created code snippets"
 />
 
-#### Step 11: Test Your App Deployed Using Shuttle: GET a Single Snippet Endpoint
+#### Step 10: Test Your App Deployed Using Shuttle: GET a Single Snippet Endpoint
 
 Send a GET request to `https://code-snippet-share-ow2x.shuttle.app/snippets/{id}` to retrieve a specific snippet by its ID.
 
