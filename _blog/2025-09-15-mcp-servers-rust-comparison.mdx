@@ -18,6 +18,7 @@ Here is a quick overview of the comparison between the best MCP Servers
 
 | MCP Server | Rust Integration | AI Compatibility | Security Setup | Deployment Support | Notes |
 | --- | --- | --- | --- | --- | --- |
+| Context7 MCP | Provides up-to-date, version-specific documentation for all libraries including Rust crates | AI assistant can fetch real-time docs and code examples for accurate code generation | Low risk, read-only access to documentation APIs | None | Essential for preventing hallucinated APIs and outdated code examples |
 | Docker MCP | Good for developing containerized Rust applications. | AI assistance can issue Docker commands through MCP | Requires elevated privileges for certain operations, which can pose risks if not isolated | Can build, package, and push Rust apps to a Docker Registry | Suitable for those interested in or running Rust applications in Docker containers |
 | GitHub Server MCP | Integrates with Rust code repositories and supports CI/CD workflows (GitHub Actions) | The AI assistant can raise PRs, manage issues, and interact with GitHub workflows | Requires GitHub auth token access with limited or supervised privileges | Works effectively with GitHub Actions workflow | Great for managing repositories and automating workflows |
 | File System MCP Servers | Provide direct access to Rust source code including Cargo.toml | AI assistance has complete visibility of the Rust project | Risky. AI assistant can read and modify project files. Sandbox is recommended | Requires a custom script for deployment | Useful for testing workflows that rely on code modifications |
@@ -43,14 +44,22 @@ When evaluating an MCP server for Rust development, it is essential to keep a fe
 4. **Setup Complexity:** A good MCP server should be simple to configure and use. It shouldn't require complex installation steps, whether in an IDE or through an LLM.
 5. **Deployment Capability:** Can the MCP server assist with end-to-end deployment, beyond just code generation? The best MCPs should be able to generate code, build, test, package, and even deploy Rust applications directly from an IDE.
     
-With these criteria in mind, let's look at the six most common MCP servers Rust developers actually use.
+With these criteria in mind, let's look at the seven most common MCP servers Rust developers actually use.
     
 
-## The 6 Most Common MCP Servers for Rust Developers
+## The 7 Most Common MCP Servers for Rust Developers
 
 Here is a list of popular MCP servers that are particularly useful for Rust development.
 
-### 1. Docker MCP Server
+### 1. Context7 MCP Server
+
+Context7 MCP Server addresses one of the most critical challenges in AI-assisted Rust development: outdated and hallucinated documentation. When working with Rust's rapidly evolving ecosystem, developers often encounter AI assistants that generate code based on year-old training data, leading to deprecated APIs, incorrect function signatures, and non-existent methods.
+
+Context7 solves this by providing real-time access to up-to-date, version-specific documentation directly from the source. For Rust developers, this means accurate code examples for popular crates like Axum, Tokio, Serde, and emerging libraries that weren't in the AI's training data.
+
+The main advantage is eliminating the frustration of debugging AI-generated code that uses outdated APIs. Instead of spending time fixing deprecated methods or non-existent functions, developers can trust that the AI assistant has access to current documentation and working code examples.
+
+### 2. Docker MCP Server
 
 Docker MCP Server is ideal for Rust developers managing complex dependencies or building applications that require isolated environments. By running a Rust project inside a Docker container, the AI assistant can conveniently perform builds, run tests, and refactor code in a secure and reproducible way. Developers can easily reproduce builds and dependencies consistently without affecting the other parts of the codebase.
 
@@ -58,31 +67,31 @@ Developers can also run commands inside the Docker container, such as **cargo bu
 
 Rust developers can leverage pairing Docker MCP with File system MCP to streamline their day-to-day coding activities and automate a smooth workflow. Docker MCP is best used for integration testing, Continuous Integration workflow, or sandbox experimentation.
 
-### 2. GitHub MCP Server
+### 3. GitHub MCP Server
 
 Rust developers derive the most benefits from using the GitHub MCP server when their code repository is hosted on GitHub. This MCP server automates workflows such as setting up Continuous Integration (CI) pipelines with GitHub Actions and managing releases. Developers can ask their AI assistant to handle tasks such as bumping crate versions, generating and maintaining changelog files, and other routine repository management tasks.
 
 The GitHub MCP Server is tightly coupled to GitHub, which means that its full capabilities are only available within the GitHub ecosystem. Teams hosting their code on GitLab, Bitbucket, or other platforms may not find the GitHub MCP server as useful. The GitHub MCP Server is best used when paired with Docker MCP to provide a complete workflow from development to deployment.
 
-### 3. File System MCP Server
+### 4. File System MCP Server
 
 The File System MCP Server provides the AI assistant with direct access to read, write, and modify Rust project files. This allows Rust developers to perform tasks such as refactoring code, automatically fixing errors in the codebase, creating new features, and updating Rust files accordingly.
 
 When using the MCP server, developers should have measures in place to track which files that have been modified by the assistant. Combined with GitHub MCP server, version control can be implemented, making it easier to track the changes introduced by File system MCP. For example, an AI assistant could create a new feature, test it within a Docker container, and then set up a CI workflow using GitHub's MCP; this demonstrates how Docker, GitHub, and File System MCP can all work together.
 
-### 4. Memory MCP
+### 5. Memory MCP
 
 Memory MCP stores project-specific knowledge across sessions, making it easier for an AI assistant to remember naming conventions, coding standards, and recurring compiler errors. For Rust developers working across different teams or modules, this helps to enforce consistency and maintain project wide standards.
 
 The main limitation is that the MCP is bound to a single context, which may restrict productivity in large projects that demand switching between multiple contexts. However, when paired with File System or Docker MCP, it can guide developers or an AI assistant during editing or refactoring, ensuring modifications align with the project standard.
 
-### 5. Browsing MCP
+### 6. Browsing MCP
 
 Browsing MCP gives the AI assistant realtime access to external information such as crates documentation, Rust official documentation, or usage examples. This MCP is beneficial when working on a task and needing to look up an example implementation or consult documentation without leaving the development workflow.
 
 The main limitation is that Browsing MCP can not modify the file system directly. When combined with other MCPs, such as File System or Docker MCP, the AI assistant can utilize the information it discovers to apply it to the project by creating code, updating files, or testing changes.
 
-### 6. Shuttle MCP
+### 7. Shuttle MCP
 
 Shuttle MCP is tailored for deploying Rust applications, such as Axum, Actix, or Rocket. For a development team focused on rapid iteration, this MCP allows developers to deploy the application quickly from code to a live environment. Developers can concentrate on writing code while Shuttle handles server setup, SSL certificate management and deployment.
 
