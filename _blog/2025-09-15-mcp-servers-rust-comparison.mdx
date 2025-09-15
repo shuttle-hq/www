@@ -8,10 +8,6 @@ cover: mcp-servers-rust/cover.png
 date: '2025-09-15'
 ---
 
-# A Hands-on Comparison of Best MCP Servers for Rust Developers
-
-# **A Hands-on Comparison of Best MCP Servers for Rust Developers**
-
 Model Context Protocol (MCP) servers are enhancing developer productivity by working collectively with AI coding assistants like GitHub Copilot, Cursor, and Claude. With MCP having full access to the Rust project, the AI assistants are no longer limited to the currently open file; they can now follow instructions to execute commands, analyze the entire codebase, run tests, and automate workflows, making development faster.
 
 Most developers don't rely on a single MCP; instead, they use multiple servers, depending on their task. Each MCP comes with its own strengths and limitations.
@@ -41,17 +37,13 @@ MCP is an open standard that was introduced by Anthropic in November 2024. It en
 
 When evaluating an MCP server for Rust development, it is essential to keep a few key criteria in mind:
 
-1.  **Rust-Native Workflows:** Does the MCP work smoothly with Cargo and popular frameworks like Axum, Actix-Web, or Rocket? The best servers will integrate effectively with the existing Rust ecosystem.
+1. **Rust-Native Workflows:** Does the MCP work smoothly with Cargo and popular frameworks like Axum, Actix-Web, or Rocket? The best servers will integrate effectively with the existing Rust ecosystem.
+2. **AI Assistant Compatibility:** Can your AI assistant access the MCP server, either through LLMs or a developer IDE? Developers should consider how the MCP will fit into their current workflow. Ideally, the MCP should support both IDE and LLM integrations.
+3. **Security and Access:** Security is a crucial factor when choosing the right MCP. Developers need to be confident that their secrets are kept safe and that the MCP server avoids unnecessary privilege escalation.
+4. **Setup Complexity:** A good MCP server should be simple to configure and use. It shouldn't require complex installation steps, whether in an IDE or through an LLM.
+5. **Deployment Capability:** Can the MCP server assist with end-to-end deployment, beyond just code generation? The best MCPs should be able to generate code, build, test, package, and even deploy Rust applications directly from an IDE.
     
-2.  **AI Assistant Compatibility:** Can your AI assistant access the MCP server, either through LLMs or a developer IDE? Developers should consider how the MCP will fit into their current workflow. Ideally, the MCP should support both IDE and LLM integrations.
-    
-3.  **Security and Access:** Security is a crucial factor when choosing the right MCP. Developers need to be confident that their secrets are kept safe and that the MCP server avoids unnecessary privilege escalation.
-    
-4.  **Setup Complexity:** A good MCP server should be simple to configure and use. It shouldn't require complex installation steps, whether in an IDE or through an LLM.
-    
-5.  **Deployment Capability:** Can the MCP server assist with end-to-end deployment, beyond just code generation? The best MCPs should be able to generate code, build, test, package, and even deploy Rust applications directly from an IDE.
-    
-    With these criteria in mind, let's look at the six most common MCP servers Rust developers actually use.
+With these criteria in mind, let's look at the six most common MCP servers Rust developers actually use.
     
 
 ## The 6 Most Common MCP Servers for Rust Developers
@@ -100,30 +92,30 @@ Shuttle focuses on Rust projects and it integrates smoothly with Rust ecosystem.
 
 Using individual MCPs can help accelerate developer productivity, but managing multiple MCPs simultaneously introduces additional complexity. Here are some of the challenges I have encountered while working with various MCPs.
 
-### **Resource Management and Performance**
+### Resource Management and Performance
 
 When working with multiple MCP servers, there is always the possibility that they will compete for system resources such as CPU and memory. In large Rust projects, this competition can negatively impact IDE performance. It becomes a significant bottleneck when projects rely heavily on multiple MCP servers.
 
 To ensure you get the most out of these MCPs while still maintaining top performance in your Rust projects, here are a few best practices to follow:
 
--   **Monitor and limit resource usage:** Carefully track CPU and memory usage and limit the number of active MCPs to prevent overload.
--   **Allocate CPU and memory per MCP:** Assign specific resources to each MCP server to ensure no single server dominates system resources.
+- **Monitor and limit resource usage:** Carefully track CPU and memory usage and limit the number of active MCPs to prevent overload.
+- **Allocate CPU and memory per MCP:** Assign specific resources to each MCP server to ensure no single server dominates system resources.
 
-### **Security and Authentication Complexity**
+### Security and Authentication Complexity
 
 As a developer, when I want to use an MCP server, each server requires its own authentication and security setup. When multiple MCP servers, such as Docker, GitHub, file system, and browsing MCPs, are running simultaneously, managing all the secrets, API keys, access tokens, and security configurations can become challenging. If one MCP is compromised or becomes vulnerable, it could put the entire MCP setup at risk.
 
 To make multiple MCPs safe for use, you can do the following:
 
--   **Implement strict isolation** between servers to prevent a compromised MCP from affecting others. This can be achieved by:
-    -   Running each MCP on its own container or virtual machine.
-    -   Storing secrets or API Keys in a dedicated, secure vault with a separate namespace, so that if one secret is compromised, it does not affect others.
--   **Perform regular secret rotation**, for example, yearly or quarterly, to minimize the risk of leaked credentials.
--   **Continuously monitor the environment** for any suspicious activity.
+- **Implement strict isolation** between servers to prevent a compromised MCP from affecting others. This can be achieved by:
+  - Running each MCP on its own container or virtual machine.
+  - Storing secrets or API Keys in a dedicated, secure vault with a separate namespace, so that if one secret is compromised, it does not affect others.
+- **Perform regular secret rotation**, for example, yearly or quarterly, to minimize the risk of leaked credentials.
+- **Continuously monitor the environment** for any suspicious activity.
 
 The real challenge arises when developers need to use multiple MCP servers simultaneously, such as Docker and GitHub. Each server has its own authentication, logs, and configuration, which can quickly turn into an overwhelming experience. Without a unifying layer, developers end up spending more time managing connections than actually building.
 
-## **How MCP Aggregators and API Gateways Solve These Problems**
+## How MCP Aggregators and API Gateways Solve These Problems
 
 As a developer, I want a solution that enables me to leverage multiple MCP servers with my AI assistant, unifying different tools and data sources into a single, seamless workflow. Platforms like [**Lunar.dev**](http://Lunar.dev), along with other MCP aggregators such as [**Solo.io**](http://Solo.io) and **MCP Bridge**, help tackle the complexity of managing multiple MCP servers. These platforms act as middleware, allowing you to configure various MCPs through a single interface.
 
@@ -166,7 +158,7 @@ In this hands-on section, we'll build a Rust + Axum API that powers a simple cod
 -   Filtering snippets by programming language
 -   Clean, shareable URLs with 8-character IDs
 
-#### **API Endpoints**
+#### API Endpoints
 
 | Method | Endpoint | Description |
 | --- | --- | --- |
@@ -176,14 +168,14 @@ In this hands-on section, we'll build a Rust + Axum API that powers a simple cod
 | GET | /snippets/{id} | Get a single snippet |
 | DELETE | /snippets/{id} | Delete a snippet |
 
-#### **Step 1: Setting Up Your Environment: Install Rust and Shuttle CLI**
+#### Step 1: Setting Up Your Environment: Install Rust and Shuttle CLI
 
 Firstly, ensure you have the following software running:
 
 1.  **Rust and Cargo:** For local development and testing.
 2.  **Shuttle CLI:** For deployment into a live environment. You can install it via Cargo, or use the installation script by following this link: [Shuttle CLI Installation.](https://docs.shuttle.dev/getting-started/installation)
 
-#### **Step 2: Setting Up Our Project**
+#### Step 2: Setting Up Our Project
 
 Next, we will create our Rust project. Below is an example of the Cargo.toml configuration:
 
@@ -205,7 +197,7 @@ chrono = { version = "0.4", features = ["serde"] }
 nanoid = "0.4"
 ```
 
-#### **Step 3: Build the Rust Code Locally**
+#### Step 3: Build the Rust Code Locally
 
 Build the Rust code by running this command below to build the Rust project to confirm that there are no errors:
 
@@ -213,7 +205,7 @@ Build the Rust code by running this command below to build the Rust project to c
 cargo build
 ```
 
-#### **Step 4: Run the Rust Code Locally**
+#### Step 4: Run the Rust Code Locally
 
 Run the Rust code by running this command below:
 
@@ -221,7 +213,7 @@ Run the Rust code by running this command below:
 cargo shuttle run
 ```
 
-#### **Step 5: Create** `Shuttle.toml`
+#### Step 5: Create `Shuttle.toml`
 
 Add a `Shuttle.toml` at your project root to configure your Shuttle app.
 
@@ -229,7 +221,7 @@ Add a `Shuttle.toml` at your project root to configure your Shuttle app.
 name = "code-snippet-share"
 ```
 
-#### **Step 6: Log in to Shuttle**
+#### Step 6: Log in to Shuttle
 
 Authenticate your Shuttle account:
 
@@ -239,7 +231,7 @@ shuttle login
 
 This connects your CLI to your Shuttle account, enabling authorized deployments.
 
-#### **Step 7: Deploy your app**
+#### Step 7: Deploy your app
 
 Now, let's deploy your application using Shuttle and see how it makes deployment easier by handling all the heavy lifting for you.
 
@@ -263,13 +255,13 @@ For instance, in this case, the link is [https://code-snippet-share-ow2x.shuttle
 
 Shuttle will:
 
--   Package your code
--   Compile it in the cloud
--   Provision infrastructure
--   Manage SSL certificate
--   Deploy your app to a live environment
+- Package your code
+- Compile it in the cloud
+- Provision infrastructure
+- Manage SSL certificate
+- Deploy your app to a live environment
 
-#### **Step 8: Test Your App Deployed Using Shuttle: Health Endpoint**
+#### Step 8: Test Your App Deployed Using Shuttle: Health Endpoint
 
 Let's test the application we deployed with Shuttle to ensure all the endpoints are working correctly.
 
@@ -283,7 +275,7 @@ You can use curl from the command line or a tool like Postman. In this example, 
   caption="Testing the health endpoint with Postman - successful response from deployed application"
 />
 
-#### **Step 9: Test Your App Deployed Using Shuttle: POST Snippet Endpoint**
+#### Step 9: Test Your App Deployed Using Shuttle: POST Snippet Endpoint
 
 Send a POST request to [https://code-snippet-share-ow2x.shuttle.app/snippets](https://code-snippet-share-ow2x.shuttle.app/snippets) with a JSON payload to create a new snippet record.
 
@@ -304,7 +296,7 @@ Send a POST request to [https://code-snippet-share-ow2x.shuttle.app/snippets](ht
 }
 ```
 
-#### **Step 10: Test Your App Deployed Using Shuttle: GET APl Snippet Endpoint**
+#### Step 10: Test Your App Deployed Using Shuttle: GET APl Snippet Endpoint
 
 Send a GET request to [https://code-snippet-share-ow2x.shuttle.app](https://code-snippet-share-ow2x.shuttle.app/snippets)[/snippets](http://127.0.0.1:8000/snippets) to retrieve all snippets.
 
@@ -314,7 +306,7 @@ Send a GET request to [https://code-snippet-share-ow2x.shuttle.app](https://code
   caption="Retrieving all snippets with GET request - showing list of created code snippets"
 />
 
-#### **Step 11: Test Your App Deployed Using Shuttle: GET a Single Snippet Endpoint**
+#### Step 11: Test Your App Deployed Using Shuttle: GET a Single Snippet Endpoint
 
 Send a GET request to [https://code-snippet-share-ow2x.shuttle.app](https://code-snippet-share-ow2x.shuttle.app/snippets/qjs0BzAq)[/snippets/{id}](http://127.0.0.1:8000/snippets/%7Bid%7D) to retrieve a specific snippet by its ID.
 
@@ -332,9 +324,8 @@ Shuttle simplifies deployment, letting you build features, test ideas, and ship 
 
 Ready to try this out for yourself?
 
--   [**Sign up for Shuttle**](https://shuttle.dev/) to start building with Shuttle.
--   [Clone the repository](https://github.com/ExitoLab/code_snippet_sharing_service_shuttle) used in this article to explore how to build with Shuttle.
--   [Learn more about Shuttle](https://docs.shuttle.dev/getting-started/installation) to get started quickly.
-    
+- [**Sign up for Shuttle**](https://shuttle.dev/) to start building with Shuttle.
+- [Clone the repository](https://github.com/ExitoLab/code_snippet_sharing_service_shuttle) used in this article to explore how to build with Shuttle.
+- [Learn more about Shuttle](https://docs.shuttle.dev/getting-started/installation) to get started quickly.
 
 Whichever MCP fits your workflow, **Shuttle** makes deploying Rust applications effortless.
