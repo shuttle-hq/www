@@ -117,6 +117,12 @@ const Navigation = () => {
               text: "Careers",
               keyword: "careers",
             },
+            {
+              href: "https://console.shuttle.dev/templates",
+              event: "homepage_mainnav_templates",
+              text: "Templates",
+              keyword: "templates",
+            },
           ].map(({ event, href, text, keyword }) => (
             <LinkItem
               key={href}
