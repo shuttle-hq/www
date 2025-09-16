@@ -21,7 +21,7 @@ export const ProTrial: React.FC = () => (
         height={560}
       />
     </span>
-    <div className="flex flex-col p-16 gap-8">
+    <div className="flex flex-col p-8 md:p-16 gap-8">
       <h3 className="text-center font-gradual text-[40px] md:text-5xl lg:text-[64px] font-bold text-black dark:text-head lg:leading-[72px]">
         Try{" "}
         <span className="text-gradient bg-clip-text text-transparent">
@@ -35,7 +35,7 @@ export const ProTrial: React.FC = () => (
         <span className="font-bold">14 days free Shuttle Pro</span>, no credit
         card required. Experience the ease of building on cloud with Shuttle.
       </span>
-      <div className="flex flex-wrap items-center gap-2 self-center">
+      <div className="flex flex-wrap items-center gap-2 self-center justify-center">
         <SignupButton
           variant="primary"
           invertOnDark
