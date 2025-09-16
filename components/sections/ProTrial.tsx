@@ -15,7 +15,7 @@ export const ProTrial: React.FC = () => (
           height={584}
         />
       </span>
-      <div className="flex flex-col p-16 gap-8">
+      <div className="flex flex-col p-8 md:p-16 gap-8">
         <span className="bg-[#ffffff] uppercase rounded-4xl self-center text-[#000000] px-5 py-2">
           No credit card required
         </span>
@@ -32,7 +32,7 @@ export const ProTrial: React.FC = () => (
           <span className="font-bold">14 days free Shuttle Pro</span>, no credit
           card required. Experience the ease of building on cloud with Shuttle.
         </span>
-        <div className="flex flex-wrap items-center gap-2 self-center">
+        <div className="flex flex-wrap items-center gap-2 self-center justify-center">
           <SignupButton
             variant="primary"
             invertOnDark
