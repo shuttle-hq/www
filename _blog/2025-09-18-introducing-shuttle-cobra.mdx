@@ -1,0 +1,100 @@
+---
+title: "Introducing Shuttle Cobra"
+description: ""
+author: dcodes
+tags: [shuttle, mcp, rust, docker, github, deployment, axum]
+thumb: introducing-shuttle-cobra/cover.png
+cover: introducing-shuttle-cobra/cover.png
+date: '2025-09-18'
+---
+
+We spent years building Shuttle for Rust, we listened to the community and the response was incredible. Developers love it because it solves a fundamental problem: the massive gap between writing code and deploying it.
+
+Shuttle's success comes from Infrastructure-from-Code (IfC). Instead of juggling multiple config languages, you write Rust macros that control your infrastructure directly. This lets developers focus on their application logic without the need for a complicated deployment setup.
+
+Over the years, we took advantage of the simplicity of the same pattern for other resources as well. Database provisioning demonstrates this well - in our current platform, developers can add one annotation and have a database ready regardless of the environment they are in and Shuttle will handle each environment specifically: If it's development, it will create a docker container with a Postgres instance and connect it to your code and if it's production, it will either create a dedicated AWS RDS instance or a shared DB based on the annotation.
+
+Everything connects with full type safety without the need to define separate configuration files. This is what makes Shuttle loved by the community.
+
+After many iterations and fixing many issues, we were finally able to provide a seamless experience providing infrastructure to our users. That got us to thinking: *could we step outside of Rust and bring the same experience to other languages?*
+
+**This project is our shot at bringing this same experience to Python.**
+
+## Shuttle Cobra
+
+Shuttle Cobra is our first step to explore this idea and bring IfC to Python and potentially other languages in the future.
+
+**Shuttle Cobra** is a Python framework that makes it easy to deploy Python code to your own AWS infrastructure using Python **type hints** and **decorators**. Unlike our main Shuttle platform, Cobra deploys directly to your own AWS account - you own the infrastructure and pay the AWS costs.
+
+**Shuttle Cobra** is experimental and a POC (proof of concept) at the moment, our main goal is to gather feedback from the community and monitor adoption.
+
+## How Shuttle Cobra Works
+
+Just like Shuttle for Rust, the main goal for **Shuttle Cobra** is also **Simplicity**, we've made it so simple that you can deploy a Python job to AWS just by adding a few lines of code and if you already have a **Python job**, you can just add the same annotations and you're good to go.
+
+Here is an example of a Python job that reads from an S3 bucket and writes to a database:
+
+```python
+from typing import Annotated
+import shuttle_runtime
+import shuttle_task
+from shuttle_common import Bucket, BucketOptions, AllowWrite, RdsPostgres, RdsPostgresOptions
+
+@shuttle_task.cron(schedule="0 * * * ? *")
+async def main(
+    bucket: Annotated[
+        Bucket,
+        BucketOptions(
+            bucket_name="grafana-exporter-1234abcd",
+            policies=[
+                AllowWrite(account_id="842910673255", role_name="SessionTrackerService")
+            ]
+        )
+    ],
+    db: Annotated[RdsPostgres, RdsPostgresOptions()],
+):
+    # ...
+
+if __name__ == "__main__":
+    shuttle_runtime.main(main)
+```
+
+Then just run `shuttle deploy` and you're done. There is **no vendor lock-in** here, you're still using the same AWS libraries (`boto3`, `aioboto3`) that you'd use without **Shuttle Cobra**. The framework just handles the infrastructure setup and you will write code the same way you'd write without it.
+
+## What Happens Under the Hood
+
+When you use `Annotated[Bucket, BucketOptions(...)]`, you're telling **Shuttle Cobra** "I need an S3 bucket with these settings."
+
+Here's what happens when you deploy:
+
+1. The **Shuttle Cobra** CLI reads your type hints to see what AWS resources you need
+2. It generates the CloudFormation templates for you
+3. Provisions everything in your AWS account
+4. Packages your code into a container and deploys it to ECS
+5. Sets up the CRON schedule with EventBridge
+
+Your dependencies get injected at runtime, so your code stays clean.
+
+## Fair Warning
+
+This is experimental. Right now it only handles CRON jobs, but we think the approach could work for web services, Lambda functions and other workloads too.
+
+We built this to see if the IfC idea that works so well in Rust could work in other languages. Turns out it can.
+
+## What's Next?
+
+We'd love to hear what you think about **Shuttle Cobra**. Since this is an experimental approach, your feedback will shape where we take it next.
+
+Try it out and let us know:
+
+- Does the IfC pattern feel natural in Python?
+- What other AWS resources would be useful?
+- What types of workloads beyond CRON jobs would you want to deploy this way?
+
+Join our [Discord](https://discord.gg/shuttle) to share your thoughts, ask questions, or just chat about deployment patterns. We're excited to see what you build with it.
+
+## Links
+
+- [GitHub repo](https://github.com/shuttle-hq/shuttle-cobra)
+- [Docs](https://docs.cobra.shuttle.dev/?utm_source=shuttle_blog&utm_campaign=shuttle_cobra)
+- [Discord](https://discord.gg/shuttle)
