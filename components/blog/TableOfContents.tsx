@@ -1,5 +1,3 @@
-import { MDXRemote } from "next-mdx-remote";
-
 interface HeaderProps {
   slug: string;
   content: string;

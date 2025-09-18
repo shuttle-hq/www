@@ -6,6 +6,7 @@ import {
 } from "next-mdx-remote";
 import Link from "components/elements/Link";
 import { FC } from "react";
+import SidebarTOC from "./SidebarTOC";
 
 interface BlogSidebarProps {
   tags: string[];
@@ -23,6 +24,11 @@ const BlogSidebar: FC<BlogSidebarProps> = ({
   return (
     <div className="relative w-full">
       <div className="w-full space-y-6 lg:sticky lg:top-0">
+        <div className="rounded-3xl border border-black/10 px-6 py-4 dark:border-white/10">
+          <div className="mb-2 dark:text-head">On this page</div>
+          <SidebarTOC toc={toc} />
+        </div>
+
         <div className="rounded-3xl border border-black/10 px-6 py-4 dark:border-white/10">
           <div className="mb-2 dark:text-head">Categories</div>
 
