@@ -13,6 +13,11 @@ const SHUTTLE_LINKS = [
   { key: "features", name: "Features", href: "/#features" },
   { key: "starters", name: "Starters", href: "/starters" },
   {
+    key: "templates",
+    name: "Templates",
+    href: "https://console.shuttle.dev/templates",
+  },
+  {
     key: "releases",
     name: "Releases",
     href: "https://github.com/shuttle-hq/shuttle/releases",
