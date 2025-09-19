@@ -423,7 +423,7 @@ export default function BlogPostPage(props: Props) {
           <BlogSidebar
             tags={props.blog.tags || []}
             relatedPosts={props.relatedPosts || []}
-            toc={props.blog.toc}
+            toc={props.blog.contentTOC?.json}
             mdxComponents={mdxComponents}
           />
         </div>

@@ -1,4 +1,3 @@
-import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import React, {
   createContext,
   useContext,
@@ -8,16 +7,43 @@ import React, {
   useState,
 } from "react";
 
+interface TocItem {
+  slug: string;
+  content: string;
+  lvl?: number; // markdown-toc key
+  level?: number; // sometimes different naming
+}
+
 interface SidebarTOCProps {
-  toc?: MDXRemoteSerializeResult<Record<string, unknown>>;
+  toc?: TocItem[];
 }
 
 // Track nesting depth of ULs to compute indentation
 const DepthContext = createContext(0);
 const ActiveIdContext = createContext<string | null>(null);
 
-function isReactElement(child: React.ReactNode): child is React.ReactElement {
-  return !!child && typeof child === "object" && "type" in (child as any);
+// Build hierarchical tree from flat list
+interface TocNode extends TocItem {
+  children: TocNode[];
+  depth: number; // normalized depth starting at 1
+}
+
+function normalizeDepth(item: TocItem) {
+  return item.lvl ?? item.level ?? 1;
+}
+
+function buildTree(items: TocItem[]): TocNode[] {
+  const root: TocNode[] = [];
+  const stack: TocNode[] = [];
+  items.forEach((item) => {
+    const depth = normalizeDepth(item);
+    const node: TocNode = { ...item, depth, children: [] };
+    while (stack.length && stack[stack.length - 1].depth >= depth) stack.pop();
+    if (!stack.length) root.push(node);
+    else stack[stack.length - 1].children.push(node);
+    stack.push(node);
+  });
+  return root;
 }
 
 const Caret: React.FC<{ open: boolean }> = ({ open }) => (
@@ -32,92 +58,44 @@ const Caret: React.FC<{ open: boolean }> = ({ open }) => (
   </svg>
 );
 
-const TOCUl: React.FC<React.HTMLAttributes<HTMLUListElement>> = ({
-  children,
-  ...props
-}) => {
-  const depth = useContext(DepthContext);
-  const nextDepth = depth + 1;
+const TOCUl: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const depth = useContext(DepthContext) + 1;
   return (
-    <DepthContext.Provider value={nextDepth}>
-      <ul {...props} className="my-1 space-y-1">
-        {children}
-      </ul>
+    <DepthContext.Provider value={depth}>
+      <ul className="my-1 space-y-1">{children}</ul>
     </DepthContext.Provider>
   );
 };
-TOCUl.displayName = "TOCUl";
 
-const TOCLi: React.FC<React.HTMLAttributes<HTMLLIElement>> = ({
-  children,
-  ...props
-}) => {
-  const depth = useContext(DepthContext);
+interface TocBranchProps {
+  node: TocNode;
+}
+
+const TocBranch: React.FC<TocBranchProps> = ({ node }) => {
   const activeId = useContext(ActiveIdContext);
-  const [open, setOpen] = useState(false);
+  const hasChildren = node.children.length > 0;
+  const [open, setOpen] = useState(node.depth === 1); // default open top-level
+  const isActive = activeId === node.slug;
 
-  const kids = React.Children.toArray(children);
-  const hasSublist = kids.some(
-    (c) =>
-      isReactElement(c) &&
-      (c.type === "ul" ||
-        c.type === TOCUl ||
-        (c.type as any)?.displayName === "TOCUl"),
-  );
-
-  const content = useMemo(() => {
-    return kids.map((child, idx) => {
-      if (
-        isReactElement(child) &&
-        (child.type === "ul" ||
-          child.type === TOCUl ||
-          (child.type as any)?.displayName === "TOCUl")
-      ) {
-        return open ? (
-          <div key={`sub-${idx}`} className="mt-1">
-            {child}
-          </div>
-        ) : null;
-      }
-      return <React.Fragment key={idx}>{child}</React.Fragment>;
-    });
-  }, [kids, open]);
-
-  const indentPx = Math.max(0, depth - 1) * 12; // 12px per level after top
-
-  // Auto-open when the active heading is within this subtree
-  const containsActive = useMemo(() => {
-    const target = activeId ? `#${activeId}` : null;
-    if (!target) return false;
-
-    const search = (nodes: React.ReactNode[]): boolean => {
-      for (const n of nodes) {
-        if (isReactElement(n)) {
-          const t: any = n.type as any;
-          const isLink =
-            t === "a" || t === TOCLink || t?.displayName === "TOCLink";
-          if (isLink) {
-            const href = (n.props?.href as string) || "";
-            if (href === target) return true;
-          }
-          const childNodes = React.Children.toArray(n.props?.children);
-          if (childNodes.length && search(childNodes)) return true;
-        }
-      }
-      return false;
+  // Auto-open if active is within subtree
+  const subtreeSlugs = useMemo(() => {
+    const acc: string[] = [];
+    const walk = (n: TocNode) => {
+      acc.push(n.slug);
+      n.children.forEach(walk);
     };
-
-    return search(kids);
-  }, [kids, activeId]);
+    walk(node);
+    return new Set(acc);
+  }, [node]);
 
   useEffect(() => {
-    if (containsActive) setOpen(true);
-  }, [containsActive]);
+    if (activeId && subtreeSlugs.has(activeId)) setOpen(true);
+  }, [activeId, subtreeSlugs]);
 
   return (
-    <li {...props} style={{ ...(props.style || {}) }} className="list-none">
+    <li className="list-none">
       <div className="flex items-start gap-2">
-        {hasSublist ? (
+        {hasChildren ? (
           <button
             type="button"
             aria-label={open ? "Collapse section" : "Expand section"}
@@ -128,104 +106,109 @@ const TOCLi: React.FC<React.HTMLAttributes<HTMLLIElement>> = ({
             <Caret open={open} />
           </button>
         ) : (
-          // spacer to align text when there's no caret
-          <span className="mt-0.5 h-4 w-4 text-xs items-center flex justify-center text-grey700">
+          <span className="mt-0.5 h-4 w-4 text-center text-xs text-grey700">
             -
           </span>
         )}
-        <div className="min-w-0 flex-1">{content}</div>
+        <div className="min-w-0 flex-1">
+          <a
+            href={`#${node.slug}`}
+            className={
+              "relative left-0 text-sm transition-all duration-300 hover:left-1 " +
+              (isActive
+                ? "font-medium bg-gradient-to-r from-[#FC540C] to-[#FFD76F] bg-clip-text text-transparent "
+                : "text-slate-500 dark:text-body dark:hover:text-white ")
+            }
+          >
+            {node.content}
+          </a>
+          {hasChildren && open && (
+            <TOCUl>
+              {node.children.map((c) => (
+                <TocBranch key={c.slug} node={c} />
+              ))}
+            </TOCUl>
+          )}
+        </div>
       </div>
     </li>
-  );
-};
-
-// Anchor styling to match sidebar widgets (Recent articles)
-const TOCLink: React.FC<React.AnchorHTMLAttributes<HTMLAnchorElement>> = ({
-  className,
-  ...props
-}) => {
-  const activeId = useContext(ActiveIdContext);
-  const href = (props.href as string) || "";
-  const isActive = activeId && href === `#${activeId}`;
-  return (
-    <a
-      {...props}
-      className={
-        "relative left-0 text-sm transition-all duration-300 hover:left-1 " +
-        (isActive
-          ? "font-medium bg-gradient-to-r from-[#FC540C] to-[#FFD76F] bg-clip-text text-transparent "
-          : "text-slate-500 dark:text-body dark:hover:text-white ") +
-        (className ? ` ${className}` : "")
-      }
-      aria-current={isActive ? "true" : undefined}
-    />
   );
 };
 
 export const SidebarTOC: React.FC<SidebarTOCProps> = ({ toc }) => {
   // Track active heading based on scroll position
   const [activeId, setActiveId] = useState<string | null>(null);
-  const rafRef = useRef<number | null>(null);
+  const sectionsRef = useRef<{ id: string; top: number }[]>([]);
+  const tickingRef = useRef(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const getHeadings = () =>
-      Array.from(
-        document.querySelectorAll<HTMLElement>(
-          "article h2[id], article h3[id], article h4[id], article h5[id], article h6[id]",
-        ),
-      );
+    const selector =
+      "article h2[id], article h3[id], article h4[id], article h5[id], article h6[id]";
 
-    const compute = () => {
-      const headings = getHeadings();
-      if (!headings.length) return;
-      const scrollY = window.scrollY || window.pageYOffset;
-      const offset = 120; // account for sticky headers
-      const current = headings
-        .map((el) => ({
-          id: el.id,
-          top: el.getBoundingClientRect().top + scrollY,
-        }))
-        .filter((h) => !!h.id)
-        .sort((a, b) => a.top - b.top)
-        .reduce<string | null>((acc, h) => {
-          return h.top <= scrollY + offset ? h.id : acc;
-        }, headings[0].id);
-      setActiveId(current);
+    const collect = () => {
+      sectionsRef.current = Array.from(
+        document.querySelectorAll<HTMLElement>(selector),
+      ).map((el) => ({ id: el.id, top: el.offsetTop }));
+      if (sectionsRef.current.length && !activeId) {
+        setActiveId(sectionsRef.current[0].id);
+      }
     };
 
-    const onScroll = () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(compute);
+    collect();
+
+    const handleResize = () => {
+      collect();
+      handleScroll();
     };
 
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    // initial compute after paint
-    const t = setTimeout(compute, 0);
+    const handleScroll = () => {
+      if (tickingRef.current) return;
+      tickingRef.current = true;
+      requestAnimationFrame(() => {
+        const scrollY = window.scrollY || window.pageYOffset;
+        // Adjust for any fixed headers + small buffer
+        const offset = 120;
+        const pos = scrollY + offset;
+        const sections = sectionsRef.current;
+        if (!sections.length) return;
+        // Find last section whose top <= pos
+        let current = sections[0].id;
+        for (let i = 0; i < sections.length; i++) {
+          if (sections[i].top <= pos) current = sections[i].id;
+          else break;
+        }
+        if (current !== activeId) setActiveId(current);
+        tickingRef.current = false;
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleResize);
+    // Also recalc on fonts load (layout shift)
+    window.addEventListener("load", handleResize);
+    // Initial
+    handleScroll();
+
     return () => {
-      clearTimeout(t);
-      window.removeEventListener("scroll", onScroll as any);
-      window.removeEventListener("resize", onScroll as any);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      window.removeEventListener("scroll", handleScroll as any);
+      window.removeEventListener("resize", handleResize as any);
+      window.removeEventListener("load", handleResize as any);
     };
-  }, []);
+  }, [activeId]);
 
-  if (!toc) return null;
+  const tree = useMemo(() => (toc ? buildTree(toc) : []), [toc]);
+  if (!toc || !toc.length) return null;
 
   return (
     <div className="text-sm">
       <ActiveIdContext.Provider value={activeId}>
-        <MDXRemote
-          {...toc}
-          // Override only the parts we need for a collapsible tree
-          components={{
-            ul: TOCUl,
-            li: TOCLi,
-            a: TOCLink,
-          }}
-        />
+        <ul className="space-y-1">
+          {tree.map((n) => (
+            <TocBranch key={n.slug} node={n} />
+          ))}
+        </ul>
       </ActiveIdContext.Provider>
     </div>
   );

@@ -1,17 +1,20 @@
 import { Post } from "lib/blog/posts";
-import {
-  MDXRemote,
-  MDXRemoteProps,
-  MDXRemoteSerializeResult,
-} from "next-mdx-remote";
+import { MDXRemoteProps } from "next-mdx-remote";
 import Link from "components/elements/Link";
 import { FC } from "react";
 import SidebarTOC from "./SidebarTOC";
 
+interface TocItem {
+  slug: string;
+  content: string;
+  lvl?: number; // markdown-toc uses 'lvl'
+  level?: number; // allow 'level' just in case
+}
+
 interface BlogSidebarProps {
   tags: string[];
   relatedPosts: Post[];
-  toc?: MDXRemoteSerializeResult<Record<string, unknown>>;
+  toc?: TocItem[];
   mdxComponents: MDXRemoteProps["components"];
 }
 
