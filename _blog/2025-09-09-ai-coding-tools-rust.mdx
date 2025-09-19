@@ -263,7 +263,7 @@ Now it's time to put these tools to the test by building a task management API i
 
 **Evaluation Method:** Each tool was tested with the same starting prompt. We recorded the generated code, its completeness and accuracy, and its integration into the Rust workflow.
 
-### **Building with Cursor**
+### Building with Cursor
 
 We opened a folder `rust-tasks-cursor`in Cursor, launched the **AI chat panel** (Cmd/Ctrl + L) and entered the baseline prompt:
 
@@ -331,7 +331,7 @@ Cursor then updated the `main.rs` file with the API models, handlers, and expose
 
 **Verdict:** Great for **rapid prototyping and multi-file Rust projects**, especially for developers comfortable with VS Code-style workflows.
 
-### **Building with Windsurf**
+### Building with Windsurf
 
 We created a `rust-tasks-windsurf` folder in Windsurf and used the same prompt. Windsurf scaffolded a Rust project but took longer due to its **Cascade** checks. The upside is that it proposed project structure refinements (splitting `handlers.rs` and `routes.rs`) and enforced pinned versions in `Cargo.toml`.
 
@@ -348,7 +348,7 @@ We created a `rust-tasks-windsurf` folder in Windsurf and used the same prompt. 
 
 **Verdict:** Great for **planning long-lived Rust projects** where architecture matters.
 
-### **Building with VS Code + GitHub Copilot**
+### Building with VS Code + GitHub Copilot
 
 We created a new folder `rust-tasks-copilot` in VS Code and initialized the project by running the command below:
 
@@ -371,7 +371,7 @@ Copilot helped fill in dependencies, models, and handler boilerplate as we typed
 
 **Verdict:** Great for **incremental coding and filling gaps** rather than full project generation.
 
-### **Building with Claude Code**
+### Building with Claude Code
 
 In Claude, we entered the same prompt in the terminal. Claude generated a project scaffold, listed the steps it would take, then produced `Cargo.toml` and `main.rs`. It explained async concepts and ownership trade-offs in detail while building.
 
@@ -388,7 +388,7 @@ In Claude, we entered the same prompt in the terminal. Claude generated a projec
 
 **Verdict:** Great for **learning Rust while building** (doubles as tutor + generator) **and building large-scale projects**.
 
-### **Building with Aider**
+### Building with Aider
 
 For this, we initialized Git and prompted Aider. It scaffolded a Cargo project, generated dependencies, and committed each step with descriptive messages. Its Git-aware workflow was unique: each file edit was atomic, with matching commit messages.
 
