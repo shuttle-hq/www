@@ -129,7 +129,9 @@ const TOCLi: React.FC<React.HTMLAttributes<HTMLLIElement>> = ({
           </button>
         ) : (
           // spacer to align text when there's no caret
-          <span className="mt-0.5 inline-block h-4 w-4" />
+          <span className="mt-0.5 h-4 w-4 text-xs items-center flex justify-center text-grey700">
+            -
+          </span>
         )}
         <div className="min-w-0 flex-1">{content}</div>
       </div>
