@@ -141,16 +141,29 @@ export const SidebarTOC: React.FC<SidebarTOCProps> = ({ toc }) => {
   const sectionsRef = useRef<{ id: string; top: number }[]>([]);
   const tickingRef = useRef(false);
 
+  // Only display headings up to level 3 (h3). Deeper (>=4) are hidden, but their parent remains highlighted.
+  const displayed = useMemo(
+    () => (toc || []).filter((h) => (h.lvl ?? h.level ?? 1) <= 3),
+    [toc],
+  );
+
+  const tree = useMemo(() => buildTree(displayed), [displayed]);
+  const isEmpty = displayed.length === 0;
+
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     const selector =
       "article h2[id], article h3[id], article h4[id], article h5[id], article h6[id]";
 
+    const displayedSlugSet = new Set(displayed.map((d) => d.slug));
+
     const collect = () => {
       sectionsRef.current = Array.from(
         document.querySelectorAll<HTMLElement>(selector),
-      ).map((el) => ({ id: el.id, top: el.offsetTop }));
+      )
+        .filter((el) => displayedSlugSet.has(el.id))
+        .map((el) => ({ id: el.id, top: el.offsetTop }));
       if (sectionsRef.current.length && !activeId) {
         setActiveId(sectionsRef.current[0].id);
       }
@@ -196,10 +209,9 @@ export const SidebarTOC: React.FC<SidebarTOCProps> = ({ toc }) => {
       window.removeEventListener("resize", handleResize as any);
       window.removeEventListener("load", handleResize as any);
     };
-  }, [activeId]);
+  }, [activeId, displayed]);
 
-  const tree = useMemo(() => (toc ? buildTree(toc) : []), [toc]);
-  if (!toc || !toc.length) return null;
+  if (isEmpty) return null;
 
   return (
     <div className="text-sm">
