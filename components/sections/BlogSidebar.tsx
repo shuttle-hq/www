@@ -1,16 +1,20 @@
 import { Post } from "lib/blog/posts";
-import {
-  MDXRemote,
-  MDXRemoteProps,
-  MDXRemoteSerializeResult,
-} from "next-mdx-remote";
+import { MDXRemoteProps } from "next-mdx-remote";
 import Link from "components/elements/Link";
 import { FC } from "react";
+import SidebarTOC from "./SidebarTOC";
+
+interface TocItem {
+  slug: string;
+  content: string;
+  lvl?: number; // markdown-toc uses 'lvl'
+  level?: number; // allow 'level' just in case
+}
 
 interface BlogSidebarProps {
   tags: string[];
   relatedPosts: Post[];
-  toc?: MDXRemoteSerializeResult<Record<string, unknown>>;
+  toc?: TocItem[];
   mdxComponents: MDXRemoteProps["components"];
 }
 
@@ -23,6 +27,11 @@ const BlogSidebar: FC<BlogSidebarProps> = ({
   return (
     <div className="relative w-full">
       <div className="w-full space-y-6 lg:sticky lg:top-0">
+        <div className="rounded-3xl border border-black/10 px-6 py-4 dark:border-white/10">
+          <div className="mb-2 dark:text-head">On this page</div>
+          <SidebarTOC toc={toc} />
+        </div>
+
         <div className="rounded-3xl border border-black/10 px-6 py-4 dark:border-white/10">
           <div className="mb-2 dark:text-head">Categories</div>
 
