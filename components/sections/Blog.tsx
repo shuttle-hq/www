@@ -94,7 +94,7 @@ const BlogPost: FC<Post> = (post) => {
             {firstAuthor?.author || "Shuttle"}
             {firstAuthor?.position ? ` - ${firstAuthor.position}` : ""}
           </div>
-          <li className="list-disc text-body">{post.dateReadable}</li>
+          <li className="list-disc text-body ml-5">{post.dateReadable}</li>
         </div>
         <Link
           href={`/blog/${post.url}`}
