@@ -8,7 +8,7 @@ const userStories = [
   {
     key: "triacc",
     title:
-      "How TriAcc accelerated from concept to production in days, not weeks",
+      "From concept to production in days with Shuttle",
     logo: "/images/user-stories/triacc.png",
     logoWidth: 110,
     logoHeight: 34,
@@ -20,7 +20,7 @@ const userStories = [
     logoWidth: 160,
     logoHeight: 25,
     link: "/customers/unwritten",
-    title: `How Unwritten powers large-scale data processing with zero infrastructure overhead`,
+    title: `Large-scale data processing without infrastructure overhead`,
   },
   {
     key: "decent-land",
@@ -28,7 +28,7 @@ const userStories = [
     logoWidth: 260,
     logoHeight: 30,
     link: "/customers/decent-land",
-    title: `How Decent Land eliminated infrastructure complexity for Web3 development`,
+    title: `How Decent Land simplified Web3 development`,
   },
 ];
 

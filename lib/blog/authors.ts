@@ -178,6 +178,13 @@ const authors: readonly Author[] = [
     author_url: "https://github.com/ExitoLab",
     author_image_url: "/images/authors/adetokunbo.jpg",
   },
+  {
+    author_id: "shuttle",
+    author: "Shuttle",
+    position: "",
+    author_url: "https://shuttle.dev",
+    author_image_url: "/images/logo-2.png",
+  },
 ];
 
 export default authors;

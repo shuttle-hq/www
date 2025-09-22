@@ -9,14 +9,14 @@ export default function Triacc() {
     <>
       <NextSeo
         title="Customers | TriAcc"
-        description="How TriAcc accelerated from concept to production in days, not weeks"
+        description="From concept to production in days with Shuttle"
         openGraph={{
           images: [
             {
               url: "https://www.shuttle.dev/images/user-stories/triacc-og-image.png",
               width: 2400,
               height: 1350,
-              alt: "Shuttle x TriAcc: Accelerating from concept to production in days, not weeks",
+              alt: "Shuttle x TriAcc: From concept to production in days with Shuttle",
             },
           ],
         }}
@@ -32,8 +32,7 @@ export default function Triacc() {
                 height={30}
               />
               <h1 className="self-stretch justify-start text-neutral-200 text-3xl md:text-5xl font-bold font-gradual leading-tight md:leading-[57.60px]">
-                How TriAcc accelerated from concept to production in days, not
-                weeks
+                From concept to production in days with Shuttle
               </h1>
               <p className="self-stretch justify-start text-text-secondary text-xl font-normal">
                 Using Rust and Shuttle to build a contractor marketplace without
