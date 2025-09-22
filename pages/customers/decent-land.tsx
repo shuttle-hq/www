@@ -10,14 +10,14 @@ export default function DecentLand() {
     <>
       <NextSeo
         title="Customers | Decent Land"
-        description="How Decent Land eliminated infrastructure complexity for Web3 development"
+        description="How Decent Land simplified Web3 development"
         openGraph={{
           images: [
             {
               url: "https://www.shuttle.dev/images/user-stories/decent-land-og-image.png",
               width: 2400,
               height: 1350,
-              alt: "How Decent Land eliminated infrastructure complexity for Web3 development",
+              alt: "How Decent Land simplified Web3 development",
             },
           ],
         }}
@@ -33,8 +33,7 @@ export default function DecentLand() {
                 height={30}
               />
               <h2 className="self-stretch justify-start text-neutral-200 text-3xl md:text-5xl font-bold font-gradual leading-tight md:leading-[57.60px]">
-                How Decent Land eliminated infrastructure complexity for Web3
-                development
+                How Decent Land simplified Web3 development
               </h2>
               <p className="self-stretch justify-start text-text-secondary text-xl font-normal">
                 Using Rust and Shuttle to eliminate off-chain infrastructure

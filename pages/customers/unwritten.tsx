@@ -12,14 +12,14 @@ export default function Unwritten() {
     <>
       <NextSeo
         title="Customers | Unwritten"
-        description="How Unwritten powers large-scale data processing with zero infrastructure overhead"
+        description="Large-scale data processing without infrastructure overhead"
         openGraph={{
           images: [
             {
               url: "https://www.shuttle.dev/images/user-stories/unwritten-og-image.png",
               width: 2400,
               height: 1350,
-              alt: "Shuttle x Unwritten: Powering large-scale data processing with zero infrastructure overhead",
+              alt: "Shuttle x Unwritten: Large-scale data processing without infrastructure overhead",
             },
           ],
         }}
@@ -35,8 +35,7 @@ export default function Unwritten() {
                 height={22}
               />
               <h2 className="self-stretch justify-start text-neutral-200 text-3xl md:text-5xl font-bold font-gradual leading-tight md:leading-[57.60px]">
-                How Unwritten powers large-scale data processing with zero
-                infrastructure overhead
+                Large-scale data processing without infrastructure overhead
               </h2>
               <p className="self-stretch justify-start text-text-secondary text-xl font-normal">
                 Using Shuttle&apos;s Rust deployment platform to accelerate
