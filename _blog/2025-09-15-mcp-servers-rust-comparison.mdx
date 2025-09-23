@@ -8,7 +8,7 @@ cover: mcp-servers-rust-comparison/cover.png
 date: '2025-09-15'
 ---
 
-Model Context Protocol (MCP) servers are enhancing developer productivity by working collectively with AI coding assistants like GitHub Copilot, Cursor, and Claude. With MCP having full access to the Rust project, the AI assistants are no longer limited to the currently open file; they can now follow instructions to execute commands, analyze the entire codebase, run tests, and automate workflows, making development faster.
+Model Context Protocol (MCP) servers boost developer productivity by working with an AI coding assistants like GitHub Copilot, Cursor, and Claude. With MCP having full access to the Rust project, the AI assistants are no longer limited to the currently open file; they can now follow instructions to execute commands, analyze the entire codebase, run tests, and automate workflows, making development faster.
 
 Most developers don't rely on a single MCP; instead, they use multiple servers, depending on their task. Each MCP comes with its own strengths and limitations.
 
@@ -21,7 +21,7 @@ Here is a quick overview of the comparison between the best MCP Servers
 | Context7 MCP | Provides up-to-date, version-specific documentation for all libraries including Rust crates | AI assistant can fetch real-time docs and code examples for accurate code generation | Low risk, read-only access to documentation APIs | None | Essential for preventing hallucinated APIs and outdated code examples |
 | Docker MCP | Good for developing containerized Rust applications. | AI assistance can issue Docker commands through MCP | Requires elevated privileges for certain operations, which can pose risks if not isolated | Can build, package, and push Rust apps to a Docker Registry | Suitable for those interested in or running Rust applications in Docker containers |
 | GitHub Server MCP | Integrates with Rust code repositories and supports CI/CD workflows (GitHub Actions) | The AI assistant can raise PRs, manage issues, and interact with GitHub workflows | Requires GitHub auth token access with limited or supervised privileges | Works effectively with GitHub Actions workflow | Great for managing repositories and automating workflows |
-| File System MCP Servers | Provide direct access to Rust source code including Cargo.toml | AI assistance has complete visibility of the Rust project | Risky. AI assistant can read and modify project files. Sandbox is recommended | Requires a custom script for deployment | Useful for testing workflows that rely on code modifications |
+| File System MCP Servers | Provide direct access to Rust source code | AI assistance has complete visibility of the Rust project | Risky because AI assistant can read and modify project files. Sandbox is recommended | Requires a custom script for deployment | Useful for testing workflows that rely on code modifications |
 | Memory MCP Servers | No direct Rust project support | Helpful in maintaining conversational context across tasks | Low risk since it operates only in memory | None | It is used in combination with other MCPs or systems |
 | Browsing MCP Servers | No direct Rust integration. This is useful for fetching Rust documentation and creating crates.io packages | AI assistant can read and retrieve information from Rust documentation | None | None | Great for referencing external Rust documentation and libraries |
 | Shuttle MCP | Built specifically for Rust. It integrates perfectly into the Rust ecosystem | It works well with AI assistants to manage and deploy Rust applications | It handles secrets and other sensitive details securely on the Shuttle Platform | It can deploy Rust applications directly from a developer's IDE | It is helpful for Rust deployment |
@@ -128,11 +128,11 @@ The real challenge arises when developers need to use multiple MCP servers simul
 
 As a developer, I want a solution that enables me to leverage multiple MCP servers with my AI assistant, unifying different tools and data sources into a single, seamless workflow. Platforms like [**Lunar.dev**](http://Lunar.dev), along with other MCP aggregators such as [**Solo.io**](http://Solo.io) and **MCP Bridge**, help tackle the complexity of managing multiple MCP servers. These platforms act as middleware, allowing you to configure various MCPs through a single interface.
 
-Here is how MCP aggregators help: 
+Here is how MCP aggregators help:
 
--   **Unified logging:** Developers can view a stream of logs from multiple MCP servers, which is more helpful in debugging than viewing logs from a single MCP server.
--   **Security monitoring and access control:** Aggregators provide fine-grained access control, making it easier to identify which permissions are granted to a specific developer.
--   **Performance optimization and caching:** Frequently accessed or requested results can be cached at the aggregator level, reducing latency, improving response times for developers, and ultimately saving time.
+- **Unified logging:** Developers can view a stream of logs from multiple MCP servers, which is more helpful in debugging than viewing logs from a single MCP server.
+- **Security monitoring and access control:** Aggregators provide fine-grained access control, making it easier to identify which permissions are granted to a specific developer.
+- **Performance optimization and caching:** Frequently accessed or requested results can be cached at the aggregator level, reducing latency, improving response times for developers, and ultimately saving time.
 
 Rust developers can increase their productivity by integrating AI-assisted workflows into their ecosystem. These aggregators add tremendous value by simplifying integration, reducing overhead, and maintaining a secure and performant development environment, allowing engineers to focus on building code.
 
@@ -161,11 +161,13 @@ You can ask your AI assistant to:
 
 ## Hands-on Example: Build and Deploy a Snippet Sharing API with Shuttle
 
-In this hands-on section, we'll build a Rust + Axum API that powers a simple code snippet sharing service (similar to Pastebin) and deploy it with Shuttle MCP. The API will include:
+In this hands-on section, we'll build a Rust + Axum API that powers a simple code snippet sharing service (similar to Pastebin) and demonstrate how to fetch documentation with Context7 MCP Server, create a pull request with GitHub MCP Server and deploy the Rust code using Shuttle MCP Server, with Cursor AI assistance.
 
--   Endpoints to create and retrieve snippets
--   Filtering snippets by programming language
--   Clean, shareable URLs with 8-character IDs
+The API will include:
+
+- Endpoints to create and retrieve snippets
+- Filtering snippets by programming language
+- Clean, shareable URLs with 8-character IDs
 
 ### API Endpoints
 
@@ -183,10 +185,22 @@ Firstly, ensure you have the following software running:
 
 1.  **Rust and Cargo:** For local development and testing.
 2.  **Shuttle CLI:** For deployment into a live environment. You can install it via Cargo, or use the installation script by following this link: [Shuttle CLI Installation.](https://docs.shuttle.dev/getting-started/installation)
+3.  **Cursor:** An AI coding assistant. We will use it to interact with MPC Servers (Context7, GitHub and Shuttle) for documentation lookup, creating PRs and deploying the Rust application.
+    
 
-#### Step 2: Setting Up Our Project
+#### Step 2: Log in to Shuttle
 
-Next, we will create our Rust project. Below is an example of the Cargo.toml configuration:
+Authenticate your Shuttle account:
+
+```bash
+shuttle login
+```
+
+This connects your CLI to your Shuttle account, enabling authorized deployments.
+
+#### Step 3: Setting Up Our Project
+
+Next, we will create our Rust project. Below is an example of the Cargo.toml configuration. You can also generate the below file `Cargo.toml` by running the shuttle command `shuttle init` . Running the command will initializes a new Shuttle project in your current directory.
 
 ```toml
 [package]
@@ -226,40 +240,39 @@ cargo build
 Run the Rust code by running this command below:
 
 ```bash
-cargo shuttle run
+shuttle run
 ```
 
-#### Step 5: Log in to Shuttle
+#### Step 5: Deploy your app
 
-Authenticate your Shuttle account:
-
-```bash
-shuttle login
-```
-
-This connects your CLI to your Shuttle account, enabling authorized deployments.
-
-#### Step 6: Deploy your app
-
-Now, let's deploy your application using Shuttle and see how it makes deployment easier by handling all the heavy lifting for you.
+Now, let's deploy your application using Shuttle and see how it makes deployment easier by handling all the heavy lifting for you. We will be deploying the application using Shuttle MCP Server.
 
 > The URLs used in the following steps are examples. When you deploy your own application, Shuttle will provide you with a unique URL.
 
-From your project root, run:
+From your cursor IDE. Run the command on the prompt
 
 ```bash
-shuttle deploy
+#Prompt 
+Deploy the Rust code
+
+Use the Shuttle MCP server.
 ```
 
 <CaptionedImage
-  src="/images/blog/mcp-servers-rust-comparison/shuttle-deploy.png"
+  src="/images/blog/mcp-servers-rust-comparison/shuttle-deploy-using-ai-assistant.png"
+  alt="How to deploy Rust application using Shuttle MCP Server"
+  caption="Deploying Rust application using Shuttle MCP Server through AI assistant"
+/>
+
+<CaptionedImage
+  src="/images/blog/mcp-servers-rust-comparison/shuttle-console.png"
   alt="Shuttle deployment console showing successful deployment with generated URL"
   caption="Shuttle deployment console showing successful deployment with generated URL"
 />
 
-After running the command `shuttle deploy`, your application will be deployed, and a link will be generated. You can access your application with the provided link. 
+The AI assistant will deploy the application and a link will be generated. You can access your application with the provided link. 
 
-For instance, in this case the link is `https://code-snippet-share-ow2x.shuttle.app`. 
+For instance, in this case, the link is `https://code-snippet-share-ow2x.shuttle.app`. 
 
 Shuttle will:
 
@@ -269,7 +282,7 @@ Shuttle will:
 - Manage SSL certificate
 - Deploy your app to a live environment
 
-#### Step 7: Test Your App Deployed Using Shuttle: Health Endpoint
+#### Step 6: Test Your App Deployed Using Shuttle: Health Endpoint
 
 Let's test the application we deployed with Shuttle to ensure all the endpoints are working correctly.
 
@@ -278,7 +291,7 @@ Let's test the application we deployed with Shuttle to ensure all the endpoints 
 You can use curl from the command line or a tool like Postman. In this example, we will use Postman.
 
 <CaptionedImage
-  src="/images/blog/mcp-servers-rust-comparison/postman-test-health-endpoint.png"
+  src="/images/blog/mcp-servers-rust-comparison/postman-shuttle-health-endpoint.png"
   alt="Postman request testing the health endpoint showing successful response"
   caption="Testing the health endpoint with Postman - successful response from deployed application"
 />
@@ -288,7 +301,7 @@ You can use curl from the command line or a tool like Postman. In this example, 
 Send a POST request to `https://code-snippet-share-ow2x.shuttle.app/snippets` with a JSON payload to create a new snippet record.
 
 <CaptionedImage
-  src="/images/blog/mcp-servers-rust-comparison/postman-post-request.png"
+  src="/images/blog/mcp-servers-rust-comparison/postman-shuttle-post-endpoint.png"
   alt="Postman POST request creating a new code snippet with JSON payload"
   caption="Creating a new code snippet via POST request - Postman showing successful creation"
 />
@@ -304,24 +317,60 @@ Send a POST request to `https://code-snippet-share-ow2x.shuttle.app/snippets` wi
 }
 ```
 
-#### Step 9: Test Your App Deployed Using Shuttle: GET API Snippet Endpoint
+#### Step 8: Test Your App Deployed Using Shuttle: GET APl Snippet Endpoint
 
 Send a GET request to `https://code-snippet-share-ow2x.shuttle.app/snippets` to retrieve all snippets.
 
 <CaptionedImage
-  src="/images/blog/mcp-servers-rust-comparison/postman-get-all-snippets.png"
-  alt="Postman GET request retrieving all code snippets from the API"
-  caption="Retrieving all snippets with GET request - showing list of created code snippets"
+  src="/images/blog/mcp-servers-rust-comparison/postman-shuttle-single-all-endpoint.png"
+  alt="Postman request to retrieve all snippets"
+  caption="Retrieving all snippets via GET request - Postman showing successful response"
 />
 
-#### Step 10: Test Your App Deployed Using Shuttle: GET a Single Snippet Endpoint
+#### Step 9: Test Your App Deployed Using Shuttle: GET a Single Snippet Endpoint
 
-Send a GET request to `https://code-snippet-share-ow2x.shuttle.app/snippets/{id}` to retrieve a specific snippet by its ID.
+Send a GET request to `https://code-snippet-share-ow2x.shuttle.app/snippets/qjs0BzAq` to retrieve a specific snippet by its ID.
 
 <CaptionedImage
-  src="/images/blog/mcp-servers-rust-comparison/postman-get-one-snippet.png"
-  alt="Postman GET request retrieving a specific code snippet by ID"
-  caption="Retrieving a single snippet by ID - Postman showing individual snippet details"
+  src="/images/blog/mcp-servers-rust-comparison/postman-request-single-snippet-endpoint.png"
+  alt="Postman request to retrieve a single snippet"
+  caption="Retrieving a specific snippet by ID - Postman showing successful response"
+/>
+
+#### Step 10: Use GitHub MCP Server
+
+We will explore how to use the GitHub MCP Server to create a Pull Request (PR) and manage the Rust project on GitHub.
+
+```bash
+# Prompt
+
+Raise a PR with my new changes
+
+Using GitHub MCP Server 
+```
+
+<CaptionedImage
+  src="/images/blog/mcp-servers-rust-comparison/github-mcpserver.png"
+  alt="Using GitHub MCP Server to raise PR"
+  caption="Using GitHub MCP Server to create a pull request with AI assistant"
+/>
+
+#### Step 11: Use Context7 MCP Server
+
+We will explore how to use Context7 MCP Server to ask questions about the Rust code and access documentation related to the project. In the example below, we demonstrate how to use Context7 MCP Server to ask a question and reference documentation "_I need to reference a Rust documentation on how i can persistent snippet data instead of using in memory HashMap_".
+
+```bash
+# Prompt 
+
+I need to reference a Rust documentation on how i can persistent snippet data instead of using in memory HashMap.
+
+Using context7 MCP
+```
+
+<CaptionedImage
+  src="/images/blog/mcp-servers-rust-comparison/context7-mcp-server-1.png"
+  alt="How to use context7 MCP Server"
+  caption="Using Context7 MCP Server to access Rust documentation and code examples"
 />
 
 ## Wrapping Up
