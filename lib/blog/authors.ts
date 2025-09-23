@@ -185,6 +185,13 @@ const authors: readonly Author[] = [
     author_url: "https://shuttle.dev",
     author_image_url: "/images/logo-2.png",
   },
+  {
+    author_id: "jeremiah",
+    author: "Jeremiah Adepoju",
+    position: "",
+    author_url: "https://github.com/AdepojuJeremy",
+    author_image_url: "/images/authors/jeremiah.jpg",
+  },
 ];
 
 export default authors;
