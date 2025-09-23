@@ -30,7 +30,11 @@ Polars provides the performance foundation for this pipeline. Its lazy evaluatio
 
 The NYC taxi dataset contains all the characteristics that make observability critical: high record volume, data quality issues with missing coordinates and invalid timestamps, complex geographic and temporal transformations, and memory-intensive aggregation operations. Processing this dataset demonstrates how proper instrumentation reveals bottlenecks and data quality issues before they impact production systems.
 
-![Screenshot of dataset sample showing column structure and data types of NYC Taxi csv files.](/images/blog/monitor-data-pipelines/screenshot-of-dataset-sample-showing-column-structure-and-data-types-of-nyc-taxi-csv-files.png)
+<CaptionedImage
+  src="/images/blog/monitor-data-pipelines/screenshot-of-dataset-sample-showing-column-structure-and-data-types-of-nyc-taxi-csv-files.png"
+  alt="Screenshot of dataset sample showing column structure and data types of NYC Taxi csv files"
+  caption="Dataset sample showing column structure and data types of NYC Taxi csv files"
+/>
 
 ## What to Monitor in Data Pipelines (and Why)
 
@@ -188,11 +192,23 @@ Memory monitoring through `rss_mb()` reads actual RSS memory consumption from `/
 
 The image below shows the memory usage monitoring for Polars, demonstrating increased memory consumption during processing.
 
-![Memory usage monitoring for Polars ETL execution.](/images/blog/monitor-data-pipelines/memory-usage-monitoring-for-polars-etl-execution.png)
+<CaptionedImage
+  src="/images/blog/monitor-data-pipelines/memory-usage-monitoring-for-polars-etl-execution.png"
+  alt="Memory usage monitoring for Polars ETL execution"
+  caption="Memory usage monitoring for Polars ETL execution showing baseline performance with low CPU utilization (1-8%) and stable 5.1GB memory usage"
+/>
 
-![Memory usage monitoring for Polars ETL execution.](/images/blog/monitor-data-pipelines/memory-usage-monitoring-for-polars-etl-execution.png)
+<CaptionedImage
+  src="/images/blog/monitor-data-pipelines/memory-usage-monitoring-for-polars-etl-execution.png"
+  alt="Memory usage monitoring for Polars ETL execution"
+  caption="Memory usage monitoring for Polars ETL execution showing increased processing activity with CPU8 reaching 32.4% while memory remains stable"
+/>
 
-![Memory usage monitoring for Polars ETL execution.](/images/blog/monitor-data-pipelines/memory-usage-monitoring-for-polars-etl-execution.png)
+<CaptionedImage
+  src="/images/blog/monitor-data-pipelines/memory-usage-monitoring-for-polars-etl-execution.png"
+  alt="Memory usage monitoring for Polars ETL execution"
+  caption="Memory usage monitoring for Polars ETL execution capturing peak ETL operations with significantly higher CPU utilization (CPU8 at 85.9%) and elevated memory consumption at 9.9GB"
+/>
 
 These images show the system monitoring during ETL pipeline execution, where the first image displays baseline performance with low CPU utilization (1-8%) and stable 5.1GB memory usage, the next image shows increased processing activity with CPU8 reaching 32.4% while memory remains stable, and the last one captures peak ETL operations with significantly higher CPU utilization (CPU8 at 85.9%) and elevated memory consumption at 9.9GB, effectively demonstrating how the Rust pipeline scales resource usage during different processing phases and validating the importance of memory monitoring.
 
@@ -240,9 +256,17 @@ When you enable BetterStack integration in your Shuttle project settings, teleme
 
 This approach works because Shuttle's runtime includes a tracer provider that automatically exports spans and metrics when observability integrations are enabled. Your application code focuses on emitting telemetry data using standard OpenTelemetry patterns, while the platform handles infrastructure concerns.
 
-![Open Telemetry Better Stack Portal](/images/blog/monitor-data-pipelines/screenshot-showing-open-telemetry-betterstack-portal.png)
+<CaptionedImage
+  src="/images/blog/monitor-data-pipelines/screenshot-showing-open-telemetry-betterstack-portal.png"
+  alt="Open Telemetry Better Stack Portal"
+  caption="BetterStack observability platform showing basic log streams with application startup events including tracing subscriber initialization and service startup messages"
+/>
 
-![OpenTelemetry BetterStack Portal with Logs and Traces](/images/blog/monitor-data-pipelines/screenshot-showing-opentelemetry-betterstack-portal-with-logs-and-traces.png)
+<CaptionedImage
+  src="/images/blog/monitor-data-pipelines/screenshot-showing-opentelemetry-betterstack-portal-with-logs-and-traces.png"
+  alt="OpenTelemetry BetterStack Portal with Logs and Traces"
+  caption="BetterStack portal displaying detailed OpenTelemetry span data with trace IDs, span IDs, and stage timing information for comprehensive pipeline monitoring"
+/>
 
 The images above demonstrate the BetterStack observability platform receiving telemetry data from the Rust ETL pipeline, where the first screen shows basic log streams with application startup events including tracing subscriber initialization and service startup messages, while the second reveals detailed OpenTelemetry span data displaying trace IDs, span IDs, and stage timing information, showcasing how the integration captures both high-level application logs and granular distributed tracing data for comprehensive pipeline monitoring.
 
@@ -363,7 +387,47 @@ curl https://your-app.shuttle.app/benchmark
 
 Shuttle automatically streams metrics to BetterStack once you configure the integration in your project settings. The platform handles authentication, retry logic, and batching that would normally require manual OTLP configuration.
 
-![Observable Pipeline Deployed on Shuttle](/images/blog/monitor-data-pipelines/screenshot-of-observable-pipeline-deployed-on-shuttle.png)![Observable Pipeline CLI Benchmarks](/images/blog/monitor-data-pipelines/screenshot-of-pbservable-pipeline-cli-benchmarks.png)![Observable Pipeline Showing CLI Telemetry information](/images/blog/monitor-data-pipelines/screenshot-of-pbservable-pipeline-showing-cli-telemetry-information.png)![Observable Pipeline Showing CLI Telemetry information](/images/blog/monitor-data-pipelines/screenshot-of-pbservable-pipeline-showing-cli-telemetry-information.png)![Observable Pipeline Showing CLI Telemetry information](/images/blog/monitor-data-pipelines/screenshot-of-pbservable-pipeline-showing-cli-telemetry-information.png)![Observable Pipeline Showing CLI Telemetry Information](/images/blog/monitor-data-pipelines/screenshot-of-pbservable-pipeline-showing-cli-telemetry-information.png)![Shuttle Showing the Deployed Application Running](/images/blog/monitor-data-pipelines/screenshot-of-shuttle-showing-the-deployed-application-running.png)
+<CaptionedImage
+  src="/images/blog/monitor-data-pipelines/screenshot-of-observable-pipeline-deployed-on-shuttle.png"
+  alt="Observable Pipeline Deployed on Shuttle"
+  caption="Observable pipeline deployed on Shuttle showing the application endpoints and deployment status"
+/>
+
+<CaptionedImage
+  src="/images/blog/monitor-data-pipelines/screenshot-of-pbservable-pipeline-cli-benchmarks.png"
+  alt="Observable Pipeline CLI Benchmarks"
+  caption="CLI execution with structured JSON logging revealing detailed performance metrics including 108-second total runtime and stage-by-stage timing breakdown"
+/>
+
+<CaptionedImage
+  src="/images/blog/monitor-data-pipelines/screenshot-of-pbservable-pipeline-showing-cli-telemetry-information.png"
+  alt="Observable Pipeline Showing CLI Telemetry information"
+  caption="Comprehensive telemetry output with dataset information and processing statistics of 12.7M records processed at 4.5M records/second"
+/>
+
+<CaptionedImage
+  src="/images/blog/monitor-data-pipelines/screenshot-of-pbservable-pipeline-showing-cli-telemetry-information.png"
+  alt="Observable Pipeline Showing CLI Telemetry information"
+  caption="Telemetry data showing deployment configuration details and performance metrics"
+/>
+
+<CaptionedImage
+  src="/images/blog/monitor-data-pipelines/screenshot-of-pbservable-pipeline-showing-cli-telemetry-information.png"
+  alt="Observable Pipeline Showing CLI Telemetry information"
+  caption="CLI telemetry information displaying processing stages and execution timing"
+/>
+
+<CaptionedImage
+  src="/images/blog/monitor-data-pipelines/screenshot-of-pbservable-pipeline-showing-cli-telemetry-information.png"
+  alt="Observable Pipeline Showing CLI Telemetry Information"
+  caption="Complete telemetry output showing the development-to-production workflow for the observable Rust ETL pipeline"
+/>
+
+<CaptionedImage
+  src="/images/blog/monitor-data-pipelines/screenshot-of-shuttle-showing-the-deployed-application-running.png"
+  alt="Shuttle Showing the Deployed Application Running"
+  caption="Shuttle deployment dashboard showing the running application with telemetry integration and log streaming capabilities"
+/>
 
 The above images demonstrate the complete development-to-production workflow for the observable Rust ETL pipeline. The initial screens show local CLI execution with structured JSON logging, revealing detailed performance metrics including 108-second total runtime and stage-by-stage timing breakdown, while subsequent displays present comprehensive telemetry output with dataset information, processing statistics of 12.7M records processed at 4.5M records/second, and deployment configuration details. The workflow continues with the deployed Shuttle application's API endpoints for health checks and benchmarking, followed by captures of the Shuttle deployment process and dashboard showing the running application with telemetry integration and log streaming capabilities, further showing how the same codebase provides both detailed local benchmarking and production-ready observability through feature flags and deployment automation.
 
@@ -418,7 +482,17 @@ You can configure dashboard for data pipeline monitoring like:
 
 These visualizations provide insights into processing performance trends, memory consumption patterns during different pipeline stages, and throughput characteristics that help with capacity planning and performance optimization.
 
-![Betterstack Dashboard showing the average cpu usage time in the data pipeline.](/images/blog/monitor-data-pipelines/betterstack-dashboard-showing-the-average-cpu-usage-time-in-the-data-pipeline.png)![Betterstack Dashboard showing the clean stage etl performance in the data pipeline.](/images/blog/monitor-data-pipelines/betterstack-dashboard-showing-the-clean-stage-etl-performance-in-the-data-pipeline.png)
+<CaptionedImage
+  src="/images/blog/monitor-data-pipelines/betterstack-dashboard-showing-the-average-cpu-usage-time-in-the-data-pipeline.png"
+  alt="Betterstack Dashboard showing the average cpu usage time in the data pipeline"
+  caption="BetterStack dashboard showing CPU usage chart with sustained high utilization around 1,200-1,500T during data processing"
+/>
+
+<CaptionedImage
+  src="/images/blog/monitor-data-pipelines/betterstack-dashboard-showing-the-clean-stage-etl-performance-in-the-data-pipeline.png"
+  alt="Betterstack Dashboard showing the clean stage etl performance in the data pipeline"
+  caption="BetterStack telemetry interface displaying Clean Time and Aggregate Time charts with regular periodic spikes indicating scheduled batch operations"
+/>
 
 These images show Betterstack monitoring dashboards tracking ETL pipeline performance, where the Telemetry interface displays Clean Time and Aggregate Time charts with regular periodic spikes indicating scheduled batch operations, while a separate CPU usage chart reveals sustained high utilization around 1,200-1,500T during data processing, providing essential visibility into pipeline performance and resource monitoring.
 
