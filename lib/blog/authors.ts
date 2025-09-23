@@ -190,7 +190,7 @@ const authors: readonly Author[] = [
     author: "Jeremiah Adepoju",
     position: "",
     author_url: "https://github.com/AdepojuJeremy",
-    author_image_url: "/images/authors/jeremiah.jpg",
+    author_image_url: "/images/authors/jeremiah.png",
   },
 ];
 
