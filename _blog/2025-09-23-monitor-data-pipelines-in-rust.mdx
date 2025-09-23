@@ -581,6 +581,16 @@ RUST_LOG=info cargo run --release --features bench-cli
 
 Local testing reveals performance characteristics that aren't visible in production monitoring. Memory allocation patterns during aggregation stages, processing bottlenecks with different dataset sizes, and error handling behaviour with malformed data files.
 
+## Wrapping Up: Fast Pipelines with Precise Monitoring
+
+Rust with Polars delivers consistent performance that traditional Python workflows often lack. While Python pipelines struggle with unpredictable memory spikes, Rust provides predictable resource usage that scales linearly with dataset size. Moreover, compile-time error checking prevents the runtime failures that typically corrupt downstream analysis in dynamically-typed environments.
+
+Building on this foundation, OpenTelemetry adds precise monitoring with minimal performance overhead. This enables comprehensive dashboards and proactive alerts that surface issues before they impact data quality. Meanwhile, Shuttle eliminates the deployment complexity that often delays pipeline rollouts, providing zero-config OTLP export, automatic retry handling, and managed authentication out of the box.
+
+The business impact is substantial: teams ship data products 3x faster without infrastructure bottlenecks, process larger datasets with predictable costs, and maintain higher system reliability that directly improves user experience. Together, these tools create production-ready workflows that deliver fast processing through Rust and Polars, comprehensive visibility via OpenTelemetry, and frictionless deployment through Shuttle. This proactive monitoring approach prevents costly memory failures, enables accurate capacity planning, and catches performance bottlenecks before they affect end users.
+
+**Ready to build observable data pipelines? Try the complete example on Shuttle with one-click deployment:** [**Deploy Observable Pipeline**](https://github.com/AdepojuJeremy/shuttle-examples/tree/main/axum/polars-otel-shuttle)
+
 ## Troubleshooting Telemetry Issues in Rust Pipelines - FAQ
 
 **Q: My metrics aren't showing up in BetterStack. What's wrong?**
@@ -598,13 +608,3 @@ Local testing reveals performance characteristics that aren't visible in product
 **Q: How can I get better error information when my pipeline fails?**
 
 **A:** Implement structured error logging that includes file paths, record counts, and processing stage information in error messages. This context enables rapid issue resolution by showing exactly where and why failures occur, rather than generic error messages that require extensive debugging to understand.
-
-## Wrapping Up: Fast Pipelines with Precise Monitoring
-
-Rust with Polars delivers consistent performance that traditional Python workflows often lack. While Python pipelines struggle with unpredictable memory spikes, Rust provides predictable resource usage that scales linearly with dataset size. Moreover, compile-time error checking prevents the runtime failures that typically corrupt downstream analysis in dynamically-typed environments.
-
-Building on this foundation, OpenTelemetry adds precise monitoring with minimal performance overhead. This enables comprehensive dashboards and proactive alerts that surface issues before they impact data quality. Meanwhile, Shuttle eliminates the deployment complexity that often delays pipeline rollouts, providing zero-config OTLP export, automatic retry handling, and managed authentication out of the box.
-
-The business impact is substantial: teams ship data products 3x faster without infrastructure bottlenecks, process larger datasets with predictable costs, and maintain higher system reliability that directly improves user experience. Together, these tools create production-ready workflows that deliver fast processing through Rust and Polars, comprehensive visibility via OpenTelemetry, and frictionless deployment through Shuttle. This proactive monitoring approach prevents costly memory failures, enables accurate capacity planning, and catches performance bottlenecks before they affect end users.
-
-**Ready to build observable data pipelines? Try the complete example on Shuttle with one-click deployment:** [**Deploy Observable Pipeline**](https://github.com/AdepojuJeremy/shuttle-examples/tree/main/axum/polars-otel-shuttle)
