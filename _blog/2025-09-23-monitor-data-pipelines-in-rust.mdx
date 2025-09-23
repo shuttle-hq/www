@@ -55,7 +55,7 @@ Instrumenting Rust applications for data pipeline monitoring requires strategic 
 
 Here's how to structure observability in your Rust data pipeline using OpenTelemetry and tracing:
 
-```javascript
+```rust
 use polars::prelude::*;
 use std::collections::HashMap;
 use std::time::Instant;
@@ -184,9 +184,9 @@ impl PolarsETL {
 
 Memory monitoring through `rss_mb()` reads actual RSS memory consumption from `/proc/self/status`, providing accurate memory usage data during each processing stage. This approach works reliably in containerized environments and cloud deployments.
 
-⚠️ **Platform-Specific Code**: This memory monitoring function reads from the `/proc` filesystem, which is specific to Linux. For cross-platform compatibility, you might consider using a crate like `sysinfo` that provides unified system information APIs across Windows, macOS, and Linux.
+⚠️ **Platform-Specific Code**: This memory monitoring function reads from the `/proc` filesystem, which is specific to Linux. For cross-platform compatibility, consider using a crate like `sysinfo` that provides unified system information APIs across Windows, macOS, and Linux.
 
-The Image below shows the memory usage monitoring for Polars, showing increased memory consumption.
+The image below shows the memory usage monitoring for Polars, demonstrating increased memory consumption during processing.
 
 ![Memory usage monitoring for Polars ETL execution.](https://s3.eu-west-2.amazonaws.com/hmb-shuttle-kxdg/1757978001826-Screenshot-From-2025-08-25-04-47-42.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4IBKNRD4QFSY4YSO%2F20250915%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250915T231322Z&X-Amz-Expires=604800&X-Amz-Signature=38063e79c5597bd1e2fc3b24da98b050a52840ffa2bb7cd23ef41a23f566b88c&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
 
@@ -194,7 +194,7 @@ The Image below shows the memory usage monitoring for Polars, showing increased 
 
 ![Memory usage monitoring for Polars ETL execution.](https://s3.eu-west-2.amazonaws.com/hmb-shuttle-kxdg/1757978127625-Screenshot-From-2025-08-25-04-48-29.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4IBKNRD4QFSY4YSO%2F20250915%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250915T231527Z&X-Amz-Expires=604800&X-Amz-Signature=4c4ec7f1e6ba05b4855fb1c8b2cc98eceaba5e4e32b8c44a80bea7bae715e0c2&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
 
-These images above shows the system monitoring during ETL pipeline execution, where the first image displays baseline performance with low CPU utilization (1-8%) and stable 5.1GB memory usage, next image shows increased processing activity with CPU8 reaching 32.4% while memory remains stable, and the last one captures peak ETL operations with significantly higher CPU utilization (CPU8 at 85.9%) and elevated memory consumption at 9.9GB, effectively demonstrating how the Rust pipeline scales resource usage during different processing phases and validating the importance of memory monitoring.
+These images show the system monitoring during ETL pipeline execution, where the first image displays baseline performance with low CPU utilization (1-8%) and stable 5.1GB memory usage, the next image shows increased processing activity with CPU8 reaching 32.4% while memory remains stable, and the last one captures peak ETL operations with significantly higher CPU utilization (CPU8 at 85.9%) and elevated memory consumption at 9.9GB, effectively demonstrating how the Rust pipeline scales resource usage during different processing phases and validating the importance of memory monitoring.
 
 By establishing these observability goals upfront, tracking performance, memory usage, and data quality, you create a foundation for reliable monitoring.
 
@@ -204,7 +204,7 @@ Shuttle provides out-of-the-box OpenTelemetry integration that eliminates tradit
 
 To enable this integration, include [Shuttle's setup-otel-exporter feature](https://www.shuttle.dev/blog/2025/02/19/using-shuttle-with-betterstack) in your runtime configuration:
 
-```javascript
+```toml
 [dependencies]
 shuttle-runtime = { version = "0.56", features = ["setup-otel-exporter"] }
 shuttle-axum = "0.56"
@@ -215,7 +215,7 @@ opentelemetry = { version = "0.30", features = ["trace"] }
 
 Then configure observability in your application code:
 
-```javascript
+```rust
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilter};
 
 pub fn init_tracing(service_name: &str) {
@@ -252,7 +252,7 @@ Shuttle deployment transforms your observable Rust application into a production
 
 **Step 1: Set up your application for Shuttle deployment:**
 
-```javascript
+```rust
 mod etl;
 mod observability;
 
@@ -342,7 +342,7 @@ fn api_router() -> Router {
 
 **Step 2: Deploy your observable pipeline:**
 
-```javascript
+```bash
 # Deploy to Shuttle platform
 shuttle deploy
 
@@ -353,7 +353,7 @@ shuttle logs --follow
 
 **Step 3: Testing endpoints confirms telemetry data flows correctly:**
 
-```javascript
+```bash
 # Test health endpoint
 curl https://your-app.shuttle.app/health
 
@@ -373,14 +373,10 @@ When running ETL pipelines, it's not enough to just know they work; you need vis
 
 Here are some common ETL-specific metrics and their naming conventions you should follow:
 
--   **etl.load.duration:** measures the time spent loading CSV
-    
+-   **etl.load.duration**: measures the time spent loading CSV
 -   **etl.clean.duration**: tracks the performance of data cleaning stage
-    
 -   **etl.aggregate.duration**: captures how long aggregation operation takes
-    
 -   **etl.rows.processed**: shows record throughput and overall volume
-    
 -   **etl.memory.peak**: reports peak memory consumption per stage
     
 
@@ -388,7 +384,7 @@ You can configure dashboard for data pipeline monitoring like:
 
 **Memory Usage Over Time Dashboard**:
 
-```javascript
+```json
 {
   "metric": "etl.memory.peak",
   "aggregation": "max",
@@ -400,10 +396,10 @@ You can configure dashboard for data pipeline monitoring like:
 
 **Stage-by-Stage Duration Analysis**:
 
-```javascript
+```json
 {
   "metrics": ["etl.load.duration", "etl.clean.duration", "etl.aggregate.duration"],
-  "aggregation": "avg", 
+  "aggregation": "avg",
   "visualization": "stacked_area",
   "group_by": ["stage"]
 }
@@ -411,9 +407,9 @@ You can configure dashboard for data pipeline monitoring like:
 
 **Processing Throughput Tracking**:
 
-```javascript
+```json
 {
-  "metric": "etl.rows.processed", 
+  "metric": "etl.rows.processed",
   "aggregation": "rate",
   "time_window": "1m",
   "visualization": "gauge"
@@ -436,7 +432,7 @@ Feature flags enable different build targets for local development versus produc
 
 **Configure feature-based compilation in Cargo.toml:**
 
-```javascript
+```toml
 [features]
 bench-cli = []
 default = []
@@ -444,7 +440,7 @@ default = []
 
 **Local development implementation with full ETL processing:**
 
-```javascript
+```rust
 #[cfg(feature = "bench-cli")]
 fn main() -> Result<(), Box> {
     observability::init_tracing("polars-etl-benchmark-cli");
@@ -492,7 +488,7 @@ fn main() -> Result<(), Box> {
 
 **CLI workflow for benchmarking locally** with comprehensive logs and metrics:
 
-```javascript
+```bash
 # Process full dataset with detailed telemetry
 RUST_LOG=debug cargo run --release --features bench-cli
 
