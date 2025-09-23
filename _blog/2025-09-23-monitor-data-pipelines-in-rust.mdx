@@ -6,6 +6,12 @@ tags: [rust, data-pipelines, monitoring]
 thumb: monitor-data-pipelines/cover.png
 cover: monitor-data-pipelines/cover.png
 date: '2025-09-23'
+takeaways:
+  - "Rust with Polars delivers predictable performance, avoiding Python's unpredictable memory spikes."
+  - "OpenTelemetry provides standardized observability with minimal performance overhead."
+  - "Data pipelines need different metrics than web apps: stage timing, throughput, and memory usage."
+  - "Feature flags enable separate CLI builds for local testing while keeping production deployments lightweight."
+  - "Structured logging with contextual attributes enables rapid debugging and performance analysis."
 ---
 
 **TL;DR**: _Data pipelines often fail silently, corrupting data before anyone notices. We show you how to build a high-performance, observable ETL pipeline in Rust using Polars for speed, OpenTelemetry for detailed metrics and traces, and Shuttle for zero-config deployment and telemetry export. This guide provides commented code, deployment steps, and dashboard examples to help you catch failures early, pinpoint bottlenecks, and ensure data quality from start to finish._
