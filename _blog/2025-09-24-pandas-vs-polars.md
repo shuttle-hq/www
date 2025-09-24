@@ -1,10 +1,17 @@
-# Pandas vs Polars: Which Data Pipeline Runs Faster
-
-**Meta:** If your workflows hit performance walls, the choice between Pandas vs Polars is critical. Learn benchmarks, code, and how Shuttle enables faster ETL pipelines.
-
-**_TL;DR_**
-
-_Polars (Rust-based)often outperforms Pandas (Python-based) by 3-10× on large ETL workloads, though gains depend on dataset size and operations. On smaller data (<1M rows), Pandas may remain competitive. Pandas is still great for familiarity and ecosystem integration, but if your workflows are hitting performance walls, Polars is the better choice for speed and scalability. Deploying Polars pipelines on_ **_Shuttle_** _makes ETL workloads production-ready with minimal overhead._
+---
+title: "Pandas vs Polars: Which Data Pipeline Runs Faster"
+description: "If your workflows hit performance walls, the choice between Pandas vs Polars is critical. Learn benchmarks, code, and how Shuttle enables faster ETL pipelines."
+author: jeremiah
+tags: [rust, data-pipelines, pandas, polars, performance, etl]
+thumb: pandas-vs-polars/cover.png
+cover: pandas-vs-polars/cover.png
+date: "2025-09-23"
+takeaways:
+  - "Polars (Rust-based) often outperforms Pandas (Python-based) by 3-10× on large ETL workloads, though gains depend on dataset size and operations."
+  - "On smaller data (<1M rows), Pandas may remain competitive and offers better ecosystem integration."
+  - "Pandas is still great for familiarity and ecosystem integration, but if your workflows are hitting performance walls, Polars is the better choice for speed and scalability."
+  - "Deploying Polars pipelines on Shuttle makes ETL workloads production-ready with minimal overhead."
+---
 
 When your data science workflows start hitting performance walls, the choice between Python's Pandas and Rust's Polars becomes critical. I recently discovered this firsthand while processing millions of rows of data that pushed my Python scripts to their breaking point.
 
