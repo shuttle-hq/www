@@ -33,9 +33,9 @@
 .highlight-line {
   margin-left: -16px;
   margin-right: -16px;
-  background-color: rgba(55, 65, 81, 0.5);
+  background-color: rgba(55, 65, 81, 0.35);
   /* Set highlight bg color */
-  border-left: 4px solid rgb(59, 130, 246);
+  border-left: 4px solid rgba(55, 65, 81, 0.75);
   /* Set highlight accent border color */
 }
 

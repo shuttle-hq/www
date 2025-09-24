@@ -18,6 +18,43 @@ export const Pre = ({ children, ...props }: any) => {
 
   const code = getChildren(children.props.children).join("");
 
+  // rehype-prism-plus now nests tokens inside elements with className "code-line".
+  // Previously we relied on a top-level child having className "token table class-name".
+  // We still need to strip the "table" class from TOML table identifiers so they don't
+  // get interpreted/styled incorrectly. We do this recursively now.
+  function sanitizeTomlTables(node: any): any {
+    if (!node || typeof node === "string") return node;
+    if (!node.props) return node;
+
+    let className = node.props.className;
+    if (
+      props.className === "language-toml" &&
+      typeof className === "string" &&
+      className.includes("token") &&
+      className.includes("table") &&
+      className.includes("class-name")
+    ) {
+      // Remove just the 'table' class token
+      className = className
+        .split(/\s+/)
+        .filter((c) => c !== "table")
+        .join(" ");
+    }
+
+    const newChildren = [node.props.children]
+      .flat()
+      .map((c: any) => sanitizeTomlTables(c));
+
+    return {
+      ...node,
+      props: {
+        ...node.props,
+        className,
+        children: newChildren,
+      },
+    };
+  }
+
   return (
     <div className={clsx("relative shuttle-scrollbar")}>
       <CopyButton
@@ -49,30 +86,8 @@ export const Pre = ({ children, ...props }: any) => {
                     }),
                   ];
                 }
-
-                // This is a hack to prevent toml tables from being interpreted as HTML tables
-
-                // Before this fix:
-                // [
-                //   dependencies
-                // ]
-
-                // After this fix:
-                // [dependencies]
-                if (
-                  props.className === "language-toml" &&
-                  child.props.className === "token table class-name"
-                ) {
-                  return {
-                    ...child,
-                    props: {
-                      ...child.props,
-                      className: "token class-name",
-                    },
-                  };
-                }
-
-                return child;
+                // Recursively sanitize TOML table tokens inside nested structures
+                return sanitizeTomlTables(child);
               }),
             ],
           },
