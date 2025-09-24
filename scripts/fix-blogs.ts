@@ -12,6 +12,7 @@ const problematicChars: Record<string, string> = {
   "\u2013": "-", // En dash
   "\u2026": "...", // Horizontal ellipsis
   "\u00A0": " ", // Non-breaking space
+  "\u00D7": "x", // Multiplication sign
 };
 
 function fixBlogFiles() {
