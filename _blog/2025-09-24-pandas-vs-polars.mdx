@@ -40,7 +40,11 @@ The ETL pipeline covers five core operations that appear in most data processing
 
 This represents typical data pipeline tasks in production environments where teams process transaction logs, sensor data, or user behaviour analytics regularly.
 
-![Screenshot of Dataset sample showing column structure and data types from NYC taxi data](https://s3.eu-west-2.amazonaws.com/hmb-shuttle-kxdg/1757971899932-Screenshot-From-2025-08-23-01-12-50.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4IBKNRD4QFSY4YSO%2F20250915%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250915T213140Z&X-Amz-Expires=604800&X-Amz-Signature=8e0ac253c74c51049af2792002e5853b0d5544e67095b7aec48163772b1c18e8&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+<CaptionedImage
+  src="/images/blog/pandas-vs-polars/dataset-sample-column-structure-data-types-nyc-taxi-data.png"
+  alt="Screenshot of Dataset sample showing column structure and data types from NYC taxi data"
+  caption="Dataset sample showing column structure and data types from NYC taxi data"
+/>
 
 ## Performance Bottlenecks in Python ETL with Pandas
 
@@ -93,7 +97,11 @@ df_typed = df_filled.astype({'passenger_count': 'int32'})
 
 These sequential operations become increasingly expensive as datasets grow, particularly when dealing with wide schemas containing many columns with different data types.
 
-![System monitor showing single-core CPU usage during Pandas operations](https://s3.eu-west-2.amazonaws.com/hmb-shuttle-kxdg/1757972137087-Screenshot-From-2025-08-27-02-00-30.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4IBKNRD4QFSY4YSO%2F20250915%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250915T213537Z&X-Amz-Expires=604800&X-Amz-Signature=d2cb07f643dab93f0c12ed443539c9bc5bdfcc94a46ceaafa810358ff89480fc&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+<CaptionedImage
+  src="/images/blog/pandas-vs-polars/system-monitor-single-core-cpu-usage-pandas-operations.png"
+  alt="System monitor showing single-core CPU usage during Pandas operations"
+  caption="System monitor showing single-core CPU usage during Pandas operations"
+/>
 
 ## How Polars Uses Rust for Fast, Multi-Threaded Data Processing
 
@@ -159,9 +167,17 @@ let daily_stats = LazyFrame::scan_csv("data.csv", ScanArgsCSV::default())?
 
 Memory efficiency comes from Rust's ownership system and Polars' streaming capabilities, which process data in chunks rather than loading entire datasets into memory. As the graph belows shows, Polars also maximizes CPU utilization, distributing work across all cores for consistently fast execution.
 
-![CPU usage graph showing all cores utilized during Polars operations](https://s3.eu-west-2.amazonaws.com/hmb-shuttle-kxdg/1757972424515-Screenshot-From-2025-08-25-04-48-10.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4IBKNRD4QFSY4YSO%2F20250915%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250915T214024Z&X-Amz-Expires=604800&X-Amz-Signature=fd9a4fce6f9e7e2a4892a3518d09c0f2ca454e0f1cb48e84b1b13202ac9199f9&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+<CaptionedImage
+  src="/images/blog/pandas-vs-polars/cpu-usage-graph-all-cores-polars-operations.png"
+  alt="CPU usage graph showing all cores utilized during Polars operations"
+  caption="CPU usage graph showing all cores utilized during Polars operations"
+/>
 
-![CPU usage graph showing all cores utilized during Polars operations](https://s3.eu-west-2.amazonaws.com/hmb-shuttle-kxdg/1757972457805-Screenshot-From-2025-08-25-04-48-29.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4IBKNRD4QFSY4YSO%2F20250915%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250915T214058Z&X-Amz-Expires=604800&X-Amz-Signature=ac52ec19cfc0d31c7044996661db341481feba71663c7119f7bd9777ac2ebea3&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+<CaptionedImage
+  src="/images/blog/pandas-vs-polars/cpu-usage-graph-all-cores-polars-operations-1.png"
+  alt="CPU usage graph showing all cores utilized during Polars operations"
+  caption="CPU usage graph showing all cores utilized during Polars operations"
+/>
 
 ## Pandas vs Polars ETL Pipeline Examples
 
@@ -367,7 +383,17 @@ rustc --version
 # OS: Ubuntu 22.04 LTS
 ```
 
-![Code Comparison Showing Pandas vs Polars side by side](https://s3.eu-west-2.amazonaws.com/hmb-shuttle-kxdg/1757972570624-Screenshot-From-2025-08-23-01-20-55.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4IBKNRD4QFSY4YSO%2F20250915%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250915T214250Z&X-Amz-Expires=604800&X-Amz-Signature=79c154e01a0a95ed8376a2f46814ab24b855a7587f85b1582168cd3c9ffbba11&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)![Code comparison showing Pandas vs Polars side by side](https://s3.eu-west-2.amazonaws.com/hmb-shuttle-kxdg/1757972699993-Screenshot-From-2025-08-23-01-23-56.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4IBKNRD4QFSY4YSO%2F20250915%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250915T214500Z&X-Amz-Expires=604800&X-Amz-Signature=2afa3bc6c42d6cd610e4b84d54fc902a885d8000846591bb5b3e1605ba961adb&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+<CaptionedImage
+  src="/images/blog/pandas-vs-polars/code-comparison-pandas-vs-polars-side-by-side.png"
+  alt="Code Comparison Showing Pandas vs Polars side by side"
+  caption="Code Comparison Showing Pandas vs Polars side by side"
+/>
+
+<CaptionedImage
+  src="/images/blog/pandas-vs-polars/code-comparison-pandas-vs-polars-side-by-side-1.png"
+  alt="Code comparison showing Pandas vs Polars side by side"
+  caption="Code comparison showing Pandas vs Polars side by side"
+/>
 
 These side-by-side implementations highlight the key design differences between Pandas and Polars. Pandas follows an eager, memory-intensive approach, while Polars builds an optimized lazy query plan that executes more efficiently. With both pipelines producing the same analytical outputs, the real distinction emerges in how they perform at scale.
 
@@ -566,7 +592,17 @@ shuttle login
 shuttle deploy
 ```
 
-![Screenshot showing cargo shuttle deployed.](https://s3.eu-west-2.amazonaws.com/hmb-shuttle-kxdg/1757972832171-Screenshot-From-2025-08-23-01-28-41.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4IBKNRD4QFSY4YSO%2F20250915%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250915T214712Z&X-Amz-Expires=604800&X-Amz-Signature=23f27bf19936d9df622806bc8d2b3c762befc92e09c30b865da1b93248ea2503&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)![Screenshot showing cargo shuttle deployed.](https://s3.eu-west-2.amazonaws.com/hmb-shuttle-kxdg/1757972898208-Screenshot-From-2025-08-23-01-37-34.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4IBKNRD4QFSY4YSO%2F20250915%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250915T214818Z&X-Amz-Expires=604800&X-Amz-Signature=23bcaa03d692f9a50652515c9e8f3e3dff843829c5f7d4523480dff66641ed93&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+<CaptionedImage
+  src="/images/blog/pandas-vs-polars/cargo-shuttle-deployed.png"
+  alt="Screenshot showing cargo shuttle deployed"
+  caption="Screenshot showing cargo shuttle deployed"
+/>
+
+<CaptionedImage
+  src="/images/blog/pandas-vs-polars/cargo-shuttle-deployed-1.png"
+  alt="Screenshot showing cargo shuttle deployed"
+  caption="Screenshot showing cargo shuttle deployed"
+/>
 
 Shuttle handles all the complex infrastructure concerns:
 
