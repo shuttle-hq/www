@@ -25,11 +25,11 @@ The dataset characteristics make it representative of typical production scenari
 
 The ETL pipeline covers five core operations that appear in most data processing workflows:
 
-1.  **Load**: Reading CSV data from storage into memory or lazy frames
-2.  **Clean**: Handling missing data, filtering invalid values, and data type conversions
-3.  **Aggregate**: Grouping operations across temporal and categorical dimensions
-4.  **Filter**: Complex multi-condition filtering and sorting operations
-5.  **Export**: Writing processed results back to storage systems
+1. **Load**: Reading CSV data from storage into memory or lazy frames
+2. **Clean**: Handling missing data, filtering invalid values, and data type conversions
+3. **Aggregate**: Grouping operations across temporal and categorical dimensions
+4. **Filter**: Complex multi-condition filtering and sorting operations
+5. **Export**: Writing processed results back to storage systems
 
 This represents typical data pipeline tasks in production environments where teams process transaction logs, sensor data, or user behaviour analytics regularly.
 
