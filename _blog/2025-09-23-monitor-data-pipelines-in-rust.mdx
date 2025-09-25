@@ -585,7 +585,17 @@ Building on this foundation, OpenTelemetry adds precise monitoring with minimal 
 
 The business impact is substantial: teams ship data products 3x faster without infrastructure bottlenecks, process larger datasets with predictable costs, and maintain higher system reliability that directly improves user experience. Together, these tools create production-ready workflows that deliver fast processing through Rust and Polars, comprehensive visibility via OpenTelemetry, and frictionless deployment through Shuttle. This proactive monitoring approach prevents costly memory failures, enables accurate capacity planning, and catches performance bottlenecks before they affect end users.
 
-**Ready to build observable data pipelines? Try the complete example on Shuttle with one-click deployment:** [**Deploy Observable Pipeline**](https://github.com/shuttle-hq/shuttle-examples/tree/main/axum/polars-otel-shuttle)
+**Ready to build observable data pipelines? Get started with the complete example:**
+
+```bash
+shuttle init --from shuttle-hq/shuttle-examples --subfolder axum/polars-otel-shuttle
+```
+
+Then deploy with:
+
+```bash
+shuttle deploy
+```
 
 ## Troubleshooting Telemetry Issues in Rust Pipelines - FAQ
 
