@@ -151,7 +151,7 @@ const mdxComponents: MDXRemoteProps["components"] = {
   table: (props) => {
     const { className, children, ...rest } = props as any;
     return (
-      <div className="my-6 w-full overflow-x-auto xl:overflow-x-visible">
+      <div className="my-6 w-full overflow-x-auto xl:overflow-x-visible shuttle-scrollbar">
         <table
           {...rest}
           className={clsx(

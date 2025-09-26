@@ -5,7 +5,7 @@ author: jeremiah
 tags: [rust, data-pipelines, monitoring]
 thumb: monitor-data-pipelines/cover.png
 cover: monitor-data-pipelines/cover.png
-date: '2025-09-23'
+date: "2025-09-23"
 takeaways:
   - "Rust with Polars delivers predictable performance, avoiding Python's unpredictable memory spikes."
   - "OpenTelemetry provides standardized observability with minimal performance overhead."
@@ -46,14 +46,10 @@ The NYC taxi dataset contains all the characteristics that make observability cr
 
 Data pipeline monitoring differs fundamentally from web application observability. Instead of request latency and error rates, you need visibility into processing characteristics that determine pipeline reliability and data quality.
 
--   **Stage-level execution time** reveals processing bottlenecks. While web applications measure individual request duration, data pipelines need timing for load operations, parsing stages, transformation steps, aggregation phases, and output generation. A single slow stage can bottleneck the entire pipeline.
-    
--   **Throughput and record counts** provide data volume insights. Monitor records processed per second, total record counts per stage, and record rejection rates during validation. These metrics help identify processing capacity limits and data quality trends.
-    
--   **Peak memory consumption per stage** prevents out-of-memory failures. Filtering operations might spike memory usage when loading large intermediate results. Aggregation stages require materializing grouped data. Memory patterns vary dramatically based on dataset characteristics and processing logic.
-    
--   **Error paths and panics in Rust code** need special attention. Unlike garbage-collected languages, Rust memory safety prevents many runtime failures, but data pipeline errors often relate to schema mismatches, missing files, or invalid data formats. Capturing error context enables rapid debugging.
-    
+- **Stage-level execution time** reveals processing bottlenecks. While web applications measure individual request duration, data pipelines need timing for load operations, parsing stages, transformation steps, aggregation phases, and output generation. A single slow stage can bottleneck the entire pipeline.
+- **Throughput and record counts** provide data volume insights. Monitor records processed per second, total record counts per stage, and record rejection rates during validation. These metrics help identify processing capacity limits and data quality trends.
+- **Peak memory consumption per stage** prevents out-of-memory failures. Filtering operations might spike memory usage when loading large intermediate results. Aggregation stages require materializing grouped data. Memory patterns vary dramatically based on dataset characteristics and processing logic.
+- **Error paths and panics in Rust code** need special attention. Unlike garbage-collected languages, Rust memory safety prevents many runtime failures, but data pipeline errors often relate to schema mismatches, missing files, or invalid data formats. Capturing error context enables rapid debugging.
 
 These metrics differ from typical web application monitoring because data pipelines process discrete batches rather than continuous streams, consume resources in predictable patterns based on dataset size, and fail differently than request-response applications.
 
@@ -110,7 +106,7 @@ impl PolarsETL {
         // Manual span creation for nested tracing hierarchy
         let load_span = span!(Level::INFO, "etl_load", file = file_path);
         let _enter = load_span.enter();
-        
+
         // Structured logging with contextual information
         info!("Loading CSV file: {}", file_path);
         let start = Instant::now(); // Performance timing measurement
@@ -121,7 +117,7 @@ impl PolarsETL {
             .finish()?
             .select([
                 col("pickup_longitude"),
-                col("pickup_latitude"), 
+                col("pickup_latitude"),
                 col("trip_distance"),
                 col("passenger_count"),
                 col("total_amount"),
@@ -131,7 +127,7 @@ impl PolarsETL {
         let t = start.elapsed().as_secs_f64(); // Duration calculation
         self.metrics.insert("load_time".into(), t); // Custom metric storage
         bump_peak(&mut self.metrics, "after_load"); // Memory usage tracking
-        
+
         // Structured logging with key-value metrics for observability platforms
         info!(
             etl.load.duration = t,                    // Performance metric
@@ -139,7 +135,7 @@ impl PolarsETL {
             stage = "load",                           // Pipeline stage identifier
             "CSV load completed"                      // Human-readable message
         );
-        
+
         Ok(self)
     }
 
@@ -149,7 +145,7 @@ impl PolarsETL {
         // Nested span for detailed tracing hierarchy
         let clean_span = span!(Level::INFO, "etl_clean");
         let _enter = clean_span.enter();
-        
+
         // Stage-specific logging with contextual information
         info!("Starting data cleaning stage");
         let start = Instant::now(); // Performance measurement start
@@ -171,7 +167,7 @@ impl PolarsETL {
         let t = start.elapsed().as_secs_f64(); // Performance timing
         self.metrics.insert("clean_time".into(), t); // Stage-specific metrics
         bump_peak(&mut self.metrics, "after_clean"); // Memory tracking per stage
-        
+
         // Multi-dimensional metrics emission with contextual attributes
         info!(
             etl.clean.duration = t,                   // Stage performance
@@ -179,18 +175,15 @@ impl PolarsETL {
             stage = "clean",                          // Pipeline stage tag
             "Data cleaning completed"                 // Completion status
         );
-        
+
         Ok(self)
     }
 }
 ```
 
--   **Spans with contextual attributes** provide distributed tracing capability. Each processing stage gets its own span with resource attributes like stage, file, and processing metadata. This enables tracing the whole process across complex pipeline operations.
-    
--   **Instrumented functions** using the `#[instrument]` attribute automatically capture function entry/exit, execution time, and error conditions. The tracing framework handles span lifecycle management and context propagation.
-    
--   **Metrics emission** follows OpenTelemetry conventions with structured field names like `etl.load.duration` and `etl.clean.memory_mb`. These metrics integrate with observability platforms for dashboard creation and alerting.
-    
+- **Spans with contextual attributes** provide distributed tracing capability. Each processing stage gets its own span with resource attributes like stage, file, and processing metadata. This enables tracing the whole process across complex pipeline operations.
+- **Instrumented functions** using the `#[instrument]` attribute automatically capture function entry/exit, execution time, and error conditions. The tracing framework handles span lifecycle management and context propagation.
+- **Metrics emission** follows OpenTelemetry conventions with structured field names like `etl.load.duration` and `etl.clean.memory_mb`. These metrics integrate with observability platforms for dashboard creation and alerting.
 
 Memory monitoring through `rss_mb()` reads actual RSS memory consumption from `/proc/self/status`, providing accurate memory usage data during each processing stage. This approach works reliably in containerized environments and cloud deployments.
 
@@ -295,11 +288,11 @@ use tracing::info;
 #[shuttle_runtime::main]
 async fn shuttle_main() -> shuttle_axum::ShuttleAxum {
     observability::init_tracing("polars-etl-pipeline");
-    
+
     let app = api_router()
         .layer(CorsLayer::permissive())
         .layer(TraceLayer::new_for_http());
-        
+
     info!(event = "startup", service = "polars-etl", "Application ready");
     Ok(app.into())
 }
@@ -322,10 +315,10 @@ async fn health() -> &'static str {
 
 async fn benchmark(_query: Query>) -> Json {
     let start = std::time::Instant::now();
-    
+
     info!(
         etl.benchmark.start = 1,
-        endpoint = "/benchmark", 
+        endpoint = "/benchmark",
         "Benchmark endpoint called"
     );
 
@@ -443,12 +436,11 @@ When running ETL pipelines, it's not enough to just know they work; you need vis
 
 Here are some common ETL-specific metrics and their naming conventions you should follow:
 
--   **etl.load.duration**: measures the time spent loading CSV
--   **etl.clean.duration**: tracks the performance of data cleaning stage
--   **etl.aggregate.duration**: captures how long aggregation operation takes
--   **etl.rows.processed**: shows record throughput and overall volume
--   **etl.memory.peak**: reports peak memory consumption per stage
-    
+- **etl.load.duration**: measures the time spent loading CSV
+- **etl.clean.duration**: tracks the performance of data cleaning stage
+- **etl.aggregate.duration**: captures how long aggregation operation takes
+- **etl.rows.processed**: shows record throughput and overall volume
+- **etl.memory.peak**: reports peak memory consumption per stage
 
 You can configure dashboard for data pipeline monitoring like:
 
@@ -468,7 +460,11 @@ You can configure dashboard for data pipeline monitoring like:
 
 ```json
 {
-  "metrics": ["etl.load.duration", "etl.clean.duration", "etl.aggregate.duration"],
+  "metrics": [
+    "etl.load.duration",
+    "etl.clean.duration",
+    "etl.aggregate.duration"
+  ],
   "aggregation": "avg",
   "visualization": "stacked_area",
   "group_by": ["stage"]
@@ -526,7 +522,7 @@ fn main() -> Result<(), Box> {
     observability::init_tracing("polars-etl-benchmark-cli");
 
     println!("Starting Polars ETL benchmark with observability");
-    
+
     let data_file = std::env::var("DATA_PATH")
         .unwrap_or_else(|_| "data/yellow_tripdata_2015-01.csv".to_string());
 
@@ -548,7 +544,7 @@ fn main() -> Result<(), Box> {
         Ok(_) => {
             let total_time = total_start.elapsed().as_secs_f64();
             println!("ETL benchmark completed in {:.2} seconds", total_time);
-            
+
             let metrics = etl.get_metrics();
             println!("Performance metrics:");
             for (key, value) in metrics {
@@ -589,7 +585,17 @@ Building on this foundation, OpenTelemetry adds precise monitoring with minimal 
 
 The business impact is substantial: teams ship data products 3x faster without infrastructure bottlenecks, process larger datasets with predictable costs, and maintain higher system reliability that directly improves user experience. Together, these tools create production-ready workflows that deliver fast processing through Rust and Polars, comprehensive visibility via OpenTelemetry, and frictionless deployment through Shuttle. This proactive monitoring approach prevents costly memory failures, enables accurate capacity planning, and catches performance bottlenecks before they affect end users.
 
-**Ready to build observable data pipelines? Try the complete example on Shuttle with one-click deployment:** [**Deploy Observable Pipeline**](https://github.com/AdepojuJeremy/shuttle-examples/tree/main/axum/polars-otel-shuttle)
+**Ready to build observable data pipelines? Get started with the complete example:**
+
+```bash
+shuttle init --from shuttle-hq/shuttle-examples --subfolder axum/polars-otel-shuttle
+```
+
+Then deploy with:
+
+```bash
+shuttle deploy
+```
 
 ## Troubleshooting Telemetry Issues in Rust Pipelines - FAQ
 
