@@ -357,7 +357,7 @@ export default function BlogPostPage(props: Props) {
                   "prose-headings:before:lg:pt-20",
                   "text-xl text-body prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl prose-h5:text-lg prose-h6:text-base",
                   "[&_code:not(pre_code)]:before:content-none [&_code:not(pre_code)]:after:content-none",
-                  "prose-table:w-full prose-th:whitespace-nowrap prose-td:align-top",
+                  "prose-table:w-full prose-td:align-top",
                 )}
               >
                 {props.blog.takeaways && props.blog.takeaways.length > 0 && (
