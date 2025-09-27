@@ -1,6 +1,6 @@
 ---
 title: "Best AI Coding Tools for Rust Projects: IDEs vs Terminals"
-description: "We tested five AI coding tools on the same Rust project. See how each performed on speed, accuracy, and terminal vs IDE workflows."
+description: "We tested seven AI coding tools on the same Rust project. See how each performed on speed, accuracy, and terminal vs IDE workflows."
 author: demola 
 tags: [rust, ai, coding-tools, development]
 thumb: ai-coding-tools-rust/cover.png
@@ -10,7 +10,7 @@ date: '2025-09-09'
 
 As Rust developers, we tend to rely on familiar setups like Visual Studio Code (VS Code) or the terminal because they offer the speed and control we need. AI coding tools extend these workflows but approach them in different ways. Some plug directly into IDEs, while others work in the terminal. If you are building Rust projects, the real question is which of these tools are actually useful in practice.
 
-To find out, we tested five popular AI coding assistants by building the same Rust HTTP server with Axum. We compared how quickly they generated code, the quality of what they produced, and how well they fit into everyday Rust workflows.
+To find out, we tested seven popular AI coding assistants by building the same Rust HTTP server with Axum. We compared how quickly they generated code, the quality of what they produced, and how well they fit into everyday Rust workflows.
 
 Because each tool outputs code differently, we also needed a way to deploy their results without switching stacks or starting from scratch. We will walk you through how we solved that as well.
 
@@ -405,6 +405,41 @@ For this, we initialized Git and prompted Aider. It scaffolded a Cargo project, 
 
 **Verdict:** Great for **collaborative, Git-driven workflows** in Rust.
 
+### Building with Gemini CLI
+
+In Gemini CLI, we entered the same prompt in the terminal. Gemini CLI walked us through the steps it would take, then scaffolded a Rust project with a Cargo.toml and main.rs. It also highlighted the project dependencies needed to run the project and installed them.
+
+**What worked:**
+
+- Clear, step-by-step reasoning using the ReAct (reason + act) pattern.
+- Accurate async handling with `axum`.
+- Solid project structure with a clean separation of concerns.
+
+**What didn't:**
+
+- Took longer to get to a runnable version because the ReAct mechanism tended to overthink the flow.
+- Sometimes over-engineered things by introducing extra traits and impl blocks.
+
+**Verdict:** Great for **learning Rust** and refactoring **large-scale projects**.
+
+### Building with OpenAI Codex CLI
+
+With Codex CLI, we gave it the same prompt. This time, it laid out the steps with a visual progress bar, updating as it went. It scaffolded the project, and even showed a change history for each file it touched.
+
+**What worked:**
+
+- Visual, step-by-step reasoning with clear highlights of changes.
+- Accurate async handling with `axum`.
+- Clear guidance on next steps for improving the application.
+
+**What didn't:**
+
+- No separation of concerns. Everything got bundled into `main.rs` (handlers, models, logic, the works).
+- Sometimes over-engineered with unnecessary packages, like extra tracing libs.
+
+**Verdict:** Great for **learning Rust** and **mapping out roadmaps for Rust projects**.
+
+
 If you're weighing up any of the AI coding tools against each other, here's a quick reference to help decide which fits best in different contexts:
 
 | Tool | Category | Code Quality | Best For |
@@ -414,6 +449,8 @@ If you're weighing up any of the AI coding tools against each other, here's a qu
 | Copilot | IDE | 8 | Incremental completions, patterns |
 | Claude Code | Terminal | 9 | Learning and explaining Rust and large-scale projects |
 | Aider | Terminal | 8.5 | Git-aware, team-oriented dev |
+| Gemini | Terminal | 8 | Complex refactoring and project architecture |
+| Codex | Terminal | 8.5 | Fast prototyping, mapping out roadmaps |
 
 Using AI to generate Rust code can be powerful, but even the best tools have their blind spots. IDEs may overlook context rules, terminal tools can feel slower, and both risk introducing subtle bugs if not monitored. The gap between a quick prototype and a maintainable project often comes down to workflow design, rule enforcement, and consistent testing. In the next section, we'll cover best practices for getting the most out of AI coding tools so your Rust projects stay reliable, predictable, and scalable.
 
