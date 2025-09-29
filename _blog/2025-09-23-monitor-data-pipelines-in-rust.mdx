@@ -81,7 +81,7 @@ fn rss_mb() -> f64 {
 }
 
 // Track peak memory across processing stages
-fn bump_peak(metrics: &mut HashMap, label: &str) {
+fn bump_peak(metrics: &mut HashMap<String, f64>, label: &str) {
     let m = rss_mb();
     metrics.insert(format!("{}_memory_mb", label), m);
     let peak = metrics.get("peak_memory_mb").cloned().unwrap_or(0.0);
@@ -91,8 +91,8 @@ fn bump_peak(metrics: &mut HashMap, label: &str) {
 }
 
 pub struct PolarsETL {
-    df: Option,
-    metrics: HashMap, // Custom metrics storage for pipeline-specific data
+    df: Option<LazyFrame>,
+    metrics: HashMap<String, f64>, // Custom metrics storage for pipeline-specific data
 }
 
 impl PolarsETL {
@@ -106,7 +106,7 @@ impl PolarsETL {
         // Manual span creation for nested tracing hierarchy
         let load_span = span!(Level::INFO, "etl_load", file = file_path);
         let _enter = load_span.enter();
-
+        
         // Structured logging with contextual information
         info!("Loading CSV file: {}", file_path);
         let start = Instant::now(); // Performance timing measurement
@@ -117,7 +117,7 @@ impl PolarsETL {
             .finish()?
             .select([
                 col("pickup_longitude"),
-                col("pickup_latitude"),
+                col("pickup_latitude"), 
                 col("trip_distance"),
                 col("passenger_count"),
                 col("total_amount"),
@@ -127,7 +127,7 @@ impl PolarsETL {
         let t = start.elapsed().as_secs_f64(); // Duration calculation
         self.metrics.insert("load_time".into(), t); // Custom metric storage
         bump_peak(&mut self.metrics, "after_load"); // Memory usage tracking
-
+        
         // Structured logging with key-value metrics for observability platforms
         info!(
             etl.load.duration = t,                    // Performance metric
@@ -135,7 +135,7 @@ impl PolarsETL {
             stage = "load",                           // Pipeline stage identifier
             "CSV load completed"                      // Human-readable message
         );
-
+        
         Ok(self)
     }
 
@@ -145,7 +145,7 @@ impl PolarsETL {
         // Nested span for detailed tracing hierarchy
         let clean_span = span!(Level::INFO, "etl_clean");
         let _enter = clean_span.enter();
-
+        
         // Stage-specific logging with contextual information
         info!("Starting data cleaning stage");
         let start = Instant::now(); // Performance measurement start
@@ -167,7 +167,7 @@ impl PolarsETL {
         let t = start.elapsed().as_secs_f64(); // Performance timing
         self.metrics.insert("clean_time".into(), t); // Stage-specific metrics
         bump_peak(&mut self.metrics, "after_clean"); // Memory tracking per stage
-
+        
         // Multi-dimensional metrics emission with contextual attributes
         info!(
             etl.clean.duration = t,                   // Stage performance
@@ -175,7 +175,7 @@ impl PolarsETL {
             stage = "clean",                          // Pipeline stage tag
             "Data cleaning completed"                 // Completion status
         );
-
+        
         Ok(self)
     }
 }
@@ -288,18 +288,18 @@ use tracing::info;
 #[shuttle_runtime::main]
 async fn shuttle_main() -> shuttle_axum::ShuttleAxum {
     observability::init_tracing("polars-etl-pipeline");
-
+    
     let app = api_router()
         .layer(CorsLayer::permissive())
         .layer(TraceLayer::new_for_http());
-
+        
     info!(event = "startup", service = "polars-etl", "Application ready");
     Ok(app.into())
 }
 
 #[derive(Serialize)]
 struct BenchmarkResult {
-    metrics: HashMap,
+    metrics: HashMap<String, f64>,
     message: String,
     throughput_summary: String,
 }
@@ -313,12 +313,12 @@ async fn health() -> &'static str {
     "OK"
 }
 
-async fn benchmark(_query: Query>) -> Json {
+async fn benchmark(_query: Query<HashMap<String, String>>) -> Json<BenchmarkResult> {
     let start = std::time::Instant::now();
-
+    
     info!(
         etl.benchmark.start = 1,
-        endpoint = "/benchmark",
+        endpoint = "/benchmark", 
         "Benchmark endpoint called"
     );
 
@@ -518,11 +518,11 @@ default = []
 
 ```rust
 #[cfg(feature = "bench-cli")]
-fn main() -> Result<(), Box> {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     observability::init_tracing("polars-etl-benchmark-cli");
 
     println!("Starting Polars ETL benchmark with observability");
-
+    
     let data_file = std::env::var("DATA_PATH")
         .unwrap_or_else(|_| "data/yellow_tripdata_2015-01.csv".to_string());
 
@@ -544,7 +544,7 @@ fn main() -> Result<(), Box> {
         Ok(_) => {
             let total_time = total_start.elapsed().as_secs_f64();
             println!("ETL benchmark completed in {:.2} seconds", total_time);
-
+            
             let metrics = etl.get_metrics();
             println!("Performance metrics:");
             for (key, value) in metrics {
