@@ -143,13 +143,7 @@ There's something to note here, Axum 0.8 has a breaking change in the route synt
   caption="Found outdated crates"
 />
 
-As you might be aware by now, MCPs aren't very friendly when it comes to keeping the context clean, my first thought was "Too many MCP calls is going to blow up the context window." which is true but the important thing is that the model stays sharp and doesn't lose focus. I wasn't very optimistic about it.
-
-Axum 0.8 introduced a breaking change in route syntax. The old 0.7 way was `/:id` for path parameters, but 0.8 requires `/\{id\}` instead. Miss that change and you get a runtime panic. It's the kind of subtle breaking change that's easy to overlook when you're just bumping version numbers.
-
-I watched to see if Sonnet would catch it.
-
-It did.
+As you might be aware by now, MCPs aren't very friendly when it comes to keeping the context clean, my first thought was "Too many MCP calls is going to blow up the context window." which is true but the important thing is that the model stays sharp and doesn't lose focus.
 
 <CaptionedImage
   src="/images/blog/build-rust-api-with-sonnet-4-5/dependencies-updated.png"
@@ -163,7 +157,7 @@ It did.
   caption="Axum 0.8 route update"
 />
 
-`cargo build` works, and no runtime errors and both endpoints work perfectly.
+It actually loooked up the documentation for Axum 0.8 and updated the route syntax correctly. `cargo build` works, and no runtime errors and both endpoints work perfectly.
 
 Three prompts total with zero compilation errors so far is quite impressive.
 
@@ -212,15 +206,15 @@ With the conversion complete, it proceeded to deploy the API.
 />
 
 <CaptionedImage
-  src="/images/blog/build-rust-api-with-sonnet-4-5/deployment-success.png"
-  alt="Deployment success"
-  caption="Deployment success"
-/>
-
-<CaptionedImage
   src="/images/blog/build-rust-api-with-sonnet-4-5/deployment-logs.png"
   alt="Shuttle deployment logs"
   caption="Shuttle deployment logs"
+/>
+
+<CaptionedImage
+  src="/images/blog/build-rust-api-with-sonnet-4-5/deployment-success.png"
+  alt="Deployment success"
+  caption="Deployment success"
 />
 
 There you go, the RSS aggregator was live and accessible. The days have changed, the entire process from prompt to production took three simple instructions and maybe five minutes of actual work.
@@ -251,7 +245,7 @@ Sonnet 4.5 delivered on its promise. Three prompts, zero compilation errors, and
 
 What matters is that you always keep the context clean and write your `CLAUDE.md` files with caution, do not overfill the context window with junk and always keep updating it and iterating on it until you get the results you want.
 
-The "best coding model" claim might be bold, but based on this test, it's not far off. The combination of accuracy, speed, and tool integration makes it a compelling choice for Rust development.
+The "best coding model" could be true. The combination of accuracy, speed, and tool integration makes it a compelling choice for Rust development.
 
 Want to try building something similar? Get started quickly with:
 
