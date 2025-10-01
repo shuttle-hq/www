@@ -51,11 +51,11 @@ Let's give it the first prompt:
 > Endpoints:
 >
 > GET /feeds - all items as JSON
-> GET /feeds/{source} - filtered by source
+> GET /feeds/\{source\} - filtered by source
 >
 > Use Axum
 
-This is a very high level prompt, the only technical requirement is to use Axum and the endpoints should be GET /feeds and GET /feeds/{source}.
+This is a very high level prompt, the only technical requirement is to use Axum and the endpoints should be GET /feeds and GET /feeds/\{source\}.
 
 <CaptionedImage
   src="/images/blog/build-rust-api-with-sonnet-4-5/initial-implementation.png"
@@ -120,7 +120,7 @@ There was still one thing bugging me: the outdated Axum version. Let's give anot
 
 Didn't specify which crates were outdated, let's let Sonnet figure it out itself.
 
-There's something to note here, Axum 0.8 has a breaking change in the route syntax, the old 0.7 way was `/:id` for path parameters, but 0.8 requires `/{id}` instead. If Sonnet doesn't catch this breaking change, it will cause the application to panic at runtime.
+There's something to note here, Axum 0.8 has a breaking change in the route syntax, the old 0.7 way was `/:id` for path parameters, but 0.8 requires `/\{id\}` instead. If Sonnet doesn't catch this breaking change, it will cause the application to panic at runtime.
 
 <CaptionedImage
   src="/images/blog/build-rust-api-with-sonnet-4-5/fetching-docs.png"
@@ -136,7 +136,7 @@ There's something to note here, Axum 0.8 has a breaking change in the route synt
 
 As you might be aware by now, MCPs aren't very friendly when it comes to keeping the context clean, my first thought was "Too many MCP calls is going to blow up the context window." which is true but the important thing is that the model stays sharp and doesn't lose focus. I wasn't very optimistic about it.
 
-Axum 0.8 introduced a breaking change in route syntax. The old 0.7 way was `/:id` for path parameters, but 0.8 requires `/{id}` instead. Miss that change and you get a runtime panic. It's the kind of subtle breaking change that's easy to overlook when you're just bumping version numbers.
+Axum 0.8 introduced a breaking change in route syntax. The old 0.7 way was `/:id` for path parameters, but 0.8 requires `/\{id\}` instead. Miss that change and you get a runtime panic. It's the kind of subtle breaking change that's easy to overlook when you're just bumping version numbers.
 
 I watched to see if Sonnet would catch it.
 
