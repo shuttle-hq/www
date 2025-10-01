@@ -14,7 +14,11 @@ Sonnet has proven itself to be very powerful and capable of handling complex tas
 
 To bring back their users, Anthropic is finally back with a new model **Sonnet 4.5** and the Claude Code VSCode extension has also been updated, so you can use Sonnet 4.5 directly in VSCode or Cursor for a better experience.
 
-![Claude Code VSCode Extension](images/vscode-extension.png)
+<CaptionedImage
+  src="/images/blog/build-rust-app-with-sonnet-4-5/vscode-extension.png"
+  alt="Claude Code VSCode Extension"
+  caption="Claude Code VSCode Extension"
+/>
 
 So let's see if Sonnet 4.5 is actually worth the hype and put it to the test, we as Rust developers like coding in Rust so this is what this blog post is about, we'll let Sonnet 4.5 build a Rust API for us that collects from 3 RSS feeds and serves them through an HTTP API.
 
@@ -30,7 +34,11 @@ Here is what we care about:
 - **MCP Capabilities**: How good is it in calling MCP tools
 - **Error Prediction**: How well Sonnet 4.5 can predict and handle errors
 
-![Claude Code interface](images/claude-interface.png)
+<CaptionedImage
+  src="/images/blog/build-rust-app-with-sonnet-4-5/claude-interface.png"
+  alt="Claude Code interface"
+  caption="Claude Code interface"
+/>
 
 Let's give it the first prompt:
 
@@ -49,7 +57,11 @@ Let's give it the first prompt:
 
 This is a very high level prompt, the only technical requirement is to use Axum and the endpoints should be GET /feeds and GET /feeds/{source}.
 
-![Initial implementation complete](images/initial-implementation.png)
+<CaptionedImage
+  src="/images/blog/build-rust-app-with-sonnet-4-5/initial-implementation.png"
+  alt="Initial implementation complete"
+  caption="Initial implementation complete"
+/>
 
 ## First Impressions
 
@@ -78,13 +90,25 @@ I gave Sonnet a follow-up prompt to normalize the feeds:
 
 It performed exceptionally well, it first sent a GET request to each of the RSS feeds to fetch the data and understand their structure, then it normalized the data into a unified JSON structure, which is exactly what I wanted it to do.
 
-![Testing RSS feed with curl](images/testing-rss-curl.png)
+<CaptionedImage
+  src="/images/blog/build-rust-app-with-sonnet-4-5/testing-rss-curl.png"
+  alt="Testing RSS feed with curl"
+  caption="Testing RSS feed with curl"
+/>
 
-![Feed normalization complete](images/feed-normalization.png)
+<CaptionedImage
+  src="/images/blog/build-rust-app-with-sonnet-4-5/feed-normalization.png"
+  alt="Feed normalization complete"
+  caption="Feed normalization complete"
+/>
 
 Testing the `/feeds` endpoint, everything was working as expected.
 
-![RSS feed output](images/rss-output.png)
+<CaptionedImage
+  src="/images/blog/build-rust-app-with-sonnet-4-5/rss-output.png"
+  alt="RSS feed output"
+  caption="RSS feed output"
+/>
 
 Two prompts. That's all it took to go from initial implementation to a fully working, normalized RSS aggregator. That's really impressive, and the speed in which it did it is something I can't express enough.
 
@@ -98,9 +122,17 @@ Didn't specify which crates were outdated, let's let Sonnet figure it out itself
 
 There's something to note here, Axum 0.8 has a breaking change in the route syntax, the old 0.7 way was `/:id` for path parameters, but 0.8 requires `/{id}` instead. If Sonnet doesn't catch this breaking change, it will cause the application to panic at runtime.
 
-![Fetching documentation](images/fetching-docs.png)
+<CaptionedImage
+  src="/images/blog/build-rust-app-with-sonnet-4-5/fetching-docs.png"
+  alt="Fetching documentation"
+  caption="Fetching documentation"
+/>
 
-![Found outdated crates](images/outdated-crates.png)
+<CaptionedImage
+  src="/images/blog/build-rust-app-with-sonnet-4-5/outdated-crates.png"
+  alt="Found outdated crates"
+  caption="Found outdated crates"
+/>
 
 As you might be aware by now, MCPs aren't very friendly when it comes to keeping the context clean, my first thought was "Too many MCP calls is going to blow up the context window." which is true but the important thing is that the model stays sharp and doesn't lose focus. I wasn't very optimistic about it.
 
@@ -110,9 +142,17 @@ I watched to see if Sonnet would catch it.
 
 It did.
 
-![Updated dependencies](images/dependencies-updated.png)
+<CaptionedImage
+  src="/images/blog/build-rust-app-with-sonnet-4-5/dependencies-updated.png"
+  alt="Updated dependencies"
+  caption="Updated dependencies"
+/>
 
-![Axum 0.8 route update](images/axum-route-update.png)
+<CaptionedImage
+  src="/images/blog/build-rust-app-with-sonnet-4-5/axum-route-update.png"
+  alt="Axum 0.8 route update"
+  caption="Axum 0.8 route update"
+/>
 
 `cargo build` works, and no runtime errors and both endpoints work perfectly.
 
@@ -136,15 +176,31 @@ shuttle login
 
 With just one prompt `Deploy to Shuttle` my app was up and running in a few minutes.
 
-![Deploying to Shuttle](images/shuttle-deploy.png)
+<CaptionedImage
+  src="/images/blog/build-rust-app-with-sonnet-4-5/shuttle-deploy.png"
+  alt="Deploying to Shuttle"
+  caption="Deploying to Shuttle"
+/>
 
-![Deployment success](images/deployment-success.png)
+<CaptionedImage
+  src="/images/blog/build-rust-app-with-sonnet-4-5/deployment-success.png"
+  alt="Deployment success"
+  caption="Deployment success"
+/>
 
-![Shuttle deployment logs](images/deployment-logs.png)
+<CaptionedImage
+  src="/images/blog/build-rust-app-with-sonnet-4-5/deployment-logs.png"
+  alt="Shuttle deployment logs"
+  caption="Shuttle deployment logs"
+/>
 
 There you go, the RSS aggregator was live and accessible. The days have changed, the entire process from prompt to production took three simple instructions and maybe five minutes of actual work.
 
-![Live application URL](images/live-application.png)
+<CaptionedImage
+  src="/images/blog/build-rust-app-with-sonnet-4-5/live-application.png"
+  alt="Live application URL"
+  caption="Live application URL"
+/>
 
 ## Results Summary
 
