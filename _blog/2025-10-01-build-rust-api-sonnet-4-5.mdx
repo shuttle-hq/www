@@ -1,5 +1,5 @@
 ---
-title: "Building a Rust App with Claude Sonnet 4.5: Testing the 'Best Coding Model'"
+title: "Building a Rust API with Claude Sonnet 4.5"
 description: "Putting Anthropic's bold claim to the test by building a Rust API from scratch with Sonnet 4.5"
 author: dcodes
 tags: [rust, ai, claude, mcp, axum, api]
@@ -44,9 +44,9 @@ Let's give it the first prompt:
 
 > Build a Rust RSS aggregator API that fetches these 3 feeds:
 >
-> Hacker News: <https://news.ycombinator.com/rss>
-> Rust Blog: <https://blog.rust-lang.org/feed.xml>
-> XKCD: <https://xkcd.com/rss.xml>
+> Hacker News: https://news.ycombinator.com/rss
+> Rust Blog: https://blog.rust-lang.org/feed.xml
+> XKCD: https://xkcd.com/rss.xml
 >
 > Endpoints:
 >
@@ -160,7 +160,7 @@ Three prompts total with zero compilation errors so far is quite impressive.
 
 ## Deploying to Shuttle
 
-With a working application in hand, there was one more test: deployment. Claude Code has MCP (Model Context Protocol) integration with Shuttle, so I wanted to see if Sonnet could handle the entire deployment workflow.
+With a working API in hand, there was one more test: deployment. Claude Code has MCP (Model Context Protocol) integration with Shuttle, so I wanted to see if Sonnet could handle the entire deployment workflow.
 
 I simply asked it to deploy the project, but bear in mind that I have the [Shuttle MCP](https://docs.shuttle.dev/integrations/mcp-server) installed in Claude, so it can interact with the Shuttle platform. To install it, you can run:
 
@@ -174,7 +174,7 @@ You should also have the [Shuttle CLI installed](https://docs.shuttle.dev/gettin
 shuttle login
 ```
 
-With just one prompt `Deploy to Shuttle` my app was up and running in a few minutes.
+With just one prompt `Deploy to Shuttle` my API was up and running in a few minutes.
 
 <CaptionedImage
   src="/images/blog/build-rust-app-with-sonnet-4-5/shuttle-deploy.png"
@@ -198,8 +198,8 @@ There you go, the RSS aggregator was live and accessible. The days have changed,
 
 <CaptionedImage
   src="/images/blog/build-rust-app-with-sonnet-4-5/live-application.png"
-  alt="Live application URL"
-  caption="Live application URL"
+  alt="Live API URL"
+  caption="Live API URL"
 />
 
 ## Results Summary
