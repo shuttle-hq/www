@@ -162,7 +162,7 @@ Three prompts total with zero compilation errors so far is quite impressive.
 
 With a working API in hand, there was one more test: deployment. Claude Code has MCP (Model Context Protocol) integration with Shuttle, so I wanted to see if Sonnet could handle the entire deployment workflow.
 
-I simply asked it to deploy the project, but bear in mind that I have the [Shuttle MCP](https://docs.shuttle.dev/integrations/mcp-server) installed in Claude, so it can interact with the Shuttle platform. To install it, you can run:
+I have the [Shuttle MCP](https://docs.shuttle.dev/integrations/mcp-server) installed in Claude, so it can interact with the Shuttle platform. To install it, you can run:
 
 ```bash
 claude mcp add Shuttle shuttle mcp start
@@ -174,7 +174,27 @@ You should also have the [Shuttle CLI installed](https://docs.shuttle.dev/gettin
 shuttle login
 ```
 
-With just one prompt `Deploy to Shuttle` my API was up and running in a few minutes.
+I gave it this prompt:
+
+> I want you to use the Shuttle MCP to search the docs on how to convert the app to a Shuttle app and then deploy it to Shuttle.
+
+It identified the required changes and updated the dependencies to include Shuttle runtime.
+
+<CaptionedImage
+  src="/images/blog/build-rust-api-with-sonnet-4-5/shuttle-dependencies.png"
+  alt="Adding Shuttle dependencies"
+  caption="Adding Shuttle dependencies"
+/>
+
+Then converted the app to a Shuttle app.
+
+<CaptionedImage
+  src="/images/blog/build-rust-api-with-sonnet-4-5/shuttle-conversion.png"
+  alt="Converting to Shuttle app"
+  caption="Converting to Shuttle app"
+/>
+
+With the conversion complete, it proceeded to deploy the API.
 
 <CaptionedImage
   src="/images/blog/build-rust-api-with-sonnet-4-5/shuttle-deploy.png"
