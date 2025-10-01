@@ -44,15 +44,21 @@ Let's give it the first prompt:
 
 > Build a Rust RSS aggregator API that fetches these 3 feeds:
 >
+> <br />
 > Hacker News: https://news.ycombinator.com/rss
-> Rust Blog: https://blog.rust-lang.org/feed.xml
-> XKCD: https://xkcd.com/rss.xml
 >
+> <br />
+> Rust Blog: https://blog.rust-lang.org/feed.xml
+> <br />
+> XKCD: https://xkcd.com/rss.xml
+> <br />
 > Endpoints:
+> <br />
 >
 > GET /feeds - all items as JSON
 > GET /feeds/\{source\} - filtered by source
 >
+> <br />
 > Use Axum
 
 This is a very high level prompt, the only technical requirement is to use Axum and the endpoints should be GET /feeds and GET /feeds/\{source\}.
