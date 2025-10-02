@@ -6,26 +6,26 @@ author: shaaz
 tags: [observability, best-practices, devops, resilience]
 thumb: observability-best-practices.png
 cover: observability-best-practices.png
-date: '2025-06-10'
+date: "2025-06-10"
 ---
 
 # Process Beats Perfection: Why Observability Enables Building Resilient & Scalable Systems
 
-If you've ever been in a system design whiteboarding interview where you're asked to design a scalable and highly available web service, you'll know the rabbit hole it can become. You draw a box, label it "web server," and suddenly you're cascading into a never-ending list of concerns—load balancing, database replication, regional failovers, backpressure mechanisms, retries, caching, circuit breakers. As a fresh grad, I remember thinking, *is this just an infinite loop of optimization? When do I know I've done enough?*
+If you've ever been in a system design whiteboarding interview where you're asked to design a scalable and highly available web service, you'll know the rabbit hole it can become. You draw a box, label it "web server," and suddenly you're cascading into a never-ending list of concerns—load balancing, database replication, regional failovers, backpressure mechanisms, retries, caching, circuit breakers. As a fresh grad, I remember thinking, _is this just an infinite loop of optimization? When do I know I've done enough?_
 
 ## The Power of Process Over Perfection
 
-But of course, life is simpler than that. We don't have to build perfect systems upfront. In fact, trying to do so usually leads to unnecessary complexity and wasted effort. 
+But of course, life is simpler than that. We don't have to build perfect systems upfront. In fact, trying to do so usually leads to unnecessary complexity and wasted effort.
 
 The secret to building highly available, scalable systems isn't prescience—it's process. The most resilient systems out there didn't start perfect; they became robust through consistent iteration, guided by excellent observability and a disciplined feedback loop.
 
 **That's where good service observability comes in**. It's the foundation that lets us see where things are cracking before they shatter. With tools like dashboards, traces, metrics, and logs, we can identify real-world issues as they emerge in production, prioritize based on impact, and fix them incrementally. Add a strong operational cadence—like a weekly review of key dashboards—and suddenly you're not chasing stability reactively, you're engineering it proactively.
 
-[Shuttle's new Monitoring & Observability integration with BetterStack](https://docs.shuttle.dev/docs/telemetry/betterstack) solves the long-standing pain of setting up observability. With just a few clicks, it's built into your deploys from the start. BetterStack was chosen as one of our first integrations for its simplicity and generous free tier. Want resource usage metrics? Just create a BetterStack source, update the config in the Shuttle console, redeploy your project and you should be able to graph CPU, Memory and Network metrics on a dashboard quickly. 
+[Shuttle's new Monitoring & Observability integration with BetterStack](https://docs.shuttle.dev/docs/telemetry/betterstack) solves the long-standing pain of setting up observability. With just a few clicks, it's built into your deploys from the start. BetterStack was chosen as one of our first integrations for its simplicity and generous free tier. Want resource usage metrics? Just create a BetterStack source, update the config in the Shuttle console, redeploy your project and you should be able to graph CPU, Memory and Network metrics on a dashboard quickly.
 
 ## Observability Foundations: The Three Pillars of Metrics
 
-We build robust systems not by guessing where the next problem will strike, but by instrumenting our systems well and following signals. The [AWS Builder's Library offers a compelling model for observability](https://aws.amazon.com/builders-library/building-dashboards-for-operational-visibility/) by categorizing metrics into three main types: 
+We build robust systems not by guessing where the next problem will strike, but by instrumenting our systems well and following signals. The [AWS Builder's Library offers a compelling model for observability](https://aws.amazon.com/builders-library/building-dashboards-for-operational-visibility/) by categorizing metrics into three main types:
 
 1. **Customer or client metrics**
 2. **Resource metrics**
@@ -37,7 +37,7 @@ Each of these plays a unique role in guiding operational excellence and scaling 
 
 Customer metrics are the heartbeat of any service. They tell you how real users are experiencing the system. Hyperscalers and market-leading cloud platforms practice what [Rob Ewaschuk at Google called "alerting from the spout"](https://docs.google.com/document/d/199PqyG3UsyXlwieHaqbGiWVa8eMWi8zzAn0YfcApr8Q/edit?tab=t.0#heading=h.fs3knmjt7fjy)—that is, monitoring what the client sees, not just what the server thinks it's doing.
 
-**Why?** Because symptoms surface where the user sits. Alerting from the *outside in*—using external uptime monitoring with a probe, like the uptime feature BetterStack offers—means you catch broad classes of issues early, from timeouts to bad dependencies. Guessing root causes from low-level server metrics is like diagnosing illness by checking your pulse—you might catch something, but you're probably missing the bigger picture.
+**Why?** Because symptoms surface where the user sits. Alerting from the _outside in_—using external uptime monitoring with a probe, like the uptime feature BetterStack offers—means you catch broad classes of issues early, from timeouts to bad dependencies. Guessing root causes from low-level server metrics is like diagnosing illness by checking your pulse—you might catch something, but you're probably missing the bigger picture.
 
 To stay focused on what matters, Google's Site Reliability Engineering (SRE) book recommends measuring **the Four Golden Signals**:
 
@@ -46,9 +46,9 @@ To stay focused on what matters, Google's Site Reliability Engineering (SRE) boo
 - **Errors**: What fraction of requests are failing?
 - **Saturation**: How "full" is your system—are you nearing limits?
 
-<CaptionedImage 
-  src="/images/blog/observability-best-practices-traffic-error-latency.png" 
-  alt="Dashboard showing the golden signals—traffic, error rate, and latency—for an Axum API endpoint, used in observability best practices." 
+<CaptionedImage
+  src="/images/blog/observability-best-practices-traffic-error-latency.png"
+  alt="Dashboard showing the golden signals—traffic, error rate, and latency—for an Axum API endpoint, used in observability best practices."
   caption="Golden signals for an Axum API endpoint: traffic, error rate, and latency visualized in a real observability dashboard."
 />
 
@@ -60,13 +60,13 @@ The good news? Tracking these signals in a Shuttle service is straightforward—
 
 Resource metrics give us a peek under the hood. In classic systems terms, computers are fundamentally about compute, memory, and I/O. Your service is no different. CPU starvation, memory pressure, network congestion, or slow disks—all of these are common culprits behind degraded performance.
 
-You don't need to over-optimize upfront. But if your system is slow and client metrics say "something's wrong," resource metrics can often tell you *what*. When troubleshooting, check these next: is the CPU utilization excessively high? Is network bandwidth being throttled? Are out of memory errors causing your project to restart?
+You don't need to over-optimize upfront. But if your system is slow and client metrics say "something's wrong," resource metrics can often tell you _what_. When troubleshooting, check these next: is the CPU utilization excessively high? Is network bandwidth being throttled? Are out of memory errors causing your project to restart?
 
 [BetterStack dashboards via Shuttle's integration](https://www.shuttle.dev/blog/2025/02/19/using-shuttle-with-betterstack) surface these metrics at the instance or container level with a few clicks and a redeployment—because you can't scale if you don't know what you're exhausting.
 
-<CaptionedImage 
-  src="/images/blog/observability-best-practices-resource-metrics.png" 
-  alt="Dashboard showing CPU, memory, and network usage metrics collected from a Shuttle-deployed service using BetterStack integration." 
+<CaptionedImage
+  src="/images/blog/observability-best-practices-resource-metrics.png"
+  alt="Dashboard showing CPU, memory, and network usage metrics collected from a Shuttle-deployed service using BetterStack integration."
   caption="Monitor CPU, memory, and network usage metrics with no code changes—just redeploy your Shuttle project to activate BetterStack observability."
 />
 
@@ -74,19 +74,19 @@ You don't need to over-optimize upfront. But if your system is slow and client m
 
 Diagnostic metrics complete the picture by connecting symptoms to potential causes. These often live in the messy web of service-to-service dependencies: databases, caches, auth services, third-party APIs. Anything your project talks to over a network can—and eventually will—fail.
 
-<CaptionedImage 
-  src="/images/blog/observability-best-practices-shared-db.png" 
-  alt="Dashboard tracking latency, request volume, and error rates for Shuttle's shared PostgreSQL database, as seen from the application's perspective." 
+<CaptionedImage
+  src="/images/blog/observability-best-practices-shared-db.png"
+  alt="Dashboard tracking latency, request volume, and error rates for Shuttle's shared PostgreSQL database, as seen from the application's perspective."
   caption="Monitor Shuttle's shared PostgreSQL database: track latency, request volume, and error rates directly from your app's perspective using BetterStack."
 />
 
-So, track these dependencies explicitly. [AWS emphasizes building **dependency dashboards** that show how your downstream services are behaving *from your service's perspective*](https://aws.amazon.com/builders-library/building-dashboards-for-operational-visibility/). If your success rates are dropping, and client metrics look red, check these dashboards: did your database start timing out? Is a rate limit being hit upstream? The more clearly you track these relationships, the faster you can isolate and fix failures.
+So, track these dependencies explicitly. [AWS emphasizes building **dependency dashboards** that show how your downstream services are behaving _from your service's perspective_](https://aws.amazon.com/builders-library/building-dashboards-for-operational-visibility/). If your success rates are dropping, and client metrics look red, check these dashboards: did your database start timing out? Is a rate limit being hit upstream? The more clearly you track these relationships, the faster you can isolate and fix failures.
 
-## A Real-World Debugging Walkthrough	
+## A Real-World Debugging Walkthrough
 
 ### Step 1 - Start with the Client Metrics
 
-Let's bring this to life with a classic troubleshooting exercise. Imagine you've committed to being oncall for a friend's side project, and your friend texts you from vacation: *"Hey, my little home project is down, can you check on it?"* It's a simple cloud infrastructure setup—a public user-facing API service talking to another backend service, which connects to a database.
+Let's bring this to life with a classic troubleshooting exercise. Imagine you've committed to being oncall for a friend's side project, and your friend texts you from vacation: _"Hey, my little home project is down, can you check on it?"_ It's a simple cloud infrastructure setup—a public user-facing API service talking to another backend service, which connects to a database.
 
 You start where you always should: the **client metrics dashboard**. This is your spout. You want to know what users are seeing. The graph tells you: there's a sudden spike in HTTP 500 responses. Latency is up, and request success rates have dipped sharply. OK—there's definitely a real problem.
 
@@ -119,11 +119,11 @@ This is observability at work—**a structured, top-down root cause workflow**. 
 
 ## Make It a Habit, Not a Hero Move
 
-This isn't magic. It's a process. And the best teams make it a habit: review dashboards weekly, tune alerts thoughtfully, and build visibility from the top down. 
+This isn't magic. It's a process. And the best teams make it a habit: review dashboards weekly, tune alerts thoughtfully, and build visibility from the top down.
 
-There's another core process that's critical for iterative scaling and reliability: learning from incidents using postmortems that are made rigorous and scientific by enhanced observability. We'll discuss that in a later article. 
+There's another core process that's critical for iterative scaling and reliability: learning from incidents using postmortems that are made rigorous and scientific by enhanced observability. We'll discuss that in a later article.
 
-With Shuttle, you get the ability to deploy fast *and* observe well, which means you can keep building, scaling, and debugging incrementally—without needing a crystal ball to foresee every failure. That's how high availability becomes a living system, not a paper exercise.
+With Shuttle, you get the ability to deploy fast _and_ observe well, which means you can keep building, scaling, and debugging incrementally—without needing a crystal ball to foresee every failure. That's how high availability becomes a living system, not a paper exercise.
 
 ## So... Now What?
 
@@ -132,18 +132,14 @@ Sure, you could keep hand-rolling dashboards in your staging-only observability 
 With [Shuttle's BetterStack + OpenTelemetry integration](https://docs.shuttle.dev/docs/telemetry/getting-started), your service ships **with real metrics out of the box**—no bash scripts, no dashboards lost in tabs, no "I'll do it later" promises to your future self.
 
 Just:
+
 - [Enable your OTEL exporter in your shuttle runtime](https://docs.shuttle.dev/docs/telemetry/getting-started)
 - [Add a source in BetterStack](https://docs.shuttle.dev/docs/telemetry/betterstack)
 - Update your Shuttle project config in console
 - Redeploy from CLI
 - Watch those golden signals light up
 
-
 📈 Observability: now as easy as shipping code.  
 🎯 [Get started with real metrics →](https://docs.shuttle.dev/docs/telemetry/getting-started)
 
 ---
-
-
-
-

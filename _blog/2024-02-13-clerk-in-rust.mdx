@@ -5,7 +5,7 @@ author: sourabpramanik
 tags: [rust, actix, auth, clerk, guide]
 thumb: clerk-rust-thumb.png
 cover: clerk-rust-thumb.png
-date: '2024-02-13T17:00:01'
+date: "2024-02-13T17:00:01"
 ---
 
 This two-part article covers how we can build an Issue tracking application using React for the frontend, and [Shuttle](https://www.shuttle.dev/) and [Actix Web](https://actix.rs/) for the backend. It also uses [Clerk](https://clerk.com/) for authentication in the frontend and protecting the Rest APIs in the backend.
@@ -19,7 +19,6 @@ To start this project we will use the Clerk template from Shuttle's [example rep
 The backend uses the [clerk-rs](https://github.com/DarrenBaldwin07/clerk-rs) community crate to create a connection between the backend application and Clerk project. This crate has many different APIs for different use cases. In the template there is an endpoint to fetch all user records using the `clerk-rs` user API. We can easily verify a user's identity when trying to access protected routes using the `ClerkMiddleware` from the crate.
 
 We will use Postgres for the database which will run in a docker container so make sure you also have docker [installed](https://docs.docker.com/engine/install/) in your local machine.
-
 
 ## Let's get started
 
@@ -58,7 +57,7 @@ Copy the **Secret key** from the Clerk's dashboard and add it to the `Secrets.to
 CLERK_SECRET_KEY = "sk_test_vsWrxxxxxxxxxxxxxxxxxxxxxxxxxtfTr"
 ```
 
-*⚠️ Do not commit this file, so make sure you have added this file in the `.gitignore`.*
+_⚠️ Do not commit this file, so make sure you have added this file in the `.gitignore`._
 
 Now, we need to write a new migration in a `schema.sql` file which will create a new `issues` table in our Postgres database.
 
@@ -153,7 +152,7 @@ Try running the application using Shuttle CLI:
 cargo shuttle run
 ```
 
-*🗨️ Make sure docker is running in your local machine because after you run the above command Shuttle will pull the Postgres docker image and start a docker container.*
+_🗨️ Make sure docker is running in your local machine because after you run the above command Shuttle will pull the Postgres docker image and start a docker container._
 
 The backend application can now query the Postgres database using SQLX. Let's create some **CRUD** endpoints for our application.
 

@@ -5,8 +5,9 @@ author: josh
 tags: [rust, ai, aws, guide]
 thumb: prompting-aws-bedrock-rust-thumb.png
 cover: prompting-aws-bedrock-rust-thumb.png
-date: '2024-05-10T15:30:00'
+date: "2024-05-10T15:30:00"
 ---
+
 Hey there! In this article we're going to talk about using AWS Bedrock with Rust. At the end of this article, you'll have a API that can take a JSON prompt from a HTTP request and return an answer from AWS Bedrock that can be streamed or returned as a full response.
 
 Interested in the full code? You can find the repository [here.](https://github.com/joshua-mo-143/shuttle-bedrock-ex)
@@ -89,6 +90,7 @@ async fn main(
     // .. your code here
 }
 ```
+
 On a local or deployment run, the secrets macro will allow the Shuttle runtime to read the `Secrets.toml` file!
 
 Next we'll grab our secrets, then create our AWS `Credentials` struct then create an `aws_config` Config type. This will allow us to create the AWS Bedrock Runtime client, as well as any other client from the AWS Rust SDK that we need.
@@ -442,6 +444,7 @@ Shuttle will also cache your dependencies, so if you need to re-deploy you won't
 Thanks for reading! By integrating Rust with AWS Bedrock, you can harness the power of both technologies to build scalable, reliable, and maintainable systems.
 
 Read more:
+
 - [Building a RAG web service with Qdrant and OpenAI](https://www.shuttle.dev/blog/2024/02/28/rag-llm-rust)
 - [Building AI agents](https://www.shuttle.dev/blog/2024/04/30/building-ai-agents-rust)
 - [Using Huggingface with Rust](https://www.shuttle.dev/blog/2024/05/01/using-huggingface-rust)

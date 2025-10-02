@@ -5,8 +5,9 @@ author: josh
 tags: [rust, guide]
 thumb: setup-rust-ci-cd-thumb.png
 cover: setup-rust-ci-cd-thumb.png
-date: '2025-01-23T16:30:00'
+date: "2025-01-23T16:30:00"
 ---
+
 ## Introduction
 
 The importance of a good CI/CD pipeline cannot go understated. The more you can automate in your deployment pipeline, the less work you have to do overall. That being said, it can be difficult to set up an effective CI/CD pipeline if it's your first time doing it. YAML files can be quite tricky to debug, and you can also additionally incur high costs from inefficient pipelines if you aren't careful.
@@ -23,7 +24,7 @@ The average Rust project might have the following things carried out in CI:
 - Automatic website deployment
 - Dependabot
 
-Below is an example of a CI/CD workflow using YAML that you might find for a Rust project. For this file to be usable by Github Actions, it needs to be in the `.github/workflows` folder (relative to your project root). We'll call our file `workflow.yml` for the purpose of simplicity.  Let's go through the steps:
+Below is an example of a CI/CD workflow using YAML that you might find for a Rust project. For this file to be usable by Github Actions, it needs to be in the `.github/workflows` folder (relative to your project root). We'll call our file `workflow.yml` for the purpose of simplicity. Let's go through the steps:
 
 - Our workflow will only run on a pull request to `main`. Before we merge to main we need to ensure that the code compiles on a pull request - once the code's been pushed to main, it's a bit too late to make any changes by then and we'll have to push another PR to fix it!
 - We check out the code and install our required dependencies (meaning the Rust toolchain and `cargo-nextest`). Note that for external dependencies, using pure binary downloads is often far faster than trying to use `cargo install`.
@@ -107,7 +108,7 @@ And now you're done! Interested in finding out more? Check out [the sccache Gith
 
 ## Dependabot
 
-Dependabot is a tool provided by Github to help you manage dependencies effectively. While Dependabot *itself* is not a CI tool, it is a great complement for any CI/CD pipeline on Github. Without it, you will often otherwise having to spend time manually checking dependency versions.
+Dependabot is a tool provided by Github to help you manage dependencies effectively. While Dependabot _itself_ is not a CI tool, it is a great complement for any CI/CD pipeline on Github. Without it, you will often otherwise having to spend time manually checking dependency versions.
 
 You can set up Dependabot quickly and easily by adding it in your Github workflows like so (file should be in `# <project_root>/.github/dependabot.yml`):
 
@@ -122,11 +123,10 @@ updates:
     schedule:
       interval: "weekly"
     ignore:
-        # These are peer deps of Cargo and should not be automatically bumped
-        - dependency-name: "semver"
-        - dependency-name: "crates-io"
+      # These are peer deps of Cargo and should not be automatically bumped
+      - dependency-name: "semver"
+      - dependency-name: "crates-io"
     rebase-strategy: "disabled"
-
 ```
 
 Once you've added it to version control, nothing else is required. When there are new dependencies, Dependabot will automatically create issues/PRs as required. You can also additonally customise your Dependabot config much further - which you can [find out more in the Github documentation.](https://docs.github.com/en/code-security/dependabot/working-with-dependabot/managing-pull-requests-for-dependency-updates)

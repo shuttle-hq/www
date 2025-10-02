@@ -5,8 +5,9 @@ author: josh
 tags: [rust, ai, rag, guide]
 thumb: building-agentic-rag-rust-qdrant-thumb.png
 cover: building-agentic-rag-rust-qdrant-thumb.png
-date: '2024-05-23T16:30:00'
+date: "2024-05-23T16:30:00"
 ---
+
 Hey there! In this article, we're gonna talk about building an agentic RAG workflow with Rust! We'll be building an agent that can take a CSV file, parse it and embed it into Qdrant, as well as retrieving the relevant embeddings from Qdrant to answer questions from users about the contents of the CSV file.
 
 Interested in deploying or just want to see what the final code looks like? You can find the repository [here.](https://github.com/joshua-mo-143/shuttle-agentic-rag)
@@ -137,7 +138,7 @@ impl File {
 }
 ```
 
-While the above parsing method *is* serviceable (collecting all the lines into a `Vec<String>`), note that it is a naive implementation. Based on how your CSV files are delimited and/or if there is dirty data to clean up, you may want to either prepare your data so that it is already well-prepared, or include some form of data cleaning or validation. Some examples of this might be:
+While the above parsing method _is_ serviceable (collecting all the lines into a `Vec<String>`), note that it is a naive implementation. Based on how your CSV files are delimited and/or if there is dirty data to clean up, you may want to either prepare your data so that it is already well-prepared, or include some form of data cleaning or validation. Some examples of this might be:
 
 - `unicode-segmentation` - [a library crate for splitting sentences](https://github.com/unicode-rs/unicode-segmentation)
 - `csv_log_cleaner` - [a binary crate for cleaning CSVs](https://github.com/ambidextrous/csv_log_cleaner)
@@ -388,6 +389,7 @@ To deploy, all you need to do is use `shuttle deploy` (with the `--ad` flag if o
 Thanks for reading! With the power of combining AI agents and RAG, we can create powerful workflows to be able to satisfy many different use cases. With Rust, we can leverage performance benefits to be able to run our workflows safely and with a low memory footprint.
 
 Read more:
+
 - [Using Huggingface with Rust](https://www.shuttle.dev/blog/2024/05/01/using-huggingface-rust)
 - [Building a RAG web service with Qdrant & Rust](https://www.shuttle.dev/blog/2024/02/28/rag-llm-rust)
 - [Prompting AWS Bedrock with the AWS Rust SDK](https://www.shuttle.dev/blog/2024/05/10/prompting-aws-bedrock-rust)

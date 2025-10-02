@@ -16,7 +16,7 @@ If you clicked on this post, you are likely familiar with Kubernetes and looking
 
 ## Getting Started
 
-To create a local Kubernetes cluster, we will use [KinD](https://kind.sigs.k8s.io/),  a tool that allows you to run Kubernetes in Docker, hence the name KinD. Don't forget to have Docker installed!
+To create a local Kubernetes cluster, we will use [KinD](https://kind.sigs.k8s.io/), a tool that allows you to run Kubernetes in Docker, hence the name KinD. Don't forget to have Docker installed!
 
 If you're on Mac, you can install kind using brew:
 
@@ -109,11 +109,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ```
 
-Using `Config::infer()`  `kube-rs` will attempt to connect to the cluster using your default [kubeconfig](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/).
+Using `Config::infer()` `kube-rs` will attempt to connect to the cluster using your default [kubeconfig](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/).
 
 ## Creating a Client
 
-Using the config is great for printing out cluster information, but we can't use it to interact with it. To create a new cluster, we can use `Client::try_default()`, which calls  `Client::infer()` under the hood and returns a new client:
+Using the config is great for printing out cluster information, but we can't use it to interact with it. To create a new cluster, we can use `Client::try_default()`, which calls `Client::infer()` under the hood and returns a new client:
 
 ```rust
 use kube::{Client};
@@ -413,7 +413,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 This example demonstrates a slightly more realistic scenario of working with Pods in a Kubernetes cluster. We create a Pod running Nginx, wait for it to be ready, and then fetch its logs.
 
-
 After creating the Pod, we use the `status` field to determine if the Pod is running:
 
 ```rust
@@ -616,7 +615,6 @@ metadata:
 spec:
   species: lobster
   habitat: Atlantic Ocean
-
 ```
 
 Great, but Kubernetes still has no idea how to handle this CRD. To do this, we need to apply the custom resource definition to the cluster:
@@ -715,7 +713,7 @@ larry   Atlantic Ocean
 
 ## Watching for Resource Changes
 
-So we've got our `Crustacean` CRD up and running. But  creating resources is only half the battle. More often you want to react to events in the cluster this is where [watchers](https://kubernetes.io/docs/reference/using-api/api-concepts/#efficient-detection-of-changes) come in, as the name suggests, watchers are used to monitor specific events.
+So we've got our `Crustacean` CRD up and running. But creating resources is only half the battle. More often you want to react to events in the cluster this is where [watchers](https://kubernetes.io/docs/reference/using-api/api-concepts/#efficient-detection-of-changes) come in, as the name suggests, watchers are used to monitor specific events.
 
 In our case, we'll monitor for new `Crustacean` resources and create a pod for each one.
 
@@ -783,7 +781,7 @@ let mut crustacean_watcher = watcher(crustaceans, watcher::Config::default())
 .boxed();
 ```
 
-We set up a **watcher** to monitor the `Crustacean` custom resource, using the `applied_objects()`:  method ensures that we only care about the resources that have been applied (created or updated). It filters out other events like deletions.
+We set up a **watcher** to monitor the `Crustacean` custom resource, using the `applied_objects()`: method ensures that we only care about the resources that have been applied (created or updated). It filters out other events like deletions.
 
 In the **while loop**, we watch for events in the stream provided by the `crustacean_watcher`. For each `Crustacean` resource that the watcher detects, we create a Pod.
 

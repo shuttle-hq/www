@@ -5,7 +5,7 @@ author: josh
 tags: [rust, guide, ai, discord]
 thumb: discord-bot-deepseek-rig-rust-thumb.png
 cover: discord-bot-deepseek-rig-rust-thumb.png
-date: '2025-01-29T14:45:00'
+date: "2025-01-29T14:45:00"
 ---
 
 ## Introduction
@@ -23,14 +23,14 @@ Before we get started, you'll need to make sure you have the following installed
 - the Rust programming language
 - The `cargo-shuttle` CLI tool (for deploying to Shuttle & project initialisation)
 - You will also additionally need a Hyperbolic API key. To get one, follow the instructions below:
-    - You'll need to [make a Hyperbolic account](https://app.hyperbolic.xyz/) from the application.
-    - Once registered, navigate to the [Settings](https://app.hyperbolic.xyz/settings) page on the dashboard.
-    - You'll be able to view and copy your Hyperbolic API Key from there. Keep ahold of your API key as we'll be using it later.
+  - You'll need to [make a Hyperbolic account](https://app.hyperbolic.xyz/) from the application.
+  - Once registered, navigate to the [Settings](https://app.hyperbolic.xyz/settings) page on the dashboard.
+  - You'll be able to view and copy your Hyperbolic API Key from there. Keep ahold of your API key as we'll be using it later.
 - A Discord API key is also required. If you don't already have one, follow the instructions to get one (it's totally free!):
-    - Click the New Application button, name your application and click Create.
-    - Navigate to the Bot tab in the lefthand menu, and add a new bot.
-    - On the bot page click the Reset Token button to reveal your token. Keep ahold of this token as we'll be using it later.
-    - For the sake of this example, you also need to scroll down on the
+  - Click the New Application button, name your application and click Create.
+  - Navigate to the Bot tab in the lefthand menu, and add a new bot.
+  - On the bot page click the Reset Token button to reveal your token. Keep ahold of this token as we'll be using it later.
+  - For the sake of this example, you also need to scroll down on the
     bot page to the Message Content Intent section and enable that option.
 - You will also need `sqlx-cli` installed (the SQLx CLI tool) which will allow you to easily manage SQL migrations versions.
 
@@ -71,7 +71,7 @@ Let's closely examine what our new dependencies are for:
 
 - **rig-core:** The `rig` framework.
 - **sqlx:** A library for working with SQL. We add the `runtime-tokio-rustls` and `postgres` features (both are mandatory), as well as the `macros` and `chrono` features for enabling usage with the `chrono` crate.
-- **shuttle-shared-db:** A crate that allows provisioning of a Postgres database from Shuttle servers (and locally, Docker). We can allow it to output a connection pool from the Shuttle  resource annotation
+- **shuttle-shared-db:** A crate that allows provisioning of a Postgres database from Shuttle servers (and locally, Docker). We can allow it to output a connection pool from the Shuttle resource annotation
 - **chrono:** A crate for dealing with time.
 - **serde-json:** A crate for (de)serializing to and from JSON.
 

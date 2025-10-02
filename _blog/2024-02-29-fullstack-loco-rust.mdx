@@ -5,13 +5,15 @@ author: josh
 tags: [rust, fullstack, loco, guide]
 thumb: fullstack-loco-rust-thumb.png
 cover: fullstack-loco-rust-thumb.png
-date: '2024-02-29T15:30:00'
+date: "2024-02-29T15:30:00"
 ---
+
 Loco is a Rust framework that aims to do it all - authentication, tasks, migrations and more. While initially being more complex to use than using pure Axum, it can save a lot of time setting up boilerplate and provides a great platform to build on.
 
-In this guide, we'll deploying Loco on Shuttle via a fullstack template that also additionally includes SaaS subscription payments. By using their SaaS starter, we can leverage their pre-built authentication features to build payments out quickly and easily.  Interested in deploying or trying out the final repo? You can check it out [here.](https://github.com/joshua-mo-143/shuttle-stripe-ex)
+In this guide, we'll deploying Loco on Shuttle via a fullstack template that also additionally includes SaaS subscription payments. By using their SaaS starter, we can leverage their pre-built authentication features to build payments out quickly and easily. Interested in deploying or trying out the final repo? You can check it out [here.](https://github.com/joshua-mo-143/shuttle-stripe-ex)
 
 Steps to deploy from cloning:
+
 - Run `shuttle init --from joshua-mo-143/shuttle-stripe-ex` and follow the prompt (requires `cargo-shuttle` installed)
 - Set up API keys (see below)
 - Use `shuttle deploy --allow-dirty` and watch the magic happen!
@@ -97,7 +99,7 @@ DATABASE_URL=<DB_URL_HERE> cargo loco db migrate
 DATABASE_URL=<DB_URL_HERE> cargo loco db entities
 ```
 
- Note that you will need a database URL for this. If you don't have one yet, you can use `shuttle run` to automatically spin up a Postgres container with a provided connection string or spin up your own Docker container.
+Note that you will need a database URL for this. If you don't have one yet, you can use `shuttle run` to automatically spin up a Postgres container with a provided connection string or spin up your own Docker container.
 
 These two commands will generate some files in the `migrations` folder as well as in `src/models`, which we'll be making heavy use of as they are the main way to interface with the database when using Loco.
 

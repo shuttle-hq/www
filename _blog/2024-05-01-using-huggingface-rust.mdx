@@ -5,8 +5,9 @@ author: josh
 tags: [rust, ai, guide]
 thumb: using-huggingface-rust-thumb.png
 cover: using-huggingface-rust-thumb.png
-date: '2024-05-01T18:30:00'
+date: "2024-05-01T18:30:00"
 ---
+
 Hello world! Today, we're going to talk about Huggingface with Rust. We're going to cover the following:
 
 - Downloading a repo from Huggingface
@@ -21,7 +22,6 @@ By the end of this article, we'll have a fully working web server for running ou
 Huggingface describes itself simply as:
 
 > The AI community, building the future.
->
 
 Huggingface is both a company, as well as a platform that contributes heavily to the AI and NLP fields through open source and open science. A couple of examples of how they do this:
 
@@ -42,6 +42,7 @@ cargo add hf_hub
 ```
 
 You'll also want the following dependencies which you can grab from this shell snippet:
+
 ```bash
 cargo add anyhow candle-core candle-nn candle-transformers serde serde_json tokenizers -F serde/derive
 ```
@@ -53,7 +54,6 @@ But first before we continue, let's have a quick look at what tensors actually a
 From Wikipedia:
 
 > a **tensor** is an algebraic object that describes a multilinear relationship between sets of algebraic objects related to a vector space.
->
 
 Practically speaking for us, this just means multidimensional arrays of numbers (an array with multiple indexes, if you will). We can manipulate tensors and shape them to get output. A real-world example of using a tensor might be a picture. A picture can have height, width and color - which we can model as a 3D tensor. If we feed this into a model by turning it into a data representation, the model can find similar photos by comparing values from its training data and output a relevant response.
 
@@ -450,9 +450,10 @@ impl TextGeneration {
 
 ## Using Candle with a web service
 
-Using the previous functions we've made, we can create a web service using `axum` and `tokio`  with an endpoint to run our prompt! No local work required.
+Using the previous functions we've made, we can create a web service using `axum` and `tokio` with an endpoint to run our prompt! No local work required.
 
 To install Axum and Tokio you can use this shell snippet:
+
 ```bash
 cargo add axum tokio -F tokio/macros,tokio/rt-multi-thread
 ```

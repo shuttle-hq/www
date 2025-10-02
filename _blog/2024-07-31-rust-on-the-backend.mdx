@@ -5,7 +5,7 @@ author: josh
 tags: [rust, opinion]
 thumb: rust-on-the-backend-thumb.png
 cover: rust-on-the-backend-thumb.png
-date: '2024-07-31T15:30:00'
+date: "2024-07-31T15:30:00"
 ---
 
 With Rust named most admired language in the Stack Overflow 2024 survey, more and more developers are looking to get into Rust. Though Rust is a versatile language, many newer Rust developers are using it for backend web development in particular. In this article, we'll talk about why Rust makes a good fit for backend web development compared to other languages.
@@ -49,6 +49,7 @@ async fn main -> Result<(), Box<dyn std::error::Error> {
 	  Ok(())
 }
 ```
+
 We'll also add our endpoint code below:
 
 ```rust
@@ -81,6 +82,7 @@ While the syntax can be somewhat unfamiliar, idiomatic Rust code is relatively e
 ## Rust benefits
 
 ### Low Memory Footprint
+
 Rust's borrow checker system allows for much lower footprint during runtime. Optimisations made during compilation time allow for a small memory footprint, as well as providing memory safety garuantees. This makes Rust a great language to use for companies (and individuals!) who want to simultaneously up their green credentials and save on running overhead costs. Faster execution speed can also save costs on serverless functions!
 
 This generally matters more for web services than other types of applications. If you're not running your web service on a VPS, chances are you're being billed for compute and CPU usage. Being able to use a much more efficient language for writing backends can significantly reduce costs in the long run, especially for larger companies who may be switching over from something like Java, Python or Ruby. In terms of using a VPS, it would mean you may be able to downsize the VM you're using, constraints notwithstanding.
@@ -90,6 +92,7 @@ The other primary consequence of this advantage is that it's far easier to run R
 Frontloading so much to the compiler does, of course, increase compilation times. Even so, your application will typically be running for much longer in production. Using [crane](https://github.com/ipetkov/crane) and [mold linker](https://github.com/rui314/mold) can also be used to reduce compilation time significantly. Although first-time compiles can take a few minutes, typically with subsequent compilations it takes much less thereafter.
 
 ### Concurrency
+
 Concurrency has always been a difficult problem to solve. Language design choices designed to abstract away complexity can often contribute to this. For example, Python's Global Interpreter Lock (GIL) has undeniably had benefits in terms of development and making it easier to run C extensions in Python. However, it can also significantly increase the complexity of multithreaded applications. This is primarily through lock acquisition and thread contention. As a consequence, things like parallelism can be much more difficult to express.
 
 In contrast, Rust doesn't hide the complexity of writing concurrent programs. This can make it somewhat intimidating to get started. However, the current ecosystem extends the stdlib primitives significantly to provide much more usable abstractions that make handling concurrency much easier at scale. For example: [dashmap](https://docs.rs/dashmap/latest/dashmap/), a concurrent `HashMap` implementation, as well as [parking-lot](https://github.com/Amanieu/parking_lot) which primarily provides the parking and unparking of threads but provides deadlock detection for mutexes and other synchronization primitives.
@@ -123,6 +126,7 @@ async fn main() {
 Entire programming languages have been dedicated to dealing with concurrency: Erlang with BEAM (and any other languages that can run on the BEAM VM) being one example. Although Rust doesn't quite have concurrency baked in every single language design choice, if you wanted to make a fully concurrent section of your backend web service in Rust, you're given the tools to be able to do it safely and efficiently for backend Rust web services.
 
 ### Memory Safety
+
 Earlier this year, [the White House advocated for memory safe languages](https://www.whitehouse.gov/wp-content/uploads/2024/02/Final-ONCD-Technical-Report.pdf) which is a huge win for Rust. Although Rust was one of several languages in the discussion, the message is largely the same: move away from languages that don't have sufficient safeguards around introducing memory errors, whether they're memory access violations or leaks (or a simple use-after-free!).
 
 Rust is not entirely immune to memory issues. However, it does leverage sufficient safeguards such that you need to deliberately use the `unsafe` marker to bypass the forced memory safety garuantees of the compiler. For example, this code which is a method in the vector type (`Vec`) for removing an element at a given index:
@@ -143,6 +147,7 @@ pub fn remove(&mut self, index: usize) -> T {
     }
 }
 ```
+
 Note that the function is "safe" to use because it's not marked unsafe, but there is an unsafe block. This means that it's up to the library to ensure the code soundness rather than the user!
 
 While this can be intimidating for many, many libraries solve this issue by creating safe abstractions for unsafe code by using the above methodology. A specific example of this would also be the many libraries that are Rust bindings to C libraries. They have safe abstractions on top (like `image-rs` and `rust-rdkafka`), allowing users to safely use the underlying tech without memory issues. Many parts of the standard library also use unsafe code, with the synchronization examples and low-level data structures like `Vec` (vectors) and hashmaps. [The Rustonomicon](https://doc.rust-lang.org/nomicon/intro.html) actually has a guide for [re-implementing the `Vec` type from scratch](https://doc.rust-lang.org/nomicon/vec/vec.html), which is a great read for anyone who wants to dive deeper into using unsafe Rust safely.
@@ -150,6 +155,7 @@ While this can be intimidating for many, many libraries solve this issue by crea
 Although memory safety is not explicitly a hard requirement for most industries and use cases, memory issues are often time-consuming to resolve and can be quite costly if it's related to infrastructure. As it stands, for most developers making a memory error is practically inevitable - which is why adding compile-time checks for memory safety is an important advantage that Rust holds. Of course, there are things that get past the compiler, but if you're in a team with more junior engineers, you definitely don't want them to be shipping memory errors into production. Rust makes it much easier to ensure that it doesn't happen.
 
 ## Who's using Rust?
+
 Of course, Rust is currently being used by quite a few large companies: Amazon, Google and Microsoft (who is [in the process of migrating their Office 365 backends to Rust](https://securityboulevard.com/2024/02/microsoft-365-rust-richixbw/)) to name a few. Many companies who are also security-oriented also use Rust: [1Password](https://1password.com/) who have [made their own collection of Rust libraries for using passkeys](https://github.com/1Password/passkey-rs), [cryptee](https://crypt.ee/) who focus on encrypted document storage and photo management services, as well as the growing number of Rust companies and consultancies that are popping up to help larger companies with creating quality Rust code.
 
 [DARPA](https://www.darpa.mil/) also recently announced that they are [converting all of their C code to Rust](https://sam.gov/opp/1e45d648886b4e9ca91890285af77eb7/view) with the goal of the codebase eventually as high quality as would be from skilled Rust developers. While no small undertaking, if done successfully this will be a huge win for Rust going forward.
@@ -157,9 +163,11 @@ Of course, Rust is currently being used by quite a few large companies: Amazon, 
 Though it should come as no surprise, at Shuttle we also use Rust! Our platform services as well as our CLI are written in 100% Rust, and you can see this by going to [our main repository.](https://www.github.com/shuttle-hq/shuttle)
 
 ## Finishing up
+
 Thanks for reading! Although there's a lot of reasons to use Rust on the backend, hopefully this article has helped you understand some of the underlying details behind the advantages.
 
 Read more:
+
 - [Getting started with Actix Web](https://www.shuttle.dev/blog/2023/12/15/using-actix-rust)
 - [An intro to advanced Rust traits and generics](https://www.shuttle.dev/blog/2024/04/18/using-traits-generics-rust)
 - [Why type safety is important](https://www.shuttle.dev/blog/2023/11/29/type-safety)

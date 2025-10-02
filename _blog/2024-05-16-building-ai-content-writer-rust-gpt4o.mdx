@@ -5,8 +5,9 @@ author: josh
 tags: [rust, ai, guide]
 thumb: building-ai-agents-rust-thumb.png
 cover: building-ai-agents-rust-thumb.png
-date: '2024-05-16T18:30:00'
+date: "2024-05-16T18:30:00"
 ---
+
 Hello world! In this guide, we're going to talk about how you can get started with using AI agents to create a content writer that will use the [Serper.dev](http://Serper.dev) API to search Google for results on your query, then use the results together with GPT-4o to create a summary of the results and finally create an article about it.
 
 Interested in just deploying or got stuck during the tutorial? [Have a look at the repository.](https://github.com/joshua-mo-143/shuttle-content-writer)
@@ -368,7 +369,7 @@ Now all we need to do is use `shuttle deploy` (adding the `--ad` flag if on an u
 
 So let's say you've built this example, and want to go even further. What about pulling in another agent that generates a Twitter post or a LinkedIn post. At this point, you probably want to build a pipeline that holds all your agents, then you can just write `.run_pipeline()` and it'll do everything for you.
 
-To do this, you could create a `Pipeline` trait  does two things:
+To do this, you could create a `Pipeline` trait does two things:
 
 - Initialise the agents set (and return it as a `Vec<Box<dyn Agent>>`)
 - Run the vector as a pipeline, where the results of the previous agent gets fed into the next one

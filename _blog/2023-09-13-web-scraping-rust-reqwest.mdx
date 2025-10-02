@@ -5,9 +5,11 @@ author: josh
 tags: [rust, web-scraping, tutorial]
 thumb: web_scraper_thumbnail.png
 cover: web_scraper_thumbnail.png
-date: '2023-09-13T14:00:00'
+date: "2023-09-13T14:00:00"
 ---
+
 ## Introduction
+
 Have you ever thought about making your own database of potential businesses for lead generation or product price data so you can get your products at the cheapest price without any effort? Web scraping is what lets you do that without having to do any of the manual work yourself. Rust makes this easier by allowing you to handle errors explicitly and run tasks concurrently, letting you do things like attaching a web service router to your scraper or a Discord bot that outputs the data.
 
 In this guide to Rust web scraping, we will write a Rust web scraper that will scrape Amazon for Raspberry Pi products and get their prices, then store them in a PostgresQL database for further processing.
@@ -15,17 +17,23 @@ In this guide to Rust web scraping, we will write a Rust web scraper that will s
 Stuck or want to see the final code? The Github repository for this article can be found [here.](https://github.com/joshua-mo-143/reqshuttle)
 
 ## Getting Started
+
 Let's make a new project by using `cargo shuttle init`. For this project we'll simply call it `webscraper` - you'll want the `none` option for the framework, which will spawn a new Cargo project with `shuttle-runtime` added (as we aren't currently using a web framework, we don't need to pick any of the other options).
 
 Let's install our dependencies with the following one liner:
+
 ```bash
 cargo add chrono reqwest scraper tracing shuttle-shared-db sqlx --features shuttle-shared-db/postgres,sqlx/runtime-tokio-native-tls,sqlx/postgres
 ```
+
 We'll also want to install `sqlx-cli`, which is a useful tool for managing our SQL migrations. We can install it by running the following:
+
 ```bash
 cargo install sqlx-cli
 ```
+
 If we then use `sqlx migrate add schema` in our project folder, we'll then get our SQL migration file, which can be found in the `migrations` folder! The file will be formatted with the date and time at which the migration was created, and then the name we gave it (in this case, `schema`). For our purposes, here are the migrations we'll be using:
+
 ```sql
 -- migrations/schema.sql
 CREATE TABLE IF NOT EXISTS products (
@@ -39,6 +47,7 @@ CREATE TABLE IF NOT EXISTS products (
 ```
 
 Before we get started, we'll want to make a struct that implements `shuttle_runtime::Service`, which is an async trait. We'll also want to set our user agent so that there is less chance of us getting blocked. Thankfully, we can do all of this by returning a struct in our main function, like so:
+
 ```rust
 // src/main.rs
 use reqwest::Client;
@@ -75,6 +84,7 @@ impl shuttle_runtime::Service for CustomService {
     }
 }
 ```
+
 Now that we're done, we can get started web scraping in Rust!
 
 ## Making our Web Scraper
@@ -114,7 +124,9 @@ async fn scrape(ctx: Client) -> Result<(), String> {
     };
 }
 ```
-As you may have noticed, we added a variable named `retry_attempts`. This is because sometimes when we're scraping, Amazon (or any other site for that matter) may give us a 503 Service Unavailable, meaning that the scraping will fail. Sometimes this can be caused by server  overload or us scraping too quickly, so we can model our error handling like this:
+
+As you may have noticed, we added a variable named `retry_attempts`. This is because sometimes when we're scraping, Amazon (or any other site for that matter) may give us a 503 Service Unavailable, meaning that the scraping will fail. Sometimes this can be caused by server overload or us scraping too quickly, so we can model our error handling like this:
+
 ```rust
 // src/main.rs
 
@@ -141,6 +153,7 @@ if res.status() == StatusCode::SERVICE_UNAVAILABLE {
 
 retry_attempts = 0;
 ```
+
 Assuming the HTTP request is successful, we'll get a HTML body that we can parse using `scraper`.
 
 If you go to Amazon in your browser and search for "raspberry pi", you'll then receive a product list. You can examine this product list by using the dev tools function on your browser (in this instance, it's the Inspect function in Firefox but you can also use Chrome Devtools, Microsoft Edge DevTools, etc...). It should look like the following:
@@ -148,6 +161,7 @@ If you go to Amazon in your browser and search for "raspberry pi", you'll then r
 ![Devtools preview of webpage analysis for web scraping in a browser](/images/blog/web_scraper_amazon.png)
 
 You might notice that the `div` element has a data attribute of `data-component-type` for which the value of `s-search-result`. This is helpful for us as no other page components other than the ones we want to scrape have that attribute! Therefore, we can scrape the data by selecting it as a CSS selector (see below for more information). We'll want to make sure we prepare our HTML by parsing it as a HTML fragment, and then we can declare our initial `scraper::Selector`:
+
 ```rust
 // src/main.rs
 use scraper::{Html, Selector};
@@ -155,9 +169,11 @@ use scraper::{Html, Selector};
 let html = Html::parse_fragment(&res);
 let selector = Selector::parse("div[data-component-type='s-search-result']").unwrap();
 ```
+
 As you can see, the `Selector` uses CSS selectors to be able to parse the HTML. In this case, we are specifically attempting to search for a HTML `div` element that has a data attribute called "data-component-type" with a value of "s-search-result".
 
 If you attempt to run our program now and `html.select(&selector)` as per the `scraper` documentation, you'll see that it returns an iterator over HTML elements. However, because the iteration count can also technically be zero, we'll want to make sure that there are actually things we can iterate over - so let's make sure we cover that point by adding an if statement to check for the iterator count:
+
 ```rust
 // src/main.rs
 if html.select(&selector).count() == 0 {
@@ -165,9 +181,11 @@ if html.select(&selector).count() == 0 {
     break
 };
 ```
+
 In our final iteration of the app, this should just break the loop as this will normally signal that there's no more products we can retrieve as in the first case there should always be product results.
 
 Now that we've done our respective error handling, we can iterate through the entries and create a Product, then append it to our vector of Products.
+
 ```rust
 // src/main.rs
 for entry in html.select(&selector) {
@@ -198,9 +216,11 @@ for entry in html.select(&selector) {
 pagenum += 1;
 std_sleep(Duration::from_secs(20));
 ```
+
 Note that in the above codeblock we use sleep from the standard library - if we attempt to use `tokio::time::sleep`, the compiler returns an error about holding a non-`Send` future across an await point.
 
 Now that we've written our code for processing the data we've gathered from the web page, we can wrap what we've written so far in a loop, moving our `Vec<Product>` and `pagenum` declarations to an outer loop that will run infinitely. Next, we'll want to make sure we have somewhere to save our data! We'll want to use a batched transaction here, which thankfully we can do by using `db.begin` and `db.commit`. Check the code out below:
+
 ```rust
 // src/main.rs
 let transaction = db.begin().await.unwrap();
@@ -228,9 +248,11 @@ for product in vec {
 }
 transaction.commit().await.unwrap();
 ```
+
 All we're doing here is just running a for loop over the list of scraped products and inserting them all into the database, then committing at the end to finalise it.
 
 Now ideally we'll want the scraper to rest for some time so that the pages are given time to update - otherwise, if you comb the pages all the time you will more than likely end up with a huge amount of duplicate data. Let's say we wanted to wanted it to rest until midnight:
+
 ```rust
 // src/main.rs
 use tokio::time::{sleep as tokio_sleep, Duration};
@@ -252,9 +274,11 @@ let duration_to_midnight =  tomorrow_midnight.signed_duration_since(now).to_std(
 // sleep for the required time
 tokio_sleep(Duration::from_secs(duration_to_midnight.as_secs())).await;
 ```
+
 Now we're pretty much done!
 
 Your final scraping function should look like this:
+
 ```rust
 // src/main.rs
 async fn scrape(ctx: Client, db: PgPool) -> Result<(), String> {
@@ -385,15 +409,19 @@ async fn scrape(ctx: Client, db: PgPool) -> Result<(), String> {
     Ok(())
 }
 ```
+
 And we're done!
 
 ## Deploying
+
 If you initialised your project on the Shuttle servers, you can get started by using `cargo shuttle deploy` (adding `--allow-dirty` if on a dirty Git branch). If not, you'll want to use `cargo shuttle project start --idle-minutes 0` to get your project up and running.
 
 ## Finishing Up
+
 Thanks for reading this article! I hope you have a more thorough understanding of how to start web scraping in Rust, using the Rust Reqwest and scraper crates.
 
 Ways to extend this article:
+
 - Add a frontend so you can show stats for your scraper bot
 - Add a proxy for your web scraper
 - Scrape more than one website

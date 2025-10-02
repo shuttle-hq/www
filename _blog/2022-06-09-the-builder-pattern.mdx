@@ -7,6 +7,7 @@ thumb: crab-builder.png
 cover: crab-builder.png
 date: "2022-06-09T15:00:00"
 ---
+
 This blog post is powered by shuttle! The serverless platform built for Rust.
 
 In this post, we'll be going over the "builder pattern". The builder pattern is an API design pattern for constructing instances of Rust structures. We'll be going over where it makes sense to use it and some of the benefits of applying it to your structs.
@@ -16,6 +17,7 @@ In this post, we'll be going over the "builder pattern". The builder pattern is 
 Here are some examples of the builder pattern in common Rust crates:
 
 [`Command`](https://doc.rust-lang.org/std/process/struct.Command.html) from the Rust standard library
+
 ```rust
 Command::new("cmd")
     .args(["/C", "echo hello"])
@@ -23,6 +25,7 @@ Command::new("cmd")
 ```
 
 [`Rocket`](https://api.rocket.rs/v0.5/rocket/struct.Rocket) in Rocket
+
 ```rust
 rocket::build()
     .mount("/hello", routes![world])
@@ -30,6 +33,7 @@ rocket::build()
 ```
 
 [`Response`](https://docs.rs/http/latest/http/response/struct.Response.html#method.builder) in the HTTP crate
+
 ```rust
 Response::builder()
     .status(200)
@@ -41,11 +45,12 @@ Response::builder()
 
 [Cargo uses the pattern internally for tests](https://github.com/rust-lang/cargo/blob/c6745a3d7fcea3a949c3e13e682b8ddcbd213add/tests/testsuite/build.rs#L74-L91)
 
-Ok - so let's dive into *what* the builder pattern actually is.
+Ok - so let's dive into _what_ the builder pattern actually is.
 
 ## What is the builder pattern
 
 Given the following struct representation:
+
 ```rust
 struct Message {
     from: String,
@@ -53,7 +58,9 @@ struct Message {
     attachment: Option<String>
 }
 ```
+
 Using struct initialization syntax:
+
 ```rust
 Message {
     from: "John Smith".into(),
@@ -61,7 +68,9 @@ Message {
     attachment: None
 }
 ```
+
 Using a builder pattern:
+
 ```rust
 Message::builder()
     .from("John Smith".into())
@@ -70,13 +79,14 @@ Message::builder()
 ```
 
 The builder pattern consists of:
-- A function that generates a *intermediate builder structure* (`Message::builder()`)
+
+- A function that generates a _intermediate builder structure_ (`Message::builder()`)
 - A chain of methods which set values on the builder: (`.from("John Smith".into()).content("Hello!".into())`)
 - A final method which builds the final value from the intermediate structure `.build()`
 
 The structure of the builder pattern follows the functional programming design and has likeness of building iterators.
 
-The setting methods take a mutable reference to the builder and return the same reference (thus for chaining to work). The handy part about working with  mutable references is that it can be shared around between functions and if statements:
+The setting methods take a mutable reference to the builder and return the same reference (thus for chaining to work). The handy part about working with mutable references is that it can be shared around between functions and if statements:
 
 ```rust
 fn build_message_from_console_input(
@@ -201,6 +211,7 @@ let query = Query::new(
     false
 );
 ```
+
 But this causes confusion at the call site. Its not clear whether "imdb" is the database, the table or the text_filter? [^vscode-inlay-hints].
 
 The builder pattern makes it much easier to read and understand what's happening during initialisation:
@@ -332,6 +343,7 @@ impl UserBuilder {
 ```
 
 Some things to look out for:
+
 - Every set method must take a mutable reference in order to add the data to the backer
 - The method must then return the mutable reference it has to allow for them to be chained.
 
@@ -390,6 +402,7 @@ impl Query {
 Typed-builder solves two problems with `derive_builder`:
 
 With `derive_builder` you can set a field twice (or more)
+
 ```rust
 Query::builder()
     .database("imdb".into())
@@ -480,7 +493,7 @@ However both of these don't the use the nice chaining syntax.
 
 The builder pattern can help you write cleaner, more readable APIs, and it turn help the consumers of your APIs write better code. We can apply constraints to make sure that our structs are initialised correctly with a clean API enforcing the contract.
 
-One thing to remember is that code is read *much* more than it's written - so it's worth going out of our way to make our code just that little bit more pleasant to read.
+One thing to remember is that code is read _much_ more than it's written - so it's worth going out of our way to make our code just that little bit more pleasant to read.
 
 ## [Shuttle](https://www.shuttle.dev/): Stateful Serverless for Rust
 
@@ -488,7 +501,7 @@ Deploying and managing your Rust web apps can be an expensive, anxious and time 
 
 If you want a batteries included and ops-free experience, [try out Shuttle](https://docs.rs/shuttle-service/latest/shuttle_service/).
 
-<hr styles="margin-top: 10px"/>
+<hr styles="margin-top: 10px" />
 
 [^type_constraints]: I partially agree with this, there are ways to design your types to be constrained. Here we could create a `struct FutureEvent(chrono::DateTime)` structure where the constraint is constructing the `FutureEvent` type rather than leaving the constraint to the field. But there are lots of scenarios where that isn't the case.
 

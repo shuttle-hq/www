@@ -5,7 +5,7 @@ author: josh
 tags: [cronjob, rust, tutorial, guide]
 thumb: cronjobs-rust-thumb.png
 cover: cronjobs-rust-thumb.png
-date: '2024-01-23T14:30:00'
+date: "2024-01-23T14:30:00"
 ---
 
 In this article we're going to talk about how you can write your own cron jobs as a web service using Shuttle!
@@ -18,9 +18,9 @@ Cron jobs (or "scheduled tasks") are useful for many things. They allow you to a
 
 If you're interested in the final code and want to deploy quickly, you can find the repo [here.](https://github.com/shuttle-hq/shuttle-examples/tree/main/shuttle-cron) You can deploy it with two simple steps:
 
-1) Run `shuttle init --from shuttle-hq/shuttle-examples --subfolder shuttle-cron` and follow the prompt (requires `cargo-shuttle` installed)
+1. Run `shuttle init --from shuttle-hq/shuttle-examples --subfolder shuttle-cron` and follow the prompt (requires `cargo-shuttle` installed)
 
-2) Run `shuttle deploy`. That's it!
+2. Run `shuttle deploy`. That's it!
 
 ## Getting Started
 
@@ -154,6 +154,7 @@ async fn say_hello_world(job: Reminder, ctx: JobContext) {
     svc.execute(job);
 }
 ```
+
 The variables for the `CronjobData` struct come from instantiating the struct and then adding it as a shared data extension to the Tower service that we use. This allows `apalis` to be able to use the data by using `.data_opt()` from the `JobContext` struct.
 
 ### Hooking it all up
@@ -177,6 +178,7 @@ impl shuttle_runtime::Service for MyService {
    }
 }
 ```
+
 The `shuttle_runtime::Service` trait is what allows your custom service to be packaged into a project that the Shuttle runtime can use. It also provides a HTTP address that you can optionally bind a HTTP-bound service to (for example, a web server).
 
 Now we can create a `tower` service that holds our job that we want to run. We can use the `DefaultRetryPolicy` provided to us by `apalis` to be able to add automatic re-tries, as well as layering the shared data as an `Extension`:

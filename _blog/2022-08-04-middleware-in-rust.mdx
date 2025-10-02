@@ -52,7 +52,7 @@ Many routes may want user information. The incoming request contain user informa
 
 Information about which paths users are going to and when can be very useful. With logging middleware we can log and store request information for later analysis.
 
-Similar to logging is [*server response timings*](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing). This is a field / http header, which is standardized for holding timing information about requests. Here our middleware can log the start time of an incoming *request* and the end time on the *response*. Then the middleware can modify the outgoing response to include the timing. This header is often highlighted in developer tools, which can be useful while debugging. It can also be used in chunked / streamed responses where the header of a request might have already been sent by using [Trailer](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Trailer)s.
+Similar to logging is [_server response timings_](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing). This is a field / http header, which is standardized for holding timing information about requests. Here our middleware can log the start time of an incoming _request_ and the end time on the _response_. Then the middleware can modify the outgoing response to include the timing. This header is often highlighted in developer tools, which can be useful while debugging. It can also be used in chunked / streamed responses where the header of a request might have already been sent by using [Trailer](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Trailer)s.
 
 #### Compression and other response optimizations
 
@@ -98,7 +98,7 @@ Application::build()
 
 ### Separating out code
 
-The benefit of middleware *just* being functions is that they can be separated out to different modules or even crates. Many 3rd party services may choose to expose their service as a middleware rather than a system of complicated functions, and having to deal with users passing the correct state into them.
+The benefit of middleware _just_ being functions is that they can be separated out to different modules or even crates. Many 3rd party services may choose to expose their service as a middleware rather than a system of complicated functions, and having to deal with users passing the correct state into them.
 
 ```rust
     .add_middleware(hot_new_server_logging_framework_start_up::Middleware::new())
@@ -318,7 +318,7 @@ We'll be using Axum for this demo. The demo is not public at the moment, look ou
 
 Cookies can be used for maintaining user state. When a user cookie is set on the frontend it's sent with every request. We'll skip over how the cookie got there 😅 and leave it for a future tutorial.
 
-Either way we want to add middleware which *injects* the following the struct into current request.
+Either way we want to add middleware which _injects_ the following the struct into current request.
 
 ```rust
 #[derive(Clone)]
@@ -372,9 +372,9 @@ async fn auth<B>(
 }
 ```
 
-*this is a bit ad hoc parsing, proper parsing should account for multiple cookies etc and could be neater 😆*.
+_this is a bit ad hoc parsing, proper parsing should account for multiple cookies etc and could be neater 😆_.
 
-At the end we do two **important things**. First we *extend* the request with this lazy auth state: `req.extensions_mut().insert(...)`. Secondly we run the rest of the request stack: `next.run(req).await`.
+At the end we do two **important things**. First we _extend_ the request with this lazy auth state: `req.extensions_mut().insert(...)`. Secondly we run the rest of the request stack: `next.run(req).await`.
 
 Unlike Rocket fairings, in Axum we could return our own Response from the middleware and not run the handler by skipping `next.run(req).await`.
 

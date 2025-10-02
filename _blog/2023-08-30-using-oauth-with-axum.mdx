@@ -5,8 +5,9 @@ author: josh
 tags: [rust, tutorial, auth]
 thumb: oauth-axum-thumb.png
 cover: oauth-axum-thumb.png
-date: '2023-08-30T18:18:00'
+date: "2023-08-30T18:18:00"
 ---
+
 In this post, we'll be learning how to implement OAuth 2.0 in Rust by writing a backend service that will interact with
 [Google OAuth](https://developers.google.com/identity/protocols/oauth2) and will interact with [OpenID Connect](https://auth0.com/docs/authenticate/protocols/openid-connect-protocol) ("OIDC") service from Google to retrieve a user's email.
 We'll first learn to use the [oauth2](https://github.com/ramosbugs/oauth2-rs) library to authorise our users using database-backed sessions to
@@ -17,14 +18,17 @@ The final code for the repository can be found [here.](https://github.com/shuttl
 ## Set Up
 
 Before we get started, you'll want the following:
+
 - A project in Google Cloud Console (you can get started [here](https://console.cloud.google.com) - it's free!)
 
 We'll want to also install [`sqlx-cli`](https://github.com/launchbadge/sqlx/blob/main/sqlx-cli/README.md), which we can do by running the following command:
+
 ```bash
 cargo install sqlx-cli
 ```
 
 Once we've created our project, we'll want to use `sqlx migrate add schema` to create our initial schema file which you will be able to find in the migrations folder. Once you open the file, it'll be empty with a simple comment to add your migrations - in which we'll add the following:
+
 ```sql
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
@@ -45,15 +49,19 @@ CREATE TABLE IF NOT EXISTS sessions (
 When we run our app we'll run the migrate macro, which will automatically attempt to run our migrations and add a new migration entry to the table so it won't automatically try to run the migration again.
 
 ## Getting Started
+
 To get started, you'll want to create a new project by running the following:
+
 ```bash
 shuttle init
 ```
+
 We'll want to pick "axum" as the framework. For the purposes of the project we will refer to the project name as "oauth-rust".
 
 Looking to deploy? Make sure you enable initialising your project on the Shuttle servers!
 
 Next we'll want to install our dependencies - copy the script below to install everything in one go:
+
 ```bash
 cargo add axum --features multipart,macros
 cargo add axum-extra --features cookie-private
@@ -66,6 +74,7 @@ cargo add anyhow tracing oauth2 reqwest shuttle-secrets thiserror
 
 Next you'll want to create a `Secrets.toml` file in the root of your backend that holds all of our secret variables - you'll
 want to make sure you have at least the following, in the following format:
+
 ```toml
 GOOGLE_OAUTH_CLIENT_ID = "Your key here"
 GOOGLE_OAUTH_CLIENT_SECRET = "Your key here"
@@ -162,6 +171,7 @@ pub enum ApiError {
 Here, note that the `#[from]` attribute allows us to directly implement `From<T>` for our enum. The `#[error("...")]` attribute allows us to write an error message while still including the original error.
 
 To make our error type compatible with Axum, we need to implement the `IntoResponse` trait. We can do this like so:
+
 ```rust
 // src/routes/errors.rs
 use axum::{response::IntoResponse, Response, http::StatusCode};
@@ -185,8 +195,11 @@ impl IntoResponse for ApiError {
     }
 }
 ```
+
 ## But how do I use OAuth?
+
 First, we will need to write a function to create an `oauth2::BasicClient`. This client can take any OAuth authorization endpoint URL and token endpoint URL (as long as they're both from the same OAuth service). We can pass in our Google OAuth secrets that we created earlier, as you'll be able to see below. Our redirect URL should be an endpoint that we create on our side so when the user gets successfully authorised, they get sent back to our application with a code we can exchange for a token that allows a user to stay authenticated.
+
 ```rust
 // src/main.rs
 use oauth::{TokenUrl, AuthUrl,
@@ -237,6 +250,7 @@ async fn homepage(
 ```
 
 To get this route to work, you'll want to create a Router that layers an `axum::Extension`, then nest it onto your main router:
+
 ```rust
 // Use the oauth_id from earlier in your main function
 
@@ -247,6 +261,7 @@ let homepage_router = Router::new()
 
 Once we allow the application to use our user's credentials, Google will fire a GET request to our chosen OAuth redirect URI as seen in the homepage router, with some URI query parameters. Although there's multiple parameters returned, for us we only need the code response given back by Google so we can exchange it for an access token. We can make a struct to extract the
 query parameters:
+
 ```rust
 use serde::Deserialize;
 #[derive(Debug, Deserialize)]
@@ -256,6 +271,7 @@ pub struct AuthRequest {
 ```
 
 Then we need to exchange the code for a token by using our `BasicClient` we made earlier:
+
 ```rust
 // src/routes/oauth.rs
 use axum_extra::extract::cookie::PrivateCookieJar;
@@ -279,10 +295,12 @@ pub async fn google_callback(
     // .. rest of the function
 }
 ```
+
 The token returned by exchanging the token holds all of the information from the response and has methods to get all of the
 required fields that we need (life duration of the access token, the code, etc...).
 
 Because we requested OpenID privileges earlier, we can now access any of Google's OpenID using the access token that was given to us (that we required permissions for, as per the redirect URI). Thankfully, this is pretty simple to do without the oauth2 crate and we only need to use a simple `Reqwest` client with bearer auth to get the user profile data, like so:
+
 ```rust
 #[derive(Deserialize, sqlx::FromRow, Clone)]
 pub struct UserProfile {
@@ -298,10 +316,12 @@ let profile = state.ctx.get("https://openidconnect.googleapis.com/v1/userinfo")
 
 let profile = profile.json::<UserProfile>().await.unwrap();
 ```
+
 As you can see, we needed to create a struct for the type. This particular OIDC endpoint returns much more than just an email and you'll be able to see that if you use `.text().await.unwrap()` instead of trying to convert the response to JSON - however, for our purposes currently we only need the email for verification - `serde` ignores unknown fields (unless [deny_unknown_fields](https://serde.rs/container-attrs.html#deny_unknown_fields) is enabled),
 so this is safe to do.
 
 ## Using OAuth with Axum Extensions
+
 Now that we've got our access token, all we need to do is store the token somewhere our service can access it. We can do this with SQLx and usage of the `PrivateCookieJar` type from `axum_extra`, which uses cryptographically secure cookies. Let's have a look at what the code would look like:
 
 ```rust
@@ -339,6 +359,7 @@ let cookie = Cookie::build("sid", token.access_token().secret().to_owned())
 ```
 
 Now that we've done everything, we want to make sure to include our token addition in the response and a redirect:
+
 ```rust
     Ok((
         jar.add(cookie),
@@ -408,6 +429,7 @@ pub async fn google_callback(
 ```
 
 To be able to authenticate users more easily, we will implement `FromRequest` for `UserProfile`. This will allow us to directly call the database while extracting the body. We then return the user profile of the person who just authenticated.
+
 ```rust
 #[axum::async_trait]
 impl FromRequest<AppState> for UserProfile {
@@ -439,9 +461,8 @@ impl FromRequest<AppState> for UserProfile {
 }
 ```
 
-
-
 Now we just need to add the protected route!
+
 ```rust
 pub async fn protected(profile: UserProfile) -> impl IntoResponse {
     (StatusCode::OK, profile.email)
@@ -449,6 +470,7 @@ pub async fn protected(profile: UserProfile) -> impl IntoResponse {
 ```
 
 Now that we've filled out everything we need, we can come back to the main entrypoint function and fill back in all of our routes so that we can use them:
+
 ```rust
 #[shuttle_runtime::main]
 async fn axum(
@@ -497,12 +519,15 @@ fn init_router(state: AppState, oauth_client: BasicClient, oauth_id: String) -> 
 ```
 
 ## Deploying to Production
+
 Once we're done implementing OAuth, all you need to do is use `shuttle deploy` (with `--allow-dirty` if you're working on a dirty Git branch) and it'll work!
 
 ## Finishing Up
+
 Thanks for reading! I hope you enjoyed this guide to implementing OAuth in Rust and leveraging the [oauth2](https://github.com/ramosbugs/oauth2-rs) library for Rust auth.
 
 Some extra ideas if you'd like to extend this article:
+
 - Silent token rotation
 - Add more functionality so users don't have to go through the whole OAuth process every single time
 - Try implementing refresh tokens (make sure they're implemented securely!)

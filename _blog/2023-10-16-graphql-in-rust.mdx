@@ -1,15 +1,17 @@
 ---
-title: 'Using GraphQL in Rust'
+title: "Using GraphQL in Rust"
 description: This article details how to build a GraphQL server in Rust. We will explore using queries, mutations as well as subscriptions to make a fully working endpoint.
 author: josh
 tags: [rust, graphql, sql, guide]
 thumb: graphql-in-rust-thumb.png
 cover: graphql-in-rust-thumb.png
-date: '2023-10-16T14:30:00'
+date: "2023-10-16T14:30:00"
 ---
+
 ## Introduction
 
 When it comes to writing an API, sometimes you might have several data sources and want to coalesce them into one easy-to-query API on the frontend. This is where GraphQL comes in: an query language made for APIs and declarative data fetching (you only query what you want). Here are some advantages that GraphQL can bring to your Rust web application:
+
 - Test your queries out in real-time via the GraphQL playground
 - Makes it much easier for your frontend to query your backend
 - You can use any data source
@@ -21,6 +23,7 @@ Stuck or want to know what the final code looks like? [You can find the reposito
 ## Getting Started
 
 You'll want to initiate a new Shuttle project (requires `cargo-shuttle`):
+
 ```bash
 shuttle init
 ```
@@ -28,6 +31,7 @@ shuttle init
 For this article we'll be using the project name "graphql-example". When the CLI asks you what framework you want, pick Axum.
 
 Next, you'll want to make a migrations schema file like so in the root of your project:
+
 ```sql schema.sql
 CREATE TABLE IF NOT EXISTS dogs (
     id serial primary key,
@@ -35,7 +39,9 @@ CREATE TABLE IF NOT EXISTS dogs (
     age INT NOT NULL,
 );
 ```
+
 Now you'll want to install the required dependencies. We can do this with a one-line command:
+
 ```bash
 cargo add async-graphql async-graphql-axum async-stream axum futures-channel futures-core \
           futures-util once-cell shuttle-axum shuttle-runtime shuttle-shared-db slab \
@@ -47,7 +53,8 @@ cargo add async-graphql async-graphql-axum async-stream axum futures-channel fut
 ## Setting up GraphQL
 
 At the very minimum, we'll want to create an endpoint that serves the GraphQL playground so we can quickly try queries out, and then a basic "Hello world!" query in GraphQL. Let's have a look at how this would look in code:
-``` rust src/queries.rs
+
+```rust src/queries.rs
 use sqlx::PgPool;
 use async_graphql::{context::Context, Object};
 
@@ -101,6 +108,7 @@ Now we're ready to get started on queries, mutations and subscriptions!
 ## Queries
 
 Although a simple "hello world" query shows how basic data fetching works, we probably want to figure out how to do more complicated queries: for example, returning some records from our SQL data source. Let's change our `impl Query` to include a method for getting a list of Dogs:
+
 ```rust src/queries.rs
 // the records we want to return - the struct currently reflects the schema of the table
 // however if you you don't want to return everything, you can change it accordingly
@@ -196,6 +204,7 @@ impl Dog {
     }
 }
 ```
+
 If you run `shuttle run` and go to `http://localhost:8000`, you'll be able to see that if you click on Queries on the left-hand side, it'll let you use `dogs` as a query.
 
 ## Mutations
@@ -229,6 +238,7 @@ impl Mutation {
     }
 }
 ```
+
 As you can see, it's practically the same as if we just did it normally in SQL - we grab the SQL connection and insert the record, then return the ID. We'll also want to be able to only update certain parameters - for example, if a dog's name needs to be updated but not their age. We learned about how we can use optional parameters in `async-graphql`, and we can write the function like so:
 
 ```rust src/mutations.rs
@@ -268,6 +278,7 @@ async fn update_dog(&self, ctx: &Context<'_>,
     }
 }
 ```
+
 Similarly, we can do it exactly the same way for delete functions.
 
 ## Subscriptions
@@ -327,11 +338,14 @@ where
     f(senders.downcast_mut::<Senders<T>>().unwrap())
 }
 ```
+
 There's quite a few generics here, but don't be intimidated: these are simply required in order for the function to be usable with more than one time. Let's break it down:
+
 - The `T` type must implement Sync, Send, Clone and 'static. This means that the type must be able to be marked as being able to safely share and synchronise across threads.
 - The `F` type is a function that must implement a closure, where the item inside a closure is a `Senders<T>` (which we created earlier).
 
 Next, we need to implement `Drop` and `futures_util::Stream` for our type - for `Drop` we want a custom implementation because we need it to work a specific way. `futures_util::Stream` is required by `async-graphql` for the type to work.
+
 ```rust
 // because we want to remove our BrokerStream from the hashmap we need to implement
 // our own Drop function
@@ -350,9 +364,11 @@ impl<T: Sync + Send + Clone + 'static> Stream for BrokerStream<T> {
     }
 }
 ```
+
 Note that the T type, as above, requires `Sync + Send + Clone + 'static` - this is also required for us to use more than one type with the `SimpleBroker`. Otherwise, we will end up being able to only stream one type - which is good in some cases, but let's assume we want to stream more than one type eventually and will therefore, need to make it generic.
 
 Once we're done with the above, we need to write the implementation for the broker itself. See below:
+
 ```rust
 impl<T: Sync + Send + Clone + 'static> SimpleBroker<T> {
     /// Publish a message that all subscription streams can receive.
@@ -435,17 +451,20 @@ impl Subscription {
 ```
 
 However, this won't work on its own and we still need to push the messages to the broker. We can publish our mutation updates to the `SimpleBroker` by using the `SimpleBroker::publish` method after a successful SQL update, like so:
+
 ```rust
 SimpleBroker::publish(DogChanged {
 	mutation_type: MutationType::Created,
 	id: res.id,
 });
 ```
+
 We've finished all of the parts we need to make our GraphQL server fully functional, so it's time to hook it all up!
 
 ## Connecting it all up
 
 See below for what your main file should look like:
+
 ```rust src/main.rs
 async fn graphiql() -> impl IntoResponse {
     Html(

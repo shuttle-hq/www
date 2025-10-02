@@ -5,7 +5,7 @@ author: sourabpramanik
 tags: [javascript, react, auth, clerk, guide]
 thumb: clerk-react-thumb.png
 cover: clerk-react-thumb.png
-date: '2024-02-13T17:00:00'
+date: "2024-02-13T17:00:00"
 ---
 
 This two-part article covers how we can build an Issue tracking application using React for the frontend, and [Shuttle](https://www.shuttle.dev/) and [Actix Web](https://actix.rs/) for the backend. It also uses [Clerk](https://clerk.com/) for authentication in the frontend and protecting the Rest APIs in the backend.
@@ -56,20 +56,20 @@ Create `/frontend/lib/schema.ts` and add `IssueSchema` and `UserSchema` interfac
 
 ```tsx
 export interface IssueSchema {
-    id: string | undefined,
-    title: string;
-    description: string;
-    status: "todo" | "inprogress" | "done" | "backlog";
-    label: "bug" | "feature" | "documentation";
-    author: string;
+  id: string | undefined;
+  title: string;
+  description: string;
+  status: "todo" | "inprogress" | "done" | "backlog";
+  label: "bug" | "feature" | "documentation";
+  author: string;
 }
 
 export interface UserSchema {
-    id: string,
-    first_name: string,
-    last_name: string,
-    username: string,
-    profile_image_url: string,
+  id: string;
+  first_name: string;
+  last_name: string;
+  username: string;
+  profile_image_url: string;
 }
 ```
 
@@ -86,31 +86,31 @@ npm install zustand
 - Store for issue `id` that has to be updated/edited
 
 ```tsx
-import { create } from 'zustand'
+import { create } from "zustand";
 
 type IssueStore = {
-    edit_issue_id: string,
-    setEditIssueId: (id: string) => void
-}
+  edit_issue_id: string;
+  setEditIssueId: (id: string) => void;
+};
 export const useIssueStore = create<IssueStore>((set) => ({
-    edit_issue_id: "",
-    setEditIssueId: (id: string) => set(() => ({ edit_issue_id: id })),
-}))
+  edit_issue_id: "",
+  setEditIssueId: (id: string) => set(() => ({ edit_issue_id: id })),
+}));
 ```
 
 - Store for closing and opening the issue modal
 
 ```tsx
 type IssueModalStore = {
-    isOpen: boolean,
-    setOpen: () => void
-    setClose: () => void
-}
+  isOpen: boolean;
+  setOpen: () => void;
+  setClose: () => void;
+};
 export const useIssueModalStore = create<IssueModalStore>((set) => ({
-    isOpen: false,
-    setOpen: () => set({ isOpen: true }),
-    setClose: () => set({ isOpen: false }),
-}))
+  isOpen: false,
+  setOpen: () => set({ isOpen: true }),
+  setClose: () => set({ isOpen: false }),
+}));
 ```
 
 ### Custom hooks
@@ -120,8 +120,8 @@ We will create the custom hooks using `useSWR` and `userSWRMutation` so that we 
 Create `/frontend/lib/hooks.ts` and let's start integrating all the APIs we have created in the backend. First let's bring all the required schema, hooks, and components into the scope:
 
 ```tsx
-import useSWR, { Fetcher, useSWRConfig } from "swr"
-import useSWRMutation from 'swr/mutation'
+import useSWR, { Fetcher, useSWRConfig } from "swr";
+import useSWRMutation from "swr/mutation";
 import { IssueSchema, UserSchema } from "./schema";
 import { toast } from "sonner";
 import { useIssueModalStore } from "./store";
@@ -135,10 +135,11 @@ The hook returns an object where the `isLoading` property is a boolean property 
 
 ```tsx
 export const useGetUser = (user_id: string | undefined) => {
-    const fetcher: Fetcher<UserSchema, string> = (url) => fetch(url).then(res => res.json())
-    const { isLoading, data } = useSWR(`/api/user/${user_id}`, fetcher);
-    return { isLoading, data };
-}
+  const fetcher: Fetcher<UserSchema, string> = (url) =>
+    fetch(url).then((res) => res.json());
+  const { isLoading, data } = useSWR(`/api/user/${user_id}`, fetcher);
+  return { isLoading, data };
+};
 ```
 
 **Get issues hook**
@@ -147,12 +148,11 @@ Fetches all the issues for the issues table, consuming get issues API, the respo
 
 ```tsx
 export const useGetIssues = () => {
-    const fetcher: Fetcher<IssueSchema[], string> = (url) =>
-        fetch(url).then((res) => res.json())
-    const { isLoading, data } = useSWR('/api/issues', (url) => fetcher(url));
-    return { isLoading, data };
-}
-
+  const fetcher: Fetcher<IssueSchema[], string> = (url) =>
+    fetch(url).then((res) => res.json());
+  const { isLoading, data } = useSWR("/api/issues", (url) => fetcher(url));
+  return { isLoading, data };
+};
 ```
 
 **Get issue by `id` hook**
@@ -161,13 +161,15 @@ This hook uses the get issue by `id` API and returns the one single record that 
 
 ```tsx
 export const useGetIssue = (id: string) => {
-    const fetcher: Fetcher<{ data: IssueSchema }, string> = (url) =>
-        fetch(url).then((res) => res.json())
-    const { data } = useSWR(() => id !== "" ? `/api/issue/${id}` : null, fetcher);
+  const fetcher: Fetcher<{ data: IssueSchema }, string> = (url) =>
+    fetch(url).then((res) => res.json());
+  const { data } = useSWR(
+    () => (id !== "" ? `/api/issue/${id}` : null),
+    fetcher,
+  );
 
-    return { data: data?.data }
-}
-
+  return { data: data?.data };
+};
 ```
 
 **Create issue hook**
@@ -180,39 +182,40 @@ The data of the payload should match the `IssueSchema` but it should not have th
 
 ```tsx
 export const useCreateIssue = () => {
-    const { setClose } = useIssueModalStore();
+  const { setClose } = useIssueModalStore();
 
-    const create = (url: string, { arg }: { arg: Omit<IssueSchema, "id"> }) => fetch(url, {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(arg),
-    }).then(res => res.json())
+  const create = (url: string, { arg }: { arg: Omit<IssueSchema, "id"> }) =>
+    fetch(url, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(arg),
+    }).then((res) => res.json());
 
-    const { mutate: revalidateIssuesList } = useSWRConfig();
+  const { mutate: revalidateIssuesList } = useSWRConfig();
 
-    const { isMutating, trigger } = useSWRMutation("/api/issue", create, {
-        onSuccess() {
-            toast.success("Issue has been created.");
-            setClose();
-            revalidateIssuesList("/api/issues")
-        },
-        onError(err) {
-            if (err.message) {
-                toast.error(err.message);
-            } else {
-                toast.error("Failed to create issue");
-            }
-        },
-    })
+  const { isMutating, trigger } = useSWRMutation("/api/issue", create, {
+    onSuccess() {
+      toast.success("Issue has been created.");
+      setClose();
+      revalidateIssuesList("/api/issues");
+    },
+    onError(err) {
+      if (err.message) {
+        toast.error(err.message);
+      } else {
+        toast.error("Failed to create issue");
+      }
+    },
+  });
 
-    return { isMutating, trigger }
-}
+  return { isMutating, trigger };
+};
 ```
 
-*🗨️ We need to specify the content type header as `application/json` in the fetch calls because by default fetch API sets the content type header to `text/plain` which causes an incorrect content error as the backend we have created expects a JSON payload.*
+_🗨️ We need to specify the content type header as `application/json` in the fetch calls because by default fetch API sets the content type header to `text/plain` which causes an incorrect content error as the backend we have created expects a JSON payload._
 
 **Update/Edit issue hook**
 
@@ -222,36 +225,37 @@ We use the `setClose` method from the `useIssueModalStore` to close the issue mo
 
 ```tsx
 export const useEditIssue = () => {
-    const { setClose } = useIssueModalStore();
+  const { setClose } = useIssueModalStore();
 
-    const edit = (url: string, { arg }: { arg: IssueSchema }) => fetch(`${url}/${arg.id}`, {
-        method: "PATCH",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(arg),
-    }).then(res => res.json())
+  const edit = (url: string, { arg }: { arg: IssueSchema }) =>
+    fetch(`${url}/${arg.id}`, {
+      method: "PATCH",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(arg),
+    }).then((res) => res.json());
 
-    const { mutate: revalidateIssuesList } = useSWRConfig();
+  const { mutate: revalidateIssuesList } = useSWRConfig();
 
-    const { isMutating, trigger } = useSWRMutation("/api/issue", edit, {
-        onSuccess() {
-            toast.success("Issue has been updated.");
-            setClose();
-            revalidateIssuesList("/api/issues")
-        },
-        onError(err) {
-            if (err.message) {
-                toast.error(err.message);
-            } else {
-                toast.error("Failed to update issue");
-            }
-        },
-    })
+  const { isMutating, trigger } = useSWRMutation("/api/issue", edit, {
+    onSuccess() {
+      toast.success("Issue has been updated.");
+      setClose();
+      revalidateIssuesList("/api/issues");
+    },
+    onError(err) {
+      if (err.message) {
+        toast.error(err.message);
+      } else {
+        toast.error("Failed to update issue");
+      }
+    },
+  });
 
-    return { isMutating, trigger }
-}
+  return { isMutating, trigger };
+};
 ```
 
 **Delete issue hook**
@@ -260,31 +264,32 @@ One final API integration, the delete API takes the `id` and also returns an obj
 
 ```tsx
 export const useDeleteIssue = () => {
-    const { setClose } = useIssueModalStore();
+  const { setClose } = useIssueModalStore();
 
-    const remove = (url: string, { arg }: { arg: { id: string } }) => fetch(`${url}/${arg.id}`, {
-        method: "DELETE",
-    }).then(res => res.json())
+  const remove = (url: string, { arg }: { arg: { id: string } }) =>
+    fetch(`${url}/${arg.id}`, {
+      method: "DELETE",
+    }).then((res) => res.json());
 
-    const { mutate: revalidateIssuesList } = useSWRConfig();
+  const { mutate: revalidateIssuesList } = useSWRConfig();
 
-    const { isMutating, trigger } = useSWRMutation("/api/issue", remove, {
-        onSuccess() {
-            toast.success("Issue has been deleted.");
-            setClose();
-            revalidateIssuesList("/api/issues")
-        },
-        onError(err) {
-            if (err.message) {
-                toast.error(err.message);
-            } else {
-                toast.error("Failed to delete issue");
-            }
-        },
-    })
+  const { isMutating, trigger } = useSWRMutation("/api/issue", remove, {
+    onSuccess() {
+      toast.success("Issue has been deleted.");
+      setClose();
+      revalidateIssuesList("/api/issues");
+    },
+    onError(err) {
+      if (err.message) {
+        toast.error(err.message);
+      } else {
+        toast.error("Failed to delete issue");
+      }
+    },
+  });
 
-    return { isMutating, trigger }
-}
+  return { isMutating, trigger };
+};
 ```
 
 ### Issue modal
@@ -407,7 +412,7 @@ Create a new directory inside the components directory `issues-table`, inside th
 
 We will define `Row` component which will take `props` having the type set to `IssueSchema`.
 
-Each row will have 6 cells for the author, title, description (truncated), status, label,  and last cell for edit and delete buttons.
+Each row will have 6 cells for the author, title, description (truncated), status, label, and last cell for edit and delete buttons.
 
 The edit button will set the issue `id` to be edited using `setEditIssueId` from `useIssueStore` hook and open up the modal. The delete button will trigger the delete API in the `useDeleteIssue` hook.
 
@@ -417,7 +422,7 @@ Please find the complete code [here](https://github.com/sourabpramanik/issue-tra
 
 **Edit the `index.tsx` file of the `issue-table` component**
 
-Here you can find the complete code for the [issue table](https://github.com/sourabpramanik/issue-tracker/blob/main/frontend/src/components/issue-table/index.tsx)**.
+Here you can find the complete code for the [issue table](https://github.com/sourabpramanik/issue-tracker/blob/main/frontend/src/components/issue-table/index.tsx)\*\*.
 
 ### Update `App.tsx` file
 
@@ -475,7 +480,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <Toaster />
       <IssueModal />
     </ClerkProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
 ```
 

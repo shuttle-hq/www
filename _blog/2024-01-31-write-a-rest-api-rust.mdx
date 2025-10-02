@@ -5,7 +5,7 @@ author: josh
 tags: [rust, axum, guide]
 thumb: write-rest-api-rust-thumb.png
 cover: write-rest-api-rust-thumb.png
-date: '2024-01-31T14:30:00'
+date: "2024-01-31T14:30:00"
 ---
 
 In this article, we're going to talk about writing a REST API in Rust! Following on from our first [Shuttle Bytes](https://www.shuttle.dev/blog/2024/01/22/introducing-shuttlebytes) stream where we live-streamed a tutorial on this, we've created a text write-up to allow you to follow along in text.
@@ -19,6 +19,7 @@ Interested in checking out what the final code should look like? You can find it
 If you haven't already, make sure you have Rust and Cargo installed! You can find install instructions [here.](https://www.rust-lang.org/tools/install)
 
 We'll be initialising our project with `cargo-shuttle`, Shuttle's CLI. You can install it by running the following:
+
 ```bash
 cargo install cargo-shuttle
 ```
@@ -47,6 +48,7 @@ async fn main(
     // .. your code here
 }
 ```
+
 During deployment, Shuttle will automatically provision a database to our project without any input required from us! Locally, it will use Docker to spin up the Postgres container - you can also use Podman and similar programs that allow Docker usage through them. You can find the installation for Docker [here.](https://www.docker.com/)
 
 Interested in just getting the connection string? You can disable the `sqlx` feature of `shuttle-shared-db` and instead change the type to `String`, then connect to your PgPool. You can find more information about connecting to a PgPool [here.](https://docs.rs/sqlx/latest/sqlx/type.PgPool.html#method.connect)

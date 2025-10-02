@@ -5,8 +5,9 @@ author: josh
 tags: [rust, sql, orm, comparison]
 thumb: orm-rust-thumb.png
 cover: orm-rust-thumb.png
-date: '2024-01-16T14:30:00'
+date: "2024-01-16T14:30:00"
 ---
+
 In this article, we're going to talk about Rust ORMs and compare the most popular Rust ORMs that you can use today in your applications.
 
 ## What is an ORM?
@@ -45,7 +46,7 @@ If you have a lot of different models or tables that you need to use, SeaORM is 
 
 One thing that you might find to be a hindrance is knowing where to import your dependencies from. Particularly if you're using multiple models in one file, it can be annoying to rename everything! It can also be somewhat complicated to implement your own `ActiveModel` behavior. If you're a less experienced developer, this can lead to some headaches. The set-up time may also be a turn-off particularly if you have a lot of tables to set up due to how much method chaining there is.
 
-Additionally, there are a couple of initial bumps that a newer developer may come across while using it - particularly, the need for a CLI and looking at what the migrations do exactly. Additionally,  although you can migrate SQL files directly to SeaORM migrations, the generated migration files themselves are extremely long. This is a migration that adds one table with one column:
+Additionally, there are a couple of initial bumps that a newer developer may come across while using it - particularly, the need for a CLI and looking at what the migrations do exactly. Additionally, although you can migrate SQL files directly to SeaORM migrations, the generated migration files themselves are extremely long. This is a migration that adds one table with one column:
 
 ```rust
 // src/migrator/m20220602_000001_create_bakery_table.rs (create new file)
@@ -145,7 +146,7 @@ diesel::table! {
 
 ```
 
-Instead of mapping directly to Rust types, Diesel maps SQL types as Rust unit structs. However, when you're writing a struct that you may want to use for querying the database, note that the documentation says you shouldn't directly use these types in your structs. 
+Instead of mapping directly to Rust types, Diesel maps SQL types as Rust unit structs. However, when you're writing a struct that you may want to use for querying the database, note that the documentation says you shouldn't directly use these types in your structs.
 
 Instead of being required to use models or entities directly, you can use Diesel's methods to do simple inserts, updates, or selects instead:
 
@@ -166,6 +167,7 @@ If you're looking to use a web service with Diesel, it should be noted that Dies
 Diesel has very extensive documentation that goes beyond the crate itself and has sections on composing applications with Diesel and best practices, extending Diesel with whatever functionality you'd like as well as how to configure the CLI. Compared to SeaORM, the [docs.rs](http://docs.rs/) documentation has quite a lot on there! There is explicit documentation on writing queries, using the library traits, and more. In comparison, however, SeaORM has much more documentation on its own docs page which isn't based on [docs.rs](http://docs.rs/). Neither particularly loses in this category, although it can be slightly more difficult to find documentation about certain topics in SeaORM like ActiveModel.
 
 Due to the way that Diesel is built, it makes very heavy use of generics. Using generics can help write crates because it can make your structs much more flexible while maintaining good performance. However, it can also result in extremely unhelpful errors when writing your application. Other libraries (Axum, for example) have gotten around this by adding a macros flag that also allows you to add a `debug_handler` macro that lets you add a macro to any function that doesn't use generics to avoid the wall-of-errors issue. Like Axum, Diesel also has a macro to be able to automatically check for errors, which you can use like so:
+
 ```rust
 #[derive(Selectable)]
 pub struct SomeStruct {
@@ -173,7 +175,8 @@ pub struct SomeStruct {
 	some_field: String
 }
 ```
-This automatically allows Diesel to type-check your struct without you needing to do anything. Diesel also has a section of documentation dedicated to helping you tackle the various trait-related errors, which you can find [here.](https://docs.diesel.rs/2.1.x/diesel/index.html#how-to-read-diesels-compile-time-error-messages) 
+
+This automatically allows Diesel to type-check your struct without you needing to do anything. Diesel also has a section of documentation dedicated to helping you tackle the various trait-related errors, which you can find [here.](https://docs.diesel.rs/2.1.x/diesel/index.html#how-to-read-diesels-compile-time-error-messages)
 
 ### Using Diesel with Shuttle
 
@@ -208,17 +211,17 @@ async fn axum(
 
 This table illustrates the main differences between SeaORM and Diesel for those who just want a comparison:
 
-| Library | SeaORM | Diesel |
-| --- | --- | --- |
-| Migrations | Yes | Yes |
-| Query building | Yes | Yes |
-| Models | Yes | Yes |
-| Lazy loading | Yes | No |
-| Compile time checks | No | Yes |
-| Raw SQL support | Yes | Yes |
-| Extendable? | Not particularly although you can extend the ActiveModels | Yes - you can extend Diesel as well as the CLI |
-| Async friendly? | Yes | Plugins required |
-| Extra dependencies | Depends what features are enabled | Depends what features are enabled |
+| Library             | SeaORM                                                    | Diesel                                         |
+| ------------------- | --------------------------------------------------------- | ---------------------------------------------- |
+| Migrations          | Yes                                                       | Yes                                            |
+| Query building      | Yes                                                       | Yes                                            |
+| Models              | Yes                                                       | Yes                                            |
+| Lazy loading        | Yes                                                       | No                                             |
+| Compile time checks | No                                                        | Yes                                            |
+| Raw SQL support     | Yes                                                       | Yes                                            |
+| Extendable?         | Not particularly although you can extend the ActiveModels | Yes - you can extend Diesel as well as the CLI |
+| Async friendly?     | Yes                                                       | Plugins required                               |
+| Extra dependencies  | Depends what features are enabled                         | Depends what features are enabled              |
 
 Below, we'll also go through some of the other major changes that differentiate SeaORM and Diesel from each other.
 

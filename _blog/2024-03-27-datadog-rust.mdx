@@ -5,11 +5,12 @@ author: roberto
 tags: [rust, datadog, guide]
 thumb: datadog-rust-thumb.png
 cover: datadog-rust-thumb.png
-date: '2024-03-27T15:30:00'
+date: "2024-03-27T15:30:00"
 ---
+
 ## Some words about observability
 
-As we all know, being able to '*see*' what's going on in our services can be critical in many ways. We can easily find bugs or identify undesired behaviors, and it's certainly an invaluable tool at our disposal.
+As we all know, being able to '_see_' what's going on in our services can be critical in many ways. We can easily find bugs or identify undesired behaviors, and it's certainly an invaluable tool at our disposal.
 
 Observability, in software, refers to the **ability to understand the state of a system and its behavior** by collecting, analyzing, and presenting data about its various components and interactions. This enables engineers to diagnose and resolve issues and make informed decisions about system health and performance.
 
@@ -35,7 +36,7 @@ This is great for simple applications, but what if you want to send your logs to
 
 > As a disclaimer, I must say that I'm currently working at [Datadog](https://datadoghq.com), so I'm a bit biased, but I'm also a huge fan of the product and I think it's a great tool for developers 😅.
 
-Most of the time, the easiest way to send anything to the [Datadog platform](https://www.datadoghq.com/observability-platform/) is by using the [Datadog Agent](https://docs.datadoghq.com/agent/), but in this case, as **we cannot install it** in any way, we will use a **small library I created for the occasion** called [dd-tracing-layer](https://docs.rs/dd-tracing-layer/latest/dd_tracing_layer/), which happens to be using the [Datadog HTTP API](https://docs.datadoghq.com/api/latest/logs/) under the hood to send logs to the  [Datadog platform](https://www.datadoghq.com/observability-platform/).
+Most of the time, the easiest way to send anything to the [Datadog platform](https://www.datadoghq.com/observability-platform/) is by using the [Datadog Agent](https://docs.datadoghq.com/agent/), but in this case, as **we cannot install it** in any way, we will use a **small library I created for the occasion** called [dd-tracing-layer](https://docs.rs/dd-tracing-layer/latest/dd_tracing_layer/), which happens to be using the [Datadog HTTP API](https://docs.datadoghq.com/api/latest/logs/) under the hood to send logs to the [Datadog platform](https://www.datadoghq.com/observability-platform/).
 
 ## How to use tracing with Shuttle
 
@@ -148,7 +149,6 @@ async fn axum() -> shuttle_axum::ShuttleAxum {
 At this point, if you try to run the project locally by using the `shuttle run` command, you should see none of our logs.
 
 That's ok, as we haven't initialized a [tracing subscriber](https://docs.rs/tracing/latest/tracing/trait.Subscriber.html) yet.
-
 
 ### Adding our tracing subscriber
 

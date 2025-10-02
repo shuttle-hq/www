@@ -12,7 +12,7 @@ To quote the Rust Book, 'errors are a fact of life in software'. This post goes
 over how to handle them.
 
 Before talking about recoverable errors and the `Result` type, let's first
-touch on unrecoverable errors - a.k.a  panics.
+touch on unrecoverable errors - a.k.a panics.
 
 ## An Introduction to Unrecoverable Errors
 
@@ -289,7 +289,7 @@ fn string_to_plus_one(s: &str) -> Result<i32, std::num::ParseIntError> {
 }
 ```
 
-### Result::ok() 
+### Result::ok()
 
 [Result::ok](https://doc.rust-lang.org/std/result/enum.Result.html#method.ok) is useful for converting Results to Options
 
@@ -335,7 +335,7 @@ Removing the `"not a number"` entry
 [examples\iteration.rs:3] a = Ok( [ 1.0, 2.0, ], )
 ```
 
-Because Rust iterators are *piecewise* and lazy the iterator can short circuit without evaluating parse on any of the later items.
+Because Rust iterators are _piecewise_ and lazy the iterator can short circuit without evaluating parse on any of the later items.
 
 ## More Panic
 
@@ -395,7 +395,7 @@ down the line.
 
 ### Panics in the standard library
 
-It is important to note that some of the APIs in the standard library *can*
+It is important to note that some of the APIs in the standard library _can_
 panic. You should look out for these annotations in the docs. One of them is
 [Vec::remove](https://doc.rust-lang.org/std/vec/struct.Vec.html#panics-6).
 If you use this you should ensure that the argument is in its indexable range.
@@ -410,7 +410,7 @@ fn remove_at_idx(a: usize, vec: &mut Vec<i32>) -> Option<i32> {
 }
 ```
 
-## Handling Multiple Errors and Helper Crates 
+## Handling Multiple Errors and Helper Crates
 
 Handling errors from multiple libraries and APIs can become challenging as
 you have to deal with a bunch of different types. They are different sizes
@@ -486,7 +486,6 @@ Caused by:
     0: while calling func2
     1: Hmm something went wrong
 ```
-
 
 Similar to the `Error` trait, `anyhow` suffers from the fact you can't match on
 `anyhow`'s result error variant. This is why it is suggested in `anyhow`'s

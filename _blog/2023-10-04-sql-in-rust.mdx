@@ -1,13 +1,15 @@
 ---
-title: 'Raw SQL in Rust with SQLx'
-description:  This article shows you how you can use SQL in Rust with SQLx - you will find a rundown of all the advantages SQLx offers you, the best ways to use it and how to use SQLx with Shuttle.
+title: "Raw SQL in Rust with SQLx"
+description: This article shows you how you can use SQL in Rust with SQLx - you will find a rundown of all the advantages SQLx offers you, the best ways to use it and how to use SQLx with Shuttle.
 author: josh
 tags: [rust, sql, sqlx, tutorial]
 thumb: sql-in-rust-thumb.png
 cover: sql-in-rust-thumb.png
-date: '2023-10-04T14:30:00'
+date: "2023-10-04T14:30:00"
 ---
+
 When it comes to using SQL, the Rust ecosystem has us spoiled for choice: thankfully, there are already a few that have come out on top which we can use. SQLx is a purely async, runtime-agnostic Rust SQL crate that allows you to use compile-time type checked queries without a DSL. As [one of the most popular ways to use SQL in Rust,](https://github.com/search?q=sql+rust+language%3ARust&type=repositories&s=stars&o=desc&l=Rust) it offers the following advantages:
+
 - It's compatible with all your favourite flavours of SQL (MySQL, SQLite, Postgres)
 - Compile-time checked queries ensure type and query validity
 - Support for extra features like Postgres listen/notify
@@ -17,12 +19,15 @@ When it comes to using SQL, the Rust ecosystem has us spoiled for choice: thankf
 Let's look at SQLx in action!
 
 ## Getting Started
+
 To get started you'll need to add `sqlx` to your Rust program:
+
 ```bash
 cargo add sqlx
 ```
 
 You'll also want to install `sqlx-cli`, the official SQLx CLI which helps you manage your migrations more easily amongst other things. You can install it by running the commands below:
+
 ```bash
 cargo install sqlx-cli
 ```
@@ -42,6 +47,7 @@ CREATE TABLE IF NOT EXISTS foo (
 As long as it's valid SQL, whichever method you decide to use will succeed and will create a `_sqlx_migrations` table in your database, with a list of the migrations that have been applied.
 
 An in-app migrate command might look like this:
+
 ```rust
 pool.execute(include_str!("../schema.sql"))
     	.await
@@ -62,6 +68,7 @@ let query = sqlx::query("SELECT * FROM TABLE")
 ```
 
 By default, SQLx promotes using bound parameters which are very important for preventing SQL injection - you can do so simply by adding them to your query (find more about this [here](https://docs.rs/sqlx/latest/sqlx/query/struct.Query.html#method.bind)):
+
 ```rust
 sqlx::query("INSERT INTO TABLE (foo) VALUES ($1)")
   .bind("bar".to_string())
@@ -92,6 +99,7 @@ let res = sqlx::query_as::<_, Foo>("SELECT * FROM FOO")
 Looking for something a bit more complex? You can also use the [QueryBuilder](https://docs.rs/sqlx/latest/sqlx/struct.QueryBuilder.html) type to construct queries. While it's great for programatically adding dynamic phrases to queries, you should be careful while using this as it has methods for adding values that are not bound parameters - you would ideally want to use `push_bind` if you are not sure about whether or not what you're using is secure.
 
 A usage example:
+
 ```rust
 const BIND_LIMIT: usize = 65535;
 
@@ -186,7 +194,7 @@ let query = query_file!("query.sql", 1i32).fetch_one(&pool).await.unwrap();
 
 This particular macro also, of course, supports struct binding and scalar queries with `query_file_as!` and `query_file_scalar!`.
 
-Something of note is that if you *only* want to compile-time check the syntax and not whether or not the database inputs and outputs are correct for a query macro, you can add `unchecked` at the end of a macro. For example: `query!` would become `query_unchecked!`. This is useful in cases where you don't actually have a database set up yet or there's no convenient method for retrieving the database URL (or in other such circumstances where you don't want to give SQLx direct access to your database).
+Something of note is that if you _only_ want to compile-time check the syntax and not whether or not the database inputs and outputs are correct for a query macro, you can add `unchecked` at the end of a macro. For example: `query!` would become `query_unchecked!`. This is useful in cases where you don't actually have a database set up yet or there's no convenient method for retrieving the database URL (or in other such circumstances where you don't want to give SQLx direct access to your database).
 
 ## PostgreSQL Listen/Notify
 
@@ -209,6 +217,7 @@ loop {
   sqlx::query("SELECT pg_notify('testNotify', 'Hello world!')").execute(&pool).await;
 }
 ```
+
 As you can see here, we've spawned a Tokio task to be able to asynchronously loop and receive notifications then print them out - meanwhile, within the main execution thread we've also set up a loop to continuously send a query that sends "Hello world!" down the channel which gets received by our `PgListener`.
 
 For a more advanced implementation in a web service that implements a stream of database updates as an endpoint, you would want to use the `.into_stream()` method as frameworks will typically accept a stream of data that is then wrapped in the frameworks' relevant type. For example, in Axum you'd use the `axum::response::Sse` type (note this assumes you already have a web service set up):
@@ -233,6 +242,7 @@ async fn return_stream(Extension(listener): Extension<PgListener>) -> Sse<impl S
 ```
 
 When we're setting up our web service, we can create notifications through one of two ways:
+
 - Using SQL
 - Using `pg_notify` on specific events
 
@@ -276,6 +286,7 @@ async fn main(
   ... the rest of your code
 }
 ```
+
 Our free database offering is via a shared database server (with users having separate databases for each application). However, we are now offering 100% isolated AWS RDS databases as a paid add-on which you can find more about [here](https://www.shuttle.dev/pricing) which supports MySQL, Postgres and MariaDB.
 
 ## Finishing Up

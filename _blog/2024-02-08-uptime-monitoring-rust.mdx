@@ -5,14 +5,14 @@ author: josh
 tags: [rust, uptime-monitoring, guide]
 thumb: uptime-monitoring-rust-thumb.png
 cover: uptime-monitoring-rust-thumb.png
-date: '2024-02-08T18:00:00'
+date: "2024-02-08T18:00:00"
 ---
 
 In this article, we're going to talk about building and deploying an uptime-monitoring web service in Rust!
 
 Interested in just deploying your uptime monitor? You can find that in 2 steps:
 
-1. Open your terminal and run `shuttle init --from joshua-mo-143/shuttle-monitoring-template`  (requires `cargo-shuttle` installed) and follow the prompt
+1. Open your terminal and run `shuttle init --from joshua-mo-143/shuttle-monitoring-template` (requires `cargo-shuttle` installed) and follow the prompt
 2. Run `shuttle deploy --allow-dirty` and watch the magic happen!
 
 For everyone who wants to learn how to build it, let's get started - if you get lost, you can find the repo with the final code [here.](https://github.com/joshua-mo-143/shuttle-monitoring-template)
@@ -137,7 +137,7 @@ async fn check_websites(db: PgPool) {
 }
 ```
 
- We *could* use `fetch_all()`, but by using `fetch()` we get a `Stream` back and can skip dealing with `RowNotFound` SQL errors by checking whether or not there are any rows to fetch.
+We _could_ use `fetch_all()`, but by using `fetch()` we get a `Stream` back and can skip dealing with `RowNotFound` SQL errors by checking whether or not there are any rows to fetch.
 
 Now that we have our list of websites (or lack thereof), we can try to send a request sequentially to each website that exists then store the results of the fetch in our database:
 
@@ -385,7 +385,7 @@ fn fill_data_gaps(
 
 Once done, we'll want to create a dynamic route for getting more information about a monitored URL. We can use this page to display things like past incidents/alerts. This function will follow most of the previous handler function except we're fetching one URL and additionally grabbing any records of HTTP requests that didn't return `200 OK` and labelling them as "Incidents".
 
-As you can see below it is *mostly* the same as grabbing data for all websites, except now we also have last month's data (split by day) to add to our return results:
+As you can see below it is _mostly_ the same as grabbing data for all websites, except now we also have last month's data (split by day) to add to our return results:
 
 ```rust
 #[derive(Serialize, sqlx::FromRow, Template)]
@@ -485,21 +485,30 @@ We'll first want to make our `base.html` file:
 <!-- templates/base.html -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-        <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/styles.css"/>
-     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <head>
+    <script
+      src="https://unpkg.com/htmx.org@1.9.10"
+      integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+      rel="stylesheet"
+    />
 
     <title>Shuttle Status Monitor</title>
     {% block head %}{% endblock %}
-</head>
-    <body>
-        <div id="content">
-            {% block content %}<p>Placeholder content</p>{% endblock %}
-        </div>
-    </body>
+  </head>
+  <body>
+    <div id="content">
+      {% block content %}
+      <p>Placeholder content</p>
+      {% endblock %}
+    </div>
+  </body>
 </html>
 ```
 
@@ -512,60 +521,57 @@ Here is the HTML for our main page:
 {% extends "base.html" %} {% block content %}
 <h1>Shuttle Status Monitor</h1>
 <form action="/websites" method="POST">
-    <input name="url" placeholder="url" required />
-    <input name="alias" placeholder="alias" required />
-    <button class="submit-button" type="submit">Submit</button>
+  <input name="url" placeholder="url" required />
+  <input name="alias" placeholder="alias" required />
+  <button class="submit-button" type="submit">Submit</button>
 </form>
 <div class="website-list">
-    {% for log in logs %}
-    <div class="website">
-        <h2 class="website-name">{{log.alias}} - {{log.url}}</h2>
-        <div>
-            Last 24 hours: {% for timestamp in log.data %} {% match
-            timestamp.uptime_pct %} {% when Some with (100) %}
-            <div class="tooltip">
-                🟢
-                <span class="tooltiptext"
-                    >{{timestamp.time}} Uptime:
-                    {{timestamp.uptime_pct.unwrap()}}%</span
-                >
-            </div>
-            {% when None %}
-            <div class="tooltip">
-                ⚪
-                <span class="tooltiptext"
-                    >{{timestamp.time}} No data here :(</span
-                >
-            </div>
-            {% else %}
-            <div class="tooltip">
-                🔴
+  {% for log in logs %}
+  <div class="website">
+    <h2 class="website-name">{{log.alias}} - {{log.url}}</h2>
+    <div>
+      Last 24 hours: {% for timestamp in log.data %} {% match
+      timestamp.uptime_pct %} {% when Some with (100) %}
+      <div class="tooltip">
+        🟢
+        <span class="tooltiptext"
+          >{{timestamp.time}} Uptime: {{timestamp.uptime_pct.unwrap()}}%</span
+        >
+      </div>
+      {% when None %}
+      <div class="tooltip">
+        ⚪
+        <span class="tooltiptext">{{timestamp.time}} No data here :(</span>
+      </div>
+      {% else %}
+      <div class="tooltip">
+        🔴
 
-                <span class="tooltiptext"
-                    >{{timestamp.time}} Uptime:
-                    {{timestamp.uptime_pct.unwrap()}}%</span
-                >
-            </div>
+        <span class="tooltiptext"
+          >{{timestamp.time}} Uptime: {{timestamp.uptime_pct.unwrap()}}%</span
+        >
+      </div>
 
-            {% endmatch %} {% endfor %}
-        </div>
-        <div>
-            <a href="/websites/{{log.alias}}" class="view-button">View</a>
-            <button
-                hx-delete="/websites/{{log.alias}}"
-                class="delete-button"
-                hx-confirm="Are you sure you want to stop tracking this website?"
-                hx-target="closest .menu"
-                hx-swap="outerHTML"
-            >
-                Delete
-            </button>
-        </div>
+      {% endmatch %} {% endfor %}
     </div>
-    {% endfor %}
+    <div>
+      <a href="/websites/{{log.alias}}" class="view-button">View</a>
+      <button
+        hx-delete="/websites/{{log.alias}}"
+        class="delete-button"
+        hx-confirm="Are you sure you want to stop tracking this website?"
+        hx-target="closest .menu"
+        hx-swap="outerHTML"
+      >
+        Delete
+      </button>
+    </div>
+  </div>
+  {% endfor %}
+</div>
 ```
 
-As you can see here, we extend the `base.html` template and then loop through the websites we found earlier in our SQL query. We then display the timestamps as coloured circles depending on what the uptime percentage is (note that `None` means there's a data gap).  Although we unwrap the uptime percentages here, we already match it beforehand to make sure it is a `Some` variant.
+As you can see here, we extend the `base.html` template and then loop through the websites we found earlier in our SQL query. We then display the timestamps as coloured circles depending on what the uptime percentage is (note that `None` means there's a data gap). Although we unwrap the uptime percentages here, we already match it beforehand to make sure it is a `Some` variant.
 
 You may have noticed we're using tooltips to display the time of day that the request was taken as well as displaying the uptime percentage on the webpage. In the CSS file, we add styling so that when you hover over a circle, a tooltip will display the timestamp the circle represents as well as the exact uptime percentage.
 
@@ -577,68 +583,64 @@ The single URL HTML webpage is also mostly the same, except we're also adding an
 <h1>Shuttle Status Monitor</h1>
 <a href="/">Back to main page</a>
 <div class="website">
-    <h2 class="website-name">{{log.alias}} - {{log.url}}</h2>
-    <div>
-        Last 24 hours: {% for timestamp in log.data %} {% match
-        timestamp.uptime_pct %} {% when Some with (100) %}
-        <div class="tooltip">
-            🟢
-            <span class="tooltiptext"
-                >{{timestamp.time}} Uptime:
-                {{timestamp.uptime_pct.unwrap()}}%</span
-            >
-        </div>
-        {% when None %}
-        <div class="tooltip">
-            ⚪
-            <span class="tooltiptext">{{timestamp.time}} No data here :(</span>
-        </div>
-        {% else %}
-        <div class="tooltip">
-            🔴
-
-            <span class="tooltiptext"
-                >{{timestamp.time}} Uptime:
-                {{timestamp.uptime_pct.unwrap()}}%</span
-            >
-        </div>
-
-        {% endmatch %} {% endfor %}
+  <h2 class="website-name">{{log.alias}} - {{log.url}}</h2>
+  <div>
+    Last 24 hours: {% for timestamp in log.data %} {% match timestamp.uptime_pct
+    %} {% when Some with (100) %}
+    <div class="tooltip">
+      🟢
+      <span class="tooltiptext"
+        >{{timestamp.time}} Uptime: {{timestamp.uptime_pct.unwrap()}}%</span
+      >
     </div>
-    <div>
-        Last 30 days: {% for timestamp in monthly_data %} {% match
-        timestamp.uptime_pct %} {% when Some with (100) %}
-        <div class="tooltip">
-            🟢
-            <span class="tooltiptext"
-                >{{timestamp.time}} Uptime:
-                {{timestamp.uptime_pct.unwrap()}}%</span
-            >
-        </div>
-        {% when None %}
-        <div class="tooltip">
-            ⚪
-            <span class="tooltiptext">{{timestamp.time}} No data here :(</span>
-        </div>
-        {% else %}
-        <div class="tooltip">
-            🔴
-
-            <span class="tooltiptext"
-                >{{timestamp.time}} Uptime:
-                {{timestamp.uptime_pct.unwrap()}}%</span
-            >
-        </div>
-
-        {% endmatch %} {% endfor %}
+    {% when None %}
+    <div class="tooltip">
+      ⚪
+      <span class="tooltiptext">{{timestamp.time}} No data here :(</span>
     </div>
+    {% else %}
+    <div class="tooltip">
+      🔴
+
+      <span class="tooltiptext"
+        >{{timestamp.time}} Uptime: {{timestamp.uptime_pct.unwrap()}}%</span
+      >
+    </div>
+
+    {% endmatch %} {% endfor %}
+  </div>
+  <div>
+    Last 30 days: {% for timestamp in monthly_data %} {% match
+    timestamp.uptime_pct %} {% when Some with (100) %}
+    <div class="tooltip">
+      🟢
+      <span class="tooltiptext"
+        >{{timestamp.time}} Uptime: {{timestamp.uptime_pct.unwrap()}}%</span
+      >
+    </div>
+    {% when None %}
+    <div class="tooltip">
+      ⚪
+      <span class="tooltiptext">{{timestamp.time}} No data here :(</span>
+    </div>
+    {% else %}
+    <div class="tooltip">
+      🔴
+
+      <span class="tooltiptext"
+        >{{timestamp.time}} Uptime: {{timestamp.uptime_pct.unwrap()}}%</span
+      >
+    </div>
+
+    {% endmatch %} {% endfor %}
+  </div>
 </div>
 
 <div class="incident-list">
-    <h2>Incidents</h2>
-    {% if incidents.len() > 0 %} {% for incident in incidents %}
-    <div class="incident">{{incident.time}} - {{incident.status}}</div>
-    {% endfor %} {% else %} No incidents reported. {% endif %}
+  <h2>Incidents</h2>
+  {% if incidents.len() > 0 %} {% for incident in incidents %}
+  <div class="incident">{{incident.time}} - {{incident.status}}</div>
+  {% endfor %} {% else %} No incidents reported. {% endif %}
 </div>
 {% endblock %}
 ```

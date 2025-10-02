@@ -143,7 +143,6 @@ impl EventHandler for Bot {
 ```
 
 > Serenity has a bit of a different way of registering commands using a callback. If you are working on a larger command application, [poise](https://docs.rs/poise/latest/poise/) (which builds on Serenity) might be better suited.
->
 
 With our command registered, we will now add a hook for when these commands are called using `interaction_create`.
 
@@ -217,7 +216,7 @@ The API requires making network requests and it returns a JSON response. We can 
 
 > You can skip some of the boilerplate by using [direct access on untyped values](https://docs.rs/serde_json/latest/serde_json/#operating-on-untyped-json-values). But we will opt for the better strongly typed structured approach.
 
-Here we type some of the structures returned by the API and add `#[derive(Deserialize)]` so they can be decoded from JSON. All the keys are in *`PascalCase`* so we use the `#[serde(rename_all = "PascalCase")]` helper attribute to stay aligned with Rust standards. Some are completely different from the Rust field name so we use `#[serde(alias = ...)]` on the field to set its matching JSON representation.
+Here we type some of the structures returned by the API and add `#[derive(Deserialize)]` so they can be decoded from JSON. All the keys are in _`PascalCase`_ so we use the `#[serde(rename_all = "PascalCase")]` helper attribute to stay aligned with Rust standards. Some are completely different from the Rust field name so we use `#[serde(alias = ...)]` on the field to set its matching JSON representation.
 
 ```rust
 // In weather.rs
@@ -458,6 +457,7 @@ And entering a location that isn't registered returns an error, thanks to the er
 With all of that setup, it is really easy to get your bot hosted and running without having to run your PC 24/7.
 
 To deploy your app, all you need to do is:
+
 ```bash
 shuttle deploy
 ```
@@ -481,4 +481,4 @@ Deploying and managing your Rust web apps can be an expensive, anxious and time 
 
 If you want a batteries included and ops-free experience, [try out Shuttle](https://github.com/shuttle-hq/shuttle).
 
-<hr styles="margin-top: 10px"/>
+<hr styles="margin-top: 10px" />

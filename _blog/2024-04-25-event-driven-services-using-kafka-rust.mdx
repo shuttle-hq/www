@@ -5,8 +5,9 @@ author: josh
 tags: [rust, kafka, guide]
 thumb: event-driven-services-kafka-rust-thumb.png
 cover: event-driven-services-kafka-rust-thumb.png
-date: '2024-04-25T14:30:00'
+date: "2024-04-25T14:30:00"
 ---
+
 When it comes to real-time data handling, there are certain challenges that are imposed upon regular HTTP-based services. Resiliency, consistency and reliability are all qualities that a production-grade system handling real-time data processing should have. Event driven architecture and microservices is one way to become more resilient against this kind of issue. In this post, we'll take a deep dive into writing an event driven microservice and how we can use Change Data Capture to assist with taking functionality from a monolith and putting it in a microservice.
 
 Interested in deploying or got stuck somewhere in the article? You can find the final repository [here.](https://github.com/joshua-mo-143/kafka-shuttle)
@@ -72,7 +73,7 @@ async fn main(
 
 With only three lines, we've added a database (provisioned locally by Docker and provisioned by Shuttle servers in deployment!), our Secrets file and deployment metadata to the application!
 
-We will also be using `sqlx` to handle our database migrations and queries. This means we'll also want to use `sqlx-cli` to help manage our migrations.  We'll get started by installing it (the following command adds all features):
+We will also be using `sqlx` to handle our database migrations and queries. This means we'll also want to use `sqlx-cli` to help manage our migrations. We'll get started by installing it (the following command adds all features):
 
 ```rust
 cargo install sqlx-cli
@@ -126,7 +127,7 @@ A simple Kafka setup can easily be done using Docker Compose:
 version: "3"
 
 services:
-# kafka
+  # kafka
   zookeeper-1:
     container_name: zookeeper-1
     image: zookeeper
@@ -136,7 +137,7 @@ services:
     environment:
       - ZOOKEEPER_CLIENT_PORT=2181
     volumes:
-    - ./config/zookeeper-1/zookeeper.properties:/kafka/config/zookeeper.properties
+      - ./config/zookeeper-1/zookeeper.properties:/kafka/config/zookeeper.properties
 
   kafka-1:
     container_name: kafka-1
@@ -154,7 +155,8 @@ services:
       - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
       - KAFKA_CREATE_TOPICS=messages:1:3
     healthcheck:
-      test: [ "CMD-SHELL", "kafka-topics.sh --bootstrap-server kafka:9092 --list" ]
+      test:
+        ["CMD-SHELL", "kafka-topics.sh --bootstrap-server kafka:9092 --list"]
       interval: 5s
       timeout: 10s
       retries: 5
@@ -162,7 +164,6 @@ networks:
   net:
     name: "net"
     driver: bridge
-
 ```
 
 If you run this `docker-compose.yml` setup, it should automatically spawn a Zookeeper and Kafka instance for you. There are a lot of initial logs created when spawning both instances, so you may want to either create a detached instance (using `-d` flag) or opening a separate terminal window for this.
@@ -249,7 +250,7 @@ impl IntoResponse for ApiError {
 
 ### Setting up a producer and consumer
 
-To get started with `rdkafka`, we need to create a publisher and a consumer.  We can do this with these two functions:
+To get started with `rdkafka`, we need to create a publisher and a consumer. We can do this with these two functions:
 
 ```rust
 pub fn create_kafka_producer(secrets: &SecretStore) -> FutureProducer {
@@ -400,7 +401,7 @@ If you use `shuttle run` to start your application (assuming Kafka is running) a
 		-d '{"action":"Create","message_id":4,"data":{"name":"Josh","message":"Hello world!"}}'
 ```
 
- You should see "Message sent!" as a response.
+You should see "Message sent!" as a response.
 
 ### Using a Kafka consumer
 
@@ -530,7 +531,7 @@ If you're considering migrating from a monolith to a microservice that uses a da
 
 To solve your issues, one idea that you can leverage is Change Data Capture (or CDC). CDC typically refers to the tracking of data in a data source - for example, a database or data warehouse - so it can be captured in destination systems.
 
-CDC is useful because it allows us to track changes across a database reliably: for example, let's say you have a record that was updated, and then another event of the same type is sent and the same field gets updated again. We can track these changes such  that we'll know which version of the record the field should actually be updated to!
+CDC is useful because it allows us to track changes across a database reliably: for example, let's say you have a record that was updated, and then another event of the same type is sent and the same field gets updated again. We can track these changes such that we'll know which version of the record the field should actually be updated to!
 
 How you can do this typically depends on the database that you're using. Since we're using Postgres in our application, we'll look at a great way you can carry out Change Data Capture using Postgres using triggers.
 
@@ -613,7 +614,7 @@ As you can see, there is a non-insignificant amount of code required to implemen
 
 ### Telemetry
 
-Of course, while writing a microservice architecture you will probably want a way to track events across your service. For example, when a payload is retrieved successfully or an error occurs while trying to insert a new record in your database. With the `tracing` libraries, this can be as simple as adding  the `#[tracing::instrument]` macro to your function and then using any one of the event macros. Below is our consumer task loop, fully instrumented:
+Of course, while writing a microservice architecture you will probably want a way to track events across your service. For example, when a payload is retrieved successfully or an error occurs while trying to insert a new record in your database. With the `tracing` libraries, this can be as simple as adding the `#[tracing::instrument]` macro to your function and then using any one of the event macros. Below is our consumer task loop, fully instrumented:
 
 ```sql
 #[tracing::instrument(skip(con, db))]

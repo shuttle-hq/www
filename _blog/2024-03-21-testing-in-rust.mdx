@@ -5,7 +5,7 @@ author: josh
 tags: [rust, testing, guide]
 thumb: testing-rust-thumb.png
 cover: testing-rust-thumb.png
-date: '2024-03-21T15:30:00'
+date: "2024-03-21T15:30:00"
 ---
 
 Testing is an important tool. It cuts down on production errors and allows us to check for regressions. It's easy to see the value of testing - it saves time (and money!) trying to find regressions later on. By the end of this article, you'll have a comprehensive understanding of implementing different types of testing in Rust.
@@ -256,7 +256,7 @@ proptest! {
 }
 ```
 
-This short snippet runs 1000 tests and asserts that the absolute value is above or equal to 0.  Similarly, we can also use regex to be able to find out whether or not a function properly covers all use cases:
+This short snippet runs 1000 tests and asserts that the absolute value is above or equal to 0. Similarly, we can also use regex to be able to find out whether or not a function properly covers all use cases:
 
 ```rust
 use proptest::prelude::*;
@@ -395,24 +395,26 @@ Assuming tests pass normally, cargo-mutants will generate every mutant it can (s
 Each mutant results in one of the following outcomes:
 
 - **caught** — A test failed with this mutant applied. This is a good sign about
-test coverage.
+  test coverage.
 - **missed** — No test failed with this mutation applied, which seems to
-indicate a gap in test coverage. Or, it may be that the mutant is
-undistinguishable from the correct code. You may wish to add a better test, or
-mark that the function should be skipped.
+  indicate a gap in test coverage. Or, it may be that the mutant is
+  undistinguishable from the correct code. You may wish to add a better test, or
+  mark that the function should be skipped.
 - **unviable** — The attempted mutation doesn't compile. This is inconclusive about test coverage and
-no action is needed, but indicates an opportunity for cargo-mutants to either
-generate better mutants, or at least not generate unviable mutants.
+  no action is needed, but indicates an opportunity for cargo-mutants to either
+  generate better mutants, or at least not generate unviable mutants.
 - **timeout** — The mutation caused the test suite to run
-for a long time, until it was eventually killed. You might want to
-investigate the cause and potentially mark the function to be skipped.
+  for a long time, until it was eventually killed. You might want to
+  investigate the cause and potentially mark the function to be skipped.
 
 Interested? You can find their docs [here](https://mutants.rs/welcome.html) - they're quite comprehensive!
 
 The main thing to take into account here is that mutation testing in Rust can be somewhat expensive. If you change one line of code, you need to scan and re-compile your program again which can be very expensive in terms of time. If you need to use `cargo-mutants` with CI, this can result in a very expensive CI bill.
 
 ### insta-rs
+
 Snapshot testing (also called approval testing) is also another form of testing you can do to help build up tests for a legacy system. It generally works as follows:
+
 - You bring your code into a test
 - Throw a variety of inputs at the tested function
 - Capture the output
@@ -420,6 +422,7 @@ Snapshot testing (also called approval testing) is also another form of testing 
 This builds up a "net" of snapshots that you can use to check for any regressions.
 
 With `insta`, you can capture inputs and insta will automatically manage the snapshotting for you. A snapshot capture can be as simple as this (taken from the docs):
+
 ```rust
 #[test]
 fn test_simple() {
@@ -432,10 +435,13 @@ When actually running your tests, you can use `cargo test` to run tests normally
 Once you've done the captures, you can use `cargo insta review` to review your snapshots! Snapshots can either be stored in `.snap` files, or inside of inline string literals in your Rust files.
 
 If you're interested in learning more, you can find the crate docs [here.](https://insta.rs/docs/)
+
 ## Finishing up
+
 Thanks for reading! Hopefully you've gotten a better understanding of how to test within a Rust context. With so many types of testing being available to us, it's never been easier to ensure our Rust applications are working as intended.
 
 Read more:
+
 - Check out our guide for [getting started with Tracing](https://www.shuttle.dev/blog/2024/01/09/getting-started-tracing-rust)
 - Learn more about [writing a REST API with Rust](https://www.shuttle.dev/blog/2024/01/31/write-a-rest-api-rust)
 - Check out our [recently updated article about using OAuth2 with Rust](https://www.shuttle.dev/blog/2023/08/30/using-oauth-with-axum)

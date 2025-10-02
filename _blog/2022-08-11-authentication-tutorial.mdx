@@ -53,19 +53,22 @@ We want a general layout for our site, so we create a base layout. In our base l
 <!-- in "templates/base.html" -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Title</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Karla:wght@500&display=swap" rel="stylesheet">
-    <link href="/styles.css" rel="stylesheet">
-</head>
-<body>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Karla:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link href="/styles.css" rel="stylesheet" />
+  </head>
+  <body>
     {% block content %}{% endblock content %}
-</body>
+  </body>
 </html>
 ```
 
@@ -73,8 +76,7 @@ And now we can create our first page that will be displayed under the `/` path
 
 ```html
 <!-- in "templates/index.html" -->
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <h1>Hello world</h1>
 {% endblock content %}
 ```
@@ -129,8 +131,8 @@ We can create a `public/styles.css` file
 
 ```css
 body {
-    font-family: 'Karla', sans-serif;
-    font-size: 12pt;
+  font-family: "Karla", sans-serif;
+  font-size: 12pt;
 }
 ```
 
@@ -254,7 +256,7 @@ fn create_user(username: &str, password: &str, database: &Database) -> Result<i3
 }
 ```
 
-With hashing, if someone gets the value in the password field they cannot find out the actual password value. The only thing this value allows is whether a plain text password matches this value. And with [salting](https://en.wikipedia.org/wiki/Salt_(cryptography)) different names are encoded differently. Here all these passwords were registered as *"password"*, but they have different values in the database because of salting.
+With hashing, if someone gets the value in the password field they cannot find out the actual password value. The only thing this value allows is whether a plain text password matches this value. And with [salting](<https://en.wikipedia.org/wiki/Salt_(cryptography)>) different names are encoded differently. Here all these passwords were registered as _"password"_, but they have different values in the database because of salting.
 
 ```sql
 postgres=> select * from users;
@@ -313,16 +315,28 @@ To invoke the endpoint with multipart we will use an HTML form.
 
 ```html
 <!-- in "templates/signup.html" -->
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <form action="/signup" enctype="multipart/form-data" method="post">
-    <label for="username">Username</label>
-    <input type="text" name="username" id="username" minlength="1" maxlength="20" pattern="[0-9a-z]+" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <label for="confirm_password">Confirm Password</label>
-    <input type="password" name="confirm_password" id="confirm_password" required>
-    <input type="submit" value="Signup">
+  <label for="username">Username</label>
+  <input
+    type="text"
+    name="username"
+    id="username"
+    minlength="1"
+    maxlength="20"
+    pattern="[0-9a-z]+"
+    required
+  />
+  <label for="password">Password</label>
+  <input type="password" name="password" id="password" required />
+  <label for="confirm_password">Confirm Password</label>
+  <input
+    type="password"
+    name="confirm_password"
+    id="confirm_password"
+    required
+  />
+  <input type="submit" value="Signup" />
 </form>
 {% endblock content %}
 ```
@@ -355,11 +369,11 @@ Cookies help store the state between browser requests. When a response is sent d
 
 Again, these need to be safe. We don't want collisions/duplicates. We want it to be hard to guess. For these reasons, we will represent it as a 128-bit unsigned integer. This has 2^128 options, so a very low chance of a collision.
 
-We want to generate a "session token". We want the tokens to be cryptographically secure. Given a session id, we don't want users to be able to find the next one. A simple globally incremented u128 wouldn't be secure because if I know I have *session 10* then I can send requests with *session 11* for the user who logged in after. With a cryptographically secure generator, there isn't a distinguishing pattern between subsequently generated tokens. We will use the [ChaCha](https://github.com/rust-random/rand/tree/master/rand_chacha) algorithm/crate (we will add `cargo add rand_core rand_chacha`). [We can see that it does implement the crypto marker-trait confirming it is valid for cryptographic scenarios](https://docs.rs/rand_chacha/0.3.1/rand_chacha/struct.ChaCha8Rng.html#impl-CryptoRng).
+We want to generate a "session token". We want the tokens to be cryptographically secure. Given a session id, we don't want users to be able to find the next one. A simple globally incremented u128 wouldn't be secure because if I know I have _session 10_ then I can send requests with _session 11_ for the user who logged in after. With a cryptographically secure generator, there isn't a distinguishing pattern between subsequently generated tokens. We will use the [ChaCha](https://github.com/rust-random/rand/tree/master/rand_chacha) algorithm/crate (we will add `cargo add rand_core rand_chacha`). [We can see that it does implement the crypto marker-trait confirming it is valid for cryptographic scenarios](https://docs.rs/rand_chacha/0.3.1/rand_chacha/struct.ChaCha8Rng.html#impl-CryptoRng).
 
-This is unlike [Pseudo-random number generators where you can predict the next *random* number given a start point and the algorithm](https://www.youtube.com/watch?v=-h_rj2-HP2E). This could be a problem if we have our token we can get the session token of the person who logged in after us really easy and thus impersonate them.
+This is unlike [Pseudo-random number generators where you can predict the next _random_ number given a start point and the algorithm](https://www.youtube.com/watch?v=-h_rj2-HP2E). This could be a problem if we have our token we can get the session token of the person who logged in after us really easy and thus impersonate them.
 
-To initialize the random generator we use [SeedableRng::from_seed](https://docs.rs/rand_core/latest/rand_core/trait.SeedableRng.html#tymethod.from_seed). The seed in this case is an initial *state* for the generator. Here we use [OsRng.next_u64()](https://docs.rs/rand_core/latest/rand_core/struct.OsRng.html) which *retrieves randomness from the operating system* rather a seed. We will be doing something similar to the creation of the Tera instance. We must wrap it in an arc and a mutex because generating new identifiers requires mutable access. We now have the following main function:
+To initialize the random generator we use [SeedableRng::from_seed](https://docs.rs/rand_core/latest/rand_core/trait.SeedableRng.html#tymethod.from_seed). The seed in this case is an initial _state_ for the generator. Here we use [OsRng.next_u64()](https://docs.rs/rand_core/latest/rand_core/struct.OsRng.html) which _retrieves randomness from the operating system_ rather a seed. We will be doing something similar to the creation of the Tera instance. We must wrap it in an arc and a mutex because generating new identifiers requires mutable access. We now have the following main function:
 
 ```rust
 #[shuttle_service::main]
@@ -463,7 +477,7 @@ let session_token = new_session(database, random, user_id);
 
 ### Using the session token
 
-Great so now we have a token/identifier for a *session*. Now we can use this as a key to get information about users.
+Great so now we have a token/identifier for a _session_. Now we can use this as a key to get information about users.
 
 We can pull the cookie value using the following spaghetti of iterators and options:
 
@@ -569,13 +583,11 @@ Modifying our index Tera template, we can add an "if block" to show a status if 
 
 ```html
 <!-- in "templates/index.html" -->
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <h1>Hello world</h1>
 {% if username %}
-    <h3>Logged in: {{ username }}</h3>
-{% endif %}
-{% endblock content %}
+<h3>Logged in: {{ username }}</h3>
+{% endif %} {% endblock content %}
 ```
 
 Using our middleware in requests is easy in Axum by including a reference to it in the parameters. We then add the username to the context for it to be rendered on the page.
@@ -674,6 +686,7 @@ async fn axum(
 This is great, we now have a site with signup and login functionality. But we have no users, our friends can't log in on our localhost. We want it live on the interwebs. Luckily we are using shuttle, so it is as simple as:
 
 To deploy your app, all you need to do is:
+
 ```
 shuttle deploy
 ```
@@ -698,4 +711,4 @@ Deploying and managing your Rust web apps can be an expensive, anxious and time 
 
 If you want a batteries included and ops-free experience, [try out shuttle](https://docs.rs/shuttle-service/latest/shuttle_service/).
 
-<hr styles="margin-top: 10px"/>
+<hr styles="margin-top: 10px" />

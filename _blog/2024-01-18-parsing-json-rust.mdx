@@ -1,12 +1,13 @@
 ---
 title: "Parsing JSON in Rust"
-description: This article talks about parsing JSON in Rust and compares JSON parsing libraries. 
+description: This article talks about parsing JSON in Rust and compares JSON parsing libraries.
 author: josh
 tags: [rust, json, guide, comparison]
-thumb: parsing-json-rust-thumb.png 
-cover: parsing-json-rust-thumb.png 
-date: '2024-01-18T14:30:00'
+thumb: parsing-json-rust-thumb.png
+cover: parsing-json-rust-thumb.png
+date: "2024-01-18T14:30:00"
 ---
+
 In this article we're going to talk about how to use JSON parsing libraries in Rust, as well as a comparison of the most popular libraries and how they perform.
 
 ## JSON Parsing Basics
@@ -164,19 +165,19 @@ Doing it this way allows you to deserialize from the stream directly instead of 
 
 ## Comparing Rust JSON crates
 
-Although `serde-json` may be the most popular crate, it is by no means the fastest. A few other crates have popped up in the meantime to improve general JSON parsing performance. In exchange for performance, however, there are certain caveats regarding CPU SIMD extension requirements. There is also increased use of unsafe code, though generally speaking best efforts have been upheld to make sure the code is safe to use. 
+Although `serde-json` may be the most popular crate, it is by no means the fastest. A few other crates have popped up in the meantime to improve general JSON parsing performance. In exchange for performance, however, there are certain caveats regarding CPU SIMD extension requirements. There is also increased use of unsafe code, though generally speaking best efforts have been upheld to make sure the code is safe to use.
 
-All of these crates for the most part have the same API. Unless stated otherwise, you can safely go between these libraries and expect roughly the same interfaces for working with JSON in each library. 
+All of these crates for the most part have the same API. Unless stated otherwise, you can safely go between these libraries and expect roughly the same interfaces for working with JSON in each library.
 
 ### serde-json
 
-`serde-json` is the easiest to use of the Rust JSON libraries. It requires no extra dependencies to use and is often recommended alongside `serde` when you need access to idiomatic manipulation of raw JSON values. `serde-json` also has support for `no_std` by allowing you to turn off the default `std` feature and enabling `alloc` instead. 
+`serde-json` is the easiest to use of the Rust JSON libraries. It requires no extra dependencies to use and is often recommended alongside `serde` when you need access to idiomatic manipulation of raw JSON values. `serde-json` also has support for `no_std` by allowing you to turn off the default `std` feature and enabling `alloc` instead.
 
 In terms of performance, `serde-json` itself is not slow by any means. However, it is slower than some of the other JSON libraries on this list. This is primarily due to being optimised for non-parallelized CPU usage. Particularly if you are able to access a modern x86 CPU, you may want to read on to find out more about some of the better-performing options. However, this crate is also the most well used and supported within the Rust community, so if you are having issues with it then it is easy to find assistance!
 
 ### simd-json
 
-[`simd-json`](https://github.com/simd-lite/simd-json) is a Rust port of the `simdjson` C++ JSON parser, with `serde` compatibility built in. As the name states, this library uses SIMD - short for Single Instruction Multiple Data. This is a technique used to be able to process multiple data points with parallel processing, making it significantly faster! As a caveat however, it requires that your system is x86 capable and during runtime it will select the best SIMD feature set for performance. If no feature sets are available there is also an unoptimised Rust implementation, but in the documentation it mentions that it should not be relied on. 
+[`simd-json`](https://github.com/simd-lite/simd-json) is a Rust port of the `simdjson` C++ JSON parser, with `serde` compatibility built in. As the name states, this library uses SIMD - short for Single Instruction Multiple Data. This is a technique used to be able to process multiple data points with parallel processing, making it significantly faster! As a caveat however, it requires that your system is x86 capable and during runtime it will select the best SIMD feature set for performance. If no feature sets are available there is also an unoptimised Rust implementation, but in the documentation it mentions that it should not be relied on.
 
 It is mentioned in the documentation that `simd-json` can be used at full capacity on native target compilation. You can do this by enabling the following compiler option in rustc when running your program, like so:
 
@@ -190,15 +191,16 @@ However, if you're like most people using Cargo you probably want to use `cargo 
 [build]
 rustflags = ["-C", "target-cpu=native"]
 ```
+
 Generally speaking, although this library is quite fast, it should be noted that there is quite a lot of **unsafe** code in this crate due to it being a port of a C++ crate. This is not to say that you shouldn't use it, but rather to use it with caution (as the crate says). In spite of this, there's a section on safety that details how best practices (like unit testing) are upheld to make sure the crate is as safe to use as possible.
 
-It should also be mentioned that for best performance, it's typically best to enable the `jemalloc` or `mimalloc` features to be able to make the most of the library. 
+It should also be mentioned that for best performance, it's typically best to enable the `jemalloc` or `mimalloc` features to be able to make the most of the library.
 
 Generally, the API for `simd-json` is the same as `serde-json`, so if you want to switch at any point then generally you should not have any problems doing so.
 
 ### sonic-rs
 
-[`sonic-rs`](https://github.com/cloudwego/sonic-rs) is a Rust implementation of JSON manipulation with SIMD functionality. This library also has a counterpart library in C++ and Go! Although it used to require the Rust nightly toolchain, it supports stable Rust. Similarly to `simd-json`, it also requires x86 CPU architecture to function at full capacity. 
+[`sonic-rs`](https://github.com/cloudwego/sonic-rs) is a Rust implementation of JSON manipulation with SIMD functionality. This library also has a counterpart library in C++ and Go! Although it used to require the Rust nightly toolchain, it supports stable Rust. Similarly to `simd-json`, it also requires x86 CPU architecture to function at full capacity.
 
 Like `simd-json`, to use `sonic-rs` you need to enable the following compiler option in rustc when running your program:
 
@@ -225,11 +227,11 @@ Although `sonic-rs` is a pretty fast library, it is also a more recent crate and
 
 You can find the benchmarks for `simd-json` and `serde-json` [here.](https://github.com/serde-rs/json-benchmark) There is a fairly significant improvement for `simd-json` versus `serde-json`.
 
-You can find the benchmarks for `sonic-rs` [here](https://github.com/cloudwego/sonic-rs#benchmark), which also compares it against `simd-json` and `serde-json`. As you can see, the final results are not in the same format as the `simd-json` and `serde-json` benchmarks so it is somewhat more difficult to understand in terms of data processed per second. However, `sonic-rs`  is significantly (and sometimes hugely!) faster than both `simd-json` and `serde-json` under most scenarios. 
+You can find the benchmarks for `sonic-rs` [here](https://github.com/cloudwego/sonic-rs#benchmark), which also compares it against `simd-json` and `serde-json`. As you can see, the final results are not in the same format as the `simd-json` and `serde-json` benchmarks so it is somewhat more difficult to understand in terms of data processed per second. However, `sonic-rs` is significantly (and sometimes hugely!) faster than both `simd-json` and `serde-json` under most scenarios.
 
 ## Finishing Up
 
-Thanks for reading! I hope this article has helped you gain an understanding of how to effectively use Rust JSON parsing libraries. 
+Thanks for reading! I hope this article has helped you gain an understanding of how to effectively use Rust JSON parsing libraries.
 
 Interested in more?
 

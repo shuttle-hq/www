@@ -1,11 +1,11 @@
 ---
 title: "How to Migrate to Shuttle Using Cursor and the Shuttle MCP Server"
 description: "Learn how to migrate your existing Axum application to Shuttle using Cursor and the Shuttle MCP server for seamless deployment."
-author: dcodes 
+author: dcodes
 tags: [shuttle, cursor, mcp, migration, axum, rust]
 thumb: migrate-to-shuttle/cover.png
 cover: migrate-to-shuttle/cover.png
-date: '2025-09-11'
+date: "2025-09-11"
 ---
 
 We've made migration to Shuttle very easy by leveraging our Shuttle MCP server and Cursor. The Shuttle MCP provides up to date documentation to your AI agents so that they'll be able to understand how to interact with the Shuttle platform having the latest information.
@@ -41,8 +41,8 @@ shuttle login
 
 This command will redirect you to the Shuttle console in your browser. Click "Authorize" to login.
 
-<CaptionedImage 
-  src="/images/blog/migrate-to-shuttle/authorize.png" 
+<CaptionedImage
+  src="/images/blog/migrate-to-shuttle/authorize.png"
   alt="Shuttle Authorize Page"
   caption="Shuttle Authorize Page"
 />
@@ -51,8 +51,8 @@ This command will redirect you to the Shuttle console in your browser. Click "Au
 
 Installing the Shuttle MCP Server is quite easy to do, you can add it just by clicking the "Add to Cursor" button in the the [Shuttle documentation page](https://docs.shuttle.dev/integrations/mcp-server), it will automatically configure the MCP server in your Cursor settings.
 
-<CaptionedImage 
-  src="/images/blog/migrate-to-shuttle/add-to-cursor.png" 
+<CaptionedImage
+  src="/images/blog/migrate-to-shuttle/add-to-cursor.png"
   alt="Add to Cursor"
   caption="Add to Cursor"
 />
@@ -70,8 +70,8 @@ If not using Cursor no problem, you can manually update your `mcp.json` file to 
 }
 ```
 
-<CaptionedImage 
-  src="/images/blog/migrate-to-shuttle/verify-shuttle-mcp-working.png" 
+<CaptionedImage
+  src="/images/blog/migrate-to-shuttle/verify-shuttle-mcp-working.png"
   alt="Verify Installation"
   caption="Verify Installation"
 />
@@ -141,8 +141,8 @@ After completing the migration, inform about these remaining manual steps:
 
 Paste the prompt to your AI agent and let it do the work for you.
 
-<CaptionedImage 
-  src="/images/blog/migrate-to-shuttle/shuttle-search-tool-call.png" 
+<CaptionedImage
+  src="/images/blog/migrate-to-shuttle/shuttle-search-tool-call.png"
   alt="Shuttle search tool call"
   caption="Shuttle search tool call"
 />
@@ -196,32 +196,32 @@ Once your project is migrated, the AI agent will attempt to create and deploy a 
 Deploy the project to Shuttle
 ```
 
-<CaptionedImage 
-  src="/images/blog/migrate-to-shuttle/deploy-shuttle.png" 
+<CaptionedImage
+  src="/images/blog/migrate-to-shuttle/deploy-shuttle.png"
   alt="Shuttle deploy"
   caption="Shuttle deploy"
 />
 
 Cursor will call the `deploy` tool to deploy the project to Shuttle and Shuttle will start building your project.
 
-<CaptionedImage 
-  src="/images/blog/migrate-to-shuttle/deployments.png" 
+<CaptionedImage
+  src="/images/blog/migrate-to-shuttle/deployments.png"
   alt="Shuttle building"
   caption="Shuttle building"
 />
 
 After building is done, you can see the project URL in your Shuttle console and visit the website.
 
-<CaptionedImage 
-  src="/images/blog/migrate-to-shuttle/shuttle-console-url.png" 
+<CaptionedImage
+  src="/images/blog/migrate-to-shuttle/shuttle-console-url.png"
   alt="Shuttle console"
   caption="Shuttle console"
 />
 
 Opening the project URL in the browser, you can see the website is working.
 
-<CaptionedImage 
-  src="/images/blog/migrate-to-shuttle/todo-app-hosted-working.png" 
+<CaptionedImage
+  src="/images/blog/migrate-to-shuttle/todo-app-hosted-working.png"
   alt="Todo app hosted working"
   caption="Todo app hosted"
 />
