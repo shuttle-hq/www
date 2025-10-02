@@ -2,11 +2,18 @@
 title: "The Hidden Costs of Deploying Rust Microservices"
 pageTitle: "The Hidden Costs of Deploying Rust Microservices"
 description: "Discover the hidden costs of microservices deployment at scale. Learn practical solutions to infrastructure complexity with Rust and Shuttle examples."
-author: dcodes 
-tags: [rust microservices, rust async, rust sqlx, axum framework, devops best practices]
+author: dcodes
+tags:
+  [
+    rust microservices,
+    rust async,
+    rust sqlx,
+    axum framework,
+    devops best practices,
+  ]
 thumb: rust-microservices-deployment-costs.png
 cover: rust-microservices-deployment-costs.png
-date: '2025-06-18'
+date: "2025-06-18"
 ---
 
 Microservices promise speed, scale, and team autonomy. But once you deploy more than a handful, the complexity creeps in. Teams suddenly face config sprawl, CI duplication, secret management, and fractured environments.
@@ -45,11 +52,11 @@ A **monolith** is a single, tightly coupled codebase running as one process. It'
 - **Team autonomy**: Squads own, deploy, and monitor their own services.
 - **Cost-effective scaling**: Scale only the services that need resources, not the entire application stack.
 
-*Example: A Netflix clone might break into services like Recommendations, Streaming, Billing, and Users. With a monolith, they share the same release cycle. With microservices, each evolves and scales independently.*
+_Example: A Netflix clone might break into services like Recommendations, Streaming, Billing, and Users. With a monolith, they share the same release cycle. With microservices, each evolves and scales independently._
 
-<CaptionedImage 
-  src="/images/blog/typical-microservices-architecture.png" 
-  alt="Diagram of a typical microservices architecture with independently scalable services like billing, user, and recommendation services" 
+<CaptionedImage
+  src="/images/blog/typical-microservices-architecture.png"
+  alt="Diagram of a typical microservices architecture with independently scalable services like billing, user, and recommendation services"
   caption="Microservices scaling architecture diagram showing independent service scaling capabilities"
 />
 
@@ -101,7 +108,7 @@ The more services you have, the more secrets and configurations you need to mana
 
 > **Ready to experience these challenges for yourself?**
 >
-> We've built an interactive onboarding challenge using **Rust** and **Shuttle** called **ShellCon**. You'll debug and optimize 3 microservices to make the frontend app work,  including async Rust code, Axum HTTP routes, and SQL queries.
+> We've built an interactive onboarding challenge using **Rust** and **Shuttle** called **ShellCon**. You'll debug and optimize 3 microservices to make the frontend app work, including async Rust code, Axum HTTP routes, and SQL queries.
 >
 > &nbsp;
 >
@@ -203,6 +210,7 @@ curl -sSfL https://www.shuttle.dev/install | bash
 ```
 
 ### Windows (PowerShell)
+
 ```bash
 iwr https://www.shuttle.dev/install-win | iex
 ```
@@ -234,8 +242,8 @@ Create the first project for our analytics service:
 shuttle init --template axum
 ```
 
-<CaptionedImage 
-  src="/images/blog/axum-template.png" 
+<CaptionedImage
+  src="/images/blog/axum-template.png"
   alt="Shuttle CLI terminal output showing initialization of a Rust microservice using the Axum template"
   caption="Shuttle CLI initializing analytics microservice with Axum template"
 />
@@ -260,8 +268,8 @@ docker run -d --name postgres --restart=always -e POSTGRES_USER=postgres -e POST
 
 Once your database is ready to accept connections, you can set up the analytics database:
 
-<CaptionedImage 
-  src="/images/blog/sqlx-create-db.png" 
+<CaptionedImage
+  src="/images/blog/sqlx-create-db.png"
   alt="Terminal showing SQLx CLI creating a PostgreSQL database for a Rust analytics microservice"
   caption="SQLx CLI creating PostgreSQL database for analytics microservice"
 />
@@ -451,8 +459,8 @@ shuttle deploy
 
 This will deploy the service to the cloud, you'll see the deployed URL in the console, we'll use this URL in our blog service to send analytics events to the analytics service.
 
-<CaptionedImage 
-  src="/images/blog/shuttle-deploy-analytics.png" 
+<CaptionedImage
+  src="/images/blog/shuttle-deploy-analytics.png"
   alt="Terminal output showing successful deployment of the analytics microservice to the Shuttle cloud platform"
   caption="Analytics microservice successfully deployed to Shuttle cloud platform"
 />
@@ -585,12 +593,11 @@ Deploy the service using **Shuttle**:
 shuttle deploy
 ```
 
-<CaptionedImage 
-  src="/images/blog/shuttle-deploy-blog-api.png" 
+<CaptionedImage
+  src="/images/blog/shuttle-deploy-blog-api.png"
   alt="Terminal showing Shuttle deployment output with the live URL of the Blog API microservice"
   caption="Blog API microservice deployed with Shuttle showing service URL"
 />
-
 
 🎉 Great! Now both of our services are deployed and ready to use.
 
@@ -633,15 +640,15 @@ Great! Our services are working as expected, we have a blog service that can cre
 
 Comparing this approach with the traditional approach, we can see that we no longer need to manage multiple configuration files and orchestration tools - we can focus on building our application logic instead. With this approach, teams can focus on building smaller Rust microservices without worrying about the infrastructure, secrets management, and observability tools. This makes microservice deployment much faster and easier.
 
-| Aspect | Traditional Setup (Docker/Kubernetes/Terraform) | Shuttle Setup |
-| --- | --- | --- |
-| **Infrastructure Management** | Manual configuration of Dockerfiles, docker-compose.yml, Kubernetes manifests, and Terraform files | Automated infrastructure provisioning through Shuttle |
-| **Database Provisioning** | Manual setup of PostgreSQL containers, volumes, and Terraform database resources | Automatic database provisioning with Shuttle's shared database feature |
-| **Secret Management** | Environment variables in docker-compose.yml, Kubernetes secrets, or external tools like Vault | Integrated secret management using Shuttle's Secrets.toml |
-| **Deployment Complexity** | Requires manual deployment steps, CI/CD pipeline configuration, and Kubernetes/Terraform orchestration | Simple deployment with `shuttle deploy` command |
-| **Scalability** | Manual configuration of Kubernetes HPA, scaling policies, and load balancers | Built-in scalability features with Shuttle |
-| **Monitoring** | Requires additional monitoring tools, Prometheus setup, and configuration | Integrated monitoring capabilities with Shuttle |
-| **Development Experience** | Complex setup for local development with Docker, minikube, or kind clusters | Simplified development experience with Shuttle's local development features |
+| Aspect                        | Traditional Setup (Docker/Kubernetes/Terraform)                                                        | Shuttle Setup                                                               |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| **Infrastructure Management** | Manual configuration of Dockerfiles, docker-compose.yml, Kubernetes manifests, and Terraform files     | Automated infrastructure provisioning through Shuttle                       |
+| **Database Provisioning**     | Manual setup of PostgreSQL containers, volumes, and Terraform database resources                       | Automatic database provisioning with Shuttle's shared database feature      |
+| **Secret Management**         | Environment variables in docker-compose.yml, Kubernetes secrets, or external tools like Vault          | Integrated secret management using Shuttle's Secrets.toml                   |
+| **Deployment Complexity**     | Requires manual deployment steps, CI/CD pipeline configuration, and Kubernetes/Terraform orchestration | Simple deployment with `shuttle deploy` command                             |
+| **Scalability**               | Manual configuration of Kubernetes HPA, scaling policies, and load balancers                           | Built-in scalability features with Shuttle                                  |
+| **Monitoring**                | Requires additional monitoring tools, Prometheus setup, and configuration                              | Integrated monitoring capabilities with Shuttle                             |
+| **Development Experience**    | Complex setup for local development with Docker, minikube, or kind clusters                            | Simplified development experience with Shuttle's local development features |
 
 ## Ready to Try It Yourself? Build Microservices with Rust & Shuttle
 
@@ -661,38 +668,46 @@ Using **Shuttle** can make microservice deployment easier. Without having to dea
 
 This makes development easier and much faster, putting you ahead of the curve. You can focus on **shipping** rather than **managing infrastructure**.
 
-------
+---
 
 <BlogFAQ
   title="Frequently Asked Questions"
   items={[
     {
       question: "Is Rust a good choice for building microservices?",
-      answer: "Yes. Rust offers high performance, memory safety, and a powerful async ecosystem, making it ideal for backend services that require speed and reliability."
+      answer:
+        "Yes. Rust offers high performance, memory safety, and a powerful async ecosystem, making it ideal for backend services that require speed and reliability.",
     },
     {
       question: "How do microservices communicate with each other in Rust?",
-      answer: "Most Rust microservices use HTTP APIs (via frameworks like Axum) or gRPC. Communication is typically secured with SSL/TLS and authorization tokens."
+      answer:
+        "Most Rust microservices use HTTP APIs (via frameworks like Axum) or gRPC. Communication is typically secured with SSL/TLS and authorization tokens.",
     },
     {
       question: "How does Shuttle simplify Rust microservice deployment?",
-      answer: "Shuttle handles provisioning, secret management, and deployment automatically. You define infrastructure with macros in your Rust code and deploy using the Shuttle CLI."
+      answer:
+        "Shuttle handles provisioning, secret management, and deployment automatically. You define infrastructure with macros in your Rust code and deploy using the Shuttle CLI.",
     },
     {
       question: "What's the best way to manage secrets across microservices?",
-      answer: "Use a secure secret management system. Shuttle simplifies this by letting you define secrets in a Secrets.toml file and injecting them into your app with the shuttle_runtime::Secrets macro."
+      answer:
+        "Use a secure secret management system. Shuttle simplifies this by letting you define secrets in a Secrets.toml file and injecting them into your app with the shuttle_runtime::Secrets macro.",
     },
     {
-      question: "How can I practice deploying and debugging Rust microservices?",
-      answer: "Try the <a href='https://github.com/shuttle-hq/shuttle-shellcon' target='_blank'>ShellCon Challenge</a>. It's a hands-on Rust app with multiple services (Axum, SQLx, async) that you fix and deploy using Shuttle."
+      question:
+        "How can I practice deploying and debugging Rust microservices?",
+      answer:
+        "Try the <a href='https://github.com/shuttle-hq/shuttle-shellcon' target='_blank'>ShellCon Challenge</a>. It's a hands-on Rust app with multiple services (Axum, SQLx, async) that you fix and deploy using Shuttle.",
     },
     {
       question: "What happens if one microservice fails?",
-      answer: "In a well-designed system, other services continue running. You should implement retry logic, circuit breakers, and graceful degradation to improve overall system resilience."
+      answer:
+        "In a well-designed system, other services continue running. You should implement retry logic, circuit breakers, and graceful degradation to improve overall system resilience.",
     },
     {
       question: "Should I start with microservices or a monolith?",
-      answer: "Start with a well-structured monolith and break it into microservices as scaling or modularity becomes a bottleneck. Premature microservice adoption adds unnecessary complexity."
-    }
+      answer:
+        "Start with a well-structured monolith and break it into microservices as scaling or modularity becomes a bottleneck. Premature microservice adoption adds unnecessary complexity.",
+    },
   ]}
 />

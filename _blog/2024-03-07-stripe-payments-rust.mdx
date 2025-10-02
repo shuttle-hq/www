@@ -5,8 +5,9 @@ author: josh
 tags: [rust, stripe, guide]
 thumb: stripe-rust-thumb.png
 cover: stripe-rust-thumb.png
-date: '2024-03-07T15:30:00'
+date: "2024-03-07T15:30:00"
 ---
+
 Hello world! In this article we're going to talk about how to integrate Stripe Payments into a Rust application. Stripe is a hassle-free, easy to use payments provider that makes commercializing your Rust web services hassle-free. We're going to cover:
 
 - One off payments
@@ -51,7 +52,7 @@ let product = {
 
 Note here that you can add any metadata you want for your product (as long as it can be a String). If you need to add things like net weight, nutritional information, or other kinds of information this is where you'd put it.
 
-Additionally, you can add images to the `CreateProduct` struct - up to 8 using URLs. This would mean using something like Cloudflare R2 or AWS S3 buckets to store your images and accessing them from there. 
+Additionally, you can add images to the `CreateProduct` struct - up to 8 using URLs. This would mean using something like Cloudflare R2 or AWS S3 buckets to store your images and accessing them from there.
 
 You can read more about the `CreateProduct` struct [here.](https://docs.rs/async-stripe/0.34.1/stripe/generated/core/product/struct.CreateProduct.html#structfield.default_price_data)
 
@@ -72,13 +73,13 @@ let price = {
 };
 ```
 
-Note that here, we have the currency as US dollars. The unit amount is the smallest possible currency for a given currency, meaning that the total amount for this price is actually $10.00 (or "1000 cents"), not $1000! As before with the product information itself, we can add whatever metadata we want to the price object. We are also required to input a product ID as the price object depends on a product ID being present. 
+Note that here, we have the currency as US dollars. The unit amount is the smallest possible currency for a given currency, meaning that the total amount for this price is actually $10.00 (or "1000 cents"), not $1000! As before with the product information itself, we can add whatever metadata we want to the price object. We are also required to input a product ID as the price object depends on a product ID being present.
 
 You can additionally set things up like tiered pricing (based on unit volume!) programmatically. You can find more about the price object from this docs page [here.](https://docs.stripe.com/api/prices/object)
 
 ### Subscriptions
 
-[Subscriptions](https://docs.stripe.com/billing/subscriptions/overview) are worth a special mention. Although they are technically just "prices with a recurring period" and you can use them just like a regular price object in Stripe, you may want to structure them differently. For example: How do you set your subscription tiers up properly? 
+[Subscriptions](https://docs.stripe.com/billing/subscriptions/overview) are worth a special mention. Although they are technically just "prices with a recurring period" and you can use them just like a regular price object in Stripe, you may want to structure them differently. For example: How do you set your subscription tiers up properly?
 
 To create a subscription price, when creating the price object you need to add the `recurring` property like so:
 
@@ -183,7 +184,7 @@ As you can see, although somewhat complicated it is not too difficult. We simply
 
 Now for the fun part: getting paid! We can create a checkout session with a customer ID, then add a checkout with a price ID. Then once the session has been created, we can send the URL back to the user!
 
-Note that we've added a cancel and success URL to explicitly tell Stripe where we want to send our user to after; if this isn't set, they will stay on the Stripe page. 
+Note that we've added a cancel and success URL to explicitly tell Stripe where we want to send our user to after; if this isn't set, they will stay on the Stripe page.
 
 ```rust
 async fn create_checkout_session(customer_id: String) -> String {
@@ -211,7 +212,7 @@ async fn create_checkout_session(customer_id: String) -> String {
 }
 ```
 
-When we return the URL to the user (assuming they visit the URL), once the checkout is completed, they'll now have purchased a product or service from us! If we have webhooks set up (see the later [webhooks section](/#webhooks)), we will receive a `CheckoutSessionCompleted` event which will hold the user subscription ID that we can save and use in other scenarios (for example, updating/cancelling subscriptions). Because the ID by itself cannot be used for anything without an API key, it is not considered sensitive data and is therefore safe to store without much additional consideration. 
+When we return the URL to the user (assuming they visit the URL), once the checkout is completed, they'll now have purchased a product or service from us! If we have webhooks set up (see the later [webhooks section](/#webhooks)), we will receive a `CheckoutSessionCompleted` event which will hold the user subscription ID that we can save and use in other scenarios (for example, updating/cancelling subscriptions). Because the ID by itself cannot be used for anything without an API key, it is not considered sensitive data and is therefore safe to store without much additional consideration.
 
 ### Setting up customers
 
@@ -235,7 +236,7 @@ let customer = Customer::create(&client, CreateCustomer {
 
 Here we have added a test customer to Stripe, with some metadata, an email and a description. You can find out more about the `CreateCustomer` struct [here](https://docs.rs/async-stripe/latest/stripe/struct.CreateCustomer.html), which shows all of the fields/methods that can be used.
 
-Note that while it is possible to additionally add a payment method for a customer through the API, you are required to be [PCI compliant](https://stripe.com/ie/guides/pci-compliance) while using Stripe; processing or handling of card information of any kind through an API requires you to meet much more stringent criteria than if you just set up a Stripe checkout session and allow the user to input their details into the checkout session. 
+Note that while it is possible to additionally add a payment method for a customer through the API, you are required to be [PCI compliant](https://stripe.com/ie/guides/pci-compliance) while using Stripe; processing or handling of card information of any kind through an API requires you to meet much more stringent criteria than if you just set up a Stripe checkout session and allow the user to input their details into the checkout session.
 
 If you're still interested in adding a payment method manually through your API, see below:
 
@@ -327,7 +328,7 @@ async fn my_function(
 }
 ```
 
-Webhooks normally require HTTPS to test - if you're trying to make this work locally, you can use Cloudflare Tunnel, Ngrok or a similar service to receive webhooks. 
+Webhooks normally require HTTPS to test - if you're trying to make this work locally, you can use Cloudflare Tunnel, Ngrok or a similar service to receive webhooks.
 
 Interested in checking out the examples for Actix Web and Rocket? The `async-stripe` GitHub repo has those examples [here.](https://github.com/arlyon/async-stripe/tree/master/examples)
 

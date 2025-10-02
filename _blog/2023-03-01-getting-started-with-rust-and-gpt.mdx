@@ -5,7 +5,7 @@ author: josh
 tags: [rust, tutorial]
 thumb: rust-gpt-banner.png
 cover: rust-gpt-banner.png
-date: '2022-12-23T15:00:00'
+date: "2022-12-23T15:00:00"
 ---
 
 Rust is a language that is starting to gain more and more traction within many large tech companies as it is starting to become more widely adopted due to its high level of efficiency, memory safety as well as the ability to inter-op with other languages like C and JavaScript making it easy to add in without requiring a full rewrite in Rust. We can also leverage the power of AI and language models through OpenAI's GPT-3 to create web apps that can generate useful text, which we will be covering in this tutorial.
@@ -81,33 +81,33 @@ Now we just simply need to add an function that makes an async/await API call to
 
 ```typescript
 // App.ts - Add this to your function component before the return
-const [prompt, setPrompt] = React.useState<string>('')
+const [prompt, setPrompt] = React.useState<string>("");
 
 const fetchData = async () => {
-	const res = await fetch('/api/prompt')
-	const data = await res.json()
-	return data
-}
+  const res = await fetch("/api/prompt");
+  const data = await res.json();
+  return data;
+};
 
 const setText = () => {
-	let text = document.querySelector('#prompt-text') as HTMLParagraphElement
+  let text = document.querySelector("#prompt-text") as HTMLParagraphElement;
 
-	text.innerText = prompt
-}
+  text.innerText = prompt;
+};
 
 const handleSubmit = async (e: React.SyntheticEvent) => {
-	e.preventDefault()
-	try {
-		fetchData().then((data) => {
-			setPrompt(data)
-			setText()
-		})
-	} catch (err: any) {
-		console.log(`Error: ${err}`)
-		setPrompt(`Error: ${err}`)
-		setText()
-	}
-}
+  e.preventDefault();
+  try {
+    fetchData().then((data) => {
+      setPrompt(data);
+      setText();
+    });
+  } catch (err: any) {
+    console.log(`Error: ${err}`);
+    setPrompt(`Error: ${err}`);
+    setText();
+  }
+};
 ```
 
 That's it! Our frontend is done. Now we can focus on the meat of the app, which will be the backend.
@@ -268,13 +268,13 @@ Now that we've created both of our front and backend components, let's have a lo
 ```typescript
 // vite.config.ts
 export default defineConfig({
-	base: '',
-	plugins: [react()],
-	build: {
-		outDir: 'API/static',
-		emptyOutDir: true,
-	},
-})
+  base: "",
+  plugins: [react()],
+  build: {
+    outDir: "API/static",
+    emptyOutDir: true,
+  },
+});
 ```
 
 Then make sure your build script in `packages.json` looks like this:
@@ -346,8 +346,8 @@ If there's no issues, it should deploy! We'll be able to view our app at the lin
 
 Now that we're done, there's quite a few ways we could easily extend this example. If you're looking to take this example further and generate a fully working app, here's a few ideas you could try:
 
--   A web app that will generate a PDF or word document based on what you want the document to contain.
--   A random color scheme generator that will generate random colour schemes.
--   A random password generator based on some random criteria.
+- A web app that will generate a PDF or word document based on what you want the document to contain.
+- A random color scheme generator that will generate random colour schemes.
+- A random password generator based on some random criteria.
 
 Working with GPT-3 has never been easier, and with some simple prompt refinement we can get results that we can turn into meaningful web applications for end users. We've also recently released a new version (v0.12.0) that implements some really cool new features like a Node CLI to easily bootstrap a Next.js + Rust application, as well as local secrets, so if you'd like to use it for other things, now is a better time than ever to try it out!

@@ -5,16 +5,16 @@ description: In this article, we are showcasing our latest integration, and that
 author: josh
 tags: [rust, turso, tutorial]
 thumb: tursoapi.png
-date: '2023-07-28T18:18:00'
+date: "2023-07-28T18:18:00"
 ---
 
 In this article, we are showcasing our latest integration, and that's Turso! Turso is a service that describes itself as "SQLite for the edge", taking the power of SQLite to the extreme by hosting it on the cloud and using replicas to allow you to get a local replica of your database wherever you need it, saving time and money on read data. This is hugely useful for web applications where you might need to generate a lot of reports using read data from your SQL database as reads using SQLite are extremely cheap, or web services where most of the traffic will be GET requests for information.
 
 We'll be writing a web service in the form of a Cat Facts API service that utilises a Turso instance. We'll want the following functionality by the time our API is done:
 
--   Grab a single cat fact
--   Users can submit their own cat facts
--   Allow users to subscribe to a web service that will send out a daily cat fact
+- Grab a single cat fact
+- Users can submit their own cat facts
+- Allow users to subscribe to a web service that will send out a daily cat fact
 
 Looking for the final example codebase? You can check it out here: https://github.com/joshua-mo-143/cat-facts-api
 
@@ -103,8 +103,8 @@ Now that we've set up everything we need, we can get started!
 
 Our service will be split into two parts:
 
--   A web service
--   A background task that will check the time and if it matches what the time is, it'll send out a load of subscription emails to our subscribers
+- A web service
+- A background task that will check the time and if it matches what the time is, it'll send out a load of subscription emails to our subscribers
 
 Natively, Shuttle will give you types that you can use for easily supporting your web services. However, we don't want that - we want to run our web service and background task concurrently, which means we need to return a type that implements `shuttle_runtime::Service`. See below:
 
@@ -531,7 +531,7 @@ Thank you for reading! Hopefully this has given you a good high-level insight in
 
 If you'd like to extend this example, here are a few suggestions:
 
--   Email validation for adding subscribers
--   Make the subscriber email background task a job queue
--   Add some kind of approval functionality and admin approval for submissions
--   Add a full frontend using HTML templating or a Rust/Javascript front-end framework
+- Email validation for adding subscribers
+- Make the subscriber email background task a job queue
+- Add some kind of approval functionality and admin approval for submissions
+- Add a full frontend using HTML templating or a Rust/Javascript front-end framework

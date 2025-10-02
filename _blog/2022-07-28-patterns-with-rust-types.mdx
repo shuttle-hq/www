@@ -13,7 +13,7 @@ This post is on the advanced side and in general there are no absolutes - these 
 
 ## The new type pattern
 
-The new type pattern provides encapsulation  as well as a guarantee that the right type of value is supplied at compile time. There are several uses and benefits for the new type pattern - let's take a look at some examples.
+The new type pattern provides encapsulation as well as a guarantee that the right type of value is supplied at compile time. There are several uses and benefits for the new type pattern - let's take a look at some examples.
 
 ### Identifier Separation
 
@@ -71,7 +71,7 @@ The new-type pattern enforces type-safety at compile time without any performanc
 
 ### Re-adding functionality to our type
 
-After creating this new *wrapper* type, we may need to implement some of the behaviour of the type it is encapsulating to appease our compiler. For example consider a set of 'banned' users:
+After creating this new _wrapper_ type, we may need to implement some of the behaviour of the type it is encapsulating to appease our compiler. For example consider a set of 'banned' users:
 
 ```rust
 let banned_users: HashSet<UserId> = HashSet::new();
@@ -90,7 +90,7 @@ And we're good to go!
 
 The new type pattern can also be used to constrain types to only take 'valid' values.
 
-In the above example we used a wrapper type to enforce *flow* of values, this method also enforces the *content* of the value. In our application we only want usernames to contain **lowercase** alphabetic characters. Wrapping over String we can do this:
+In the above example we used a wrapper type to enforce _flow_ of values, this method also enforces the _content_ of the value. In our application we only want usernames to contain **lowercase** alphabetic characters. Wrapping over String we can do this:
 
 ```rust
 struct Username(String);
@@ -112,7 +112,7 @@ impl TryFrom<String> for Username {
 }
 ```
 
-This implementation returns a new `Username` if *all* the characters are lowercase. Else the string is returned and can be reused in logic possibly displaying an error.
+This implementation returns a new `Username` if _all_ the characters are lowercase. Else the string is returned and can be reused in logic possibly displaying an error.
 
 As the string field is private a `Username` cannot be created with `Username(my_string)`. It also cannot be modified by outsiders and invalidate our contract.
 
@@ -263,7 +263,7 @@ We could have instead boxed the results and returned `Box<dyn Iterator<Item=&Use
 
 When creating a library we may add some functions for working with existing types (whether in the standard library or a different crate).
 
-Let's say we are writing a library on top of *serenity* which has models for discord servers (discord refers to them as guilds).
+Let's say we are writing a library on top of _serenity_ which has models for discord servers (discord refers to them as guilds).
 
 Let's write a helper function that gets the number of channels in a [Guild](https://docs.rs/serenity/0.11.4/serenity/model/guild/struct.Guild.html).
 
@@ -324,4 +324,3 @@ You can use the [easy_ext](https://docs.rs/easy-ext/1.0.0/easy_ext/) for doing t
 ## Conclusion
 
 We saw how we can use various patterns like the new-type pattern and extension pattern to make our Rust code more ergonomic and take advantage of the type system and compiler to write better code. There is a great book out on [Rust design patterns](https://rust-unofficial.github.io/patterns/intro.html) which covers some of these and many more patterns in Rust. What are your favourite design patterns in Rust? Let us know and we'll cover them next time!
-
