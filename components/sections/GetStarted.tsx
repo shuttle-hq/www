@@ -1,9 +1,8 @@
 import Image from "next/image";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useState } from "react";
 import clsx from "clsx";
-import { Copy } from "components/svgs";
 import { CodeBlock } from "components/elements";
-import { useCopyToClipboard, useIntersection } from "react-use";
+import { useCopyToClipboard } from "react-use";
 import { trackEvent } from "lib/posthog";
 import CopyButton from "components/elements/CopyButton";
 
