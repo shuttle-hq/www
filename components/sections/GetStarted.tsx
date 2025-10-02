@@ -5,6 +5,7 @@ import { Copy } from "components/svgs";
 import { CodeBlock } from "components/elements";
 import { useCopyToClipboard, useIntersection } from "react-use";
 import { trackEvent } from "lib/posthog";
+import CopyButton from "components/elements/CopyButton";
 
 type GetStartedStep =
   | "homepage_getstartedinseconds_clipboard_install"
@@ -181,15 +182,11 @@ const GetStartedSlide: FC<GetStartedSlideProps> = ({
 
         <div className="relative mt-3 flex w-full cursor-text items-center rounded-2xl border border-[#191919] bg-transparent py-2 pl-3 pr-14 outline-none">
           $ {command}
-          <button
-            className="absolute right-3 rounded-lg border border-transparent p-1 hover:border-[#484848] hover:bg-[#343434] dark:text-head"
-            onClick={() => {
-              trackEvent(step);
-              copyToClipboard(command);
-            }}
-          >
-            <Copy />
-          </button>
+          <CopyButton
+            code={command}
+            className="absolute right-3"
+            onCopied={() => trackEvent(step)}
+          />
         </div>
 
         <hr className="absolute -bottom-px left-6 w-[calc(100%-3rem)] border-black/10 dark:border-[#191919]" />
