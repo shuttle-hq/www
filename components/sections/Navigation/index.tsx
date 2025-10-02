@@ -2,12 +2,14 @@
 
 import clsx from "clsx";
 import CustomButton from "../../elements/CustomButton";
-import { Hamburger, Logo } from "components/svgs";
+import { GithubLogo, Hamburger, Logo } from "components/svgs";
+// import { Github, Discord } from "components/svgs";
 import { trackEvent } from "lib/posthog";
 import dynamic from "next/dynamic";
 import Link from "components/elements/Link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { DiscordLogo } from "components/svgs/DiscordLogo";
 
 const ThemeSwitcher = dynamic(() => import("./ThemeSwitcher"), { ssr: false });
 
@@ -133,6 +135,29 @@ const Navigation = () => {
               active={router.pathname.includes(keyword)}
             />
           ))}
+
+          <div className="flex items-center gap-4 pl-px xl:ml-4">
+            <a
+              href="https://github.com/shuttle-hq/shuttle"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub"
+              onClick={() => trackEvent("homepage_mainnav_github")}
+              className="transition-colors text-black/70 hover:text-black dark:text-white/60 dark:hover:text-white"
+            >
+              <GithubLogo className="w-5 h-5" />
+            </a>
+            <a
+              href="https://discord.com/invite/shuttle"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Discord"
+              onClick={() => trackEvent("homepage_mainnav_discord")}
+              className="transition-colors text-black/70 hover:text-black dark:text-white/60 dark:hover:text-white"
+            >
+              <DiscordLogo className="w-5 h-5" />
+            </a>
+          </div>
         </div>
         <div className="mt-10 xl:ml-auto xl:mt-0 xl:flex xl:items-center xl:gap-5">
           <div
