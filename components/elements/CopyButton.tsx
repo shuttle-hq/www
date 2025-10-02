@@ -7,9 +7,10 @@ import { useCopyToClipboard } from "react-use";
 interface CopyButtonProps {
   code: string;
   className?: string;
+  onCopied?: () => void;
 }
 
-const CopyButton: FC<CopyButtonProps> = ({ code, className }) => {
+const CopyButton: FC<CopyButtonProps> = ({ code, className, onCopied }) => {
   const [_, copyToClipboard] = useCopyToClipboard();
   const [copied, setCopied] = useState(false);
 
@@ -25,6 +26,7 @@ const CopyButton: FC<CopyButtonProps> = ({ code, className }) => {
   const handleCopy = () => {
     copyToClipboard(code);
     setCopied(true);
+    onCopied?.();
   };
 
   return (
