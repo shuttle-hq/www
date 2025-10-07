@@ -24,7 +24,7 @@ println!("'Cargo.toml':\n{}", cargo_toml_content);
 
 The above statements are executed in a well-defined order, one after the other, from top to bottom." `Hello World` is printed, followed by the contents of `Cargo.toml` being read and then printed.
 
-This paradigm is perfectly fine under normal operation - but sometimes our code requires the current context to stop while it *waits* for something else - this is generally known as **blocking**. In other words, when a piece of code is blocked, it's essentially on hold, waiting for a particular operation to complete before it can proceed. This can occur when, for example, we're waiting for the file system, network communication, a database transaction, or even a specified amount of time to pass. During this blocked state, the program remains idle and cannot perform other tasks concurrently. In the earlier example, the loop can't move on to the next iteration until the request in the previous iteration has finished. This can lead to inefficiencies, especially when dealing with a significant number of such requests.
+This paradigm is perfectly fine under normal operation - but sometimes our code requires the current context to stop while it _waits_ for something else - this is generally known as **blocking**. In other words, when a piece of code is blocked, it's essentially on hold, waiting for a particular operation to complete before it can proceed. This can occur when, for example, we're waiting for the file system, network communication, a database transaction, or even a specified amount of time to pass. During this blocked state, the program remains idle and cannot perform other tasks concurrently. In the earlier example, the loop can't move on to the next iteration until the request in the previous iteration has finished. This can lead to inefficiencies, especially when dealing with a significant number of such requests.
 
 In the example below, every loop iteration a request is made to the infamous `example.com`.
 
@@ -47,9 +47,9 @@ When a program is blocked it is doing nothing but waiting for a response to retu
 **What if there was a way to start additional requests without having to wait for the previous to have finished its request?**
 
 This is where asynchronous programming comes in. Asynchronous programming is
-about *not* blocking. Let's say you've ordered a mountain bike for a ride on
+about _not_ blocking. Let's say you've ordered a mountain bike for a ride on
 the weekend. You don't need to spend all your time on the doorstep waiting
-for the delivery - you can continue living your life doing whatever. An async runtime allows you to continue whatever you are doing and serves as a notification, *awaking* you to the door when the delivery arrives.
+for the delivery - you can continue living your life doing whatever. An async runtime allows you to continue whatever you are doing and serves as a notification, _awaking_ you to the door when the delivery arrives.
 
 We will get more in to how to write async later but the essence is that we can change the loop to the following to start up 100 requests without having requiring the previous request to have finished:
 
@@ -68,7 +68,7 @@ for handle in handles {
 
 ### Parallelization and concurrency
 
-Before we go further we should note that async is *not* for processing
+Before we go further we should note that async is _not_ for processing
 expensive operations. It's only beneficial for IO in which data comes from somewhere further away than the RAM and when there is a lot of it. Parallelization is beneficial for computationally expensive operations.
 
 **Parallelization is running multiple things at the same time. Concurrency is handling multiple things at the same time.**
@@ -82,12 +82,12 @@ synchronously - for a large numbers of concurrent web requests, the async
 version is ~60% faster that synchronous requests and ~20% faster than spinning
 up a thread for each request[^benchmarks].
 
-| Command | Mean [s] | Min [s] | Max [s] | Relative |
-|:---|---:|---:|---:|---:|
-| `./sync` | 1.070 ± 0.013 | 1.060 | 1.085 | 1.65 ± 0.09 |
-| `./threads` | 0.787 ± 0.007 | 0.782 | 0.795 | 1.22 ± 0.06 |
-| `./async` | 0.732 ± 0.016 | 0.721 | 0.750 | 1.13 ± 0.06 |
-| `./async_threads` | 0.646 ± 0.033 | 0.612 | 0.677 | 1.00 |
+| Command           |      Mean [s] | Min [s] | Max [s] |    Relative |
+| :---------------- | ------------: | ------: | ------: | ----------: |
+| `./sync`          | 1.070 ± 0.013 |   1.060 |   1.085 | 1.65 ± 0.09 |
+| `./threads`       | 0.787 ± 0.007 |   0.782 |   0.795 | 1.22 ± 0.06 |
+| `./async`         | 0.732 ± 0.016 |   0.721 |   0.750 | 1.13 ± 0.06 |
+| `./async_threads` | 0.646 ± 0.033 |   0.612 |   0.677 |        1.00 |
 
 ## Getting started with async Rust
 
@@ -116,7 +116,7 @@ async fn do_thing() {
 
 Within an async function, you have the ability to employ `.await`. This is appended to the end of an asynchronous function call, and it plays a vital role in non-blocking execution. When you use `.await`, it temporarily halts execution and retrieves the actual result value.
 
-Now, let's go a bit deeper. Async functions, as well as async blocks, return Futures. A [Future](https://doc.rust-lang.org/std/future/trait.Future.html) is a function which returns a [Poll](https://doc.rust-lang.org/std/task/enum.Poll.html). Poll is a bit like a `Result` or `Option`, it has two variants one is a final value and the other variant is that the value is still pending. Futures are lazy, there are two ways to run a future: `tokio::spawn` to spawn eagerly and get a [JoinHandle](https://docs.rs/tokio/latest/tokio/task/struct.JoinHandle.html) or `.await`. Rust warns against *unawaited* futures.
+Now, let's go a bit deeper. Async functions, as well as async blocks, return Futures. A [Future](https://doc.rust-lang.org/std/future/trait.Future.html) is a function which returns a [Poll](https://doc.rust-lang.org/std/task/enum.Poll.html). Poll is a bit like a `Result` or `Option`, it has two variants one is a final value and the other variant is that the value is still pending. Futures are lazy, there are two ways to run a future: `tokio::spawn` to spawn eagerly and get a [JoinHandle](https://docs.rs/tokio/latest/tokio/task/struct.JoinHandle.html) or `.await`. Rust warns against _unawaited_ futures.
 
 ### Writing async operations
 
@@ -147,16 +147,15 @@ let (weather, news) = tokio::join!(weather, news).await;
 
 What `tokio::join`! does there is initiate multiple asynchronous tasks simultaneously and then await their results concurrently. In essence, it starts both the weather and news requests at the same time and then waits for both responses without waiting for one to finish before starting the other. This concurrent approach is significantly different from sequential execution, where you would request weather first, then wait for it to complete, and only after that request news. By leveraging `tokio::join!`, you're able to efficiently utilize your program's time, improving performance when dealing with multiple asynchronous operations.
 
-<hr styles="margin-top: 5px"/>
+<hr styles="margin-top: 5px" />
 
 To keep this post short and to the basics we will stop here. If you want to read more about writing async the there is the [official Rust async book](https://rust-lang.github.io/async-book/) and [Tokio has a brilliant tutorial](https://tokio.rs/tokio/tutorial).
 
 ## Conclusion
 
-Async Rust is a practical and evolving aspect of the Rust language. While the async features continue to develop, there is room for improvement in the future. You can check the current status of async features and other aspects of the async ecosystem at [areweasyncyet.rs](https://areweasyncyet.rs). This post provides an introductory guide to writing async Rust code, so you can definitely *await* a future post that digs deeper into async in Rust with topics such as; Rust streams, error handling in async code, advanced concurrency patterns, and practical examples of async Rust in real-world applications.
+Async Rust is a practical and evolving aspect of the Rust language. While the async features continue to develop, there is room for improvement in the future. You can check the current status of async features and other aspects of the async ecosystem at [areweasyncyet.rs](https://areweasyncyet.rs). This post provides an introductory guide to writing async Rust code, so you can definitely _await_ a future post that digs deeper into async in Rust with topics such as; Rust streams, error handling in async code, advanced concurrency patterns, and practical examples of async Rust in real-world applications.
 
-
-<hr styles="margin-top: 10px"/>
+<hr styles="margin-top: 10px" />
 
 [^rust-runtime]: Technically there are panic handlers and things which is runtime https://doc.rust-lang.org/reference/runtime.html
 

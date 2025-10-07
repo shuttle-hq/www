@@ -5,13 +5,15 @@ author: josh
 tags: [rust, testing, guide]
 thumb: testing-in-rust-thumb.png
 cover: testing-in-rust-thumb.png
-date: '2023-11-08T14:30:00'
+date: "2023-11-08T14:30:00"
 ---
+
 Whether you're a new web developer or more experienced senior developer, testing is a key component of being able to make sure your web applications are bug-free and work as intended. Although at first you might only want to do manual testing (for example if you're quickly hacking something together), in more robust work pipelines where your application may have some paid users that depend on the service, testing can be a great tool to assist with automation and saving time (especially with regards to more complicated workflows).
 
 This article will describe and compare how testing is done in JavaScript, and then follow with how to test in Rust. Jest will be primarily used for comparison. If you plan on following the Rust parts, you may wish to install Rust [here.](https://www.rust-lang.org/tools/install)
 
 ## Test Setup
+
 In JavaScript, testing is typically something that you either do manually (by just opening the webpage and testing that the functionality you implemented works) or through a specific JavaScript testing framework - two of the most popular ones being Mocha and Jest, with Jest in particular originally being a tool created for testing React but being able to be run other frameworks, such as Express or whatever you need and Mocha being a more general testing framework for Node.js.
 
 As you may know (or not!) already, you will generally need to put your tests in their own separate files for tests in JavaScript to run, then use `mocha` or `jest` depending on which library you're using - which then runs all of the tests. Best practice dictates that you put your test file next to wherever the actual file is (switching out the ".js" at the end for ".test.js"). Specific frameworks and libraries like React may also have their own testing facilities - for example, you can use React Testing Library if you want to test React. Your file/folder setup might look like this:
@@ -27,6 +29,7 @@ Although the language tooling itself has good testing capabiliities, we can take
 ```bash
 cargo install cargo-nextest
 ```
+
 When it's installed, you can use `cargo nextest run` and it will run all tests within a workspace. Interested? Find more about cargo-nextest [here.](https://nexte.st/)
 
 Although we will primarily be focusing on the Rust standard testing capabilities for ease of use, there are also quite a few helper libraries for testing; for example, `test-case` which helps you build up test cases for tests by providing macros that you can stack on top of a test function and `lets_expect` which provides a macro in the form of `lets_expect!()` to help you test faster and more ergonomically.
@@ -34,9 +37,11 @@ Although we will primarily be focusing on the Rust standard testing capabilities
 Some Rust crates may also have their own testing library, in addition to this. Backend web frameworks in particular have their own Rust testing crates that let you do things like calling specific handler functions by themselves, so that you don't have to mock the entire API - we'll discuss this later on in the article.
 
 ## Unit Testing
+
 With regards to unit testing, there is not a huge amount of difference between JavaScript and Rust. You import what files you need, and then run them.
 
 For example, if you have a file called `sum.js` with the following JS unit test:
+
 ```javascript
 // sum.js
 // This function we're testing adds two numbers together
@@ -45,38 +50,43 @@ function sum(a, b) {
 }
 module.exports = sum;
 ```
+
 Then you would create a file called `sum.test.js`, which contains our actual test:
+
 ```javascript
 // sum.test.js
-const sum = require('./sum');
+const sum = require("./sum");
 
-test('adds 1 + 2 to equal 3', () => {
+test("adds 1 + 2 to equal 3", () => {
   expect(sum(1, 2)).toBe(3);
 });
 ```
+
 As you can see, we've imported the function from our other file then added a simple test that expects the function with some given parameters to be equal to another given value.
 
 Then once we're done with whatever tests we want to add, we then run `jest` and the test should pass.
 
 Want to group tests together? You can do that pretty easily! Just use `describe` to create a group of tests, then insert the tests you want to make like so:
+
 ```javascript
-describe('matching cities to foods', () => {
+describe("matching cities to foods", () => {
   // Applies only to tests in this describe block
   beforeEach(() => {
     return initializeFoodDatabase();
   });
 
-  test('Vienna <3 veal', () => {
-    expect(isValidCityFoodPair('Vienna', 'Wiener Schnitzel')).toBe(true);
+  test("Vienna <3 veal", () => {
+    expect(isValidCityFoodPair("Vienna", "Wiener Schnitzel")).toBe(true);
   });
 
-  test('San Juan <3 plantains', () => {
-    expect(isValidCityFoodPair('San Juan', 'Mofongo')).toBe(true);
+  test("San Juan <3 plantains", () => {
+    expect(isValidCityFoodPair("San Juan", "Mofongo")).toBe(true);
   });
 });
 ```
 
 As mentioned before, you can group both your regular code and Rust unit testing together. Typically, this is used for things that are not declared as public, but if you don't want to put your tests in a tests folder, you can also add your tests this way. You can put your files and code together like this:
+
 ```rust
 // lib.rs
 // for reference: the "usize" type means any non-negative integer
@@ -100,12 +110,15 @@ mod tests {
     }
 }
 ```
+
 In comparison to Jest, Rust doesn't have test grouping enabled by default in the standard library although you can enable similar tests for behaviour-driven development if you use [rspec](https://github.com/rust-rspec/rspec), which is a framework that supports this kind of testing. In terms of organising your integration tests, normally if you have a lot of different integration tests you can split them into separate files if you want to separate them by user behaviour, what part of a program it's testing or any other criteria. You can find more about this [here.](https://doc.rust-lang.org/book/ch11-03-test-organization.html#submodules-in-integration-tests)
 
 ## Setup and Teardown
+
 Sometimes, you might need to do some work before or after every test: with testing in JavaScript via Jest, this is very simple to do. You need to create functions that carry out what you need to do, then either attach them to a `beforeEach` or `afterEach` statement, depending on what you want to do.
 
 In JS testing with Jest, this is quite simple:
+
 ```javascript
 async function initialiseCityDatabase {
   // ... your code for setting up the test database here
@@ -127,6 +140,7 @@ afterEach(() => {
 ```
 
 In Rust, although there is no such thing provided by the default testing functionality, you can still run a setup and teardown function so that you can delete any artefacts created by the tests (for example, SQL records that may have been left over in the test database). Below is an example of what this might look like:
+
 ```rust
 // the PgPool type is a Postgres connection pool type provided by SQLx, a Rust SQL crate
 async fn setup_database() -> sqlx::PgPool {
@@ -146,7 +160,9 @@ async fn do_stuff() {
   teardown_database(database).await;
 }
 ```
+
 You can also use libraries like [test-context](https://docs.rs/test-context/latest/test_context/) to be able to write your setup and teardown, which makes it much easier as you can use a macro on top of a test function and you can also implement test contexts for multiple structs. A small snippet from the library's documentation follows below:
+
 ```rust
 use test_context::{test_context, TestContext};
 
@@ -175,11 +191,13 @@ fn test_works(ctx: &mut MyContext) {
 ```
 
 ## Mocking
+
 Don't worry, there will be no insults will be flying around here! Mocking is a practice commonly used with unit testing where you create a mock of an object (as much as is required) for the purpose of using it in a test. The goal of mocking is to isolate a unit of code away from things that would normally use or create said code. Testing in isolation helps to determine whether or not a certain function by itself is correct or not.
 
 Do note for this section that "fakes" and "mocks" are not the same thing - fakes are functional versions of mocks that attempt to replicate the real thing that you want to use. You don't always need mocks, but you might need fakes!
 
 With JavaScript testing, you can create a mock function to be used in test code, or you can write a manual mock that overrides a module dependency (although typically, you'll be doing more of the first one unless you have a specific reason as to why you need to override the module dependency).
+
 ```javascript
 // forEach.js
 // this function takes an array and function,
@@ -191,11 +209,11 @@ export function forEach(items, callback) {
 }
 
 // forEach.test.js
-const forEach = require('./forEach');
+const forEach = require("./forEach");
 
-const mockCallback = jest.fn(x => 42 + x);
+const mockCallback = jest.fn((x) => 42 + x);
 
-test('forEach mock function', () => {
+test("forEach mock function", () => {
   forEach([0, 1], mockCallback);
 
   // The mock function was called twice
@@ -215,44 +233,49 @@ test('forEach mock function', () => {
 As you can see above, by using mocking you can get extra information about a function for testing purposes - for example, how many times a function was called or how many times a mock was created.
 
 Now let's talk about mocking modules. Jest is able to mock dependencies and modules for testing - but what does this mean in practice? Let's say you need to use a real API or have an API you're building that is supposed to have some data that your web app is supposed to call normally. You can mock a dependency like `axios` to be able to model fake data from the API and then test your code using the fake data mock! Let's have a look at what this would look like below:
+
 ```javascript
 // users.js
-import axios from 'axios';
+import axios from "axios";
 
 class Users {
   static all() {
-    return axios.get('/users.json').then(resp => resp.data);
+    return axios.get("/users.json").then((resp) => resp.data);
   }
 }
 
 export default Users;
 
 // users.test.js
-import axios from 'axios';
-import Users from './users';
+import axios from "axios";
+import Users from "./users";
 
-jest.mock('axios');
+jest.mock("axios");
 
-test('should fetch users', () => {
-  const users = [{name: 'Bob'}];
-  const resp = {data: users};
+test("should fetch users", () => {
+  const users = [{ name: "Bob" }];
+  const resp = { data: users };
   axios.get.mockResolvedValue(resp);
 
   // or you could use the following depending on your use case:
   // axios.get.mockImplementation(() => Promise.resolve(resp))
 
-  return Users.all().then(data => expect(data).toEqual(users));
+  return Users.all().then((data) => expect(data).toEqual(users));
 });
 ```
+
 This is not all of course - you can also mock a subset of a module (a "partial") and then have the rest of the module keep its regular implementation.
 
 In Rust, mocking doesn't require any special libraries can be done quite easily through creating custom implementations of any traits you want in a test to get the same behaviour as mocking. Traits in Rust are groups of methods defined for a particular type, which you can implement for a struct or enum. You can read more about this [here.](https://doc.rust-lang.org/book/ch10-02-traits.html).
 
 Additionally, there are also several libraries that aim to provide assistance with mocking but one of the most popular ones we'll be looking at is `mockall`. If you want to try `mockall` for yourself and have Rust installed, you'll want to spin up a new Rust project, navigate to the project folder and run the following:
+
 ```bash
 cargo add mockall
 ```
+
 Let's have a look at how you can create a mock that implements multiple traits:
+
 ```rust
 use mockall::*;
 use mockall::predicate::*;
@@ -284,9 +307,11 @@ mock! {
 
 let mut mock = MockMyStruct::new();
 ```
+
 As you can see above, we've now implemented two traits on a single struct that we can now use for any kind of testing we want to do!
 
 That's not all however. We can also modify the behaviour of our mock object's behaviour, through using the methods on our `mock` variable to return a specific value:
+
 ```rust
 let mut mock = MockMyStruct::new();
 
@@ -298,24 +323,27 @@ mock.expect_foo()
 Now whenever we use `mock.foo()`, the answer will always return 44 and it will always return a type of u32 (unsigned 32-bit integer). This is great for us as it means we can mock any kind of dependency we want and can be used similarly to the example we used before for the `axios` mock where we mocked up some data and then created some tests around the provided data.
 
 ## Integration Testing
+
 Integration testing (otherwise known as end-to-end testing) is a more general kind of testing to test how functions integrate together by using them in the same test. Initially, you might do this manually (for example, testing out registering to a website and then logging in) but eventually at some point you're going to want to automate testing the overall functionality of your application, especially as you start getting more and more functions.
 
 In JavaScript, how you'll approach this depends on what libraries you're using. Are you using React? You'll need Jest along with React Testing Library. Are you using Express? There's a number of ways you can do it - but for the purposes of this example, let's assume you already have an Express.js application that you want to test using Jest:
-```javascript
-const express = require('express')
-const app = express()
-const port = 3000
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+```javascript
+const express = require("express");
+const app = express();
+const port = 3000;
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+  console.log(`Example app listening on port ${port}`);
+});
 ```
 
 You would ideally want to install `supertest` to make it easier to test, by using `npm i --save-dev supertest`. Your `package.json` file would want to have this added in:
+
 ```javascript
 "scripts": {
     // ... your other scripts
@@ -331,21 +359,21 @@ You would ideally want to install `supertest` to make it easier to test, by usin
 ```
 
 Then you serve a single test (or however many you want) from your test file:
+
 ```javascript
 // server.test.js
-const request = require('supertest')
-const app = require('../server')
+const request = require("supertest");
+const app = require("../server");
 
-describe('Testing routes', () => {
-  it('should return Hello World', async () => {
-    const res = await request(app)
-      .get('/')
-      .send()
+describe("Testing routes", () => {
+  it("should return Hello World", async () => {
+    const res = await request(app).get("/").send();
 
-    expect(res.statusCode).toEqual(200)
-  })
-})
+    expect(res.statusCode).toEqual(200);
+  });
+});
 ```
+
 As you can see, using `supertest` with `jest` boosts its capabilities considerably by allowing it to expect things from the response - for example, the status code or what the body contains. This makes it much, much easier to test your backend and makes the testing experience much better.
 
 With regards to Rust integration tests, although there's no default helper library you can still write integration tests by just writing tests that utilise many parts or functions from your program together. For example, you might have some code to setup an SQL database instance, then an integration test that adds and manipulates some data that's contained in your database and finally the teardown code to reset your test database.
@@ -357,6 +385,7 @@ pub fn setup() {
     // servers, etc.
 }
 ```
+
 ```rust
 // tests/integration_test.rs
 // importing common module.
@@ -373,6 +402,7 @@ fn test_add() {
 Although how you test a server generally depends on what web framework you're using, some web frameworks are built from the ground up to be made easier to test. For example, in `axum` which has extremely strong compatibility with `tower` (a set of utilities for robust networking clients), you can simply just initialise your `axum::Router` then send a oneshot request to it. We can see an example of this below.
 
 Let's say we have a `main.rs` file, which has a basic Axum router (see codeblock comments for explanations):
+
 ```rust
 // main.rs
 // import functions from dependencies to bring them into scope
@@ -404,6 +434,7 @@ axum::Server::bind(&addr).serve(router.into_make_service()).await.unwrap();
 ```
 
 We could then set up the tests like this - in this case we could probably just set it up in the same file as the `main.rs` file:
+
 ```rust
 #[cfg(test)]
 mod tests {
@@ -438,6 +469,7 @@ You can also assert things like cookies, iterating through cookies, headers, che
 We also can carry out black-box API testing if our program or web application is reliant on usage of an external API and you don't want to trigger API calls. [Wiremock](https://github.com/LukeMathWalker/wiremock-rs), a crate originally created by Luca Palmieri who wrote [Zero to Production in Rust](https://www.zero2prod.com/index.html?country=the%20UK&discount_code=VAT20&country_code=GB), is a great way to do this. It's quite simple to use and works by creating a lightweight HTTP server that you can then use for any kind of testing that you want to use; for example, you can mock an API that returns some data, then use that data in a real function that you want to test.
 
 Let's see how this works. We will start a `MockServer`, mount a route to it then use `surf` (a HTTP request library) to send a HTTP request to our mock server, which we will then use `assert_eq!` on to make sure that the status code is 200 OK. See the example below:
+
 ```rust
 // main.rs
 // import items for use, bringing them into scope
@@ -479,11 +511,12 @@ async fn main() {
 
 As you can see, this is pretty easy!
 
-
 ## Finishing Up
+
 Thanks for reading this article! I hope you have gained a better understanding of testing in Rust vs JS and maybe a little bit of knowledge about setting up a basic web router in Rust using Axum.
 
 Looking for more info? Check out some of our other articles:
+
 - Check out our docs page for the fundamentals on writing an Axum web service [here.](https://docs.shuttle.rs/tutorials/rest-http-service-with-axum)
 - New to Rust? Check out [Shuttle Launchpad](https://www.shuttle.dev/launchpad), our free newsletter for learning Rust!
 

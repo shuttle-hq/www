@@ -5,8 +5,9 @@ author: josh
 tags: [rust, aws, guide]
 thumb: aws-s3-rust-thumb.png
 cover: aws-s3-rust-thumb.png
-date: '2024-04-17T15:30:00'
+date: "2024-04-17T15:30:00"
 ---
+
 Hello world! This time, we're going to go a little more in-depth when it comes to writing web services. We're going to create a web service that uses AWS S3 to store and retrieve images. We will also add telemetry via tracing, look at tests and other common things for productionising a Rust web application.
 
 Interested in deploying or just want to see what the final code looks like? Check it out [here.](https://github.com/joshua-mo-143/shuttle-s3-example)
@@ -192,7 +193,7 @@ pub struct AppState {
 
 ### Creating a custom response type
 
-To make it easier for ourselves when writing our code, we'll create our own enum return type that will implement `axum::response::IntoResponse`. While you *can* use `impl IntoResponse` itself as the return type, it is often better to declare a specific type for a couple of reasons:
+To make it easier for ourselves when writing our code, we'll create our own enum return type that will implement `axum::response::IntoResponse`. While you _can_ use `impl IntoResponse` itself as the return type, it is often better to declare a specific type for a couple of reasons:
 
 - While using `impl IntoResponse`, every response type is required to be the same
 - Using an enum allows you to be more flexible in your response type
@@ -295,7 +296,7 @@ let _res = state.s3
 
 It is important to note here that we've generated our own filename. It is always more secure to generate your own file names rather than taking the user's filenames, as you may accidentally end up overwriting your own files. Users may also maliciously try to upload files with known names!
 
-Strictly speaking, we don't *need* the file extension at the end of our file key. However, when you're using said files outside of image storage, it's best to preserve them for future usage.
+Strictly speaking, we don't _need_ the file extension at the end of our file key. However, when you're using said files outside of image storage, it's best to preserve them for future usage.
 
 To retrieve an image, we can write the following route:
 
