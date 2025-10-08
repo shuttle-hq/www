@@ -5,8 +5,9 @@ author: josh
 tags: [rust, guide]
 thumb: traits-generics-rust-thumb.png
 cover: traits-generics-rust-thumb.png
-date: '2024-04-18T15:30:00'
+date: "2024-04-18T15:30:00"
 ---
+
 Hello world! In this post we're going to give a quick refresher course on Rust traits and generics, as well as implementing some more advanced trait bounds and type signatures.
 
 ## A quick refresher on Rust traits
@@ -124,7 +125,7 @@ There's a couple of reasons why you would want marker traits:
 - The compiler needs to know if something can be guaranteed to do something
 - They're an implementation-level detail that you can also implement manually
 
-Two marker traits in particular, in conjunction with other lesser-used marker traits, are quite important to us: `Send` and `Sync`.  `Send` and `Sync` are unsafe to implement manually - this is typically because you need to manually ensure that it is implemented safely. `Unpin` is also another example of this. You can find more about why it's unsafe to manually implement these traits [here.](https://doc.rust-lang.org/nomicon/send-and-sync.html)
+Two marker traits in particular, in conjunction with other lesser-used marker traits, are quite important to us: `Send` and `Sync`. `Send` and `Sync` are unsafe to implement manually - this is typically because you need to manually ensure that it is implemented safely. `Unpin` is also another example of this. You can find more about why it's unsafe to manually implement these traits [here.](https://doc.rust-lang.org/nomicon/send-and-sync.html)
 
 In addition to this, marker traits are also (generally speaking) auto traits. If a struct has fields that all implement an auto trait, the struct itself will also implement the auto trait. For example:
 
@@ -185,11 +186,12 @@ struct MyStruct {
 
 The object type will then be computed during runtime, as opposed to generics which use compile-time.
 
-The main advantages of dynamic dispatch are that your function doesn't need to know the concrete type; as long as the type implements the trait, you can use it as a trait object (as long as it's trait object safe). This is similar to the concept of duck-typing in other languages, where the functions and properties available to an object determine the typing. Typically from a user standpoint, the compiler doesn't care what the underlying concrete type is - just that it implements the trait. There are cases however where it *does* matter - in which case Rust offers ways to determine concrete type, although tricky to use. You also save some code bloat, which depending on your use can be a good thing.
+The main advantages of dynamic dispatch are that your function doesn't need to know the concrete type; as long as the type implements the trait, you can use it as a trait object (as long as it's trait object safe). This is similar to the concept of duck-typing in other languages, where the functions and properties available to an object determine the typing. Typically from a user standpoint, the compiler doesn't care what the underlying concrete type is - just that it implements the trait. There are cases however where it _does_ matter - in which case Rust offers ways to determine concrete type, although tricky to use. You also save some code bloat, which depending on your use can be a good thing.
 
 Errors are also easier to understand from a library user perspective. From a library developer's point of view this is not such an issue, but if you need to use a generics-heavy library, you can get some very confusing errors! Axum and Diesel are two libraries that can sometimes be guilty of this and have workarounds for this (Axum's `#[debug_handler]` macro and Diesel's documentation, respectively). Because you're moving the dispatch process to runtime, you also save compilation time.
 
 The downsides are that you need to ensure object trait safety. The conditions you need to satisfy for object safety include:
+
 - your type doesn't require `Self: Sized`
 - your type must use some type of "self" in function arguments (whether it's `&self`, `self`, `mut self` etc...)
 - your type must not return Self

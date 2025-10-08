@@ -5,8 +5,9 @@ author: josh
 tags: [rust, posthog, guide]
 thumb: posthog-rust-thumb.png
 cover: posthog-rust-thumb.png
-date: '2024-03-14T15:30:00'
+date: "2024-03-14T15:30:00"
 ---
+
 Hello world! In this article, we're going to talk about how you can use Posthog with Rust to be able to track user behavior across an application. Analytics are more important than ever to be able to improve your product; Posthog makes it easy to do exactly that.
 
 ## How does PostHog work?
@@ -192,7 +193,7 @@ async fn get_insights(
 }
 ```
 
-When you get the response, you will need to turn it into a struct that implements `Deserialize`. Thankfully, `reqwest` provides a method for turning the response into JSON-compatible structs. Let's make a struct that represents some of the properties of the JSON response from PostHog.  `serde` completely ignores undeclared fields by default, allowing us to only take what we need.
+When you get the response, you will need to turn it into a struct that implements `Deserialize`. Thankfully, `reqwest` provides a method for turning the response into JSON-compatible structs. Let's make a struct that represents some of the properties of the JSON response from PostHog. `serde` completely ignores undeclared fields by default, allowing us to only take what we need.
 
 ```rust
 #[derive(Deserialize, Debug)]
@@ -235,6 +236,7 @@ async fn get_insights(
 Posthog makes it easy to track how users are using your application and find easy wins. While the Rust SDK is not complete, hopefully you've found some clarity in communicating with the Posthog API with Rust!
 
 Read more:
+
 - Get started with using Rust's most popular framework [here](https://www.shuttle.dev/blog/2023/12/06/using-axum-rust)
 - Learn about logging for your Rust application [here](https://www.shuttle.dev/blog/2023/09/20/logging-in-rust)
 - Check out our guide for using Stripe with Rust [here](https://www.shuttle.dev/blog/2024/03/07/stripe-payments-rust)

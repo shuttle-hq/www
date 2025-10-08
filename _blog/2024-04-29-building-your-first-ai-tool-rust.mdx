@@ -5,8 +5,9 @@ author: ivan
 tags: [rust, ai, guide]
 thumb: building-your-first-ai-tool-rust-thumb.png
 cover: building-your-first-ai-tool-rust-thumb.png
-date: '2024-04-29T14:30:00'
+date: "2024-04-29T14:30:00"
 ---
+
 In this tutorial, we'll build a command-line application in Rust that can analyze data from a CSV file. The app will prompt the user to enter a question, and it will provide an answer based on the data in the CSV file.
 
 At the end, we'll be able to ask our helper various questions, and get various answers! Here's a short video that shows its powers:
@@ -19,12 +20,13 @@ The full code of the Rust AI helper can be found [here.](https://github.com/josh
 
 Before we get started, make sure you have the following installed:
 
-* Rust (you can install it from [rustup.rs](https://rustup.rs))
-* The `csv` and `llm_chain` crates (we'll install these later)
+- Rust (you can install it from [rustup.rs](https://rustup.rs))
+- The `csv` and `llm_chain` crates (we'll install these later)
 
 You'll also need an OpenAI API key which you can [get here](https://platform.openai.com/api-keys).
 
 ## Setting up the Project
+
 First, create a new Rust project:
 
 ```bash
@@ -47,14 +49,17 @@ These lines add the required dependencies for our project: `csv` for reading CSV
 ## What is llm-chain?
 
 Here is the description from their [official GitHub repository](https://github.com/sobelio/llm-chain):
+
 > llm-chain is a collection of Rust crates designed to help you create advanced LLM applications such as chatbots, agents, and more.
 
 `llm-chain` is effectively an LLM orchestration library that allows you to "chain" prompts together, executing one after the other - with extra features:
+
 - Templates are supported, allowing you to not need to manually chain steps
 - We can carry out complex tasks that LLMs cannot handle in a single step
 - `llm-chain` also supports vector storage, allowing long term memory and subject matter knowledge.
 
 This benefits us in several ways:
+
 - Being able to chain steps allows us to get much closer to a useful output, rather than only being able to use one step. For example, you may want several pre-instruction prompts to set up a context for your application.
 - By operating on data in steps, we can get much better insight from our data.
 
@@ -86,7 +91,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
 ```
 
 The return type is set to `Result<(), Box<dyn Error>>` to enable error propagation with `?` and overall error handling across different error types.
-
 
 ### Adding our API Key
 
@@ -125,6 +129,7 @@ for result in reader.records() {
 ```
 
 The contents of the CSV file (make sure to create a `data.csv` file in your root directory and copy-paste the contents below):
+
 ```csv
 Name,Age,Occupation,City,FavoriteSport,AnnualIncome
 Samantha,28,Entrepreneur,New York,Skydiving,$120000
@@ -146,13 +151,12 @@ Abigail,23,Writer,Minneapolis,Rock Climbing,$18000
 
 Example of what it looks like as a table:
 
-|Name    |Age|Occupation       |City           |FavoriteSport  |AnnualIncome|
-|--------|---|-----------------|---------------|---------------|------------|
-|Samantha|28 |Entrepreneur     |New York       |Skydiving      |$120000     |
-|Michael |35 |Software Engineer|San Francisco  |Rock Climbing  |$95000      |
-|Emily   |42 |Chef             |Chicago        |Surfing        |$65000      |
-|David   |25 |Artist           |Los Angeles    |Parkour        |$30000      |
-
+| Name     | Age | Occupation        | City          | FavoriteSport | AnnualIncome |
+| -------- | --- | ----------------- | ------------- | ------------- | ------------ |
+| Samantha | 28  | Entrepreneur      | New York      | Skydiving     | $120000      |
+| Michael  | 35  | Software Engineer | San Francisco | Rock Climbing | $95000       |
+| Emily    | 42  | Chef              | Chicago       | Surfing       | $65000       |
+| David    | 25  | Artist            | Los Angeles   | Parkour       | $30000       |
 
 ### Creating the user input loop
 
@@ -182,7 +186,6 @@ loop {
 Now, we'll create a prompt string that includes the user's question and the CSV data. This prompt will be used by the `llm_chain` crate to generate a response.
 
 > 💡 **TIP**: When defining prompts, be clear and concise about the task you want the language model to perform. Provide any necessary context or input data (like the CSV example) and be specific about the desired output (eg, a summary, analysis, code, or text generation).
-
 
 ```rust
 let prompt_string = format!(
@@ -224,12 +227,15 @@ That's the end of our loop and now we need to wrap it all up by adding `Ok(())` 
 ### Running our App
 
 To run the app, navigate to the project directory and execute `cargo run`. You should see the following message in your terminal:
+
 ```bash
 Enter your prompt (or 'quit'` to exit):
-````
+```
+
 Enter your question related to the data in the data2.csv file, and the app will provide a concise answer based on the analysis.
 
 Here are some CSV-specific questions you can ask your helper:
+
 1. "Who has the highest annual income, and what is their occupation?"
 2. "What is the most popular extreme sport among the individuals in the data?"
 3. "Which city has the most individuals represented in the data?"
@@ -249,10 +255,12 @@ And finally, hook it all up together and try deploying it with Shuttle!
 P.S. Tweet `#shuttleai` when you are done and we'll check out and share your creations!
 
 ## Summary
+
 In this tutorial, we built a command-line application in Rust that can analyze data from a CSV file. The app uses the `csv` and `llm_chain` crates to read the CSV data and generate a response based on the user's question.
 
 If you are up for another challenge; try making the data source dynamic, allowing users to upload their own `csv`, or even better, other file formats such as `pdf` or `json`!
 
 Read more:
+
 - [Creating a RAG-assisted web service with Axum](https://www.shuttle.dev/blog/2024/02/28/rag-llm-rust)
 - [More than you've ever wanted to know about error handling](https://www.shuttle.dev/blog/2022/06/30/error-handling)

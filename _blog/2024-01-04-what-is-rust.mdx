@@ -3,35 +3,45 @@ title: "What is Rust and Why Should You Use It?"
 description: This article provides a deep dive into the Rust programming language and benefits, cons as well as some companies using Rust in production.
 author: josh
 tags: [rust, tutorial, guide]
-thumb: what-is-rust-thumb.png 
+thumb: what-is-rust-thumb.png
 cover: what-is-rust-thumb.png
-date: '2024-01-04T14:30:00'
+date: "2024-01-04T14:30:00"
 ---
+
 In today's world, Rust is becoming more and more popular. Yet, there are still a lot of people (and companies!) who misunderstand what Rust's value proposition is, or even what it is. In this article, we'll be talking about what Rust is and why it's a good programming language to enhance your skillset.
 
 ## What is Rust?
+
 In a nutshell, Rust is a multi-paradigm, general purpose language. Due to this, it's currently being used and experimented with in many domains. From the Rust website:
+
 > A language empowering everyone to build reliable and efficient software.
 
 The borrow checker and ownership model allows it to keep memory usage low. The type system, combined with Rust's traits, allows certain safety garuantees that would not normally be possible in other languages (like memory safety). Rust's package manager, Cargo, is also a formatter, linter and test runner. Rust has a small standard library that provides building blocks for your own tools. This removes the bureaucracy of getting things added to the standard library.
 
 ## A short summary of Rust's history up to now
+
 In 2006, Rust started out as a small side-project created by Graydon Hoare, a software developer for Mozilla at the time. In 2009 Mozilla, officially sponsored the project, reaching a stable release in May 2015. Since then many companies like Microsoft, Amazon, and Cloudflare have adopted Rust. In December 2022 the Linux kernel also started using Rust. The language has also enjoyed a notable amount of popularity on social media with many Rust developers using the crab emoji in their names. The growth of the primarily open source Rust ecosystem has become more and more rapid as time has gone on. The community is powerful, with many contributors now using Rust in their jobs.
 
 ## Reasons to Use Rust
+
 Below are some of the reasons that Rust will be able to help you become a better programmer - and not just because "Rust is fast and has fearless concurrency". While that's still true, we'd like to dig into some of the deeper details.
 
 ### Rust saves you money without trying
+
 Due to the low memory footage, it is almost assured that you are going to save money by using Rust. An average Java Spring or Python Django app can use many gigabytes of memory in large applications. This is particularly true if you have not yet optimised your application, or you're getting random memory leaks somewhere. With Rust, you are more than likely already ahead in memory consumption without any fancy tricks - but they are there if you need them! Don't just take our word for it. One company saved 87% on compute costs by switching from Ruby to Rust. You can find more about how they did it [here.](https://worldwithouteng.com/articles/i-saved-87-percent-on-compute-costs-by-switching-languages/)
 
 Even if you are not planning to use Rust directly in production, you can still use it in your applications. You can do this by using Rust modules then then use a Foreign Function Interface (FFI). While this needs some effort on your part (particularly if you're new to using FFI), it can also save money by allowing you to process much quicker. This also allows much more gradual adoption of Rust, which may be more to your liking. You can also of course use `wasm-bindgen` to convert Rust to WASM, which is perfect for any JavaScript-based applications.
 
 ### Error handling in Rust is awesome
+
 Rust is a language that forces you to deal with errors upfront. It's known by most Rust developers that you should avoid `.unwrap()` in production where possible. Yet, it's good to know that you can always come back and improve the error handling when you're ready. Take the following statement for instance:
+
 ```rust
 thing.use_function_that_can_fail().unwrap();
 ```
+
 You could convert this to use pattern-matching:
+
 ```rust
 let result = thing.use_function_that_can_fail();
 
@@ -40,16 +50,21 @@ match result {
     Err(error) => println!("{error}");
 }
 ```
+
 This can be used to match a single error. Meanwhile, you could also use a question mark to propagate the error:
+
 ```rust
 thing.use_function_that_can_fail()?;
 ```
+
 This attempts to turn the error into the error type returned by the function. meaning you can avoid unwraps and pattern matching! There are many packages to help you also improve your error handling like `eyre` and `anyhow`. You can find more about error handling [here.](https://www.shuttle.dev/blog/2022/06/30/error-handling)
 
 ### Rust syntax is ugly
+
 Yes, the syntax is ugly. There, I said it. However, getting used to new types of syntax (whether they're ugly or not!) is typically a good thing because it helps you gain a new perspective. It is a little bit similar to getting a new perspective after learning a new spoken language because of where words can originate from. Cultural ideas can inform the way that the spoken language is formed.
 
 In particular, pattern matching has led to things like `let-else` and `if-let`. These are two examples of syntax you wouldn't see in other mainstream programming languages. Let's have a quick look at these two in action:
+
 ```rust
 // using let-else
 let Ok(some_result) = function_that_can_fail() else {
@@ -61,6 +76,7 @@ if let Ok(result) = function_that_can_fail() {
     println!("The function succeeded!");
 }
 ```
+
 As you can see, fairly straightforward. It also avoids us having to directly use pattern matching and instead allows us to "match" against the arm because Rust is an expression-orientated language.
 
 This is enabled by the fact that Rust is a highly expressive language. By exposing ourselves to new ideas, we can learn new ways to do things that either make our code more readable or perform better. Many developers have even taken ideas from Rust (or functional programming in general) and implemented them in other languages: for example, the Result enum type.
@@ -68,40 +84,52 @@ This is enabled by the fact that Rust is a highly expressive language. By exposi
 Rust can also end up becoming a gateway to other more functional programming ("FP") languages like OCaml. Although not recent, Rust's first compiler iterations were actually written in OCaml. Despite the two languages not officially being affiliated with each other, there are quite a few similarities between the two languages, notably Rust's use of sum types ("enums") and general algebraic data types.
 
 ## Where is Rust being used?
+
 Of course, this article isn't complete without a list of companies who are using Rust. Here are a few examples.
 
 ### Cloudflare
+
 It's not a huge secret that Cloudflare is using Rust. One Google search for "cloudflare rust" returns Oxy, their new proxy framework. They also wrote their own internal proxy called [Pingora](https://blog.cloudflare.com/how-we-built-pingora-the-proxy-that-connects-cloudflare-to-the-internet/) in Rust. A look on their [blog](https://blog.cloudflare.com/tag/rust) also returns many search results for Rust-related articles. The earliest article talking about Cloudflare development with Rust was [back in 2019.](https://blog.cloudflare.com/how-we-made-firewall-rules/)
 
 ### 1Password
-1Password is not exactly shouting to the world that they use Rust. However, one look at their [GitHub organization page](https://github.com/1Password) shows that they are very much using it. They've also contributed to the Rust ecosystem by publishing crates. One of them is [passkey-rs,](https://github.com/1Password/passkey-rs) a collection of libraries that implement the [Webauthn Level 3](https://www.w3.org/TR/webauthn-3/) and [CTAP2](https://fidoalliance.org/specs/fido-v2.0-ps-20190130/fido-client-to-authenticator-protocol-v2.0-ps-20190130.html) standards. 
+
+1Password is not exactly shouting to the world that they use Rust. However, one look at their [GitHub organization page](https://github.com/1Password) shows that they are very much using it. They've also contributed to the Rust ecosystem by publishing crates. One of them is [passkey-rs,](https://github.com/1Password/passkey-rs) a collection of libraries that implement the [Webauthn Level 3](https://www.w3.org/TR/webauthn-3/) and [CTAP2](https://fidoalliance.org/specs/fido-v2.0-ps-20190130/fido-client-to-authenticator-protocol-v2.0-ps-20190130.html) standards.
 
 ### Daimler (Mercedes-Benz)
+
 Around 4 years ago, some internal source code from the Mercedez-Benz group was [leaked.](https://www.zdnet.com/article/mercedes-benz-onboard-logic-unit-olu-source-code-leaks-online/) Despite most of the code being C++, some Rust was notably included. Additionally, the organisation's first ever open-source contribution was [in Rust.](https://github.com/mercedes-benz/vehicle-information-service) It can be roughly inferred that they've probably continued to use it. This is a great sign for Rust in the automotive industry - even if it's not the majority of the code.
 
 ### Shuttle
+
 Our platform is also written primarily in Rust! We provision our runtime and infrastructure resources via Rust crates that use macros. Our platform also allows you to write your own resource macros. While we currently primarily support HTTP services, we are currently looking into upgrading our internal systems to allow for features like raw TCP, specifying your Rust toolchain and more.
 
 A more exhaustive list of companies using Rust can be found [here.](https://github.com/omarabid/rust-companies)
 
 ## Reasons to not use Rust
+
 Despite all of Rust's advantages, there are still some glaring edges if you're planning to adopt Rust. Here's a small list of things that can cause you issues while using Rust.
 
 ### The learning curve
+
 Once you actually learn Rust, it's pretty smooth sailing. However, up until then be prepared for some very uncomfortable bumps. In particular, the borrow checker (especially without proper care of scoping) can be a big one. Here are some quick tips you can use to improve your initial Rust learning experience:
+
 - Use references where you can. Functions can also take references as parameters.
 - When it comes to iterators, `.iter()` iterates over a vector of element references. If you want to iterate over owned elements, you want to use `.into_iter()`.
 - When it comes to error handling, `anyhow` is your friend. You can also use `thiserror` to easily extend the behaviour of your own error types.
 
 ### Small ecosystem
+
 Many areas of Rust are fairly robust, particularly when it comes to async and WebAssembly. However because Rust hasn't yet managed to achieve general mainstream adoption, some companies do not actively support Rust. Additionally, many crates are at the mercy of open-source labor. This isn't to say that they are poorly maintained. Due to obligations outside of open-source work though, sometimes crates can take a long time to be updated. This is something you will need to think about when adopting Rust; if it doesn't exist yet, you will probably need to write it yourself.
 
 ### Deploying Rust
+
 Deploying Rust web services is not particularly easy compared to other languages. This is primarily due to a lack of general Rust adoption. Normally, you would need to deploy your Rust program via Dockerfile, set up your own Nginx proxy and add SSL certs (among other things). It's a lot, especially if it's your first time doing it. Shuttle is aiming to solve this problem by allowing one-command deploys and letting you declare your infrastructure in your code.
 
 ## Finishing Up
+
 Thanks for reading! I hope this has helped you learn about whether or not Rust is the right choice for you.
 
 Interested in more?
+
 - Learn more about the best Rust web framework for you [here.](https://www.shuttle.dev/blog/2023/08/23/rust-web-framework-comparison)
-- Learn more about enums in Rust [here.](https://www.shuttle.dev/blog/2023/11/23/enums-in-rust) 
+- Learn more about enums in Rust [here.](https://www.shuttle.dev/blog/2023/11/23/enums-in-rust)

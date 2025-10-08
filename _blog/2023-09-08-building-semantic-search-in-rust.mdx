@@ -5,7 +5,7 @@ author: stefan
 tags: [rust, ai, qdrant, semantic-search]
 thumb: semantic-search-in-rust-thumbnail.png
 cover: semantic-search-in-rust-thumbnail.png
-date: '2023-09-08T15:30:00'
+date: "2023-09-08T15:30:00"
 ---
 
 ## Introduction
@@ -70,7 +70,7 @@ Then it iterates over all lines of the file and depending on the current state, 
 
 Once we extraced a full sentence, we add it to the contents vector and start a new sentence.
 
-```rust
+````rust
 pub fn parse(&mut self) {
     let mut contents = Vec::new();
     let mut state = FileState::None;
@@ -120,7 +120,7 @@ pub fn parse(&mut self) {
     }
     self.sentences = contents;
 }
-```
+````
 
 With the `File` struct now representing a parsed file, we need to go from an actual file to a `File` struct.
 
@@ -287,6 +287,7 @@ Alright! Now our database is ready and we can start searching for similar senten
 ## Searching
 
 The idea is that our users are asking our search engine a question in natural language, and we return the most relevant documents. Similar to our `embed_file` function, we create a function called `embed_sentence` that takes a user's prompt and returns a single `Embedding`.
+
 ```rust
 pub async fn embed_sentence(prompt: &str) -> Result<Embedding> {
     Embedding::create("text-embedding-ada-002", prompt, "stefan")

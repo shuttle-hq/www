@@ -4,7 +4,7 @@ description: What if we didn't have to write code anymore? What if we could rely
 author: ian
 tags: [shuttle-ai, ai]
 thumb: shuttle-ai.png
-date: '2023-06-07T16:00:00'
+date: "2023-06-07T16:00:00"
 ---
 
 When building Shuttle, we've always focused on how we can help developers. With our infrastructure-from-code offering, we hoped to solve the challenge of provisioning and managing a complex infrastructure. We wanted to give developers the ability to build, test, and deploy their apps without having to worry about managing servers or drowning in console commands.
@@ -42,13 +42,13 @@ Just write `shuttle-ai add-feature "Add commenting support"`, sit back and watch
 But enough talking, here's that sneak peek we promised:
 
 <iframe
-	width='400'
-	height='250'
-	src='https://www.youtube.com/embed/6sHo-2ddw3U'
-	title='Shuttle AI - Instant Apps From a Single Prompt'
-	frameborder='0'
-	allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-	allowfullscreen
+  width="400"
+  height="250"
+  src="https://www.youtube.com/embed/6sHo-2ddw3U"
+  title="Shuttle AI - Instant Apps From a Single Prompt"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  allowfullscreen
 ></iframe>
 
 Now, while this is just a small preview of our new tool's capabilities, we will soon be opening it up to more testers, and we're hyped to see what everyone will be able to build with it.
@@ -91,13 +91,13 @@ While the technology is pretty amazing and we are enjoying watching it build a w
 
 Some of the encountered limitations are:
 
--   _Context size_, i.e. token limits in models. While it is possible to stay under them using different techniques, they are still an issue when a sufficiently large project is in question. Since code heavily relies on other code, providing less code can limit the context in which an LLM operates and increase the changes of the code not applying to the codebase. While we are currently in alpha and don't expect anyone to generate large-scale production projects, we are already using some techniques and actively exploring alternative approaches and updates to our process to avoid this limitation.
+- _Context size_, i.e. token limits in models. While it is possible to stay under them using different techniques, they are still an issue when a sufficiently large project is in question. Since code heavily relies on other code, providing less code can limit the context in which an LLM operates and increase the changes of the code not applying to the codebase. While we are currently in alpha and don't expect anyone to generate large-scale production projects, we are already using some techniques and actively exploring alternative approaches and updates to our process to avoid this limitation.
 
--   _Business logic_ - while often times the logic will be correct, LLM's still make mistakes, especially without enough information. This can be avoided by giving a more detailed prompt, but also by writing tests. While we have currently not implemented a test-writing component, it is in our short-term roadmap, along with other new tools that will enable you to have more confidence in the generation results and in your code.
+- _Business logic_ - while often times the logic will be correct, LLM's still make mistakes, especially without enough information. This can be avoided by giving a more detailed prompt, but also by writing tests. While we have currently not implemented a test-writing component, it is in our short-term roadmap, along with other new tools that will enable you to have more confidence in the generation results and in your code.
 
--   _Hallucinations and local minima_ - one of the things we have to admit to ourselves when using LLM's is that they often hallucinate. And if you use them in a conversational manner as a part of an automated process, a single hallucination can often lead the LLM into a path that ends up looping, i.e. it starts applying hallucinations to fix it's hallucination-caused errors. While this problem is natural due to the way of the technologies inner workings, it is also avoidable by steering the LLM with a set of right rules and examples, or raising the temperature to get a different response path. We're applying multiple of these techniques, which combined with [Shuttle's large repository of samples](https://github.com/shuttle-hq/shuttle-examples), help reduce hallucinations to a minimum.
+- _Hallucinations and local minima_ - one of the things we have to admit to ourselves when using LLM's is that they often hallucinate. And if you use them in a conversational manner as a part of an automated process, a single hallucination can often lead the LLM into a path that ends up looping, i.e. it starts applying hallucinations to fix it's hallucination-caused errors. While this problem is natural due to the way of the technologies inner workings, it is also avoidable by steering the LLM with a set of right rules and examples, or raising the temperature to get a different response path. We're applying multiple of these techniques, which combined with [Shuttle's large repository of samples](https://github.com/shuttle-hq/shuttle-examples), help reduce hallucinations to a minimum.
 
--   _Costs and privacy of LLM's_ - While we are currently using GPT-4, we are well aware of it's costs and privacy issues. Yet, while this is still in an early phase, we do not expect anyone to use it to generate proprietary code or hundreds of codebases. To get around these issues, we are looking into using self-hosted models, or even fine-tuning existing ones. In the future releases, we will also look into the ability of allowing users to provide tokens or even use pick-an-LLM approach.
+- _Costs and privacy of LLM's_ - While we are currently using GPT-4, we are well aware of it's costs and privacy issues. Yet, while this is still in an early phase, we do not expect anyone to use it to generate proprietary code or hundreds of codebases. To get around these issues, we are looking into using self-hosted models, or even fine-tuning existing ones. In the future releases, we will also look into the ability of allowing users to provide tokens or even use pick-an-LLM approach.
 
 ### The implications of LLM's & code generation
 

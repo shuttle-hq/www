@@ -5,7 +5,7 @@ author: josh
 tags: [rust, grafana, guide]
 thumb: grafana-rust-thumb.png
 cover: grafana-rust-thumb.png
-date: '2024-03-28T15:30:00'
+date: "2024-03-28T15:30:00"
 ---
 
 Hello world! We will look at how you can leverage Grafana Loki for log storage and analysis. Application monitoring tools are a crucial part of monitoring and observability. They allow you to examine exactly how your application works, what is going in/out, and what is going wrong. Using application monitoring tools saves time and money by being able to fix production issues faster and retaining users.
@@ -24,7 +24,7 @@ To get the most out of this article, you need to either self-host Grafana servic
 
 To get started, you will want an API token that has the `write:logs` permissions. This can be done from Grafana Cloud user management. Make sure you save your Grafana user and API token variables, as you'll need them in just a little bit.
 
-For initializing our service, we'll use `shuttle init --template axum`  (requires `cargo-shuttle` installed) to create a new Shuttle project with the Axum template. We will then add the following dependencies with this shell snippet:
+For initializing our service, we'll use `shuttle init --template axum` (requires `cargo-shuttle` installed) to create a new Shuttle project with the Axum template. We will then add the following dependencies with this shell snippet:
 
 ```bash
 cargo add url
@@ -62,7 +62,7 @@ GRAFANA_API_KEY = "<your-grafana-api-token-here>"
 
 To get started, we will be using the `tracing_loki` crate to build the base of our tracing subscriber. `tracing_loki` allows us to create a `tracing_subscriber` layer that collects and exports logs to a Grafana Loki instance. On creation of a Grafana Cloud account we are given a free data source by default for Loki, which `tracing_loki` is compatible with.
 
-The default Grafana data source uses the basic authentication scheme, which you can find more about [here.](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#basic_authentication_scheme)  Later on when we create the `tracing_loki` tracing layer, we will add this as a HTTP header.
+The default Grafana data source uses the basic authentication scheme, which you can find more about [here.](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#basic_authentication_scheme) Later on when we create the `tracing_loki` tracing layer, we will add this as a HTTP header.
 
 We'll start by grabbing our secrets and making a Base64 string out of them:
 
