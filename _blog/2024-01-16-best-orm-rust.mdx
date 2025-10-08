@@ -17,7 +17,6 @@ A Relational Object Mapper (ORM for short) is a piece of software that aims to s
 
 ```sql
 SELECT FROM CAKES WHERE NAME = 'Test Cake';
-
 ```
 
 This may be written as this:
@@ -28,7 +27,6 @@ let cake: cake::Model = User::find()
     .filter(cake::Column::Name.contains(name))
     .all(db_connection)
     .await?;
-
 ```
 
 Although initially there is more boilerplate setup than using a raw SQL library might use, in the long run it can save a lot of developer headaches when getting SQL queries to work - it also makes onboarding developers who are new to a codebase much easier. Additionally, you get the benefits of any IDE plugins you wish to use - for example, LSP (Language Server Protocol) plugins and Intellisense.
@@ -109,7 +107,6 @@ pub enum Bakery {
     Name,
     ProfitMargin,
 }
-
 ```
 
 As you can see, it's pretty long. Additionally, the `Iden` derive macro is not clearly explained to the user in the documentation. Despite this, it is crucial to be able to implement the definitions for the migration itself.
@@ -133,7 +130,6 @@ async fn axum(
 
     Ok(app.into())
 }
-
 ```
 
 In production, the macro will automatically allow the Shuttle servers to provision a Postgres instance to you with no setup required!
@@ -160,7 +156,6 @@ diesel::table! {
         favorite_color -> Nullable<VarChar>,
     }
 }
-
 ```
 
 Instead of mapping directly to Rust types, Diesel maps SQL types as Rust unit structs. However, when you're writing a struct that you may want to use for querying the database, note that the documentation says you shouldn't directly use these types in your structs.
@@ -172,7 +167,6 @@ let new_user = (id.eq(1), name.eq("Sean"));
 let rows_inserted = diesel::insert_into(users)
     .values(&new_user)
     .execute(connection);
-
 ```
 
 The combination of both of these makes for a much more simple interface to work with than SeaORM. There is no specific interface for extending your models, but you can also add a manual implementation.
@@ -204,7 +198,6 @@ To use it, you need to run the following command:
 ```rust
 cargo add shuttle-diesel-async --git <https://github.com/aumetra/shuttle-diesel-async>
 cargo add diesel-async
-
 ```
 
 Then you can add it to your code like so:
@@ -221,7 +214,6 @@ async fn axum(
 ) -> shuttle_axum::ShuttleAxum {
     // .. your code
 }
-
 ```
 
 ## What Should You Use?
