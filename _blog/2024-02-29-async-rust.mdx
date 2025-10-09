@@ -5,8 +5,9 @@ author: stefan
 tags: [rust, async, guide]
 thumb: async-rust-thumb.png
 cover: async-rust-thumb.png
-date: '2024-02-29T15:00:00'
+date: "2024-02-29T15:00:00"
 ---
+
 Computers are just as fast as they can be. One way to speed up our programs is to do things in parallel, or concurrently. There is a fine distinction between those two terms. Parallel execution means that we execute two different tasks at the same time, on two different CPUs. Concurrent execution means that a single CPU makes progress on more than one task at the same time, by interleaving the execution of those tasks.
 
 The Rust standard library gives bindings and abstractions for the underlying operating system. This includes threads, a way to run code in parallel. The parallelism is managed by the operating system, you can have as many threads as CPU cores, but there can also be more, and the operating system decides when to execute what. This can be potentially very heavy and has lots of overhead.
@@ -73,7 +74,7 @@ Once an event has happened, the waker indicates to the executor to poll the same
 
 Okay, so all you need to have is functions or structs that implement `Future`, and you're done with it. Right? Right? Well, it's not that easy, literally. Implementing the `Future` trait can be very daunting, and it's not very ergonomic.
 
-That's why Rust has introduced the `async` and `await` keywords. To make something async, it needs to return a `Future`. So if you want to have a method  `read_to_string`, and this is the synchronous version:
+That's why Rust has introduced the `async` and `await` keywords. To make something async, it needs to return a `Future`. So if you want to have a method `read_to_string`, and this is the synchronous version:
 
 ```rust
 fn read_to_string(&mut self, buf: &mut String) -> Result<usize>;

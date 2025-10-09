@@ -5,7 +5,7 @@ author: josh
 tags: [betterstack, tutorial, guide, observability]
 thumb: set-up-status-page-betterstack-thumb.png
 cover: set-up-status-page-betterstack-thumb.png
-date: '2024-12-20T14:00:00'
+date: "2024-12-20T14:00:00"
 ---
 
 ## Introduction
@@ -18,13 +18,13 @@ In this tutorial, we'll get into how you can add a status page for your web serv
 
 ## Why use status pages at all?
 
-While status pages are a commonly used solution to improve user experience, it's also important to talk about *why* you should set up a status page. Status pages are a commonly used convention by a lot of different types of companies and although the reasons may seem relatively obvious, there are benefits for any company with a website to set up a status page for your users.
+While status pages are a commonly used solution to improve user experience, it's also important to talk about _why_ you should set up a status page. Status pages are a commonly used convention by a lot of different types of companies and although the reasons may seem relatively obvious, there are benefits for any company with a website to set up a status page for your users.
 
 Although companies and professional teams often additionally opt for an internal status page (for internal services), we will primarily be discussing external-facing status pages below.
 
 ### Transparency builds trust
 
-Not everyone is building a critical service with high availability requirements.  That being said however, giving your users the ability to check themselves whether your service is either online or offline is a great way to build trust with them. By not hiding any of the metrics, it allows the user to trust that the company is handling the situation properly rather than doing everything behind closed doors and totally controlling the narrative.
+Not everyone is building a critical service with high availability requirements. That being said however, giving your users the ability to check themselves whether your service is either online or offline is a great way to build trust with them. By not hiding any of the metrics, it allows the user to trust that the company is handling the situation properly rather than doing everything behind closed doors and totally controlling the narrative.
 
 ### Spend less time answering user questions
 
@@ -76,7 +76,7 @@ Typically, the subdomain used would be `status`. So in our example we would use 
 
 ### Ensure coverage of your whole service
 
-Status pages are great because they ensure that at least *one* part (typically the health check route) is available form your status page. However, this does not guarantee a high degree of availability over your whole service - availability here meaning whether or not your service returns `2xx` or a `5xx` code). In this case, you likely want to use BetterStack's Playwright monitors to be able to use much more custom scenarios. By setting the What to Monitor option to `Playwright scenario fails`, we can now use the `playwright` JavaScript library to be able to set up tests! An example can be found below:
+Status pages are great because they ensure that at least _one_ part (typically the health check route) is available form your status page. However, this does not guarantee a high degree of availability over your whole service - availability here meaning whether or not your service returns `2xx` or a `5xx` code). In this case, you likely want to use BetterStack's Playwright monitors to be able to use much more custom scenarios. By setting the What to Monitor option to `Playwright scenario fails`, we can now use the `playwright` JavaScript library to be able to set up tests! An example can be found below:
 
 ```rust
 const { test, expect } = require('@playwright/test');
@@ -112,6 +112,7 @@ Understanding what exactly went wrong and communicating it publicly as well as h
 Thanks for reading! As you can see, BetterStack can significantly improve multiple facets of observability within your application, and is extremely helpful to have.
 
 Read more:
+
 - [Sending your logs to Datadog with Rust](https://www.shuttle.dev/blog/2024/03/27/datadog-rust)
 - [Using OpenTelemetry with Rust](https://www.shuttle.dev/blog/2024/04/10/using-opentelemetry-rust)
 - [Getting started with the tracing libraries](https://www.shuttle.dev/blog/2024/01/09/getting-started-tracing-rust)

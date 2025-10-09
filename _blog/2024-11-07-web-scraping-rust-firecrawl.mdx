@@ -19,8 +19,8 @@ Interested in checking out the code so you can deploy it or want to try running 
 Shuttle allows you to deploy Rust web services seamlessly and hassle-free with one-line deploys and being able to provision your infrastructure directly from annotations (main function parameter).
 
 <video width="700" height="500" loop autoPlay muted>
-    <source src="/videos/blog/htmx-with-rust.mp4" type="video/mp4"></source>
-    Your browser does not support the video tag.
+  <source src="/videos/blog/htmx-with-rust.mp4" type="video/mp4"></source>
+  Your browser does not support the video tag.
 </video>
 
 Whether you need a provisioned database to store your scraping results, or a frontend for your web service so you can display your scraping results, Shuttle can do it for you. The less time you spend context switching, the more time you can spend writing code and fixing problems.
@@ -149,7 +149,7 @@ async fn main(
 }
 ```
 
-The `secrets` variable is provided as an immutable key-value store - so we can simply use the `get()`  function to try to grab our API key, erroring out if it doesn't exist.
+The `secrets` variable is provided as an immutable key-value store - so we can simply use the `get()` function to try to grab our API key, erroring out if it doesn't exist.
 
 ## Deploying
 
@@ -165,6 +165,7 @@ Ideas for extending if you want to take this tutorial further:
 - Try adding a database to store your results!
 
 Further reading:
+
 - [Make a RAG web service with Qdrant & Rust](https://www.shuttle.dev/blog/2024/02/28/rag-llm-rust)
 - [Prompting AWS Bedrock with Rust](https://www.shuttle.dev/blog/2024/05/10/prompting-aws-bedrock-rust)
 - [Implement an API rate limiter for your web service](https://www.shuttle.dev/blog/2024/02/22/api-rate-limiting-rust)

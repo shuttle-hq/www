@@ -6,19 +6,19 @@ tags: [rust, startup, opinion]
 thumb: shuttle-beta.png
 cover: shuttle-beta.png
 caption: '"An oil painting of an orange shuttle taking off with a container exploding in the background" - DALL·E 2'
-date: '2022-10-21T15:00:00'
+date: "2022-10-21T15:00:00"
 ---
 
 <TLDR>
-	<p>
-		Virtual machines and containers have improved backends in a lot of ways, but over time they have also
-		created a lot of problems. We believe it's time to rethink how we use virtualization for backend
-		development.
-	</p>
-	<p>
-		We're building a backend framework that shifts the scope of virtualization from processes down to service
-		components.
-	</p>
+  <p>
+    Virtual machines and containers have improved backends in a lot of ways, but
+    over time they have also created a lot of problems. We believe it's time to
+    rethink how we use virtualization for backend development.
+  </p>
+  <p>
+    We're building a backend framework that shifts the scope of virtualization
+    from processes down to service components.
+  </p>
 </TLDR>
 
 In web applications nowadays, you can sort any component somewhere in a broad spectrum from client-side to server-side.
@@ -68,8 +68,8 @@ Where does that leave us then? We need a new take on virtualization. One that ha
 ## WASM and WASI
 
 <Tweet
-	tweetId='1111004913222324225'
-	placeholder="If WASM+WASI existed in 2008, we wouldn't have needed to created Docker. That's how important it is. Webassembly on the server is the future of computing. A standardized system interface was the missing link. Let's hope WASI is up to the task!"
+  tweetId="1111004913222324225"
+  placeholder="If WASM+WASI existed in 2008, we wouldn't have needed to created Docker. That's how important it is. Webassembly on the server is the future of computing. A standardized system interface was the missing link. Let's hope WASI is up to the task!"
 />
 
 [WebAssembly][webassembly] (abbreviated WASM) is an instruction set for extremely lightweight virtual machines. Its most common use is to speed up client-side interactivity. This is made possible as popular browsers have rolled out WASM runtimes a few years back.
@@ -85,9 +85,9 @@ The really powerful thing about WASM is that it is a very common compilation tar
 ## Changing virtualization for backends
 
 <CaptionedImage
-	src='/images/blog/beta-hello.png'
-	alt='Hello world endpoint'
-	caption='A simple "Hello, World!" endpoint.'
+  src="/images/blog/beta-hello.png"
+  alt="Hello world endpoint"
+  caption='A simple "Hello, World!" endpoint.'
 />
 
 When we launched [shuttle](https://www.shuttle.dev/) for its early alpha, back in March 2022, our purpose was to address the issues people face when building and deploying web app backends. So we created an open-source infrastructure-from-code platform with which you don't need to write Containerfiles and orchestrate images, starting with support for Rust.
@@ -133,9 +133,9 @@ async fn main() {
 and deploy it to Heroku:
 
 <CaptionedImage
-	src='/images/blog/axum-heroku.gif'
-	alt='Deployment demo'
-	caption='TLDR: it takes 3 minutes and 50 seconds.'
+  src="/images/blog/axum-heroku.gif"
+  alt="Deployment demo"
+  caption="TLDR: it takes 3 minutes and 50 seconds."
 />
 
 To try to address this, we wanted to **move all these heavy dependencies to a common runtime across services**. So your tokio, hyper, sqlx and co (in the case of Rust), now all belong to a long-lived containerized process running persistently in the cloud. Whereas all your service logic, database and endpoint code build into lightweight WASM modules that are dynamically loaded in-place by this global persistent process. That way "building" means compiling a very lightweight codebase with a small dependency footprint. And "deploying" means calling upon the control plane of that long-lived process to replace service components without rolling out new images, containers or VMs.
@@ -143,9 +143,9 @@ To try to address this, we wanted to **move all these heavy dependencies to a co
 This leaves us with a trimmed down user-facing API that still uses familiar objects like `PgClient`s and axum-style routes with guards:
 
 <CaptionedImage
-	src='/images/blog/beta-api.png'
-	alt='Get article endpoint'
-	caption='A GET article endpoint that retrieves an article from the provisioned database.'
+  src="/images/blog/beta-api.png"
+  alt="Get article endpoint"
+  caption="A GET article endpoint that retrieves an article from the provisioned database."
 />
 
 Except that now the virtualization platform in which your services are run is responsible for instantiating these objects and calling these functions.
@@ -155,9 +155,9 @@ With this approach, the component of virtualization that you end up deploying on
 This results in "images" that are effectively up to **100x smaller** because of the switch from container images to WASM binaries. And super fast to deploy too, from tens of minutes sometimes to **less than a second** all the time. All because when things are _really_ incremental, you don't have to build and test a large codebase with its large userspace dependencies on every push. You just need to build and test the code you're writing and the changes you've made.
 
 <CaptionedImage
-	src='/images/blog/beta-next-deploy-demo.gif'
-	alt='Deployment demo'
-	caption='Deploy your application in less than a second.'
+  src="/images/blog/beta-next-deploy-demo.gif"
+  alt="Deployment demo"
+  caption="Deploy your application in less than a second."
 />
 
 Our vision for this new way of doing backend development is shuttle-next: a next-generation backend framework with the fastest build, test and deployment times ever.
