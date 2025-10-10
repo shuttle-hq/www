@@ -1,0 +1,76 @@
+---
+title: "MCP Servers for Rust Developers"
+description: "Learn what MCP servers are and see them in action with GitHub, Context7, and Shuttle integrations"
+author: shuttle
+tags: [mcp, rust, tutorial, video]
+thumb: mcp-servers-thumb/cover.png
+date: "2025-10-10"
+---
+
+Model Context Protocol (MCP) servers let you extend AI coding assistants with custom tools and data sources. Instead of copying documentation or running commands manually, you can give your AI direct access to the resources it needs.
+
+In this video, we walk through what MCP servers are and demonstrate three of them in action:
+
+- **GitHub MCP** - Finding and managing GitHub issues directly from your AI assistant
+- **Context7 MCP** - Accessing up-to-date library documentation without leaving your editor
+- **Shuttle MCP Server** - Deploying Rust applications to production with simple tool calls
+
+<div style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}>
+  <iframe
+    style={{
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+    }}
+    src="https://www.youtube.com/embed/eQdCSsdqLkk"
+    title="MCP Servers for Rust Developers"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  />
+</div>
+
+## Getting Started
+
+MCP servers work with AI coding assistants like Claude Code, Cursor, and others that support the Model Context Protocol. Each server exposes tools that your AI can call directly - no manual context switching needed.
+
+### What the Shuttle MCP Server Does
+
+The Shuttle MCP Server gives your AI agent direct access to Shuttle's platform. Your agent can search documentation, deploy projects, list all your deployments, check project status, and view logs in real-time. Tell your AI "deploy my app" and it handles everything - from creating a project if needed to catching and fixing common deployment issues.
+
+To set it up, install the Shuttle CLI and add this to your MCP configuration:
+
+```json
+{
+  "mcpServers": {
+    "Shuttle": {
+      "command": "shuttle",
+      "args": ["mcp", "start"]
+    }
+  }
+}
+```
+
+Learn more in our announcement post: <https://www.shuttle.dev/blog/2025/10/08/shuttle-mcp?utm_source=shuttle_blog&utm_medium=video&utm_campaign=mcp_servers>
+
+Full setup guide: <https://docs.shuttle.dev/integrations/mcp-server?utm_source=shuttle_blog&utm_medium=video&utm_campaign=mcp_servers>
+
+## Wrapping Up
+
+MCP servers bridge the gap between AI assistants and the tools we use every day. From searching library docs to managing GitHub issues to deploying Rust applications, these servers eliminate the context switching that slows us down.
+
+The Shuttle MCP Server takes this further by handling the entire deployment workflow - from creating projects to monitoring production logs. If you're building with Rust, it's worth checking out.
+
+### Try It Yourself
+
+Get started with Shuttle and deploy your first Rust app:
+
+```bash
+shuttle init --from shuttle-hq/shuttle-examples --subfolder axum/hello-world
+```
+
+Then connect the Shuttle MCP Server to your AI assistant and deploy directly from your coding session.
+
+Happy coding!
