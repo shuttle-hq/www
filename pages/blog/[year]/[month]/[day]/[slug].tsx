@@ -39,6 +39,7 @@ import { BlogFAQ } from "../../../../../components/blog/BlogFAQ";
 import { NewConsoleCTA } from "../../../../../components/blog/NewConsoleCTA";
 import { MainTakeaways } from "../../../../../components/blog/MainTakeaways";
 import { ExpandableImage } from "../../../../../components/blog/ExpandableImage";
+import YouTubeEmbed from "../../../../../components/blog/YouTubeEmbed";
 import {
   GenericCTA,
   ReadyToShipFaster,
@@ -271,6 +272,9 @@ const mdxComponents: MDXRemoteProps["components"] = {
   },
   DatabaseCTA: (props) => {
     return <DatabaseCTA {...props} />;
+  },
+  YouTubeEmbed: (props) => {
+    return <YouTubeEmbed {...props} />;
   },
 };
 
