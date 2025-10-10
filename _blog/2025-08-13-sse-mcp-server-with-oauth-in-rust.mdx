@@ -21,6 +21,8 @@ Building secure MCP servers requires adherence to two critical standards: the Mo
 
 This tutorial provides a comprehensive guide to OAuth authentication patterns and walks through building a production-ready MCP server. We'll implement secure authentication flows that allow AI agents to safely interact with your hosted services, then deploy the complete solution using [Shuttle's](https://shuttle.dev/) streamlined cloud deployment.
 
+<YouTubeEmbed videoId="eQdCSsdqLkk" title="MCP Servers for Rust Developers" />
+
 ## MCP Transport Types
 
 MCP servers use two transport mechanisms: [**STDIO**](https://modelcontextprotocol.io/specification/2025-06-18/basic/transports#stdio) (standard input/output) and [**SSE**](https://modelcontextprotocol.io/specification/2025-06-18/basic/transports#http-with-sse) (Server-Sent Events). The stdio transport runs as a local subprocess and communicates through standard input/output streams, which we covered in detail in our [comprehensive guide to building stdio MCP servers in Rust](https://www.shuttle.dev/blog/2025/07/18/how-to-build-a-stdio-mcp-server-in-rust). SSE transport type servers, on the other hand, use HTTP-based communication with Server-Sent Events for real-time messaging.
