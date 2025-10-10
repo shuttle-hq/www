@@ -7,13 +7,13 @@ thumb: mcp-servers-for-rust-developers/cover.png
 date: "2025-10-10"
 ---
 
-Model Context Protocol (MCP) servers let you extend AI coding assistants with custom tools and data sources. Instead of copying documentation or running commands manually, you can give your AI direct access to the resources it needs.
+Watch how MCP servers transform AI coding assistants from text generators into practical development tools. In this video, David and Mark (Senior Software Engineer at Shuttle) demonstrate three MCP servers that eliminate the constant context switching developers face:
 
-In this video, we walk through what MCP servers are and demonstrate three of them in action:
+- **GitHub MCP** - Managing issues and pull requests without leaving your editor
+- **Context7 MCP** - Getting up-to-date library documentation on demand
+- **Shuttle MCP Server** - Deploying Rust applications with simple commands
 
-- **GitHub MCP** - Finding and managing GitHub issues directly from your AI assistant
-- **Context7 MCP** - Accessing up-to-date library documentation without leaving your editor
-- **Shuttle MCP Server** - Deploying Rust applications to production with simple tool calls
+You'll see each server in action and learn how to set them up yourself.
 
 <div style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}>
   <iframe
@@ -32,15 +32,15 @@ In this video, we walk through what MCP servers are and demonstrate three of the
   />
 </div>
 
-## Getting Started
+## What You'll Learn
 
-MCP servers work with AI coding assistants like Claude Code, Cursor, and others that support the Model Context Protocol. Each server exposes tools that your AI can call directly - no manual context switching needed.
+The video shows how MCP servers give AI assistants direct access to tools and data sources. Instead of explaining what you need and watching the AI generate code, you can have it perform actual operations - deploying apps, searching documentation, or managing GitHub issues.
 
-### What the Shuttle MCP Server Does
+### Setting Up the Shuttle MCP Server
 
-The Shuttle MCP Server gives your AI agent direct access to Shuttle's platform. Your agent can search documentation, deploy projects, list all your deployments, check project status, and view logs in real-time. Tell your AI "deploy my app" and it handles everything - from creating a project if needed to catching and fixing common deployment issues.
+In the video, you'll see the Shuttle MCP Server in action. It connects your AI assistant directly to Shuttle's deployment platform, handling everything from project creation to log monitoring.
 
-To set it up, install the Shuttle CLI and add this to your MCP configuration:
+After installing the Shuttle CLI, add this to your MCP configuration:
 
 ```json
 {
@@ -53,15 +53,11 @@ To set it up, install the Shuttle CLI and add this to your MCP configuration:
 }
 ```
 
-Learn more in our announcement post: [Shuttle MCP Server](https://www.shuttle.dev/blog/2025/10/08/shuttle-mcp?utm_source=shuttle_blog&utm_medium=video&utm_campaign=mcp_servers)
+The video walks through the complete setup process and shows real deployment examples.
 
-Full setup guide: [MCP Server Documentation](https://docs.shuttle.dev/integrations/mcp-server?utm_source=shuttle_blog&utm_medium=video&utm_campaign=mcp_servers)
+Learn more: [Shuttle MCP Server](https://www.shuttle.dev/blog/2025/10/08/shuttle-mcp?utm_source=shuttle_blog&utm_medium=video&utm_campaign=mcp_servers)
 
-## Wrapping Up
-
-MCP servers bridge the gap between AI assistants and the tools we use every day. From searching library docs to managing GitHub issues to deploying Rust applications, these servers eliminate the context switching that slows us down.
-
-The Shuttle MCP Server takes this further by handling the entire deployment workflow - from creating projects to monitoring production logs. If you're building with Rust, it's worth checking out.
+Full documentation: [MCP Server Documentation](https://docs.shuttle.dev/integrations/mcp-server?utm_source=shuttle_blog&utm_medium=video&utm_campaign=mcp_servers)
 
 ### Try It Yourself
 
