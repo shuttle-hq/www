@@ -29,7 +29,10 @@ This is why being conservative with your context isn't just about saving tokens.
 
 The practices below all serve this goal: keeping your context window filled with high-quality, relevant information and nothing else.
 
-![Claude Code interface showing the terminal with Claude Code v2.0.17](./images/claude-code.png)
+<CaptionedImage
+  src="/images/blog/claude-code-best-practices/claude-code.png"
+  alt="Claude Code interface showing the terminal with Claude Code"
+/>
 
 ### Clear Context After Every Prompt
 
@@ -37,7 +40,10 @@ This might sound extreme and unnecessary at first, but the thing is, the more yo
 
 It's a good practice to chop down your tasks into smaller chunks and clear the context as soon as Claude finishes the work, clear the context and start a completely new chat. With Claude Code, you can use the `/clear` command - this should become muscle memory that you execute every few minutes.
 
-![Clearing context with /clear](./images/claude-clear.png)
+<CaptionedImage
+  src="/images/blog/claude-code-best-practices/claude-clear.png"
+  alt="Clearing context with /clear"
+/>
 
 I have seen developers keep their chats running for hours without ever clearing. This makes Claude forget about all the rules and guidelines of your project and collects a lot of noise and junk in your context window. It also costs you money and burns through your usage limit faster than necessary.
 
@@ -129,7 +135,10 @@ This division of labor keeps your Claude Code sessions focused on what it does b
 
 Auto-compact is a feature that quietly consumes a massive amount of your context window before you even start coding. Open a new Claude Code instance and run `/context` to see your current context usage, and you might be shocked at what you find.
 
-![Context usage showing auto-compact buffer at 45k tokens](./images/context-auto-compact.png)
+<CaptionedImage
+  src="/images/blog/claude-code-best-practices/context-auto-compact.png"
+  alt="Context usage showing auto-compact buffer at 45k tokens"
+/>
 
 In this example, the autocompact buffer is consuming 45k tokens - that's 22.5% of your context window gone before writing a single line of code. This accumulated context comes from previous chat sessions, sitting there whether you need it or not.
 
@@ -139,11 +148,17 @@ We already have better solutions for maintaining context across sessions: CLAUDE
 
 Turn it off. Run `/config`, navigate to the Auto-compact option, and press space to toggle it to `false`.
 
-![Config screen with auto-compact turned off](./images/config-auto-compact-off.png)
+<CaptionedImage
+  src="/images/blog/claude-code-best-practices/config-auto-compact-off.png"
+  alt="Config screen with auto-compact turned off"
+/>
 
 After turning off auto-compact and running `/context` again, you'll see the immediate impact:
 
-![Clean context usage with no autocompact buffer](./images/context-clean.png)
+<CaptionedImage
+  src="/images/blog/claude-code-best-practices/context-clean.png"
+  alt="Clean context usage with no autocompact buffer"
+/>
 
 The autocompact buffer is completely gone. Went from 45k tokens of accumulated old context to having 176k tokens of free space (88.1% of your context window). This immediately frees up tens of thousands of tokens for context that actually matters to your current task. Combined with frequent `/clear` usage and well-maintained CLAUDE.md files, you'll have complete control over the context instead of letting old sessions pollute your current work.
 
@@ -155,7 +170,10 @@ Some developers add MCP servers and completely forget about them. They install s
 
 With Claude Code, you can toggle MCP servers on and off without completely removing them. Type `@` followed by the MCP server name in Claude Code, and you can quickly disable or enable servers as needed. This gives you fine-grained control over which tools are consuming context at any given moment.
 
-![Toggle MCP servers with @ mention](./images/toggle-mcp.png)
+<CaptionedImage
+  src="/images/blog/claude-code-best-practices/toggle-mcp.png"
+  alt="Toggle MCP servers with @ mention"
+/>
 
 If you don't need an MCP server anymore, just completely remove it. Remove every MCP server you're not actively using. The fewer MCP servers you run, the more context Claude has for actual work.
 
