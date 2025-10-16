@@ -1,0 +1,206 @@
+---
+title: "Claude Code Best Practices - Use Claude to Its Full Potential"
+description: "Learn how to maintain high-quality context and get consistently accurate results from Claude Code as your projects grow more complex"
+author: dcodes
+tags: [claude, claude code, ai, coding, best-practices]
+thumb: claude-code-best-practices/cover.png
+date: "2025-10-16"
+---
+
+I've been using Claude Code pretty heavily over the past few months, and I've learned that there's a clear pattern to how it goes wrong. When your codebase is small, everything works beautifully. You describe what you want, Claude builds it, everything clicks. But as your codebase grows larger and more complex, things start falling apart. Responses get less accurate, context gets messy, and you end up spending more time correcting it than you save.
+
+The issue isn't Claude Code itself. It's how we use it.
+
+I've figured out what separates productive sessions from frustrating ones, and it all comes down to context management, throughout the blog, you'll see that most practices revolve around context management but in different shapes and forms. This guide walks through the practices that keep Claude Code useful as your projects grow more complex, guaranteeing you'll get a consistently high-quality output from Claude as your project grows.
+
+## Context is Everything
+
+Context management makes or breaks your Claude Code experience. Every decision you make should optimize for context efficiency.
+
+Garbage in, garbage out has never been more relevant than today. The quality of information in your context window directly determines the quality of Claude's responses. Feed it noise, and you get noisy output. Feed it clean, relevant information, and you get precise, accurate code.
+
+Most people think about context as a capacity problem - they worry about hitting token limits. That's missing the point entirely. The real issue is context quality, not quantity. You could be at 10% of your context window and still get terrible results if that 10% is filled with irrelevant command outputs, stale error logs, and outdated architectural decisions.
+
+Your context window has limited space. Bad information doesn't just waste tokens - it actively degrades responses. When your context fills up with old command outputs, stale error logs, or outdated notes, Claude will have a hard time distinguishing what's important. Your critical architectural patterns get treated the same as your debug output. Everything blends into noise, and responses become less accurate.
+
+This is why being conservative with your context isn't just about saving tokens. It's also about maintaining quality control. Every piece of information you include should be current, accurate, and directly relevant to the task at hand. If something doesn't meet that bar, it's actively hurting your results.
+
+The practices below all serve this goal: keeping your context window filled with high-quality, relevant information and nothing else.
+
+<CaptionedImage
+  src="/images/blog/claude-code-best-practices/claude-code.png"
+  alt="Claude Code interface showing the terminal with Claude Code"
+/>
+
+### Clear Context After Every Prompt
+
+This might sound extreme and unnecessary at first, but the thing is, the more you keep your session running, the more noise and junk you're collecting in your LLM's context window. What matters is that you keep your context window clean and full of high-quality relevant information rather than obfuscated command outputs and error logs that can produce tons of noise and make your AI agent go astray and forget about your project rules and guidelines.
+
+It's a good practice to chop down your tasks into smaller chunks and clear the context as soon as Claude finishes the work, clear the context and start a completely new chat. With Claude Code, you can use the `/clear` command - this should become muscle memory that you execute every few minutes.
+
+<CaptionedImage
+  src="/images/blog/claude-code-best-practices/claude-clear.png"
+  alt="Clearing context with /clear"
+/>
+
+I have seen developers keep their chats running for hours without ever clearing. This makes Claude forget about all the rules and guidelines of your project and collects a lot of noise and junk in your context window. It also costs you money and burns through your usage limit faster than necessary.
+
+Clear the context after 1-3 messages. It's fine to occasionally send more messages if Claude couldn't finish the task on the first tries, but it's important to be conservative with it.
+
+There's a catch to this approach though: if we keep clearing context, things get repetitive. You have to repeat yourself constantly and tell Claude about specific things you want to do, or keep explaining the proejct guidelines and standards. The CLAUDE.md files and custom commands covered in the next sections helps you solve this problem. They let you maintain consistency without manually repeating prompts every single time.
+
+### Customize CLAUDE.md Files
+
+Claude Code automatically pulls in the CLAUDE.md files in your project directory and subdirectories into context whenever it starts executing a task. Your CLAUDE.md files are your project's knowledge base. You should make sure that they provide high-quality and highly relevant information about your project and keep them updated almost every day.
+
+An easy way to get started with this is running the `/init` command in Claude Code. This will tell Claude Code to search your codebase and let it understand your project and create a CLAUDE.md file for you. However, this is a very basic approach. It's only good to get started. It's extremely important that you get your hands dirty and update the CLAUDE.md file yourself, review it, and remove any wrong or unnecessary information. Keep in mind, the shorter these files are, the better and more focused your AI agent will be.
+
+Customize the top-level CLAUDE.md and the ones in subdirectories. Keep them under 100 lines and make sure they're explaining the project's structure, patterns, and standards. Every piece of information you give Claude needs to be as context-efficient as possible. The subdirectory files matter just as much as the main one.
+
+Focus on project-specific patterns, architectural decisions, and common pitfalls specific to your codebase. Include coding standards, naming conventions, and any non-obvious relationships between components. The goal is to give Claude the context it needs to make intelligent decisions without reading your entire codebase. If you find yourself repeating the same instructions across multiple sessions, that's a sign it belongs in your CLAUDE.md file.
+
+### Custom Slash Commands
+
+Slash commands are a great way to avoid repeating yourself constantly and tell Claude about specific things you want to do. For example, you might find yourself repeating the same instructions across multiple sessions, for example you might want to tell Claude to review your code then search the codebase to ensure it didn't create a new function that already exists in the codebase. Instead of prompting it each time, you can create a slash command that does it for you.
+
+You can add slash commands as markdown files in your `./.claude/commands` directory.
+
+This will save you tons of time in the long run, and you'll be saved from the frustration of having to repeat yourself constantly. You can always tweak these slash commands to make them better and better until you're happy with them.
+
+The combination of slash commands and CLAUDE.md files, if you use them properly and carefully, can make your agentic coding experience exceptionally and significantly better. But we're not done yet. There are more techniques that you can follow to make your agentic coding experience even better.
+
+## Always Plan Before Implementation
+
+One of the most common mistakes I see developers make is jumping straight into implementation without a clear plan. You give Claude a vague description of what you want, it starts writing code immediately, and halfway through you realize the approach is completely wrong. Now you're stuck - do you try to salvage the broken implementation, or start over? Either way, you've wasted time and tokens.
+
+The planning phase is where you catch these issues early. When Claude generates a plan, you can review the approach before any code gets written. If something's off, you can course-correct immediately. This is infinitely cheaper than fixing broken implementations.
+
+Claude Code has a built-in planning mode that you can trigger, but the key is actually reviewing those plans critically. Don't just approve plans on autopilot. Read through them carefully. Does the approach make sense for your codebase? Are there edge cases being missed? Is Claude proposing to create new utilities that already exist in your project?
+
+If a plan is fundamentally wrong, don't try to salvage it by editing within the same session. The planning process itself has already consumed significant context with exploratory file reads, architecture analysis, and multiple iterations. Copy the plan to a markdown file, clear your context with `/clear`, and start fresh. This gives Claude a clean slate to generate a better plan without the noise from the failed attempt.
+
+The separation between planning and execution is crucial for context efficiency. Planning involves broad codebase exploration - searching for existing patterns, reading multiple files, analyzing architecture. This generates a lot of exploratory noise. Execution, on the other hand, should be focused and precise. By separating these phases, you keep your implementation context clean and focused on the specific files and functions that need to change.
+
+## Spec-Driven Development
+
+GitHub recently introduced [Spec Driven Development](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/) as a technique for AI-assisted coding that prevents hallucinations and maintains your repository's standards. The core idea is solid, but this approach can be painfully slow. Creating separate spec, plan, and tasks files, then executing them in different sessions, burns through tokens and arguably is a waste of time.
+
+I've found a better implementation that works exceptionally well: combine everything into a single file.
+
+Claude Code does have a built-in planning mode, but I prefer this approach because it gives me more control over the planning process and keeps everything consolidated in one place that I can reference across different sessions.
+
+Instead of managing multiple documents, create one plan file that contains:
+
+- **Spec**: High-level overview of the finished task from an end-user perspective (1-3 paragraphs)
+- **Plan**: Your approach and how you'll achieve the goal (1-3 paragraphs)
+- **Tasks**: Checkboxes splitting the feature into smaller, executable tasks (as many as needed)
+- **Context**: File paths and descriptions of what they do, relevant to achieving the task. (the more the better)
+
+This single-file approach hits the sweet spot for context efficiency. The key is using **Gemini 2.5 Pro** to gather the context first and make the plan, then having Claude Code jump straight to implementation.
+
+I recommend Gemini 2.5 Pro specifically for this because planning requires understanding complex codebases and making architectural decisions - not every model is smart enough for this task. Smaller models often miss important patterns or suggest approaches that don't align with your existing architecture. Gemini 2.5 Pro consistently generates accurate, well-structured plans that respect your codebase's existing patterns.
+
+Here is a simplified example of a custom command for plan generation:
+
+```text
+Search the codebase for the relevant files that might be needed for the given task below and generate a `plan.md` file in the `plans/<plan-name>/plan.md` file. The file must include these sections:
+
+- **Spec**: A high-level overview of the finished task, which can be a description of the final result or an end-user perspective (1-3 paragraphs max).
+- **Plan**: What's your approach? How are you trying to solve this prompt or achieve this goal? (1-3 paragraphs)
+- **Tasks**: A list of checkboxes that split the feature into multiple smaller tasks that can be executed separately (as many as needed).
+- **Context**: A list of relevant file paths and descriptions of what they are responsible for and what they do.
+```
+
+The workflow is straightforward: run this command in **Gemini 2.5 Pro** to create your plan file, then switch to Claude Code to execute it. Gemini 2.5 Pro handles the token-intensive research and planning, Claude Code handles the implementation.
+
+## Offload Context Gathering to Save Tokens
+
+If you're doing heavy development, you'll likely hit Claude Code's 5-hour or weekly usage limits. Unless you have the $200/month subscription, these limits become a real constraint on how much you can get done. But token limits aren't the only reason to offload context gathering. Even if you never hit your limits, using Sonnet 4.5 for codebase searches and summarization is inefficient. Context gathering is a task where even smaller, faster models excel.
+
+This connects directly back to the context quality principle from earlier. When Claude Code searches your codebase, most of what fills your context window is noise. You get raw outputs from `ls` commands listing directory contents, `grep` results showing dozens of potential matches, `find` commands enumerating file paths, and file reads that may or may not be relevant. Each search operation pollutes your context with low-quality information that drowns out what actually matters.
+
+The better approach: let a smaller, faster model deal with that noise. It can run all the messy searches, sift through the results, and distill everything down to a clean, high-quality document. Then you take that document and execute it in a completely fresh Claude Code session with zero noise.
+
+One of the best ways to extend your coding productivity is running **Gemini CLI** in a separate terminal alongside Claude Code. Use it to handle the context-gathering work-searching the codebase, analyzing relevant files, and creating plan.md files that Claude Code can consume.
+
+You can use Gemini CLI (free tier: 60 requests/min, 1,000 requests/day), or Claude Code with a Haiku-based agent, Cursor if you have a subscription, or any other AI tool. What matters is that you don't waste your Claude Code tokens and don't waste time on the slow responses of Claude Code on tasks that faster models handle better.
+
+When you prompt Claude Code to implement the plan file, it doesn't waste tokens searching through your entire codebase. The previous model has already done that work and included all the necessary context in the plan. Claude Code can jump straight to implementation with fresh context and no accumulated noise from the research phase.
+
+This division of labor keeps your Claude Code sessions focused on what it does best: writing code. The context-gathering work gets offloaded to faster, more efficient models.
+
+### Turn Off Auto-Compact
+
+Auto-compact is a feature that quietly consumes a massive amount of your context window before you even start coding. Open a new Claude Code instance and run `/context` to see your current context usage, and you might be shocked at what you find.
+
+<CaptionedImage
+  src="/images/blog/claude-code-best-practices/context-auto-compact.png"
+  alt="Context usage showing auto-compact buffer at 45k tokens"
+/>
+
+In this example, the autocompact buffer is consuming 45k tokens - that's 22.5% of your context window gone before writing a single line of code. This accumulated context comes from previous chat sessions, sitting there whether you need it or not.
+
+Claude Code added auto-compact as a feature to help remember context from old conversations, while it might work for some projects, what's making me to hesitate to use it is that I don't have full control over what context is being added, there is no way for me to know what is in the context and to edit or remove wrong information from it ultimately leaving us with no guarantee of having high-quality context.
+
+We already have better solutions for maintaining context across sessions: CLAUDE.md files capture your project's patterns and standards, custom commands encode repetitive workflows, and plan files consolidate everything needed for a specific task. These approaches give you explicit control over exactly what context Claude receives. Auto-compact, by contrast, pulls in old context that may no longer be relevant to your current work.
+
+Turn it off. Run `/config`, navigate to the Auto-compact option, and press space to toggle it to `false`.
+
+<CaptionedImage
+  src="/images/blog/claude-code-best-practices/config-auto-compact-off.png"
+  alt="Config screen with auto-compact turned off"
+/>
+
+After turning off auto-compact and running `/context` again, you'll see the immediate impact:
+
+<CaptionedImage
+  src="/images/blog/claude-code-best-practices/context-clean.png"
+  alt="Clean context usage with no autocompact buffer"
+/>
+
+The autocompact buffer is completely gone. Went from 45k tokens of accumulated old context to having 176k tokens of free space (88.1% of your context window). This immediately frees up tens of thousands of tokens for context that actually matters to your current task. Combined with frequent `/clear` usage and well-maintained CLAUDE.md files, you'll have complete control over the context instead of letting old sessions pollute your current work.
+
+## Too Many MCP Servers
+
+MCP servers are powerful, they give your AI agent tools to interact with the world beyond its normal boundaries. The problem is they consume context behind the scenes to explain how to use themselves. Some MCP servers take 4-10k tokens just sitting there, doing nothing and most people don't even know they're there.
+
+Some developers add MCP servers and completely forget about them. They install something once, never use it, and without knowing that their AI output is getting worse. The context window is being eaten up by tools that aren't even relevant to the current task.
+
+With Claude Code, you can toggle MCP servers on and off without completely removing them. Type `@` followed by the MCP server name in Claude Code, and you can quickly disable or enable servers as needed. This gives you fine-grained control over which tools are consuming context at any given moment.
+
+<CaptionedImage
+  src="/images/blog/claude-code-best-practices/toggle-mcp.png"
+  alt="Toggle MCP servers with @ mention"
+/>
+
+If you don't need an MCP server anymore, just completely remove it. Remove every MCP server you're not actively using. The fewer MCP servers you run, the more context Claude has for actual work.
+
+The better approach is project-scoped MCP servers instead of user-scoped ones. Add MCP servers to specific project configurations rather than your global settings. This way, a database MCP only loads when you're working on projects that actually need database access, not when you're writing documentation or working on frontend code.
+
+## Quick Reference
+
+We've covered a lot of techniques throughout this guide, so here's everything consolidated into one place. These are the practices that will keep your Claude Code sessions productive as your codebase grows. Each one serves the same goal: maintaining high-quality context while minimizing noise.
+
+| Practice                | What to Do                                                                                                            |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Clear Context           | Use `/clear` after 1-3 messages to prevent context bloat                                                              |
+| CLAUDE.md Files         | Keep under 100 lines with project-specific patterns and standards                                                     |
+| Slash Commands          | Create reusable commands in `~/.claude/commands` for repetitive tasks                                                 |
+| Turn Off Auto-Compact   | Disable in `/config` to prevent old context from consuming 40k+ tokens                                                |
+| MCP Servers             | Toggle with `@` or remove unused servers to free up context                                                           |
+| Planning Mode           | Use for complex features, separate planning from execution                                                            |
+| Spec-Driven Development | Use Gemini 2.5 Pro for planning - combine spec, plan, tasks, and context in one file and use Claude Code to implement |
+
+## Conclusion
+
+AI coding tools work exactly like any other software - output quality directly reflects input quality. What you feed into Claude Code determines what you get back. The difference between developers who get consistent value from AI tools and those who struggle comes down to how deliberately they manage context. Every practice in this guide exists to maintain that quality bar.
+
+These aren't one-time setup tasks. Keep your CLAUDE.md files current as your architecture evolves, refine your slash commands as you identify repetitive patterns, and revisit your planning workflows when they stop serving you. The practices compound over time. Your CLAUDE.md files become more accurate as you encounter edge cases. Your slash commands become more refined as you understand what actually saves time. Your planning process becomes more efficient as you learn which details matter and which don't.
+
+The real test isn't whether Claude Code works well on day one with a small codebase - it will. The test is whether it still delivers accurate, useful results six months later when your project has grown ten times larger. That's where these practices matter. The developers who maintain these habits are the ones still getting value from AI coding tools while others have given up out of frustration.
+
+Try these practices with Shuttle's AI-assisted template:
+
+```bash
+shuttle init --from shuttle-hq/shuttle-examples --subfolder axum/ai-assisted
+```
