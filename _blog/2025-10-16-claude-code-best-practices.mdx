@@ -100,7 +100,7 @@ This single-file approach hits the sweet spot for context efficiency. The key is
 
 I recommend Gemini 2.5 Pro specifically for this because planning requires understanding complex codebases and making architectural decisions - not every model is smart enough for this task. Smaller models often miss important patterns or suggest approaches that don't align with your existing architecture. Gemini 2.5 Pro consistently generates accurate, well-structured plans that respect your codebase's existing patterns.
 
-I use a custom command with this prompt for plan generation:
+Here is a simplified example of a custom command for plan generation:
 
 ```text
 Search the codebase for the relevant files that might be needed for the given task below and generate a `plan.md` file in the `plans/<plan-name>/plan.md` file. The file must include these sections:
