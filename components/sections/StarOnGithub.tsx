@@ -49,7 +49,7 @@ const StarOnGithub = () => {
     >
       {SHOW_FUNDRAISING_BANNER ? (
         <>
-          Shuttle raises $6 million to build an AI Platform Engineer&nbsp;
+          Shuttle raises $6 million to build the AI Platform Engineer&nbsp;
           <Link
             href="/blog/2025/10/22/shuttle-raises-6-million?utm_source=shuttle-website&utm_campaign=banner"
             onClick={() => {
