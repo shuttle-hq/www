@@ -1,6 +1,12 @@
 import { trackEvent } from "lib/posthog";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+
+const bannerKeys = {
+  "shuttle-raises-6m-banner": "shuttle-raises-6m-banner",
+  starred: "starred",
+};
 
 const StarOnGithub = () => {
   const [starOpen, setStarOpen] = useState<boolean>(false);
@@ -9,7 +15,8 @@ const StarOnGithub = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (localStorage.getItem("starred")) setStarOpen(false);
+    if (localStorage.getItem(bannerKeys["shuttle-raises-6m-banner"]))
+      setStarOpen(false);
     else setStarOpen(true);
 
     setMounted(true);
@@ -26,35 +33,21 @@ const StarOnGithub = () => {
         display: starOpen && mounted ? "flex" : "none",
       }}
     >
-      ⭐️ If you like Shuttle,&nbsp;
-      <a
-        href="https://github.com/shuttle-hq/shuttle"
-        target="_blank"
-        rel="noopener noreferrer"
+      Shuttle raises $6 million to build an AI Platform Engineer&nbsp;
+      <Link
+        href="/blog/2025/10/22/shuttle-raises-6-million"
         onClick={() => {
-          trackEvent("github_star_cta");
+          trackEvent("announcement_banner_click");
         }}
         className="underline"
       >
-        give it a star on GitHub
-      </a>
-      <span className="hidden sm:block">&nbsp;or&nbsp;</span>
-      <a
-        href="https://twitter.com/shuttle_dev"
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={() => {
-          trackEvent("twitter_follow_cta");
-        }}
-        className="hidden sm:block underline"
-      >
-        follow us on Twitter
-      </a>
+        Read more
+      </Link>
       <button
         className="absolute right-3"
         onClick={() => {
           setStarOpen(false);
-          localStorage.setItem("starred", "true");
+          localStorage.setItem(bannerKeys["shuttle-raises-6m-banner"], "true");
         }}
       >
         <svg
