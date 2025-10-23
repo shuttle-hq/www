@@ -40,55 +40,57 @@ const StarOnGithub = () => {
 
   return (
     <div
-      className="relative items-center justify-center py-2 text-sm font-bold text-white"
+      className="relative items-center justify-center py-2 px-3 sm:px-4 text-sm font-bold text-white"
       style={{
         background:
           "linear-gradient(85.52deg, #FC540C -7.27%, rgba(255, 215, 111, 0.72) 108.87%)",
         display: starOpen && mounted ? "flex" : "none",
       }}
     >
-      {SHOW_FUNDRAISING_BANNER ? (
-        <>
-          Shuttle raises $6 million to build the AI Platform Engineer&nbsp;
-          <Link
-            href="/blog/2025/10/22/shuttle-raises-6-million?utm_source=shuttle-website&utm_campaign=banner"
-            onClick={() => {
-              trackEvent("announcement_banner_click");
-            }}
-            className="underline"
-          >
-            Read more
-          </Link>
-        </>
-      ) : (
-        <>
-          ⭐️ If you like Shuttle,&nbsp;
-          <a
-            href="https://github.com/shuttle-hq/shuttle"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => {
-              trackEvent("github_star_cta");
-            }}
-            className="underline"
-          >
-            give it a star on GitHub
-          </a>
-          <span className="hidden sm:block">&nbsp;or&nbsp;</span>
-          <a
-            href="https://twitter.com/shuttle_dev"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => {
-              trackEvent("twitter_follow_cta");
-            }}
-            className="hidden sm:block underline"
-          >
-            follow us on Twitter
-          </a>
-        </>
-      )}
-      <button className="absolute right-3" onClick={handleClose}>
+      <div className="flex flex-wrap items-center justify-center gap-x-1 text-center pr-8">
+        {SHOW_FUNDRAISING_BANNER ? (
+          <>
+            <span>Shuttle raises $6 million to build the AI Platform Engineer</span>
+            <Link
+              href="/blog/2025/10/22/shuttle-raises-6-million?utm_source=shuttle-website&utm_campaign=banner"
+              onClick={() => {
+                trackEvent("announcement_banner_click");
+              }}
+              className="underline whitespace-nowrap"
+            >
+              Read more
+            </Link>
+          </>
+        ) : (
+          <>
+            <span>⭐️ If you like Shuttle,</span>
+            <a
+              href="https://github.com/shuttle-hq/shuttle"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => {
+                trackEvent("github_star_cta");
+              }}
+              className="underline whitespace-nowrap"
+            >
+              give it a star on GitHub
+            </a>
+            <span className="hidden sm:inline">or</span>
+            <a
+              href="https://twitter.com/shuttle_dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => {
+                trackEvent("twitter_follow_cta");
+              }}
+              className="hidden sm:inline underline whitespace-nowrap"
+            >
+              follow us on Twitter
+            </a>
+          </>
+        )}
+      </div>
+      <button className="absolute right-2 sm:right-3 flex-shrink-0" onClick={handleClose}>
         <svg
           width="25"
           height="25"
