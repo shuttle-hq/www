@@ -22,11 +22,11 @@ export function DiscordCTA({
 }: DiscordCTAProps) {
   return (
     <div
-      className={`group relative overflow-hidden rounded-xl bg-[#151515] hover:bg-[#1a1a1a] border border-white/10 hover:border-white/20 transition-colors duration-500 px-4 my-6 ${className}`}
+      className={`group relative overflow-hidden rounded-xl bg-[#151515] hover:bg-[#1a1a1a] border border-white/5 transition-colors duration-500 p-5 sm:px-4 sm:py-0 my-6 ${className}`}
     >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="p-3 bg-[#5865F2] rounded-xl">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 sm:gap-4">
+        <div className="flex items-center gap-4 w-full sm:w-auto">
+          <div className="p-3 bg-[#5865F2] rounded-xl flex-shrink-0">
             <svg
               width="24"
               height="24"
@@ -40,22 +40,26 @@ export function DiscordCTA({
               />
             </svg>
           </div>
-          <div>
-            <h4 className="text-white font-semibold text-xl leading-tight mb-0.5">
+          <div className="flex-1 min-w-0">
+            <h4 className="text-white font-semibold text-lg sm:text-xl leading-tight mb-1">
               {title}
             </h4>
-            <p className="text-gray-400 text-base">{subtitle}</p>
+            <p className="text-gray-400 text-sm sm:text-base leading-snug">
+              {subtitle}
+            </p>
           </div>
         </div>
 
-        <CTAButton
-          href={href}
-          onClick={() => {
-            trackEvent(eventName);
-          }}
-        >
-          {buttonText}
-        </CTAButton>
+        <div className="w-full sm:w-auto">
+          <CTAButton
+            href={href}
+            onClick={() => {
+              trackEvent(eventName);
+            }}
+          >
+            Join
+          </CTAButton>
+        </div>
       </div>
     </div>
   );

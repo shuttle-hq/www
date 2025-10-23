@@ -22,7 +22,7 @@ export function GenericCTA({
 }: TryItYourselfProps) {
   return (
     <div
-      className={`group relative overflow-hidden rounded-xl bg-[#151515] hover:bg-[#1a1a1a] border border-white/10 hover:border-white/20 transition-colors duration-500 px-4 my-6 ${className}`}
+      className={`group relative overflow-hidden rounded-xl bg-[#151515] hover:bg-[#1a1a1a] border border-white/5 transition-colors duration-500 px-4 my-6 ${className}`}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">

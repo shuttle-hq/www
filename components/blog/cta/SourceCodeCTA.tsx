@@ -19,7 +19,7 @@ export const SourceCodeCTA = ({
   eventName = "blog_view_implementation_cta",
 }: SourceCodeCTAProps) => {
   return (
-    <div className="group relative overflow-hidden rounded-xl bg-[#151515] hover:bg-[#1a1a1a] border border-white/10 hover:border-white/20 transition-colors duration-500 px-4 my-6 flex items-center gap-6">
+    <div className="group relative overflow-hidden rounded-xl bg-[#151515] hover:bg-[#1a1a1a] border border-white/5 transition-colors duration-500 px-4 my-6 flex items-center gap-6">
       <div className="flex-shrink-0">
         <div className="p-3 bg-[#010409] rounded-xl">
           <svg
@@ -47,7 +47,7 @@ export const SourceCodeCTA = ({
           onClick={() => {
             trackEvent(eventName);
           }}
-          className="bg-[#010409]/90 hover:bg-[#010409] text-white gap-2 border border-white/10 hover:border-white/20"
+          className="bg-[#010409]/90 hover:bg-[#010409] text-white gap-2"
         >
           <svg
             width="20"
