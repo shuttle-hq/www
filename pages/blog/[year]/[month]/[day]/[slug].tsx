@@ -42,9 +42,8 @@ import { ExpandableImage } from "../../../../../components/blog/ExpandableImage"
 import YouTubeEmbed from "../../../../../components/blog/YouTubeEmbed";
 import {
   GenericCTA,
-  ReadyToShipFaster,
-  ViewImplementation,
-  DatabaseCTA,
+  SourceCodeCTA,
+  DiscordCTA,
 } from "../../../../../components/blog/cta";
 
 export async function getStaticPaths() {
@@ -264,14 +263,14 @@ const mdxComponents: MDXRemoteProps["components"] = {
   TryItYourself: (props) => {
     return <GenericCTA {...props} />;
   },
-  ReadyToShipFaster: (props) => {
-    return <ReadyToShipFaster {...props} />;
+  GenericCTA: (props) => {
+    return <GenericCTA {...props} />;
   },
-  ViewImplementation: (props) => {
-    return <ViewImplementation {...props} />;
+  SourceCodeCTA: (props) => {
+    return <SourceCodeCTA {...props} />;
   },
-  DatabaseCTA: (props) => {
-    return <DatabaseCTA {...props} />;
+  DiscordCTA: (props) => {
+    return <DiscordCTA {...props} />;
   },
   YouTubeEmbed: (props) => {
     return <YouTubeEmbed {...props} />;

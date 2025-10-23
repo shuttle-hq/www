@@ -67,11 +67,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Reusable call-to-action components for blog posts located in `/components/blog/cta/`:
 
-- **TryItYourself**: Encourages hands-on experimentation with Shuttle
-- **ReadyToShipFaster**: Focuses on deployment and production readiness
-- **ViewImplementation**: Links to source code and complete tutorials
-- **DatabaseCTA**: Promotes Shuttle's database services with PostgreSQL, MongoDB, and Redis. Uses brand gradient background for visibility.
-- **NewConsoleCTA**: Promotes the redesigned Shuttle Console experience
+- **DiscordCTA**: Encourages joining the Shuttle Discord community
 
 All CTA components:
 
