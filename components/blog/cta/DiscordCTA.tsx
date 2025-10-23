@@ -6,7 +6,6 @@ import { CTAButton } from "./CTAButton";
 interface DiscordCTAProps {
   title?: string;
   subtitle?: string;
-  buttonText?: string;
   href?: string;
   eventName?: string;
   className?: string;
@@ -15,9 +14,8 @@ interface DiscordCTAProps {
 export function DiscordCTA({
   title = "Join the Shuttle Discord Community",
   subtitle = "Connect with other developers, learn, get help, and share your projects",
-  buttonText = "Join Discord",
   href = "https://discord.gg/shuttle",
-  eventName = "blog_join_community_cta",
+  eventName = "blog_discord_cta",
   className = "",
 }: DiscordCTAProps) {
   return (
