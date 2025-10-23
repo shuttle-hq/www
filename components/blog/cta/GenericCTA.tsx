@@ -1,6 +1,7 @@
 "use client";
 
-import Button from "components/elements/Button";
+import { trackEvent } from "lib/posthog";
+import { CTAButton } from "./CTAButton";
 
 interface TryItYourselfProps {
   title?: string;
@@ -21,11 +22,11 @@ export function GenericCTA({
 }: TryItYourselfProps) {
   return (
     <div
-      className={`group relative overflow-hidden rounded-xl bg-gradient-to-br from-[#FC540C]/20 via-[rgba(255,215,111,0.15)] to-[#38D4E9]/20 hover:from-[#FC540C]/25 hover:via-[rgba(255,215,111,0.18)] hover:to-[#38D4E9]/25 backdrop-blur-sm border border-[#FC540C]/30 hover:border-[#FC540C]/40 transition-colors duration-500 p-6 my-6 ${className}`}
+      className={`group relative overflow-hidden rounded-xl bg-[#151515] hover:bg-[#1a1a1a] border border-white/5 transition-colors duration-500 px-4 my-6 ${className}`}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="p-3 bg-gradient-to-br from-[#FC540C] to-[#38D4E9] rounded-xl">
+          <div className="p-3 bg-[#49341E] rounded-xl">
             <svg
               width="24"
               height="24"
@@ -37,34 +38,21 @@ export function GenericCTA({
             </svg>
           </div>
           <div>
-            <h4 className="text-white font-semibold text-lg">{title}</h4>
-            <p className="text-gray-400 text-sm">{subtitle}</p>
+            <h4 className="text-white font-semibold text-xl leading-tight mb-0.5">
+              {title}
+            </h4>
+            <p className="text-gray-400 text-base">{subtitle}</p>
           </div>
         </div>
 
-        <Button
-          variant="primary"
+        <CTAButton
           href={href}
-          className="px-4 py-2 text-lg"
-          eventName={eventName}
+          onClick={() => {
+            trackEvent(eventName);
+          }}
         >
           {buttonText}
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            className="ml-2"
-          >
-            <path
-              d="M5 12h14m-7-7l7 7-7 7"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </Button>
+        </CTAButton>
       </div>
     </div>
   );
