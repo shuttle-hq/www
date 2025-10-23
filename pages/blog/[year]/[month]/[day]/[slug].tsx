@@ -294,6 +294,7 @@ export default function BlogPostPage(props: Props) {
       <NextSeo
         title={`${title} | Shuttle`}
         description={props.blog.description}
+        canonical={`https://www.shuttle.dev/blog/${props.blog.slug}`}
         openGraph={{
           title: `${title} | Shuttle`,
           description: props.blog.description,
