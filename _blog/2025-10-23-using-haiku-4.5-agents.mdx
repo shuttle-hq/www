@@ -1,0 +1,171 @@
+---
+title: "Haiku 4.5 Agents for Large Codebases"
+description: "Using Sonnet 4.5 as an orchestrator to deploy multiple Haiku 4.5 agents in parallel. We build a new CLI feature for the Shuttle repository to demonstrate how parallel agent orchestration handles complex tasks faster and more cost-effectively."
+author: dcodes
+tags: [ai, claude, haiku, agents]
+thumb: using-haiku-4.5-agents/cover.png
+cover: using-haiku-4.5-agents/cover.png
+date: "2025-10-23"
+---
+
+Last week, Anthropic launched Haiku 4.5, their newest and most capable small model yet. It matches Claude Sonnet 4's coding performance which used to be the best model just a few months ago, outperforms it in certain tasks like computer use, runs at more than twice the speed, and costs one-third as much.
+
+<CaptionedImage
+  src="/images/blog/using-haiku-4.5-agents/haiku-benchmark.png"
+  alt="The Official Haiku 4.5 benchmark performance by Anthropic"
+  caption="The Official Haiku 4.5 benchmark performance by Anthropic"
+/>
+
+The numbers look good on paper, but does this actually work in practice? Anthropic recommends using Haiku 4.5 through a parallel orchestration approach - Sonnet 4.5 breaks down complex problems and does the planning while multiple Haiku 4.5 agents handle subtasks in parallel.
+
+One of the great advantages of spawning agents by the main agent is that each agent will have it's own context window and they will have a clean context to work with because they will not automatically add `CLAUDE.md` files to their context window. They operate only based on the instructions given to them by the main agent. This also means that your main agent's context window will not be cluttered with old context from the workers and it will only get the summarized details from each worker agent, this way you'll have a more efficient main agent as well.
+
+To demonstrate this in action, we're working with the official [Shuttle repository](https://github.com/shuttle-hq/shuttle). This is a real production codebase that's been actively developed and maintained over the years. It's the perfect testbed for putting Haiku 4.5 to the test because the repository has a lot of code and is a good example of a large codebase that can be used to demonstrate this approach.
+
+In this blog post, we'll use this method to build a new feature for the Shuttle CLI. We'll explain the feature to Sonnet 4.5 and let it plan the implementation, then launch multiple Haiku agents to execute the plan in parallel, and see what we learn from applying it to a real codebase.
+
+## The Feature: AI Rules Command
+
+The feature we're building is a new CLI command that helps developers set up AI rules for Shuttle for their code editor. Different editors like Cursor, Claude Code, and Windsurf use these files to provide context to their AI assistants. The command `shuttle ai rules` will interactively ask which editor you're using, or accept arguments like `shuttle ai rules --claude` to skip interaction.
+
+This helps AI agents to understand how Shuttle works and how to use it. Giving proper context and instructions to avoid hallucinations and improve accuracy.
+
+We have a `ai-rules.md` file that contains the context required for the AI agents to understand how Shuttle works and how to use it. And when the command runs, a file will be created with the content of the `ai-rules.md` file in the corresponding editor's rules directory.
+
+## Creating a Worker Agent
+
+First, I create a worker agent by running `/agents` in Claude Code and describing its purpose:
+
+<CaptionedImage
+  src="/images/blog/using-haiku-4.5-agents/create-agent.png"
+  alt="Creating a new agent"
+  caption="Creating a new agent"
+/>
+
+The prompt is simple: "A worker agent that's not very smart but it can get things done if the task isn't too complex and enough context is given."
+
+This explanation sets the expectations for the orchestrator when launching agents to not offload too complex tasks to the workers.
+
+Next, select Haiku 4.5 as the model:
+
+<CaptionedImage
+  src="/images/blog/using-haiku-4.5-agents/select-haiku.png"
+  alt="Selecting Haiku as the model"
+  caption="Selecting Haiku as the model"
+/>
+
+Perfect! Our worker agent is ready to use!
+
+## The Prompt: Building a New CLI Feature
+
+I'll enter this prompt in plan mode, which lets Sonnet think through the approach before executing. Here's the prompt I'm giving to Sonnet to build a new feature for the Shuttle CLI:
+
+<CaptionedImage
+  src="/images/blog/using-haiku-4.5-agents/prompt-plan-mode.png"
+  alt="Entering the prompt in plan mode"
+  caption="Entering the prompt in plan mode"
+/>
+
+The prompt includes everything Sonnet needs to know: what to build, how to research the existing codebase patterns, the interactive flow, and the argument handling.
+
+In plan mode, Sonnet spawns the built-in "Explore" agent (powered by Haiku) to search for existing interactive implementations, analyze the CLI structure, and gather context. This is another great use of the Haiku model - it's fast and efficient for codebase exploration.
+
+<CaptionedImage
+  src="/images/blog/using-haiku-4.5-agents/explore-agent.png"
+  alt="Explore agent searching the codebase"
+  caption="Explore agent searching the codebase"
+/>
+
+## Minimizing Ambiguity
+
+After searching the codebase, Claude doesn't immediately write the plan. Instead, it finds some ambiguity and asks clarifying questions:
+
+<CaptionedImage
+  src="/images/blog/using-haiku-4.5-agents/claude-asks-questions.png"
+  alt="Claude asking questions about file paths"
+/>
+
+This is a newer feature in Claude Code that sets it apart from many other coding agents. Most AI coding tools are goal-oriented - they try to complete the task no matter what, often making assumptions that lead to side effects or inaccurate implementations. Claude Code takes a different approach. When it encounters ambiguity, it stops and asks questions.
+
+After answering the questions, Claude has everything it needs:
+
+<CaptionedImage
+  src="/images/blog/using-haiku-4.5-agents/questions-answered.png"
+  alt="Answered questions ready to submit"
+/>
+
+The answers clarify the remaining ambiguities - skip VSCode since it doesn't have native AI rules support, use `.windsurf/rules/shuttle.md` for Windsurf, bundle the ai-rules.md into the CLI binary, and make it work from any directory. With this context locked in, Claude is ready to create the implementation plan.
+
+<CaptionedImage
+  src="/images/blog/using-haiku-4.5-agents/plan-ready.png"
+  alt="Implementation plan ready"
+/>
+
+This is exactly what I wanted. The plan covers both interactive and non-interactive flows, includes key implementation points like using `ColorfulTheme::default()` to match existing patterns, and even outlines a testing approach. The planner looked at the codebase, understood the existing conventions, and created a plan that fits naturally into the project.
+
+Now that the plan is ready, let's start launching the Haiku agents.
+
+## Running Tasks in Parallel
+
+To make Claude run multiple agents in parallel, you need to tell it explicitly. After reviewing the plan, I added a simple instruction: _"Use multiple @agent-task-worker agents to handle each task in parallel."_ This tells Sonnet to spawn multiple _task-worker_ agents (the Haiku 4.5 agents we configured earlier) and distribute the implementation tasks across them, executing them concurrently instead of sequentially.
+
+<CaptionedImage
+  src="/images/blog/using-haiku-4.5-agents/parallel-prompt.png"
+  alt="Prompting Claude to use parallel agents"
+/>
+
+## The Army Executes
+
+You can see three Haiku-powered task-worker agents running simultaneously - one updating `args.rs` with the AI command, another creating the `ai.rs` module implementation, and a third updating `lib.rs` to wire the AI command into the CLI. Each agent is reading files, running cargo checks, and making progress on its assigned task independently. Sonnet orchestrates while multiple Haiku agents execute the implementation in parallel.
+
+The orchestrator prevents conflicts by assigning non-overlapping files and including necessary context about dependencies in each agent's instructions. When Agent A needs types that Agent B is creating, Sonnet provides those definitions upfront. If something breaks, the orchestrator detects it and adjusts. But it still remains my main concern when launching many agents in parallel.
+
+<CaptionedImage
+  src="/images/blog/using-haiku-4.5-agents/agents-running.png"
+  alt="Multiple agents running in parallel"
+  caption="Multiple agents running in parallel"
+/>
+
+## The Result
+
+The agents finish writing their code. Then Sonnet takes over, testing the CLI and handling all the edge cases. Everything works exactly as requested.
+
+<CaptionedImage
+  src="/images/blog/using-haiku-4.5-agents/task-complete.png"
+  alt="Implementation complete"
+  caption="Implementation complete"
+/>
+
+All the success criteria pass. The new `shuttle ai rules` command works in both interactive and non-interactive modes, bundles the ai-rules.md content into the binary, handles platform-specific file paths correctly, and works from any directory.
+
+This would've taken hours if done manually - learning the codebase, finding patterns, handling the interactive flow and file operations. The _Explore_ agents gather context about the codebase structure and conventions, Sonnet plans the implementation, and _task-worker_ agents execute it.
+
+## When to Use Which Model
+
+| Use Haiku When                               | Use Sonnet When                                 |
+| -------------------------------------------- | ----------------------------------------------- |
+| Exploring codebases or gathering context     | Orchestrating multiple sub-tasks                |
+| Task is well-defined with clear requirements | Problem requires complex reasoning or planning  |
+| Following existing code patterns             | Making architectural decisions                  |
+| Implementing specific features from a plan   | Breaking down ambiguous requirements            |
+| Writing tests or documentation               | Testing implementations and handling edge cases |
+| Task can run in parallel with others         | Need sequential decision-making                 |
+| Cost and speed matter more than complexity   | Accuracy matters more than speed                |
+
+Haiku excels at execution when you know what needs to be done. Sonnet excels at figuring out what needs to be done. Use Sonnet to plan and orchestrate, then spawn Haiku agents for codebase exploration and implementation to execute the plan.
+
+## Conclusion
+
+This approach changes how we think about AI-assisted development. Instead of a single model grinding through every task sequentially and bloat the context window, Sonnet 4.5 acts as an intelligent orchestrator while Haiku 4.5 agents handle the execution in parallel, the main agent's context window remains clean throughout the coding session. The result is faster, cheaper, and more accurate than either model working alone.
+
+Throughout the blog, we saw multiple use cases of using Haiku agents, they're not just great for execution, but also for exploration and gathering context.
+
+Give Sonnet one comprehensive prompt in plan mode, let it research the codebase by spawning Explore agents, clarify any ambiguities through questions, then spawn worker agents to execute in parallel.
+
+While this worked for me in this particular example, it might not always be the case and there could be specific scenarios where this approach might not be the best fit. Let us know your thoughts in [Discord](https://discord.gg/shuttle).
+
+Start building your applications and deploy to Shuttle in 5 minutes with our Rust & Axum template.
+
+```bash
+shuttle init --from shuttle-hq/shuttle-examples --subfolder axum/ai-assisted
+```
