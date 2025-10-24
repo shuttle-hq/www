@@ -215,6 +215,8 @@ If we use `node server.js`, head to `[http://localhost:3030](http://localhost:30
 
 Note that depending on the settings you are using for your image file format conversion, your file size may increase post-conversion; this is because you may be using lossless conversion. If you want to use lossy conversion to decrease your file size, you want the `new_with_quality` method while instantiating the image encoder in your Rust code.
 
+<TestimonialCTA />
+
 ## Building our app with alternative CLIs
 
 While `wasm-bindgen-cli` is useful, it's also the most low level CLI out of our options and you can run into spurious issues while using it such as `wasm-bindgen` version incompatibility issues. There are some additional quality of life changes that we could benefit from, such as automatic versioning and `wasm-opt` usage. Let's take a quick look at some of these other options and see how they compare.
