@@ -45,6 +45,7 @@ import {
   SourceCodeCTA,
   DiscordCTA,
 } from "../../../../../components/blog/cta";
+import { AddToCursor } from "components/blog/cta/AddToCursor";
 
 export async function getStaticPaths() {
   const paths = getAllPostSlugs();
@@ -274,6 +275,9 @@ const mdxComponents: MDXRemoteProps["components"] = {
   },
   YouTubeEmbed: (props) => {
     return <YouTubeEmbed {...props} />;
+  },
+  AddToCursor: (props) => {
+    return <AddToCursor {...props} />;
   },
 };
 
