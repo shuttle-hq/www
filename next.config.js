@@ -40,6 +40,14 @@ const nextConfig = {
           source: "/rss.xml",
           destination: "/api/rss",
         },
+        {
+          source: "/llms.txt",
+          destination: "/api/llms",
+        },
+        {
+          source: "/llms-full.txt",
+          destination: "/api/llms-full",
+        },
       ],
       fallback: [
         // These rewrites are checked after both pages/public files
