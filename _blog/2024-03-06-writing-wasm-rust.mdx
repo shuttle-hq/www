@@ -159,7 +159,7 @@ If you don't want to use CommonJS because you're using ESM (EcmaScript modules, 
 - `deno` (usable as a Deno module)
 - `no-modules` (like the `web` target but doesn't use ES Modules).
 
-There are specific docs for usage with ES which you can check out [here.](https://rustwasm.github.io/wasm-bindgen/examples/hello-world.html?highlight=webpack#webpack-specific-files) The easiest way to do it in terms of what compiler to use is typically with Webpack as it's the most compatible. There is also an additional guide you can use for compiling to ES6 modules without a bundler [here](https://rustwasm.github.io/wasm-bindgen/examples/without-a-bundler.html) - though it involves initializing the WASM module manually before running which adds some overhead.
+There are specific docs for usage with ES. The easiest way to do it in terms of what compiler to use is typically with Webpack as it's the most compatible. You can also compile to ES6 modules without a bundler, though it involves initializing the WASM module manually before running which adds some overhead.
 
 ## Test driving our new module
 
@@ -221,7 +221,7 @@ While `wasm-bindgen-cli` is useful, it's also the most low level CLI out of our 
 
 ### Wasm-pack
 
-`wasm-pack` is a tool that aims to be a one-stop-shop for compiling Rust to WASM. It includes a CLI that you can use by installing it [here](https://rustwasm.github.io/wasm-pack/installer/). In comparison to using `wasm-bindgen-cli`, it has a number of quality of life upgrades:
+`wasm-pack` is a tool that aims to be a one-stop-shop for compiling Rust to WASM. It includes a CLI that you can install. In comparison to using `wasm-bindgen-cli`, it has a number of quality of life upgrades:
 
 - Comes with `wee_alloc`, a WebAssembly allocator with a (pre-compression) 1kB code footprint.
 - Comes with a panic hook that allows you to debug Rust panic messages in the browser

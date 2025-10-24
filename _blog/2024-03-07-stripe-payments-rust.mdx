@@ -279,7 +279,7 @@ Stripe additionally offers [webhooks](https://docs.stripe.com/webhooks) that we 
 
 While we can do this manually, `async-stripe` has examples that we can use in extractors. The way that we do this is by wrapping `stripe::Event` in a struct that then implements the relevant extractor trait, checking the `stripe-signature` header to ensure HTTP request integrity and construct the payload.
 
-Below is a snippet of an Axum custom extractor that wraps `stripe::Event` - you can find the full example [here](https://github.com/arlyon/async-stripe/blob/master/examples/webhook-axum.rs).
+Below is a snippet of an Axum custom extractor that wraps `stripe::Event`:
 
 ```rust
 struct StripeEvent(Event);

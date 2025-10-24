@@ -108,7 +108,7 @@ The benefit of middleware _just_ being functions is that they can be separated o
 
 ### [Rocket](https://rocket.rs/)
 
-Rocket is a server framework. Rocket's middleware implementation is known as [fairings](https://rocket.rs/v0.5-rc/guide/fairings/#fairings) (yes there are many rocket related puns in the crate).
+Rocket is a server framework. Rocket's middleware implementation is known as fairings (yes there are many rocket related puns in the crate).
 
 From Rocket's fairing documentation:
 
@@ -162,7 +162,7 @@ Rocket middleware has several hooks. Each of them has a default implementation s
 
 This fires when a request is received. This hook has a mutable reference to the request and so **can modify the request**. "It cannot abort or respond directly to the request; these issues are better handled via request guards or via response callbacks.".
 
-As an aside, Rocket has a different non-middleware implementation that can be better suited for handlers that might short circuit an error rather than running a handler afterwards. We won't go into it here but if your middleware is fallible [request guards](https://rocket.rs/v0.5-rc/guide/requests/#request-guards) might be a better option
+As an aside, Rocket has a different non-middleware implementation that can be better suited for handlers that might short circuit an error rather than running a handler afterwards. We won't go into it here but if your middleware is fallible request guards might be a better option
 
 #### Response using `on_response`
 
@@ -180,7 +180,7 @@ All Rocket fairings have a [info field](https://api.rocket.rs/v0.5/rocket/fairin
 
 #### Ad hoc fairings
 
-Simpler middleware using functions can be added using [ad-hoc fairings](https://rocket.rs/v0.5-rc/guide/fairings/#ad-hoc-fairings). If the fairing doesn't have state / data with it, you can bypass needing to create a structure and writing a trait implementation for it and instead write a function.
+Simpler middleware using functions can be added using ad-hoc fairings. If the fairing doesn't have state / data with it, you can bypass needing to create a structure and writing a trait implementation for it and instead write a function.
 
 Using `AdHoc` and any of the names of the above mentioned hooks we can instead creating a function using a function (+ a string info):
 

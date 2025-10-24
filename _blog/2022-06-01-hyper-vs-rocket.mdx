@@ -211,7 +211,7 @@ And it is created and registered using `.manage(AppContext::default())`. Rocket 
 
 In Rocket endpoint functions can just return `String` or `str` slices and Rocket handles it automatically. Rocket also comes with a `Json` return type and reusing the fact that `AppContext` implements `Serialize` we can freely build a `Json` response from it. The `Json` structure handles setting the `Content-Type` header automatically for us.
 
-Rocket has a middleware implementation which it calls ["fairings"](https://rocket.rs/v0.5-rc/guide/fairings/#fairings). In the example it defines a `CounterFairing` which on every request modifies the counter state. The initialization code is really slim, it sets up a config and a Rocket structure is created using a builder pattern. Annotating the main function with `#[launch]` helps Rocket find the entry point and abstracts how the server is span up. Rocket also has really nice built in logs which are great for development.
+Rocket has a middleware implementation which it calls "fairings". In the example it defines a `CounterFairing` which on every request modifies the counter state. The initialization code is really slim, it sets up a config and a Rocket structure is created using a builder pattern. Annotating the main function with `#[launch]` helps Rocket find the entry point and abstracts how the server is span up. Rocket also has really nice built in logs which are great for development.
 
 <p align="center">
   <img
