@@ -16,7 +16,7 @@ export const SourceCodeCTA = ({
   subtitle = "Check out the complete source code and examples",
   buttonText = "View Code",
   repo = "#",
-  eventName = "blog_view_implementation_cta",
+  eventName = "blog_cta_view_source_code",
 }: SourceCodeCTAProps) => {
   return (
     <div className="group relative overflow-hidden rounded-xl bg-[#151515] hover:bg-[#1a1a1a] border border-white/5 transition-colors duration-500 px-4 my-6 flex items-center gap-6">

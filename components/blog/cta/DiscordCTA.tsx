@@ -15,7 +15,7 @@ export function DiscordCTA({
   title = "Join the Shuttle Discord Community",
   subtitle = "Connect with other developers, learn, get help, and share your projects",
   href = "https://discord.gg/shuttle",
-  eventName = "blog_discord_cta",
+  eventName = "blog_cta_discord",
   className = "",
 }: DiscordCTAProps) {
   return (

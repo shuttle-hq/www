@@ -171,6 +171,23 @@ I have the [Shuttle MCP](https://docs.shuttle.dev/integrations/mcp-server) insta
 claude mcp add Shuttle shuttle mcp start
 ```
 
+For Cursor, you can add it by clicking the "Add to Cursor" button below.
+
+<AddToCursor />
+
+Or updating your `mcp.json` file to include the following:
+
+```json
+{
+  "mcpServers": {
+    "Shuttle": {
+      "command": "shuttle",
+      "args": ["mcp", "start"]
+    }
+  }
+}
+```
+
 You should also have the [Shuttle CLI installed](https://docs.shuttle.dev/getting-started/installation) and logged in to Shuttle, I recommend running `shuttle upgrade` if you already have it installed, you can do this by running:
 
 ```bash
