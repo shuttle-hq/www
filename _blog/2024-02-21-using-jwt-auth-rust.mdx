@@ -137,6 +137,8 @@ impl<S> FromRequestParts<S> for Claims where S: Send + Sync {
 
 Now that we're done setting up our boilerplate for how the JWT should work, we can move onto creating our routes!
 
+<TestimonialCTA />
+
 ### Creating routes
 
 The next step is to write our endpoint when authorizing a user - when returning the token, we'll create a new `AuthBody` with the token in it and the type of token it is. We'll be using this later on:

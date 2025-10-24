@@ -154,6 +154,8 @@ This has the advantage of a particular span being able to follow from any number
 
 ![A high-level view of how follow-on spans work in the tracing Rust crate](/images/blog/tracing-article/follow-on-spans.png)
 
+<TestimonialCTA />
+
 ## Instrumentation in Tracing
 
 Of course, having to manually add spans for every function is a bit tiring. We can instead use the `#[instrument]` macro from `tracing` to do this automatically for us. To do this, you will want to make sure the `attributes` feature of `tracing` is installed first:

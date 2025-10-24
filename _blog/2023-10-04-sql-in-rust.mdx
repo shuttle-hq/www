@@ -140,6 +140,8 @@ let query = sqlx::query_scalar("SELECT * FROM FOO LIMIT 1").fetch_one(&pool).awa
 println!("{:?}", query.0);
 ```
 
+<TestimonialCTA />
+
 ## Macros
 
 Now onto one of SQLx's strengths as a crate: compile time query checking. If you're using raw SQL, having some kind of garuantee that your SQL is valid is almost never a bad thing: unless you're a database admin, if you're running a query with several joins on it you'll definitely want to make sure it's actually valid before it gets ran. It should be said here that you will need `sqlx-cli` installed for this to be able to take advantage of this feature: if not, you'll have to use the previous methods.
