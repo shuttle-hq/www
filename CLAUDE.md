@@ -76,6 +76,7 @@ All CTA components:
 - Use consistent Tailwind CSS styling with brand gradients
 - Are exported from `@components/blog/cta/index.ts` for easy import
 - **Must be registered** in `/pages/blog/[year]/[month]/[day]/[slug].tsx` mdxComponents object to be usable in MDX files
+- **Event names for the blog CTAs inside the `components/blog/cta/` directory must start with `blog_cta_`** for consistent analytics tracking (e.g., `blog_cta_discord`, `blog_cta_testimonial`)
 
 ### Styling System
 
