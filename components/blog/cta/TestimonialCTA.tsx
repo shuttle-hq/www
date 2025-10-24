@@ -36,9 +36,9 @@ export const TestimonialCTA: React.FC<TestimonialCTAProps> = ({
 }) => {
   return (
     <div
-      className={`flex justify-between relative overflow-hidden rounded-3xl bg-[#0F0F0F] border border-white/5 p-7 ${className}`}
+      className={`flex flex-col lg:flex-row lg:justify-between relative overflow-hidden rounded-3xl bg-[#0F0F0F] border border-white/5 p-5 sm:p-7 gap-6 lg:gap-4 ${className}`}
     >
-      <div className="flex flex-col">
+      <div className="flex flex-col lg:w-[40%]">
         <svg
           width="24"
           height="24"
@@ -60,12 +60,13 @@ export const TestimonialCTA: React.FC<TestimonialCTAProps> = ({
           onClick={() => {
             trackEvent(eventName);
           }}
+          className="hidden lg:inline-flex w-max"
         >
           {buttonText}
         </CTAButton>
       </div>
       <div
-        className={`flex flex-col gap-5 px-8 py-6 rounded-3xl w-[60%] items-start justify-center ${styles["quote-bg"]}`}
+        className={`flex flex-col gap-5 px-6 py-5 sm:px-8 sm:py-6 rounded-3xl lg:w-[60%] items-start justify-center ${styles["quote-bg"]}`}
       >
         <p className="self-stretch text-white text-sm italic m-0">{quote}</p>
 
@@ -86,6 +87,15 @@ export const TestimonialCTA: React.FC<TestimonialCTAProps> = ({
           </div>
         </div>
       </div>
+      <CTAButton
+        href={href}
+        onClick={() => {
+          trackEvent(eventName);
+        }}
+        className="lg:hidden"
+      >
+        {buttonText}
+      </CTAButton>
     </div>
   );
 };
