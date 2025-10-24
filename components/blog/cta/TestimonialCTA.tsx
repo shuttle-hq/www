@@ -30,7 +30,7 @@ export const TestimonialCTA: React.FC<TestimonialCTAProps> = ({
   avatarSrc,
   avatarSize = 32,
   className = "",
-  eventName = "blog_testimonial_cta",
+  eventName = "blog_cta_testimonial",
 }) => {
   return (
     <div
