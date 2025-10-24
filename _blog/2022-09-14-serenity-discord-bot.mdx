@@ -117,7 +117,7 @@ We want to call our bot when chatting in a text channel. Discord enables this wi
 
 Slash commands can be server-specific (servers are named as `guilds` in Discords API documentation) or application specific (across all servers the bot is in). For testing, we will only enable it on a single guild/server. This is because the application-wide commands can take an hour to fully register whereas the guild/server specific ones are instant, so we can test the new commands immediately.
 
-You can copy the guild ID by right-clicking here on the server name and click `copy ID` ([you will need developer mode enabled to do this](https://www.howtogeek.com/714348/how-to-enable-or-disable-developer-mode-on-discord/)):
+You can copy the guild ID by right-clicking here on the server name and click `copy ID` (you will need developer mode enabled to do this):
 
 ![](/images/blog/discord-bot-screenshots/guild-id.png)
 
@@ -255,7 +255,7 @@ pub struct Headline {
 }
 ```
 
-> The above skips [a lot of the fields returned by the API](https://developer.accuweather.com/accuweather-forecast-api/apis/get/forecasts/v1/daily/1day/%7BlocationKey%7D), only opting for the ones we will use in this demo. If you wanted to type all the fields you could try the new [type from JSON feature in rust-analyzer](https://rust-analyzer.github.io/thisweek/2022/08/15/changelog-142.html#new-features) to avoid having to write as much.
+> The above skips _a lot of the fields returned by the API_, only opting for the ones we will use in this demo. If you wanted to type all the fields you could try the new [type from JSON feature in rust-analyzer](https://rust-analyzer.github.io/thisweek/2022/08/15/changelog-142.html#new-features) to avoid having to write as much.
 
 Our location request call also fails if the search we put in returns no places. We will create an intermediate type that represents this case and implements `std::error::Error`:
 
