@@ -106,6 +106,8 @@ let rate_limiter = RateLimiter::default();
 
 From here if we wanted to extend this to work with Axum, we could. However, production-ready rate-limiting systems are typically much more advanced than this. We'll be discussing how you can utilize crates for rate limiting below, including usage of user-based rate limiting.
 
+<TestimonialCTA />
+
 ## Implementing user-based rate limiting
 
 For external-facing websites without a login, IP addresses are the only thing you can use (besides browser information) to track users. However, it can be much more useful to rate limit based on authenticated users rather than IP addresses. While working with IP addresses, you may run into the following issues:

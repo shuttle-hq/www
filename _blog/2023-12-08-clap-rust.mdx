@@ -130,6 +130,8 @@ fn main() {
 
 Now if we were to run this again by using for example `cargo run get foo`, it should work. For the `set` command, the `key` and `value` arguments are mandatory but for the `--is-true` flag, it will only be set to true if you add the flag - otherwise, it will be set to false.
 
+<TestimonialCTA />
+
 ## Clap CLI Looping
 
 Most of the time you might only want to execute a command once, but there may be times where you want to create a CLI where the user may want to keep the process running in case they want to run extra commands. For example, a REPL (also known as a "language shell" or read-eval-print-loop) will want to be able to store variables and execute statements. For this purpose, the [`clap::Parser`](https://docs.rs/clap/latest/clap/trait.Parser.html) trait also has the `try_parse_from` function where it will try to parse CLI commands from a variable that implements `Into<Iterator>` - for this case, we can use a vector as they can be iterated on.

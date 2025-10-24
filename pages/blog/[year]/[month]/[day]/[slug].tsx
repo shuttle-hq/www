@@ -46,6 +46,7 @@ import {
   DiscordCTA,
 } from "../../../../../components/blog/cta";
 import { AddToCursor } from "components/blog/cta/AddToCursor";
+import { TestimonialCTA } from "components/blog/cta/TestimonialCTA";
 
 export async function getStaticPaths() {
   const paths = getAllPostSlugs();
@@ -278,6 +279,9 @@ const mdxComponents: MDXRemoteProps["components"] = {
   },
   AddToCursor: (props) => {
     return <AddToCursor {...props} />;
+  },
+  TestimonialCTA: (props) => {
+    return <TestimonialCTA {...props} />;
   },
 };
 

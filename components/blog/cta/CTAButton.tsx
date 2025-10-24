@@ -24,7 +24,7 @@ export function CTAButton({
     <Link
       href={href}
       onClick={onClick}
-      className={`inline-flex items-center justify-center px-5 py-2 text-base bg-white hover:bg-gray-300 text-black font-medium rounded-full transition-all duration-200 no-underline ${className}`}
+      className={`inline-flex items-center justify-center px-4 py-2 text-sm text-base bg-[#D8D8D8] hover:bg-white text-black font-medium rounded-full transition-all duration-200 no-underline ${className}`}
       target={target}
       rel={rel}
     >

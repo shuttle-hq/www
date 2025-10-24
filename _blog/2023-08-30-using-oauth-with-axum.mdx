@@ -320,6 +320,8 @@ let profile = profile.json::<UserProfile>().await.unwrap();
 As you can see, we needed to create a struct for the type. This particular OIDC endpoint returns much more than just an email and you'll be able to see that if you use `.text().await.unwrap()` instead of trying to convert the response to JSON - however, for our purposes currently we only need the email for verification - `serde` ignores unknown fields (unless [deny_unknown_fields](https://serde.rs/container-attrs.html#deny_unknown_fields) is enabled),
 so this is safe to do.
 
+<TestimonialCTA />
+
 ## Using OAuth with Axum Extensions
 
 Now that we've got our access token, all we need to do is store the token somewhere our service can access it. We can do this with SQLx and usage of the `PrivateCookieJar` type from `axum_extra`, which uses cryptographically secure cookies. Let's have a look at what the code would look like:
