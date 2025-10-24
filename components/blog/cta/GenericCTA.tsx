@@ -17,7 +17,7 @@ export function GenericCTA({
   subtitle = "Get started with Shuttle in under 2 minutes",
   buttonText = "Quick Start",
   href = "https://console.shuttle.dev",
-  eventName = "blog_try_it_yourself_cta",
+  eventName = "blog_cta_generic",
   className = "",
 }: TryItYourselfProps) {
   return (

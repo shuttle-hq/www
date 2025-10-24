@@ -12,7 +12,7 @@ export const AddToCursor = () => {
     <Link
       href="cursor://anysphere.cursor-deeplink/mcp/install?name=Shuttle&config=eyJjb21tYW5kIjoic2h1dHRsZSBtY3Agc3RhcnQifQ"
       target="_blank"
-      onClick={() => trackEvent("blog_add_to_cursor_cta", { page: pathname })}
+      onClick={() => trackEvent("blog_cta_add_to_cursor", { page: pathname })}
     >
       <Image
         src="/mcp-install-light.svg"
