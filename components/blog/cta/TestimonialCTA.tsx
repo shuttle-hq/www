@@ -13,6 +13,7 @@ type TestimonialCTAProps = {
   quote: string;
   author: string;
   role?: string;
+  handle?: string;
   avatarSrc?: string;
   avatarSize?: number;
   className?: string;
@@ -24,10 +25,11 @@ export const TestimonialCTA: React.FC<TestimonialCTAProps> = ({
   subtitle = "Join developers building with Shuttle",
   href = "https://console.shuttle.dev",
   buttonText = "Join them",
-  quote,
-  author,
-  role,
-  avatarSrc,
+  quote = "Deployed my second service with Shuttle and I really like it! It's fast and integrates well with cargo, so I can focus on the Rust code instead of the deployment. Well done!",
+  author = "Matthias Endler",
+  role = "Rust Consultant @ Corrode",
+  handle = "@matthiasendler",
+  avatarSrc = "/images/sections/testimonials/matthias.jpg",
   avatarSize = 32,
   className = "",
   eventName = "blog_cta_testimonial",
@@ -80,6 +82,7 @@ export const TestimonialCTA: React.FC<TestimonialCTAProps> = ({
           <div className="inline-flex flex-col justify-start items-start">
             <span className="text-white text-xs leading-4">{author}</span>
             <span className="text-xs leading-4">{role}</span>
+            <span className="text-xs leading-4">{handle}</span>
           </div>
         </div>
       </div>
