@@ -82,8 +82,8 @@ export const TestimonialCTA: React.FC<TestimonialCTAProps> = ({
           )}
           <div className="inline-flex flex-col justify-start items-start">
             <span className="text-white text-xs leading-4">{author}</span>
-            <span className="text-xs leading-4">{role}</span>
             <span className="text-xs leading-4">{handle}</span>
+            <span className="text-xs leading-4">{role}</span>
           </div>
         </div>
       </div>
