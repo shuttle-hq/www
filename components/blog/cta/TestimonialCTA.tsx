@@ -21,7 +21,7 @@ type TestimonialCTAProps = {
 
 export const TestimonialCTA: React.FC<TestimonialCTAProps> = ({
   title = "Loved by developers",
-  subtitle = "Need some text here",
+  subtitle = "Join developers building with Shuttle",
   href = "https://console.shuttle.dev",
   buttonText = "Join them",
   quote,
