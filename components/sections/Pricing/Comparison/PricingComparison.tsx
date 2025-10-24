@@ -66,32 +66,6 @@ const computeSection = {
       cells: [
         {
           icon: CheckIcon,
-          primary: "10",
-          secondary: "rps",
-          secondaryTooltip: "Requests per Second.",
-        },
-        {
-          icon: CheckIcon,
-          primary: "50",
-          secondary: "rps",
-          secondaryTooltip: "Requests per Second.",
-        },
-        {
-          icon: CheckIcon,
-          primary: "1000",
-          secondary: "rps",
-          secondaryTooltip: "Requests per Second.",
-        },
-        {
-          icon: CheckIcon,
-          isCustom: true,
-        },
-      ],
-    },
-    {
-      cells: [
-        {
-          icon: CheckIcon,
           primary: "512",
           secondary: "MB memory",
         },

@@ -645,6 +645,14 @@ export default function Terms() {
                 introduce new facilities and functions, to the Services.
               </li>
               <li>
+                <strong className="text-head">Fair Use Guardrails.</strong> To
+                maintain the reliability and security of our services, Shuttle
+                may apply automated rate limits and other technical safeguards
+                to prevent excessive or abusive use of its network or APIs.
+                These measures are designed to ensure fair access for all users
+                and to protect system stability.
+              </li>
+              <li>
                 <strong className="text-head">You will indemnify us.</strong> If
                 you are a Business Customer, you shall indemnify and keep us
                 indemnified against any costs, claims or liabilities incurred
