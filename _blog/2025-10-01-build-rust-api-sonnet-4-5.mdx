@@ -161,6 +161,8 @@ It actually loooked up the documentation for Axum 0.8 and updated the route synt
 
 Three prompts total with zero compilation errors so far is quite impressive.
 
+<TestimonialCTA />
+
 ## Deploying to Shuttle
 
 With a working API in hand, there was one more test: deployment. Claude Code has MCP (Model Context Protocol) integration with Shuttle, so I wanted to see if Sonnet could handle the entire deployment workflow.
@@ -169,6 +171,23 @@ I have the [Shuttle MCP](https://docs.shuttle.dev/integrations/mcp-server) insta
 
 ```bash
 claude mcp add Shuttle shuttle mcp start
+```
+
+For Cursor, you can add it by clicking the "Add to Cursor" button below.
+
+<AddToCursor />
+
+Or updating your `mcp.json` file to include the following:
+
+```json
+{
+  "mcpServers": {
+    "Shuttle": {
+      "command": "shuttle",
+      "args": ["mcp", "start"]
+    }
+  }
+}
 ```
 
 You should also have the [Shuttle CLI installed](https://docs.shuttle.dev/getting-started/installation) and logged in to Shuttle, I recommend running `shuttle upgrade` if you already have it installed, you can do this by running:
@@ -246,6 +265,8 @@ Sonnet 4.5 delivered on its promise. Three prompts, zero compilation errors, and
 What matters is that you always keep the context clean and write your `CLAUDE.md` files with caution, do not overfill the context window with junk and always keep updating it and iterating on it until you get the results you want.
 
 The "best coding model" could be true. The combination of accuracy, speed, and tool integration makes it a compelling choice for Rust development.
+
+<DiscordCTA />
 
 Want to try building something similar? Get started quickly with:
 

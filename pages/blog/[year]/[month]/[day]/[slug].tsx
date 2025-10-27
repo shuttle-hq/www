@@ -39,12 +39,14 @@ import { BlogFAQ } from "../../../../../components/blog/BlogFAQ";
 import { NewConsoleCTA } from "../../../../../components/blog/NewConsoleCTA";
 import { MainTakeaways } from "../../../../../components/blog/MainTakeaways";
 import { ExpandableImage } from "../../../../../components/blog/ExpandableImage";
+import YouTubeEmbed from "../../../../../components/blog/YouTubeEmbed";
 import {
   GenericCTA,
-  ReadyToShipFaster,
-  ViewImplementation,
-  DatabaseCTA,
+  SourceCodeCTA,
+  DiscordCTA,
 } from "../../../../../components/blog/cta";
+import { AddToCursor } from "components/blog/cta/AddToCursor";
+import { TestimonialCTA } from "components/blog/cta/TestimonialCTA";
 
 export async function getStaticPaths() {
   const paths = getAllPostSlugs();
@@ -263,14 +265,23 @@ const mdxComponents: MDXRemoteProps["components"] = {
   TryItYourself: (props) => {
     return <GenericCTA {...props} />;
   },
-  ReadyToShipFaster: (props) => {
-    return <ReadyToShipFaster {...props} />;
+  GenericCTA: (props) => {
+    return <GenericCTA {...props} />;
   },
-  ViewImplementation: (props) => {
-    return <ViewImplementation {...props} />;
+  SourceCodeCTA: (props) => {
+    return <SourceCodeCTA {...props} />;
   },
-  DatabaseCTA: (props) => {
-    return <DatabaseCTA {...props} />;
+  DiscordCTA: (props) => {
+    return <DiscordCTA {...props} />;
+  },
+  YouTubeEmbed: (props) => {
+    return <YouTubeEmbed {...props} />;
+  },
+  AddToCursor: (props) => {
+    return <AddToCursor {...props} />;
+  },
+  TestimonialCTA: (props) => {
+    return <TestimonialCTA {...props} />;
   },
 };
 
@@ -291,6 +302,7 @@ export default function BlogPostPage(props: Props) {
       <NextSeo
         title={`${title} | Shuttle`}
         description={props.blog.description}
+        canonical={`https://www.shuttle.dev/blog/${props.blog.slug}`}
         openGraph={{
           title: `${title} | Shuttle`,
           description: props.blog.description,

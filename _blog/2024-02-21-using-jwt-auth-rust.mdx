@@ -5,7 +5,7 @@ author: josh
 tags: [rust, auth, jwt, guide]
 thumb: jwt-auth-rust-thumb.png
 cover: jwt-auth-rust-thumb.png
-date: '2024-02-21T15:00:00'
+date: "2024-02-21T15:00:00"
 ---
 
 Hey there! Following on from our ShuttleBytes talk which we held on Tuesday, we're going to talk about how you can implement authentication using JSON Web Tokens (JWTs) in Rust.
@@ -137,6 +137,8 @@ impl<S> FromRequestParts<S> for Claims where S: Send + Sync {
 
 Now that we're done setting up our boilerplate for how the JWT should work, we can move onto creating our routes!
 
+<TestimonialCTA />
+
 ### Creating routes
 
 The next step is to write our endpoint when authorizing a user - when returning the token, we'll create a new `AuthBody` with the token in it and the type of token it is. We'll be using this later on:
@@ -258,6 +260,8 @@ Interested in extending this project? Here's a couple ideas:
 - Use Postgres to store user logins.
 - Try using encryption and signing to strengthen your JWTs, as well as storing them in a cookie.
 - Try adding integration tests so you don't need manual testing!
+
+<DiscordCTA />
 
 ## Finishing up
 

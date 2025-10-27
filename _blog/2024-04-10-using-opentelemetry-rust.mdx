@@ -5,8 +5,9 @@ author: josh
 tags: [rust, opentelemetry, guide]
 thumb: opentelemetry-rust-thumb.png
 cover: opentelemetry-rust-thumb.png
-date: '2024-04-10T15:30:00'
+date: "2024-04-10T15:30:00"
 ---
+
 ## What is OpenTelemetry?
 
 From OpenTelemetry.io:
@@ -15,7 +16,7 @@ From OpenTelemetry.io:
 
 OpenTelemetry is a framework for effective observability based on creating and managing metrics, traces and logs. It is open source and tool-agnostic, meaning that you can use it with a huge amount of tools. When using OpenTelemetry, you also completely own your data and you are only required to conform to one set of APIs.
 
-OpenTelemetry itself is focused on the creation and management of aforementioned metrics, traces and logs. This means you will typically need to provide an appropriate observability  backend yourself. In contrast to an observability framework, an observability backend can be more accurately described as a platform for storing and analysing metrics, traces and logs. The most prominent examples would be open-source observability backends like Jaeger and Prometheus, as well as paid services like Datadog and Grafana.
+OpenTelemetry itself is focused on the creation and management of aforementioned metrics, traces and logs. This means you will typically need to provide an appropriate observability backend yourself. In contrast to an observability framework, an observability backend can be more accurately described as a platform for storing and analysing metrics, traces and logs. The most prominent examples would be open-source observability backends like Jaeger and Prometheus, as well as paid services like Datadog and Grafana.
 
 ## A quick introduction to observability
 
@@ -55,6 +56,8 @@ Traces can consist of one or more spans, under which more child spans are typica
 To be able to aid in collecting metrics and traces, OpenTelemetry has a collector that we can send our traces to. The collector offers a vendor-neutral web service for receiving, processing, and exporting telemetry data. In addition, it removes the need to run, operate, and maintain multiple agents/collectors in order to support open-source telemetry data formats.
 
 The collector behavior can be modified by using a YAML file and then executed using the `--config` flag when running it. This makes it exceptionally easy to use, as there is [a GitHub repository full of examples.](https://github.com/open-telemetry/opentelemetry-collector-contrib)
+
+<TestimonialCTA />
 
 ## Using OpenTelemetry with Rust
 
@@ -118,7 +121,7 @@ docker run \
   2>&1 | tee collector-output.txt # Optionally tee output for easier search later
 ```
 
-Note that the OpenTelemetry collector YAML file can be found at `/etc/<otel-directory>/config.yaml`.  This means we can create a Dockerfile that copies in an external YAML file into the config! Let's have a look at what this would look like:
+Note that the OpenTelemetry collector YAML file can be found at `/etc/<otel-directory>/config.yaml`. This means we can create a Dockerfile that copies in an external YAML file into the config! Let's have a look at what this would look like:
 
 ```docker
 ARG OTEL_TAG=
@@ -139,6 +142,8 @@ When we start the docker container, we add the `--config` flag to enable usage o
 The `opentelemetry-collector-contrib` repo contains a lot of different exports you can use, each with a YAML file you can examine. You can find this [here.](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/exporter)
 
 Note that OpenTelemetry collector utilities are not currently available on Shuttle.
+
+<DiscordCTA />
 
 ## Finishing up
 

@@ -5,8 +5,9 @@ author: josh
 tags: [rust, loco, tutorial, guide]
 thumb: loco-rust-thumb.png
 cover: loco-rust-thumb.png
-date: '2023-12-28T14:30:00'
+date: "2023-12-28T14:30:00"
 ---
+
 In this article we're going to talk about how you can get started with Loco - a new Rust web framework that builds on Axum and takes inspiration from Ruby on Rails. We will cover getting started using controllers, migrations, middleware and static files. Following on from [our previous article](https://www.shuttle.dev/blog/2023/12/20/loco-rust-rails), we're going to get more indepth and experiment with creating a CRUD controller as well as middleware.
 
 ## Getting Started
@@ -26,6 +27,7 @@ cargo install sea-orm-cli
 Now we've installed all of the required packages, we can get initialise our project. We can get started by using `loco new` and then selecting the SaaS application which will give us an app with full functionality. The given name we will be using for the app will be `example_app`. Don't forget to `cd` into the project folder!
 
 When you're writing your API, you will probably want to spin up a local Docker database for database testing. In that case, you will wnat to use this docker command:
+
 ```bash
 $ docker run -d -p 5432:5432 -e POSTGRES_USER=loco -e POSTGRES_DB=example_app_development -e POSTGRES_PASSWORD="loco" postgres:15.3-alpine
 ```
@@ -39,6 +41,7 @@ cargo loco generate scaffold item name:string! description:string quantity:int!
 ```
 
 This will generate a controller, model and migration for a table named `items` with:
+
 - A non-nullable name field
 - A nullable description field
 - A non-nullable quantity field
@@ -226,15 +229,17 @@ pub async fn find_by_email(db: &DatabaseConnection, email: &str) -> ModelResult<
 ```
 
 ## Middleware in Loco
+
 Middleware in Loco can be implemented in a few ways:
 
-1) Implementing `axum::FromRequestParts` (or `FromRequest`) for a given struct or enum
+1. Implementing `axum::FromRequestParts` (or `FromRequest`) for a given struct or enum
 
-2) Implmenting the optional `after_routes()` method in the Hooks trait (in `app.rs`)
+2. Implmenting the optional `after_routes()` method in the Hooks trait (in `app.rs`)
 
 Implementing `FromRequest` is probably the easiest way to go about being able to implement middleware for select routes, while `after_routes()` is likely much better for globally implementing a middleware (for example, a timeout).
 
 ### Using FromRequestParts
+
 Although `FromRequestParts` (and `FromRequest` respectively) look tricky to implement, you can make it substantially easier on yourself by remembering that the state itself just needs to implement `Send + Sync` - which means you can use `AppContext` with it! Check out the code snippet below for an overall implementation of how you would write something that implements `FromRequestParts`.
 
 ```rust
@@ -303,21 +308,27 @@ Serving a frontend with Loco is as easy as going into the `frontend` folder, the
 Note that the main frontend approach uses React. You can switch this out for any other framework you like. The only thing you need to do is to make sure the frontend you are serving matches the config file under the `static` section (the `folder` key, with the default being `/frontend/dist`). If you're a Svelte or Vue user, or want to use Leptos or Dioxus you can freely switch around! If you are not experienced in any of the aforementioned frameworks, you can also use raw HTML/CSS/JS. This may be particularly more favourable if you either don't have a lot of HTML/CSS you need to serve.
 
 ## Deploying Loco
+
 Loco have provided their own commands for generating a deployment. You can run it by using `cargo loco generate deployment`. It will then generate a Dockerfile or Shuttle deployment depending on what you select. If you're deploying with Shuttle, don't forget you can add your frontend assets by going to your Shuttle.toml file and then adding `frontend/dist` to your assets key:
+
 ```toml
 name = "<name-of-your-project>"
 assets = ["frontend/dist/*"]
 ```
 
 Then you can run the following to deploy your application (don't forget to install `cargo-shuttle`):
+
 ```bash
 shuttle deploy
 ```
+
 We are planning to release a native database integration with Loco! Stay tuned for part 2 where we will go into further detail about how you can build out your dream web application.
 
 ## Finishing Up
+
 Thanks for reading! We hope this Rust Loco guide has helped you. If you're looking to get started with Rust web development, now is a better time than ever to do so.
 
 Interested in more?
+
 - Read about our getting started with Axum article [here](https://www.shuttle.dev/blog/2023/12/06/using-axum-rust)
 - Learn about how you can implement OAuth for your application [here](https://www.shuttle.dev/blog/2023/08/30/using-oauth-with-axum)

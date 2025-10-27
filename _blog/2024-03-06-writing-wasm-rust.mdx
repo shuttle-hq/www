@@ -5,7 +5,7 @@ author: josh
 tags: [rust, wasm, guide]
 thumb: wasm-rust-thumb.png
 cover: wasm-rust-thumb.png
-date: '2024-02-29T15:30:00'
+date: "2024-02-29T15:30:00"
 ---
 
 Hello world! In today's post we're going to talk about how you can write a WebAssembly module in Rust. WebAssembly is a portable compilation target for programming languages to be able to conveniently inter-op with JavaScript on the web. Rust being able to take advantage of this has made it extremely useful for many use cases, such as:
@@ -159,7 +159,7 @@ If you don't want to use CommonJS because you're using ESM (EcmaScript modules, 
 - `deno` (usable as a Deno module)
 - `no-modules` (like the `web` target but doesn't use ES Modules).
 
-There are specific docs for usage with ES which you can check out [here.](https://rustwasm.github.io/wasm-bindgen/examples/hello-world.html?highlight=webpack#webpack-specific-files) The easiest way to do it in terms of what compiler to use is typically with Webpack as it's the most compatible. There is also an additional guide you can use for compiling to ES6 modules without a bundler [here](https://rustwasm.github.io/wasm-bindgen/examples/without-a-bundler.html) - though it involves initializing the WASM module manually before running which adds some overhead.
+There are specific docs for usage with ES. The easiest way to do it in terms of what compiler to use is typically with Webpack as it's the most compatible. You can also compile to ES6 modules without a bundler, though it involves initializing the WASM module manually before running which adds some overhead.
 
 ## Test driving our new module
 
@@ -173,15 +173,15 @@ npm i express express-fileupload
 Next, we'll create a `server.js` file in our root directory and insert the following code:
 
 ```jsx
-const fileUpload = require('express-fileupload');
-const express = require('express');
-const { convert_image } = require('./pkg/wasm_example');
+const fileUpload = require("express-fileupload");
+const express = require("express");
+const { convert_image } = require("./pkg/wasm_example");
 
 const app = express();
 app.use(fileUpload());
 const port = 3030;
 
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   res.send(`
     <h2>With <code>"express"</code> npm package</h2>
     <form action="/api/upload" enctype="multipart/form-data" method="post">
@@ -192,17 +192,17 @@ app.get('/', (req, res) => {
   `);
 });
 
-app.post('/api/upload', (req, res, next) => {
-  const image = convert_image(req.files.file.data)
+app.post("/api/upload", (req, res, next) => {
+  const image = convert_image(req.files.file.data);
 
-  res.setHeader('Content-disposition', 'attachment; filename="meme.jpeg"');
-  res.setHeader('Content-type', 'image/jpg');
-    res.send(image);
-  });
+  res.setHeader("Content-disposition", 'attachment; filename="meme.jpeg"');
+  res.setHeader("Content-type", "image/jpg");
+  res.send(image);
+});
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+  console.log(`Example app listening on port ${port}`);
+});
 ```
 
 This snippet does the following:
@@ -215,13 +215,15 @@ If we use `node server.js`, head to `[http://localhost:3030](http://localhost:30
 
 Note that depending on the settings you are using for your image file format conversion, your file size may increase post-conversion; this is because you may be using lossless conversion. If you want to use lossy conversion to decrease your file size, you want the `new_with_quality` method while instantiating the image encoder in your Rust code.
 
+<TestimonialCTA />
+
 ## Building our app with alternative CLIs
 
 While `wasm-bindgen-cli` is useful, it's also the most low level CLI out of our options and you can run into spurious issues while using it such as `wasm-bindgen` version incompatibility issues. There are some additional quality of life changes that we could benefit from, such as automatic versioning and `wasm-opt` usage. Let's take a quick look at some of these other options and see how they compare.
 
 ### Wasm-pack
 
-`wasm-pack` is a tool that aims to be a one-stop-shop for compiling Rust to WASM. It includes a CLI that you can use by installing it [here](https://rustwasm.github.io/wasm-pack/installer/). In comparison to using `wasm-bindgen-cli`, it has a number of quality of life upgrades:
+`wasm-pack` is a tool that aims to be a one-stop-shop for compiling Rust to WASM. It includes a CLI that you can install. In comparison to using `wasm-bindgen-cli`, it has a number of quality of life upgrades:
 
 - Comes with `wee_alloc`, a WebAssembly allocator with a (pre-compression) 1kB code footprint.
 - Comes with a panic hook that allows you to debug Rust panic messages in the browser

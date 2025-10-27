@@ -9,7 +9,10 @@ const problematicChars: Record<string, string> = {
   "\u2019": "'", // Right single quotation mark
   "\u201C": '"', // Left double quotation mark
   "\u201D": '"', // Right double quotation mark
+  "\u2010": "-", // Hyphen
+  "\u2011": "-", // Non-breaking hyphen
   "\u2013": "-", // En dash
+  "\u2014": "-", // Em dash
   "\u2026": "...", // Horizontal ellipsis
   "\u00A0": " ", // Non-breaking space
   "\u00D7": "x", // Multiplication sign

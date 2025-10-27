@@ -5,8 +5,9 @@ author: josh
 tags: [rust, ai, rag, guide]
 thumb: semantic-caching-qdrant-rust-thumb.png
 cover: semantic-caching-qdrant-rust-thumb.png
-date: '2024-05-30T14:30:00'
+date: "2024-05-30T14:30:00"
 ---
+
 Hello world! Today we're going to learn about semantic caching with Qdrant, in Rust. By the end of this tutorial, you'll have a Rust application that can do the following:
 
 - Ingest a CSV file, turn it into an embedding with the help of an LLM and insert it into Qdrant
@@ -212,7 +213,7 @@ impl RagSystem {
 
 ```
 
-We'll then need to embed any further inputs  to search for any matching embeddings. The `embed_prompt` function will look quite similar to the embedding part of our `embed_and_upsert_csv_file` function. However, it will instead return a `Vec<f32>` as we'll want to use this later to search our collection.
+We'll then need to embed any further inputs to search for any matching embeddings. The `embed_prompt` function will look quite similar to the embedding part of our `embed_and_upsert_csv_file` function. However, it will instead return a `Vec<f32>` as we'll want to use this later to search our collection.
 
 ```rust
 impl RagSystem {
@@ -354,7 +355,7 @@ impl RagSystem {
 
 ```
 
-Of course, you'll also want to implement a function for searching your cache collection. Note that although the functions are *mostly* the same, we get the `answer` field from the payload instead of `document` for semantics.
+Of course, you'll also want to implement a function for searching your cache collection. Note that although the functions are _mostly_ the same, we get the `answer` field from the payload instead of `document` for semantics.
 
 ```rust
 impl RagSystem {
@@ -443,7 +444,7 @@ impl RagSystem {
 
 ### Using Qdrant in a Rust web service
 
-Let's have a quick look at a real world example. Below is a HTTP endpoint for the Axum framework that  takes our `RAGSystem` as application state. It'll embed the prompt and attempt to search the cache. If there's no result, it searches in the regular collection for a match. The resulting document payload is added to an augmented prompt, and the question and answer are added to the cache. Finally, a response is returned from the endpoint.
+Let's have a quick look at a real world example. Below is a HTTP endpoint for the Axum framework that takes our `RAGSystem` as application state. It'll embed the prompt and attempt to search the cache. If there's no result, it searches in the regular collection for a match. The resulting document payload is added to an augmented prompt, and the question and answer are added to the cache. Finally, a response is returned from the endpoint.
 
 ```rust
 use axum::{Json, extract::State, response::IntoResponse, http::StatusCode};
@@ -558,13 +559,14 @@ Question 2: <question 2 goes here>
 
 ### Smaller payload indexes
 
-It should be noted of course that while our example *does* work, one thing you might need to think about is payload indexes or associated data connected to a particular embedding. If you're inserting the whole file contents as the payload for every single embedding in a large file, chances are you are going to increase your resource usage quite rapidly. You can mitigate this by only inserting a relevant slice of the file per embedding (so for example in this case, it might be the row).
+It should be noted of course that while our example _does_ work, one thing you might need to think about is payload indexes or associated data connected to a particular embedding. If you're inserting the whole file contents as the payload for every single embedding in a large file, chances are you are going to increase your resource usage quite rapidly. You can mitigate this by only inserting a relevant slice of the file per embedding (so for example in this case, it might be the row).
 
 ## Finishing up
 
 Thanks for reading! By using semantic caching, we can create a much more performant RAG system that saves on both time and costs.
 
 Read more:
+
 - [Building a RAG agent workflow](https://www.shuttle.dev/blog/2024/05/23/building-agentic-rag-rust-qdrant)
 - [Parallelize your data processing using Rayon](https://www.shuttle.dev/blog/2024/04/11/using-rayon-rust)
 - [Using Huggingface with Rust](https://www.shuttle.dev/blog/2024/05/01/using-huggingface-rust)

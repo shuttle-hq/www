@@ -5,8 +5,9 @@ author: josh
 tags: [rust, ai, llm-orchestration, guide]
 thumb: llm-chain-langchain-rust-thumb.png
 cover: llm-chain-langchain-rust-thumb.png
-date: '2024-06-06T15:30:00'
+date: "2024-06-06T15:30:00"
 ---
+
 LLM orchestration is an important part of creating AI powered applications. Particularly in business use cases, AI agents and RAG pipelines are commonly utilised for refined LLM responses. Although Langchain is currently the most popular LLM orchestration suite, there are also similar crates in Rust that we can use. In this article, we'll be diving into one of them - `llm-chain`.
 
 ## What is llm-chain?
@@ -192,7 +193,7 @@ Map-reduce chains typically consist of two steps:
 
 - A "Map" step that takes a document and applies an LLM chain to it, treating the output as a new document
 - The new documents are then passed to a new chain that combines the separate documents to get a single output.
-At the end of a Map-Reduce chain, the output can be taken for further processing by sending it to another prompting model (for instance) or as part of a sequential pipeline.
+  At the end of a Map-Reduce chain, the output can be taken for further processing by sending it to another prompting model (for instance) or as part of a sequential pipeline.
 
 To use this pattern, we need to create a prompt template:
 
@@ -291,6 +292,8 @@ Step 2: Hello, Jane! Sending you warm greetings and positive vibes today. May yo
 Step 3: Hello, Alice! I hope this message finds you well and thriving. You are such a remarkable individual with a heart full of kindness and a spirit full of strength. Keep inspiring those around you with your grace and resilience. May your day be filled with love, laughter, and countless blessings. Stay amazing, Alice!
 Step 4: We just created personalized greetings for Joe, Jane, and Alice.
 ```
+
+<TestimonialCTA />
 
 ## Using embeddings with llm-chain
 
@@ -449,7 +452,7 @@ async fn main() {
 }
 ```
 
-As well as this, there is also support for Bing Search API which provides 1000 free searches a month - you can find more about the pricing [here](https://www.microsoft.com/en-us/bing/apis/pricing).  Below is a code snippet of how you can use the API:
+As well as this, there is also support for Bing Search API which provides 1000 free searches a month. Below is a code snippet of how you can use the API:
 
 ```rust
 use llm_chain::tools::{tools::BingSearch, Tool};
@@ -501,6 +504,7 @@ You can find out more about the `parsing` module for `llm-chain` [here](https://
 Thanks for reading! With the power of `llm-chain`, you can easily leverage AI for your applications.
 
 Read more:
+
 - [Building a RAG agent workflow](https://www.shuttle.dev/blog/2024/05/23/building-agentic-rag-rust-qdrant)
 - [Using Huggingface with Rust](https://www.shuttle.dev/blog/2024/05/01/using-huggingface-rust)
 - [Building an Axum web server to use with llm-chain](https://www.shuttle.dev/blog/2024/03/13/simple-web-server-rust)

@@ -5,18 +5,21 @@ author: josh
 tags: [tutorial, ai, rust]
 thumb: arxiv-rig-rust-thumb.png
 cover: arxiv-rig-rust-thumb.png
-date: '2025-01-08T15:00:00'
+date: "2025-01-08T15:00:00"
 ---
+
 Hi there! In this tutorial we're going to be using the Rig AI framework to create an AI agent for helping you learn by suggesting research papers based on a given subject. We're also going to use Shuttle to deploy it on the web so that other people can try it out!
 
 Interested in just looking at the code? [Check out the GitHub repository.](https://github.com/0xPlaygrounds/rig-arxiv-agent-example/tree/main/shuttle)
 
 ## Why Rig?
+
 Rig (by [Playgrounds](https://playgrounds.network/), who also additionally maintains [arc.fun](https://arc.fun)) is a new up-and-coming Rust framework designed to make AI agent creation as easy as possible. It can currently create agentic pipelines (ie. pipelines that can execute a number of prompts LLM-assisted steps), integrate RAG with AI agents as well as exposing an API that you can use to create your own tools.
 
 The framework itself is growing quite rapidly with the maintainer team using it in production, so it will be receiving updates for quite some time! They're also holding an event called [the ARC Handshake](https://www.arc.fun/handshake), which will be a showcase of AI agents built using Rig.
 
 ## Pre-requisites
+
 Before we start, you'll want to ensure you have the Rust programming language installed and additionally an OpenAI API token. If you don't have one already, you will need to sign in and [obtain an API key from the dashboard](https://platform.openai.com/settings/organization/general) as this will be required to make it work.
 
 You'll also want the `cargo-shuttle` crate installed (our CLI) - [check out our installation instructions for more info.](https://docs.shuttle.dev/getting-started/installation)
@@ -24,25 +27,31 @@ You'll also want the `cargo-shuttle` crate installed (our CLI) - [check out our 
 ## Let's get building!
 
 If you haven't already, don't forget to create a new Shuttle project via [cargo-shuttle](https://docs.shuttle.dev/getting-started/installation):
+
 ```bash
 shuttle init --template axum
 ```
 
 Once you've followed the prompt and it's set up, we'll need to add our required dependencies to build the project:
+
 ```bash
 cargo add reqwest serde serde-json anyhow thiserror quick-xml rig-core \
 urlencoding tracing -F serde/derive,quick-xml/serialize
 ```
 
 ## Creating our Rig AI agent
+
 The first step will be to create our AI agent. We can do this by creating a tool that will be able to send a prompt to a model (or in this case OpenAI), as well as do some functionality when called.
 
 ### Setup
+
 The arXiv export endpoint (`http://export.arxiv.org/api/query`) takes a few different query parameters that are relevant to us:
+
 - `search_query` (The actual search query we want to search for)
 - `max` (maximum number of papers we want in the result)
 
 Before we write the implementation block, let's declare the relevant structs we want. We want one for holding paper results, one for search arguments and one for the tool itself.
+
 ```rust
 // Struct to hold paper metadata
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
@@ -78,7 +87,9 @@ pub struct ArxivSearchTool;
 ```
 
 ### Error Handling
+
 While the AI agent is carrying out work, there are many different types of errors it can get. We should aim to represent these by using an enum. We additionally enhance our error type by implementing `thiserror::Error` (requiring `Debug`), which allows us to easily derive `From<T: Error>` for our new error type.
+
 ```rust
 #[derive(Debug, thiserror::Error)]
 pub enum ArxivError {
@@ -94,10 +105,12 @@ pub enum ArxivError {
 ```
 
 By doing this, a couple of cool things happen:
+
 - It enables use of the `?` operator which increases readability and allows error propagation up the call stack
 - Makes it obvious why and/or how something has failed (we can check the enum variant)
 
 ### Rig Tool Definitions
+
 Next, we want to write the implementation block. It requires us to provide functionality for two methods - `definition()` which provides the tool definition and prompting for the model, as well as `call()` which is the actual functionality for the tool.
 
 ```rust
@@ -154,7 +167,9 @@ impl Tool for ArxivSearchTool {
 Note that the tool is simply a tool that can be called by the model - it can either be added to a given Rig prompt by itself, or it can be added to a toolset with other tools to provide a comprehensive user experience.
 
 ### Parsing the arXiv response
+
 Next, we need parse the response from arXiv. The actual response format is in XML - this is what a typical entry looks like:
+
 ```xml
 <entry>
 <id>http://arxiv.org/abs/2407.11861v1</id>
@@ -178,6 +193,7 @@ Next, we need parse the response from arXiv. The actual response format is in XM
 <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
 </entry>
 ```
+
 In order to parse it, we will use the `quickxml` crate which offers good performance while still being relatively easy to use.
 
 To ensure codebase readability, we will create a struct that will act as our parser and hold the parser state in it:
@@ -195,11 +211,12 @@ struct ArxivParser<'a> {
 ```
 
 We will implement several methods on this struct:
+
 - Methods for handling different types of XML events
 - A public method for parsing the whole text
 
-
 To start with, we'll create methods for handling the start of an XML tag as well as any text that is contained within the tag:
+
 ```rust
 impl<'a> ArxivParser<'a> {
     fn parse_start_event(&mut self, event: &BytesStart) {
@@ -239,7 +256,9 @@ impl<'a> ArxivParser<'a> {
     }
 }
 ```
+
 Before we continue, we need to create a small function to be able to convert the links we get from parsing an `arXiv` XML entry to be able to return the PDF response. See below where we replace `arxiv.org/abs` with `arxiv.org/pdf`:
+
 ```rust
 fn convert_pdf_url(url: &str) -> String {
     if url.contains("arxiv.org/abs/") {
@@ -256,7 +275,9 @@ fn convert_pdf_url(url: &str) -> String {
     }
 }
 ```
+
 Next, we want to parse empty XML elements. If the XML element is a Link or Category, we attempt to parse them like below and add the relevant parts to the parser state:
+
 ```rust
 impl<'a> ArxivParser<'a> {
         // .. other methods here
@@ -293,9 +314,12 @@ impl<'a> ArxivParser<'a> {
         Ok(())
     }
 ```
+
 We also need to ensure that we are correctly resetting the parser state when we reach the end of an element:
+
 - If we reach the end of an entry, we need to push our current `Paper` to the list of papers being generated by the parser
 - If we reach the end of another element, we just reset the `current_field` field as there is nothing left to parse within the given element.
+
 ```rust
 impl<'a> ArxivParser<'a> {
     // .. other methods
@@ -322,7 +346,9 @@ impl<'a> ArxivParser<'a> {
     }
 }
 ```
+
 Finally, we need to write our method for parsing the whole response. This function simply loops until the end of the XML file has been reached (an `Event::Eof` has been reached). If there's no papers that have been parsed (no results were returned), we will return an error.
+
 ```rust
 impl<'a> ArxivParser<'a> {
     // .. other methods
@@ -356,21 +382,28 @@ impl<'a> ArxivParser<'a> {
 Now we can move onto writing our web service!
 
 ## Writing our Rust web service
+
 In terms of application code for the web service itself, there are a few things:
+
 - Setting up application state
 - Setting up endpoints
 - Serving a frontend (of our choice)
 
 ### Setting up application state
+
 We can define the application state as a struct that holds our OpenAI client. Note that it's required to derive Clone as application state is shared over many requests, hence the Clone trait requirement (as it guarantees this behaviour).
+
 ```rust
 #[derive(Clone)]
 struct AppState {
     openai_client: openai::Client,
 }
 ```
+
 ### Error handling
+
 Before we implement our endpoint, let's again take a minute to consider error handling. We want error handling to be as idiomatic as possible - and we also use `anyhow::Error` for a large majority of our errors as it's easy to use. Therefore, we should implement `From<T: Into<anyhow::Error>>` for our application error. We also additionally want to implement `axum::response::IntoResponse` for our error type as this allows the type to be used as part of a return type signature in an Axum function handler.
+
 ```rust
 use axum::response::IntoResponse;
 
@@ -397,7 +430,9 @@ where
 ```
 
 ### Endpoints
+
 There is only one single endpoint we need to write - the handler for receiving requests about papers to search and then carrying out the required work. The code snippet below is a relatively simple - we grab the query, we create an AI agent that uses GPT-4 and add some additional pre-amble (extra context) as well as the original prompt as part of the query. We then deserialize the resulting string and return a HTML response.
+
 ```rust
 use serde::Deserialize;
 
@@ -437,9 +472,11 @@ async fn search_papers(
 ```
 
 ### Frontend
+
 While we won't dive into writing the frontend in this article, you can [have a look at the HTML files yourself](https://github.com/0xPlaygrounds/rig-arxiv-agent-example/tree/main/shuttle/static) and copy them in (we use a folder called `static`, which is in the project root).
 
 You'll need to create a handler to serve it:
+
 ```rust
 use axum::response::Html;
 
@@ -465,7 +502,9 @@ pub fn format_papers_as_html(papers: &[Paper]) -> Result<String, Box<dyn std::er
 ```
 
 ### Putting it all together
+
 Next, we'll set up our main function. We'll need to add the Secrets annotation (see below) to our function parameters, as well as adding a `CorsLayer` and our additional routes.
+
 ```rust
 #[shuttle_runtime::main]
 async fn axum(
@@ -500,6 +539,7 @@ async fn axum(
 ```
 
 ## Deploying
+
 If you've added any frontend assets, make sure you add them to a `Shuttle.toml` file in your root folder (this will allow the frontend templates folder to be included in deployment):
 
 ```toml
@@ -509,12 +549,14 @@ assets = ["<folder-name>/*"]
 
 If you've followed this tutorial from start to finish, the folder name should be `static`. We add `/*` at the end to signify that we want to include the whole directory and all files inside it.
 
-To deploy, all you need to do is write `shuttle deploy` into the terminal  and watch the magic happen! If you'd like to run this locally, simply run `shuttle run` then visit `localhost:8000`.
+To deploy, all you need to do is write `shuttle deploy` into the terminal and watch the magic happen! If you'd like to run this locally, simply run `shuttle run` then visit `localhost:8000`.
 
 ## Finishing up
+
 Thanks for reading! Hopefully this article has increased your understanding of how to implement your own AI agent using the Rig AI framework, as well as writing a web service with a frontend.
 
 Further reading:
+
 - [Building agentic RAG with Qdrant & Rust](https://www.shuttle.dev/blog/2024/05/23/building-agentic-rag-rust-qdrant)
 - [Get Started with Logging in Rust](https://www.shuttle.dev/blog/2023/09/20/logging-in-rust)
 - [Get Started with Axum](https://www.shuttle.dev/blog/2023/12/06/using-axum-rust)

@@ -119,7 +119,7 @@ const authors: readonly Author[] = [
     author_id: "jeff",
     author: "Jeff Mitchell",
     position: "",
-    author_url: "https://jeff-mitchell.dev/",
+    author_url: "#",
     author_image_url: "",
   },
   {
@@ -140,7 +140,7 @@ const authors: readonly Author[] = [
     author_id: "antithesis",
     author: "Antithesis",
     position: "",
-    author_url: "",
+    author_url: "#",
     author_image_url: "",
   },
   {

@@ -5,7 +5,7 @@ author: josh
 tags: [rust, rate-limiting, guide]
 thumb: rate-limiting-rust-thumb.png
 cover: rate-limiting-rust-thumb.png
-date: '2024-02-22T15:00:00'
+date: "2024-02-22T15:00:00"
 ---
 
 Hello world! We're going to talk about implementing rate limiting for your API in Rust. When it comes to services in production, you want to ensure that bad actors aren't abusing your APIs - this is where API rate limiting comes in.
@@ -43,7 +43,7 @@ pub struct RateLimiter {
 }
 ```
 
- To get started, we'll want to lock our hashmap by using `.lock()` which gives us write access. Then we'll want to check whether or not the hashmap contains a key containing the IP address we want to check for with the `.entry()` function, then modify it by retaining valid timestamps and pushing a new entry depending on whether or not the length is under the request limit. We then check if the entry length is a higher length than the request limit - if so, return an error; if not, return `Ok(())`.
+To get started, we'll want to lock our hashmap by using `.lock()` which gives us write access. Then we'll want to check whether or not the hashmap contains a key containing the IP address we want to check for with the `.entry()` function, then modify it by retaining valid timestamps and pushing a new entry depending on whether or not the length is under the request limit. We then check if the entry length is a higher length than the request limit - if so, return an error; if not, return `Ok(())`.
 
 ```rust
 impl RateLimiter {
@@ -106,6 +106,8 @@ let rate_limiter = RateLimiter::default();
 
 From here if we wanted to extend this to work with Axum, we could. However, production-ready rate-limiting systems are typically much more advanced than this. We'll be discussing how you can utilize crates for rate limiting below, including usage of user-based rate limiting.
 
+<TestimonialCTA />
+
 ## Implementing user-based rate limiting
 
 For external-facing websites without a login, IP addresses are the only thing you can use (besides browser information) to track users. However, it can be much more useful to rate limit based on authenticated users rather than IP addresses. While working with IP addresses, you may run into the following issues:
@@ -116,6 +118,7 @@ For external-facing websites without a login, IP addresses are the only thing yo
 Working with user-based rate limiting allows us to solve these issues. While users can have more than one IP address, we can assign it all to the same user.
 
 ## Getting started
+
 To initialise our web service we'll use `shuttle init` (requires `cargo-shuttle` installed) to create our project, making sure to pick Axum as the framework.
 
 Before adding the rate limiter itself, we're going to create a custom header key! This will be used in routes where we require user authentication. We can also use the header when implementing our custom key extractor for the rate limiter later on. We'll want to start by adding `axum-extra` with the `typed-header` feature:
@@ -269,6 +272,8 @@ Note that in the builder, the `per_second()` function tells us exactly how many 
 ## Deploying
 
 Now that we're done, you can deploy using `shuttle deploy` (add `--ad` if on a dirty Git branch) and watch the magic happen. Once finished, Shuttle will output the details of your deployment in the terminal.
+
+<DiscordCTA />
 
 ## Finishing Up
 

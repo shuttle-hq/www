@@ -1,11 +1,11 @@
 ---
 title: "Best AI Coding Tools for Rust Projects: IDEs vs Terminals"
 description: "We tested seven AI coding tools on the same Rust project. See how each performed on speed, accuracy, and terminal vs IDE workflows."
-author: demola 
+author: demola
 tags: [rust, ai, coding-tools, development]
 thumb: ai-coding-tools-rust/cover.png
 cover: ai-coding-tools-rust/cover.png
-date: '2025-09-09'
+date: "2025-09-09"
 ---
 
 As Rust developers, we tend to rely on familiar setups like Visual Studio Code (VS Code) or the terminal because they offer the speed and control we need. AI coding tools extend these workflows but approach them in different ways. Some plug directly into IDEs, while others work in the terminal. If you are building Rust projects, the real question is which of these tools are actually useful in practice.
@@ -16,14 +16,14 @@ Because each tool outputs code differently, we also needed a way to deploy their
 
 The table below summarizes the key differences between IDE-based and terminal-based AI coding tools:
 
-| Aspect | IDE-Based Tools | Terminal-Based Tools |
-| --- | --- | --- |
-| Integration | Deep editor integration with real-time suggestions | Command-line focused with file system awareness |
-| Workflow | Seamless coding experience within a familiar environment | Context-switching between the terminal and the editor |
-| Context Awareness | Full project context with syntax highlighting | File-based context with smart project understanding |
-| Learning Curve | Minimal - extends existing IDE workflow | Moderate - requires learning CLI commands |
-| Collaboration | Individual developer focused | Often better for pair programming and code review |
-| Customization | Limited to IDE extension capabilities | Highly customizable through configuration files |
+| Aspect            | IDE-Based Tools                                          | Terminal-Based Tools                                  |
+| ----------------- | -------------------------------------------------------- | ----------------------------------------------------- |
+| Integration       | Deep editor integration with real-time suggestions       | Command-line focused with file system awareness       |
+| Workflow          | Seamless coding experience within a familiar environment | Context-switching between the terminal and the editor |
+| Context Awareness | Full project context with syntax highlighting            | File-based context with smart project understanding   |
+| Learning Curve    | Minimal - extends existing IDE workflow                  | Moderate - requires learning CLI commands             |
+| Collaboration     | Individual developer focused                             | Often better for pair programming and code review     |
+| Customization     | Limited to IDE extension capabilities                    | Highly customizable through configuration files       |
 
 ## AI Coding Tools: IDEs vs. Terminals
 
@@ -41,10 +41,11 @@ With IDE-based tools, you can expect:
 - Higher Resource Usage: Keep in mind that graphical interfaces and IDE overhead usually demand more system resources.
 
 Some of the most popular IDE-based AI coding tools are:
-  - Cursor
-  - Windsurf (formerly Codeium)
-  - VS Code + GitHub Copilot
-  - Kiro by AWS
+
+- Cursor
+- Windsurf (formerly Codeium)
+- VS Code + GitHub Copilot
+- Kiro by AWS
 
 **Cursor:**
 
@@ -59,7 +60,11 @@ Key features include:
 - Real-Time Code Generation: Code gets written as you type.
 - Smart Autocomplete: Smarter, context-aware autocomplete.
 
-<CaptionedImage src="/images/blog/ai-coding-tools-rust/cursor-ide.png" alt="Cursor IDE" caption="Cursor IDE" />
+<CaptionedImage
+  src="/images/blog/ai-coding-tools-rust/cursor-ide.png"
+  alt="Cursor IDE"
+  caption="Cursor IDE"
+/>
 
 **Windsurf (formerly Codeium):**
 
@@ -76,8 +81,8 @@ Key features include:
 - Code Quality Insights: Instant feedback on clarity, maintainability, and best practices.
 - Deep Static Analysis Integration: Catch hidden bugs, security risks, and performance issues early.
 
-<CaptionedImage 
-  src="/images/blog/ai-coding-tools-rust/windsurf-ide.png" 
+<CaptionedImage
+  src="/images/blog/ai-coding-tools-rust/windsurf-ide.png"
   alt="Windsurf IDE"
   caption="Windsurf IDE"
 />
@@ -96,8 +101,8 @@ Key features include:
 - Multi-Language and Framework Support: Works across dozens of languages and frameworks.
 - Integration with GitHub Ecosystem: Easily connects with repos, PRs, and Actions.
 
-<CaptionedImage 
-  src="/images/blog/ai-coding-tools-rust/vscode.png" 
+<CaptionedImage
+  src="/images/blog/ai-coding-tools-rust/vscode.png"
   alt="VS Code + GitHub Copilot"
   caption="VS Code + GitHub Copilot"
 />
@@ -115,13 +120,15 @@ Key features include:
 - Agentic Programming: Let AI agents handle multi-step tasks. They can plan projects, update specs, and keep changes synced across your codebase.
 - AWS Integration: Connect seamlessly with AWS services for deployment, monitoring, and scaling so your projects move smoothly into production.
 
-<CaptionedImage 
-  src="/images/blog/ai-coding-tools-rust/kiro-ui.png" 
+<CaptionedImage
+  src="/images/blog/ai-coding-tools-rust/kiro-ui.png"
   alt="Kiro IDE"
   caption="Kiro IDE"
 />
 
 The key difference between IDE-based AI coding tools is in their approach. Cursor, Windsurf, and Copilot focus on real-time code suggestions and inline assistance for quick iteration. Kiro, on the other hand, takes a different path with agentic, spec-driven workflows that emphasize production readiness and cut down on ad-hoc "vibe coding" chaos. This makes it more agent-led and customizable, giving teams the guardrails and automations they need instead of just editor-centric features.
+
+<TestimonialCTA />
 
 ### What are Terminal-Based AI Coding Tools?
 
@@ -137,10 +144,11 @@ With terminal-based tools, you can expect:
 - Steeper Learning Curve: Requires comfort with command-line workflows and provides less visual feedback compared to IDE-based tools.
 
 Popular terminal-based AI coding tools include:
-  - Claude Code
-  - Aider
-  - Gemini CLI
-  - OpenAI Codex CLI
+
+- Claude Code
+- Aider
+- Gemini CLI
+- OpenAI Codex CLI
 
 **Claude Code:**
 
@@ -156,8 +164,8 @@ Key features include:
 - Conversational Debugging: Debug interactively with step-by-step guidance.
 - Code Explanation and Documentation: Turn complex code into clear explanations and documentation.
 
-<CaptionedImage 
-  src="/images/blog/ai-coding-tools-rust/claude-code.png" 
+<CaptionedImage
+  src="/images/blog/ai-coding-tools-rust/claude-code.png"
   alt="Claude Code"
   caption="Claude Code"
 />
@@ -174,8 +182,8 @@ Key features include:
 - Support for Multiple AI Models: Choose the AI model that fits your project and workflow.
 - Real-Time Collaboration: Get live, pair-programmer-style coding suggestions.
 
-<CaptionedImage 
-  src="/images/blog/ai-coding-tools-rust/aider.png" 
+<CaptionedImage
+  src="/images/blog/ai-coding-tools-rust/aider.png"
   alt="Aider"
   caption="Aider"
 />
@@ -192,8 +200,8 @@ Key features include:
 - Generous Free Tier: Get 60 requests per minute and 1,000 requests per day for free with just a personal Google account.
 - Security and Sandboxing: Runs in a secure, sandboxed environment with network restrictions, ensuring safe code execution.
 
-<CaptionedImage 
-  src="/images/blog/ai-coding-tools-rust/gemini-cli.png" 
+<CaptionedImage
+  src="/images/blog/ai-coding-tools-rust/gemini-cli.png"
   alt="Gemini CLI"
   caption="Gemini CLI"
 />
@@ -210,8 +218,8 @@ Key features include:
 - Open-Source and Community-Driven: Encourages community contributions and supports multiple AI providers like Gemini and OpenRouter via the Chat Completion API.
 - Sandbox Security: Executes commands in secure, sandboxed environments using Docker on Linux and Apple Seatbelt on macOS to ensure safe operations.
 
-<CaptionedImage 
-  src="/images/blog/ai-coding-tools-rust/codex-ui.png" 
+<CaptionedImage
+  src="/images/blog/ai-coding-tools-rust/codex-ui.png"
   alt="OpenAI Codex CLI"
   caption="OpenAI Codex CLI"
 />
@@ -232,7 +240,7 @@ Below are some of the benefits you get when you use IDE-based AI tools in your R
 - Visual feedback and multi-view interfaces make navigating complex Rust projects easier.
 - Deep integration with rust-analyzer provides context-aware fixes for the borrow checker and type errors.
 - Seamless real-time suggestions and autocomplete help maintain flow during Rust's error-prone early stages.
-While the visuals make it ideal for building and debugging large-scale projects, they still come with some limitations:
+  While the visuals make it ideal for building and debugging large-scale projects, they still come with some limitations:
 
 - Reliance on a GUI makes them less ideal for headless or remote Rust environments, such as servers.
 - Higher resource consumption, which can slow things down on lower-spec machines during Rust compilations.
@@ -247,7 +255,7 @@ Below are some of the benefits you get when you use terminal-based AI tools in y
 - Strong reasoning capabilities for planning Rust architectures or algorithms.
 - Lightweight and fast, making them great for Rust development on servers or low-power devices.
 - Well-suited for automation and Git-integrated workflows, including running builds and tests via commands.
-While they are fast and less resource-intensive, they also come with some drawbacks:
+  While they are fast and less resource-intensive, they also come with some drawbacks:
 - Less immediate feedback, as validation depends on manual runs of cargo tools, which can slow iteration.
 - Steeper learning curve, since you'll need comfort with the CLI to handle Rust's verbose error messages.
 
@@ -439,18 +447,17 @@ With Codex CLI, we gave it the same prompt. This time, it laid out the steps wit
 
 **Verdict:** Great for **learning Rust** and **mapping out roadmaps for Rust projects**.
 
-
 If you're weighing up any of the AI coding tools against each other, here's a quick reference to help decide which fits best in different contexts:
 
-| Tool | Category | Code Quality | Best For |
-| --- | --- | --- | --- |
-| Cursor | IDE | 9 | Fast prototyping, full-feature builds |
-| Windsurf | IDE | 8.5 | Architecture planning, complex logic |
-| Copilot | IDE | 8 | Incremental completions, patterns |
-| Claude Code | Terminal | 9 | Learning and explaining Rust and large-scale projects |
-| Aider | Terminal | 8.5 | Git-aware, team-oriented dev |
-| Gemini | Terminal | 8 | Complex refactoring and project architecture |
-| Codex | Terminal | 8.5 | Fast prototyping, mapping out roadmaps |
+| Tool        | Category | Code Quality | Best For                                              |
+| ----------- | -------- | ------------ | ----------------------------------------------------- |
+| Cursor      | IDE      | 9            | Fast prototyping, full-feature builds                 |
+| Windsurf    | IDE      | 8.5          | Architecture planning, complex logic                  |
+| Copilot     | IDE      | 8            | Incremental completions, patterns                     |
+| Claude Code | Terminal | 9            | Learning and explaining Rust and large-scale projects |
+| Aider       | Terminal | 8.5          | Git-aware, team-oriented dev                          |
+| Gemini      | Terminal | 8            | Complex refactoring and project architecture          |
+| Codex       | Terminal | 8.5          | Fast prototyping, mapping out roadmaps                |
 
 Using AI to generate Rust code can be powerful, but even the best tools have their blind spots. IDEs may overlook context rules, terminal tools can feel slower, and both risk introducing subtle bugs if not monitored. The gap between a quick prototype and a maintainable project often comes down to workflow design, rule enforcement, and consistent testing. In the next section, we'll cover best practices for getting the most out of AI coding tools so your Rust projects stay reliable, predictable, and scalable.
 
@@ -477,9 +484,10 @@ In short, enforce guardrails, define clear rules, and think like a PM. With that
 Each tool got us to a working Rust API, but in different ways. Some needed a bit of re-prompting, while others were more direct. Instead of setting up separate Dockerfiles, CI pipelines, or custom cloud configs for each tool, we kept things simple with a single deployment workflow powered by Shuttle's [Model Context Protocol](https://docs.shuttle.dev/integrations/mcp-server) (MCP). Here's how you can do the same:
 
 1. Set up Shuttle
-  - Create a [free Shuttle account](https://console.shuttle.dev/signup).
-  - Install the [Shuttle CLI](https://docs.shuttle.dev/getting-started/installation), which lets you deploy straight from your machine.
-  - Configure the CLI by running:&nbsp;
+
+- Create a [free Shuttle account](https://console.shuttle.dev/signup).
+- Install the [Shuttle CLI](https://docs.shuttle.dev/getting-started/installation), which lets you deploy straight from your machine.
+- Configure the CLI by running:&nbsp;
 
 ```bash
 Shuttle login
@@ -490,20 +498,22 @@ This will open a browser where you can log in with your credentials.
 2. Connect your AI Coding Tool to Shuttle MCP
 
 Add the Shuttle MCP server to your tool of choice. For example, in Windsurf:
-  - Go to Settings → Windsurf Settings → Manage MCPs → View raw config.
-  - Paste the server configuration below into the config file:
-    ```json
-    {
-      "mcpServers": {
-        "Shuttle": {
-          "command": "shuttle",
-          "args": ["mcp", "start"]
-        }
+
+- Go to Settings → Windsurf Settings → Manage MCPs → View raw config.
+- Paste the server configuration below into the config file:
+
+  ```json
+  {
+    "mcpServers": {
+      "Shuttle": {
+        "command": "shuttle",
+        "args": ["mcp", "start"]
       }
     }
-    ```
+  }
+  ```
 
-    Check [Shuttle's documentation](https://docs.shuttle.dev/integrations/mcp-server) for the full list of MCP configurations.
+  Check [Shuttle's documentation](https://docs.shuttle.dev/integrations/mcp-server) for the full list of MCP configurations.
 
 3. Prompt the Tool to Deploy
 
@@ -546,8 +556,8 @@ async fn main() -> shuttle_axum::ShuttleAxum {
 
 Finally, open your [Shuttle console](https://console.shuttle.dev/) to grab your API URL and other deployment artifacts.
 
-<CaptionedImage 
-  src="/images/blog/ai-coding-tools-rust/shuttle-console.png" 
+<CaptionedImage
+  src="/images/blog/ai-coding-tools-rust/shuttle-console.png"
   alt="Shuttle Console"
   caption="Shuttle Console"
 />
@@ -561,6 +571,8 @@ Shuttle goes further than just deployment. It provides tools and resources that 
 - **Community-driven development and support**, with an active open-source community, Discord, and programs to support your workflow.&nbsp;
 - **Fast redeploys and local iteration**, making it easy to test changes without waiting on long build times.
 - **Infrastructure as Code (IaC)** powered by Rust macros, which means your infrastructure lives directly inside your Rust code instead of separate config files.
+
+<DiscordCTA />
 
 ## Wrapping Up
 

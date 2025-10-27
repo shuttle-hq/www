@@ -1,11 +1,11 @@
 ---
-title: 'Rust Vs Go: A Hands-On Comparison'
+title: "Rust Vs Go: A Hands-On Comparison"
 description: Rust versus Go is a controversial topic that pops up from time. In this post, we will compare both languages in the context of web development by writing a small web service which shows weather data in both languages.
 author: matthias
 tags: [rust, go, comparison, guide]
 thumb: rust-go-thumb.png
 cover: rust-go-thumb.png
-date: '2023-09-27T17:00:00'
+date: "2023-09-27T17:00:00"
 ---
 
 Oh no, not another 'Is Rust better than Go?' article. Seriously, haven't we all
@@ -19,7 +19,7 @@ use for non-trivial projects.
 Since we are a platform-as-a-service provider, we think that we can contribute
 the most by _showing_ you how to build a small web service in both languages. We
 will use the same task and popular libraries for both languages to compare the
-solutions side-by-side so that you can make up your own mind and get a *feel*
+solutions side-by-side so that you can make up your own mind and get a _feel_
 for what it's like to work in each ecosystem.
 
 So, before you dismiss this as 'just another comparison', give it a read. There
@@ -62,10 +62,10 @@ highlight the strengths and weaknesses of _both_ languages.
 
 We will cover the following topics:
 
--   Routing
--   Templating
--   Database access
--   Deployment
+- Routing
+- Templating
+- Database access
+- Deployment
 
 We will leave out topics like client-side rendering or migrations,
 and focus on the server-side only.
@@ -86,8 +86,8 @@ also show a list of recently searched cities.
 
 As we extend the service, we will add the following features:
 
--   A simple UI to display the weather forecast
--   A database to store recently searched cities
+- A simple UI to display the weather forecast
+- A database to store recently searched cities
 
 ## The Weather API
 
@@ -95,8 +95,8 @@ For the weather forecast, we will use the [Open-Meteo API](https://open-meteo.co
 
 We will use these two API endpoints:
 
--   The [GeoCoding API](https://open-meteo.com/en/docs/geocoding-api) to get the coordinates of a city.
--   The [Weather Forecast API](https://open-meteo.com/en/docs) to get the weather forecast for the given coordinates.
+- The [GeoCoding API](https://open-meteo.com/en/docs/geocoding-api) to get the coordinates of a city.
+- The [Weather Forecast API](https://open-meteo.com/en/docs) to get the weather forecast for the given coordinates.
 
 There are libraries for both Go ([omgo](https://github.com/HectorMalot/omgo))
 and Rust ([openmeteo](https://github.com/angelodlfrtr/open-meteo-rs)), which we would use in a production service. However, for the sake of comparison, we want to see what it takes to make a "raw" HTTP request in both languages and convert the response to an idiomatic data structure.
@@ -419,28 +419,26 @@ Finally, we can create a template file `weather.html` in the `views` directory:
 ```html
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Weather Forecast</title>
-	</head>
-	<body>
-		<h1>Weather for {{ .City }}</h1>
-		<table border="1">
-			<tr>
-				<th>Date</th>
-				<th>Temperature</th>
-			</tr>
-			{{ range .Forecasts }}
-			<tr>
-				<td>{{ .Date }}</td>
-				<td>{{ .Temperature }}</td>
-			</tr>
-			{{ end }}
-		</table>
-	</body>
+  <head>
+    <title>Weather Forecast</title>
+  </head>
+  <body>
+    <h1>Weather for {{ .City }}</h1>
+    <table border="1">
+      <tr>
+        <th>Date</th>
+        <th>Temperature</th>
+      </tr>
+      {{ range .Forecasts }}
+      <tr>
+        <td>{{ .Date }}</td>
+        <td>{{ .Temperature }}</td>
+      </tr>
+      {{ end }}
+    </table>
+  </body>
 </html>
 ```
-
-(Take a look at the Gin documentation for more [details on how to use templates](https://gin-gonic.com/docs/examples/html-rendering/).)
 
 With that, we have a working web service that returns the weather forecast for a
 given city as an HTML page!
@@ -461,17 +459,17 @@ And a new template file `index.html`:
 ```html
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Weather Forecast</title>
-	</head>
-	<body>
-		<h1>Weather Forecast</h1>
-		<form action="/weather" method="get">
-			<label for="city">City:</label>
-			<input type="text" id="city" name="city" />
-			<input type="submit" value="Submit" />
-		</form>
-	</body>
+  <head>
+    <title>Weather Forecast</title>
+  </head>
+  <body>
+    <h1>Weather Forecast</h1>
+    <form action="/weather" method="get">
+      <label for="city">City:</label>
+      <input type="text" id="city" name="city" />
+      <input type="submit" value="Submit" />
+    </form>
+  </body>
 </html>
 ```
 
@@ -647,23 +645,23 @@ Our `stats.html` template is simple enough:
 ```html
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Latest Queries</title>
-	</head>
+  <head>
+    <title>Latest Queries</title>
+  </head>
 
-	<body>
-		<h1>Latest Lat/Long Lookups</h1>
-		<table border="1">
-			<tr>
-				<th>Cities</th>
-			</tr>
-			{{ range . }}
-			<tr>
-				<td>{{ . }}</td>
-			</tr>
-			{{ end }}
-		</table>
-	</body>
+  <body>
+    <h1>Latest Lat/Long Lookups</h1>
+    <table border="1">
+      <tr>
+        <th>Cities</th>
+      </tr>
+      {{ range . }}
+      <tr>
+        <td>{{ . }}</td>
+      </tr>
+      {{ end }}
+    </table>
+  </body>
 </html>
 ```
 
@@ -671,13 +669,13 @@ And with that, we have a working web service! Congratulations!
 
 We have achieved the following:
 
--   A web service that fetches the latitude and longitude for a given city from an external API
--   Stores the latitude and longitude in a database
--   Fetches the latitude and longitude from the database on subsequent requests
--   Prints the last search queries on the `/stats` endpoint
--   Basic-auth to protect the `/stats` endpoint
--   Uses middleware to log requests
--   Templates to render HTML
+- A web service that fetches the latitude and longitude for a given city from an external API
+- Stores the latitude and longitude in a database
+- Fetches the latitude and longitude from the database on subsequent requests
+- Prints the last search queries on the `/stats` endpoint
+- Basic-auth to protect the `/stats` endpoint
+- Uses middleware to log requests
+- Templates to render HTML
 
 That's quite a lot of functionality for a few lines of code!
 Let's see how Rust stacks up!
@@ -846,18 +844,18 @@ response
 
 A few things are happening here:
 
--   `response.results.get(0)` returns an `Option<&LatLong>`. It is an
-    `Option` because the `get` function might return `None` if the vector
-    is empty.
--   `cloned()` clones the value inside the `Option` and converts the
-    `Option<&LatLong>` into an `Option<LatLong>`. This is necessary,
-    because we want to return a `LatLong` and not a reference. Otherwise,
-    we would have to add a lifetime specifier to the function signature and
-    it makes the code less readable.
--   `ok_or("No results found".into())` converts the `Option<LatLong>` into
-    a `Result<LatLong, Box<dyn std::error::Error>>`. If the `Option` is
-    `None`, it will return the error message. The `into()` function
-    converts the string into a `Box<dyn std::error::Error>`.
+- `response.results.get(0)` returns an `Option<&LatLong>`. It is an
+  `Option` because the `get` function might return `None` if the vector
+  is empty.
+- `cloned()` clones the value inside the `Option` and converts the
+  `Option<&LatLong>` into an `Option<LatLong>`. This is necessary,
+  because we want to return a `LatLong` and not a reference. Otherwise,
+  we would have to add a lifetime specifier to the function signature and
+  it makes the code less readable.
+- `ok_or("No results found".into())` converts the `Option<LatLong>` into
+  a `Result<LatLong, Box<dyn std::error::Error>>`. If the `Option` is
+  `None`, it will return the error message. The `into()` function
+  converts the string into a `Box<dyn std::error::Error>`.
 
 An alternative way to write this would be:
 
@@ -1148,7 +1146,7 @@ Note how we mix the parsing logic with the handler logic.
 Let's clean this up a bit by moving the parsing logic into a
 constructor function:
 
-```rust
+````rust
 impl WeatherDisplay {
 	/// Create a new `WeatherDisplay` from a `WeatherResponse`.
 	fn new(city: String, response: WeatherResponse) -> Self {
@@ -1182,7 +1180,7 @@ async fn weather(Query(params): Query<WeatherQuery>) -> Result<String, StatusCod
 	let display = WeatherDisplay::new(params.city, weather);
 	Ok(format!("{:?}", display))
 }
-```
+````
 
 That's already a little bit better.
 What's distracting is the `map_err` boilerplate.
@@ -1280,29 +1278,29 @@ similar to the Go table template we created earlier:
 ```html
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<title>Weather</title>
-	</head>
-	<body>
-		<h1>Weather for {{ city }}</h1>
-		<table>
-			<thead>
-				<tr>
-					<th>Date</th>
-					<th>Temperature</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for forecast in forecasts %}
-				<tr>
-					<td>{{ forecast.date }}</td>
-					<td>{{ forecast.temperature }}</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Weather</title>
+  </head>
+  <body>
+    <h1>Weather for {{ city }}</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Temperature</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for forecast in forecasts %}
+        <tr>
+          <td>{{ forecast.date }}</td>
+          <td>{{ forecast.temperature }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
 </html>
 ```
 
@@ -1336,20 +1334,20 @@ We can use the exact same HTML we used for the Go version:
 
 ```html
 <form action="/weather" method="get">
-	<!DOCTYPE html>
-	<html>
-		<head>
-			<title>Weather Forecast</title>
-		</head>
-		<body>
-			<h1>Weather Forecast</h1>
-			<form action="/weather" method="get">
-				<label for="city">City:</label>
-				<input type="text" id="city" name="city" />
-				<input type="submit" value="Submit" />
-			</form>
-		</body>
-	</html>
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <title>Weather Forecast</title>
+    </head>
+    <body>
+      <h1>Weather Forecast</h1>
+      <form action="/weather" method="get">
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" />
+        <input type="submit" value="Submit" />
+      </form>
+    </body>
+  </html>
 </form>
 ```
 
@@ -1421,9 +1419,9 @@ async fn main() -> anyhow::Result<()> {
 
 Here's what changed:
 
--   We added a `DATABASE_URL` environment variable and read it in `main`.
--   We create a database connection pool with `sqlx::PgPool::connect`.
--   Then we pass the pool to `with_state` to make it available to all handlers.
+- We added a `DATABASE_URL` environment variable and read it in `main`.
+- We create a database connection pool with `sqlx::PgPool::connect`.
+- Then we pass the pool to `with_state` to make it available to all handlers.
 
 In each route, we can (but don't have to) access the database pool like this:
 
@@ -1505,9 +1503,9 @@ information on how to do basic auth.
 
 I ended up writing a custom middleware, that would
 
--   check if the request has an `Authorization` header
--   if it does, check if the header contains a valid username and password
--   if it does, return an "unauthorized" response and a `WWW-Authenticate` header, which instructs the browser to show a login dialog.
+- check if the request has an `Authorization` header
+- if it does, check if the header contains a valid username and password
+- if it does, return an "unauthorized" response and a `WWW-Authenticate` header, which instructs the browser to show a login dialog.
 
 Here's the code:
 
@@ -1740,21 +1738,20 @@ without any boilerplate or unnecessarily verbose error handling.
 
 ### Summary
 
--   Go:
+- Go:
+  - Easy to learn, fast, good for web services
+  - Batteries included. We did a lot with just the standard library.
+    For example, we didn't need to add a templating engine or a separate auth library.
+  - Our only external dependencies were `Gin` and `sqlx`
 
-    -   Easy to learn, fast, good for web services
-    -   Batteries included. We did a lot with just the standard library.
-        For example, we didn't need to add a templating engine or a separate auth library.
-    -   Our only external dependencies were `Gin` and `sqlx`
-
--   Rust:
-    -   Fast, safe, evolving ecosystem for web services
-    -   No batteries included. We had to add a lot of dependencies to get the
-        same functionality as in Go and write our own small middleware.
-    -   The final handler code was free from distracting error handling, because
-        we used our own error type and the `?` operator. This makes for very
-        readable code, at the cost of having to write additional adapter logic.
-		The handlers are succinct, and there's a natural separation of concerns.
+- Rust:
+  - Fast, safe, evolving ecosystem for web services
+  - No batteries included. We had to add a lot of dependencies to get the
+    same functionality as in Go and write our own small middleware.
+  - The final handler code was free from distracting error handling, because
+    we used our own error type and the `?` operator. This makes for very
+    readable code, at the cost of having to write additional adapter logic.
+    The handlers are succinct, and there's a natural separation of concerns.
 
 That begs the question...
 

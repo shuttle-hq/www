@@ -67,11 +67,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Reusable call-to-action components for blog posts located in `/components/blog/cta/`:
 
-- **TryItYourself**: Encourages hands-on experimentation with Shuttle
-- **ReadyToShipFaster**: Focuses on deployment and production readiness
-- **ViewImplementation**: Links to source code and complete tutorials
-- **DatabaseCTA**: Promotes Shuttle's database services with PostgreSQL, MongoDB, and Redis. Uses brand gradient background for visibility.
-- **NewConsoleCTA**: Promotes the redesigned Shuttle Console experience
+- **DiscordCTA**: Encourages joining the Shuttle Discord community
 
 All CTA components:
 
@@ -80,6 +76,7 @@ All CTA components:
 - Use consistent Tailwind CSS styling with brand gradients
 - Are exported from `@components/blog/cta/index.ts` for easy import
 - **Must be registered** in `/pages/blog/[year]/[month]/[day]/[slug].tsx` mdxComponents object to be usable in MDX files
+- **Event names for the blog CTAs inside the `components/blog/cta/` directory must start with `blog_cta_`** for consistent analytics tracking (e.g., `blog_cta_discord`, `blog_cta_testimonial`)
 
 ### Styling System
 

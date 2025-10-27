@@ -1,0 +1,164 @@
+---
+title: "Shuttle MCP Server"
+description: "How we improved the Shuttle MCP server to make AI agents more reliable, with better error handling and context for seamless deployment workflows"
+author: dcodes
+tags: [mcp, ai, shuttle, deployment, claude, workflow]
+thumb: shuttle-mcp/cover.png
+cover: shuttle-mcp/cover.png
+date: "2025-10-08"
+---
+
+AI agents are changing how we build software, and the Model Context Protocol (MCP) is at the heart of this shift. MCP lets AI agents connect with external tools and APIs - kind of like giving your AI assistant hands to actually do things instead of just talking about them.
+
+We've updated our Shuttle MCP server, and it's a proper workflow upgrade. Here's what's new.
+
+<YouTubeEmbed videoId="eQdCSsdqLkk" title="MCP Servers for Rust Developers" />
+
+## What Does the Shuttle MCP do?
+
+The Shuttle MCP server gives AI agents direct access to Shuttle's platform and documentation. Your AI agent can now:
+
+- Search through Shuttle documentation to understand how things work, ensuring you have the latest information
+- Deploy projects directly to Shuttle
+- List all your Shuttle projects
+- Get detailed information about specific projects
+- View deployment logs in real-time for debugging
+
+Instead of copy-pasting commands and switching between your terminal, documentation, and AI chat, your agent handles the entire workflow.
+
+## The Problem With the Previous Version
+
+The first version of our MCP server worked well for most users. The tools were functional, AI agents could call them, and they'd return the expected data for common workflows.
+
+But we noticed struggles in edge cases. When dealing with unusual deployment configurations or error states, agents would sometimes call the wrong tool or miss required parameters. When something failed in these scenarios, they'd get stuck because error messages didn't provide enough context to self-correct.
+
+We realized the problem wasn't the tools themselves as they were powerful enough - it was how we presented them to the agents. In edge cases, agents didn't have enough guidance to understand when or how to use each tool. We'd built powerful functionality but needed to be documented better for AI agents to understand.
+
+## What's New in This Version
+
+The updated server doesn't add flashy new features - it makes the existing ones actually work the way they should. The Agents now have much higher success rates, and even when things go wrong, they know how to recover and fix issues on their own.
+
+We've enhanced how AI agents understand Shuttle. Each MCP tool includes detailed instructions that help agents understand not just what a tool does, but when and how to use it.
+
+We've also reworked error handling. When something goes wrong now, the error messages are designed for AI agents - they provide enough context and guidance for the agent to understand what happened and how to fix it. Instead of getting stuck, agents can self-correct and try again with a high chance of success.
+
+With this, your AI agent works faster and makes fewer mistakes. It understands deployment workflows and can troubleshoot issues on its own.
+
+## What We Learned About Building MCP Servers
+
+Building MCP tools isn't just about writing the code that exposes functionality. It's about documentation and context - specifically, documentation written for AI models rather than humans.
+
+A powerful tool isn't very efficient if the agent doesn't know when and how to use it. You need to provide condensed, structured context that models can actually parse and understand. Otherwise, you're handing your agent a toolbox without labels on any of the tools leaving the agent to guess what to do with it.
+
+This means thinking differently about how you write tool descriptions, parameter explanations, and error messages. Every piece of text needs to be optimized for model comprehension, not human readability.
+
+If you're building your own MCP server, spend as much time on how you describe your tools as you do on implementing them. The quality of that documentation directly determines whether AI agents can actually use what you've built.
+
+## Real-World Benefits
+
+Here's where this gets practical. You can now tell your AI agent "Deploy my Shuttle App" and it handles everything using the Shuttle MCP server:
+
+1. Creates a project for you if you don't have one already
+2. Deploys the project to the cloud
+3. Handles edge cases
+4. Catches and fixes common deployment issues automatically
+
+The entire workflow - from project creation to a live deployment - happens through your AI agent.
+
+We tested this with Claude Sonnet 4.5 to build a complete Rust API from scratch, you can see the MCP server in action. [See the full walkthrough here](https://www.shuttle.dev/blog/2025/10/01/build-rust-api-sonnet-4-5?utm_source=shuttle_blog&utm_campaign=shuttle_mcp_update_announcement).
+
+## Getting Started
+
+### Prerequisites
+
+First, you'll need the latest Shuttle CLI. If you don't have it installed:
+
+**Linux/macOS:**
+
+```bash
+curl -sSfL https://www.shuttle.dev/install | bash
+```
+
+**Windows (PowerShell):**
+
+```powershell
+iwr https://www.shuttle.dev/install-win | iex
+```
+
+If you already have Shuttle installed, upgrade to the latest version:
+
+```bash
+shuttle upgrade
+```
+
+### Configuring the MCP Server
+
+After installing the CLI, configure the MCP server in your IDE or MCP client.
+
+For Cursor, you can add it by clicking the "Add to Cursor" button below.
+
+<AddToCursor />
+
+Or add this to your `mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "Shuttle": {
+      "command": "shuttle",
+      "args": ["mcp", "start"]
+    }
+  }
+}
+```
+
+For other IDEs and MCP clients, check the [configuration guide](https://docs.shuttle.dev/integrations/mcp-server?utm_source=shuttle_blog&utm_campaign=shuttle_mcp_update_announcement) to learn more.
+
+### Quick Start
+
+The fastest way to try this is with a Shuttle template.
+
+```bash
+shuttle init --from shuttle-hq/shuttle-examples --subfolder axum/hello-world
+```
+
+Connect your AI agent with the MCP server, and tell it to deploy. Your app will be live in minutes.
+
+## How to Use the Shuttle MCP Server
+
+Here are some practical prompts to test with your AI agent once you have the MCP server configured:
+
+> **Note**: If the AI agent tries to execute the prompt directly without using the MCP tools first, make sure to prompt it explicitly to use the Shuttle MCP server.
+
+**Deployment and Migration:**
+
+- Deploy my app to Shuttle
+- Migrate my Rust app to a Shuttle app
+- Set up a Shuttle Database for me
+
+**Debugging and Monitoring:**
+
+- Check my production logs and see if we have any issues
+- How many Shuttle projects do I have?
+
+**Questions and Documentation:**
+
+- How to scale my compute size on Shuttle?
+- How to set up a Shuttle Database?
+
+## Conclusion
+
+This changes how you code with Shuttle. Your AI agent becomes a proper development partner that understands your entire deployment workflow - it can answer questions about your project configuration, check deployment status, review logs when something breaks, and guide you through scaling decisions. The friction between writing code and shipping it basically disappears.
+
+Try it now and see the difference for yourself. Check out our [getting started guide](https://docs.shuttle.dev/getting-started/quick-start?utm_source=shuttle_blog&utm_campaign=shuttle_mcp_update_announcement) to set everything up.
+
+Or get started with our most popular template:
+
+```bash
+shuttle init --from shuttle-hq/shuttle-examples --subfolder axum/hello-world
+```
+
+<DiscordCTA
+  title="Share What You Build With the Shuttle MCP Server"
+  subtitle="Show us your projects and share your experiences with the Shuttle MCP server with the community"
+/>

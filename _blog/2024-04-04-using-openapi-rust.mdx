@@ -5,10 +5,11 @@ author: josh
 tags: [rust, openapi, guide]
 thumb: openapi-rust-thumb.png
 cover: openapi-rust-thumb.png
-date: '2024-04-04T15:30:00'
+date: "2024-04-04T15:30:00"
 ---
 
 Hello world! In this article we're going to talk about how you can make the most of OpenAPI with Rust, by learning all the different ways we can use OpenAPI in a Rust context. By the end of this article, you'll learn the following:
+
 - Adding OpenAPI to a Rust web service
 - How to generate API client libraries from OpenAPI specifications
 - Working with the OpenAPI spec directly
@@ -175,7 +176,7 @@ npm install @openapitools/openapi-generator-cli -g
 
 There are also alternative ways to install the OpenAPI generator, which you can check out [here.](https://openapi-generator.tech/docs/installation/)
 
-Next, we'll need a specification to generate a client library from. The generator takes YAML or JSON files as input.  Thankfully for us, we already have a JSON filefrom the OpenAPI service we just built. If we head to `localhost:8080/api-docs/openapi.json`,  we can select the Raw Text option, prettify it and then put it all into a JSON file for input. Our file name will be `utoipa-client.json`.
+Next, we'll need a specification to generate a client library from. The generator takes YAML or JSON files as input. Thankfully for us, we already have a JSON filefrom the OpenAPI service we just built. If we head to `localhost:8080/api-docs/openapi.json`, we can select the Raw Text option, prettify it and then put it all into a JSON file for input. Our file name will be `utoipa-client.json`.
 
 Next, we'll actually generate the client code. This can be done with the following shell snippet:
 
@@ -192,6 +193,8 @@ This looks like quite a long command! What's happening here?
 Once done, you should see a new Rust crate in the automatically generated `utoipa-client` folder. At this point in time, the generator is mostly correct. However, your generated code can have syntactical errors if your OpenAPI specification input is malformed. You can find out more about this [here.](https://docs.rs/openapi_lib_generator/latest/openapi_lib_generator/)
 
 Interested in further customization? You can check out more OpenAPI generator configuration options [here.](https://openapi-generator.tech/docs/generators/rust)
+
+<TestimonialCTA />
 
 ## Working with OpenAPI specifications directly in Rust
 
@@ -219,6 +222,8 @@ fn main() {
     }
 }
 ```
+
+<DiscordCTA />
 
 ## Finishing up
 

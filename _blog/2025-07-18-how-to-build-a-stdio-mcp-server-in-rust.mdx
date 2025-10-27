@@ -2,11 +2,11 @@
 title: "How to Build a stdio MCP Server in Rust"
 pageTitle: "How to Build a stdio MCP Server in Rust"
 description: "Learn how to build MCP server in Rust using the rmcp crate. This MCP server development guide covers stdio MCP server creation, DNS lookup MCP implementation, and AI agent extension with Model Context Protocol Rust SDK."
-author: dcodes 
+author: dcodes
 tags: [rust, mcp, ai, dns, stdio, server]
 thumb: mcp-server-rust-guide.png
 cover: mcp-server-rust-guide.png
-date: '2025-07-21'
+date: "2025-07-21"
 ---
 
 ## Introduction
@@ -30,6 +30,8 @@ MCP servers use two transport mechanisms: **stdio** (standard input/output) and 
 SSE servers run externally in the cloud and connect via WebSockets. While they offer more scalability, they require network setup and don't have access to your local machine's resources.
 
 This tutorial focuses on building a **stdio MCP server** - the simpler approach that's perfect for local development and personal AI workflows.
+
+<YouTubeEmbed videoId="eQdCSsdqLkk" title="MCP Servers for Rust Developers" />
 
 ## Building stdio MCP Server in Rust
 
@@ -81,6 +83,8 @@ schemars = "1.0"
 - `anyhow` for error handling
 
 The `rmcp` crate provides the MCP server implementation.
+
+<TestimonialCTA />
 
 ## Building the DNS Service
 
@@ -236,8 +240,8 @@ This uses the binary name directly, assuming you've installed it with `cargo ins
 
 Time to put the MCP server to work. Let's have it check the DNS records for three domains and create a table of the results.
 
-<CaptionedImage 
-  src="/images/blog/how-to-build-a-stdio-mcp-server-in-rust/dns-lookup-tool-call.png" 
+<CaptionedImage
+  src="/images/blog/how-to-build-a-stdio-mcp-server-in-rust/dns-lookup-tool-call.png"
   alt="AI assistant using DNS lookup MCP server to query domain records"
   caption="AI assistant using DNS lookup MCP server to query domain records"
 />
@@ -257,6 +261,8 @@ Rust shines as a great language for building MCP servers. Its type safety and pe
 In just a few dozen lines of code, we built a production-ready DNS lookup service that works with any MCP-compatible AI client. The standardized MCP protocol means your Rust server can integrate seamlessly across different AI platforms and tools.
 
 This is just the beginning - you can extend this pattern to build MCP servers for databases, APIs, file systems, or any external service your AI agents might need to interact with.
+
+<DiscordCTA />
 
 ## Deploy your MCP server to the cloud
 

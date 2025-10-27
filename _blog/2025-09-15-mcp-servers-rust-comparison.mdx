@@ -5,7 +5,7 @@ author: adetokunbo
 tags: [shuttle, mcp, rust, docker, github, deployment, axum]
 thumb: mcp-servers-rust-comparison/cover.png
 cover: mcp-servers-rust-comparison/cover.png
-date: '2025-09-15'
+date: "2025-09-15"
 ---
 
 Model Context Protocol (MCP) servers boost developer productivity by working with an AI coding assistants like GitHub Copilot, Cursor, and Claude. With MCP having full access to the Rust project, the AI assistants are no longer limited to the currently open file; they can now follow instructions to execute commands, analyze the entire codebase, run tests, and automate workflows, making development faster.
@@ -16,15 +16,17 @@ In this article, we'll walk through the best MCP servers for Rust developers. We
 
 Here is a quick overview of the comparison between the best MCP Servers
 
-| MCP Server | Rust Integration | AI Compatibility | Security Setup | Deployment Support | Notes |
-| --- | --- | --- | --- | --- | --- |
-| Context7 MCP | Provides up-to-date, version-specific documentation for all libraries including Rust crates | AI assistant can fetch real-time docs and code examples for accurate code generation | Low risk, read-only access to documentation APIs | None | Essential for preventing hallucinated APIs and outdated code examples |
-| Docker MCP | Good for developing containerized Rust applications. | AI assistance can issue Docker commands through MCP | Requires elevated privileges for certain operations, which can pose risks if not isolated | Can build, package, and push Rust apps to a Docker Registry | Suitable for those interested in or running Rust applications in Docker containers |
-| GitHub Server MCP | Integrates with Rust code repositories and supports CI/CD workflows (GitHub Actions) | The AI assistant can raise PRs, manage issues, and interact with GitHub workflows | Requires GitHub auth token access with limited or supervised privileges | Works effectively with GitHub Actions workflow | Great for managing repositories and automating workflows |
-| File System MCP Servers | Provide direct access to Rust source code | AI assistance has complete visibility of the Rust project | Risky because AI assistant can read and modify project files. Sandbox is recommended | Requires a custom script for deployment | Useful for testing workflows that rely on code modifications |
-| Memory MCP Servers | No direct Rust project support | Helpful in maintaining conversational context across tasks | Low risk since it operates only in memory | None | It is used in combination with other MCPs or systems |
-| Browsing MCP Servers | No direct Rust integration. This is useful for fetching Rust documentation and creating crates.io packages | AI assistant can read and retrieve information from Rust documentation | None | None | Great for referencing external Rust documentation and libraries |
-| Shuttle MCP | Built specifically for Rust. It integrates perfectly into the Rust ecosystem | It works well with AI assistants to manage and deploy Rust applications | It handles secrets and other sensitive details securely on the Shuttle Platform | It can deploy Rust applications directly from a developer's IDE | It is helpful for Rust deployment |
+| MCP Server              | Rust Integration                                                                                           | AI Compatibility                                                                     | Security Setup                                                                            | Deployment Support                                              | Notes                                                                              |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Context7 MCP            | Provides up-to-date, version-specific documentation for all libraries including Rust crates                | AI assistant can fetch real-time docs and code examples for accurate code generation | Low risk, read-only access to documentation APIs                                          | None                                                            | Essential for preventing hallucinated APIs and outdated code examples              |
+| Docker MCP              | Good for developing containerized Rust applications.                                                       | AI assistance can issue Docker commands through MCP                                  | Requires elevated privileges for certain operations, which can pose risks if not isolated | Can build, package, and push Rust apps to a Docker Registry     | Suitable for those interested in or running Rust applications in Docker containers |
+| GitHub Server MCP       | Integrates with Rust code repositories and supports CI/CD workflows (GitHub Actions)                       | The AI assistant can raise PRs, manage issues, and interact with GitHub workflows    | Requires GitHub auth token access with limited or supervised privileges                   | Works effectively with GitHub Actions workflow                  | Great for managing repositories and automating workflows                           |
+| File System MCP Servers | Provide direct access to Rust source code                                                                  | AI assistance has complete visibility of the Rust project                            | Risky because AI assistant can read and modify project files. Sandbox is recommended      | Requires a custom script for deployment                         | Useful for testing workflows that rely on code modifications                       |
+| Memory MCP Servers      | No direct Rust project support                                                                             | Helpful in maintaining conversational context across tasks                           | Low risk since it operates only in memory                                                 | None                                                            | It is used in combination with other MCPs or systems                               |
+| Browsing MCP Servers    | No direct Rust integration. This is useful for fetching Rust documentation and creating crates.io packages | AI assistant can read and retrieve information from Rust documentation               | None                                                                                      | None                                                            | Great for referencing external Rust documentation and libraries                    |
+| Shuttle MCP             | Built specifically for Rust. It integrates perfectly into the Rust ecosystem                               | It works well with AI assistants to manage and deploy Rust applications              | It handles secrets and other sensitive details securely on the Shuttle Platform           | It can deploy Rust applications directly from a developer's IDE | It is helpful for Rust deployment                                                  |
+
+<YouTubeEmbed videoId="eQdCSsdqLkk" title="MCP Servers for Rust Developers" />
 
 Before we deploy our Rust applications directly from the IDE, let's understand what Model Context Protocol (MCP) is and what makes a good MCP for Rust developers.
 
@@ -43,9 +45,10 @@ When evaluating an MCP server for Rust development, it is essential to keep a fe
 3. **Security and Access:** Security is a crucial factor when choosing the right MCP. Developers need to be confident that their secrets are kept safe and that the MCP server avoids unnecessary privilege escalation.
 4. **Setup Complexity:** A good MCP server should be simple to configure and use. It shouldn't require complex installation steps, whether in an IDE or through an LLM.
 5. **Deployment Capability:** Can the MCP server assist with end-to-end deployment, beyond just code generation? The best MCPs should be able to generate code, build, test, package, and even deploy Rust applications directly from an IDE.
-    
+
 With these criteria in mind, let's look at the seven most common MCP servers Rust developers actually use.
-    
+
+<DiscordCTA />
 
 ## The 7 Most Common MCP Servers for Rust Developers
 
@@ -159,6 +162,8 @@ You can ask your AI assistant to:
 - Deploy your Axum API to the live environment
 - Check the logs of the deployed service
 
+<TestimonialCTA />
+
 ## Hands-on Example: Build and Deploy a Snippet Sharing API with Shuttle
 
 In this hands-on section, we'll build a Rust + Axum API that powers a simple code snippet sharing service (similar to Pastebin) and demonstrate how to fetch documentation with Context7 MCP Server, create a pull request with GitHub MCP Server and deploy the Rust code using Shuttle MCP Server, with Cursor AI assistance.
@@ -171,13 +176,13 @@ The API will include:
 
 ### API Endpoints
 
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| GET | /health | Health check endpoint |
-| POST | /snippets | Create a new code snippet |
-| GET | /snippets | List all snippets |
-| GET | /snippets/\{id\} | Get a single snippet |
-| DELETE | /snippets/\{id\} | Delete a snippet |
+| Method | Endpoint         | Description               |
+| ------ | ---------------- | ------------------------- |
+| GET    | /health          | Health check endpoint     |
+| POST   | /snippets        | Create a new code snippet |
+| GET    | /snippets        | List all snippets         |
+| GET    | /snippets/\{id\} | Get a single snippet      |
+| DELETE | /snippets/\{id\} | Delete a snippet          |
 
 #### Step 1: Setting Up Your Environment: Install Rust and Shuttle CLI
 
@@ -186,7 +191,6 @@ Firstly, ensure you have the following software running:
 1.  **Rust and Cargo:** For local development and testing.
 2.  **Shuttle CLI:** For deployment into a live environment. You can install it via Cargo, or use the installation script by following this link: [Shuttle CLI Installation.](https://docs.shuttle.dev/getting-started/installation)
 3.  **Cursor:** An AI coding assistant. We will use it to interact with MPC Servers (Context7, GitHub and Shuttle) for documentation lookup, creating PRs and deploying the Rust application.
-    
 
 #### Step 2: Log in to Shuttle
 
@@ -252,7 +256,7 @@ Now, let's deploy your application using Shuttle and see how it makes deployment
 From your cursor IDE. Run the command on the prompt
 
 ```bash
-#Prompt 
+#Prompt
 Deploy the Rust code
 
 Use the Shuttle MCP server.
@@ -270,9 +274,9 @@ Use the Shuttle MCP server.
   caption="Shuttle deployment console showing successful deployment with generated URL"
 />
 
-The AI assistant will deploy the application and a link will be generated. You can access your application with the provided link. 
+The AI assistant will deploy the application and a link will be generated. You can access your application with the provided link.
 
-For instance, in this case, the link is `https://code-snippet-share-ow2x.shuttle.app`. 
+For instance, in this case, the link is `https://code-snippet-share-ow2x.shuttle.app`.
 
 Shuttle will:
 
@@ -346,7 +350,7 @@ We will explore how to use the GitHub MCP Server to create a Pull Request (PR) a
 
 Raise a PR with my new changes
 
-Using GitHub MCP Server 
+Using GitHub MCP Server
 ```
 
 <CaptionedImage
@@ -360,7 +364,7 @@ Using GitHub MCP Server
 We will explore how to use Context7 MCP Server to ask questions about the Rust code and access documentation related to the project. In the example below, we demonstrate how to use Context7 MCP Server to ask a question and reference documentation "_I need to reference a Rust documentation on how i can persistent snippet data instead of using in memory HashMap_".
 
 ```bash
-# Prompt 
+# Prompt
 
 I need to reference a Rust documentation on how i can persistent snippet data instead of using in memory HashMap.
 

@@ -5,8 +5,9 @@ author: josh
 tags: [rust, guide]
 thumb: simple-web-server-rust-thumb.png
 cover: simple-web-server-rust-thumb.png
-date: '2024-03-13T15:30:00'
+date: "2024-03-13T15:30:00"
 ---
+
 Building a web server with Rust doesn't need to be complex. With frameworks like Axum, you can write a web server without hassle. Leveraging Rust allows you to easily take on the job of web services written in other languages and more. In this post we're going to talk about how you can build and deploy a simple web server using Axum.
 
 ## What Rust framework should I use?
@@ -104,7 +105,7 @@ async fn main() -> shuttle_axum::ShuttleAxum {
 }
 ```
 
-However, a more likely situation is that you'll want to return data that follows a schema. We can use the `Deserialize` and `Serialize` traits from the `serde` crate to do this.  We can easily apply these traits by adding the `derive` feature and then adding it as a derive macro to a struct:
+However, a more likely situation is that you'll want to return data that follows a schema. We can use the `Deserialize` and `Serialize` traits from the `serde` crate to do this. We can easily apply these traits by adding the `derive` feature and then adding it as a derive macro to a struct:
 
 ```rust
 use serde::{Deserialize, Serialize};

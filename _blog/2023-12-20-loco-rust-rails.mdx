@@ -5,13 +5,15 @@ author: josh
 tags: [rust, loco, tutorial, guide]
 thumb: loco-rust-thumb.png
 cover: loco-rust-thumb.png
-date: '2023-12-20T14:30:00'
+date: "2023-12-20T14:30:00"
 ---
+
 Although Ruby on Rails is not as popular as it used to be, in its prime, it was a force to be reckoned with. Many successful businesses were built from it - Airbnb and Shopify being two of many big names coming out of this, although more recently Shopify has started experimenting with other languages and late last year announced that they would be [officially supporting Rust.](https://shopify.engineering/shopify-rust-systems-programming)
 
 This has led to many frameworks attempting to emulate the Rails philosophy - Loco.rs being no different. In this case, however, it aims to solve a long-standing issue within the Rust web backend framework in terms of there being no truly batteries-included Rust framework. Let's talk about it.
 
 ## Why was Ruby on Rails popular? A quick refresher
+
 Ruby on Rails was popular because it is a framework that does all the heavy lifting for you and abstracts away a lot of the heavy lifting - which means there is a very short gap between thinking of the business logic for an idea and time to full productivity. This is a great thing for a few reasons, especially in web development: you can ship faster without needing to do any of the boilerplate, you can rely on the framework to do all of the difficult low-level things for you and you don't need to be necessarily fluent in Ruby to use it (although it helps massively if you are!). This is something that a lot of web developers resonate with, as evidenced by the huge number of developers who use Laravel, a PHP framework that is very similar to Ruby on Rails.
 
 It achieves these things by gating everything behind a command-line interface: you use the command line to start the web service itself, you use it for migrations, and job processing as well as creating new controllers, models, and more. For example, you can generate a database model by using `rails generate model test` which will generate a model. You can then create a route controller by using `rails generate controller test`, which will generate a controller called `TestController` - you can do the same for migrations by using `rake generate migration`.
@@ -19,7 +21,9 @@ It achieves these things by gating everything behind a command-line interface: y
 This is somewhat at odds when it comes to Rust which is why Loco.rs is interesting: Rust is a language that allows you to get into the meat of the matter when it comes to low-level details, which means that it tends to attract programmers who don't mind doing the extra work because they would rather things be either implemented to their standard or because they want to understand how everything works so that when something breaks, they know how to fix it. In addition, Loco is not itself a standalone framework - currently it uses `axum` under the hood, alongside `sidekiq-rs` for job processing and `sea-orm` for migrations.
 
 ## Getting Started with Loco
+
 To get started with the Rust Loco crate, you need to use their CLI which you can install by using the following:
+
 ```bash
 cargo install loco-cli
 ```
@@ -27,11 +31,13 @@ cargo install loco-cli
 You can start a new project by using `loco new` - it'll ask you what the name of your app is and then what kind of app you want. For this article, we'll be talking about the full Rust SaaS starter application.
 
 ## Routing in Loco
+
 Although Loco uses `axum` under the hood, it abstracts some things away into config files that you can find in the `config` folder.
 
 The Axum service that gets run by the application implements the `Hooks` trait from `loco_cli`, which requires several functions to use - going to `src/app.rs` shows that we have functions for registering routes, getting the app name, connecting workers and registering tasks, truncate tables and seed data into the database. We can also add extra functions to the router that get hooked into the CLI as well - `after_routes()` which is for adding things like middleware, and `before_run()` which allows you to carry out operations before your application itself starts. Note that any commands we use through the project CLI to generate things will automatically be appended to the `app.rs` file - no need to do it yourself!
 
 To add a controller, we need to run `cargo loco generate controller test` from the project root which generates a controller called `test` and simultaneously adds a new file in the `controllers` folder. Then we can create any routes we need to and append them to the router in the same file, and it'll automatically be added to the application - no further work required! Your new controller should look like something like this:
+
 ```rust
 #![allow(clippy::unused_async)]
 use loco_rs::prelude::*;
@@ -52,6 +58,7 @@ pub fn routes() -> Routes {
         .add("/echo", post(echo))
 }
 ```
+
 Now you can add any routes you want to this file and it will be put under this controller when it's added to the `routes()` function in the file. Route-wise, this means it'll be all under the same route. You can access the database connection from the provided `State` - unlike in Axum normally, you don't need to create this yourself.
 
 The great thing about Loco's routing is that everything you know from using Axum can be applied here - so if you know how to write your own extractors, write middleware, and other things this can all be used in Loco since it essentially builds on top of Axum.
@@ -59,22 +66,28 @@ The great thing about Loco's routing is that everything you know from using Axum
 Once you've finished adding all the controllers and routes you want, you can use `cargo loco routes` to display all of the routes your application currently has.
 
 ## Models in Loco
+
 Models in Loco represent the database models used by `sea_orm`. To get started, you'll want to run the following:
+
 ```bash
 cargo loco generate model <name-of-model>
 ```
+
 This will then generate a model that you can use in your application. You can also initialise with extra fields to generate a full model:
+
 ```bash
 cargo loco generate model movies title:string rating:int
 ```
 
 Note that if you want to initialise with extra fields, you will want to check the [reference docs](https://loco.rs/docs/the-app/models/) so you can find what fields you need to use. Once you're done adding all the models you need to, you can simply run the following two commands to get back the migrations and entities required:
+
 ```bash
 cargo loco db migrate
 cargo loco db entities
 ```
 
 When you generate a blank model, when you go to the model file you will probably find something that looks like this:
+
 ```rust
 use sea_orm::entity::prelude::*;
 
@@ -84,7 +97,9 @@ impl ActiveModelBehavior for ActiveModel {
     // extend activemodel below (keep comment for generators)
 }
 ```
-When we use this model in our controller, typically speaking we won't reference the struct that holds the model itself -  instead we reference the `ActiveModel` or `Entity`/`Model` - a blank model file looks like this:
+
+When we use this model in our controller, typically speaking we won't reference the struct that holds the model itself - instead we reference the `ActiveModel` or `Entity`/`Model` - a blank model file looks like this:
+
 ```rust
 use sea_orm::entity::prelude::{ActiveModelBehavior};
 
@@ -96,6 +111,7 @@ impl ActiveModelBehavior for ActiveModel {
 ```
 
 We can extend the behaviour of our ActiveModel by adding a `before_save()` method as mentioned before, like so:
+
 ```rust
 use sea_orm::entity::prelude::{ActiveModelBehavior};
 
@@ -113,6 +129,7 @@ impl ActiveModelBehavior for ActiveModel {
     }
 }
 ```
+
 The `ActiveModelBehaviour` trait implementation (from `sea_orm`) allows us to define behaviour for an `ActiveModel` - more specifically, we can add methods for before and after saving a model, as well as before and after deleting a model. We can also extend the behaviour of our model by adding extra methods to it:
 
 ```rust
@@ -122,6 +139,7 @@ impl super::_entities::users::Model {
 ```
 
 Now we can use it in a handler function by loading the item from the database - then we can do whatever we need to with the data:
+
 ```rust
 async fn load_item(ctx: &AppContext, id: i32) -> Result<Model> {
     let item = Entity::find_by_id(id).one(&ctx.db).await?;
@@ -151,6 +169,7 @@ pub async fn update(
 ```
 
 However - that isn't all that Loco.rs has to offer. We can also use the `loco_rs` Validator struct to be able to verify a new model before needing to do anything with it! A use case for this, for example, might be if we needed to check if an email is a valid email. You can check this out below:
+
 ```rust
 [derive(Debug, Validate, Deserialize)]
 pub struct ModelValidator {
@@ -170,12 +189,16 @@ impl From<&ActiveModel> for ModelValidator {
 }
 ```
 
+<TestimonialCTA />
+
 ## Job Processing in Loco
+
 Like with everything else in Loco, you can also generate workers and tasks via the CLI. Running `cargo loco generate task` or `cargo loco generate worker` will let you generate a task or a worker at will.
 
 Under the hood, Loco uses `sidekiq-rs` to do job processing - which is a Rust re-implementation of its Ruby counterpart, `sidekiq.rb`. Once the worker is generated, you want to go to the `workers` folder and check out the file you made - it will have a struct for the worker itself, a struct that holds the arguments that the worker will take, an implementation of the `AppWorker` trait for the worker and then an async trait implementation that lets the worker do something.
 
 You can then run it like so:
+
 ```rust
 ReportWorkerWorker::perform
     (
@@ -189,18 +212,25 @@ ReportWorkerWorker::perform
 As you can see, we don't need to initialise the struct to use it - we can call the method from the struct directly and it will work assuming the arguments are valid - as you can see here, no arguments are required since the args struct does not have any fields.
 
 ## Deploying Loco
+
 Currently, Loco.rs allows you to generate a deployment by using the following comamnd:
+
 ```bash
 cargo loco generate deployment
 ```
+
 This lets you choose between Docker and Shuttle. When choosing Docker it will generate a Dockerfile that you can use to deploy anywhere, but when you pick Shuttle it will automatically generate everything you need for a Shuttle deployment - no further work required! You can then use the Shuttle CLI to start a new project and deploy it:
+
 ```bash
 // note that if you want to avoid using the --name flag
 // you should use the name key in Shuttle.toml
 shuttle deploy --name <name-of-project>
 ```
 
+<DiscordCTA />
+
 ## Finishing Up
+
 Thanks for reading! Loco is a great framework that shows a lot of promise, and is growing very quickly. Building a Rest API in Rust has never been made easier!
 
 Interested in more?

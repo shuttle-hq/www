@@ -2,11 +2,11 @@
 title: "AI Assisted Rust Development Environment Setup: Build Rust APIs in Minutes"
 pageTitle: "AI Assisted Rust Development Environment Setup: Build Rust APIs in Minutes"
 description: "Learn how to build a complete Rust API with AI in 5 minutes using Cursor, MCP servers, and Shuttle."
-author: dcodes 
+author: dcodes
 tags: [rust, ai, mcp, cursor, shuttle]
 thumb: rust-ai-workflow-guide.png
 cover: rust-ai-workflow-guide.png
-date: '2025-07-03'
+date: "2025-07-03"
 ---
 
 Shipping Rust code used to mean wrestling with the borrow-checker, poring over docs, and SSH-ing into servers at 2 a.m. In 2025 that workflow feels prehistoric. With AI-first IDEs such as Cursor, tool-calling standards like [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction), and one-command cloud hosts such as [Shuttle](https://www.shuttle.dev), you can spin up, test, and deploy a secure Rust API in 5 minutes before your coffee cools.
@@ -52,8 +52,8 @@ MCP servers aren't confined to a single flavor: there's an ecosystem of ready-ma
 
 The screenshot below shows MCP servers in action. Notice how the AI assistant taps the specialized tool to deploy the Rust project to Shuttle.
 
-<CaptionedImage 
-  src="/images/blog/rust-ai-workflow-guide/shuttle-deploy-tool-call.png" 
+<CaptionedImage
+  src="/images/blog/rust-ai-workflow-guide/shuttle-deploy-tool-call.png"
   alt="AI assistant using Shuttle MCP server deploy tool call"
   caption="Shuttle MCP server deploy tool call"
 />
@@ -61,7 +61,6 @@ The screenshot below shows MCP servers in action. Notice how the AI assistant ta
 In this example, you can see the AI assistant using the `deploy` tool to deploy the application to the cloud, demonstrating how MCP servers extend the AI's capabilities beyond simple code generation.
 
 > Later in the article, we'll walk through how to use the Shuttle MCP server.
-> 
 
 #### Recommended MCP Servers for Rust Development
 
@@ -91,40 +90,40 @@ To add documentation context:
 
 Open the chat panel in Cursor and type `@Docs` in the chat.
 
-<CaptionedImage 
-  src="/images/blog/rust-ai-workflow-guide/cursor-docs.png" 
+<CaptionedImage
+  src="/images/blog/rust-ai-workflow-guide/cursor-docs.png"
   alt="Cursor chat panel showing the @Docs command"
   caption="Cursor docs"
 />
 
 Click "Add new doc".
 
-<CaptionedImage 
-  src="/images/blog/rust-ai-workflow-guide/cursor-docs-new.png" 
+<CaptionedImage
+  src="/images/blog/rust-ai-workflow-guide/cursor-docs-new.png"
   alt="Cursor docs interface showing the 'Add new doc' button"
   caption="Cursor docs new"
 />
 
 Paste the URL prefix of the documentation you want to add (e.g., `https://docs.shuttle.dev`).
 
-<CaptionedImage 
-  src="/images/blog/rust-ai-workflow-guide/cursor-docs-new-doc.png" 
+<CaptionedImage
+  src="/images/blog/rust-ai-workflow-guide/cursor-docs-new-doc.png"
   alt="Cursor docs interface showing URL input field for documentation"
   caption="Cursor docs new documentation"
 />
 
 Press **Enter**, this will bring us to the last step, which we can specify a **title** for our documentation, along with an **entrypoint URL** and **prefix URL** for the documentation we want to add.
 
-<CaptionedImage 
-  src="/images/blog/rust-ai-workflow-guide/cursor-docs-new-doc-dialog.png" 
+<CaptionedImage
+  src="/images/blog/rust-ai-workflow-guide/cursor-docs-new-doc-dialog.png"
   alt="Cursor docs configuration dialog showing title, entrypoint URL, and prefix URL fields"
   caption="Cursor docs new documentation add dialog"
 />
 
 Cursor will automatically index the page and any sub-pages with that URL prefix. We can then mention it using `@Docs` and select the specific documentation we want to use. Claude 4.0 is especially good at this due to its large context window.
 
-<CaptionedImage 
-  src="/images/blog/rust-ai-workflow-guide/cursor-docs-mention-in-chat.png" 
+<CaptionedImage
+  src="/images/blog/rust-ai-workflow-guide/cursor-docs-mention-in-chat.png"
   alt="Cursor chat interface showing how to mention docs using @Docs"
   caption="Cursor docs mention in chat"
 />
@@ -165,6 +164,7 @@ Let's create a `.cursor/rules/rust.mdc` file in our project root with Rust-speci
 You are an expert Rust developer. Follow these rules when writing Rust code:
 
 ## Code Style
+
 - Use idiomatic Rust patterns and conventions
 - Prefer explicit error handling with Result<T, E>
 - Use ? operator for error propagation
@@ -172,6 +172,7 @@ You are an expert Rust developer. Follow these rules when writing Rust code:
 - Use descriptive variable names and function signatures
 
 ## Error Handling
+
 - For comprehensive error handling, use libraries like `anyhow` for simple error handling, `thiserror` for custom error types, or `eyre` for enhanced error reporting
 - Never use unwrap() or expect() in production code
 - Provide meaningful error messages
@@ -179,14 +180,13 @@ You are an expert Rust developer. Follow these rules when writing Rust code:
 - Use `thiserror::Error` derive macro for custom error enums
 
 ## Testing
+
 - Write unit tests for all public functions
 - Use descriptive test names that explain the scenario
 - Group related tests in modules
-
 ```
 
 > Important Note: These are generic rules for Rust development. You should customize these rules for your specific project. For example, if you're using a validation library like validator, write specific rules about how to handle validations. If you're using specific architectural patterns or frameworks, document them in your rules so the AI can follow your project's conventions consistently.
-> 
 
 #### How Cursor Reads Your Specified Rules
 
@@ -197,8 +197,8 @@ Cursor will read these rules based on a few conditions that we can manually spec
 - **Agent Requested**: This gives us the option to add a description to the rules file, Cursor will automatically read these rules if it finds a description that matches the current chat.
 - **Manual**: This will read the rules only when we manually mention it in the chat by typing `@Cursor Rules` and selecting the rules that we defined.
 
-<CaptionedImage 
-  src="/images/blog/rust-ai-workflow-guide/cursor-rules-example.png" 
+<CaptionedImage
+  src="/images/blog/rust-ai-workflow-guide/cursor-rules-example.png"
   alt="Cursor rules configuration interface showing different rule attachment options"
   caption="Cursor rules example"
 />
@@ -266,7 +266,6 @@ This API will be a simple task management API, it will have a few endpoints:
 
 - [ ] Write unit and integration tests
 - [ ] Set up test database
-
 ```
 
 #### Provide Focused Context
@@ -298,12 +297,10 @@ Now for the exciting part—let's build and deploy a complete CRUD API using not
 We'll also deploy the API to the cloud, we'll do all this without writing any code, we'll just let our AI assistant to do all the heavy lifting for us.
 
 > Important Note
-> 
-> 
+>
 > This approach is not a complete replacement for human developers, AI can make mistakes and write code that is prone to bugs and security vulnerabilities. This demonstration is just a proof of concept and a way to show the power of AI-assisted development.
-> 
+>
 > When building production applications, make sure you review all the AI generated code and make sure it's secure, performant and reliable.
-> 
 
 ### Ready to Build Along?
 
@@ -388,8 +385,8 @@ Next, let's create a new project for our task management API.
 shuttle init
 ```
 
-<CaptionedImage 
-  src="/images/blog/rust-ai-workflow-guide/shuttle-init-with-axum.png" 
+<CaptionedImage
+  src="/images/blog/rust-ai-workflow-guide/shuttle-init-with-axum.png"
   alt="Shuttle CLI output showing project initialization with Axum template"
   caption="Shuttle init with axum"
 />
@@ -435,8 +432,8 @@ This API will be a simple task management API, it will have a few endpoints, we'
 
 Let's tell Cursor to read the `todo.md` file and work through the tasks sequentially.
 
-<CaptionedImage 
-  src="/images/blog/rust-ai-workflow-guide/shuttle-docs-search-tool-call.png" 
+<CaptionedImage
+  src="/images/blog/rust-ai-workflow-guide/shuttle-docs-search-tool-call.png"
   alt="AI assistant using Shuttle MCP server to search documentation"
   caption="Shuttle MCP server documentation search_docs tool call"
 />
@@ -445,8 +442,8 @@ The todo list system is a great approach to give the AI agent a clear understand
 
 The AI agent immediately ran the tool `search_docs` to search through the latest Shuttle documentation and find the relevant information needed for the the tasks.
 
-<CaptionedImage 
-  src="/images/blog/rust-ai-workflow-guide/create-tasks-postgres-migration.png" 
+<CaptionedImage
+  src="/images/blog/rust-ai-workflow-guide/create-tasks-postgres-migration.png"
   alt="AI agent creating PostgreSQL migration files for tasks table"
   caption="Create tasks postgreSQL migration"
 />
@@ -455,32 +452,32 @@ The required migrations for the tasks have been created.
 
 Once the tasks are complete, the AI agent will commit the changes listed in `todo.md` and deploy the application to Shuttle.
 
-<CaptionedImage 
-  src="/images/blog/rust-ai-workflow-guide/shuttle-deploy-tool-call.png" 
+<CaptionedImage
+  src="/images/blog/rust-ai-workflow-guide/shuttle-deploy-tool-call.png"
   alt="AI agent deploying application to Shuttle using MCP server"
   caption="Shuttle deploy tool call"
 />
 
 The AI agent then proceeds to the next step which is writing the tests to make sure the API is working as expected.
 
-<CaptionedImage 
-  src="/images/blog/rust-ai-workflow-guide/ai-agent-tests-generated.png" 
+<CaptionedImage
+  src="/images/blog/rust-ai-workflow-guide/ai-agent-tests-generated.png"
   alt="AI agent generating comprehensive tests for the API endpoints"
   caption="AI agent tests generated"
 />
 
 When running the tests, we can see that all the tests are failing:
 
-<CaptionedImage 
-  src="/images/blog/rust-ai-workflow-guide/failing-tests.png" 
+<CaptionedImage
+  src="/images/blog/rust-ai-workflow-guide/failing-tests.png"
   alt="Terminal output showing failing test results"
   caption="Failing tests"
 />
 
 The AI agent begins by debugging, gathering all the details it needs to fix the failing tests. It can also call the `deployment_status` and `logs` tools to inspect the latest deployment, scan the logs, and pinpoint the root cause.
 
-<CaptionedImage 
-  src="/images/blog/rust-ai-workflow-guide/ai-agent-fetching-logs.png" 
+<CaptionedImage
+  src="/images/blog/rust-ai-workflow-guide/ai-agent-fetching-logs.png"
   alt="AI agent using Shuttle MCP server to fetch deployment logs for debugging"
   caption="AI agent debugging Rust code using Shuttle MCP server"
 />
@@ -491,16 +488,16 @@ The issue was that `axum@0.8` changed its path parameter syntax from `/:id` to `
 
 The AI agent then proceeds to fix the tests and run them again:
 
-<CaptionedImage 
-  src="/images/blog/rust-ai-workflow-guide/fix-error-for-axum-0.8.png" 
+<CaptionedImage
+  src="/images/blog/rust-ai-workflow-guide/fix-error-for-axum-0.8.png"
   alt="AI agent fixing path parameter syntax for Axum 0.8"
   caption="Fix error for axum 0.8"
 />
 
 Running the tests again:
 
-<CaptionedImage 
-  src="/images/blog/rust-ai-workflow-guide/run-tests-passed.png" 
+<CaptionedImage
+  src="/images/blog/rust-ai-workflow-guide/run-tests-passed.png"
   alt="Terminal output showing all tests passing successfully"
   caption="Run tests passed against production API hosted on Shuttle"
 />
@@ -556,7 +553,6 @@ The key to successful AI-assisted development is reviewing every bit of code tha
 - **Load test** critical endpoints
 
 > Remember: AI may speed up development, but it doesn't guarantee secure or reliable code. It's up to you to review each change and ensure everything is secure, performant, and dependable.
-> 
 
 ## Conclusion
 
@@ -567,6 +563,8 @@ This is what a ridiculously productive workflow looks like. We spun up a complet
 It's also important to note that while AI can be extremely helpful in accelerating development time, it's still subject to making mistakes and leaving security vulnerabilities in your code. It is always best practice to review the code and ensure you are only committing high-quality, secure, and performant code.
 
 Develop the mentality of treating AI as a tool, not a replacement for human developers, this way you'll get work done much faster and much more efficiently without exposing your code to security vulnerabilities.
+
+<DiscordCTA />
 
 **Don't just build. Create at the speed of thought**
 
