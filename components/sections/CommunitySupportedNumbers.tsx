@@ -1,6 +1,7 @@
 import { trackEvent } from "lib/posthog";
 import { DISCORD_URL } from "../../lib/constants";
 import Link from "components/elements/Link";
+import { formatNumberToK } from "../../lib/helpers";
 
 const CommunitySupportedNumbers = ({
   stargazersCount,
@@ -76,16 +77,5 @@ const CommunitySupportedNumbers = ({
     </div>
   );
 };
-
-function formatNumberToK(number: number) {
-  if (number >= 1000) {
-    const suffixes = ["", "k", "M", "G", "T", "P"];
-    const magnitude = Math.floor(Math.log10(number) / 3);
-    const scaledNumber = number / Math.pow(1000, magnitude);
-    const formattedNumber = scaledNumber.toFixed(1);
-    return `${formattedNumber}${suffixes[magnitude]}`;
-  }
-  return number.toString();
-}
 
 export default CommunitySupportedNumbers;

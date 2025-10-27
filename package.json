@@ -52,6 +52,7 @@
     "remark-gfm": "3.0.1",
     "remark-gfm-4": "npm:remark-gfm@4.0.0",
     "sharp": "^0.34.4",
+    "swr": "^2.3.6",
     "tailwind-merge": "^3.0.2",
     "typescript": "^5.5.4"
   },

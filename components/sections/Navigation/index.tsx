@@ -10,6 +10,8 @@ import Link from "components/elements/Link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { DiscordLogo } from "components/svgs/DiscordLogo";
+import { useStargazersCount } from "hooks/useStargazersCount";
+import { formatNumberToK } from "lib/helpers";
 
 const ThemeSwitcher = dynamic(() => import("./ThemeSwitcher"), { ssr: false });
 
@@ -50,6 +52,7 @@ const LinkItem = ({
 const Navigation = () => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const { count: stargazersCount } = useStargazersCount(); // now available here
 
   useEffect(() => {
     function updateMenu() {
@@ -135,37 +138,42 @@ const Navigation = () => {
               active={router.pathname.includes(keyword)}
             />
           ))}
-
+        </div>
+        <div className="mt-10 xl:ml-auto xl:mt-0 xl:flex xl:items-center xl:gap-5">
           <div className="flex items-center gap-4 pl-px xl:ml-4">
             {[
               {
-                icon: <GithubLogo className="w-5 h-5" />,
+                icon: <GithubLogo className="w-6 h-6" />,
                 href: "https://github.com/shuttle-hq/shuttle",
+                text: `${stargazersCount !== null ? formatNumberToK(stargazersCount) : ""}`,
+                title: `${stargazersCount ?? "N/A"} GitHub stars`,
               },
               {
-                icon: <DiscordLogo className="w-5 h-5" />,
+                icon: <DiscordLogo className="w-6 h-6" />,
                 href: "https://discord.com/invite/shuttle",
+                text: "",
+                title: "Join us on Discord",
               },
-            ].map(({ icon, href }, index) => (
+            ].map(({ icon, href, text, title }, index) => (
               <a
                 key={href}
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={href.includes("github") ? "GitHub" : "Discord"}
+                title={title}
                 onClick={() =>
                   trackEvent(
                     `homepage_mainnav_${href.includes("github") ? "github" : "discord"}`,
                   )
                 }
-                className="transition-colors text-black/70 hover:text-black dark:text-white/60 dark:hover:text-white"
+                className={`flex gap-1 transition-colors text-[#D8D8D8] hover:text-black dark:text-white/60 dark:hover:text-white bg-[#1D1D1D] flex items-center justify-center rounded-full h-[48px] ${text ? " px-3" : "w-[48px]"}`}
               >
                 {icon}
+                {text && <span className="text-xs">{text}</span>}
               </a>
             ))}
           </div>
-        </div>
-        <div className="mt-10 xl:ml-auto xl:mt-0 xl:flex xl:items-center xl:gap-5">
           <div
             className="mt-10 flex flex-wrap items-center gap-5 xl:mt-0"
             onClick={() => {

@@ -10,3 +10,14 @@ export function generateReadingTime(text: string): string {
 }
 
 export const mergeClasses = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
+
+export const formatNumberToK = (number: number) => {
+  if (number >= 1000) {
+    const suffixes = ["", "k", "M", "G", "T", "P"];
+    const magnitude = Math.floor(Math.log10(number) / 3);
+    const scaledNumber = number / Math.pow(1000, magnitude);
+    const formattedNumber = scaledNumber.toFixed(1);
+    return `${formattedNumber}${suffixes[magnitude]}`;
+  }
+  return number.toString();
+};
