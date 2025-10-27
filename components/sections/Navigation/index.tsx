@@ -147,30 +147,30 @@ const Navigation = () => {
                 href: "https://github.com/shuttle-hq/shuttle",
                 text: `${stargazersCount !== null ? formatNumberToK(stargazersCount) : ""}`,
                 title: `${stargazersCount ?? "N/A"} GitHub stars`,
+                trackingEvent: "homepage_mainnav_github",
+                label: "GitHub",
               },
               {
                 icon: <DiscordLogo className="w-6 h-6" />,
                 href: "https://discord.com/invite/shuttle",
                 text: "",
                 title: "Join us on Discord",
+                trackingEvent: "homepage_mainnav_discord",
+                label: "Discord",
               },
-            ].map(({ icon, href, text, title }, index) => (
+            ].map((item) => (
               <a
-                key={href}
-                href={href}
+                key={item.href}
+                href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={href.includes("github") ? "GitHub" : "Discord"}
-                title={title}
-                onClick={() =>
-                  trackEvent(
-                    `homepage_mainnav_${href.includes("github") ? "github" : "discord"}`,
-                  )
-                }
-                className={`flex gap-1 transition-colors text-[#D8D8D8] hover:text-black dark:text-white/60 dark:hover:text-white bg-[#1D1D1D] flex items-center justify-center rounded-full h-[48px] ${text ? " px-3" : "w-[48px]"}`}
+                aria-label={item.label}
+                title={item.title}
+                onClick={() => trackEvent(item.trackingEvent)}
+                className={`gap-1 transition-colors text-[#D8D8D8] hover:text-black dark:text-white/60 dark:hover:text-white bg-[#1D1D1D] flex items-center justify-center rounded-full h-[48px] ${item.text ? " px-3" : "w-[48px]"}`}
               >
-                {icon}
-                {text && <span className="text-xs">{text}</span>}
+                {item.icon}
+                {item.text && <span className="text-xs">{item.text}</span>}
               </a>
             ))}
           </div>
