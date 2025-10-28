@@ -235,7 +235,11 @@ Now that everything is set up, you can run it locally:
 cargo run
 ```
 
-![Task Manager MCP Server Running](./images/cargo-run.png)
+<CaptionedImage
+  src="/images/blog/stream-http-mcp/cargo-run.png"
+  alt="Task Manager MCP Server Running"
+  caption="Task Manager MCP Server Running"
+/>
 
 Now the server is ready, add it to your MCP client - in my case I'll use Cursor.
 
@@ -251,11 +255,23 @@ Now the server is ready, add it to your MCP client - in my case I'll use Cursor.
 
 Let's try it out, I'll ask the AI agent to add a few tasks and run all the other MCP tools to see how it works.
 
-![Cursor Chat](./images/cursor-chat.png)
+<CaptionedImage
+  src="/images/blog/stream-http-mcp/cursor-chat.png"
+  alt="Cursor Chat"
+  caption="Cursor Chat"
+/>
 
-![MCP Tool Call](./images/cursor-add-task.png)
+<CaptionedImage
+  src="/images/blog/stream-http-mcp/cursor-add-task.png"
+  alt="MCP Tool Call"
+  caption="MCP Tool Call"
+/>
 
-![Success](./images/mcp-works.png)
+<CaptionedImage
+  src="/images/blog/stream-http-mcp/mcp-works.png"
+  alt="Success"
+  caption="Success"
+/>
 
 Perfect! 🎉 Everything works as expected.
 
@@ -304,7 +320,11 @@ Migrating to Shuttle is as simple as that. Run your project locally to see it wo
 shuttle run
 ```
 
-![Shuttle Running](./images/shuttle-run.png)
+<CaptionedImage
+  src="/images/blog/stream-http-mcp/shuttle-run.png"
+  alt="Shuttle Running"
+  caption="Shuttle Running"
+/>
 
 Perfect! 🎉 Your MCP server is now running locally using Shuttle.
 
@@ -318,7 +338,11 @@ We'll need a Shuttle project first:
 shuttle project create --name task-manager-mcp-server
 ```
 
-![Shuttle Project Create](./images/shuttle-project-create.png)
+<CaptionedImage
+  src="/images/blog/stream-http-mcp/shuttle-project-create.png"
+  alt="Shuttle Project Create"
+  caption="Shuttle Project Create"
+/>
 
 Then deploy with the following command:
 
@@ -326,7 +350,11 @@ Then deploy with the following command:
 shuttle deploy --name task-manager-mcp-server
 ```
 
-![Shuttle Deploy](./images/shuttle-deploy-success.png)
+<CaptionedImage
+  src="/images/blog/stream-http-mcp/shuttle-deploy-success.png"
+  alt="Shuttle Deploy"
+  caption="Shuttle Deploy"
+/>
 
 Perfect! 🎉 Your MCP server is now deployed to Shuttle.
 
@@ -342,7 +370,11 @@ Update your `mcp.json` file to use the new project URL:
 }
 ```
 
-![Tasks MCP ON](./images/tasks-mcp-on.png)
+<CaptionedImage
+  src="/images/blog/stream-http-mcp/tasks-mcp-on.png"
+  alt="Tasks MCP ON"
+  caption="Tasks MCP ON"
+/>
 
 ## Next Steps
 
