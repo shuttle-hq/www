@@ -446,7 +446,7 @@ export default function BlogPostPage(props: Props) {
 
             <BlogPrevNext prevPost={props.prevPost} nextPost={props.nextPost} />
 
-            <CallToActionNewsletter bg={true} />
+            <CallToActionNewsletter />
           </div>
           {/* Sidebar */}
           <BlogSidebar
