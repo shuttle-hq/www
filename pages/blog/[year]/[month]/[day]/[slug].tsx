@@ -17,7 +17,8 @@ import slug from "rehype-slug";
 // @ts-ignore
 import toc from "markdown-toc";
 import rehypePrism from "rehype-prism-plus";
-import { DISCORD_URL, SITE_URL } from "lib/constants";
+import { SITE_URL } from "lib/constants";
+import { HeadingLink } from "components/blog/HeadingLink";
 import { GetStaticPropsContext, GetStaticPropsResult } from "next";
 import { ParsedUrlQuery } from "querystring";
 import Link from "components/elements/Link";
@@ -150,6 +151,31 @@ export async function getStaticProps({
 }
 
 const mdxComponents: MDXRemoteProps["components"] = {
+  h2: (props) => (
+    <HeadingLink level="h2" {...props}>
+      {props.children}
+    </HeadingLink>
+  ),
+  h3: (props) => (
+    <HeadingLink level="h3" {...props}>
+      {props.children}
+    </HeadingLink>
+  ),
+  h4: (props) => (
+    <HeadingLink level="h4" {...props}>
+      {props.children}
+    </HeadingLink>
+  ),
+  h5: (props) => (
+    <HeadingLink level="h5" {...props}>
+      {props.children}
+    </HeadingLink>
+  ),
+  h6: (props) => (
+    <HeadingLink level="h6" {...props}>
+      {props.children}
+    </HeadingLink>
+  ),
   table: (props) => {
     const { className, children, ...rest } = props as any;
     return (
@@ -247,7 +273,7 @@ const mdxComponents: MDXRemoteProps["components"] = {
   blockquote(props) {
     return (
       <blockquote className="border-none bg-[linear-gradient(180deg,_#FC540C_25.63%,_rgba(255,_215,_111,_0.72)_60.67%,_#38D4E9_88.15%)] pl-1 text-left text-lg font-normal not-italic text-body">
-        <div className="bg-[#E9E9E9] py-1 pl-8 prose-p:!my-0 dark:bg-black">
+        <div className="bg-[#E9E9E9] py-1 pl-8 prose-p:!my-0 dark:bg-black before:content-none after:content-none children:before:content-none children:after:content-none">
           {props.children}
         </div>
       </blockquote>

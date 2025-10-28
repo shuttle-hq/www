@@ -1,0 +1,397 @@
+---
+title: "How to Build a Streamable HTTP MCP Server in Rust"
+description: "Learn how to build and deploy a task manager MCP server using streamable HTTP transport in Rust. This guide covers the MCP protocol, real-time updates with SSE, and deployment to Shuttle for production use."
+author: dcodes
+tags: [rust, mcp, http, sse, shuttle, ai]
+thumb: stream-http-mcp/cover.png
+cover: stream-http-mcp/cover.png
+date: "2025-10-29"
+---
+
+[Local MCP servers](https://www.shuttle.dev/blog/2025/07/18/how-to-build-a-stdio-mcp-server-in-rust?utm_source=shuttle_blog&utm_medium=blog&utm_campaign=http_stream_mcp_server&utm_content=intro_link) are great, but they come with friction. Users need to install them on their machines, have the right runtimes (Python, Node.js, etc.) with compatible versions, and manually update them when new versions are released. Tools like `npx` can help with this, but it's still an extra step.
+
+There's also the trust factor. Local MCP servers can execute code on your machine, so you're essentially giving the authors system-level permissions. That requires a high degree of trust.
+
+HTTP MCP servers or _Remote MCP servers_ sidestep these issues. Instead of running code locally, your MCP client communicates with a live URL. No installation required. Updates happen server-side, and the trust model is simpler since the server can't touch your local machine.
+
+Streamable HTTP is the successor to the older HTTP+SSE transport from protocol version 2024-11-05. The current protocol revision (2025-03-26) offers improved flexibility for both basic and feature-rich servers with **streaming** capabilities.
+
+In this guide, we'll build a task manager MCP server using _streamable HTTP_ transport. The server demonstrates session-based communication with Server-Sent Events (SSE) for streaming updates from server to client, and HTTP POST requests for client-to-server messages.
+
+## Understanding Streamable HTTP Transport
+
+Streamable HTTP works through session-based communication. During initialization, the server assigns a **session ID** and returns it in the `Mcp-Session-Id` header. Clients send messages through HTTP POST requests, and servers can respond in two ways:
+
+- Direct JSON response (`application/json`) for simple operations
+- SSE stream (`text/event-stream`) for operations requiring multiple updates or server-initiated messages
+
+Clients also maintain a dedicated SSE connection via HTTP GET to receive server-initiated messages between POST requests.
+
+In our task manager example, the flow works like this: when a client (like Cursor) sends a POST request to add a task, the server processes it and can immediately push the result back through an SSE stream. The client maintains an open connection listening for these events, receiving real-time updates as tasks are added or completed. This means the AI agent doesn't need to poll for changes-it gets notified instantly when something happens on the server.
+
+For details on other transport types and the complete specification, see the [MCP documentation](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports).
+
+## Building a Streamable HTTP MCP Server
+
+In this guide, we'll build a task manager MCP server that keeps track of tasks and allows you to add, complete, list, and retrieve tasks with real-time updates. The task manager implemenation is relatively simple, but it demonstrates the core patterns for building streamable HTTP MCP servers.
+
+> Note: This project is designed for learning and demonstration purposes. It doesn't follow production best practices like proper error handling, authentication, or persistent storage. For production use, you'd want to add these features.
+
+### Project Setup
+
+We'll need the official [RMCP crate](https://crates.io/crates/rmcp) made by the [modelcontextprotocol.io](https://modelcontextprotocol.io/) team.
+
+Create a new project and add the dependencies:
+
+```toml
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+rmcp = { version = "0.8", features = [
+    "server",
+    "macros",
+    "transport-streamable-http-server",
+] }
+axum = "0.8"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+schemars = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+```
+
+The `rmcp` crate with the `transport-streamable-http-server` feature provides everything we need for building streamable HTTP servers. We'll also use the `axum` framework for handling HTTP requests and responses and it integrates seamlessly with the `rmcp` crate.
+
+### Task Manager Implementation
+
+First, we'll define the task structure and the manager that holds our state:
+
+```rust
+#[derive(Debug, Clone, Serialize, Deserialize)]
+struct Task {
+    id: usize,
+    title: String,
+    description: String,
+    completed: bool,
+}
+
+#[derive(Debug, Clone)]
+struct TaskManager {
+    tasks: Arc<Mutex<Vec<Task>>>,
+    next_id: Arc<Mutex<usize>>, // Counter for generating unique task IDs
+    tool_router: ToolRouter<TaskManager>,
+}
+```
+
+`Arc<Mutex<>>` ensures thread-safe access to our shared state-multiple clients might be connected simultaneously, and this pattern handles concurrent operations safely. The `next_id` counter increments each time we create a task, giving each one a unique identifier.
+
+The `tool_router` (type `ToolRouter<T>` from the `rmcp` crate) handles routing incoming tool calls to the appropriate methods we'll define below.
+
+### Implementing MCP Tools
+
+The `#[tool_router]` and `#[tool]` macros make defining MCP tools straightforward. RMCP handles all the protocol specifications behind the scenes, so we just need to focus on implementing our tools.
+
+You'd implement the tools just like how you would do it in any other Rust project, write your code and let the macros handle the rest. Here's how I implement the `add_task` tool:
+
+```rust
+#[tool_router]
+impl TaskManager {
+    fn new() -> Self {
+        Self {
+            tasks: Arc::new(Mutex::new(Vec::new())),
+            next_id: Arc::new(Mutex::new(1)),
+            tool_router: Self::tool_router(),
+        }
+    }
+
+    #[tool(description = "Add a new task to the task manager")]
+    async fn add_task(
+        &self,
+        Parameters(AddTaskRequest { title, description }): Parameters<AddTaskRequest>,
+    ) -> Result<CallToolResult, McpError> {
+        let mut tasks = self.tasks.lock().await;
+        let mut next_id = self.next_id.lock().await;
+
+        let task = Task {
+            id: *next_id,
+            title: title.clone(),
+            description,
+            completed: false,
+        };
+
+        *next_id += 1;
+        tasks.push(task.clone());
+
+        let response = serde_json::json!({
+            "success": true,
+            "task": task,
+            "message": format!("Task '{}' added successfully with ID {}", title, task.id)
+        });
+
+        Ok(CallToolResult::success(vec![Content::text(
+            serde_json::to_string_pretty(&response).unwrap(),
+        )]))
+    }
+}
+```
+
+The `Parameters` wrapper automatically validates and deserializes the input based on the request structure:
+
+```rust
+#[derive(Debug, Deserialize, schemars::JsonSchema)]
+struct AddTaskRequest {
+    #[schemars(description = "The title of the task")]
+    title: String,
+    #[schemars(description = "A detailed description of the task")]
+    description: String,
+}
+```
+
+The `schemars` descriptions help AI agents understand what each parameter means, improving their ability to use the tools correctly.
+
+I've implemented similar tools for completing tasks, listing all tasks, and retrieving specific tasks by ID. Each tool follows the same pattern: validate input, perform the operation, return structured results.
+
+### Server Handler Implementation
+
+The `ServerHandler` trait defines server metadata and capabilities. Every MCP server must implement this trait to be compliant with the MCP protocol, the AI agents will query this metadata to understand what the server is used for and which specification version it supports.
+
+> In a real life project you'll want to be more descriptive with the server metadata and capabilities, but for the sake of this guide we'll keep it simple.
+
+```rust
+#[tool_handler]
+impl ServerHandler for TaskManager {
+    fn get_info(&self) -> ServerInfo {
+        ServerInfo {
+            protocol_version: ProtocolVersion::V_2025_03_26,
+            capabilities: ServerCapabilities::builder()
+                .enable_tools()
+                .build(),
+            server_info: Implementation {
+                name: "task-manager".to_string(),
+                version: "0.1.0".to_string(),
+                title: None,
+                website_url: None,
+                icons: None,
+            },
+            instructions: Some(
+                "A task manager MCP server that allows you to add, complete, list, and retrieve tasks with real-time updates."
+                    .to_string(),
+            ),
+        }
+    }
+}
+```
+
+Setting up the MCP service is as easy as that. Now we need to wire everything together and serve it over HTTP, and for that we'll use the `axum` framework which integrates seamlessly with the `rmcp` crate.
+
+## Serving the MCP Server over HTTP
+
+With our task manager service defined, the final step is creating the HTTP server that exposes it. We'll configure logging with `tracing`, initialize our `StreamableHttpService` with the `TaskManager`, and start an Axum server to handle incoming MCP requests over HTTP.
+
+```rust {11-15, 17}
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    tracing_subscriber::registry()
+        .with(
+            tracing_subscriber::EnvFilter::try_from_default_env()
+                .unwrap_or_else(|_| "info".to_string().into()),
+        )
+        .with(tracing_subscriber::fmt::layer())
+        .init();
+
+    let service = StreamableHttpService::new(
+        || Ok(TaskManager::new()),
+        LocalSessionManager::default().into(),
+        Default::default(),
+    );
+
+    let router = axum::Router::new().nest_service("/mcp", service);
+    let tcp_listener = tokio::net::TcpListener::bind("127.0.0.1:8000").await?;
+
+    tracing::info!("Server ready at http://127.0.0.1:8000/mcp");
+
+    axum::serve(tcp_listener, router)
+        .with_graceful_shutdown(async {
+            tokio::signal::ctrl_c().await.unwrap();
+        })
+        .await?;
+
+    Ok(())
+}
+```
+
+The service factory `|| Ok(TaskManager::new())` creates a new instance for each session. This means each connected client gets their own isolated task list-tasks added by one client won't appear in another client's list. For a production task manager, you'd likely want shared state across sessions using a [database](https://docs.shuttle.dev/resources/shuttle-shared-db?utm_source=shuttle_blog&utm_medium=blog&utm_campaign=http_stream_mcp_server&utm_content=database_resource).
+
+`LocalSessionManager::default()` handles all the session lifecycle management. It creates sessions, routes messages to the correct connections, and cleans up when clients disconnect.
+
+### How Messages Flow
+
+In our task manager, the client establishes a persistent SSE connection via GET request to listen for updates. When the client sends a POST request to add or complete a task or run any other MCP tool, the server processes it and pushes the result back through that established SSE stream in real-time. This way the client receives instant notifications without polling.
+
+## Testing with MCP Inspector
+
+Now that everything is set up, you can run it locally:
+
+```bash
+cargo run
+```
+
+<CaptionedImage
+  src="/images/blog/stream-http-mcp/cargo-run.png"
+  alt="Task Manager MCP Server Running"
+  caption="Task Manager MCP Server Running"
+/>
+
+Now the server is ready, add it to your MCP client - in my case I'll use Cursor.
+
+```json
+{
+  "mcpServers": {
+    "Tasks": {
+      "url": "http://127.0.0.1:8000/mcp"
+    }
+  }
+}
+```
+
+Let's try it out, I'll ask the AI agent to add a few tasks and run all the other MCP tools to see how it works.
+
+<CaptionedImage
+  src="/images/blog/stream-http-mcp/cursor-chat.png"
+  alt="Cursor Chat"
+  caption="Cursor Chat"
+/>
+
+<CaptionedImage
+  src="/images/blog/stream-http-mcp/cursor-add-task.png"
+  alt="MCP Tool Call"
+  caption="MCP Tool Call"
+/>
+
+<CaptionedImage
+  src="/images/blog/stream-http-mcp/mcp-works.png"
+  alt="Success"
+  caption="Success"
+/>
+
+Perfect! 🎉 Everything works as expected.
+
+With the task manager running and integrated into Cursor, you have a fully functional MCP server handling real-time task operations through streamable HTTP.
+
+This works perfectly for local development, but in real applications you'll want your server accessible from anywhere so users can connect to it. In the next section, we'll deploy to Shuttle to get a public URL.
+
+> Make sure you read the [security warnings](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports#security-warning) before deploying your MCP server to production.
+
+## Deploying Your MCP Server to the Cloud
+
+In order to deploy your MCP server to Shuttle, you'll need to install the Shuttle crates. At the moment the latest versions are `0.57` but make sure to check the [latest Shuttle versions here](https://github.com/shuttle-hq/shuttle/releases).
+
+```toml
+[dependencies]
+shuttle-runtime = "0.57"
+shuttle-axum = "0.57"
+```
+
+Update your `main.rs` file to use Shuttle:
+
+```rust {1-2, 15}
+#[shuttle_runtime::main]
+async fn main() -> shuttle_axum::ShuttleAxum {
+    // Bind Address variable no longer needed. Shuttle will handle the binding for us.
+    tracing::info!("Starting Task Manager MCP Server");
+
+    let service = rmcp::transport::streamable_http_server::StreamableHttpService::new(
+        || Ok(TaskManager::new()),
+        rmcp::transport::streamable_http_server::session::local::LocalSessionManager::default()
+            .into(),
+        Default::default(),
+    );
+
+    let router = axum::Router::new().nest_service("/mcp", service);
+
+    Ok(router.into())
+}
+```
+
+We removed `tracing_subscriber` as well, because Shuttle has it's own logging system and it's already configured for us.
+
+Migrating to Shuttle is as simple as that. Run your project locally to see it working with `shuttle run`.
+
+```bash
+shuttle run
+```
+
+<CaptionedImage
+  src="/images/blog/stream-http-mcp/shuttle-run.png"
+  alt="Shuttle Running"
+  caption="Shuttle Running"
+/>
+
+Perfect! 🎉 Your MCP server is now running locally using Shuttle.
+
+### Shuttle Deploy
+
+Make sure you're logged in to Shuttle first to deploy, you'll need to [create an account](https://console.shuttle.dev?utm_source=shuttle_blog&utm_medium=blog&utm_campaign=http_stream_mcp_server&utm_content=create_account) and run `shuttle login` first.
+
+We'll need a Shuttle project first:
+
+```bash
+shuttle project create --name task-manager-mcp-server
+```
+
+<CaptionedImage
+  src="/images/blog/stream-http-mcp/shuttle-project-create.png"
+  alt="Shuttle Project Create"
+  caption="Shuttle Project Create"
+/>
+
+Then deploy with the following command:
+
+```bash
+shuttle deploy --name task-manager-mcp-server
+```
+
+<CaptionedImage
+  src="/images/blog/stream-http-mcp/shuttle-deploy-success.png"
+  alt="Shuttle Deploy"
+  caption="Shuttle Deploy"
+/>
+
+Perfect! 🎉 Your MCP server is now deployed to Shuttle.
+
+Update your `mcp.json` file to use the new project URL:
+
+```json
+{
+  "mcpServers": {
+    "Tasks": {
+      "url": "https://task-manager-mcp-server-djf4.shuttle.app/mcp"
+    }
+  }
+}
+```
+
+<CaptionedImage
+  src="/images/blog/stream-http-mcp/tasks-mcp-on.png"
+  alt="Tasks MCP ON"
+  caption="Tasks MCP ON"
+/>
+
+## Next Steps
+
+This task manager demonstrates the core patterns for building streamable HTTP MCP servers. The same approach scales to more complex scenarios like [database integration](https://docs.shuttle.dev/resources/shuttle-shared-db?utm_source=shuttle_blog&utm_medium=blog&utm_campaign=http_stream_mcp_server&utm_content=next_steps) or external API calls.
+
+One of the best parts about HTTP MCP servers is the deployment story. Your users don't need to install anything locally or manage dependencies - they just add your server's URL to their `mcp.json` and it works. This makes distribution and updates simple since you control the server and everyone automatically gets the latest version.
+
+You can download the complete project from the following command:
+
+```bash
+shuttle init --from shuttle-hq/shuttle-examples --subfolder mcp/http-stream-mcp
+```
+
+And deploy to Shuttle:
+
+```bash
+shuttle deploy
+```
+
+Happy Coding!
