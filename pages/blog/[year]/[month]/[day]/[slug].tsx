@@ -17,7 +17,8 @@ import slug from "rehype-slug";
 // @ts-ignore
 import toc from "markdown-toc";
 import rehypePrism from "rehype-prism-plus";
-import { DISCORD_URL, SITE_URL } from "lib/constants";
+import { SITE_URL } from "lib/constants";
+import { HeadingLink } from "components/blog/HeadingLink";
 import { GetStaticPropsContext, GetStaticPropsResult } from "next";
 import { ParsedUrlQuery } from "querystring";
 import Link from "components/elements/Link";
@@ -150,111 +151,31 @@ export async function getStaticProps({
 }
 
 const mdxComponents: MDXRemoteProps["components"] = {
-  h2: (props) => {
-    const id =
-      props.id ||
-      String(props.children)
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^\w-]/g, "");
-    return (
-      <h2 id={id} className="group">
-        <a
-          href={`#${id}`}
-          className="no-underline hover:no-underline flex items-center gap-2"
-        >
-          <span>{props.children}</span>
-          <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[#FC540C] text-xl">
-            #
-          </span>
-        </a>
-      </h2>
-    );
-  },
-  h3: (props) => {
-    const id =
-      props.id ||
-      String(props.children)
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^\w-]/g, "");
-    return (
-      <h3 id={id} className="group">
-        <a
-          href={`#${id}`}
-          className="no-underline hover:no-underline flex items-center gap-2"
-        >
-          <span>{props.children}</span>
-          <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[#FC540C] text-xl">
-            #
-          </span>
-        </a>
-      </h3>
-    );
-  },
-  h4: (props) => {
-    const id =
-      props.id ||
-      String(props.children)
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^\w-]/g, "");
-    return (
-      <h4 id={id} className="group">
-        <a
-          href={`#${id}`}
-          className="no-underline hover:no-underline flex items-center gap-2"
-        >
-          <span>{props.children}</span>
-          <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[#FC540C] text-xl">
-            #
-          </span>
-        </a>
-      </h4>
-    );
-  },
-  h5: (props) => {
-    const id =
-      props.id ||
-      String(props.children)
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^\w-]/g, "");
-    return (
-      <h5 id={id} className="group">
-        <a
-          href={`#${id}`}
-          className="no-underline hover:no-underline flex items-center gap-2"
-        >
-          <span>{props.children}</span>
-          <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[#FC540C] text-xl">
-            #
-          </span>
-        </a>
-      </h5>
-    );
-  },
-  h6: (props) => {
-    const id =
-      props.id ||
-      String(props.children)
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^\w-]/g, "");
-    return (
-      <h6 id={id} className="group">
-        <a
-          href={`#${id}`}
-          className="no-underline hover:no-underline flex items-center gap-2"
-        >
-          <span>{props.children}</span>
-          <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[#FC540C] text-xl">
-            #
-          </span>
-        </a>
-      </h6>
-    );
-  },
+  h2: (props) => (
+    <HeadingLink level="h2" {...props}>
+      {props.children}
+    </HeadingLink>
+  ),
+  h3: (props) => (
+    <HeadingLink level="h3" {...props}>
+      {props.children}
+    </HeadingLink>
+  ),
+  h4: (props) => (
+    <HeadingLink level="h4" {...props}>
+      {props.children}
+    </HeadingLink>
+  ),
+  h5: (props) => (
+    <HeadingLink level="h5" {...props}>
+      {props.children}
+    </HeadingLink>
+  ),
+  h6: (props) => (
+    <HeadingLink level="h6" {...props}>
+      {props.children}
+    </HeadingLink>
+  ),
   table: (props) => {
     const { className, children, ...rest } = props as any;
     return (
