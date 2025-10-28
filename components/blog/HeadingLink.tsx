@@ -25,7 +25,7 @@ export const HeadingLink: React.FC<HeadingLinkProps> = ({
     <HeadingTag id={id} className="group" {...props}>
       <a
         href={`#${id}`}
-        className="no-underline hover:no-underline flex items-center gap-2"
+        className="no-underline hover:no-underline flex items-center gap-2 font-bold"
       >
         <span>{children}</span>
         <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[#FC540C] flex items-center">
