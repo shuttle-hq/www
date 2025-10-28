@@ -1,14 +1,12 @@
 ---
-title: "Launching an Army of Haiku 4.5 Agents"
-description: "Using Sonnet 4.5 as an orchestrator to deploy multiple Haiku 4.5 agents in parallel. We build a new CLI feature for the Shuttle repository to demonstrate how parallel agent orchestration handles complex tasks faster and more cost-effectively."
+title: "How to Build a Streamable HTTP MCP Server in Rust"
+description: "Learn how to build and deploy a task manager MCP server using streamable HTTP transport in Rust. This guide covers the MCP protocol, real-time updates with SSE, and deployment to Shuttle for production use."
 author: dcodes
-tags: [ai, claude, haiku, agents]
-thumb: using-haiku-4.5-agents/cover.png
-cover: using-haiku-4.5-agents/cover.png
+tags: [rust, mcp, http, sse, shuttle, ai]
+thumb: stream-http-mcp/cover.png
+cover: stream-http-mcp/cover.png
 date: "2025-10-23"
 ---
-
-# How to Build a Streamable HTTP MCP Server in Rust
 
 [Local MCP servers](https://www.shuttle.dev/blog/2025/07/18/how-to-build-a-stdio-mcp-server-in-rust?utm_source=shuttle_blog&utm_medium=blog&utm_campaign=http_stream_mcp_server) are great, but they come with friction. Users need to install them on their machines, have the right runtimes (Python, Node.js, etc.) with compatible versions, and manually update them when new versions are released. Tools like `npx` can help with this, but it's still an extra step.
 
