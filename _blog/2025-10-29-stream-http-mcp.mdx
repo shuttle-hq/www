@@ -8,7 +8,7 @@ cover: stream-http-mcp/cover.png
 date: "2025-10-29"
 ---
 
-[Local MCP servers](https://www.shuttle.dev/blog/2025/07/18/how-to-build-a-stdio-mcp-server-in-rust?utm_source=shuttle_blog&utm_medium=blog&utm_campaign=http_stream_mcp_server) are great, but they come with friction. Users need to install them on their machines, have the right runtimes (Python, Node.js, etc.) with compatible versions, and manually update them when new versions are released. Tools like `npx` can help with this, but it's still an extra step.
+[Local MCP servers](https://www.shuttle.dev/blog/2025/07/18/how-to-build-a-stdio-mcp-server-in-rust?utm_source=shuttle_blog&utm_medium=blog&utm_campaign=http_stream_mcp_server&utm_content=intro_link) are great, but they come with friction. Users need to install them on their machines, have the right runtimes (Python, Node.js, etc.) with compatible versions, and manually update them when new versions are released. Tools like `npx` can help with this, but it's still an extra step.
 
 There's also the trust factor. Local MCP servers can execute code on your machine, so you're essentially giving the authors system-level permissions. That requires a high degree of trust.
 
@@ -219,7 +219,7 @@ async fn main() -> anyhow::Result<()> {
 }
 ```
 
-The service factory `|| Ok(TaskManager::new())` creates a new instance for each session. This means each connected client gets their own isolated task list-tasks added by one client won't appear in another client's list. For a production task manager, you'd likely want shared state across sessions using a [database](https://docs.shuttle.dev/resources/shuttle-shared-db?utm_source=shuttle_blog&utm_medium=blog&utm_campaign=http_stream_mcp_server) or shared in-memory store.
+The service factory `|| Ok(TaskManager::new())` creates a new instance for each session. This means each connected client gets their own isolated task list-tasks added by one client won't appear in another client's list. For a production task manager, you'd likely want shared state across sessions using a [database](https://docs.shuttle.dev/resources/shuttle-shared-db?utm_source=shuttle_blog&utm_medium=blog&utm_campaign=http_stream_mcp_server&utm_content=database_resource).
 
 `LocalSessionManager::default()` handles all the session lifecycle management. It creates sessions, routes messages to the correct connections, and cleans up when clients disconnect.
 
@@ -293,7 +293,7 @@ shuttle-axum = "0.57"
 
 Update your `main.rs` file to use Shuttle:
 
-```rust {1-2}
+```rust {1-2, 15}
 #[shuttle_runtime::main]
 async fn main() -> shuttle_axum::ShuttleAxum {
     // Bind Address variable no longer needed. Shuttle will handle the binding for us.
@@ -330,7 +330,7 @@ Perfect! 🎉 Your MCP server is now running locally using Shuttle.
 
 ### Shuttle Deploy
 
-Make sure you're logged in to Shuttle first to deploy, you'll need to [create an account](https://console.shuttle.dev) and run `shuttle login` first.
+Make sure you're logged in to Shuttle first to deploy, you'll need to [create an account](https://console.shuttle.dev?utm_source=shuttle_blog&utm_medium=blog&utm_campaign=http_stream_mcp_server&utm_content=create_account) and run `shuttle login` first.
 
 We'll need a Shuttle project first:
 
@@ -378,7 +378,7 @@ Update your `mcp.json` file to use the new project URL:
 
 ## Next Steps
 
-This task manager demonstrates the core patterns for building streamable HTTP MCP servers. The same approach scales to more complex scenarios like [database integration](https://docs.shuttle.dev/resources/shuttle-shared-db) or external API calls.
+This task manager demonstrates the core patterns for building streamable HTTP MCP servers. The same approach scales to more complex scenarios like [database integration](https://docs.shuttle.dev/resources/shuttle-shared-db?utm_source=shuttle_blog&utm_medium=blog&utm_campaign=http_stream_mcp_server&utm_content=next_steps) or external API calls.
 
 One of the best parts about HTTP MCP servers is the deployment story. Your users don't need to install anything locally or manage dependencies - they just add your server's URL to their `mcp.json` and it works. This makes distribution and updates simple since you control the server and everyone automatically gets the latest version.
 

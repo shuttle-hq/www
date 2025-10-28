@@ -150,6 +150,111 @@ export async function getStaticProps({
 }
 
 const mdxComponents: MDXRemoteProps["components"] = {
+  h2: (props) => {
+    const id =
+      props.id ||
+      String(props.children)
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w-]/g, "");
+    return (
+      <h2 id={id} className="group">
+        <a
+          href={`#${id}`}
+          className="no-underline hover:no-underline flex items-center gap-2"
+        >
+          <span>{props.children}</span>
+          <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[#FC540C] text-xl">
+            #
+          </span>
+        </a>
+      </h2>
+    );
+  },
+  h3: (props) => {
+    const id =
+      props.id ||
+      String(props.children)
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w-]/g, "");
+    return (
+      <h3 id={id} className="group">
+        <a
+          href={`#${id}`}
+          className="no-underline hover:no-underline flex items-center gap-2"
+        >
+          <span>{props.children}</span>
+          <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[#FC540C] text-xl">
+            #
+          </span>
+        </a>
+      </h3>
+    );
+  },
+  h4: (props) => {
+    const id =
+      props.id ||
+      String(props.children)
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w-]/g, "");
+    return (
+      <h4 id={id} className="group">
+        <a
+          href={`#${id}`}
+          className="no-underline hover:no-underline flex items-center gap-2"
+        >
+          <span>{props.children}</span>
+          <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[#FC540C] text-xl">
+            #
+          </span>
+        </a>
+      </h4>
+    );
+  },
+  h5: (props) => {
+    const id =
+      props.id ||
+      String(props.children)
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w-]/g, "");
+    return (
+      <h5 id={id} className="group">
+        <a
+          href={`#${id}`}
+          className="no-underline hover:no-underline flex items-center gap-2"
+        >
+          <span>{props.children}</span>
+          <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[#FC540C] text-xl">
+            #
+          </span>
+        </a>
+      </h5>
+    );
+  },
+  h6: (props) => {
+    const id =
+      props.id ||
+      String(props.children)
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w-]/g, "");
+    return (
+      <h6 id={id} className="group">
+        <a
+          href={`#${id}`}
+          className="no-underline hover:no-underline flex items-center gap-2"
+        >
+          <span>{props.children}</span>
+          <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[#FC540C] text-xl">
+            #
+          </span>
+        </a>
+      </h6>
+    );
+  },
   table: (props) => {
     const { className, children, ...rest } = props as any;
     return (
@@ -247,7 +352,7 @@ const mdxComponents: MDXRemoteProps["components"] = {
   blockquote(props) {
     return (
       <blockquote className="border-none bg-[linear-gradient(180deg,_#FC540C_25.63%,_rgba(255,_215,_111,_0.72)_60.67%,_#38D4E9_88.15%)] pl-1 text-left text-lg font-normal not-italic text-body">
-        <div className="bg-[#E9E9E9] py-1 pl-8 prose-p:!my-0 dark:bg-black">
+        <div className="bg-[#E9E9E9] py-1 pl-8 prose-p:!my-0 dark:bg-black before:content-none after:content-none children:before:content-none children:after:content-none">
           {props.children}
         </div>
       </blockquote>
