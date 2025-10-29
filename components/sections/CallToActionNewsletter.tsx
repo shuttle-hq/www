@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { trackEvent } from "lib/posthog";
 import Image from "next/image";
 import { useState, FormEvent, useEffect } from "react";
@@ -5,9 +6,14 @@ import { useState, FormEvent, useEffect } from "react";
 interface CallToActionProps {
   subtext?: string;
   bg?: boolean;
+  className?: string;
 }
 
-const CallToActionNewsletter = ({ subtext, bg }: CallToActionProps) => {
+const CallToActionNewsletter = ({
+  subtext,
+  bg,
+  className,
+}: CallToActionProps) => {
   const subtext_ =
     subtext || "Get the latest news about Shuttle features and Rust tips";
 
@@ -59,7 +65,12 @@ const CallToActionNewsletter = ({ subtext, bg }: CallToActionProps) => {
 
   return (
     <>
-      <div className="relative w-full overflow-hidden rounded-[2rem] bg-[#0F0F0F] p-4 md:p-6">
+      <div
+        className={clsx(
+          "relative w-full overflow-hidden rounded-[2rem] bg-[#0F0F0F] p-4 md:p-6",
+          className,
+        )}
+      >
         {bg ? (
           <div>
             <Image

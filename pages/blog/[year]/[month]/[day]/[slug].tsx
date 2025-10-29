@@ -379,10 +379,9 @@ export default function BlogPostPage(props: Props) {
                 )}
               </div>
             )}
-            {/* <CallToActionNewsletter bg={false} />
-            {props.blog.contentTOC.json.length > 0 ? (
-              <TableOfContents toc={props.blog.contentTOC.json} />
-            ) : null} */}
+            <div className="mb-8">
+              <CallToActionNewsletter bg={false} />
+            </div>
             {props.blog.content && (
               <article
                 className={clsx(
@@ -407,6 +406,9 @@ export default function BlogPostPage(props: Props) {
             {/* Powered By */}
             {/* <CallToActionNewsletter bg={true} /> */}
             {/* <Socials /> */}
+
+            <CallToActionNewsletter className="mt-10" />
+
             <div className="mb-20 mt-14 flex items-center space-x-4">
               <span className="text-head">Share article</span>
               <a
@@ -471,8 +473,6 @@ export default function BlogPostPage(props: Props) {
             </div>
 
             <BlogPrevNext prevPost={props.prevPost} nextPost={props.nextPost} />
-
-            <CallToActionNewsletter />
           </div>
           {/* Sidebar */}
           <BlogSidebar
