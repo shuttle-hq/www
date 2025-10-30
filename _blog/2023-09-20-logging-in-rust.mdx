@@ -1,11 +1,12 @@
 ---
-title: Logging in Rust - How to Get Started
+title: "Logging in Rust (2025)"
 description: This article talks about the most popular logging crates in Rust and what the best one for your use case is, including both simple and more complex crates.
 author: josh
 tags: [rust, logging, guide]
 thumb: logging-thumbnail.png
 cover: logging-thumbnail.png
-date: "2023-09-20T15:00:00"
+date: "2023-09-20"
+updated_at: "2025-10-30"
 ---
 
 ## Introduction
@@ -17,6 +18,18 @@ With so many different libraries at our disposal for outputting logs in Rust, it
 In short: loggers in Rust depend on a library to act as a "logging facade" - a crate which provides the logging API that the logger can work with. So for example, if we have a crate like `log` that provides a logging implementation for us that we can use with a logger, we then will also need to add a crate that actually carries out the logging - for example, `simple-logger` being one of many crates that can use `log`. Some logging facades may only be able to be used by their own special logger - for example, `tracing` either requires you to use the `tracing-subscriber` crate, or otherwise implement your own custom type that implements `tracing::Subscriber`.
 
 Without further ado, let's start the Rust logging crate comparison!
+
+## Understanding Structured vs Unstructured Logging
+
+Before we dive into specific crates, it's worth understanding the difference between structured and unstructured logging - this will help you choose the right tool for your needs.
+
+**Unstructured logging** is what you're probably used to - free-form text messages like `"User logged in"` or `"Error: connection failed"`. While easy to write, these logs are harder for machines to parse and query at scale.
+
+**Structured logging** treats log entries as data with key-value pairs, like `{"event": "user_login", "user_id": 123, "timestamp": "2024-01-15"}`. This makes logs machine-readable and much easier to search, filter, and analyze in production systems.
+
+For small projects or development, unstructured logging is often perfectly fine. But as your application grows and you need to query logs to debug production issues or analyze patterns, structured logging becomes invaluable.
+
+Most Rust logging crates play well together. The `log` crate serves as a universal standard that other interfaces can bridge to - for example, you can use `tracing` (which supports structured logging) with any `log`-compatible consumer through the `tracing-log` crate. This flexibility means you're not locked into one ecosystem.
 
 ## log
 
@@ -98,14 +111,21 @@ builder.filter_module("path::to::module", LevelFilter::Info);
  .unwrap();
 ```
 
-For all of its convenience however, `env-logger` does suffer from a couple of things that you might be looking for in a production-grade application: namely, that there is little documented functionality on writing your own pipe for logs which can make it quite tricky to implement, and [it's also unclear whether this crate is thread-safe.](https://github.com/rust-cli/env_logger/issues/269) Needless to say, it's an extremely useful crate for any quick and dirty logging!
+For all of its convenience however, `env-logger` does suffer from a couple of things that you might be looking for in a production-grade application: namely, that there is little documented functionality on writing your own pipe for logs which can make it quite tricky to implement, and [it's also unclear whether this crate is thread-safe.](https://github.com/rust-cli/env_logger/issues/269)
+
+**When to use env-logger:** This is perfect for quick prototypes, development environments, or small CLI tools where you want the convenience of the `RUST_LOG` environment variable without any setup complexity.
 
 A quick summary:
 
 - Owned by the Rust CLI Working Group
 - Simple to use and feels good to use
+- Perfect for development and quick prototyping
 - Lack of documentation on more complex functionality like log appending/piping
 - Some unclear issues on whether the crate is 100% thread-safe
+
+## fern
+
+[fern](https://github.com/daboross/fern) is a simple, runtime-configurable logging library that works with the `log` crate. If you're coming from JavaScript (Winston) or Python (logging module), fern will feel familiar - it uses a builder pattern that's intuitive and straightforward.
 
 ## log4rs
 
@@ -223,6 +243,14 @@ Summary:
 - Easy to set up your own file appending for a log egress service
 - Works with `log`
 
+## simplelog
+
+[simplelog](https://github.com/Drakulix/simplelog.rs) lives up to its name - it's one of the simplest logging implementations you'll find that works with the `log` crate. If you want basic logging with minimal configuration, this is your option.
+
+## slog
+
+[slog](https://github.com/slog-rs/slog) is an older structured logging framework that predates `tracing`. While it offers structured logging capabilities and has its own ecosystem of drain implementations, it's less widely adopted today compared to `tracing`.
+
 <TestimonialCTA />
 
 ## tracing
@@ -324,16 +352,52 @@ tracing_subscriber::fmt()
     .init();
 ```
 
-As you can see, the `tracing` family of crates offers a tonne of power in terms of what it can do and is robust enough for any web application and it's maintained by the Tokio team so it is sure to be supported for a long time. However, using it requires learning about how `tracing` works as it uses concepts that are not utilised in other logging crates - so you'll be locked in if you need to migrate from the crate for whatever reason and you're using spans. However, if you're asking yourself "what is the best logger crate in Rust", you can't go wrong with `tracing` crates in terms of how powerful this family of crates is.
+As you can see, the `tracing` family of crates offers a tonne of power in terms of what it can do and is robust enough for any web application and it's maintained by the Tokio team so it is sure to be supported for a long time. However, using it requires learning about how `tracing` works as it uses concepts that are not utilised in other logging crates - so you'll be locked in if you need to migrate from the crate for whatever reason and you're using spans.
+
+**Performance considerations:** The `tracing-appender` crate mentioned above provides non-blocking, out-of-thread logging which is particularly valuable for high-throughput applications where logging performance matters. The non-blocking writer offloads the I/O operations to a separate thread, preventing logging from blocking your application's critical path.
+
+**Compatibility note:** While `tracing` is its own ecosystem, you can make it work with `log`-based consumers using the `tracing-log` crate. This gives you flexibility - you can use tracing's powerful features while still integrating with libraries that use the standard `log` facade.
 
 Summary:
 
 - Requires some learning about spans, etc to utilise fully
 - Maintained by the Tokio team so more than likely will see LTS
 - Split crates means you don't have to install things you aren't going to use
+- `tracing-appender` provides out-of-thread logging for better performance
+- Compatible with `log` ecosystem via `tracing-log`
 - Probably the most complex system to use on the list due to the way it's built
 
 <DiscordCTA />
+
+## Choosing the Right Logging Crate
+
+With so many options, here's a comparison table to help you decide:
+
+| Crate          | Best For     | Complexity | Structured Logging | Key Strength                          | When to Use                                             |
+| -------------- | ------------ | ---------- | ------------------ | ------------------------------------- | ------------------------------------------------------- |
+| **tracing**    | Applications | High       | Yes                | Async-first, powerful instrumentation | Production apps, microservices, need structured logging |
+| **log**        | Libraries    | Low        | No                 | Universal compatibility               | Building a library that others will use                 |
+| **env-logger** | Applications | Very Low   | No                 | Quick RUST_LOG setup                  | Development, prototypes, CLI tools                      |
+| **fern**       | Applications | Low        | No                 | Familiar API                          | Coming from JS/Python, need simple control              |
+| **simplelog**  | Applications | Very Low   | No                 | Absolute simplicity                   | Just want it to work with minimal code                  |
+| **log4rs**     | Applications | High       | No                 | File rotation, YAML config            | Need enterprise features, coming from Java              |
+| **slog**       | Applications | Medium     | Yes                | Structured logging (older)            | Existing slog codebase (use tracing for new projects)   |
+
+**Quick decision guide:**
+
+- **Building a library?** Use `log` - it's the universal standard and ensures maximum compatibility with any logging backend users might choose.
+
+- **Need structured logging?** Use `tracing` for new projects. It's the modern choice with the best async support and ecosystem.
+
+- **Just want simple logging for development?** Use `env-logger` or `simplelog` - both are trivial to set up and work great for quick projects.
+
+- **Need file rotation and enterprise features?** Use `log4rs` - it handles log archiving, rotation, and complex configurations out of the box.
+
+- **Coming from another language?** Use `fern` if you're familiar with Winston (JS) or Python's logging module - the builder pattern will feel natural.
+
+- **Performance-critical application?** Use `tracing` with `tracing-appender` for non-blocking, out-of-thread logging.
+
+The most important distinction: **libraries should use `log`** for compatibility, while **applications have more freedom** to choose based on their specific needs.
 
 ## Conclusions
 
