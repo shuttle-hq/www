@@ -12,13 +12,21 @@ Cursor just released version 2.0 with a major update introducing a new agent mod
 
 Beyond the new model, the interface has been rebuilt to treat agents as the primary way you interact with your codebase rather than files. In this article, we'll go over the most important new features and how they change the way you work with AI-assisted coding.
 
-![Cursor's first coding model](./images/first-coding-model.png)
+<CaptionedImage
+  src="/images/blog/cursor-v2/first-coding-model.png"
+  alt="Cursor's first coding model"
+  caption="Cursor's first coding model"
+/>
 
 ## Composer: Built for Speed
 
 Probably the most exciting new feature is the new model **Composer** which is Cursor's first competitive coding model, and it's designed specifically for low-latency agentic coding. The claim is 4x faster than similarly intelligent models, with most tasks completing in under 30 seconds.
 
-![Composer benchmark results](./images/composer-benchmark.png)
+<CaptionedImage
+  src="/images/blog/cursor-v2/composer-benchmark.png"
+  alt="Composer benchmark results"
+  caption="Composer benchmark results"
+/>
 
 The performance is the most interesting to me, I've lost count of how many times I've been waiting for a model to complete a relatively simple task only for me to lose patience and do it manually. Not all tasks are complex, not all tasks require _ultrathinking_ and not all tasks require _state of the art_ intelligence.
 
@@ -26,17 +34,29 @@ When you're iterating on a feature, waiting 2 minutes versus 30 seconds compound
 
 With that being said, **Composer** is still close to frontier models in terms of intelligence as well, so you'll get the best of both worlds (hopefully).
 
-![Composer model details](./images/composer-model.png)
+<CaptionedImage
+  src="/images/blog/cursor-v2/composer-model.png"
+  alt="Composer model details"
+  caption="Composer model details"
+/>
 
 Interestingly, Composer was actually running in Cursor for a while under the name "Cheetah" before this official release.
 
-![Composer is the Cheetah model](./images/composer-is-cheetah.png)
+<CaptionedImage
+  src="/images/blog/cursor-v2/composer-is-cheetah.png"
+  alt="Composer is the Cheetah model"
+  caption="Composer is the Cheetah model"
+/>
 
 One particularly clever detail: Composer was trained with codebase-wide semantic search as a core tool, making it significantly better at navigating and understanding large codebases. It can also edit multiple files in parallel, which is wild when you see it in action.
 
 ## Agent-First Interface
 
-![New agents mode](./images/new-agents-mode.png)
+<CaptionedImage
+  src="/images/blog/cursor-v2/new-agents-mode.png"
+  alt="New agents mode"
+  caption="New agents mode"
+/>
 
 The new interface is a complete departure from traditional IDE layouts. The core idea of this new interface is to focus on outcomes and let agents handle the details.
 
@@ -50,7 +70,11 @@ The idea here is to run the same task across multiple models simultaneously and 
 
 ## Built-In Browser Testing
 
-![Built-in browser](./images/build-in-browser.png)
+<CaptionedImage
+  src="/images/blog/cursor-v2/build-in-browser.png"
+  alt="Built-in browser"
+  caption="Built-in browser"
+/>
 
 One of the most practical additions is the native browser tool. Instead of constantly switching between your IDE and browser when working on web applications, the browser lives right inside Cursor. More importantly, agents can interact with it directly.
 
@@ -58,19 +82,31 @@ This means an agent can make changes to your code, test them in the browser, see
 
 ## Review Changes
 
-![Review changes view](./images/review-changes-view.png)
+<CaptionedImage
+  src="/images/blog/cursor-v2/review-changes-view.png"
+  alt="Review changes view"
+  caption="Review changes view"
+/>
 
 As agents do more coding, reviewing their output becomes the real job. Cursor 2.0 introduces a dedicated review interface that makes it much faster to scan through what changed and dive deeper when something looks off. It's not revolutionary, but it's a thoughtful addition that shows they're thinking about the actual workflow, not just generating code.
 
 ## Voice Mode
 
-![Voice mode](./images/voice-mode.png)
+<CaptionedImage
+  src="/images/blog/cursor-v2/voice-mode.png"
+  alt="Voice mode"
+  caption="Voice mode"
+/>
 
 Voice mode lets you speak your intentions and have them turned into code. Essentially Speech-to-Code, it's good to see that it's finally here.
 
 ## Pricing
 
-![Pricing](./images/pricing.png)
+<CaptionedImage
+  src="/images/blog/cursor-v2/pricing.png"
+  alt="Pricing"
+  caption="Pricing"
+/>
 
 The pricing structure remains competitive with other AI coding tools. Composer could be one of the best models for the price, especially given its speed to intelligence ratio.
 
