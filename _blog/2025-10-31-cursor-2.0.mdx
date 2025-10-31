@@ -1,0 +1,123 @@
+---
+title: "Cursor V2 is Out! Here is What's New"
+description: Cursor 2.0 brings their first coding model Composer, a reimagined agent-first interface, built-in browser testing, and parallel multi-agent workflows that change how we build software.
+author: dcodes
+tags: [cursor, v2, ai, development]
+thumb: cursor-v2/cover.png
+cover: cursor-v2/cover.png
+date: "2025-10-31"
+---
+
+Cursor just released version 2.0 with a major update introducing a new agent model **Composer** and a redesigned interface built around agentic workflows. Composer's speed particularly stands out especially when its intelligence is close to frontier models.
+
+Beyond the new model, the interface has been rebuilt to treat agents as the primary way you interact with your codebase rather than files. In this article, we'll go over the most important new features and how they change the way you work with AI-assisted coding.
+
+<CaptionedImage
+  src="/images/blog/cursor-v2/first-coding-model.png"
+  alt="Cursor's first coding model"
+  caption="Cursor's first coding model"
+/>
+
+## Composer: Built for Speed
+
+Probably the most exciting new feature is the new model **Composer** which is Cursor's first competitive coding model, and it's designed specifically for low-latency agentic coding. The claim is 4x faster than similarly intelligent models, with most tasks completing in under 30 seconds.
+
+<CaptionedImage
+  src="/images/blog/cursor-v2/composer-benchmark.png"
+  alt="Composer benchmark results"
+  caption="Composer benchmark results"
+/>
+
+The performance is the most interesting to me, I've lost count of how many times I've been waiting for a model to complete a relatively simple task only for me to lose patience and do it manually. Not all tasks are complex, not all tasks require _ultrathinking_ and not all tasks require _state of the art_ intelligence.
+
+When you're iterating on a feature, waiting 2 minutes versus 30 seconds compounds quickly. Fast feedback loops change how you think about using AI assistance.
+
+With that being said, **Composer** is still close to frontier models in terms of intelligence as well, so you'll get the best of both worlds (hopefully).
+
+<CaptionedImage
+  src="/images/blog/cursor-v2/composer-model.png"
+  alt="Composer model details"
+  caption="Composer model details"
+/>
+
+Interestingly, Composer was actually running in Cursor for a while under the name "Cheetah" before this official release.
+
+<CaptionedImage
+  src="/images/blog/cursor-v2/composer-is-cheetah.png"
+  alt="Composer is the Cheetah model"
+  caption="Composer is the Cheetah model"
+/>
+
+One particularly clever detail: Composer was trained with codebase-wide semantic search as a core tool, making it significantly better at navigating and understanding large codebases. It can also edit multiple files in parallel, which is wild when you see it in action.
+
+## Agent-First Interface
+
+<CaptionedImage
+  src="/images/blog/cursor-v2/new-agents-mode.png"
+  alt="New agents mode"
+  caption="New agents mode"
+/>
+
+The new interface is a complete departure from traditional IDE layouts. The core idea of this new interface is to focus on outcomes and let agents handle the details.
+
+You can quickly switch between the agent-focused view and the classic IDE view by clicking the "Agents" button in the top left corner.
+
+## Running Multiple Agents in Parallel
+
+Cursor 2.0 lets you run multiple agents in parallel without them stepping on each other's toes. Under the hood, this uses git worktrees or remote machines to isolate each agent's workspace.
+
+The idea here is to run the same task across multiple models simultaneously and compare results. For harder problems, this _"bake off"_ approach can potentially produce a better final output than relying on a single model.
+
+## Built-In Browser Testing
+
+<CaptionedImage
+  src="/images/blog/cursor-v2/build-in-browser.png"
+  alt="Built-in browser"
+  caption="Built-in browser"
+/>
+
+One of the most practical additions is the native browser tool. Instead of constantly switching between your IDE and browser when working on web applications, the browser lives right inside Cursor. More importantly, agents can interact with it directly.
+
+This means an agent can make changes to your code, test them in the browser, see what broke, and iterate until it works. That feedback loop happening automatically is genuinely useful, especially for frontend work where visual verification matters.
+
+## Review Changes
+
+<CaptionedImage
+  src="/images/blog/cursor-v2/review-changes-view.png"
+  alt="Review changes view"
+  caption="Review changes view"
+/>
+
+As agents do more coding, reviewing their output becomes the real job. Cursor 2.0 introduces a dedicated review interface that makes it much faster to scan through what changed and dive deeper when something looks off. It's not revolutionary, but it's a thoughtful addition that shows they're thinking about the actual workflow, not just generating code.
+
+## Voice Mode
+
+<CaptionedImage
+  src="/images/blog/cursor-v2/voice-mode.png"
+  alt="Voice mode"
+  caption="Voice mode"
+/>
+
+Voice mode lets you speak your intentions and have them turned into code. Essentially Speech-to-Code, it's good to see that it's finally here.
+
+## Pricing
+
+<CaptionedImage
+  src="/images/blog/cursor-v2/pricing.png"
+  alt="Pricing"
+  caption="Pricing"
+/>
+
+The pricing structure remains competitive with other AI coding tools. Composer could be one of the best models for the price, especially given its speed to intelligence ratio.
+
+## What This Means
+
+Cursor 2.0 feels like a bet on a specific future: one where you spend more time directing multiple AI agents and less time writing code manually. Whether that's the future you want is a different question entirely.
+
+For teams that are all-in on AI-assisted development, Cursor 2.0 provides some genuinely useful capabilities. The speed of Composer, the parallel agent workflows, and the built-in browser testing address real pain points that emerge when you're heavily using AI coding tools.
+
+The question is whether this agent-first approach becomes the standard way we build software, or if it ends up being a power feature that most developers occasionally use while sticking primarily to traditional file-based editing. Time will tell.
+
+Join our Discord and let us know what you think about Cursor 2.0!
+
+<DiscordCTA />
