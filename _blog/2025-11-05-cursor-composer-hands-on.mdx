@@ -18,13 +18,21 @@ I tested it across a few key areas: executing tasks of varying complexity, searc
 
 I started with a straightforward prompt to build a REST API in Rust with CRUD operations:
 
-![Composer prompt for building a REST API](/images/blog/cursor-composer-hands-on/crud-prompt.png)
+<CaptionedImage
+  src="/images/blog/cursor-composer-hands-on/crud-prompt.png"
+  alt="Composer prompt for building a REST API"
+  caption="Composer prompt for building a REST API"
+/>
 
 It executed the entire task in 20 seconds, from writing the code and running `cargo check` to verify everything compiled without any errors.
 
 First time trying this, I didn't expect it to be this fast! I mean I expected it to be fast, but not _this fast_ 🙂.
 
-![Composer's completion summary](/images/blog/cursor-composer-hands-on/crud-complete.png)
+<CaptionedImage
+  src="/images/blog/cursor-composer-hands-on/crud-complete.png"
+  alt="Composer's completion summary"
+  caption="Composer's completion summary"
+/>
 
 Gave it a broad prompt and let it choose whatever framework it thinks best. It chose Axum _obviously_ as every model seems to be using it these days.
 
@@ -42,11 +50,19 @@ Before planning my tasks, sometimes I do a codebase search using a fast model to
 
 I tested this with a real GitHub issue from the [shuttle-hq/shuttle](https://github.com/shuttle-hq/shuttle) repository. The task was to add a `--quiet` flag to suppress non-error output from the `shuttle run` command. I wanted to see how fast Composer can find all the relevant files in the codebase.
 
-![Composer search prompt for GitHub issue](/images/blog/cursor-composer-hands-on/search-prompt.png)
+<CaptionedImage
+  src="/images/blog/cursor-composer-hands-on/search-prompt.png"
+  alt="Composer search prompt for GitHub issue"
+  caption="Composer search prompt for GitHub issue"
+/>
 
 Composer scanned the entire codebase and returned results in 15 seconds:
 
-![Composer search results](/images/blog/cursor-composer-hands-on/search-result.png)
+<CaptionedImage
+  src="/images/blog/cursor-composer-hands-on/search-result.png"
+  alt="Composer search results"
+  caption="Composer search results"
+/>
 
 Everything was spot on, and only in 15 seconds. _Crazy fast and crazy good_.
 
@@ -54,11 +70,19 @@ Everything was spot on, and only in 15 seconds. _Crazy fast and crazy good_.
 
 Let's see if it can take those search results and create an implementation plan? I started a fresh chat and fed it the issue description along with all the file paths and locations it had just found.
 
-![Composer planning prompt](/images/blog/cursor-composer-hands-on/plan-prompt.png)
+<CaptionedImage
+  src="/images/blog/cursor-composer-hands-on/plan-prompt.png"
+  alt="Composer planning prompt"
+  caption="Composer planning prompt"
+/>
 
 Composer generated a well-structured implementation plan:
 
-![Composer's implementation plan](/images/blog/cursor-composer-hands-on/plan-done.png)
+<CaptionedImage
+  src="/images/blog/cursor-composer-hands-on/plan-done.png"
+  alt="Composer's implementation plan"
+  caption="Composer's implementation plan"
+/>
 
 The plan included an overview, clear implementation steps, specific file locations with line numbers, and code examples showing exactly what needs to be added. It broke down the task into logical steps, pretty much like any other AI model would do.
 
@@ -68,7 +92,11 @@ The structure looks solid, but the real test is execution and I don't really kno
 
 Opened a new chat and fed Composer the plan and asked it to implement the changes. It completed the task in 40 seconds, making changes across multiple files.
 
-![Implementation in args.rs](/images/blog/cursor-composer-hands-on/review.png)
+<CaptionedImage
+  src="/images/blog/cursor-composer-hands-on/review.png"
+  alt="Implementation in args.rs"
+  caption="Implementation in args.rs"
+/>
 
 But speed doesn't matter if the code doesn't work. Time to review what it actually did.
 
@@ -76,11 +104,19 @@ The code review looked clean. Cursor's reviewer agent didn't flag any issues eit
 
 I created a new Shuttle project using the official Shuttle Axum template. Then, I verified the flag works as expected by running `shuttle run` without the flag:
 
-![shuttle run without --quiet flag](/images/blog/cursor-composer-hands-on/shuttle-run-no-q.png)
+<CaptionedImage
+  src="/images/blog/cursor-composer-hands-on/shuttle-run-no-q.png"
+  alt="shuttle run without --quiet flag"
+  caption="shuttle run without --quiet flag"
+/>
 
 All the build logs, runtime startup messages, and info logs appear - the default behavior. Now with `shuttle run --quiet`:
 
-![shuttle run with --quiet flag](/images/blog/cursor-composer-hands-on/shuttle-run-quiet.png)
+<CaptionedImage
+  src="/images/blog/cursor-composer-hands-on/shuttle-run-quiet.png"
+  alt="shuttle run with --quiet flag"
+  caption="shuttle run with --quiet flag"
+/>
 
 The build logs from cargo-shuttle disappeared. Only runtime logs remain visible. Exactly what the issue asked for - suppress non-error output from cargo-shuttle while keeping the runtime output.
 
