@@ -1,6 +1,6 @@
 ---
-title: "Testing Cursor's New Model: Composer"
-description: "I spent a day testing Cursor's new Composer model to find out what it's actually good at. Here's what I learned about its speed and limitations."
+title: "Testing Cursor Composer: The AI Coding Model Built for Speed"
+description: "I spent a day testing Cursor Composer to find out what it's actually good at. Here's what I learned about its speed, capabilities, and limitations."
 author: dcodes
 tags: [ai, composer, cursor, development]
 thumb: cursor-composer-hands-on/cover.png
@@ -8,67 +8,95 @@ cover: cursor-composer-hands-on/cover.png
 date: "2025-11-05"
 ---
 
-Cursor released their Composer model last week. The main pitch is speed - it's supposed to be fast at handling specific types of tasks. I wanted to see what it's actually good at, so I spent some time putting it through different scenarios.
+Cursor released their new AI coding model (Composer) last week. The main pitch is speed - turning natural language into working code faster than before. I wanted to see what it's actually good at, so I spent some time putting it through different scenarios.
 
-Cursor claims Composer to be a competitive model close to the most frontier models in intelligence, which is why I wanted to test it out, it's the first time we have a model that can compete in both speed and intelligence.
+Cursor claims this model to be a competitive AI close to the most frontier models in intelligence, which is why I wanted to test it out, it's the first time we have a model that can compete in both speed and intelligence.
 
-I tested it across a few key areas: executing tasks of varying complexity, searching codebases and documentation, and planning. I'll walk through what worked and what didn't.
+I tested Composer across a few key areas: executing tasks of varying complexity, searching codebases and documentation, and planning. These are common software engineering tasks that developers face daily. I'll walk through what worked and what didn't.
 
-## Simple Tasks: In-Memory REST API
+## Simple Coding Tasks: Building a REST API with Cursor
 
 I started with a straightforward prompt to build a REST API in Rust with CRUD operations:
 
-![Composer prompt for building a REST API](/images/blog/cursor-composer-hands-on/crud-prompt.png)
+<CaptionedImage
+  src="/images/blog/cursor-composer-hands-on/crud-prompt.png"
+  alt="Prompt for building a REST API"
+  caption="Prompt for building a REST API"
+/>
 
-It executed the entire task in 20 seconds, from writing the code and running `cargo check` to verify everything compiled without any errors.
+It executed the entire task in 20 seconds, writing the code and running `cargo check` to verify everything compiled without any errors.
 
 First time trying this, I didn't expect it to be this fast! I mean I expected it to be fast, but not _this fast_ 🙂.
 
-![Composer's completion summary](/images/blog/cursor-composer-hands-on/crud-complete.png)
+<CaptionedImage
+  src="/images/blog/cursor-composer-hands-on/crud-complete.png"
+  alt="Completion summary"
+  caption="Completion summary"
+/>
 
-Gave it a broad prompt and let it choose whatever framework it thinks best. It chose Axum _obviously_ as every model seems to be using it these days.
+Gave Composer a broad instruction and let it choose whatever framework it thinks best. It chose Axum _obviously_ as every model seems to be using it these days.
 
-The code compiles without warnings and the server is ready to run on port 3000.
+The code compiles without warnings and the server app is ready to run on port 3000.
 
-Doing this 3 years ago would mean hours of work especially if you were new to Rust. Twenty seconds from prompt to working without any compiler errors is bonkers. No runtime errors as well.
+For developers doing this 3 years ago, it would mean hours of work, especially if you were new to Rust. Twenty seconds from natural language instructions to working code without any compiler errors is bonkers. No runtime errors as well.
 
 I tested all the endpoints - creating tasks, listing them, getting by ID, updating, and deleting. Everything works exactly as it should.
 
 Okay, this task was very simple: It was a completely new repository with no existing code, no complexity to make difficult decisions, we'll try something a little bit harder in the last section.
 
-## Codebase Search: Finding Relevant Files
+## Codebase Search: Finding Relevant Files with Cursor's AI
 
-Before planning my tasks, sometimes I do a codebase search using a fast model to find the relevant file paths for a specific task that needs to be implemented. Then, I'll use the results to plan out the task using a more intelligent model, this helps in speeding things up and saving tokens. So, let's try and do exactly that.
+Before planning my tasks when developing features, sometimes I do a codebase search using a fast model to find the relevant file paths for a specific task that needs to be implemented. Then, I'll use the results to plan out the task using a more intelligent model, this helps in speeding things up and saving tokens. So, let's try and do exactly that with Cursor's Composer.
 
-I tested this with a real GitHub issue from the [shuttle-hq/shuttle](https://github.com/shuttle-hq/shuttle) repository. The task was to add a `--quiet` flag to suppress non-error output from the `shuttle run` command. I wanted to see how fast Composer can find all the relevant files in the codebase.
+I tested this with a real GitHub issue from the [shuttle-hq/shuttle](https://github.com/shuttle-hq/shuttle) repository. The task was to add a `--quiet` flag to suppress non-error output from the `shuttle run` command. I wanted to see how fast Cursor's Composer can find all the relevant files in the codebase.
 
-![Composer search prompt for GitHub issue](/images/blog/cursor-composer-hands-on/search-prompt.png)
+<CaptionedImage
+  src="/images/blog/cursor-composer-hands-on/search-prompt.png"
+  alt="Cursor's model search request for GitHub issue"
+  caption="Cursor's model search request for GitHub issue"
+/>
 
 Composer scanned the entire codebase and returned results in 15 seconds:
 
-![Composer search results](/images/blog/cursor-composer-hands-on/search-result.png)
+<CaptionedImage
+  src="/images/blog/cursor-composer-hands-on/search-result.png"
+  alt="AI search results"
+  caption="AI search results"
+/>
 
 Everything was spot on, and only in 15 seconds. _Crazy fast and crazy good_.
 
-## Planning: Turning Search Results into Action
+## From Search to Strategy: Creating an Implementation Roadmap
 
-Let's see if it can take those search results and create an implementation plan? I started a fresh chat and fed it the issue description along with all the file paths and locations it had just found.
+Creating plans is a common process when developing software. Let's see if Composer can take those search results and create an implementation plan? I started a fresh chat and fed it the issue description along with all the file paths and locations it had just found.
 
-![Composer planning prompt](/images/blog/cursor-composer-hands-on/plan-prompt.png)
+<CaptionedImage
+  src="/images/blog/cursor-composer-hands-on/plan-prompt.png"
+  alt="The model's planning instruction"
+  caption="The model's planning instruction"
+/>
 
-Composer generated a well-structured implementation plan:
+Composer generated a well-structured plan:
 
-![Composer's implementation plan](/images/blog/cursor-composer-hands-on/plan-done.png)
+<CaptionedImage
+  src="/images/blog/cursor-composer-hands-on/plan-done.png"
+  alt="Implementation plan"
+  caption="Implementation plan"
+/>
 
 The plan included an overview, clear implementation steps, specific file locations with line numbers, and code examples showing exactly what needs to be added. It broke down the task into logical steps, pretty much like any other AI model would do.
 
-The structure looks solid, but the real test is execution and I don't really know if the plan is actually good or not. So, let's see if it can complete the task.
+The structure looks solid, but the real test is execution and I don't really know if the approach is actually good or not. So, let's see if Composer can complete the task.
 
-## Complex Tasks: Executing the Plan
+## Complex Tasks: Implementing the Solution
 
-Opened a new chat and fed Composer the plan and asked it to implement the changes. It completed the task in 40 seconds, making changes across multiple files.
+Opened a new chat and fed Composer the implementation steps and asked it to implement the changes. It completed the task in 40 seconds, making changes across multiple files.
 
-![Implementation in args.rs](/images/blog/cursor-composer-hands-on/review.png)
+<CaptionedImage
+  src="/images/blog/cursor-composer-hands-on/review.png"
+  alt="Implementation in args.rs"
+  caption="Implementation in args.rs"
+/>
 
 But speed doesn't matter if the code doesn't work. Time to review what it actually did.
 
@@ -76,35 +104,43 @@ The code review looked clean. Cursor's reviewer agent didn't flag any issues eit
 
 I created a new Shuttle project using the official Shuttle Axum template. Then, I verified the flag works as expected by running `shuttle run` without the flag:
 
-![shuttle run without --quiet flag](/images/blog/cursor-composer-hands-on/shuttle-run-no-q.png)
+<CaptionedImage
+  src="/images/blog/cursor-composer-hands-on/shuttle-run-no-q.png"
+  alt="shuttle run without --quiet flag"
+  caption="shuttle run without --quiet flag"
+/>
 
 All the build logs, runtime startup messages, and info logs appear - the default behavior. Now with `shuttle run --quiet`:
 
-![shuttle run with --quiet flag](/images/blog/cursor-composer-hands-on/shuttle-run-quiet.png)
+<CaptionedImage
+  src="/images/blog/cursor-composer-hands-on/shuttle-run-quiet.png"
+  alt="shuttle run with --quiet flag"
+  caption="shuttle run with --quiet flag"
+/>
 
 The build logs from cargo-shuttle disappeared. Only runtime logs remain visible. Exactly what the issue asked for - suppress non-error output from cargo-shuttle while keeping the runtime output.
 
 Perfect. The implementation works.
 
-## Final Thoughts
+## Final Thoughts: Natural Language to Code at Speed
 
 After testing Composer across different scenarios, here's what I think about it:
 
-**Codebase search:** Excellent. This is where Composer really shines. Fifteen seconds to scan an entire repository and find every relevant file with specific line numbers is incredibly useful.
+**Codebase search:** Excellent. This is where Composer really excels. Fifteen seconds to scan an entire repository and find every relevant file with specific line numbers is incredibly useful.
 
-**Simple to medium tasks:** Really good. The in-memory REST API took 20 seconds and worked perfectly. The GitHub issue implementation worked across multiple files in 40 seconds. For well-defined tasks with clear requirements, Composer delivers fast, working code.
+**Simple to medium tasks:** Really good. The in-memory REST API took 20 seconds and worked perfectly. The GitHub issue implementation worked across multiple files in 40 seconds. For well-defined tasks with clear requirements, it can generate and deliver fast, working code.
 
 **Complex architectural decisions:** I wouldn't trust it here. For tasks that require deep technical reasoning, evaluating tradeoffs, or making non-obvious choices, you want a more capable model like Sonnet 4.5.
 
-The practical takeaway is that we now have a model that's both fast and smart enough for real work. That's a useful combination. I can see myself using it every day - searching codebases, making config changes, implementing straightforward features. The kind of tasks where waiting 1min+ for a heavier model feels unnecessary.
+The practical takeaway for software engineering is that Composer gives us an AI tool that's both fast and smart enough for real work. That's a useful combination. I can see developers using Composer every day - searching codebases, making config changes, implementing straightforward backend or frontend features. The kind of tasks where waiting 1min+ for a heavier model feels unnecessary.
 
-It's not about replacing more intelligent models. It's about having the right tool for different jobs. For quick, well-scoped tasks, Composer gets you from prompt to working code faster than anything else I've tried.
+It's not about replacing more intelligent models. It's about having the right tool for different jobs. For quick, well-scoped tasks, this approach gets you from natural language instructions to working code faster than anything else I've tried.
 
-## Conclusion
+## Conclusion: The Future of AI-Assisted Development
 
-Speed matters when you're doing real development work. Composer proved it can handle everyday tasks - searching codebases, implementing features, fixing bugs - in seconds rather than minutes. It's not perfect for everything, but it doesn't need to be. Having a fast model that's reliable for common tasks changes how I think about using AI in my workflow.
+Speed matters in modern software engineering and development work. Cursor's new AI coding assistant (Composer) proved it can handle everyday tasks - searching codebases, implementing features, fixing bugs - in seconds rather than minutes. It's not perfect for everything, but it doesn't need to be. Having a fast model that's reliable for common software development tasks changes how I think about using AI tools in my workflow.
 
-Ready to try building with Composer? Get started with Shuttle:
+Get started with our backend API template and let us know what you'll build with Composer:
 
 ```bash
 shuttle init --template axum
