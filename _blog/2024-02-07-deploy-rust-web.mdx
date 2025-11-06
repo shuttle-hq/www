@@ -118,7 +118,11 @@ Create a new Rust project using the Axum template:
 shuttle init --template axum
 ```
 
-![shuttle init command](./images/shuttle-init.png)
+<CaptionedImage
+  src="/images/blog/deploy-rust-web/shuttle-init.png"
+  alt="shuttle init command"
+  caption="shuttle init command"
+/>
 
 This generates a basic Axum web service with Shuttle annotations already set up, along with all necessary dependencies. The Rust project structure looks like this:
 
@@ -145,11 +149,19 @@ To test locally:
 shuttle run
 ```
 
-![shuttle run command](./images/shuttle-run.png)
+<CaptionedImage
+  src="/images/blog/deploy-rust-web/shuttle-run.png"
+  alt="shuttle run command"
+  caption="shuttle run command"
+/>
 
 Your application will be available at `http://localhost:8000`:
 
-![Hello world browser output](./images/hello-world.png)
+<CaptionedImage
+  src="/images/blog/deploy-rust-web/hello-world.png"
+  alt="Hello world browser output"
+  caption="Hello world browser output"
+/>
 
 When you're ready to deploy:
 
@@ -157,17 +169,29 @@ When you're ready to deploy:
 shuttle deploy
 ```
 
-![shuttle deploy command](./images/shuttle-deploy.png)
+<CaptionedImage
+  src="/images/blog/deploy-rust-web/shuttle-deploy.png"
+  alt="shuttle deploy command"
+  caption="shuttle deploy command"
+/>
 
 Going to the [Shuttle console](https://console.shuttle.dev), you'll see your app building:
 
-![Shuttle console building status](./images/shuttle-building.png)
+<CaptionedImage
+  src="/images/blog/deploy-rust-web/shuttle-building.png"
+  alt="Shuttle console building status"
+  caption="Shuttle console building status"
+/>
 
 That's it. Shuttle handles building and deploying your application. You'll get a URL where it's live - typically something like `<your-project-name>.shuttle.app`.
 
 Visit the public URL and you'll see your app running in production:
 
-![Deployed app live on Shuttle](./images/shuttle-public-url.png)
+<CaptionedImage
+  src="/images/blog/deploy-rust-web/shuttle-public-url.png"
+  alt="Deployed app live on Shuttle"
+  caption="Deployed app live on Shuttle"
+/>
 
 Your Rust web app is now deployed and accessible to the world - all done in minutes without writing a single configuration file.
 
