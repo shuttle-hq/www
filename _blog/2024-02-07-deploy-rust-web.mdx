@@ -83,9 +83,112 @@ Shuttle uses AWS under the hood and aims to reduce the amount of work you need t
 
 - No docker knowledge required
 - No config files
+- Just run `shuttle deploy` and you're done
 
 Of course, we _are_ talking about our own product here - we're biased. Our product is also somewhat early-stage when it comes to provisioning resources and various use cases. However, if you're looking to deploy quickly in Rust (for example, an MVP or POC), we believe Shuttle is a great fit for you!
+
+## Deploying your Rust app to Shuttle
+
+Let me show you how quick it is to get a Rust web service deployed on Shuttle. We'll use Axum, the most popular Rust web framework.
+
+First, install the Shuttle CLI:
+
+**Linux and macOS:**
+
+```bash
+curl -sSfL https://www.shuttle.dev/install | bash
+```
+
+**Windows (PowerShell):**
+
+```powershell
+iwr https://www.shuttle.dev/install-win | iex
+```
+
+**Alternatively, using Cargo:**
+
+```bash
+cargo install cargo-shuttle
+```
+
+Create a new project using the Axum template:
+
+```bash
+shuttle init --template axum
+```
+
+![shuttle init command](./images/shuttle-init.png)
+
+This generates a basic Axum web service with Shuttle annotations already set up. The project structure looks like this:
+
+```rust
+use axum::{routing::get, Router};
+
+async fn hello_world() -> &'static str {
+    "Hello, world!"
+}
+
+#[shuttle_runtime::main]
+async fn main() -> shuttle_axum::ShuttleAxum {
+    let router = Router::new().route("/", get(hello_world));
+
+    Ok(router.into())
+}
+```
+
+Notice the `#[shuttle_runtime::main]` macro - this tells Shuttle how to run your application. The return type `shuttle_axum::ShuttleAxum` indicates we're deploying an Axum service.
+
+To test locally:
+
+```bash
+shuttle run
+```
+
+![shuttle run command](./images/shuttle-run.png)
+
+Your service will be available at `http://localhost:8000`:
+
+![Hello world browser output](./images/hello-world.png)
+
+When you're ready to deploy:
+
+```bash
+shuttle deploy
+```
+
+![shuttle deploy command](./images/shuttle-deploy.png)
+
+Going to the [Shuttle console](https://console.shuttle.dev), you'll see your app building:
+
+![Shuttle console building status](./images/shuttle-building.png)
+
+That's it. Shuttle handles building your application and deploying it. You'll get a URL where your service is live - typically something like `https://<your-project-name>.shuttle.app`.
+
+Visit the public URL and you'll see your app running in production:
+
+![Deployed app live on Shuttle](./images/shuttle-public-url.png)
+
+Your Rust app is now deployed and accessible to the world - all done in minutes without writing a single config file.
+
+Want to add a database? Just add the annotation to your main function:
+
+```rust
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_shared_db::Postgres] pool: PgPool,
+) -> shuttle_axum::ShuttleAxum {
+    // Your database is provisioned and ready to use
+    let router = Router::new().route("/", get(hello_world));
+    Ok(router.into())
+}
+```
+
+Shuttle provisions the database automatically when you deploy. No config files, no separate database setup - it's all declared in your code. Learn more about [provisioning databases with Shuttle](https://docs.shuttle.dev/resources/shuttle-shared-db).
 
 ## Finishing up
 
 Thanks for reading! I hope you enjoyed this guide on how to deploy a Rust web application. Rust is easier to use and deploy than ever, and with so many options it's difficult to figure out what the best one is.
+
+Feel free to join our Discord server if you have any questions or need help deploying your Rust application.
+
+<DiscordCTA />
