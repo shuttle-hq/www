@@ -30,6 +30,14 @@ const userStories = [
     link: "/customers/decent-land",
     title: `How Decent Land simplified Web3 development`,
   },
+  {
+    key: "master-ai",
+    logo: "/images/user-stories/master-ai.png",
+    logoWidth: 140,
+    logoHeight: 40,
+    link: "/customers/master-ai",
+    title: `How MasterAI Launched an AI-powered Game from Concept to 10K Daily Interactions`,
+  },
 ];
 
 export default function UserStories() {
