@@ -37,6 +37,10 @@ const nextConfig = {
         // These rewrites are checked after pages/public files
         // are checked but before dynamic routes
         {
+          source: "/sitemap.xml",
+          destination: "/api/sitemap.xml",
+        },
+        {
           source: "/rss.xml",
           destination: "/api/rss",
         },
