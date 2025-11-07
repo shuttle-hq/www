@@ -141,11 +141,6 @@ export default function MasterAI() {
               hosting options either required significant upfront investment or
               came with complexity that would slow development.
             </p>
-            <p className="self-stretch justify-start text-text-secondary text-xl font-normal">
-              &quot;We were just starting out: the ability to begin for free
-              with a few users and then scale at very accessible costs was
-              decisive,&quot; the team explains.
-            </p>
           </div>
 
           <div className="w-full max-w-[782px] mx-auto flex flex-col justify-start items-start gap-10">
@@ -362,19 +357,13 @@ export default function MasterAI() {
                 </div>
               </div>
             </div>
-            <div className="self-stretch">
-              <p className="self-stretch justify-start text-text-secondary text-xl font-normal">
-                &quot;Shuttle now manages the infrastructure automatically,
-                letting developers focus solely on Rust application code,&quot;
-                the team notes.
-              </p>
-            </div>
           </div>
 
           <UserQuote className="w-full max-w-[984px]">
             <span className="text-neutral-200 text-lg md:text-2xl font-normal">
               &quot;Shuttle now manages the infrastructure automatically,
-              letting developers focus solely on Rust application code.&quot;
+              letting developers focus solely on Rust application code,&quot; -
+              the team notes.
             </span>
           </UserQuote>
 
