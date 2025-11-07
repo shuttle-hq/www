@@ -90,9 +90,9 @@ export default function MasterAI() {
                 player.
               </p>
               <p className="text-text-secondary text-xl font-normal mt-5">
-                Drawing on decades of running D&D campaigns—where a human
+                Drawing on decades of running D&D campaigns - where a human
                 &quot;game master&quot; creates and guides adventures for a
-                group of players over weeks or months—the team understood what
+                group of players over weeks or months - the team understood what
                 makes tabletop RPGs compelling. That experience became the
                 foundation for training an AI that could replicate the dynamic
                 storytelling and adaptive gameplay of a human GM.
