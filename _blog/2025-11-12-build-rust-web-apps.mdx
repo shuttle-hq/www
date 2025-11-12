@@ -129,6 +129,12 @@ For production scale, **Kubernetes** or **ECS** provide the orchestration you'll
 
 **Shuttle** is the easiest choice. It's easy to build, deploy, and get SSL certs. You'll just add a macro to your main function and run `shuttle deploy`, and everything will be handled for you: SSL certs, database included (will be provisioned automatically). It offers a generous free tier and works with any Rust web framework (even your own custom one). For Rust web applications, this is the fastest path to production. The downside is it only works for Rust at the moment.
 
+<CaptionedImage
+  src="/images/blog/deploy-rust-web/shuttle-deploy.png"
+  alt="Shuttle deploy"
+  caption="Shuttle deploy"
+/>
+
 You can [read the Shuttle documentation](https://docs.shuttle.dev/) for more information about how to deploy a Rust web app to Shuttle.
 
 ## Common Pitfalls & Trade-offs
