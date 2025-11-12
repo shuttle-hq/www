@@ -49,7 +49,7 @@ function generateSitemapXML(): string {
 
   // Add blog posts
   posts.forEach((post) => {
-    const lastmod = post.modified || post.date;
+    const lastmod = post.updated_at || post.modified || post.date;
     xml += "  <url>\n";
     xml += `    <loc>${SITE_URL}/blog/${post.url}</loc>\n`;
     xml += `    <lastmod>${new Date(lastmod).toISOString()}</lastmod>\n`;
