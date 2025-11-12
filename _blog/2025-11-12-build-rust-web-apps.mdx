@@ -62,7 +62,7 @@ You can check out our blog about Rust ORMs [here](https://www.shuttle.dev/blog/2
 
 ### Templating
 
-Templating engines let you generate HTML dynamically by combining static markup with data from your application. They handle the common patterns of web rendering: loops, conditionals, variable interpolation, and template inheritance. Instead of manually concatenating strings or building HTML in your Rust code, you write templates that separate presentation from logic. For example, `\{\{ user.name \}\}` in Jinja2/Tera, `<%= user.name %>` in ERB, or `\{\{ user.name \}\}` in Handlebars all inject data into your HTML.
+Templating engines let you generate HTML dynamically by combining static markup with data from your application. They handle the common patterns of web rendering: loops, conditionals, variable interpolation, and template inheritance. Instead of manually concatenating strings or building HTML in your Rust code, you write templates that separate presentation from logic. For example, `{{ user.name }}` in Jinja2/Tera, `<%= user.name %>` in ERB, or `{{ user.name }}` in Handlebars all inject data into your HTML.
 
 **[Tera](https://keats.github.io/tera/)** integrates strongly with Actix-web and has solid documentation. If you've used Jinja2 or Django templates, Tera's syntax will feel familiar. It's the safe, practical choice for server-side rendering.
 
