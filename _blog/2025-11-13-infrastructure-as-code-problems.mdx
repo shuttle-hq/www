@@ -10,7 +10,7 @@ date: "2025-11-13"
 
 51% of your developers are spending more than 20% of their time managing infrastructure code. At an average salary of $150,000 a year, that's $30,000 in lost productivity per engineer. For a 10-person team, you're spending $300,000 a year to babysit YAML instead of building products.
 
-Infrastructure as Code (IaC) was supposed to give you automation, version control, and stable environments. So why are modules piling up faster than your team can refactor them? Why does every infrastructure change feel like a gamble? Why do state files keep drifting out of sync, blocking work you thought was already done?
+Infrastructure as Code (IaC) was supposed to give you [automation](https://www.shuttle.dev/blog/2025/10/21/github-integration), version control, and stable environments. So why are modules piling up faster than your team can refactor them? Why does every [infrastructure change](https://www.shuttle.dev/blog/2022/05/09/ifc) feel like a gamble? Why do state files keep drifting out of sync, blocking work you thought was already done?
 
 Let's break down how Infrastructure as Code has become a hidden cost center and what a better path forward looks like.
 
@@ -26,14 +26,14 @@ IaC usually starts small. Maybe it's a 50-line Terraform config to spin up a bas
 Refactoring Pain
 Variables, modules, and providers make IaC flexible and reusable, but maintaining it is still tricky. Most of the time, you end up digging through multiple files to make a small change. For example, renaming a resource might sound simple, but if you miss updating every reference to it, you could accidentally destroy and recreate infrastructure in production.
 
-As Matt Moore, CTO at Chainguard, put it: "Having used Terraform extensively, refactoring is extremely painful." This is not an exaggeration. Even a small refactor can break dependencies or invalidate states, forcing you to rewrite chunks of code. That's valuable time that could have gone into shipping new features instead of firefighting broken infrastructure.
+As [Matt Moore](https://thenewstack.io/infrastructure-as-code-in-2024-why-its-still-so-terrible/), CTO at Chainguard, put it: "Having used Terraform extensively, refactoring is extremely painful." This is not an exaggeration. Even a small refactor can break dependencies or invalidate states, forcing you to rewrite chunks of code. That's valuable time that could have gone into shipping new features instead of firefighting broken infrastructure.
 
 State File Problem
 Terraform uses a state file to stay consistent and reliable while managing infrastructure across multiple cloud providers. As important as it is, the state file can also become a major pain point. Since it serves as the single source of truth, it's also a single point of failure. It's prone to drift, corruption, or merge conflicts during team collaboration. Something as simple as your colleague running a `terraform apply` might lock the state file and block your deployment.
 
 The net effect of all the challenges above hits harder than most teams admit. Development cycles slow down, features miss deadlines, and engineers spend evenings debugging HashiCorp Configuration Language (HCL) syntax instead of solving interesting problems.
 
-A recent report shows that 75% of infrastructure stakeholders feel frustrated chasing these configuration errors, which makes development drag on much longer than it should.
+A [recent report](https://stackgen.com/stackedup-infographic-2025) shows that 75% of infrastructure stakeholders feel frustrated chasing these configuration errors, which makes development drag on much longer than it should.
 
 <CaptionedImage
   src="/images/blog/infrastructure-as-code-problems/infrastructure-error.png"
@@ -70,7 +70,7 @@ Shuttle was built on this core philosophy of making your code declare its own ne
 
 How Shuttle Manages Infrastructure and Development Together
 
-Shuttle takes a fundamentally different approach. Instead of managing infrastructure through separate configuration files, you declare what you need directly in your application code using annotations.
+[Shuttle](https://www.shuttle.dev/) takes a fundamentally different approach. Instead of managing infrastructure through separate configuration files, you declare what you need directly in your application code using annotations.
 
 To see this in action, let's compare it with IaC. Say you want to deploy a web application with a database and plan to scale as you go. With IaC, your configuration might look like this:
 
