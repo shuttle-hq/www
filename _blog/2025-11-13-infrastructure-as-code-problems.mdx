@@ -35,7 +35,10 @@ The net effect of all the challenges above hits harder than most teams admit. De
 
 A recent report shows that 75% of infrastructure stakeholders feel frustrated chasing these configuration errors, which makes development drag on much longer than it should.
 
-![infrastructure error](https://paper-attachments.dropboxusercontent.com/s_799E871A2C695BF20E0BB6D9A96A75BC23FBA3153851852329E0E8567BBD5878_1762766673632_Screenshot+2025-11-10+at+10.24.13.png)
+<CaptionedImage
+  src="/images/blog/infrastructure-as-code-problems/infrastructure-error.png"
+  alt="infrastructure error"
+/>
 
 The moment you factor in how much time your team is spending to keep things stable, the cost becomes hard to ignore.
 
@@ -139,4 +142,8 @@ IaC was meant to make engineering easier. Instead, it created a new set of chall
 
 Shuttle's approach of collapsing configuration into annotations, automating provisioning, and eliminating state management isn't just incrementally better. It's a fundamental rethinking of how infrastructure should work. This means more building and less time babysitting configuration files.
 
-Ready to see how Shuttle eliminates IaC complexity? Try out the quickstart deployment tutorial.
+Ready to see how Shuttle eliminates IaC complexity? Try out our axum template and deploy in minutes.
+
+```bash
+shuttle init --template axum
+```
