@@ -62,6 +62,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Front matter supports: title, date, author, tags, cover image, description
 - Table of contents and reading time calculated automatically
 - RSS feed generated at `/api/rss`
+- **Blog images must be placed in `/public/images/blog/` directory matching the path specified in the blog post frontmatter** (e.g., if frontmatter has `cover: infrastructure-as-code-problems/cover.png`, the image should be at `/public/images/blog/infrastructure-as-code-problems/cover.png`)
 
 ### Blog CTA Components
 

@@ -1,0 +1,149 @@
+---
+title: "Infrastructure as Code Problems: Why Developers Are Wasting Their Time"
+description: "You didn't hire developers to debug Terraform state files. Yet here we are. This breakdown shows what IaC is really costing you and how to stop the bleeding."
+author: demola
+tags: [infrastructure, devops, terraform, deployment]
+thumb: infrastructure-as-code-problems/cover.png
+cover: infrastructure-as-code-problems/cover.png
+date: "2025-11-13"
+---
+
+51% of your developers are spending more than 20% of their time managing infrastructure code. At an average salary of $150,000 a year, that's $30,000 in lost productivity per engineer. For a 10-person team, you're spending $300,000 a year to babysit YAML instead of building products.
+
+Infrastructure as Code (IaC) was supposed to give you [automation](https://www.shuttle.dev/blog/2025/10/21/github-integration), version control, and stable environments. So why are modules piling up faster than your team can refactor them? Why does every [infrastructure change](https://www.shuttle.dev/blog/2022/05/09/ifc) feel like a gamble? Why do state files keep drifting out of sync, blocking work you thought was already done?
+
+Let's break down how Infrastructure as Code has become a hidden cost center and what a better path forward looks like.
+
+How Infrastructure as Code is Slowing Developers Down
+
+When you have a dedicated infrastructure team, even simple requests can turn into a waiting game. Spinning up a quick proof-of-concept app to show a colleague might mean going through approvals, resource requests, and tickets before anything happens. That process kills momentum. You lose the freedom to experiment, which slows shipping.
+
+Here's what makes it worse:
+
+Too Many Config Files
+IaC usually starts small. Maybe it's a 50-line Terraform config to spin up a basic web service. But as the project grows, you need to consider scalability, databases, and networking. Suddenly, your once-minimal configuration balloons to 500+ lines spread across multiple files. Every new service, subnet, or secret adds another layer of complexity to an already bloated system.
+
+Refactoring Pain
+Variables, modules, and providers make IaC flexible and reusable, but maintaining it is still tricky. Most of the time, you end up digging through multiple files to make a small change. For example, renaming a resource might sound simple, but if you miss updating every reference to it, you could accidentally destroy and recreate infrastructure in production.
+
+As [Matt Moore](https://thenewstack.io/infrastructure-as-code-in-2024-why-its-still-so-terrible/), CTO at Chainguard, put it: "Having used Terraform extensively, refactoring is extremely painful." This is not an exaggeration. Even a small refactor can break dependencies or invalidate states, forcing you to rewrite chunks of code. That's valuable time that could have gone into shipping new features instead of firefighting broken infrastructure.
+
+State File Problem
+Terraform uses a state file to stay consistent and reliable while managing infrastructure across multiple cloud providers. As important as it is, the state file can also become a major pain point. Since it serves as the single source of truth, it's also a single point of failure. It's prone to drift, corruption, or merge conflicts during team collaboration. Something as simple as your colleague running a `terraform apply` might lock the state file and block your deployment.
+
+The net effect of all the challenges above hits harder than most teams admit. Development cycles slow down, features miss deadlines, and engineers spend evenings debugging HashiCorp Configuration Language (HCL) syntax instead of solving interesting problems.
+
+A [recent report](https://stackgen.com/stackedup-infographic-2025) shows that 75% of infrastructure stakeholders feel frustrated chasing these configuration errors, which makes development drag on much longer than it should.
+
+<CaptionedImage
+  src="/images/blog/infrastructure-as-code-problems/infrastructure-error.png"
+  alt="infrastructure error"
+/>
+
+The moment you factor in how much time your team is spending to keep things stable, the cost becomes hard to ignore.
+
+The Hidden Costs of Infrastructure as Code for Teams
+
+As we calculated earlier, a 10-person team spending one day a week on infrastructure loses $300,000 in time alone. But that isn't the cost that hurts the most.
+
+Knowledge silos form faster than you can stop them. The same "Terraform person" who helped ship early features suddenly becomes the bottleneck for every new project. When new hires join, onboarding takes weeks because that one expert is juggling infrastructure work while also trying to explain thousands of lines of configuration spread across multiple repositories.
+
+Then there's burnout. Engineers join to build things, not debug infrastructure that won't reconcile after a provider update. No developer dreams of that. They want to create products, solve problems, and see their work make an impact. When debugging infrastructure consumes a big part of their day, frustration builds, and some start looking for exits.
+
+Eventually, every team hits the same wall: too many configs, too much boilerplate, and not enough actual building. It's not that IaC failed; it just became heavy. The good news is that a new kind of platform is changing the story. Instead of writing long scripts or wrestling with complex IaC module logic, you describe your environment alongside your application logic, and the tooling handles the "how."
+
+From Infrastructure as Code to Infrastructure from Code
+
+If IaC feels like extra work, it's because it is. It forces you to separate how you build from how you deploy. You're writing configuration in one language and application logic in another, even though they describe the same system. That split creates constant friction and slows development.
+
+So, what's the fix? Instead of managing a parallel stack of configuration files, what if you could eliminate them? That is the power of Infrastructure from Code.
+
+The IfC model takes a different stance. It argues that your infrastructure needs should live inside your application code, right where you use them. Instead of maintaining a 300-line Terraform file, your infrastructure becomes a short annotation or macro on the function that requires the resource.
+
+This isn't just about convenience. It removes an entire category of work. With Infrastructure from Code, your infrastructure is:
+
+- Co-located: It lives directly in your `main.rs` file, not in a separate infra repository.
+- Obvious: Anyone reading your code can see exactly what resources it depends on.
+- Always in sync: It is reviewed, versioned, and deployed as a single unit with your application. There is no state drift because the code is the definition.
+
+Shuttle was built on this core philosophy of making your code declare its own needs.
+
+How Shuttle Manages Infrastructure and Development Together
+
+[Shuttle](https://www.shuttle.dev/) takes a fundamentally different approach. Instead of managing infrastructure through separate configuration files, you declare what you need directly in your application code using annotations.
+
+To see this in action, let's compare it with IaC. Say you want to deploy a web application with a database and plan to scale as you go. With IaC, your configuration might look like this:
+
+- `main.tf`: Provider configuration with backend setup (approximately 30 lines)
+- `vpc.tf`: VPC, subnets, internet gateway, route tables (80 lines)
+- `security-groups.tf`: Ingress/egress rules for app and database (40 lines)
+- `rds.tf`: Database instance, parameter groups, backup config (50 lines)
+- `ecs.tf`: Cluster, task definitions, service configuration (60 lines)
+- `variables.tf`: Input variables (20 lines)
+- `outputs.tf`: Connection strings and endpoints (15 lines)
+
+That's roughly 300 lines of IaC code across seven files, not counting logging, monitoring, or environment-specific configurations.
+
+In comparison, doing the same thing with Shuttle is far simpler. You don't need separate files for your application logic and infrastructure. You simply create your application and annotate the resources you need (a database in this example):
+
+```rust
+#[shuttle_runtime::main]
+async fn main(
+    #[shuttle_shared_db::Postgres] pool: PgPool,
+) -> ShuttleAxum {
+    pool.execute(include_str!("../schema.sql"))
+        .await
+        .map_err(CustomError::new)?;
+    // other application code here
+}
+```
+
+This looks like your normal application code, with a few additions. You'll notice the use of Rust macros to annotate the code:
+
+- `#[shuttle_runtime::main]` provisions the Shuttle runtime environment where your app runs.
+- `#[shuttle_shared_db::Postgres]` configures a Postgres database and injects a connection pool that your app can query directly.
+
+Once you run the `shuttle deploy` command, Shuttle automatically initializes and provisions the resources your application needs, leaving you free to focus on what matters.
+
+That's all you need to do. No YAML, HCL, or state files to manage. Your development and infrastructure code remain tightly coupled, giving you greater control as you build and scale.
+
+With Shuttle, your IaC burden drops significantly:
+
+- Updates happen automatically, and provider changes, security patches, and infrastructure updates are handled behind the scenes while your annotations stay the same.
+- You can prototype quickly with low effort and get built-in support for popular Rust frameworks.
+- You ship faster since you no longer need to switch contexts between development and infrastructure code.
+- Fast redeployment and local iteration make it easy to test changes without long build times.
+
+Once you see how Shuttle keeps your app and infrastructure in sync, the next question is obvious: How do you start using it? The good news is you don't have to rewrite everything from scratch. Shuttle's migration flow is designed to meet you where your code is and get you running fast.
+
+How to Migrate to Shuttle Without Breaking Things
+
+You don't need to treat migration like a six-month project. You can start in ten minutes. Every day you delay is another day of lost developer time.
+
+Here's how to move forward without disruption:
+
+- Start with new services: Stop building new projects on the old stack. Every new service you create should begin on Shuttle. It keeps your infrastructure close to your code and prevents the sprawl that slows teams down.
+
+- Migrate one small, painful service: Pick a microservice that is always difficult to deploy. The one with fragile pipelines or constant configuration drift. Move that first. You'll have it running on Shuttle in an afternoon.
+
+- Run in parallel: Keep your existing setup alive while testing the Shuttle version. You'll see the difference immediately. Deployments that once took hours now take seconds.
+
+- Build confidence gradually: Once you've seen the results, migrate other services one by one. Each move will take less time than the last.
+
+- Yes, Rust has a learning curve. But here's what you're not accounting for: you're already paying that cost in IaC complexity. The difference is, Rust's complexity is front-loaded and one-time, while IaC complexity compounds over time.
+
+Migration is about recovery. Every week spent maintaining IaC is time and money lost. Shuttle gives that time back.
+
+Stop Paying Developers To Manage Infrastructure
+
+Every year, your developers spend thousands of hours maintaining infrastructure they were never hired to manage. That's $30,000 of wasted time per engineer, and $300,000 for a ten-person team that could be building instead.
+
+IaC was meant to make engineering easier. Instead, it created a new set of challenges that drain time, money, and morale.
+
+Shuttle's approach of collapsing configuration into annotations, automating provisioning, and eliminating state management isn't just incrementally better. It's a fundamental rethinking of how infrastructure should work. This means more building and less time babysitting configuration files.
+
+Ready to see how Shuttle eliminates IaC complexity? Try out our axum template and deploy in minutes.
+
+```bash
+shuttle init --template axum
+```
