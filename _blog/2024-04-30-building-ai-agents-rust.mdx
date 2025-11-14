@@ -343,8 +343,8 @@ We can use this on the received response and extract the codeblock if it exists 
 
 ## Bringing the agents live
 
-Finally, we're ready to use our agents. But uhhh wait, how do we actually use them? If we plan to use them from a frontend, we'll need to create an API around that. Luckily, we can use [Shuttle and Axum together](https://docs.shuttle.rs/examples/axum) to get an API up and running quickly.
-First, you need to [install Shuttle](https://docs.shuttle.rs/getting-started/installation) - just hit `cargo binstall cargo-shuttle` and it should install in no time.
+Finally, we're ready to use our agents. But uhhh wait, how do we actually use them? If we plan to use them from a frontend, we'll need to create an API around that. Luckily, we can use [Shuttle and Axum together](https://docs.shuttle.dev/examples/axum) to get an API up and running quickly.
+First, you need to [install Shuttle](https://docs.shuttle.dev/getting-started/installation) - just hit `cargo binstall cargo-shuttle` and it should install in no time.
 
 So let's open up that Cargo.toml and add the required dependencies - we'll add `axum` and `shuttle-axum` to build the server, `tokio` for async work and the `shuttle-runtime` to run in Shuttle's cloud.
 
@@ -387,7 +387,7 @@ async fn main() -> shuttle_axum::ShuttleAxum {
 }
 ```
 
-With this we can finally deploy - just hit `cargo shuttle project start && cargo shuttle deploy --ad`, grab a coffee and you'll find your agents spinning in Shuttle's cloud, ready to be used. So let's test it out - we'll use the [Shuttle AI announcement video](https://www.youtube.com/watch?v=6sHo-2ddw3U) as an example. For now, we'll keep it simple and just use curl - later, you can also build a frontend for it, using something like [Next.js](https://www.shuttle.dev/blog/2023/03/23/nextjs-and-rust) or [one of Shuttle's starter templates](https://docs.shuttle.rs/templates/overview).
+With this we can finally deploy - just hit `cargo shuttle project start && cargo shuttle deploy --ad`, grab a coffee and you'll find your agents spinning in Shuttle's cloud, ready to be used. So let's test it out - we'll use the [Shuttle AI announcement video](https://www.youtube.com/watch?v=6sHo-2ddw3U) as an example. For now, we'll keep it simple and just use curl - later, you can also build a frontend for it, using something like [Next.js](https://www.shuttle.dev/blog/2023/03/23/nextjs-and-rust) or [one of Shuttle's starter templates](https://docs.shuttle.dev/templates/overview).
 
 So let's bring up your terminal and curl it:
 

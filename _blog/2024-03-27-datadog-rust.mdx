@@ -20,9 +20,9 @@ Fortunately, in the Rust ecosystem, we have [Tokio Tracing](https://docs.rs/trac
 
 ## Shuttle logs
 
-A while ago, I wrote a [post](https://robertohuertas.com/2023/01/09/shuttle-rust-backend-deployment/) about [Shuttle](https://www.shuttle.dev/), where I explained how ridiculously easy it is to deploy a Rust backend to the cloud by using their [CLI tool](https://docs.shuttle.rs/introduction/quick-start).
+A while ago, I wrote a [post](https://robertohuertas.com/2023/01/09/shuttle-rust-backend-deployment/) about [Shuttle](https://www.shuttle.dev/), where I explained how ridiculously easy it is to deploy a Rust backend to the cloud by using their [CLI tool](https://docs.shuttle.dev/introduction/quick-start).
 
-[Shuttle](https://www.shuttle.dev/) is still in beta, and although its observability features are not really polished yet, they offer [support](https://docs.shuttle.rs/introduction/telemetry) for [Tokio Tracing](https://docs.rs/tracing/latest/tracing/) and a way to [view logs](https://docs.shuttle.rs/introduction/telemetry#viewing-logs) by using their CLI tool.
+[Shuttle](https://www.shuttle.dev/) is still in beta, and although its observability features are not really polished yet, they offer [support](https://docs.shuttle.dev/introduction/telemetry) for [Tokio Tracing](https://docs.rs/tracing/latest/tracing/) and a way to [view logs](https://docs.shuttle.dev/introduction/telemetry#viewing-logs) by using their CLI tool.
 
 By simply running `cargo shuttle logs --follow`, you will be able to see something like this:
 
@@ -40,7 +40,7 @@ Most of the time, the easiest way to send anything to the [Datadog platform](htt
 
 ## How to use tracing with Shuttle
 
-If we check the [Shuttle documentation](https://docs.shuttle.rs/configuration/logs), we can read this:
+If we check the [Shuttle documentation](https://docs.shuttle.dev/configuration/logs), we can read this:
 
 > Shuttle will record anything your application writes to stdout, e.g. a tracing or log crate configured to write to stdout, or simply println!. By default, Shuttle will set up a global tracing subscriber behind the scenes.
 
@@ -95,7 +95,7 @@ Feel free to use it as a reference.
 
 ### Initializing the project
 
-First of all, we need to create a new [Shuttle](https://www.shuttle.dev/) project. You can do that by using the [Shuttle CLI](https://docs.shuttle.rs/getting-started/cli):
+First of all, we need to create a new [Shuttle](https://www.shuttle.dev/) project. You can do that by using the [Shuttle CLI](https://docs.shuttle.dev/getting-started/cli):
 
 ```bash
 cargo shuttle init --template axum
@@ -105,7 +105,7 @@ Follow the instructions and you should have a new project ready to go. I called 
 
 ### Adding some dependencies
 
-In our example, we are going to be using [Shuttle Secrets](https://docs.shuttle.rs/resources/shuttle-secrets), [Tokio Tracing](https://docs.rs/tracing/latest/tracing/) and [dd-tracing-layer](https://crates.io/crates/dd-tracing-layer).
+In our example, we are going to be using [Shuttle Secrets](https://docs.shuttle.dev/resources/shuttle-secrets), [Tokio Tracing](https://docs.rs/tracing/latest/tracing/) and [dd-tracing-layer](https://crates.io/crates/dd-tracing-layer).
 
 Make sure you have the following dependencies in your `Cargo.toml` file:
 
@@ -160,7 +160,7 @@ Then we will add several [layers](https://docs.rs/tracing-subscriber/latest/trac
 - [Format layer](https://docs.rs/tracing-subscriber/latest/tracing_subscriber/fmt/format/index.html) to format the logs. We will be using JSON format.
 - [Datadog Tracing layer](https://docs.rs/dd-tracing-layer/) to send our logs to [Datadog](https://datadoghq.com).
 
-Apart from that, we're also going to add support for [Shuttle Secrets](https://docs.shuttle.rs/resources/shuttle-secrets).
+Apart from that, we're also going to add support for [Shuttle Secrets](https://docs.shuttle.dev/resources/shuttle-secrets).
 
 Let's do it! Make sure your `axum` function looks like this:
 
@@ -241,7 +241,7 @@ Before running our project, there's still a thing we have to deal with: **secret
 
 As you can see in the code above, we are using the `#[shuttle_runtime::Secrets]` macro to get the [Datadog](https://datadoghq.com) API key, the tags and the log level.
 
-[Shuttle Secrets](https://docs.shuttle.rs/resources/shuttle-secrets) relies on having a `Secrets.toml` file in the root of our project containing all the secrets, and it also supports having a `Secrets.dev.toml` file for local development. You can learn more about this convention in the [Shuttle Secrets documentation](https://docs.shuttle.rs/resources/shuttle-secrets#local-secrets).
+[Shuttle Secrets](https://docs.shuttle.dev/resources/shuttle-secrets) relies on having a `Secrets.toml` file in the root of our project containing all the secrets, and it also supports having a `Secrets.dev.toml` file for local development. You can learn more about this convention in the [Shuttle Secrets documentation](https://docs.shuttle.dev/resources/shuttle-secrets#local-secrets).
 
 So, let's create two files in the root of our project:
 

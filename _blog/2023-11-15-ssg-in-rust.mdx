@@ -378,7 +378,7 @@ I spun up the local server and checked to see if it works or not - it does! I ha
 }
 ```
 
-Next, I wanted to add the [OpenGraph](https://ogp.me) tag for URL (`og:url`). Thankfully, Shuttle has a helper crate for this thing exactly called [`shuttle-metadata`](https://docs.shuttle.rs/resources/shuttle-metadata) that gives you all the information about your project! I `cargo add`ed it, then added it into my main function and added a variable that forms the domain string based on whether we're in debug or release mode:
+Next, I wanted to add the [OpenGraph](https://ogp.me) tag for URL (`og:url`). Thankfully, Shuttle has a helper crate for this thing exactly called [`shuttle-metadata`](https://docs.shuttle.dev/resources/shuttle-metadata) that gives you all the information about your project! I `cargo add`ed it, then added it into my main function and added a variable that forms the domain string based on whether we're in debug or release mode:
 
 ```rust
 // src/main.rs

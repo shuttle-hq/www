@@ -26,7 +26,7 @@ npx create-shuttle-app --ts
 
 Once you press enter, it should ask you for a name - feel free to enter any name you want here, and then it should start installing Rust automatically for you and bootstrap an application that uses Next.js (with Typescript because of the additional flag) as well as Rust for the backend, along with relevant npm commands to allow us to quickly get started with developing both the back and frontend. The framework we will be using for the backend is [Axum](https://github.com/tokio-rs/axum/), which is a highly performant, flexible framework with simple syntax and is highly compatible with [`tower_http`](https://github.com/tower-rs/tower-http), which is another extremely strong library for creating middleware.
 
-[shuttle](https://www.shuttle.dev) is a cloud development platform that simplifies the deployment of your apps. What makes it stand out is its "infrastructure-from-code" approach, allowing you to define your infrastructure directly in your code without the need for complicated consoles or external yaml/config files. This approach not only improves the clarity of your code but also provides compile-time assurance that you'll get what you asked for. Need a Postgres instance? Just add an [annotation](https://docs.shuttle.rs/resources/shuttle-shared-db) and you're good to go. [shuttle](https://www.shuttle.dev) also supports secrets (environment variables), static file folders and state persistence.
+[shuttle](https://www.shuttle.dev) is a cloud development platform that simplifies the deployment of your apps. What makes it stand out is its "infrastructure-from-code" approach, allowing you to define your infrastructure directly in your code without the need for complicated consoles or external yaml/config files. This approach not only improves the clarity of your code but also provides compile-time assurance that you'll get what you asked for. Need a Postgres instance? Just add an [annotation](https://docs.shuttle.dev/resources/shuttle-shared-db) and you're good to go. [shuttle](https://www.shuttle.dev) also supports secrets (environment variables), static file folders and state persistence.
 
 Next, we'll want to install [`sqlx-cli`](https://docs.rs/crate/sqlx-cli/latest) which is a great command line app for managing our database migrations. We can install this by simply running the following command:
 
@@ -152,7 +152,7 @@ tokio = "1.26.0"
 time = "0.3.20"
 ```
 
-Once we're done with this, we will want to set up our main function so that we can use the [`shuttle_shared_db`](https://docs.shuttle.rs/resources/shuttle-shared-db) and [`shuttle_secrets`](https://docs.shuttle.rs/resources/shuttle-secrets) crates to get a free [shuttle](https://www.shuttle.dev)\-provisioned database and be able to use secrets, like so (as well as setting up a crude implementation of cookie-based session storage):
+Once we're done with this, we will want to set up our main function so that we can use the [`shuttle_shared_db`](https://docs.shuttle.dev/resources/shuttle-shared-db) and [`shuttle_secrets`](https://docs.shuttle.dev/resources/shuttle-secrets) crates to get a free [shuttle](https://www.shuttle.dev)\-provisioned database and be able to use secrets, like so (as well as setting up a crude implementation of cookie-based session storage):
 
 ```rust
 // main.rs
