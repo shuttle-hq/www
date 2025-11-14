@@ -5,7 +5,7 @@ description: "Learn more about structuring and testing your Axum applications."
 ---
 # Issue 11 & 12: Structuring and Testing Axum Applications
 
-Quick announcement: we are hosting a **Christmas Code Hunt**! It's a 16-day long event inspired by the Advent of Code! Check it out here: [shuttle.rs/cch](https://www.shuttle.dev/cch). Now, without further ado;
+Quick announcement: we are hosting a **Christmas Code Hunt**! It's a 16-day long event inspired by the Advent of Code! Check it out here: [shuttle.dev/cch](https://www.shuttle.dev/cch). Now, without further ado;
 
 We're back! Did you miss us? After a short break, we will continue with fresh Rust tutorials directly in your inbox! Just recently, Joshua published an extensive guide on testing in Rust for JavaScript developers [on the www.shuttle.dev website](https://www.shuttle.dev/blog/2023/11/08/testing-in-rust). This is quite a coincidence because I also wanted to show you how I usually test my Axum applications.
 
@@ -148,7 +148,7 @@ pub fn router(state: &SharedState) -> Router<SharedState> {
 Again, this looks like a small change, but it helps us greatly in creating a proper application and test setup:
 
 - In your tests, you can create a blank state independently of any actual application. This means that you can test the contents of your state without the remnants of the previous tests.
-- If you create a `SharedState` trait instead of a concrete type, you can easily swap out the state for a different implementation. For example, you could use a `HashMap` in your tests, but a `Redis` instance in production. Or even better, use [Shuttle Perist](https://docs.shuttle.rs/resources/shuttle-persist).
+- If you create a `SharedState` trait instead of a concrete type, you can easily swap out the state for a different implementation. For example, you could use a `HashMap` in your tests, but a `Redis` instance in production. Or even better, use [Shuttle Perist](https://docs.shuttle.dev/resources/shuttle-persist).
 
 Okay, so with all that in place, we can finally test.
 
@@ -256,7 +256,7 @@ async fn basic_db_test() {
 Okay, there is a lot to unpack. Let's go through it step by step, follow the numbers!
 
 1. We mark the function as a test. Since we're working in an `async` context, we need to mark the function as `async` as well, and we need to apply the `#[tokio::test]` attribute. With that, we create a small Tokio runtime taking care of proper async execution.
-2. We create a new instance of our router. We need to pass in the state, so we create a new instance of `SharedState` as well. Note that we didn't create a server, we just focused on the application logic! We can test that independently of any server. Also, if our app works with an _actual_ database like [Shuttle Persist](https://docs.shuttle.rs/resources/shuttle-persist), we could still use a different state for testing if we use a trait instead of a concrete type.
+2. We create a new instance of our router. We need to pass in the state, so we create a new instance of `SharedState` as well. Note that we didn't create a server, we just focused on the application logic! We can test that independently of any server. Also, if our app works with an _actual_ database like [Shuttle Persist](https://docs.shuttle.dev/resources/shuttle-persist), we could still use a different state for testing if we use a trait instead of a concrete type.
 3. We call the `call` function on our app. This `call` method exists because we bring the `tower:Service` trait into scope. This trait is implemented for `Router`, which means that we can call the `call` method on it. The `call` method takes a `Request` and returns a `Response`. We can use the `call` method to test our routes. Again, no server is needed. We just fake a request, and expect a properly created response for it!
 4. The `Request` is created using the respective builder. We set the URI, the method, and the body. The body contains the bytes we want to set.
 5. We expect the response to be `200 OK`. This means that storing data was successful. We didn't produce any errors.

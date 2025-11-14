@@ -180,9 +180,9 @@ Now we can add our secrets to our main entry point function, like so:
 // main.rs
 #[shuttle_runtime::main]
 async fn axum(
-// https://docs.shuttle.rs/resources/shuttle-secrets
+// https://docs.shuttle.dev/resources/shuttle-secrets
     #[shuttle_secrets::Secrets] secrets: SecretStore,
-// https://docs.shuttle.rs/resources/shuttle-static-folder
+// https://docs.shuttle.dev/examples/axum-static-files
     #[shuttle_static_folder::StaticFolder] static_folder: PathBuf,
 ) -> shuttle_axum::ShuttleAxum {
     let gpt_token = secrets
