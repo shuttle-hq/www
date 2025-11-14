@@ -14,21 +14,24 @@ Infrastructure as Code (IaC) was supposed to give you [automation](https://www.s
 
 Let's break down how Infrastructure as Code has become a hidden cost center and what a better path forward looks like.
 
-How Infrastructure as Code is Slowing Developers Down
+## How Infrastructure as Code is Slowing Developers Down
 
 When you have a dedicated infrastructure team, even simple requests can turn into a waiting game. Spinning up a quick proof-of-concept app to show a colleague might mean going through approvals, resource requests, and tickets before anything happens. That process kills momentum. You lose the freedom to experiment, which slows shipping.
 
 Here's what makes it worse:
 
-Too Many Config Files
+### Too Many Config Files
+
 IaC usually starts small. Maybe it's a 50-line Terraform config to spin up a basic web service. But as the project grows, you need to consider scalability, databases, and networking. Suddenly, your once-minimal configuration balloons to 500+ lines spread across multiple files. Every new service, subnet, or secret adds another layer of complexity to an already bloated system.
 
-Refactoring Pain
+### Refactoring Pain
+
 Variables, modules, and providers make IaC flexible and reusable, but maintaining it is still tricky. Most of the time, you end up digging through multiple files to make a small change. For example, renaming a resource might sound simple, but if you miss updating every reference to it, you could accidentally destroy and recreate infrastructure in production.
 
 As [Matt Moore](https://thenewstack.io/infrastructure-as-code-in-2024-why-its-still-so-terrible/), CTO at Chainguard, put it: "Having used Terraform extensively, refactoring is extremely painful." This is not an exaggeration. Even a small refactor can break dependencies or invalidate states, forcing you to rewrite chunks of code. That's valuable time that could have gone into shipping new features instead of firefighting broken infrastructure.
 
-State File Problem
+### State File Problem
+
 Terraform uses a state file to stay consistent and reliable while managing infrastructure across multiple cloud providers. As important as it is, the state file can also become a major pain point. Since it serves as the single source of truth, it's also a single point of failure. It's prone to drift, corruption, or merge conflicts during team collaboration. Something as simple as your colleague running a `terraform apply` might lock the state file and block your deployment.
 
 The net effect of all the challenges above hits harder than most teams admit. Development cycles slow down, features miss deadlines, and engineers spend evenings debugging HashiCorp Configuration Language (HCL) syntax instead of solving interesting problems.
@@ -42,17 +45,17 @@ A [recent report](https://stackgen.com/stackedup-infographic-2025) shows that 75
 
 The moment you factor in how much time your team is spending to keep things stable, the cost becomes hard to ignore.
 
-The Hidden Costs of Infrastructure as Code for Teams
+## The Hidden Costs of Infrastructure as Code for Teams
 
 As we calculated earlier, a 10-person team spending one day a week on infrastructure loses $300,000 in time alone. But that isn't the cost that hurts the most.
 
-Knowledge silos form faster than you can stop them. The same "Terraform person" who helped ship early features suddenly becomes the bottleneck for every new project. When new hires join, onboarding takes weeks because that one expert is juggling infrastructure work while also trying to explain thousands of lines of configuration spread across multiple repositories.
+**Knowledge silos** form faster than you can stop them. The same "Terraform person" who helped ship early features suddenly becomes the bottleneck for every new project. When new hires join, onboarding takes weeks because that one expert is juggling infrastructure work while also trying to explain thousands of lines of configuration spread across multiple repositories.
 
-Then there's burnout. Engineers join to build things, not debug infrastructure that won't reconcile after a provider update. No developer dreams of that. They want to create products, solve problems, and see their work make an impact. When debugging infrastructure consumes a big part of their day, frustration builds, and some start looking for exits.
+Then there's **burnout**. Engineers join to build things, not debug infrastructure that won't reconcile after a provider update. No developer dreams of that. They want to create products, solve problems, and see their work make an impact. When debugging infrastructure consumes a big part of their day, frustration builds, and some start looking for exits.
 
 Eventually, every team hits the same wall: too many configs, too much boilerplate, and not enough actual building. It's not that IaC failed; it just became heavy. The good news is that a new kind of platform is changing the story. Instead of writing long scripts or wrestling with complex IaC module logic, you describe your environment alongside your application logic, and the tooling handles the "how."
 
-From Infrastructure as Code to Infrastructure from Code
+## From Infrastructure as Code to Infrastructure from Code
 
 If IaC feels like extra work, it's because it is. It forces you to separate how you build from how you deploy. You're writing configuration in one language and application logic in another, even though they describe the same system. That split creates constant friction and slows development.
 
@@ -68,7 +71,7 @@ This isn't just about convenience. It removes an entire category of work. With I
 
 Shuttle was built on this core philosophy of making your code declare its own needs.
 
-How Shuttle Manages Infrastructure and Development Together
+## How Shuttle Manages Infrastructure and Development Together
 
 [Shuttle](https://www.shuttle.dev/) takes a fundamentally different approach. Instead of managing infrastructure through separate configuration files, you declare what you need directly in your application code using annotations.
 
@@ -116,7 +119,7 @@ With Shuttle, your IaC burden drops significantly:
 
 Once you see how Shuttle keeps your app and infrastructure in sync, the next question is obvious: How do you start using it? The good news is you don't have to rewrite everything from scratch. Shuttle's migration flow is designed to meet you where your code is and get you running fast.
 
-How to Migrate to Shuttle Without Breaking Things
+## How to Migrate to Shuttle Without Breaking Things
 
 You don't need to treat migration like a six-month project. You can start in ten minutes. Every day you delay is another day of lost developer time.
 
@@ -134,7 +137,7 @@ Here's how to move forward without disruption:
 
 Migration is about recovery. Every week spent maintaining IaC is time and money lost. Shuttle gives that time back.
 
-Stop Paying Developers To Manage Infrastructure
+## Stop Paying Developers To Manage Infrastructure
 
 Every year, your developers spend thousands of hours maintaining infrastructure they were never hired to manage. That's $30,000 of wasted time per engineer, and $300,000 for a ten-person team that could be building instead.
 
