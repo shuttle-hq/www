@@ -8,19 +8,21 @@ cover: build-rust-web-apps/cover.png
 date: "2025-11-12"
 ---
 
-Rust promises zero-cost abstractions and blazing-fast performance, but when you're ready to build a web app, you quickly realize it's not "batteries included" like other languages, especially for the web. Unlike Go with its standard library HTTP server or Python with Django, Rust makes you choose everything: framework, database library, templating engine, and more.
+Rust promises zero-cost abstractions and blazing-fast performance, but when you're ready to build a web application, you quickly realize it's not "batteries included" like other languages, especially for the web. Unlike Go with its standard library HTTP server or Python with Django, Rust makes you choose everything: web framework, database library, templating engine, and more.
 
-Here's what I've learned from trying out many different frameworks and libraries: Rust's lack of a garbage collector and minimal memory footprint make it exceptional for web development and microservices. You can scale horizontally without the overhead of spawning a garbage collector for each service, your services can be using as little as 5MB of memory when idle. Also when it comes to processing large datasets or building performance-critical applications, Rust's speed will put your in the fast lane.
+The world of web development using Rust has evolved significantly, with frameworks like Actix Web and Axum leading the charge. This guide provides practical resources and real-world examples to help you build web apps without getting lost in framework comparisons.
+
+Here's what I've learned from trying out many different frameworks and libraries: Rust's lack of a garbage collector and minimal memory footprint make it exceptional for web development and microservices. You can scale horizontally without the overhead of spawning a garbage collector for each service, your services can be using as little as 5MB of memory when idle. Also when it comes to processing large datasets or building performance-critical applications, Rust's speed will put you in the fast lane.
 
 This guide cuts through the noise to help you make informed choices about your web stack without spending weeks researching. It will be a little opinionated as well when it comes to recommendations section. So, let's get started!
 
 ## Why Rust for Web Development?
 
-Rust delivers on its promise of zero-cost abstractions. You get functional programming patterns like `Option` and `Result` types, powerful pattern matching, and efficient iterators without runtime overhead. The compiler enforces memory safety at compile time, and without a garbage collector and your performance is predictable.
+Rust delivers on its promise of zero-cost abstractions. You get functional programming patterns like `Option` and `Result` types, powerful pattern matching, and efficient iterators without runtime overhead. The compiler enforces memory safety at compile time, and without a garbage collector your performance is predictable.
 
-Rust does have a learning curve, especially if you're coming from garbage-collected languages. The borrow checker takes time to understand, and you'll initially spend more time satisfying the compiler than writing features. But once you internalize ownership and borrowing, you'll write safer code naturally.
+Rust does have a learning curve, especially if you're coming from garbage-collected languages. The borrow checker takes time to understand, and you'll initially spend more time satisfying the compiler than writing features. But once you internalize ownership and borrowing, you'll write safer code naturally. Whether you're building a simple Rust web page or a complex microservices architecture, these fundamentals apply.
 
-There are areas in which you wouldn't want to use Rust, for example rapid prototyping or if you're still learning web development concepts. Go or JavaScript might be better choices in those cases. Rust shines when you need reliability, performance, and optimzed resource consumption.
+There are areas in which you wouldn't want to use Rust, for example rapid prototyping or if you're still learning web development concepts. Go or JavaScript might be better choices in those cases. Rust shines when you need reliability, performance, and optimized resource consumption. For developers building production web apps, these trade-offs often make sense.
 
 ## The Framework Landscape
 
@@ -28,9 +30,9 @@ There are areas in which you wouldn't want to use Rust, for example rapid protot
 
 Rust isn't _"Batteries Included"_ but the good news is that Rust for the web has a mature ecosystem of production-ready backend frameworks. Many of these frameworks are actively maintained and have a strong community behind them, some of the most popular ones are:
 
-**Axum** is what I recommend for beginners. It produces fewer _arcane_ compiler errors because it uses common ecosystem crates rather than reinventing everything. The learning curve is gentler, and you'll spend less time fighting the type system.
+**Axum** is what I recommend for beginners. It produces fewer _arcane_ compiler errors because it uses common ecosystem crates rather than reinventing everything. The learning curve is gentler, and you'll spend less time fighting the type system. For example, setting up a basic route handler is straightforward and intuitive.
 
-**Actix-web** is the battle-tested performance leader with excellent documentation. If you need proven reliability at scale, this is your choice.
+**Actix Web** is the battle-tested performance leader with excellent documentation. If you need proven reliability at scale, this is your choice. Many production projects using Rust run on Actix Web.
 
 **Rocket** offers solid ergonomics and a pleasant development experience. It's a dependable alternative that many teams use successfully.
 
@@ -64,7 +66,7 @@ You can check out our blog about Rust ORMs [here](https://www.shuttle.dev/blog/2
 
 Templating engines let you generate HTML dynamically by combining static markup with data from your application. They handle the common patterns of web rendering: loops, conditionals, variable interpolation, and template inheritance. Instead of manually concatenating strings or building HTML in your Rust code, you write templates that separate presentation from logic. For example, `{{ user.name }}` in Jinja2/Tera, `<%= user.name %>` in ERB, or `{{ user.name }}` in Handlebars all inject data into your HTML.
 
-**[Tera](https://keats.github.io/tera/)** integrates strongly with Actix-web and has solid documentation. If you've used Jinja2 or Django templates, Tera's syntax will feel familiar. It's the safe, practical choice for server-side rendering.
+**[Tera](https://keats.github.io/tera/)** integrates strongly with Actix-web and has solid documentation. If you've used Jinja2 or Django templates, Tera's syntax will feel familiar. It's the safe, practical choice for server-side rendering your Rust web page.
 
 Here's an example of a Tera template:
 
@@ -97,9 +99,9 @@ However, in reality, Rust WASM frontend frameworks aren't quite production-ready
 
 ## Project Structure
 
-As your Rust web app grows beyond a simple example, modularity becomes crucial. Splitting your code into modules provides cleaner separation of concerns, makes testing easier, and keeps your codebase maintainable. A monolithic `main.rs` quickly becomes unwieldy in production applications.
+As your Rust web application grows beyond a simple example, modularity becomes crucial. Splitting your code into modules provides cleaner separation of concerns, makes testing easier, and keeps your codebase maintainable. A monolithic `main.rs` quickly becomes unwieldy in production applications.
 
-There are many ways to organize your code, here are two common approaches:
+When starting a new project, choosing the right structure from the beginning saves refactoring time later. There are many ways to organize your code, here are two common approaches:
 
 **Function-based structure** groups by technical role: `routes/`, `handlers/`, `models/`, and `services/`. This makes the technical architecture clear at a glance.
 
