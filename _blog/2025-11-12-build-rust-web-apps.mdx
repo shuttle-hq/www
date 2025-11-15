@@ -8,7 +8,7 @@ cover: build-rust-web-apps/cover.png
 date: "2025-11-12"
 ---
 
-Rust promises zero-cost abstractions and blazing-fast performance, but when you're ready to build a web application, you quickly realize it's not "batteries included" like other languages, especially for the web. Unlike Go with its standard library HTTP server or Python with Django, Rust makes you choose everything: web framework, database library, templating engine, and more.
+Rust promises zero-cost abstractions and blazingly fast performance, but when you're ready to build a web application, you quickly realize it's not "batteries included" like other languages, especially for the web. Unlike Go with its standard library HTTP server or Python with Django, Rust makes you choose everything: web framework, database library, templating engine, and more.
 
 The world of web development using Rust has evolved significantly, with frameworks like Actix Web and Axum leading the charge. This guide provides practical resources and real-world examples to help you build web apps without getting lost in framework comparisons.
 
@@ -101,13 +101,13 @@ However, in reality, Rust WASM frontend frameworks aren't quite production-ready
 
 As your Rust web application grows beyond a simple example, modularity becomes crucial. Splitting your code into modules provides cleaner separation of concerns, makes testing easier, and keeps your codebase maintainable. A monolithic `main.rs` quickly becomes unwieldy in production applications.
 
-When starting a new project, choosing the right structure from the beginning saves refactoring time later. There are many ways to organize your code, here are two common approaches:
+When starting a new project, choosing the right structure from the beginning saves refactoring time later. Whether you're building your first Rust project or refactoring an existing one, there are many ways to organize your code. Here are two common approaches:
 
 **Function-based structure** groups by technical role: `routes/`, `handlers/`, `models/`, and `services/`. This makes the technical architecture clear at a glance.
 
 **Model-based structure** groups by domain: `users/routes.rs`, `users/handlers.rs`, `posts/routes.rs`, `posts/handlers.rs`. If you need user code, you know exactly where to find it. Everything related to users lives in one place. The tradeoff is you'll have many files with the same name, which can make searching less convenient.
 
-Both are solid choices. My preference is the model-based approach because it makes finding code easier. When working on a feature, all the related code is grouped together rather than scattered across different directories.
+Both are solid choices. My preference is the model-based approach because it makes finding code easier. When working on a feature, all the related code is grouped together rather than scattered across different directories. This structure also makes sharing data between related modules simpler, as you can keep data models and handlers close together.
 
 ## Learning Resources
 
