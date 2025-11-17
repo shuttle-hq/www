@@ -1,0 +1,212 @@
+---
+title: "Kimi K2 Thinking: Testing the Open-Source Reasoning Model on Real Code"
+description: "I put Moonshot AI's new K2 Thinking model to the test on the Shuttle codebase to see if the hype around its reasoning capabilities holds up in practice"
+author: dcodes
+tags: [ai, llm, coding, rust]
+thumb: kimi-k2-thinking-hands-on-review/cover.png
+cover: kimi-k2-thinking-hands-on-review/cover.png
+date: "2025-11-17"
+---
+
+Last week Moonshot AI released an upgraded version of their Kimi K2 model with thinking capabilities. The benchmarks are competitive and the pricing is cheaper than other proprietary models. But benchmarks don't tell the whole story, that's not what caught my attention.
+
+The real problem with AI coding assistants is tool use. They forget context, repeat themselves, or drift off track. For developers working with codebases, this is a dealbreaker. You need file searches, code reads, edits, test runs, all chained together without the model falling apart.
+
+K2 Thinking is built and tested specifically to handle large amounts of sequential tool calls while maintaining coherence. It performs continuous cycles of reasoning, searching, browsing, and coding without losing the thread. For coding tasks that involve MCP servers and extensive tool use, this changes what's possible.
+
+I tested it on a production codebase to see how it performs on real engineering work.
+
+## What Makes K2 Thinking Different
+
+Before we dive into the hands on experience, let's take a look at the technical details of the model.
+
+Kimi K2 is open source and unlike the closed source models, it shows you its reasoning process before responding. The model uses a Mixture-of-Experts (MoE) architecture with **1 trillion total parameters**, but only **32 billion active per inference** across **61 layers with 384 experts**, selecting **8 per token** and offering a **256K token context window**. The MoE design is what makes it remotely runnable on consumer hardware. Instead of loading all trillion parameters, you're working with 32 billion active parameters at any given time while the rest sit dormant until needed.
+
+## The Benchmark Story
+
+Moonshot published some strong numbers, and they're competing directly with closed models like GPT-5 and Claude Sonnet 4.5:
+
+| Benchmark            | K2 Thinking Score | Notes                                                       |
+| -------------------- | ----------------- | ----------------------------------------------------------- |
+| SWE-Bench Verified   | 71.3%             | The one I care about for coding tasks                       |
+| BrowseComp           | 60.2%             | vs GPT-5's 54.9% for agentic search and browsing            |
+| AIME25               | 99.1%             | Near-perfect on math competition problems with Python tools |
+| LiveCodeBench v6     | 83.1%             | Competitive programming                                     |
+| Humanity's Last Exam | 44.9%             | Beating both GPT-5 and Claude with tools                    |
+
+The SWE-Bench score is particularly interesting because that benchmark tests actual software engineering tasks - the kind of work I wanted to evaluate.
+
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/benchmark.png"
+  alt="Benchmark comparison showing Kimi K2 Thinking vs GPT-5 vs Claude Sonnet 4.5"
+  caption="Benchmark comparison showing Kimi K2 Thinking vs GPT-5 vs Claude Sonnet 4.5"
+/>
+
+## Kimi K2 Thinking on a Real Codebase
+
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/kimi-start.png"
+  alt="Kimi K2 Thinking interface"
+  caption="Kimi K2 Thinking interface"
+/>
+
+Benchmarks always inflate the capabilities of the model and sometimes they don't accurately reflect the model's capabilities when it comes to actual use cases. For that reason, I'm going to test the model on a real codebase and give it a real task to solve.
+
+The task I've chosen includes a large codebase with very large files, some of the files are over 2000 lines of code. It requires a lot of context along with reasoning to solve the problem. It also requires searching through the codebase to find the relevant files and pieces of code, which makes it a good test for the model's tool calling capabilities.
+
+The GitHub issue that I chose can be found [here in the Shuttle repository](https://github.com/shuttle-hq/shuttle/issues/2055).
+
+> To summarize the issue: when you create a project with the Shuttle CLI, it generates a `.shuttle/config.toml` file storing your project ID, but when you run `shuttle project delete`, the project gets removed from the platform while the _stale project ID_ stays in your local config file. This stale value causes confusion in subsequent commands since the CLI tries to use a project ID that doesn't exist anymore. Similarly, if you delete a project and create a new one, the old ID persists instead of updating to the new project's ID. The fix needs to delete the project ID from config when running `shuttle project delete` and update the config with the new project ID when running `shuttle project create`.
+
+### The Prompt
+
+I wanted to give it a very high level prompt without delving into the detials and give the model a chance to understand the problem and come up with a plan by itself.
+
+Here's the prompt:
+
+````md
+# Issue #2055: Auto update project id in .shuttle/config.toml on project creation
+
+Project ID stored in `.shuttle/config.toml` will be stale if the project is deleted
+or a new project is created.
+
+Update `.shuttle/config.toml` with the new project ID when creating a project with
+`shuttle project create` and delete it when the project is deleted with
+`shuttle project delete`, so it doesn't keep the old ID after deletion.
+
+`.shuttle/config.toml` example:
+
+```toml
+id = "proj_01K9CHACCQ3RN8D5HJ91F141AN"
+```
+````
+
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/kimi-prompt.png"
+  alt="The prompt entered into Kimi K2 Thinking"
+  caption="The prompt entered into Kimi K2 Thinking"
+/>
+
+### Kimi K2 Thinking in Action
+
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/search-codebase.png"
+  alt="K2 Thinking exploring the Shuttle codebase"
+  caption="K2 Thinking exploring the Shuttle codebase"
+/>
+
+Like any other model, the first step is to search the codebase and collect context. K2 used `find` to locate project-related files, ran `Grep` searches for `project create` and `project delete`, then found and read `cargo-shuttle/src/lib.rs` and `cargo-shuttle/src/config.rs` to understand how the config management works.
+
+Worth noting: the `lib.rs` file is over 2000 lines, and most AI models struggle with files this size. K2 Thinking read it, understood the structure, and correctly identified where the changes needed to happen. After the exploration phase, it presented a plan and started implementing the fix.
+
+## Testing the Implementation
+
+It updated the codebase and wrote some code, the code compiles without any errors, but the real question is if it works as expected.
+
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/shuttle-project.png"
+  alt="Simple Shuttle Axum project for testing"
+  caption="Simple Shuttle Axum project for testing"
+/>
+
+The script that I used for testing is below, it just compiles the code and creates an alias for the dev CLI:
+
+```sh
+#!/bin/sh
+
+(cd /home/dev/Desktop/shuttle/ && cargo build) # Compile the code
+
+alias shuttle-dev=/home/dev/Desktop/shuttle/target/debug/shuttle # Create an alias for the dev CLI
+
+# Subsequesnt commands can be run with the alias:
+
+# shuttle-dev project create --name my-axum-app
+# shuttle-dev project delete
+# shuttle-dev project create --name my-axum-app
+```
+
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/source-alias.png"
+  alt="Setting up the alias for testing"
+  caption="Setting up the alias for testing"
+/>
+
+**Test 1: Project Creation**
+
+Running `shuttle-dev project create --name my-axum-app`:
+
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/shuttle-project-create.png"
+  alt="Creating a new Shuttle project"
+  caption="Creating a new Shuttle project"
+/>
+
+Success. The project was created with ID `proj_01KA3S8JN8TNWBGSJZFJRXM7PG`, and checking `.shuttle/config.toml`:
+
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/config.toml.png"
+  alt="Config file showing the project ID"
+  caption="Config file showing the project ID"
+/>
+
+The config file was updated correctly with the new project ID.
+
+**Test 2: Project Deletion**
+
+Running `shuttle-dev project delete`:
+
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/shuttle-project-delete.png"
+  alt="Deleting the Shuttle project"
+  caption="Deleting the Shuttle project"
+/>
+
+The project was deleted from the platform. Checking the config file:
+
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/config.toml-empty.png"
+  alt="Empty config file after deletion"
+  caption="Empty config file after deletion"
+/>
+
+Empty. The stale project ID is gone.
+
+**Test 3: Creating a New Project After Deletion**
+
+The final scenario: delete a project, create a new one, and verify the config syncs with the new ID.
+
+Running `shuttle-dev project create --name my-new-axum-app`:
+
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/config.toml-in-sync.png"
+  alt="Config file with new project ID after recreation"
+  caption="Config file with new project ID after recreation"
+/>
+
+The config updated with the new project ID (`proj_01KA3SE04947EBMCF2RMZQT3BP`). Everything stayed in sync.
+
+All three test cases ✅ passed. The solution performed exactly as needed.
+
+---
+
+## Wrap Up
+
+K2 Thinking handled this specific task well. It explored a large codebase systematically, understood the context across a 2000+ line file, and implemented a working solution on the first try. The reasoning mode showed its value in the methodical approach. Rather than jumping to conclusions, it mapped out the codebase structure before making changes.
+
+This was a real-world coding use case, not a synthetic benchmark, and it worked well. That said, it doesn't mean it will work on all projects. Success depends on the type of complexity involved. For this particular issue (understanding config file management and modifying CLI commands), the model performed solidly.
+
+The tradeoff is speed. This isn't a fast model. The thinking phase adds latency, and for simple tasks, that overhead might not be worth it. But for complex codebases where understanding context matters more than raw speed, the deliberate approach pays off.
+
+Would I use it for quick one-off scripts or simple bug fixes? Probably not. For navigating unfamiliar production code and making changes that need to be right the first time? It's a solid option, especially considering it's open-source and you can run it locally (if you're rich and have the hardware).
+
+The benchmark numbers hold up in practice. The 71.3% SWE-Bench score makes sense after seeing it work through a real engineering task. Not perfect, but capable enough to be useful.
+
+## Working with AI Coding Tools
+
+If you're interested in getting the most out of AI coding assistants like Claude Code, check out our [comprehensive guide on best practices](https://www.shuttle.dev/blog/2025/10/16/claude-code-best-practices?utm_source=shuttle_blog&utm_medium=blog&utm_campaign=kimi_k2_thinking).
+
+It covers practical techniques for prompt engineering, codebase navigation, debugging workflows, and how to structure your projects to work effectively with AI assistants.
+
+Join our Discord server to stay updated on the latest AI coding tools and best practices.
+
+<DiscordCTA />
