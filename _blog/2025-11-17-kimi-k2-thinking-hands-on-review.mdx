@@ -44,6 +44,12 @@ The SWE-Bench score is particularly interesting because that benchmark tests act
 
 ## Kimi K2 Thinking on a Real Codebase
 
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/kimi-start.png"
+  alt="Kimi K2 Thinking interface"
+  caption="Kimi K2 Thinking interface"
+/>
+
 Benchmarks always inflate the capabilities of the model and sometimes they don't accurately reflect the model's capabilities when it comes to actual use cases. For that reason, I'm going to test the model on a real codebase and give it a real task to solve.
 
 The task I've chosen includes a large codebase with very large files, some of the files are over 2000 lines of code. It requires a lot of context along with reasoning to solve the problem. It also requires searching through the codebase to find the relevant files and pieces of code, which makes it a good test for the model's tool calling capabilities.
@@ -74,6 +80,12 @@ Update `.shuttle/config.toml` with the new project ID when creating a project wi
 id = "proj_01K9CHACCQ3RN8D5HJ91F141AN"
 ```
 ````
+
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/kimi-prompt.png"
+  alt="The prompt entered into Kimi K2 Thinking"
+  caption="The prompt entered into Kimi K2 Thinking"
+/>
 
 ### Kimi K2 Thinking in Action
 
@@ -112,6 +124,12 @@ alias shuttle-dev=/home/dev/Desktop/shuttle/target/debug/shuttle # Create an ali
 # shuttle-dev project delete
 # shuttle-dev project create --name my-axum-app
 ```
+
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/source-alias.png"
+  alt="Setting up the alias for testing"
+  caption="Setting up the alias for testing"
+/>
 
 **Test 1: Project Creation**
 
