@@ -82,9 +82,17 @@ export default function MasterAI() {
             </div>
             <div className="w-full max-w-[782px] mx-auto self-stretch justify-start">
               <p className="text-text-secondary text-xl font-normal">
-                MasterAI is a mobile app that uses artificial intelligence to
-                deliver interactive, personalized role-playing game experiences.
-                A &quot;virtual game master&quot; guides each user, generating
+                <Link
+                  href="https://play.google.com/store/apps/details?id=ai.rpgmaster.masterai"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-neutral-200 hover:text-[#FC540C] transition-colors underline decoration-text-secondary hover:decoration-[#FC540C]"
+                >
+                  MasterAI
+                </Link>{" "}
+                is a mobile app that uses artificial intelligence to deliver
+                interactive, personalized role-playing game experiences. A
+                &quot;virtual game master&quot; guides each user, generating
                 storylines, settings, and game mechanics in real time, including
                 dice rolls and one-of-a-kind illustrations created for every
                 player.
@@ -117,6 +125,9 @@ export default function MasterAI() {
               with a few users and then scale at very accessible costs was
               decisive.&quot;
             </span>
+            <div className="mt-4 text-text-secondary text-base font-normal">
+              — Marco Loverso, Founder, Game Designer, and Prompt Engineer
+            </div>
           </UserQuote>
 
           <div className="w-full max-w-[782px] mx-auto flex flex-col justify-start items-start gap-10">
@@ -362,9 +373,11 @@ export default function MasterAI() {
           <UserQuote className="w-full max-w-[984px]">
             <span className="text-neutral-200 text-lg md:text-2xl font-normal">
               &quot;Shuttle now manages the infrastructure automatically,
-              letting developers focus solely on Rust application code,&quot; -
-              the team notes.
+              letting developers focus solely on Rust application code.&quot;
             </span>
+            <div className="mt-4 text-text-secondary text-base font-normal">
+              — Marco Loverso, Founder, Game Designer, and Prompt Engineer
+            </div>
           </UserQuote>
 
           <div className="w-full max-w-[782px] mx-auto flex flex-col justify-start items-start gap-10">
