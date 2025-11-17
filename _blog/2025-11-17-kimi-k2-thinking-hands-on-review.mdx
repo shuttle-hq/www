@@ -8,7 +8,7 @@ cover: kimi-k2-thinking-hands-on-review/cover.png
 date: "2025-11-17"
 ---
 
-Last week Moonshot AI released an upgraded version of their Kimi K2 model with thinking capabilities. The benchmarks are competitive and the pricing is cheaper than other proprietary models. But benchmarks don't tell the whole story, that's not what caught my attention.
+Last week Moonshot AI released an upgraded version of their Kimi K2 model with thinking capabilities. The benchmarks are competitive and the pricing is cheaper than other proprietary models. But benchmarks don't tell the whole story. That's not what caught my attention.
 
 The real problem with AI coding assistants is tool use. They forget context, repeat themselves, or drift off track. For developers working with codebases, this is a dealbreaker. You need file searches, code reads, edits, test runs, all chained together without the model falling apart.
 
@@ -18,9 +18,9 @@ I tested it on a production codebase to see how it performs on real engineering 
 
 ## What Makes K2 Thinking Different
 
-Before we dive into the hands on experience, let's take a look at the technical details of the model.
+Before we dive into the hands-on experience, let's take a look at the technical details of the model.
 
-Kimi K2 is open source and unlike the closed source models, it shows you its reasoning process before responding. The model uses a Mixture-of-Experts (MoE) architecture with **1 trillion total parameters**, but only **32 billion active per inference** across **61 layers with 384 experts**, selecting **8 per token** and offering a **256K token context window**. The MoE design is what makes it remotely runnable on consumer hardware. Instead of loading all trillion parameters, you're working with 32 billion active parameters at any given time while the rest sit dormant until needed.
+Kimi K2 is open source, and unlike the closed source models, it shows you its reasoning process before responding. The model uses a Mixture-of-Experts (MoE) architecture with **1 trillion total parameters**, but only **32 billion active per inference** across **61 layers with 384 experts**, selecting **8 per token** and offering a **256K token context window**. The MoE design is what makes it remotely runnable on consumer hardware. Instead of loading all trillion parameters, you're working with 32 billion active parameters at any given time while the rest sit dormant until needed.
 
 ## The Benchmark Story
 
@@ -50,7 +50,7 @@ The SWE-Bench score is particularly interesting because that benchmark tests act
   caption="Kimi K2 Thinking interface"
 />
 
-Benchmarks always inflate the capabilities of the model and sometimes they don't accurately reflect the model's capabilities when it comes to actual use cases. For that reason, I'm going to test the model on a real codebase and give it a real task to solve.
+Benchmarks always inflate the capabilities of the model, and sometimes they don't accurately reflect the model's capabilities when it comes to actual use cases. For that reason, I'm going to test the model on a real codebase and give it a real task to solve.
 
 The task I've chosen includes a large codebase with very large files, some of the files are over 2000 lines of code. It requires a lot of context along with reasoning to solve the problem. It also requires searching through the codebase to find the relevant files and pieces of code, which makes it a good test for the model's tool calling capabilities.
 
@@ -60,7 +60,7 @@ The GitHub issue that I chose can be found [here in the Shuttle repository](http
 
 ### The Prompt
 
-I wanted to give it a very high level prompt without delving into the detials and give the model a chance to understand the problem and come up with a plan by itself.
+I wanted to give it a very high level prompt without delving into the details and give the model a chance to understand the problem and come up with a plan by itself.
 
 Here's the prompt:
 
@@ -101,7 +101,7 @@ Worth noting: the `lib.rs` file is over 2000 lines, and most AI models struggle 
 
 ## Testing the Implementation
 
-It updated the codebase and wrote some code, the code compiles without any errors, but the real question is if it works as expected.
+It updated the codebase and wrote some code. The code compiles without any errors, but the real question is if it works as expected.
 
 <CaptionedImage
   src="/images/blog/kimi-k2-thinking-hands-on-review/shuttle-project.png"
@@ -118,7 +118,7 @@ The script that I used for testing is below, it just compiles the code and creat
 
 alias shuttle-dev=/home/dev/Desktop/shuttle/target/debug/shuttle # Create an alias for the dev CLI
 
-# Subsequesnt commands can be run with the alias:
+# Subsequent commands can be run with the alias:
 
 # shuttle-dev project create --name my-axum-app
 # shuttle-dev project delete
