@@ -36,7 +36,11 @@ Moonshot published some strong numbers, and they're competing directly with clos
 
 The SWE-Bench score is particularly interesting because that benchmark tests actual software engineering tasks - the kind of work I wanted to evaluate.
 
-![Benchmark comparison showing Kimi K2 Thinking vs GPT-5 vs Claude Sonnet 4.5](./images/benchmark.png)
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/benchmark.png"
+  alt="Benchmark comparison showing Kimi K2 Thinking vs GPT-5 vs Claude Sonnet 4.5"
+  caption="Benchmark comparison showing Kimi K2 Thinking vs GPT-5 vs Claude Sonnet 4.5"
+/>
 
 ## Kimi K2 Thinking on a Real Codebase
 
@@ -73,7 +77,11 @@ id = "proj_01K9CHACCQ3RN8D5HJ91F141AN"
 
 ### Kimi K2 Thinking in Action
 
-![K2 Thinking exploring the Shuttle codebase](./images/search-codebase.png)
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/search-codebase.png"
+  alt="K2 Thinking exploring the Shuttle codebase"
+  caption="K2 Thinking exploring the Shuttle codebase"
+/>
 
 Like any other model, the first step is to search the codebase and collect context. K2 used `find` to locate project-related files, ran `Grep` searches for `project create` and `project delete`, then found and read `cargo-shuttle/src/lib.rs` and `cargo-shuttle/src/config.rs` to understand how the config management works.
 
@@ -83,7 +91,11 @@ Worth noting: the `lib.rs` file is over 2000 lines, and most AI models struggle 
 
 It updated the codebase and wrote some code, the code compiles without any errors, but the real question is if it works as expected.
 
-![Simple Shuttle Axum project for testing](./images/shuttle-project.png)
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/shuttle-project.png"
+  alt="Simple Shuttle Axum project for testing"
+  caption="Simple Shuttle Axum project for testing"
+/>
 
 The script that I used for testing is below, it just compiles the code and creates an alias for the dev CLI:
 
@@ -105,11 +117,19 @@ alias shuttle-dev=/home/dev/Desktop/shuttle/target/debug/shuttle # Create an ali
 
 Running `shuttle-dev project create --name my-axum-app`:
 
-![Creating a new Shuttle project](./images/shuttle-project-create.png)
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/shuttle-project-create.png"
+  alt="Creating a new Shuttle project"
+  caption="Creating a new Shuttle project"
+/>
 
 Success. The project was created with ID `proj_01KA3S8JN8TNWBGSJZFJRXM7PG`, and checking `.shuttle/config.toml`:
 
-![Config file showing the project ID](./images/config.toml.png)
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/config.toml.png"
+  alt="Config file showing the project ID"
+  caption="Config file showing the project ID"
+/>
 
 The config file was updated correctly with the new project ID.
 
@@ -117,11 +137,19 @@ The config file was updated correctly with the new project ID.
 
 Running `shuttle-dev project delete`:
 
-![Deleting the Shuttle project](./images/shuttle-project-delete.png)
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/shuttle-project-delete.png"
+  alt="Deleting the Shuttle project"
+  caption="Deleting the Shuttle project"
+/>
 
 The project was deleted from the platform. Checking the config file:
 
-![Empty config file after deletion](./images/config.toml-empty.png)
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/config.toml-empty.png"
+  alt="Empty config file after deletion"
+  caption="Empty config file after deletion"
+/>
 
 Empty. The stale project ID is gone.
 
@@ -131,7 +159,11 @@ The final scenario: delete a project, create a new one, and verify the config sy
 
 Running `shuttle-dev project create --name my-new-axum-app`:
 
-![Config file with new project ID after recreation](./images/config.toml-in-sync.png)
+<CaptionedImage
+  src="/images/blog/kimi-k2-thinking-hands-on-review/config.toml-in-sync.png"
+  alt="Config file with new project ID after recreation"
+  caption="Config file with new project ID after recreation"
+/>
 
 The config updated with the new project ID (`proj_01KA3SE04947EBMCF2RMZQT3BP`). Everything stayed in sync.
 
