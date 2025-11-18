@@ -1,0 +1,103 @@
+---
+title: "Gemini 3 Pro: Google's Latest AI Model Hits the Scene"
+description: "Google drops Gemini 3 Pro with impressive benchmarks and real-world performance. We look at what the numbers say and what developers are actually experiencing."
+author: dcodes
+tags: [ai, gemini, llm, benchmarks]
+thumb: gemini-3/cover.png
+cover: gemini-3/cover.png
+date: "2025-11-18T17:00:00"
+---
+
+Google released Gemini 3 Pro today on _November 18, 2025_, and the AI community wasted no time putting it through its paces. The model tops the [LMArena](https://lmarena.ai/leaderboard) with a 1501 Elo score, the highest rating on the leaderboard.
+
+![LMArena Leaderboard](./images/lmarena.png)
+
+## What's New
+
+Gemini 3 Pro combines reasoning, multimodal understanding, and agentic capabilities in one model. Google positions it as a significant step toward AGI, though we'll let the benchmarks and real-world usage speak for themselves.
+
+The model comes in two flavors:
+
+- **Gemini 3 Pro**: The standard model with strong baseline performance
+- **Gemini 3 Deep Think**: An enhanced reasoning mode that pushes performance further on complex problems
+
+## Performance Numbers
+
+![Gemini 3 Benchmarks](./images/benchmarks.png)
+
+The benchmarks show strong performance across academic reasoning, math, visual understanding, and coding tasks. Gemini 3 Pro outperforms previous models on most tests, with particularly notable improvements in visual understanding (ScreenSpot-Pro jumps from 11.4% to 72.7%) and competitive math problems (MathArena Apex at 23.4% vs. 0.5% for Gemini 2.5 Pro).
+
+## What Developers Are Saying
+
+The community is overwhelmingly positive. Users report that Gemini 3 Pro handles math, physics, and coding tasks well. Several developers mention it's passing private benchmarks where other state-of-the-art models fail.
+
+One notable aspect is visual understanding. The model's ability to recognize and understand elements in images is impressive.
+
+For coding, developers using it in Cursor IDE report positive experiences. The model appears to handle complex spatial reasoning problems better than previous models, with users mentioning it solving problems that typically trip up other AI systems.
+
+The Deep Think mode, when set to "thinking mode high," shows DeepThink-like performance. It's capable of solving complex problems that typically trip up other AI systems.
+
+## Three Core Use Cases
+
+Google positions Gemini 3 around three main capabilities:
+
+**Learn Anything**: The model handles multimodal learning across text, images, video, audio, and code with a 1 million-token context window. It can translate handwritten recipes, generate interactive materials from academic papers, and analyze sports videos. AI Mode in Google Search now uses Gemini 3 for its generative UI experiences.
+
+**Build Anything**: Positioned as Google's best coding model yet, it is available in Google AI Studio, Vertex AI, the Gemini CLI, and Google Antigravity (more on that below). Third-party integrations include Cursor, GitHub, JetBrains, Manus, and Replit.
+
+**Plan Anything**: The model tops Vending-Bench 2 for long-horizon planning and can maintain consistent tool usage over extended workflows. Google is making a Gemini Agent available for Google AI Ultra subscribers in the coming weeks.
+
+## Google Antigravity
+
+Alongside Gemini 3, Google launched Antigravity, an agentic development platform that gives AI agents direct access to the editor, terminal, and browser. The system uses Gemini 3 Pro, Gemini 2.5 Computer Use, and Nano Banana (Gemini 2.5 Image) to autonomously plan and execute software tasks.
+
+The platform aims to make AI more of an active development partner rather than just a tool you query. Agents can handle complex, end-to-end tasks with less hand-holding.
+
+## Safety and Availability
+
+Google emphasizes that Gemini 3 includes comprehensive safety evaluations with reduced sycophancy, increased resistance to prompt injections, and enhanced protection against cyberattacks. The model has been evaluated by independent assessors and security experts.
+
+**Current Availability:**
+
+- Gemini app and AI Mode in Search (Pro/Ultra subscribers)
+- Google AI Studio and Antigravity
+- Gemini CLI and Vertex AI
+- Third-party integrations (Cursor, GitHub, JetBrains, etc.)
+
+The Deep Think mode will roll out to Google AI Ultra subscribers in the coming weeks.
+
+## What This Means for Developers
+
+We are developers and we're super excited when a new model comes out that we can use to build better software. Let's dive in on what this means for us developers.
+
+Gemini 3 Pro brings some practical improvements to the table.
+
+The agentic coding capabilities stand out. The model can actually use a terminal, not just write code, but execute commands, debug issues, and handle multi-step workflows. It is available in Cursor, GitHub, JetBrains, Cline, and other IDEs you are already using.
+
+For vibe coding (turning natural language into working apps), Gemini 3 Pro tops the WebDev Arena leaderboard at 1487 Elo. The model handles complex instruction following well enough that you can describe what you want and get functional, interactive code without multiple rounds of refinement. Google AI Studio's Build mode is optimized for this, going from a single prompt to a working app.
+
+The multimodal understanding improvements matter for practical applications. Document understanding goes beyond simple OCR to handle complex layouts and reasoning. Spatial reasoning enables screen understanding for computer use agents, allowing the model to interpret UI elements, mouse movements, and screen annotations. Video understanding handles high frame rates and long-context recall, which is useful for processing hours of footage.
+
+Gemini 3 Pro integrates into production workflows through the Gemini API (available in Google AI Studio and Vertex AI). Pricing is $2/million input tokens and $12/million output tokens for prompts under 200k tokens. You get rate-limited free access in Google AI Studio for testing.
+
+The model includes a client-side bash tool for local filesystem navigation and system operations, plus a server-side bash tool for multi-language code generation. Grounding with Google Search and URL context now work with structured outputs, which helps when building agents that fetch data and need specific output formats.
+
+Google Antigravity is their new agentic development platform where you work with autonomous agents that have direct access to the editor, terminal, and browser. The agents handle planning and execution while you focus on architecture. It is available now for MacOS, Windows, and Linux.
+
+## Final Thoughts
+
+Gemini 3 Pro is the first model on the LMArena leaderboard, and according to developer communities, it is likely the best coding model available right now. The multimodal capabilities and coding performance stand out, and the Deep Think mode adds an interesting dimension for complex problem-solving.
+
+If you are building with AI, Gemini 3 Pro is worth testing, especially for agentic workflows and terminal-based development. The model integrates into the tools developers actually use, and the pricing is reasonable for experimentation.
+
+## Get Started with Rust and AI
+
+LLMs are getting more powerful for Rust development. Try our Axum template and let us know how it worked out for you:
+
+```bash
+shuttle init --template axum
+```
+
+Join our Discord to discuss Gemini 3 Pro and share your thoughts on the model.
+
+<DiscordCTA />
