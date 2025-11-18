@@ -81,20 +81,30 @@ const PricingCards = () => {
     if (!section) {
       return;
     }
+    let top =
+      section.getBoundingClientRect().top -
+      document.body.getBoundingClientRect().top;
 
+    const onResize = () => {
+      top =
+        section.getBoundingClientRect().top -
+        document.body.getBoundingClientRect().top;
+    };
     const onScroll = () => {
-      const collapse = section.getBoundingClientRect().top < 0;
-      if (collapse !== collapseSections) {
-        setCollapseSections(collapse);
-      }
+      const sign = top < 0 ? -1 : 1;
+      const collapse = Math.floor(Math.abs(top)) * sign < window.scrollY;
+
+      setCollapseSections(collapse);
     };
     window.addEventListener("scroll", onScroll);
+    window.addEventListener("resize", onResize);
     onScroll();
 
     return () => {
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
     };
-  }, [collapseSections]);
+  }, []);
 
   return (
     <>
