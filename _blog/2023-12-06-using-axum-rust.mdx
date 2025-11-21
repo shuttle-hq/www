@@ -9,7 +9,9 @@ date: "2023-12-06T14:30:00"
 updated_at: "2025-07-04T10:00:00"
 ---
 
-With so many backend web frameworks in the Rust web ecosystem, it's difficult to know what to choose. Although much further in the past you might have seen Rocket shoot to the top of the leadeboard for popularity, nowadays it's typically Axum and Actix Web battling it out with Axum slowly coming on top. In this article, we are going to do a deep dive into Axum, a web framework for making Rust REST APIs backed by the Tokio team that's simple to use and has hyper-compatibility with Tower, a robust library of reusable, modular components for building network applications.
+With so many backend web frameworks in the Rust web ecosystem, it's difficult to know what to choose. Although much further in the past you might have seen Rocket shoot to the top of the leadeboard for popularity, nowadays it's typically Axum and Actix Web battling it out with Axum slowly coming on top. In this article, we are going to do a deep dive into Axum, a web application framework for making Rust REST APIs backed by the Tokio team that's simple to use and has hyper-compatibility with Tower, a robust library of reusable, modular components for building network applications.
+
+What makes Axum stand out in the Rust programming landscape is its macro free api design, predictable error handling model, and own middleware system built on Tower. Whether you're building a single route handler or a complex API, Axum's design minimizes boilerplate while giving you full control.
 
 <TLDR>
   - **Routing & Handlers**: Define routes with `axum::Router` and write async
@@ -37,7 +39,7 @@ In this article we'll take a comprehensive look at how to use Axum to write a we
 
 ## Routing in Axum
 
-Axum follows the style of REST-style APIs like Express where you can create handler functions and attach them to axum's `axum::Router` type. An example of a route might look like this:
+Axum follows the style of REST-style APIs like Express where you can create async function handlers and attach them to axum's `axum::Router` type. The path parameter syntax is intuitive and the Rust compiler helps catch errors at compile time. An example of a route might look like this:
 
 ```rust
 async fn hello_world() -> &'static str {
@@ -56,7 +58,7 @@ fn init_router() -> Router {
 }
 ```
 
-For a handler function to be valid, it needs to either be an `axum::response::Response` type or implement `axum::response::IntoResponse`. This is already implemented for most primitive types and all of Axum's own types - for example, if we wanted to send some JSON data back to a user, we can do that quite easily using Axum's JSON type by using it as a return type, with the `axum::Json` type wrapping whatever we want to send back. As you can see above, we can also return a String (slice) by itself.
+For a handler function to be valid, it needs to either be an `axum::response::Response` type or implement `axum::response::IntoResponse`. This is already implemented for most primitive types and all of Axum's own types - for example, if we wanted to send a json response back to a user, we can do that quite easily using Axum's JSON type by using it as a return type, with the `axum::Json` type wrapping whatever we want to send back. As you can see above, we can also return a String (slice) by itself with minimal boilerplate.
 
 We can also use `impl IntoResponse` directly which at first glance immediately solves having to figure out what type we need to return; however, using it directly also means making sure all the return types are the same type! This means we can run into errors unnecessarily. We can instead implement `IntoResponse` for an enum or a struct that we can then use as the return type. See below:
 
@@ -87,6 +89,8 @@ impl IntoResponse for ApiResponse {
 }
 ```
 
+This pattern allows you to declaratively parse requests and return appropriate status code responses based on your application logic.
+
 Then you would implement the enum in your handler function like this:
 
 ```rust
@@ -95,7 +99,7 @@ async fn my_function() -> ApiResponse {
 }
 ```
 
-Of course, we can also use a Result type for returns! Although the error type will also technically accept anything that can be turned into a HTTP response, we can also implement an error type that can illustrate several different ways a HTTP request can fail within our application just like we did with our successful HTTP request enum. See below:
+Of course, we can also use a Result type for returns! Although the error type will also technically accept anything that can be turned into a HTTP response, we can also implement an error response type that can illustrate several different ways a HTTP request can fail within our application just like we did with our successful HTTP request enum. This gives you a predictable error handling model across your entire application. See below:
 
 ```rust
 enum ApiError {
@@ -112,7 +116,7 @@ async fn my_function() -> Result<ApiResponse, ApiError> {
 }
 ```
 
-This allows us to differentiate between errors and successful requests when writing our Axum routing.
+This allows us to differentiate between errors and successful requests when writing our Axum routing, providing robust error handling throughout your web application framework.
 
 ## Structuring Your Application
 
@@ -130,7 +134,7 @@ async fn get_user() { /* ... */ }
 pub fn users_router() -> Router {
     Router::new()
         .route("/users", get(get_users))
-        .route("/users/:id", get(get_user))
+        .route("/users/:id", get(get_user))  // path parameters are extracted automatically
 }
 ```
 
@@ -166,7 +170,7 @@ struct AppState {
     db: PgPool,
 }
 
-#[tokio::main]
+#[tokio::main]  // Using tokio main as the asynchronous runtime
 async fn main() {
     let db_connection_str = std::env::var("DATABASE_URL")
         .unwrap_or_else(|_| "postgres://user:password@localhost/database".to_string());
@@ -285,7 +289,7 @@ impl FromRef<AppState> for ApiState {
 
 ## Extractors in Axum
 
-Extractors are exactly that: they extract things from the HTTP request, and work by allowing you to let them be passed as parameters into the handler function. Currently, this already has native support for a wide range of things like getting separate headers, paths and queries, forms and JSON, as well as there being community support for things like MsgPack, JWT extractors, and more! You can also create your own extractors, which we will get to in a bit.
+Extractors are exactly that: they extract things from the incoming request, and work by allowing you to let them be passed as parameters into the handler function. Currently, this already has native support for a wide range of things like getting separate headers, path parameters, query params, forms and JSON, as well as there being community support for things like MsgPack, JWT extractors, and more! You can also create your own extractors, which we will get to in a bit.
 
 As an example, we can use the `axum::Json` type to consume the HTTP request by extracting a JSON request body from the HTTP request. See below for how this can be done:
 
@@ -322,7 +326,7 @@ async fn my_function(
 
 Note that any fields that are not in the struct **will be ignored** - depending on your use case, this can be a good thing; for example, if you're receiving a webhook but only want to look at certain fields from the webhook request.
 
-Forms and URL query parameters can be handled the same way by adding the appropriate type to your handler function - so for example, a form extractor might look like this:
+Forms and URL query parameters can be handled the same way by adding the appropriate type to your handler function. Axum provides a query extractor for parsing query strings - so for example, a form extractor might look like this:
 
 ```rust
 async fn my_function(
@@ -450,7 +454,7 @@ where
 
 ## Middleware in Axum
 
-As mentioned before, one of Axum's great wins over other frameworks is that it is hyper-compatible with the `tower` crates, which means that we can effectively use any Tower middleware that we want for our Rust API! For example, we can add a Tower middleware to compress responses:
+As mentioned before, one of Axum's great wins over other frameworks is that it is hyper-compatible with the `tower` crates, which means that we can effectively use any Tower middleware that we want for our Rust API! This own middleware system gives you incredible flexibility and reusability. For example, we can add a Tower middleware to compress responses:
 
 ```rust
 use tower_http::compression::CompressionLayer;
@@ -461,7 +465,7 @@ fn init_router() -> Router {
 }
 ```
 
-There are a number of crates consisting of Tower middleware that are available to use without us even having to write any middleware ourselves! If you're already using Tower middleware in any of your applications, this is a great way to re-use your middleware without having to write yet more code as the compatibility ensures no issues.
+There are a number of crates consisting of Tower middleware that are available to use without us even having to write any middleware ourselves! If you're already using Tower middleware in any of your applications, this is a great way to re-use your middleware system without having to write yet more code as the compatibility ensures no issues. The Rust language's type system also helps prevent common issues like memory leaks in middleware chains.
 
 We can also create our own middleware by writing a function. The function requires a `<B>` generic bound over the `Request` and `Next` types, as Axum's body type is generic in 0.6. See below for an example:
 
@@ -481,7 +485,7 @@ async fn check_hello_world<B>(
 }
 ```
 
-In Axum 0.7, you'd remove the `<B>` constraint, as Axum's `axum::body::Body` type is no longer generic:
+In Axum 0.7 and later, you'd remove the `<B>` constraint, as Axum's `axum::body::Body` type is no longer generic. This makes the API cleaner while maintaining the same macro free api approach:
 
 ```rust
 use axum::{http::Request, middleware::Next};
@@ -557,7 +561,7 @@ You can also use HTML templating with crates like [`askama`](https://github.com/
 
 ## Testing Your Handlers
 
-A major advantage of Axum's design is that its components (`Router`, handlers) are `tower::Service`s. This means you can test them without running an actual HTTP server. The `tower::ServiceExt` trait provides a `oneshot` method that sends a single request to your service.
+A major advantage of Axum's design is that its components (`Router`, handlers) are `tower::Service`s. This means you can test them without running an actual HTTP server. The `tower::ServiceExt` trait provides a `oneshot` method that sends a single route request to your service, making testing straightforward in the Rust programming language.
 
 Here's how you can test a handler:
 
@@ -576,7 +580,7 @@ fn app() -> Router {
     Router::new().route("/", get(|| async { "Hello, World!" }))
 }
 
-#[tokio::test]
+#[tokio::test]  // Using async fn main pattern in tests with tokio
 async fn test_hello_world() {
     let app = app();
 
@@ -671,12 +675,12 @@ We've built **ShellCon**, a real-world Rust microservices onboarding challenge w
     {
       question: "How does Axum handle middleware?",
       answer:
-        "Axum uses `tower::Service` and `tower::Layer` for middleware. This means you can leverage the entire rich ecosystem of Tower and `tower-http` crates for things like tracing, compression, authentication, and rate-limiting without waiting for an Axum-specific implementation.",
+        "Axum uses `tower::Service` and `tower::Layer` for its middleware system. This means you can leverage the entire rich ecosystem of Tower and `tower-http` crates for things like tracing, compression, authentication, and rate-limiting without waiting for an Axum-specific implementation.",
     },
     {
       question: "What is the best way to handle errors in Axum?",
       answer:
-        "The best practice is to create a custom error enum for your application that implements Axum's `IntoResponse` trait. This allows you to map different error variants into specific HTTP status codes and responses, providing a clean and centralized error-handling mechanism.",
+        "The best practice is to create a custom error enum for your application that implements Axum's `IntoResponse` trait. This allows you to map different error variants into specific HTTP status codes and error responses, providing a clean and centralized error handling mechanism with a predictable error handling model.",
     },
     {
       question: "Can I use Axum with async-graphql?",
