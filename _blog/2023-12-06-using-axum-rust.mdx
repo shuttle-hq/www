@@ -37,7 +37,11 @@ What makes Axum stand out in the Rust programming landscape is its macro free ap
 
 In this article we'll take a comprehensive look at how to use Axum to write a web service. This article has been updated for Axum 0.8 and Tokio 1.0, reflecting the latest best practices.
 
-## Routing in Axum
+## Getting Started with Axum: Building REST APIs in Rust
+
+Axum is designed specifically for building REST APIs in the Rust programming ecosystem. Let's start with the fundamentals of routing and handlers.
+
+## Routing in Axum and Handler Functions
 
 Axum follows the style of REST-style APIs like Express where you can create async function handlers and attach them to axum's `axum::Router` type. The path parameter syntax is intuitive and the Rust compiler helps catch errors at compile time. An example of a route might look like this:
 
@@ -117,6 +121,10 @@ async fn my_function() -> Result<ApiResponse, ApiError> {
 ```
 
 This allows us to differentiate between errors and successful requests when writing our Axum routing, providing robust error handling throughout your web application framework.
+
+## Error Handling in Axum Handlers
+
+Proper error handling is crucial for building reliable Rust web applications. As we've seen, Axum handlers can return Result types with custom error responses that map to appropriate HTTP status codes.
 
 ## Structuring Your Application
 
@@ -287,9 +295,15 @@ impl FromRef<AppState> for ApiState {
 }
 ```
 
-## Extractors in Axum
+## Extractors in Axum: Path Parameters and Query Parameters
 
 Extractors are exactly that: they extract things from the incoming request, and work by allowing you to let them be passed as parameters into the handler function. Currently, this already has native support for a wide range of things like getting separate headers, path parameters, query params, forms and JSON, as well as there being community support for things like MsgPack, JWT extractors, and more! You can also create your own extractors, which we will get to in a bit.
+
+### Working with Path Parameters and Path Parameter Syntax
+
+Axum makes it easy to extract path parameters from your routes. The path parameter syntax uses a colon (`:`) prefix to denote dynamic segments in your route paths.
+
+### Extracting JSON and Query Params
 
 As an example, we can use the `axum::Json` type to consume the HTTP request by extracting a JSON request body from the HTTP request. See below for how this can be done:
 
@@ -641,9 +655,11 @@ async fn handle_socket(mut socket: WebSocket) {
 
 For building documented and maintainable APIs, OpenAPI (formerly Swagger) is the standard. While Axum doesn't have built-in OpenAPI generation, the `utoipa` crate provides excellent integration. It allows you to generate an OpenAPI specification from your Axum handlers and data types using procedural macros.
 
-## How to Deploy Axum
+## How to Deploy Axum: Production Rust Web Applications
 
 Deployment with Rust backend programs in general can be less than ideal due to having to use Dockerfiles, although if you are experienced with Docker already this may not be such an issue for you - particularly if you are using `cargo-chef`. However, if you're using Shuttle you can just use `shuttle deploy` and you're done already. No setup is required.
+
+Building production-ready Rust web applications with Axum is straightforward, and with modern deployment platforms, you can focus on writing code rather than managing infrastructure.
 
 ## Ready to test your Axum skills?
 
