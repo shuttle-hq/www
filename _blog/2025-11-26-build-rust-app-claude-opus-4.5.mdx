@@ -86,6 +86,8 @@ I started with a fresh Shuttle Axum project to give Claude Opus 4.5 a clean slat
 shuttle init --template axum
 ```
 
+![Shuttle init command](images/shuttle-init.png)
+
 ![Empty Shuttle Axum project](images/empty-project.png)
 
 For this experiment, I used Cursor with Claude Opus 4.5 through the Agent feature. I pasted the entire prompt into the Agent view and hit enter.
@@ -142,7 +144,7 @@ That's it. One prompt, one password fix (which was entirely my fault for not pro
 
 Claude Opus 4.5 then moved on to deployment, using the Shuttle MCP server to deploy the application. It found the existing project ID and started the deployment process.
 
-![Successful compilation](images/deploy.png)
+![Opus deploying to Shuttle](images/deploy.png)
 
 ## The Result
 
@@ -169,8 +171,6 @@ The application was live. Let me show you what Claude Opus 4.5 built.
 ![The finished finance tracker application](images/finance-dashboard.png)
 
 The dashboard greets you with a clean, modern dark theme. Stats cards show your financial overview - total income, expenses, and balance. Below that, a pie chart breaks down spending by category and a line chart tracks monthly trends.
-
-![Finance tracker dashboard](images/finance-dashboard.png)
 
 The transactions page has all the functionality you'd expect - date range filters, category and type dropdowns, and a clean list of transactions with their icons and amounts. Each transaction can be edited or deleted.
 
