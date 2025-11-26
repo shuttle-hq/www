@@ -1,0 +1,312 @@
+---
+title: "Building a Full-Stack Rust Web App with Claude Opus 4.5"
+description: "Testing Claude Opus 4.5's coding abilities by building a complete production-ready Rust web application with database, frontend, and deployment - all from a single prompt"
+author: dcodes
+tags: [rust, claude, ai, axum, sqlx, postgres, full-stack]
+thumb: build-rust-app-claude-opus-4.5/cover.png
+cover: build-rust-app-claude-opus-4.5/cover.png
+date: "2025-11-26"
+---
+
+Last week Google released Gemini 3, and it really killed the competition. It only took a week for Anthropic to respond with Claude Opus 4.5, beating Gemini 3 on SWE-bench Verified and not letting Google take over the top spot for too long.
+
+Benchmarks are useful, but what matters more is real-world performance. In this post, I'll test Claude Opus 4.5 by building a production-ready Rust web application with database, frontend, and deployment - all from a single prompt, letting the AI agent handle the entire process.
+
+## Claude Opus 4.5
+
+Anthropic just released Claude Opus 4.5, and according to benchmarks, claims, and community response, it's a genuine leap forward for coding with AI. It's now the best model in the world for software engineering, scoring 80.9% on SWE-bench Verified - outperforming every other frontier model including GPT-5.1 and Gemini 3 Pro. According to Anthropic, Claude Opus 4.5 outperformed every human candidate on their notoriously difficult performance engineering take-home exam.
+
+<CaptionedImage
+  src="/images/blog/build-rust-app-claude-opus-4.5/benchmarks.png"
+  alt="Opus 4.5 benchmark results"
+  caption="Opus 4.5 benchmark results"
+/>
+
+The improvements are across the board: better reasoning under ambiguity, creative problem-solving, and state-of-the-art performance in most domains. Claude Opus 4.5 also uses dramatically fewer tokens to reach better outcomes than its predecessors.
+
+I gave Claude Opus 4.5 a task: build a full-stack Rust web application from scratch, complete with database migrations, frontend assets, and deploy it to Shuttle. One comprehensive prompt, no follow-up corrections.
+
+The application is a personal finance tracker with transaction management, budget tracking, spending insights with charts, and a modern UI. The stack uses Rust with Axum and SQLx for the backend, PostgreSQL for the database, and vanilla HTML/CSS/JS for the frontend.
+
+The requirements are using SQLx compile-time checked query macros throughout (no raw queries), proper database migrations, a clean modern UI, and everything deployed to Shuttle with the database provisioned automatically.
+
+## The Prompt
+
+Here's the complete prompt I used:
+
+```markdown
+Build a Personal Finance Tracker web application with the following requirements:
+
+**Backend (Rust + Axum + SQLx):**
+
+- Use Rust with the Axum web framework
+- Use SQLx for database operations with PostgreSQL
+- Use SQLx compile-time checked query macros (query!, query_as!, etc.) throughout - no raw queries
+- Database is running on localhost:5432
+- Create proper database migrations using `sqlx migrate add` commands
+- Implement migrations to create necessary tables (transactions, categories, budgets, etc.)
+- Run migrations automatically or provide clear instructions
+- Before deployment, run `cargo sqlx prepare` to generate query metadata for offline compilation
+- Create RESTful API endpoints for:
+  - Adding/editing/deleting transactions
+  - Categorizing transactions
+  - Getting spending summaries by category/time period
+  - Budget management
+
+**Frontend (HTML/CSS/JS):**
+
+- Create a modern, clean, and slick UI using vanilla HTML, CSS, and JavaScript
+- Make it responsive and mobile-friendly
+- Include data visualizations (charts for spending by category, trends over time)
+- Use a nice color scheme and contemporary design patterns
+- Place all frontend assets in a `dist/` directory
+
+**Deployment:**
+
+- Deploy to Shuttle
+- Configure the Shuttle.toml to include frontend assets
+- Use the Shuttle MCP server to handle the deployment
+- You can also use the Shuttle MCP server to search Shuttle documentation if needed
+
+**Features to implement:**
+
+- Transaction management (add, edit, delete income/expenses)
+- Automatic and manual categorization
+- Budget setting and tracking
+- Spending insights with charts (pie charts, bar charts, line graphs)
+- Date range filtering
+- Summary statistics (total spent, by category, monthly trends)
+
+Build this as a complete, production-ready application with proper error handling, validation, and a polished user experience.
+```
+
+This tests a lot of things: Rust idioms, database design, API design, frontend skills, and platform-specific deployment knowledge.
+
+## Setting Up the Test
+
+I started with a fresh Shuttle Axum project to give Claude Opus 4.5 a clean slate:
+
+```bash
+shuttle init --template axum
+```
+
+<CaptionedImage
+  src="/images/blog/build-rust-app-claude-opus-4.5/shuttle-init.png"
+  alt="Shuttle init command"
+  caption="Shuttle init command"
+/>
+
+<CaptionedImage
+  src="/images/blog/build-rust-app-claude-opus-4.5/empty-project.png"
+  alt="Empty Shuttle Axum project"
+  caption="Empty Shuttle Axum project"
+/>
+
+For this experiment, I used Cursor with Claude Opus 4.5 through the Agent feature. I pasted the entire prompt into the Agent view and hit enter.
+
+<CaptionedImage
+  src="/images/blog/build-rust-app-claude-opus-4.5/cursor-agent-view-prompt.png"
+  alt="Cursor Agent view with the prompt"
+  caption="Cursor Agent view with the prompt"
+/>
+
+## Watching It Work
+
+Before writing any code, just like other frontier models, Claude Opus 4.5 started by collecting context. One of its first actions was using the Shuttle MCP server's documentation search tool to understand how Shuttle works, what features are available, and how to structure the deployment configuration.
+
+<CaptionedImage
+  src="/images/blog/build-rust-app-claude-opus-4.5/search-docs.png"
+  alt="Opus searching Shuttle documentation"
+  caption="Opus searching Shuttle documentation"
+/>
+
+This is smart behavior, it gives it a good understanding of the platform, it verified current best practices and platform capabilities.
+
+> **My problem** with other frontier models was that even though they'd look up the documentation, they'd still make the mistake of using outdated dependencies and syntax, especially with Axum.
+
+Within seconds of finishing its research, it started generating code. It worked through the requirements - setting up the database schema, creating migrations, building out API endpoints, and crafting the frontend.
+
+In just a few minutes, it had written over 2,500 lines of code across multiple files. The agent view showed it was now attempting to build the project.
+
+<CaptionedImage
+  src="/images/blog/build-rust-app-claude-opus-4.5/2.5k-lines-written.png"
+  alt="Opus writing 2.5k lines of code"
+  caption="Opus writing 2.5k lines of code"
+/>
+
+What impressed me most wasn't just the speed - it was the attention to detail. I was specifically watching for common mistakes that trip up other frontier models, particularly around Axum's routing syntax.
+
+In Axum 0.8, the dynamic route syntax changed from `/:id` to `/{id}` (curly braces instead of colons). This is a subtle but breaking change that causes runtime errors. I've tested plenty of models on Axum projects, and they consistently get this wrong - even Claude Sonnet 4.5 makes this mistake.
+
+Claude Opus 4.5 got it right. For me personally, this is a huge improvement over Sonnet 4.5 because this would always cause a runtime error - it's subtle but very important.
+
+Every single route used the correct `/{id}` syntax. Claude Opus 4.5 also used the latest versions of all the crates - Axum, SQLx, tower-http, and everything else - without any prompting. This is something other frontier models consistently get wrong, often pulling outdated versions from their training data.
+
+<CaptionedImage
+  src="/images/blog/build-rust-app-claude-opus-4.5/versions.png"
+  alt="Up-to-date crate versions"
+  caption="Up-to-date crate versions"
+/>
+
+## The Build Process
+
+Claude Opus 4.5 organized its work into a clear todo list, systematically checking off each step:
+
+<CaptionedImage
+  src="/images/blog/build-rust-app-claude-opus-4.5/opus-cooking.png"
+  alt="Opus working through the todo list"
+  caption="Opus working through the todo list"
+/>
+
+The dependencies it chose were spot-on - SQLx with the right features, serde for serialization, tower-http for serving static files, and all the other pieces needed for a production application.
+
+After writing all the migrations, API handlers, and frontend code, it ran `cargo build`.
+
+Before the successful compilation, running `cargo sqlx prepare` failed a few times. Claude Opus 4.5 caught the errors and corrected itself twice, adjusting the database queries and schema setup. It's impressive to see the best model debug its own work and iterate toward a solution without human intervention.
+
+<CaptionedImage
+  src="/images/blog/build-rust-app-claude-opus-4.5/sqlx-prepare-error.png"
+  alt="Opus debugging the build process"
+  caption="Opus debugging the build process"
+/>
+
+Once it worked through those issues, it compiled successfully.
+
+The only correction I had to make was providing the local database password for running migrations. Claude Opus 4.5 generated the SQLx commands correctly, but since I hadn't specified my local PostgreSQL password in the prompt, it used a placeholder that needed updating.
+
+<CaptionedImage
+  src="/images/blog/build-rust-app-claude-opus-4.5/pg-command.png"
+  alt="Running database migrations locally"
+  caption="Running database migrations locally"
+/>
+
+That's it. One prompt, one password fix, and everything else worked perfectly.
+
+Claude Opus 4.5 then moved on to deployment, using the Shuttle MCP server to deploy the application. It found the existing project ID and started the deployment process.
+
+<CaptionedImage
+  src="/images/blog/build-rust-app-claude-opus-4.5/deploy.png"
+  alt="Opus deploying to Shuttle"
+  caption="Opus deploying to Shuttle"
+/>
+
+## The Result
+
+A few minutes later, the deployment completed successfully:
+
+<CaptionedImage
+  src="/images/blog/build-rust-app-claude-opus-4.5/summary.png"
+  alt="Deployment summary"
+  caption="Deployment summary"
+/>
+
+The application was live at a production URL with everything I asked for:
+
+- **Backend**: Axum with RESTful API, SQLx compile-time checked queries, proper error handling
+- **Database**: PostgreSQL with three migrations (categories with seed data, transactions, budgets)
+- **Frontend**: Dark-themed modern UI with Chart.js visualizations, responsive design, modal forms
+
+The feature set was complete:
+
+<CaptionedImage
+  src="/images/blog/build-rust-app-claude-opus-4.5/features-summary.png"
+  alt="Features implemented"
+  caption="Features implemented"
+/>
+
+It implemented a full dashboard with stats cards and charts, complete transaction management with filtering, budget tracking with progress bars, analytics views, and eight pre-seeded categories with icons and colors. The API had all the endpoints needed for CRUD operations on transactions, budgets, and categories, plus analytics endpoints for summaries and trends.
+
+## The Application in Action
+
+The application was live. Let me show you what Claude Opus 4.5 built.
+
+<CaptionedImage
+  src="/images/blog/build-rust-app-claude-opus-4.5/finance-dashboard.png"
+  alt="The finished finance tracker application"
+  caption="The finished finance tracker application"
+/>
+
+The dashboard greets you with a clean, modern dark theme. Stats cards show your financial overview - total income, expenses, and balance. Below that, a pie chart breaks down spending by category and a line chart tracks monthly trends.
+
+The transactions page has all the functionality you'd expect - date range filters, category and type dropdowns, and a clean list of transactions with their icons and amounts. Each transaction can be edited or deleted.
+
+<CaptionedImage
+  src="/images/blog/build-rust-app-claude-opus-4.5/transactions.png"
+  alt="Transactions page with filtering"
+  caption="Transactions page with filtering"
+/>
+
+Budget management: set budgets per category, and progress bars show how much you've spent versus your limit, with color coding to indicate status.
+
+<CaptionedImage
+  src="/images/blog/build-rust-app-claude-opus-4.5/budgets.png"
+  alt="Budget tracking with progress bars"
+  caption="Budget tracking with progress bars"
+/>
+
+The analytics section provides deeper insights with bar charts comparing income vs expenses, pie charts for expense breakdowns, and horizontal bar charts showing top spending categories.
+
+<CaptionedImage
+  src="/images/blog/build-rust-app-claude-opus-4.5/analytics.png"
+  alt="Analytics view with income vs expenses"
+  caption="Analytics view with income vs expenses"
+/>
+
+<CaptionedImage
+  src="/images/blog/build-rust-app-claude-opus-4.5/analytics-2.png"
+  alt="Analytics showing expense breakdown"
+  caption="Analytics showing expense breakdown"
+/>
+
+The entire UI is responsive, the charts are interactive, and everything works as you'd expect from a production application.
+
+Adding a transaction brings up a polished modal with proper form controls - toggle buttons for income/expense, amount input, description field, category dropdown with icons, and a date picker. All of these are wired up to the Rust backend API.
+
+<CaptionedImage
+  src="/images/blog/build-rust-app-claude-opus-4.5/dialog.png"
+  alt="Add transaction modal"
+  caption="Add transaction modal"
+/>
+
+Every button you see is functional. Add, edit, delete - they all make proper API calls to the Axum backend, which validates the data and updates the PostgreSQL database through SQLx's compile-time checked queries.
+
+## Final Thoughts
+
+Claude Opus 4.5 is the best coding model I've used, no doubt about it. One prompt built a complete full-stack application with a Rust backend, database migrations, a polished frontend, and deployment to production. All that without making any major mistakes or getting stuck.
+
+Every crate dependency was current. The Axum routing syntax was correct. The SQLx queries used the right macros. The UI looks good. The deployment worked on the first try.
+
+Claude Opus 4.5 is noticeably slower than Sonnet 4.5 - you'll wait longer for responses. But for complex coding tasks where accuracy matters more than speed, the wait is worth it. When you have the best model handling your code, I'd rather wait an extra minute for code that works than iterate multiple times fixing mistakes from a faster model.
+
+The Shuttle MCP integration made deployment seamless. Claude Opus 4.5 used it to search documentation when needed and handled the entire deployment process autonomously.
+
+## When to Use Claude Opus 4.5
+
+Here's when Claude Opus 4.5 is the right tool for the job versus when you should reach for something faster:
+
+| Use Claude Opus 4.5 For                         | Use Faster Models For                     |
+| ----------------------------------------------- | ----------------------------------------- |
+| Complex multi-file features                     | Small adjustments and quick fixes         |
+| System design and architecture decisions        | Simple refactoring (renaming, formatting) |
+| Building new applications from scratch          | Documentation updates                     |
+| Decision-making with multiple valid approaches  | Adding comments or docstrings             |
+| Brainstorming and generating ideas              | Tweaking CSS or UI styling                |
+| Implementing features that require deep context | Single-line bug fixes                     |
+
+For the small, fast edits, I use Cursor's Composer - it's incredibly fast for those tasks. We covered why Composer excels at quick iterations in [this post](https://www.shuttle.dev/blog/2025/11/05/cursor-composer-hands-on?utm_source=shuttle_blog&utm_medium=blog&utm_campaign=opus_4_5_rust_app).
+
+Refactoring is a gray area. For simple renames or extractions, Composer wins on speed. But for architectural refactoring where you're restructuring modules or changing patterns across multiple files, Claude Opus 4.5's deeper reasoning is worth the wait.
+
+The pattern I've found works best: use Claude Opus 4.5 when accuracy and architectural decisions matter more than speed, and use Composer (or any other fast model) when you need rapid iteration on smaller changes.
+
+## Try It Yourself
+
+Want to build your own Rust web application? Get started with Shuttle (it's free):
+
+```bash
+shuttle init --template axum
+```
+
+Join the Discord to discuss Claude Opus 4.5 and share your thoughts on this model.
+
+<DiscordCTA />
