@@ -170,7 +170,7 @@ Before the successful compilation, running `cargo sqlx prepare` failed a few tim
   caption="Opus debugging the build process"
 />
 
-Once it worked through those issues, it compiled successfully. No missing dependencies, no type errors, no syntax issues. 18 seconds to build the entire project.
+Once it worked through those issues, it compiled successfully.
 
 The only correction I had to make was providing the local database password for running migrations. Claude Opus 4.5 generated the SQLx commands correctly, but since I hadn't specified my local PostgreSQL password in the prompt, it used a placeholder that needed updating.
 
@@ -180,7 +180,7 @@ The only correction I had to make was providing the local database password for 
   caption="Running database migrations locally"
 />
 
-That's it. One prompt, one password fix (which was entirely my fault for not providing it), and everything else worked perfectly.
+That's it. One prompt, one password fix, and everything else worked perfectly.
 
 Claude Opus 4.5 then moved on to deployment, using the Shuttle MCP server to deploy the application. It found the existing project ID and started the deployment process.
 
@@ -308,3 +308,5 @@ shuttle init --template axum
 ```
 
 Join the Discord to discuss Claude Opus 4.5 and share your thoughts on this model.
+
+<DiscordCTA />
