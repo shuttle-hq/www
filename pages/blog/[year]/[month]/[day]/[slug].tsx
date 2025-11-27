@@ -475,12 +475,7 @@ export default function BlogPostPage(props: Props) {
             <BlogPrevNext prevPost={props.prevPost} nextPost={props.nextPost} />
           </div>
           {/* Sidebar */}
-          <BlogSidebar
-            tags={props.blog.tags || []}
-            relatedPosts={props.relatedPosts || []}
-            toc={props.blog.contentTOC?.json}
-            mdxComponents={mdxComponents}
-          />
+          <BlogSidebar toc={props.blog.contentTOC?.json} />
         </div>
       </div>
       <CallToAction />
