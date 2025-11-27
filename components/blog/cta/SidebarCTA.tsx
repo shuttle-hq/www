@@ -24,7 +24,7 @@ export function SidebarCTA() {
         </p>
 
         <Link
-          href="https://console.shuttle.dev"
+          href="https://console.shuttle.dev/templates?utm_source=blog&utm_medium=sidebar&utm_campaign=blog_cta_sidebar"
           onClick={() => trackEvent("blog_cta_sidebar")}
           target="_blank"
           rel="noopener noreferrer"
@@ -51,4 +51,3 @@ export function SidebarCTA() {
     </div>
   );
 }
-
