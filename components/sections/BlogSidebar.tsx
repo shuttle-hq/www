@@ -16,7 +16,7 @@ interface BlogSidebarProps {
 const BlogSidebar: FC<BlogSidebarProps> = ({ toc }) => {
   return (
     <div className="relative w-full">
-      <div className="w-full space-y-6 lg:sticky lg:top-6">
+      <div className="w-full space-y-6 lg:sticky lg:top-24">
         <div className="rounded-3xl border border-black/10 px-6 py-4 dark:border-white/10">
           <div className="mb-2 dark:text-head">On this page</div>
           <SidebarTOC toc={toc} />
