@@ -51,8 +51,9 @@ const LinkItem = ({
 
 const Navigation = () => {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const router = useRouter();
-  const { count: stargazersCount } = useStargazersCount(); // now available here
+  const { count: stargazersCount } = useStargazersCount();
 
   useEffect(() => {
     function updateMenu() {
@@ -64,156 +65,178 @@ const Navigation = () => {
       setOpen(false);
     }
 
-    window.addEventListener("resize", updateMenu);
+    function handleScroll() {
+      setScrolled(window.scrollY > 50);
+    }
 
-    return () => window.removeEventListener("resize", updateMenu);
+    window.addEventListener("resize", updateMenu);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("resize", updateMenu);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, [open]);
 
   return (
-    <nav className="mx-auto flex h-[5.5rem] w-full max-w-[1344px] items-center px-5 sm:px-10">
-      <Link
-        href="/"
-        onClick={() => {
-          setOpen(false);
-        }}
-      >
-        <Logo className="dark:text-head" />
-      </Link>
-      <div
+    <header
+      className={clsx(
+        "sticky top-0 z-50 w-full backdrop-blur-md transition-all duration-300",
+        scrolled
+          ? "bg-[#E9E9E9]/60 dark:bg-black/60"
+          : "bg-[#E9E9E9] dark:bg-black",
+      )}
+    >
+      <nav
         className={clsx(
-          "absolute left-0 top-[4.375rem] z-20 h-[calc(100vh-4.375rem)] w-full overflow-y-auto bg-[#E9E9E9] p-5 dark:bg-black sm:px-10 xl:static xl:ml-10 xl:flex xl:h-auto xl:items-center xl:overflow-y-visible xl:bg-transparent xl:p-0 xl:dark:bg-transparent",
-          !open && "hidden",
+          "mx-auto flex w-full max-w-[1344px] items-center px-5 transition-all duration-300 sm:px-10",
+          scrolled ? "h-16" : "h-[5.5rem]",
         )}
       >
-        <div className="flex flex-col gap-4 xl:flex-row xl:gap-8">
-          {[
-            // {
-            // 	href: '/cch',
-            // 	event: 'homepage_mainnav_cch',
-            // 	text: 'Christmas Code Hunt',
-            // },
-            {
-              href: "/blog/tags/all",
-              event: "homepage_mainnav_blog",
-              text: "Blog",
-              keyword: "blog",
-            },
-            {
-              href: "/pricing",
-              event: "homepage_mainnav_pricing",
-              text: "Pricing",
-              keyword: "pricing",
-            },
-            {
-              href: "https://docs.shuttle.dev",
-              event: "homepage_mainnav_docs",
-              text: "Docs",
-              keyword: "docs",
-            },
-            {
-              href: "/customers",
-              event: "homepage_mainnav_customers",
-              text: "Customers",
-              keyword: "customers",
-            },
-            {
-              href: "/careers",
-              event: "homepage_careers",
-              text: "Careers",
-              keyword: "careers",
-            },
-            {
-              href: "https://console.shuttle.dev/templates",
-              event: "homepage_mainnav_templates",
-              text: "Templates",
-              keyword: "templates",
-            },
-          ].map(({ event, href, text, keyword }) => (
-            <LinkItem
-              key={href}
-              event={event}
-              href={href}
-              text={text}
-              setOpen={setOpen}
-              active={router.pathname.includes(keyword)}
-            />
-          ))}
-        </div>
-        <div className="mt-10 xl:ml-auto xl:mt-0 xl:flex xl:items-center xl:gap-5">
-          <div className="flex items-center gap-4 pl-px xl:ml-4">
+        <Link
+          href="/"
+          onClick={() => {
+            setOpen(false);
+          }}
+        >
+          <Logo className="dark:text-head" />
+        </Link>
+        <div
+          className={clsx(
+            "absolute left-0 top-[4.375rem] z-20 h-[calc(100vh-4.375rem)] w-full overflow-y-auto bg-[#E9E9E9] p-5 dark:bg-black sm:px-10 xl:static xl:ml-10 xl:flex xl:h-auto xl:items-center xl:overflow-y-visible xl:bg-transparent xl:p-0 xl:dark:bg-transparent",
+            !open && "hidden",
+          )}
+        >
+          <div className="flex flex-col gap-4 xl:flex-row xl:gap-8">
             {[
+              // {
+              // 	href: '/cch',
+              // 	event: 'homepage_mainnav_cch',
+              // 	text: 'Christmas Code Hunt',
+              // },
               {
-                icon: <GithubLogo className="w-6 h-6" />,
-                href: "https://github.com/shuttle-hq/shuttle",
-                text: `${stargazersCount !== null ? formatNumberToK(stargazersCount) : ""}`,
-                title: `${stargazersCount ?? "N/A"} GitHub stars`,
-                trackingEvent: "homepage_mainnav_github",
-                label: "GitHub",
+                href: "/blog/tags/all",
+                event: "homepage_mainnav_blog",
+                text: "Blog",
+                keyword: "blog",
               },
               {
-                icon: <DiscordLogo className="w-6 h-6" />,
-                href: "https://discord.com/invite/shuttle",
-                text: "",
-                title: "Join us on Discord",
-                trackingEvent: "homepage_mainnav_discord",
-                label: "Discord",
+                href: "/pricing",
+                event: "homepage_mainnav_pricing",
+                text: "Pricing",
+                keyword: "pricing",
               },
-            ].map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={item.label}
-                title={item.title}
-                onClick={() => trackEvent(item.trackingEvent)}
-                className={`gap-1 transition-colors text-[#D8D8D8] hover:text-black dark:text-white/60 dark:hover:text-white bg-[#1D1D1D] flex items-center justify-center rounded-full h-[48px] ${item.text ? " px-3" : "w-[48px]"}`}
-              >
-                {item.icon}
-                {item.text && <span className="text-xs">{item.text}</span>}
-              </a>
+              {
+                href: "https://docs.shuttle.dev",
+                event: "homepage_mainnav_docs",
+                text: "Docs",
+                keyword: "docs",
+              },
+              {
+                href: "/customers",
+                event: "homepage_mainnav_customers",
+                text: "Customers",
+                keyword: "customers",
+              },
+              {
+                href: "/careers",
+                event: "homepage_careers",
+                text: "Careers",
+                keyword: "careers",
+              },
+              {
+                href: "https://console.shuttle.dev/templates",
+                event: "homepage_mainnav_templates",
+                text: "Templates",
+                keyword: "templates",
+              },
+            ].map(({ event, href, text, keyword }) => (
+              <LinkItem
+                key={href}
+                event={event}
+                href={href}
+                text={text}
+                setOpen={setOpen}
+                active={router.pathname.includes(keyword)}
+              />
             ))}
           </div>
-          <div
-            className="mt-10 flex flex-wrap items-center gap-5 xl:mt-0"
-            onClick={() => {
-              trackEvent("homepage_mainnav_login");
-            }}
-          >
-            <CustomButton
-              className="w-[140px] justify-center"
-              variant="secondary"
-              invertOnDark
-              href="https://console.shuttle.dev/"
-            >
-              Log in
-            </CustomButton>
+          <div className="mt-10 xl:ml-auto xl:mt-0 xl:flex xl:items-center xl:gap-5">
+            <div className="flex items-center gap-4 pl-px xl:ml-4">
+              {[
+                {
+                  icon: <GithubLogo className="w-6 h-6" />,
+                  href: "https://github.com/shuttle-hq/shuttle",
+                  text: `${stargazersCount !== null ? formatNumberToK(stargazersCount) : ""}`,
+                  title: `${stargazersCount ?? "N/A"} GitHub stars`,
+                  trackingEvent: "homepage_mainnav_github",
+                  label: "GitHub",
+                },
+                {
+                  icon: <DiscordLogo className="w-6 h-6" />,
+                  href: "https://discord.com/invite/shuttle",
+                  text: "",
+                  title: "Join us on Discord",
+                  trackingEvent: "homepage_mainnav_discord",
+                  label: "Discord",
+                },
+              ].map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={item.label}
+                  title={item.title}
+                  onClick={() => trackEvent(item.trackingEvent)}
+                  className={`gap-1 transition-colors text-[#D8D8D8] hover:text-black dark:text-white/60 dark:hover:text-white bg-[#1D1D1D] flex items-center justify-center rounded-full h-[48px] ${item.text ? " px-3" : "w-[48px]"}`}
+                >
+                  {item.icon}
+                  {item.text && <span className="text-xs">{item.text}</span>}
+                </a>
+              ))}
+            </div>
             <div
+              className="mt-10 flex flex-wrap items-center gap-5 xl:mt-0"
               onClick={() => {
-                trackEvent("homepage_mainnav_signup");
+                trackEvent("homepage_mainnav_login");
               }}
             >
               <CustomButton
                 className="w-[140px] justify-center"
-                variant="primary"
+                variant="secondary"
                 invertOnDark
-                href="https://console.shuttle.dev/signup"
+                href="https://console.shuttle.dev/"
               >
-                Sign up
+                Log in
               </CustomButton>
+              <div
+                onClick={() => {
+                  trackEvent("homepage_mainnav_signup");
+                }}
+              >
+                <CustomButton
+                  className="w-[140px] justify-center"
+                  variant="primary"
+                  invertOnDark
+                  href="https://console.shuttle.dev/signup"
+                >
+                  Sign up
+                </CustomButton>
+              </div>
             </div>
+            <ThemeSwitcher className="mt-5 xl:-order-1 xl:mt-0" hidden />
           </div>
-          <ThemeSwitcher className="mt-5 xl:-order-1 xl:mt-0" hidden />
         </div>
-      </div>
 
-      <button
-        className="ml-auto dark:text-head xl:hidden"
-        onClick={() => setOpen((open) => !open)}
-      >
-        <Hamburger />
-      </button>
-    </nav>
+        <button
+          className="ml-auto dark:text-head xl:hidden"
+          onClick={() => setOpen((open) => !open)}
+        >
+          <Hamburger />
+        </button>
+      </nav>
+    </header>
   );
 };
 
