@@ -1,6 +1,6 @@
 import matter from "gray-matter";
 import { serialize } from "next-mdx-remote/serialize";
-import { NextSeo } from "next-seo";
+import { NextSeo, ArticleJsonLd } from "next-seo";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { generateReadingTime } from "lib/helpers";
@@ -17,7 +17,8 @@ import slug from "rehype-slug";
 // @ts-ignore
 import toc from "markdown-toc";
 import rehypePrism from "rehype-prism-plus";
-import { SITE_URL } from "lib/constants";
+import { SITE_URL, APP_NAME } from "lib/constants";
+import authors from "lib/blog/authors";
 import { HeadingLink } from "components/blog/HeadingLink";
 import { GetStaticPropsContext, GetStaticPropsResult } from "next";
 import { ParsedUrlQuery } from "querystring";
@@ -326,6 +327,16 @@ export default function BlogPostPage(props: Props) {
   const { basePath } = useRouter();
 
   const title = props.blog.pageTitle ?? props.blog.title;
+  const articleUrl = `${SITE_URL}blog/${props.blog.slug}`;
+  const imageUrl = `${SITE_URL}${basePath}/images/blog/${props.blog.thumb}`
+    .replace(/\/+/g, "/")
+    .replace(":/", "://");
+
+  const authorData =
+    authors.find((a) => a.author_id === props.blog.author) ||
+    authors.find((a) => a.author === props.blog.author);
+  const authorName = authorData?.author || props.blog.author || APP_NAME;
+  const authorUrl = authorData?.author_url || props.blog.author_url || SITE_URL;
 
   return (
     <>
@@ -336,7 +347,7 @@ export default function BlogPostPage(props: Props) {
         openGraph={{
           title: `${title} | Shuttle`,
           description: props.blog.description,
-          url: `${SITE_URL}blog/${props.blog.slug}`,
+          url: articleUrl,
           type: "article",
           article: {
             //
@@ -354,10 +365,22 @@ export default function BlogPostPage(props: Props) {
           },
           images: [
             {
-              url: `${SITE_URL}${basePath}/images/blog/${props.blog.thumb}`,
+              url: imageUrl,
             },
           ],
         }}
+      />
+      <ArticleJsonLd
+        type="BlogPosting"
+        url={articleUrl}
+        title={title}
+        images={[imageUrl]}
+        datePublished={props.blog.date}
+        dateModified={props.blog.updated_at ?? props.blog.modified}
+        authorName={[{ name: authorName, url: authorUrl }]}
+        publisherName={APP_NAME}
+        publisherLogo={`${SITE_URL}images/logo-2.png`}
+        description={props.blog.description}
       />
       <div className="mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
         <div className="grid grid-cols-1 gap-6 gap-y-12 lg:grid-cols-4">
