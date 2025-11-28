@@ -48,6 +48,7 @@ import {
 } from "../../../../../components/blog/cta";
 import { AddToCursor } from "components/blog/cta/AddToCursor";
 import { TestimonialCTA } from "components/blog/cta/TestimonialCTA";
+import { QA } from "../../../../../components/blog/QA";
 
 export async function getStaticPaths() {
   const paths = getAllPostSlugs();
@@ -308,6 +309,9 @@ const mdxComponents: MDXRemoteProps["components"] = {
   },
   TestimonialCTA: (props) => {
     return <TestimonialCTA {...props} />;
+  },
+  QA: (props) => {
+    return <QA {...props} />;
   },
 };
 
