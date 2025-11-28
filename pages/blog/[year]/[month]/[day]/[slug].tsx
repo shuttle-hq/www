@@ -44,6 +44,7 @@ import {
   GenericCTA,
   SourceCodeCTA,
   DiscordCTA,
+  ShellConCTA,
 } from "../../../../../components/blog/cta";
 import { AddToCursor } from "components/blog/cta/AddToCursor";
 import { TestimonialCTA } from "components/blog/cta/TestimonialCTA";
@@ -308,6 +309,9 @@ const mdxComponents: MDXRemoteProps["components"] = {
   },
   QA: (props) => {
     return <QA {...props} />;
+  },
+  ShellConCTA: () => {
+    return <ShellConCTA />;
   },
 };
 
