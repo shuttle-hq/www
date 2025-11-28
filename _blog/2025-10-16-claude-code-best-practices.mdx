@@ -208,3 +208,46 @@ Try these practices with Shuttle's AI-assisted template:
 ```bash
 shuttle init --from shuttle-hq/shuttle-examples --subfolder axum/ai-assisted
 ```
+
+## Frequently Asked Questions
+
+<QA question="How often should I clear my context in Claude Code?">
+  Clear context after every 1-3 messages using the `/clear` command. This
+  prevents context bloat and keeps Claude focused on current tasks rather than
+  being confused by accumulated noise from previous interactions.
+</QA>
+
+<QA question="What should I include in my CLAUDE.md file?">
+  Keep it under 100 lines and focus on project-specific patterns, architectural
+  decisions, coding standards, naming conventions, and non-obvious relationships
+  between components. Avoid generic information - only include what Claude needs
+  to make intelligent decisions about your specific codebase.
+</QA>
+
+<QA question="Why should I turn off auto-compact?">
+  Auto-compact can consume 40k+ tokens (over 20% of your context window) with
+  old context from previous sessions. You have no control over what's included,
+  and it may contain outdated or irrelevant information. CLAUDE.md files and
+  plan files give you explicit control over context quality.
+</QA>
+
+<QA question="What's the best model for planning vs implementation?">
+  Use Gemini 2.5 Pro for planning and context gathering - it handles complex
+  codebase analysis well and is more token-efficient for research tasks. Use
+  Claude Code (Sonnet 4.5) for implementation where its coding capabilities
+  shine.
+</QA>
+
+<QA question="How do MCP servers affect Claude Code performance?">
+  Each MCP server consumes 4-10k tokens just to explain its capabilities, even
+  when not being used. Toggle off unused servers with `@servername` or remove
+  them entirely. Use project-scoped MCP servers instead of global ones so they
+  only load when relevant.
+</QA>
+
+<QA question="What's the difference between built-in planning mode and spec-driven development?">
+  Built-in planning mode is convenient but gives you less control. Spec-driven
+  development with a single plan file (containing spec, plan, tasks, and
+  context) lets you use a separate model for research, maintain the plan across
+  sessions, and start Claude Code with clean, focused context.
+</QA>
