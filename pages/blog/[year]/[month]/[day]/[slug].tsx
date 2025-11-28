@@ -36,7 +36,6 @@ import { Pre } from "components/blog/Pre";
 import MastodonLogo from "components/svgs/MastodonLogo";
 import HNLogo from "components/svgs/HNLogo";
 import { trackEvent } from "lib/posthog";
-import { BlogFAQ } from "../../../../../components/blog/BlogFAQ";
 import { NewConsoleCTA } from "../../../../../components/blog/NewConsoleCTA";
 import { MainTakeaways } from "../../../../../components/blog/MainTakeaways";
 import { ExpandableImage } from "../../../../../components/blog/ExpandableImage";
@@ -279,9 +278,6 @@ const mdxComponents: MDXRemoteProps["components"] = {
         </div>
       </blockquote>
     );
-  },
-  BlogFAQ: (props) => {
-    return <BlogFAQ {...props} />;
   },
   NewConsoleCTA: (props) => {
     return <NewConsoleCTA {...props} />;

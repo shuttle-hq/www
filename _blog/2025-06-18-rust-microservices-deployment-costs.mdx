@@ -672,46 +672,39 @@ Using **Shuttle** can make microservice deployment easier. Without having to dea
 
 This makes development easier and much faster, putting you ahead of the curve. You can focus on **shipping** rather than **managing infrastructure**.
 
----
+## Frequently Asked Questions
 
-<BlogFAQ
-  title="Frequently Asked Questions"
-  items={[
-    {
-      question: "Is Rust a good choice for building microservices?",
-      answer:
-        "Yes. Rust offers high performance, memory safety, and a powerful async ecosystem, making it ideal for backend services that require speed and reliability.",
-    },
-    {
-      question: "How do microservices communicate with each other in Rust?",
-      answer:
-        "Most Rust microservices use HTTP APIs (via frameworks like Axum) or gRPC. Communication is typically secured with SSL/TLS and authorization tokens.",
-    },
-    {
-      question: "How does Shuttle simplify Rust microservice deployment?",
-      answer:
-        "Shuttle handles provisioning, secret management, and deployment automatically. You define infrastructure with macros in your Rust code and deploy using the Shuttle CLI.",
-    },
-    {
-      question: "What's the best way to manage secrets across microservices?",
-      answer:
-        "Use a secure secret management system. Shuttle simplifies this by letting you define secrets in a Secrets.toml file and injecting them into your app with the shuttle_runtime::Secrets macro.",
-    },
-    {
-      question:
-        "How can I practice deploying and debugging Rust microservices?",
-      answer:
-        "Try the <a href='https://github.com/shuttle-hq/shuttle-shellcon' target='_blank'>ShellCon Challenge</a>. It's a hands-on Rust app with multiple services (Axum, SQLx, async) that you fix and deploy using Shuttle.",
-    },
-    {
-      question: "What happens if one microservice fails?",
-      answer:
-        "In a well-designed system, other services continue running. You should implement retry logic, circuit breakers, and graceful degradation to improve overall system resilience.",
-    },
-    {
-      question: "Should I start with microservices or a monolith?",
-      answer:
-        "Start with a well-structured monolith and break it into microservices as scaling or modularity becomes a bottleneck. Premature microservice adoption adds unnecessary complexity.",
-    },
-  ]}
+<QA
+  question="Is Rust a good choice for building microservices?"
+  answer="Yes. Rust offers high performance, memory safety, and a powerful async ecosystem, making it ideal for backend services that require speed and reliability."
+/>
+
+<QA
+  question="How do microservices communicate with each other in Rust?"
+  answer="Most Rust microservices use HTTP APIs (via frameworks like Axum) or gRPC. Communication is typically secured with SSL/TLS and authorization tokens."
+/>
+
+<QA
+  question="How does Shuttle simplify Rust microservice deployment?"
+  answer="Shuttle handles provisioning, secret management, and deployment automatically. You define infrastructure with macros in your Rust code and deploy using the Shuttle CLI."
+/>
+
+<QA
+  question="What's the best way to manage secrets across microservices?"
+  answer="Use a secure secret management system. Shuttle simplifies this by letting you define secrets in a Secrets.toml file and injecting them into your app with the shuttle_runtime::Secrets macro."
+/>
+
+<QA
+  question="How can I practice deploying and debugging Rust microservices?"
+  answer="Try the ShellCon Challenge (https://github.com/shuttle-hq/shuttle-shellcon). It's a hands-on Rust app with multiple services (Axum, SQLx, async) that you fix and deploy using Shuttle."
+/>
+
+<QA
+  question="What happens if one microservice fails?"
+  answer="In a well-designed system, other services continue running. You should implement retry logic, circuit breakers, and graceful degradation to improve overall system resilience."
+/>
+
+<QA
+  question="Should I start with microservices or a monolith?"
+  answer="Start with a well-structured monolith and break it into microservices as scaling or modularity becomes a bottleneck. Premature microservice adoption adds unnecessary complexity."
 />

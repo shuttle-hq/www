@@ -673,35 +673,29 @@ We've built **ShellCon**, a real-world Rust microservices onboarding challenge w
 
 👉 [**Start the ShellCon Challenge**](https://github.com/shuttle-hq/shuttle-shellcon)
 
----
+## Frequently Asked Questions
 
-<BlogFAQ
-  title="Frequently Asked Questions"
-  items={[
-    {
-      question: "What is the difference between Axum and Actix Web?",
-      answer:
-        "Axum is built by the Tokio team and integrates deeply with the Tower middleware ecosystem, focusing on modularity and composability. Actix Web uses the actor model and has its own mature middleware system. Both are fast and production-ready, but Axum's design philosophy is often preferred for its simplicity and tight integration with Tokio.",
-    },
-    {
-      question: "Is Axum ready for production?",
-      answer:
-        "Yes, absolutely. Axum is stable, widely used in the community, and backed by the Tokio team, making it a reliable choice for production workloads.",
-    },
-    {
-      question: "How does Axum handle middleware?",
-      answer:
-        "Axum uses `tower::Service` and `tower::Layer` for its middleware system. This means you can leverage the entire rich ecosystem of Tower and `tower-http` crates for things like tracing, compression, authentication, and rate-limiting without waiting for an Axum-specific implementation.",
-    },
-    {
-      question: "What is the best way to handle errors in Axum?",
-      answer:
-        "The best practice is to create a custom error enum for your application that implements Axum's `IntoResponse` trait. This allows you to map different error variants into specific HTTP status codes and error responses, providing a clean and centralized error handling mechanism with a predictable error handling model.",
-    },
-    {
-      question: "Can I use Axum with async-graphql?",
-      answer:
-        "Yes. The `async-graphql` crate has excellent support for Axum. You can easily integrate a GraphQL endpoint into your Axum router, allowing you to build powerful GraphQL APIs alongside your REST endpoints.",
-    },
-  ]}
+<QA
+  question="What is the difference between Axum and Actix Web?"
+  answer="Axum is built by the Tokio team and integrates deeply with the Tower middleware ecosystem, focusing on modularity and composability. Actix Web uses the actor model and has its own mature middleware system. Both are fast and production-ready, but Axum's design philosophy is often preferred for its simplicity and tight integration with Tokio."
+/>
+
+<QA
+  question="Is Axum ready for production?"
+  answer="Yes, absolutely. Axum is stable, widely used in the community, and backed by the Tokio team, making it a reliable choice for production workloads."
+/>
+
+<QA
+  question="How does Axum handle middleware?"
+  answer="Axum uses tower::Service and tower::Layer for its middleware system. This means you can leverage the entire rich ecosystem of Tower and tower-http crates for things like tracing, compression, authentication, and rate-limiting without waiting for an Axum-specific implementation."
+/>
+
+<QA
+  question="What is the best way to handle errors in Axum?"
+  answer="The best practice is to create a custom error enum for your application that implements Axum's IntoResponse trait. This allows you to map different error variants into specific HTTP status codes and error responses, providing a clean and centralized error handling mechanism with a predictable error handling model."
+/>
+
+<QA
+  question="Can I use Axum with async-graphql?"
+  answer="Yes. The async-graphql crate has excellent support for Axum. You can easily integrate a GraphQL endpoint into your Axum router, allowing you to build powerful GraphQL APIs alongside your REST endpoints."
 />
