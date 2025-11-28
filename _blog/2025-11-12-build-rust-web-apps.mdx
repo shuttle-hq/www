@@ -187,3 +187,30 @@ shuttle init --template axum
 ```
 
 This single command scaffolds a working Axum application with a proper project structure. From there, you're minutes away from a deployed web service. You can then implement your business logic and create the features your application needs.
+
+## Frequently Asked Questions
+
+<QA
+  question="What is the best Rust web framework for beginners?"
+  answer="Axum is recommended for beginners because it produces fewer arcane compiler errors and uses common ecosystem crates. The learning curve is gentler compared to alternatives like Actix Web, and you'll spend less time fighting the type system."
+/>
+
+<QA
+  question="Should I use async or sync for my Rust web application?"
+  answer="Not always async. If your application is compute-heavy rather than I/O-bound, a synchronous framework like Rouille might be simpler and just as fast. Context switching costs are measured in nanoseconds, so async overhead may not be worth it for all use cases."
+/>
+
+<QA
+  question="Is Rust WASM ready for production frontend development?"
+  answer="Backend frameworks are mature and production-ready, but frontend WASM frameworks like Yew and Perseus are still maturing. For production applications today, consider using React, Vue, or Svelte for your frontend while leveraging Rust's strengths on the backend."
+/>
+
+<QA
+  question="What database library should I use with Rust?"
+  answer="SQLx is the pragmatic choice. It lets you write direct SQL rather than wrestling with ORM abstractions, provides optional compile-time query verification, and supports PostgreSQL, MySQL, and SQLite. If you prefer ORMs, SeaORM and Diesel are solid options."
+/>
+
+<QA
+  question="How do I deploy a Rust web application?"
+  answer="Shuttle is the easiest choice for Rust web apps. Add a macro to your main function, run 'shuttle deploy', and everything is handled: SSL certs, database provisioning, and deployment. It offers a generous free tier and works with any Rust web framework."
+/>
