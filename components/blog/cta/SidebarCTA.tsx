@@ -1,9 +1,11 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { trackEvent } from "lib/posthog";
 import Link from "next/link";
 
 export function SidebarCTA() {
+  const pathname = usePathname();
   return (
     <div className="relative overflow-hidden rounded-3xl border border-[#FC540C]/30 bg-gradient-to-br from-[#FC540C]/10 via-[rgba(255,215,111,0.08)] to-[#38D4E9]/10 p-6">
       <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-[#FC540C]/20 blur-3xl" />
@@ -25,7 +27,7 @@ export function SidebarCTA() {
 
         <Link
           href="https://console.shuttle.dev/templates?utm_source=blog&utm_medium=sidebar&utm_campaign=blog_cta_sidebar"
-          onClick={() => trackEvent("blog_cta_sidebar")}
+          onClick={() => trackEvent("blog_cta_sidebar", { page: pathname })}
           target="_blank"
           rel="noopener noreferrer"
           className="group mt-2 flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#FC540C] to-[#FFD76F] px-4 py-2.5 text-sm font-semibold text-black transition-all duration-300 hover:shadow-lg hover:shadow-[#FC540C]/25"

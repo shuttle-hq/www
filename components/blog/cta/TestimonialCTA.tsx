@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import React from "react";
+import { usePathname } from "next/navigation";
 import { trackEvent } from "lib/posthog";
 import { CTAButton } from "./CTAButton";
 
@@ -34,6 +37,7 @@ export const TestimonialCTA: React.FC<TestimonialCTAProps> = ({
   className = "",
   eventName = "blog_cta_testimonial",
 }) => {
+  const pathname = usePathname();
   return (
     <div
       className={`flex flex-col lg:flex-row lg:justify-between relative overflow-hidden rounded-3xl bg-[#0F0F0F] border border-white/5 p-5 sm:p-7 gap-6 lg:gap-4 ${className}`}
@@ -58,7 +62,7 @@ export const TestimonialCTA: React.FC<TestimonialCTAProps> = ({
         <CTAButton
           href={href}
           onClick={() => {
-            trackEvent(eventName);
+            trackEvent(eventName, { page: pathname });
           }}
           className="hidden lg:inline-flex w-max"
         >
@@ -90,7 +94,7 @@ export const TestimonialCTA: React.FC<TestimonialCTAProps> = ({
       <CTAButton
         href={href}
         onClick={() => {
-          trackEvent(eventName);
+          trackEvent(eventName, { page: pathname });
         }}
         className="lg:hidden"
       >
