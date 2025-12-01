@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { trackEvent } from "lib/posthog";
 import { CTAButton } from "./CTAButton";
 
@@ -18,6 +19,7 @@ export function DiscordCTA({
   eventName = "blog_cta_discord",
   className = "",
 }: DiscordCTAProps) {
+  const pathname = usePathname();
   return (
     <div
       className={`group relative overflow-hidden rounded-xl bg-[#151515] hover:bg-[#1a1a1a] border border-white/5 transition-colors duration-500 p-5 sm:px-4 sm:py-0 my-6 ${className}`}
@@ -52,7 +54,7 @@ export function DiscordCTA({
           <CTAButton
             href={href}
             onClick={() => {
-              trackEvent(eventName);
+              trackEvent(eventName, { page: pathname });
             }}
           >
             Join

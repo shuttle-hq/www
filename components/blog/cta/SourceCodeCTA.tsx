@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { trackEvent } from "lib/posthog";
 import { CTAButton } from "./CTAButton";
 
@@ -18,6 +19,7 @@ export const SourceCodeCTA = ({
   repo = "#",
   eventName = "blog_cta_view_source_code",
 }: SourceCodeCTAProps) => {
+  const pathname = usePathname();
   return (
     <div className="group relative overflow-hidden rounded-xl bg-[#151515] hover:bg-[#1a1a1a] border border-white/5 transition-colors duration-500 px-4 my-6 flex items-center gap-6">
       <div className="flex-shrink-0">
@@ -45,7 +47,7 @@ export const SourceCodeCTA = ({
         <CTAButton
           href={`https://www.github.com/${repo}`}
           onClick={() => {
-            trackEvent(eventName);
+            trackEvent(eventName, { page: pathname });
           }}
           className="bg-[#010409]/90 hover:bg-[#010409] text-white gap-2"
         >
