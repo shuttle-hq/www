@@ -453,6 +453,15 @@ body.dark {
     color: #494949;
   }
 
+  /* Hide scrollbar utility */
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Custom Shuttle-themed scrollbars for code blocks */
   .shuttle-scrollbar::-webkit-scrollbar {
     width: 8px;
