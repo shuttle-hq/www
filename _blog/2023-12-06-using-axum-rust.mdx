@@ -14,13 +14,17 @@ With so many backend web frameworks in the Rust web ecosystem, it's difficult to
 What makes Axum stand out in the Rust programming landscape is its macro free api design, predictable error handling model, and own middleware system built on Tower. Whether you're building a single route handler or a complex API, Axum's design minimizes boilerplate while giving you full control.
 
 <TLDR>
-  - **Routing & Handlers**: Define routes with `axum::Router` and write async
-  handler functions. - **State Management**: Share state (like a database pool)
-  safely using `axum::extract::State` with `std::sync::Arc`. - **Middleware**:
-  Leverage the entire `tower` and `tower-http` ecosystem for powerful, reusable
-  middleware. - **Testing**: Test your handlers directly and efficiently without
-  a running server using `tower::ServiceExt`. - **Deployment**: Deploy easily
-  with tools like Shuttle, abstracting away Docker and complex infrastructure.
+
+- **Routing & Handlers**: Define routes with `axum::Router` and write async handler functions.
+
+- **State Management**: Share state (like a database pool) safely using `axum::extract::State` with `std::sync::Arc`.
+
+- **Middleware**: Leverage the entire `tower` and `tower-http` ecosystem for powerful, reusable middleware.
+
+- **Testing**: Test your handlers directly and efficiently without a running server using `tower::ServiceExt`.
+
+- **Deployment**: Deploy easily with tools like Shuttle, abstracting away Docker and complex infrastructure.
+
 </TLDR>
 
 <ShellConCTA />
