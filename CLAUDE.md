@@ -69,6 +69,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Reusable call-to-action components for blog posts located in `/components/blog/cta/`:
 
 - **DiscordCTA**: Encourages joining the Shuttle Discord community
+- **QA**: Collapsible Q&A component for inline questions/answers
 
 All CTA components:
 
@@ -78,6 +79,15 @@ All CTA components:
 - Are exported from `@components/blog/cta/index.ts` for easy import
 - **Must be registered** in `/pages/blog/[year]/[month]/[day]/[slug].tsx` mdxComponents object to be usable in MDX files
 - **Event names for the blog CTAs inside the `components/blog/cta/` directory must start with `blog_cta_`** for consistent analytics tracking (e.g., `blog_cta_discord`, `blog_cta_testimonial`)
+
+**QA Component Usage:**
+
+```mdx
+<QA question="What is Rust?" answer="A systems programming language." />
+<QA question="Why use Shuttle?" defaultOpen={true}>
+  Rich content with **markdown** support goes here.
+</QA>
+```
 
 ### Styling System
 

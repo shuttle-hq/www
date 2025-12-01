@@ -20,19 +20,7 @@ Microservices promise speed, scale, and team autonomy. But once you deploy more 
 
 In this article, we'll explore the hidden operational costs of microservices, especially for Rust developers. You'll see how Shuttle's dev-first approach simplifies the provisioning and deployment journey, and we'll even give you a real microservices challenge to try yourself.
 
-> **Want to try it yourself?**
->
-> We've built **ShellCon**, a real-world Rust microservices onboarding challenge where you:
->
-> - Debug and deploy 3 broken services (Axum + SQLx + async Rust)
-> - Connect them to a frontend that only works when everything is fixed
-> - Use **Shuttle** to provision, deploy, and manage the full stack: no YAML or Kubernetes needed
->
-> 🎯 Perfect for Rust devs who want to learn by doing.
->
-> &nbsp;
->
-> 👉 [Start the ShellCon Challenge](https://github.com/shuttle-hq/shuttle-shellcon)
+<ShellConCTA />
 
 We'll end the blog post with a special challenge for Rust developers for building Rust microservices at scale with ease. The challenge is designed to be fun and at the same time demonstrate microservice provisioning and deploying multiple microservices while using best practices.
 
@@ -106,13 +94,7 @@ Database provisioning, backup strategies, monitoring, and maintenance must be re
 
 The more services you have, the more secrets and configurations you need to manage. Without proper tooling for managing secrets and configurations, this becomes extremely difficult to manage.
 
-> **Ready to experience these challenges for yourself?**
->
-> We've built an interactive onboarding challenge using **Rust** and **Shuttle** called **ShellCon**. You'll debug and optimize 3 microservices to make the frontend app work, including async Rust code, Axum HTTP routes, and SQL queries.
->
-> &nbsp;
->
-> 👉 [Start the ShellCon Challenge](https://github.com/shuttle-hq/shuttle-shellcon)
+<ShellConCTA />
 
 ## How Microservices Are Typically Deployed
 
@@ -654,13 +636,7 @@ Comparing this approach with the traditional approach, we can see that we no lon
 
 <DiscordCTA />
 
-## Ready to Try It Yourself? Build Microservices with Rust & Shuttle
-
-Now that you have everything you need to build Rust microservices with **Shuttle**, **we have a challenge for you**, in this challenge we put everything we learned together to build a simple microservices architecture application.
-
-The challenge is designed to be fun and at the same time improve your skills and knowledge of building Rust microservices.
-
-The challenge is available on [GitHub](https://github.com/shuttle-hq/shuttle-shellcon), you can clone the repository and follow the instructions to complete the challenge.
+<ShellConCTA />
 
 ## Conclusion
 
@@ -672,46 +648,39 @@ Using **Shuttle** can make microservice deployment easier. Without having to dea
 
 This makes development easier and much faster, putting you ahead of the curve. You can focus on **shipping** rather than **managing infrastructure**.
 
----
+## Frequently Asked Questions
 
-<BlogFAQ
-  title="Frequently Asked Questions"
-  items={[
-    {
-      question: "Is Rust a good choice for building microservices?",
-      answer:
-        "Yes. Rust offers high performance, memory safety, and a powerful async ecosystem, making it ideal for backend services that require speed and reliability.",
-    },
-    {
-      question: "How do microservices communicate with each other in Rust?",
-      answer:
-        "Most Rust microservices use HTTP APIs (via frameworks like Axum) or gRPC. Communication is typically secured with SSL/TLS and authorization tokens.",
-    },
-    {
-      question: "How does Shuttle simplify Rust microservice deployment?",
-      answer:
-        "Shuttle handles provisioning, secret management, and deployment automatically. You define infrastructure with macros in your Rust code and deploy using the Shuttle CLI.",
-    },
-    {
-      question: "What's the best way to manage secrets across microservices?",
-      answer:
-        "Use a secure secret management system. Shuttle simplifies this by letting you define secrets in a Secrets.toml file and injecting them into your app with the shuttle_runtime::Secrets macro.",
-    },
-    {
-      question:
-        "How can I practice deploying and debugging Rust microservices?",
-      answer:
-        "Try the <a href='https://github.com/shuttle-hq/shuttle-shellcon' target='_blank'>ShellCon Challenge</a>. It's a hands-on Rust app with multiple services (Axum, SQLx, async) that you fix and deploy using Shuttle.",
-    },
-    {
-      question: "What happens if one microservice fails?",
-      answer:
-        "In a well-designed system, other services continue running. You should implement retry logic, circuit breakers, and graceful degradation to improve overall system resilience.",
-    },
-    {
-      question: "Should I start with microservices or a monolith?",
-      answer:
-        "Start with a well-structured monolith and break it into microservices as scaling or modularity becomes a bottleneck. Premature microservice adoption adds unnecessary complexity.",
-    },
-  ]}
+<QA
+  question="Is Rust a good choice for building microservices?"
+  answer="Yes. Rust offers high performance, memory safety, and a powerful async ecosystem, making it ideal for backend services that require speed and reliability."
+/>
+
+<QA
+  question="How do microservices communicate with each other in Rust?"
+  answer="Most Rust microservices use HTTP APIs (via frameworks like Axum) or gRPC. Communication is typically secured with SSL/TLS and authorization tokens."
+/>
+
+<QA
+  question="How does Shuttle simplify Rust microservice deployment?"
+  answer="Shuttle handles provisioning, secret management, and deployment automatically. You define infrastructure with macros in your Rust code and deploy using the Shuttle CLI."
+/>
+
+<QA
+  question="What's the best way to manage secrets across microservices?"
+  answer="Use a secure secret management system. Shuttle simplifies this by letting you define secrets in a Secrets.toml file and injecting them into your app with the shuttle_runtime::Secrets macro."
+/>
+
+<QA
+  question="How can I practice deploying and debugging Rust microservices?"
+  answer="Try the ShellCon Challenge (https://github.com/shuttle-hq/shuttle-shellcon). It's a hands-on Rust app with multiple services (Axum, SQLx, async) that you fix and deploy using Shuttle."
+/>
+
+<QA
+  question="What happens if one microservice fails?"
+  answer="In a well-designed system, other services continue running. You should implement retry logic, circuit breakers, and graceful degradation to improve overall system resilience."
+/>
+
+<QA
+  question="Should I start with microservices or a monolith?"
+  answer="Start with a well-structured monolith and break it into microservices as scaling or modularity becomes a bottleneck. Premature microservice adoption adds unnecessary complexity."
 />
