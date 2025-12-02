@@ -10,7 +10,7 @@ date: "2025-12-02"
 
 Anthropic recently released [Claude Agent Skills](https://www.anthropic.com/news/agent-skills), and there's been a lot of confusion around what they actually are. I was confused at first too. At first glance it looks like we already have a way to do what Skills do. We already have `CLAUDE.md` files, MCP servers, and custom commands that help AI agents work the way we want them to.
 
-Unlike traditional AI assistants that require constant re-prompting, Claude skills let you upload specialized knowledge once and have it activate automatically whenever it's relevant. Your prompts become portable across conversations and projects, a significant improvement for software development workflows.
+Unlike traditional AI assistants that require constant re-prompting, Claude skills let you upload specialized expertise or knowledge once and have it activate automatically whenever it's relevant. Your prompts become portable across conversations and projects, a significant improvement for software development workflows.
 
 In this blog post, I'll explain what Claude skills are, how they differ from existing features, and then we'll build a practical one together: a Shuttle deployment skill that helps Claude scaffold and deploy Rust projects correctly.
 
@@ -51,7 +51,7 @@ Traditional approaches to customization load everything upfront. Skills take the
 
 ### Powerful
 
-Sometimes you don't want Claude generating code. You want it running deterministic scripts that do exactly what you need. Skills can include specialized tools in the form of Python and bash scripts that Claude can execute tasks with, giving you a hybrid of AI flexibility and programmatic precision.
+Sometimes you don't want Claude generating code. You want it running deterministic scripts that do exactly what you need. Skills can include specialized tools in the form of Python and bash scripts that Claude can execute for specific tasks, giving you a hybrid of AI flexibility and programmatic precision.
 
 ## Claude Skills vs AI Agents and AI Assistants
 
