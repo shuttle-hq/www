@@ -63,6 +63,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Table of contents and reading time calculated automatically
 - RSS feed generated at `/api/rss`
 - **Blog images must be placed in `/public/images/blog/` directory matching the path specified in the blog post frontmatter** (e.g., if frontmatter has `cover: infrastructure-as-code-problems/cover.png`, the image should be at `/public/images/blog/infrastructure-as-code-problems/cover.png`)
+- **Reference images in MDX using `<CaptionedImage src="/images/blog/{slug}/{filename}" alt="..." caption="..." />`** (e.g., `<CaptionedImage src="/images/blog/build-rust-app-claude-opus-4.5/benchmarks.png" alt="..." caption="..." />`)
 
 ### Blog CTA Components
 
