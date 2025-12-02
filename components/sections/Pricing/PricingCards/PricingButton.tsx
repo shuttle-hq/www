@@ -1,12 +1,14 @@
 import React from "react";
 import clsx from "clsx";
 import CustomButton from "../../../elements/CustomButton";
+import { trackEvent } from "lib/posthog";
 
 interface PricingButtonProps {
   text: string;
   variant?: "default" | "highlight";
   collapsed?: boolean;
   href?: string;
+  eventName?: string;
 }
 
 export const PricingButton: React.FC<PricingButtonProps> = ({
@@ -14,7 +16,14 @@ export const PricingButton: React.FC<PricingButtonProps> = ({
   variant = "default",
   collapsed,
   href,
+  eventName,
 }) => {
+  const handleClick = () => {
+    if (eventName) {
+      trackEvent(eventName);
+    }
+  };
+
   return (
     <CustomButton
       href={href}
@@ -23,6 +32,7 @@ export const PricingButton: React.FC<PricingButtonProps> = ({
         "xl:mt-4": collapsed,
         "xl:mt-8": !collapsed,
       })}
+      onClick={handleClick}
     >
       {text}
     </CustomButton>
