@@ -46,6 +46,7 @@ import {
   SourceCodeCTA,
   DiscordCTA,
   ShellConCTA,
+  DownloadSkillCTA,
 } from "../../../../../components/blog/cta";
 import { AddToCursor } from "components/blog/cta/AddToCursor";
 import { TestimonialCTA } from "components/blog/cta/TestimonialCTA";
@@ -313,6 +314,9 @@ const mdxComponents: MDXRemoteProps["components"] = {
   },
   ShellConCTA: () => {
     return <ShellConCTA />;
+  },
+  DownloadSkillCTA: (props) => {
+    return <DownloadSkillCTA {...props} />;
   },
 };
 
