@@ -5,3 +5,4 @@ export * from "./TestimonialCTA";
 export * from "./AddToCursor";
 export * from "./SidebarCTA";
 export * from "./ShellConCTA";
+export * from "./DownloadSkillCTA";
