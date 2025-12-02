@@ -131,6 +131,7 @@ const Plan: FC<PlanProps> = ({
       <button
         onMouseEnter={() => setButtonHovered(true)}
         onMouseLeave={() => setButtonHovered(false)}
+        onClick={() => trackEvent(`pricing_tiers_${name.toLowerCase()}`)}
         className={clsx(
           name === "Pro"
             ? " text-black hover:text-white"
@@ -140,19 +141,14 @@ const Plan: FC<PlanProps> = ({
         style={{
           background:
             (name === "Pro" && !buttonHovered) ||
-              (name !== "Pro" && buttonHovered)
+            (name !== "Pro" && buttonHovered)
               ? "linear-gradient(73deg, #FC540C -7.95%, rgba(255, 215, 111, 0.72) 45.94%, #38D4E9 116.73%)"
               : name === "Pro" && buttonHovered
                 ? "linear-gradient(70deg, #FC540C 34.41%, rgba(255, 215, 111, 0.72) 93.53%, #38D4E9 118.82%)"
                 : "",
         }}
       >
-        <Link
-          href={url}
-          target="_blank"
-          className="inline-block h-full w-full"
-          eventName={`pricing_tiers_${name.toLowerCase()}`}
-        >
+        <Link href={url} target="_blank" className="inline-block h-full w-full">
           {cta}
         </Link>
       </button>
