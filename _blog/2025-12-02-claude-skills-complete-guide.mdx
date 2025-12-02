@@ -114,7 +114,11 @@ This means you can literally tell Claude "create a skill for X" and it will load
 
 To make sure it's enabled, go to Settings → Capabilities and verify that `skill-creator` is turned on:
 
-![Enabling the skill-creator in Claude settings](./images/skill-creator-on.png)
+<CaptionedImage
+  src="/images/blog/claude-agent-skills/skill-creator-on.png"
+  alt="Enabling the skill-creator in Claude settings"
+  caption="Enabling the skill-creator in Claude settings"
+/>
 
 Once enabled, you can ask Claude to create any skill you need, and it'll handle the entire process - from structuring the folder to writing the `SKILL.md` content with proper headers, activation patterns, and instructions.
 
@@ -122,23 +126,43 @@ Once enabled, you can ask Claude to create any skill you need, and it'll handle 
 
 Let's put the skill-creator to work. I gave Claude a simple prompt: "Create a skill for the Shuttle Rust hosting platform."
 
-![Prompting Claude to create a Shuttle skill](./images/skill-creator-prompt.png)
+<CaptionedImage
+  src="/images/blog/claude-agent-skills/skill-creator-prompt.png"
+  alt="Prompting Claude to create a Shuttle skill"
+  caption="Prompting Claude to create a Shuttle skill"
+/>
 
 Claude loads the `skill-creator` skill and starts reading its content to understand how to build a proper skill:
 
-![Claude reading the skill-creator guide](./images/read-skill-creator.png)
+<CaptionedImage
+  src="/images/blog/claude-agent-skills/read-skill-creator.png"
+  alt="Claude reading the skill-creator guide"
+  caption="Claude reading the skill-creator guide"
+/>
 
 Then it gets to work, creating the skill structure and gathering context about Shuttle's patterns:
 
-![Claude collecting context for the skill](./images/claude-collect-context.png)
+<CaptionedImage
+  src="/images/blog/claude-agent-skills/claude-collect-context.png"
+  alt="Claude collecting context for the skill"
+  caption="Claude collecting context for the skill"
+/>
 
 The first version was functional but verbose. I gave it more comprehensive knowledge about Shuttle's macros, resource annotations, and configuration format, then asked it to make the content more concise. The `skill-creator` helped refine it into something practical:
 
-![Changes made to improve the skill](./images/next-iteration.png)
+<CaptionedImage
+  src="/images/blog/claude-agent-skills/next-iteration.png"
+  alt="Changes made to improve the skill"
+  caption="Changes made to improve the skill"
+/>
 
 The result is a focused skill that covers the essential patterns developers need when working with Shuttle - proper macro usage, resource provisioning, and project configuration:
 
-![The completed Shuttle skill](./images/skill-created.png)
+<CaptionedImage
+  src="/images/blog/claude-agent-skills/skill-created.png"
+  alt="The completed Shuttle skill"
+  caption="The completed Shuttle skill"
+/>
 
 The skill now knows about `#[shuttle_runtime::main]`, how to use database macros like `#[shuttle_shared_db::Postgres]`, and the correct `Shuttle.toml` configuration format. When I ask Claude to scaffold or deploy a Shuttle project, it'll activate this skill and use these patterns automatically.
 
@@ -150,7 +174,11 @@ You can press the Download button to get the skill as a zip file, then load it i
 
 After downloading the skill, I created a project directory and unzipped it. The skill extracted into a clean structure:
 
-![Unzipping the Shuttle skill](./images/unzip-shuttle-skill.png)
+<CaptionedImage
+  src="/images/blog/claude-agent-skills/unzip-shuttle-skill.png"
+  alt="Unzipping the Shuttle skill"
+  caption="Unzipping the Shuttle skill"
+/>
 
 The `shuttle` skill that Claude created includes (you can add more files according to your needs):
 
@@ -162,7 +190,11 @@ This modular structure means Claude only loads the framework examples or custom 
 
 To install it, move the unzipped folder to `.claude/skills/`. In my case, I placed it at `.claude/skills/shuttle`.
 
-![Skill installed in the .claude/skills directory](./images/skill-structure.png)
+<CaptionedImage
+  src="/images/blog/claude-agent-skills/skill-structure.png"
+  alt="Skill installed in the .claude/skills directory"
+  caption="Skill installed in the .claude/skills directory"
+/>
 
 Once the skill is in the right location, Claude Code detects it automatically:
 
@@ -173,23 +205,39 @@ Once the skill is in the right location, Claude Code detects it automatically:
 
 Let's see the skill in action. I started a new Claude Code session and gave it a straightforward prompt: "Use the Shuttle Skill to build a todo list app with a postgres database and sqlx and deploy to Shuttle."
 
-![Prompting Claude to build and deploy a Shuttle app](./images/shuttle-app-prompt.png)
+<CaptionedImage
+  src="/images/blog/claude-agent-skills/shuttle-app-prompt.png"
+  alt="Prompting Claude to build and deploy a Shuttle app"
+  caption="Prompting Claude to build and deploy a Shuttle app"
+/>
 
 In this case, I had to explicitly ask Claude to use the Shuttle skill. While skills are designed to activate automatically based on context, Claude doesn't always detect them on the first try and it's actually a bit conservative by default. Sometimes you need to be explicit about which skill to use.
 
 When you reference a skill, Claude Code asks for permission to read it:
 
-![Claude Code requesting permission to use the Shuttle skill](./images/use-skill.png)
+<CaptionedImage
+  src="/images/blog/claude-agent-skills/use-skill.png"
+  alt="Claude Code requesting permission to use the Shuttle skill"
+  caption="Claude Code requesting permission to use the Shuttle skill"
+/>
 
 These permission prompts are part of the security measures built into Claude Code. The agent won't read files or execute scripts without your approval. After accepting, Claude has full context on how to use Shuttle: the correct macros, resource annotations, project structure, and deployment patterns.
 
-![Claude Code building the todo application](./images/claude-coding.png)
+<CaptionedImage
+  src="/images/blog/claude-agent-skills/claude-coding.png"
+  alt="Claude Code building the todo application"
+  caption="Claude Code building the todo application"
+/>
 
 Claude breaks down the task into clear steps, from setting up dependencies and migrations to implementing CRUD endpoints and deploying. Each step follows the patterns from the skill.
 
 After the build succeeded, Claude deployed the application to Shuttle:
 
-![Deploying the todo application to Shuttle](./images/deploy.png)
+<CaptionedImage
+  src="/images/blog/claude-agent-skills/deploy.png"
+  alt="Deploying the todo application to Shuttle"
+  caption="Deploying the todo application to Shuttle"
+/>
 
 ## Conclusion
 
