@@ -13,6 +13,7 @@ export interface PricingCardProps {
   href: string;
   icon: React.ComponentType<any>;
   collapsed?: boolean;
+  eventName?: string;
 }
 
 export const PricingCard: React.FC<PricingCardProps> = ({
@@ -26,6 +27,7 @@ export const PricingCard: React.FC<PricingCardProps> = ({
   href = "",
   icon,
   collapsed,
+  eventName,
 }) => {
   const featuresListClassName = collapsed ? "xl:max-h-0" : "xl:max-h-[300px]";
 
@@ -71,6 +73,7 @@ export const PricingCard: React.FC<PricingCardProps> = ({
           text={buttonText}
           variant={buttonVariant}
           href={href}
+          eventName={eventName}
         />
       </div>
     </article>
