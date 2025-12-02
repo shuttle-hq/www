@@ -21,6 +21,7 @@ const pricingTiers: PricingCardProps[] = [
     buttonVariant: "highlight",
     href: CONSOLE_BILLING_URI,
     icon: CheckIcon,
+    eventName: "pricing_tier_community",
   },
   {
     title: "Pro",
@@ -37,6 +38,7 @@ const pricingTiers: PricingCardProps[] = [
     buttonVariant: "highlight",
     href: CONSOLE_BILLING_URI,
     icon: CheckIcon,
+    eventName: "pricing_tier_pro",
   },
   {
     title: "Growth",
@@ -52,6 +54,7 @@ const pricingTiers: PricingCardProps[] = [
     buttonText: "Start 14 day trial",
     href: CONSOLE_BILLING_URI,
     icon: CheckIcon,
+    eventName: "pricing_tier_growth",
   },
   {
     title: "Enterprise",
@@ -68,6 +71,7 @@ const pricingTiers: PricingCardProps[] = [
     buttonVariant: "highlight",
     href: CONTACT_US_URI,
     icon: CheckIcon,
+    eventName: "pricing_tier_enterprise",
   },
 ];
 
