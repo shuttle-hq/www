@@ -17,6 +17,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Content Management
 
 - `bun run scripts/fix-blogs.ts` - Fix blog post formatting and metadata
+- `npm run check-links -- <slug>` - Check links in a single blog post (e.g., `npm run check-links -- claude-skills`)
 
 ## Architecture Overview
 
