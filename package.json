@@ -10,7 +10,8 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
-    "fix-blogs": "bun run scripts/fix-blogs.ts"
+    "fix-blogs": "bun run scripts/fix-blogs.ts",
+    "check-links": "bun run scripts/check-links.ts"
   },
   "dependencies": {
     "@next/third-parties": "^14.1.4",
