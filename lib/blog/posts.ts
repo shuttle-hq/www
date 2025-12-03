@@ -41,6 +41,7 @@ export interface Post {
   readonly hideAuthor?: boolean;
   readonly contentTOC?: any;
   readonly takeaways?: string[];
+  readonly canonical?: string;
 }
 
 export function getSortedPosts(
