@@ -115,20 +115,28 @@ export function getSortedPosts(
   return allPostsData;
 }
 
-// Get Slugs
+// Get Slugs (excludes posts with redirects for static generation)
 export const getAllPostSlugs = () => {
   const fileNames = fs.readdirSync(POST_DIRECTORY);
 
-  const files = fileNames.map((filename) => {
-    const dates = getDatesFromFileName(filename);
+  const files = fileNames
+    .filter((filename) => {
+      // Exclude posts with redirect property from static generation
+      const fullPath = path.join(POST_DIRECTORY, filename);
+      const fileContents = fs.readFileSync(fullPath, "utf8");
+      const { data } = matter(fileContents);
+      return !data.redirect;
+    })
+    .map((filename) => {
+      const dates = getDatesFromFileName(filename);
 
-    return {
-      params: {
-        ...dates,
-        slug: filename.replace(".mdx", "").substring(FILENAME_SUBSTRING),
-      },
-    };
-  });
+      return {
+        params: {
+          ...dates,
+          slug: filename.replace(".mdx", "").substring(FILENAME_SUBSTRING),
+        },
+      };
+    });
 
   return files;
 };
