@@ -75,8 +75,19 @@ export async function getStaticProps({
 
   const filePath = `${params.year}-${params.month}-${params.day}-${params.slug}`;
   const postContent = await getPostData(filePath);
-  const readingTime = generateReadingTime(postContent);
   const { data, content } = matter(postContent);
+
+  // Handle redirect if specified in frontmatter
+  if (data.redirect) {
+    return {
+      redirect: {
+        destination: data.redirect,
+        permanent: true, // 308 permanent redirect
+      },
+    };
+  }
+
+  const readingTime = generateReadingTime(postContent);
 
   const mdxPost = await serialize(content, {
     scope: data,
