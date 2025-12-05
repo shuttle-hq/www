@@ -74,7 +74,14 @@ export async function getStaticProps({
   if (!params) throw new Error("No params found");
 
   const filePath = `${params.year}-${params.month}-${params.day}-${params.slug}`;
-  const postContent = await getPostData(filePath);
+
+  let postContent: string;
+  try {
+    postContent = await getPostData(filePath);
+  } catch {
+    return { notFound: true };
+  }
+
   const { data, content } = matter(postContent);
 
   // Handle redirect if specified in frontmatter
