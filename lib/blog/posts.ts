@@ -42,6 +42,7 @@ export interface Post {
   readonly contentTOC?: any;
   readonly takeaways?: string[];
   readonly canonical?: string;
+  readonly redirect?: string;
 }
 
 export function getSortedPosts(
