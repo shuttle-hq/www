@@ -20,17 +20,30 @@ import { PostHogProvider } from "posthog-js/react";
 import { GoogleTagManager } from "@next/third-parties/google";
 import IntercomProvider from "providers/IntercomProvider";
 
+const COOKIE_NAME = "shuttle_analytics_consent";
+
+function getCookie(name: string): string | null {
+  if (typeof document === "undefined") return null;
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(";").shift() || null;
+  return null;
+}
+
 // Check that PostHog is client-side (used to handle Next.js SSR)
 if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_POSTHOG_KEY) {
-  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
-    api_host: "/ingest",
-    ui_host: "https://eu.posthog.com",
-    // Enable debug mode in development
-    loaded: (posthog) => {
-      if (process.env.NODE_ENV === "development") posthog.debug();
-    },
-    capture_pageview: true,
-  });
+  const consent = getCookie(COOKIE_NAME);
+  if (consent !== "false") {
+    posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
+      api_host: "/ingest",
+      ui_host: "https://eu.posthog.com",
+      // Enable debug mode in development
+      loaded: (posthog) => {
+        if (process.env.NODE_ENV === "development") posthog.debug();
+      },
+      capture_pageview: true,
+    });
+  }
 }
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -49,6 +62,12 @@ export default function App({ Component, pageProps }: AppProps) {
 
   const getLayout =
     (Component as any).getLayout || ((page: ReactNode) => <Page>{page}</Page>);
+
+  const handleDecline = () => {
+    if (typeof window !== "undefined" && posthog) {
+      posthog.opt_out_capturing();
+    }
+  };
 
   return (
     <>
@@ -75,6 +94,7 @@ export default function App({ Component, pageProps }: AppProps) {
         </IntercomProvider>
         <GoogleTagManager gtmId="GTM-5QF3M9CR" />
         <CookieConsent
+          cookieName={COOKIE_NAME}
           containerClasses="max-w-xl left-1/2 transform bottom-4 -translate-x-1/2 flex items-end flex-col bg-black/10 border border-white/10 backdrop-filter backdrop-blur-lg backdrop-saturate-150 rounded-2xl p-6"
           contentClasses="text-base text-body !m-0 !flex-none tracking-tight self-start"
           buttonWrapperClasses="!mt-3"
@@ -83,8 +103,8 @@ export default function App({ Component, pageProps }: AppProps) {
           enableDeclineButton={true}
           declineButtonText="Decline"
           buttonText="Allow"
-          onDecline={() => { }}
-          onAccept={() => { }}
+          onDecline={handleDecline}
+          onAccept={() => {}}
         >
           We use cookies to enhance the user experience and measure engagement.
         </CookieConsent>

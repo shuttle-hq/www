@@ -39,7 +39,7 @@ export default function Terms() {
           <strong className="text-head">OpenQuery Ltd</strong>, a company
           registered in England under number
           <strong className="text-head"> 12268176</strong>, with its registered
-          office at George House, 39 Fitzroy Square, London, England, W1T 6EZ (
+          office at 91 Wimpole Street, London, England, W1G 0EF (
           <strong className="text-head">OpenQuery</strong>,{" "}
           <strong className="text-head">we</strong>,{" "}
           <strong className="text-head">our</strong> or{" "}
