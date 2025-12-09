@@ -57,8 +57,8 @@ export default function Privacy() {
         <h3 className="mb-2 text-2xl font-bold text-head">Company</h3>
         <p className="mb-5 text-xl">
           Openquery Ltd, a company registered in England under number 12268176,
-          with its registered office at George House, 39 Fitzroy Square, London,
-          England, W1T 6EZ (we or us).
+          with its registered office at 91 Wimpole Street, London, England, W1G
+          0EF (we or us).
         </p>
 
         <h3 className="mb-2 text-2xl font-bold text-head">
@@ -133,7 +133,8 @@ export default function Privacy() {
           </li>
 
           <li className="mb-2">
-            Financial Data includes the last four digit of your credit card.{" "}
+            Financial Data includes the last four digit of your credit
+            card.{" "}
           </li>
           <li className="mb-2">
             Transaction Data includes details about payments to and from you and
