@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 // Feature flag: Toggle between announcement banner and GitHub star banner
-const SHOW_FUNDRAISING_BANNER = true;
+const SHOW_FUNDRAISING_BANNER = false;
 
 const bannerKeys = {
   "shuttle-raises-6m-banner": "shuttle-raises-6m-banner",
@@ -50,7 +50,9 @@ const StarOnGithub = () => {
       <div className="flex flex-wrap items-center justify-center gap-x-1 text-center pr-8">
         {SHOW_FUNDRAISING_BANNER ? (
           <>
-            <span>Shuttle raises $6 million to build the AI Platform Engineer</span>
+            <span>
+              Shuttle raises $6 million to build the AI Platform Engineer
+            </span>
             <Link
               href="/blog/2025/10/22/shuttle-raises-6-million?utm_source=shuttle-website&utm_campaign=banner"
               onClick={() => {
@@ -90,7 +92,10 @@ const StarOnGithub = () => {
           </>
         )}
       </div>
-      <button className="absolute right-2 sm:right-3 flex-shrink-0" onClick={handleClose}>
+      <button
+        className="absolute right-2 sm:right-3 flex-shrink-0"
+        onClick={handleClose}
+      >
         <svg
           width="25"
           height="25"

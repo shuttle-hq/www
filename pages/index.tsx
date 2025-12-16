@@ -17,7 +17,6 @@ import { StarterAttrs } from "../components/elements/Starter";
 import { QuestionAttrs } from "../components/sections/FrequentlyAskedQuestions";
 import { landingQuestions, FeaturedStartersContent } from "../content";
 import { NextSeo } from "next-seo";
-import { ProTrial } from "components/sections/ProTrial";
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
   const posts = getSortedPosts(3);
@@ -95,7 +94,6 @@ export default function Home({
         <LogosReferences />
         <Features />
         <CommunitySupportedNumbers stargazersCount={stargazersCount} />
-        <ProTrial />
         <FeaturedStarters starters={starters} />
         <HowItWorks />
         <Testimonials />
