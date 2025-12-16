@@ -12,7 +12,7 @@ export const ComparisonRow: React.FC<ComparisonRowProps> = ({ cells }) => {
       className={`flex items-center py-5 w-full border-b border-slate-6000 border-opacity-30 max-md:max-w-full flex-wrap`}
     >
       {cells.map((cell, index) => (
-        <ComparisonCell key={index} width="w-full lg:w-1/4" {...cell} />
+        <ComparisonCell key={index} width="w-full lg:w-1/3" {...cell} />
       ))}
     </div>
   );

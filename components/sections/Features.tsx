@@ -179,31 +179,6 @@ const Features = () => {
             lightning-speed redeploys.
           </p>
         </div>
-        <div className="group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-body dark:bg-black sm:p-8 xl:row-[span_3]">
-          <Image
-            src="/images/sections/features/bottom-right/bg.png"
-            alt="bottom right bg"
-            fill
-            className="pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-cover"
-          />
-          <Image
-            src="/images/sections/features/bottom-right/stars.png"
-            alt="bottom right stars"
-            fill
-            className="pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain transition-transform duration-1000 group-hover:translate-x-10 group-hover:translate-y-3"
-          />
-          <Image
-            src="/images/sections/features/bottom-right/stars-2.png"
-            alt="bottom right stars 2"
-            fill
-            className="pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-4xl object-contain transition-transform duration-1000 group-hover:-translate-x-10 group-hover:-translate-y-1"
-          />
-          <h3 className="font-gradual text-2xl font-bold text-head">
-            Forever-free tier
-          </h3>
-          <p>Unlimited access to essential features, no strings attached.</p>
-          <Free />
-        </div>
       </div>
     </div>
   );

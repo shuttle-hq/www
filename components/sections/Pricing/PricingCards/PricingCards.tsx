@@ -7,23 +7,6 @@ import { BackgroundShape } from "../../../BackgroundShape";
 
 const pricingTiers: PricingCardProps[] = [
   {
-    title: "Community",
-    description: "For learning, experimentation, and personal projects",
-    price: "$0",
-    priceSuffix: "/ month",
-    features: [
-      "1 project",
-      "Spot instance",
-      "Starter database",
-      "1 custom domain per project",
-    ],
-    buttonText: "Start for free",
-    buttonVariant: "highlight",
-    href: CONSOLE_BILLING_URI,
-    icon: CheckIcon,
-    eventName: "pricing_tier_community",
-  },
-  {
     title: "Pro",
     description: "Production-ready for small to medium projects",
     price: "$20",
@@ -34,7 +17,7 @@ const pricingTiers: PricingCardProps[] = [
       "Scalable vCPU & memory",
       "Monitoring & observability",
     ],
-    buttonText: "Start 14 day trial",
+    buttonText: "Start Now",
     buttonVariant: "highlight",
     href: CONSOLE_BILLING_URI,
     icon: CheckIcon,
@@ -51,7 +34,7 @@ const pricingTiers: PricingCardProps[] = [
       "Team access",
       "Dedicated database",
     ],
-    buttonText: "Start 14 day trial",
+    buttonText: "Start Now",
     href: CONSOLE_BILLING_URI,
     icon: CheckIcon,
     eventName: "pricing_tier_growth",
@@ -116,7 +99,10 @@ const PricingCards = () => {
         ref={priceSectionsRef}
         className="relative flex justify-center xl:sticky top-0 z-10"
       >
-        <section className="relative max-w-[1280px]" aria-label="Pricing plans">
+        <section
+          className="relative max-w-[1280px] dupa"
+          aria-label="Pricing plans"
+        >
           <div className="relative flex flex-wrap justify-center md:gap-0 mx-[-1rem] pt-3 backdrop-blur-lg md:mx-[-0.5rem]">
             {pricingTiers.map((tier, index) => (
               <PricingCard collapsed={collapseSections} key={index} {...tier} />
