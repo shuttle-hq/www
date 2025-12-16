@@ -13,11 +13,6 @@ const computeSection = {
       cells: [
         {
           icon: CheckIcon,
-          primary: "1",
-          secondary: "project",
-        },
-        {
-          icon: CheckIcon,
           primary: "3",
           primaryTooltip: "Up to 10 available, see docs",
           secondary: "projects",
@@ -38,12 +33,6 @@ const computeSection = {
       cells: [
         {
           icon: CheckIcon,
-          primary: "Spot",
-          primaryTooltip: "See FAQ for definition",
-          secondary: "instance",
-        },
-        {
-          icon: CheckIcon,
           primary: "Reserved",
           primaryTooltip: "See FAQ for definition",
           secondary: "instance",
@@ -71,11 +60,6 @@ const computeSection = {
         },
         {
           icon: CheckIcon,
-          primary: "512",
-          secondary: "MB memory",
-        },
-        {
-          icon: CheckIcon,
           primary: "Usage",
           secondary: "based",
         },
@@ -95,11 +79,6 @@ const computeSection = {
         },
         {
           icon: CheckIcon,
-          primary: "0.25",
-          secondary: "vCPU",
-        },
-        {
-          icon: CheckIcon,
           primary: "Usage",
           secondary: "based",
         },
@@ -112,12 +91,6 @@ const computeSection = {
     },
     {
       cells: [
-        {
-          icon: CloseIcon,
-          primary: "Configurable",
-          secondary: "instance",
-          isDisabled: true,
-        },
         {
           icon: CheckIcon,
           primary: "Configurable",
@@ -141,12 +114,6 @@ const computeSection = {
     },
     {
       cells: [
-        {
-          icon: CloseIcon,
-          primary: "Horizontal",
-          secondary: "scaling",
-          isDisabled: true,
-        },
         {
           icon: CloseIcon,
           primary: "Horizontal",
@@ -180,11 +147,6 @@ const storageSection = {
       cells: [
         {
           icon: CheckIcon,
-          primary: "Shared",
-          secondary: "DB",
-        },
-        {
-          icon: CheckIcon,
           primary: "Dedicated DB",
           secondary: "available",
           secondaryTooltip: "$20/month",
@@ -209,11 +171,6 @@ const storageSection = {
         },
         {
           icon: CheckIcon,
-          primary: "0.5",
-          secondary: "GB included",
-        },
-        {
-          icon: CheckIcon,
           primary: "20",
           secondary: "GB included",
         },
@@ -225,12 +182,6 @@ const storageSection = {
     },
     {
       cells: [
-        {
-          icon: CloseIcon,
-          isDisabled: true,
-          primary: "Additional ",
-          secondary: "storage",
-        },
         {
           icon: CheckIcon,
           primary: "Additional",
@@ -260,11 +211,6 @@ const networkSection = {
   rows: [
     {
       cells: [
-        {
-          icon: CheckIcon,
-          primary: "1",
-          secondary: "custom domain",
-        },
         {
           icon: CheckIcon,
           primary: "3",
@@ -297,23 +243,12 @@ const networkSection = {
         },
         {
           icon: CheckIcon,
-          primary: "1 GB",
-          secondary: "network egress",
-        },
-        {
-          icon: CheckIcon,
           isCustom: true,
         },
       ],
     },
     {
       cells: [
-        {
-          icon: CloseIcon,
-          primary: "Additional",
-          secondary: "egress",
-          isDisabled: true,
-        },
         {
           icon: CheckIcon,
           primary: "Additional",
@@ -346,11 +281,6 @@ const devopsSection = {
         {
           icon: CheckIcon,
           primary: "100",
-          secondary: "monthly build minutes",
-        },
-        {
-          icon: CheckIcon,
-          primary: "100",
           secondary: "build minutes",
         },
         {
@@ -367,11 +297,6 @@ const devopsSection = {
     },
     {
       cells: [
-        {
-          icon: CloseIcon,
-          primary: "Additional build minutes",
-          isDisabled: true,
-        },
         {
           icon: CheckIcon,
           primary: "Additional",
@@ -401,11 +326,6 @@ const monitoringSection = {
   rows: [
     {
       cells: [
-        {
-          icon: CheckIcon,
-          primary: "7-day",
-          secondary: "log retention",
-        },
         {
           icon: CheckIcon,
           primary: "14-day",
@@ -446,23 +366,10 @@ const monitoringSection = {
             "Export CPU usage, Memory usage, Network I/O & Disk I/O",
           secondary: "usage metrics",
         },
-        {
-          icon: CheckIcon,
-          primary: "Basic",
-          primaryTooltip:
-            "Export CPU usage, Memory usage, Network I/O & Disk I/O",
-          secondary: "usage metrics",
-        },
       ],
     },
     {
       cells: [
-        {
-          icon: CloseIcon,
-          primary: "Custom metrics & traces",
-          secondary: "",
-          isDisabled: true,
-        },
         {
           icon: CheckIcon,
           primary: "Custom",
@@ -485,12 +392,6 @@ const monitoringSection = {
     },
     {
       cells: [
-        {
-          icon: CloseIcon,
-          primary: "Custom log destinations",
-          secondary: "",
-          isDisabled: true,
-        },
         {
           icon: CheckIcon,
           primary: "Custom ",
@@ -524,12 +425,6 @@ const teamAccessSection = {
           isDisabled: true,
         },
         {
-          icon: CloseIcon,
-          primary: "Team",
-          secondary: "access",
-          isDisabled: true,
-        },
-        {
           icon: CheckIcon,
           primary: "10",
           primaryTooltip: "$25 per additional seat",
@@ -550,13 +445,6 @@ const supportSection = {
   rows: [
     {
       cells: [
-        {
-          icon: CheckIcon,
-          primary: "Community",
-          primaryTooltip:
-            "Access to all help threads and Shuttle team when available",
-          secondary: "support",
-        },
         {
           icon: CheckIcon,
           primary: "Priority",
@@ -583,12 +471,6 @@ const supportSection = {
     {
       cells: [
         {
-          icon: CloseIcon,
-          primary: "Private",
-          secondary: "support channel",
-          isDisabled: true,
-        },
-        {
           icon: CheckIcon,
           primary: "Private",
           secondary: "support channel",
@@ -620,12 +502,6 @@ const supportSection = {
           isDisabled: true,
         },
         {
-          icon: CloseIcon,
-          primary: "Uptime",
-          secondary: "SLA",
-          isDisabled: true,
-        },
-        {
           icon: CheckIcon,
           primary: "Uptime",
           secondary: "SLA",
@@ -636,7 +512,6 @@ const supportSection = {
 };
 
 const options = [
-  { label: "Community", value: "0" },
   { label: "Pro", value: "1" },
   { label: "Growth", value: "2" },
   { label: "Enterprise", value: "3" },

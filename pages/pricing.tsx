@@ -3,7 +3,6 @@ import { NextSeo } from "next-seo";
 import { GetStaticPropsResult } from "next";
 import { QuestionAttrs } from "../components/sections/FrequentlyAskedQuestions";
 import { pricingQuestions } from "../content";
-import { Button, SignupButton } from "components/elements";
 import { Page } from "components/templates";
 import FeatureList from "components/sections/Pricing/FeatureList";
 import { ImageSection } from "../components/sections/Pricing/ImageSection";
@@ -13,10 +12,7 @@ import PricingGrid from "../components/sections/Pricing/UsageBasedPricing/Pricin
 import BlogCards from "../components/sections/Pricing/BlogCards";
 import Faq from "../components/sections/Faq/Faq";
 import { faqData } from "../components/sections/Pricing/faqData";
-import Image from "next/image";
-import { trackEvent } from "lib/posthog";
 import "react-tooltip/dist/react-tooltip.css";
-import { ProTrial } from "components/sections/Pricing/ProTrial";
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
   return {
@@ -74,15 +70,13 @@ export default function PricingPage({ questions }: Props) {
       <div>
         <PricingCards />
 
-        <PricingComparison />
+        <div className="max-w-[942px] mx-auto">
+          <PricingComparison />
+        </div>
       </div>
 
       <div className="relative flex flex-col justify-center custom-bg2 bg-no-repeat sm:min-h-[1050px]">
         <PricingGrid />
-      </div>
-
-      <div className="flex flex-col justify-center items-center mb-24 md:mb-48 m-auto">
-        <ProTrial />
       </div>
 
       <div className="flex flex-col gap-6 max-w-7xl pb-16 m-auto">
