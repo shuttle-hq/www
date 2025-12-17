@@ -21,15 +21,6 @@ const Hero = () => {
             signatures and annotations.
           </p>
           <div className="mt-5 flex flex-wrap items-center gap-5 sm:mt-10 lg:mt-12 xl:mt-16">
-            <SignupButton
-              variant="primary"
-              invertOnDark
-              onClick={() => {
-                trackEvent("homepage_buildbackendsfast_startbuilding");
-              }}
-            >
-              Start Building
-            </SignupButton>
             <Button
               variant="secondary"
               invertOnDark

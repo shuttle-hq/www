@@ -121,12 +121,6 @@ const Navigation = () => {
                 keyword: "blog",
               },
               {
-                href: "/pricing",
-                event: "homepage_mainnav_pricing",
-                text: "Pricing",
-                keyword: "pricing",
-              },
-              {
                 href: "https://docs.shuttle.dev",
                 event: "homepage_mainnav_docs",
                 text: "Docs",
@@ -137,18 +131,6 @@ const Navigation = () => {
                 event: "homepage_mainnav_customers",
                 text: "Customers",
                 keyword: "customers",
-              },
-              {
-                href: "/careers",
-                event: "homepage_careers",
-                text: "Careers",
-                keyword: "careers",
-              },
-              {
-                href: "https://console.shuttle.dev/templates",
-                event: "homepage_mainnav_templates",
-                text: "Templates",
-                keyword: "templates",
               },
             ].map(({ event, href, text, keyword }) => (
               <LinkItem
@@ -210,20 +192,6 @@ const Navigation = () => {
               >
                 Log in
               </CustomButton>
-              <div
-                onClick={() => {
-                  trackEvent("homepage_mainnav_signup");
-                }}
-              >
-                <CustomButton
-                  className="w-[140px] justify-center"
-                  variant="primary"
-                  invertOnDark
-                  href="https://console.shuttle.dev/signup"
-                >
-                  Sign up
-                </CustomButton>
-              </div>
             </div>
             <ThemeSwitcher className="mt-5 xl:-order-1 xl:mt-0" hidden />
           </div>
