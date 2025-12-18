@@ -68,7 +68,6 @@ const Features = () => {
             logging support, abundant documentation and supports all major Rust
             frameworks. Yes, even if you are coming from JS.
           </p>
-          <SignupButton variant="primary">Sign up</SignupButton>
         </div>
         <div className="group relative z-10 flex flex-col items-start gap-3 overflow-hidden rounded-4xl bg-[#13292C] p-5 text-body dark:bg-black sm:p-8 xl:row-[span_2]">
           <Image

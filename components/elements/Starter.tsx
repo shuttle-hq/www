@@ -44,7 +44,7 @@ export interface StarterXProps {
   templateKey: number;
 }
 
-export interface StarterProps extends StarterXProps, StarterAttrs { }
+export interface StarterProps extends StarterXProps, StarterAttrs {}
 
 const Starter: FC<StarterProps> = ({
   icon,
@@ -96,13 +96,6 @@ const Starter: FC<StarterProps> = ({
                 Post
               </Link>
             </span>
-            <Button
-              variant="primary"
-              href={deployLink || "https://console.shuttle.dev/"}
-              eventName={`homepage_starters_${templateKey}_deploy`}
-            >
-              Deploy
-            </Button>
           </div>
         ) : (
           <Link

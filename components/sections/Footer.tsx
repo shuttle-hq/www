@@ -11,12 +11,6 @@ interface FooterProps {
 
 const SHUTTLE_LINKS = [
   { key: "features", name: "Features", href: "/#features" },
-  { key: "starters", name: "Starters", href: "/starters" },
-  {
-    key: "templates",
-    name: "Templates",
-    href: "https://console.shuttle.dev/templates",
-  },
   {
     key: "releases",
     name: "Releases",
@@ -27,7 +21,6 @@ const SHUTTLE_LINKS = [
 const COMPANY_LINKS = [
   { key: "about", name: "About", href: "/about" },
   { key: "contact", name: "Contact", href: "/contact" },
-  { key: "careers", name: "Careers", href: "/about#careers" },
   { key: "terms", name: "Terms of Service", href: "/terms" },
   { key: "privacy", name: "Privacy Policy", href: "/privacy" },
   {
