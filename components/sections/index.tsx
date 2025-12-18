@@ -18,7 +18,6 @@ export { default as HowItWorks } from "./HowItWorks";
 export { default as Navigation } from "./Navigation";
 export { default as JobOpenings } from "./JobOpenings";
 export { default as LogosReferences } from "./LogosReferences";
-export { default as Pricing } from "./Pricing";
 export { default as ShuttleHeroesBenefits } from "./ShuttleHeroesBenefits";
 export { default as ShuttleHeroesHero } from "./ShuttleHeroesHero";
 export { default as ShuttleHeroesResponsibilities } from "./ShuttleHeroesResponsibilities";
