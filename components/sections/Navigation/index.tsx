@@ -178,7 +178,7 @@ const Navigation = () => {
                 </a>
               ))}
             </div>
-            <div
+            {/*<div
               className="mt-10 flex flex-wrap items-center gap-5 xl:mt-0"
               onClick={() => {
                 trackEvent("homepage_mainnav_login");
@@ -192,7 +192,7 @@ const Navigation = () => {
               >
                 Log in
               </CustomButton>
-            </div>
+            </div>*/}
             <ThemeSwitcher className="mt-5 xl:-order-1 xl:mt-0" hidden />
           </div>
         </div>
